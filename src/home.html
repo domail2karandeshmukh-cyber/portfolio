@@ -58,12 +58,13 @@
     <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
    </div>
 
-   <figure class="rw" id="rewrite" data-state="1">
+   <div class="rw" id="rewrite" data-state="1" data-src="example">
     <div class="rw-tabs" role="group" aria-label="Choose a version">
      <button type="button" data-s="1" aria-pressed="true">Message</button>
      <button type="button" data-s="2" aria-pressed="false">Markup</button>
      <button type="button" data-s="3" aria-pressed="false">Document</button>
     </div>
+    <figure class="rw-fig">
     <div class="rw-stage" lang="en" translate="no">
      <div class="rw-raw">
       <p class="raw-head">On-call engineer, 02:14</p>
@@ -91,13 +92,37 @@
      </article>
     </div>
     <figcaption>
-     <span class="rw-cap" data-s="1">What engineering sent. Every fact is in there, in the order it came to mind.</span>
-     <span class="rw-cap" data-s="2">What I keep. The facts stay and the noise goes.</span>
-     <span class="rw-cap" data-s="3">What I publish. The same facts, in the order the reader needs them, with a way to check the result.</span>
-     <span>An illustrative example, not a client document.</span>
-     <button class="rw-again" type="button">Play it again</button>
+     <span class="rw-ex">
+      <span class="rw-cap" data-s="1">What engineering sent. Every fact is in there, in the order it came to mind.</span>
+      <span class="rw-cap" data-s="2">What I keep. The facts stay and the noise goes.</span>
+      <span class="rw-cap" data-s="3">What I publish. The same facts, in the order the reader needs them, with a way to check the result.</span>
+      <span>An illustrative example, not a client document.</span>
+      <button class="rw-again" type="button">Play it again</button>
+     </span>
+     <span class="rw-you" aria-live="polite" hidden>
+      <span class="rw-wait">Reading your message for the facts...</span>
+      <span class="rw-cap" data-s="1">Your message, as it was sent.</span>
+      <span class="rw-cap" data-s="2">Your message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
+      <span class="rw-cap" data-s="3">A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.</span>
+      <span class="rw-stats" id="rw-stats"></span>
+     </span>
     </figcaption>
-   </figure>
+    </figure>
+    <div class="rw-acts" hidden>
+     <button class="btn line sm" type="button" id="rw-copy">Copy as Markdown</button>
+     <button class="btn text sm" type="button" id="rw-back">Back to my example</button>
+    </div>
+    <form class="rw-try" id="try" hidden>
+     <label for="try-text">Now try it on a message from your own team.</label>
+     <textarea id="try-text" name="text" rows="3" maxlength="1400" placeholder="Paste a chat message, a ticket comment or meeting notes."></textarea>
+     <div class="try-row">
+      <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
+      <button class="btn ink sm" type="submit">Mark it up</button>
+     </div>
+     <p class="try-note">An AI model drafts it by <a href="{{brief}}" target="_blank" rel="noopener">this brief</a>. Your text isn't stored. Leave out anything confidential.</p>
+     <p class="try-msg" id="try-msg" role="status"></p>
+    </form>
+   </div>
   </div>
  </div>
 </section>

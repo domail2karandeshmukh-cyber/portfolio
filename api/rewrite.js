@@ -7,8 +7,8 @@ const GATEWAY = "https://ai-gateway.vercel.sh";
 const LIVE = process.env.VERCEL_ENV === "production";
 // A preview deployment sits behind Vercel's sign-in, so the limits below are lifted there to let a model be tested.
 const LIMITED = LIVE || !process.env.VERCEL;
-// Tried in this order; the first that returns a usable draft answers the next visitor too.
-const MODELS = (process.env.DESK_MODELS || "google/gemini-2.5-flash-lite,deepseek/deepseek-v4-flash,alibaba/qwen3.7-flash,inclusionai/ling-3.0-flash").split(",").map((s) => s.trim()).filter(Boolean);
+// Tried in this order. A model that reasons before it answers is written with its effort: "openai/gpt-5-mini:low".
+const MODELS = (process.env.DESK_MODELS || "google/gemini-2.5-flash-lite,openai/gpt-4.1-mini,mistral/mistral-small").split(",").map((s) => s.trim()).filter(Boolean);
 // One model may cost at most this much per token, in dollars, whoever asks for it.
 const CEILING = { input: 0.000001, output: 0.000005 };
 // A draft costs a fraction of a cent. These keep a bad day cheap: per visitor a minute, per visitor a day, in all a day.
@@ -20,20 +20,20 @@ const memo = new Map();        // drafts already made by this copy of the functi
 const minute = new Map(), daily = new Map();
 let day = "", total = 0;
 
-async function draft(model, token, text, opt = {}) {
-  const tried = [];
+async function draft(spec, token, text, opt = {}) {
+  const tried = [], [model, effort] = spec.split(":");
   // The form that worked last time goes first.
   const order = ["schema", "json", "plain"].sort((a, b) => (b === formats.get(model)) - (a === formats.get(model)));
   for (const format of order) {
     const body = {
       model,
       temperature: 0.2,
-      max_tokens: 1600,
+      max_tokens: effort ? 3200 : 1800,
       messages: D.conversation(text),
     };
     if (format === "schema") body.response_format = { type: "json_schema", json_schema: { name: "draft", description: "A document drafted from a message, with its working", schema: D.SCHEMA } };
     if (format === "json") body.response_format = { type: "json_object" };
-    if (opt.think) body.reasoning = { effort: opt.think };
+    if (effort) body.reasoning = { effort };
     const began = Date.now();
     let r, data;
     try {
@@ -111,7 +111,7 @@ module.exports = async (req, res) => {
   // On a preview, ?probe=eval&models=a,b&sample=id drafts one sample with several models and prints the drafts side by side.
   if (q.probe === "eval" && !LIVE && sample) {
     const got = await Promise.all(String(q.models || MODELS.join(",")).split(",").slice(0, 8).map(async (model) => {
-      const g = await draft(model.trim(), token, D.clean(sample.text), { raw: true, think: q.think ? String(q.think) : "" });
+      const g = await draft(model.trim(), token, D.clean(sample.text), { raw: true });
       const head = `=== ${model}  ${g.ms || "-"} ms  $${(g.usage && g.usage.cost) || "?"}  out ${(g.usage && g.usage.completion_tokens) || "?"} tok (thinking ${(g.usage && g.usage.completion_tokens_details && g.usage.completion_tokens_details.reasoning_tokens) || 0})  ${g.format || ""}  ${g.tried.join(" | ")}`;
       return head + "\n" + (g.out ? D.show(g.out) : "(no usable draft) " + String(g.content || "").slice(0, 400));
     }));
@@ -125,7 +125,7 @@ module.exports = async (req, res) => {
 
   const id = D.key(text);
   res.setHeader("cache-control", "no-store");
-  const diagnose = !LIVE && (q.model || q.raw || q.think);
+  const diagnose = !LIVE && (q.model || q.raw);
   if (memo.has(id) && !diagnose && !q.live) return res.status(200).json(memo.get(id));
 
   const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
@@ -134,24 +134,36 @@ module.exports = async (req, res) => {
   recent.push(now); minute.set(ip, recent); daily.set(ip, (daily.get(ip) || 0) + 1); total++;
   if (minute.size > 5000) minute.clear();
 
-  // On a preview, ?model= tries one model within the price ceiling, ?think= sets its reasoning effort, and ?raw=1 returns what it wrote.
+  // On a preview, ?model= tries one model within the price ceiling and ?raw=1 returns what it wrote.
   let list = chosen ? [chosen, ...MODELS.filter((m) => m !== chosen)] : MODELS;
   if (diagnose && q.model) {
     const cat = await fetch(`${GATEWAY}/v1/models`, { signal: AbortSignal.timeout(8000) }).then((r) => r.json()).catch(() => ({}));
-    const m = (cat.data || []).find((x) => x.id === q.model);
+    const m = (cat.data || []).find((x) => x.id === String(q.model).split(":")[0]);
     if (!m || !(Number(m.pricing && m.pricing.input) <= CEILING.input) || !(Number(m.pricing && m.pricing.output) <= CEILING.output)) return res.status(400).json({ error: "model not allowed" });
     list = [q.model];
   }
 
-  const tried = [];
+  // The first usable draft wins, unless the check by rule finds a name or a number lost or added.
+  // Then one more model is asked, and the draft with fewer faults is the one sent.
+  const tried = [], faults = (o) => o.check.missing.length + o.check.added.length;
+  let best = null, first = "", ms = 0;
   for (const model of list) {
-    const got = await draft(model, token, text, { raw: diagnose && !!q.raw, think: diagnose && q.think ? String(q.think) : "" });
+    const got = await draft(model, token, text, { raw: diagnose && !!q.raw });
     tried.push(...got.tried);
     if (diagnose && q.raw && got.content !== undefined) return res.status(200).json({ model, ms: got.ms, format: got.format, usage: got.usage, usable: !!got.out, content: got.content, shaped: got.out });
     if (!got.out) continue;
-    if (!diagnose) chosen = model;
+    ms += got.ms;
+    if (!got.out.ok) { best = best || { model, got }; break; }
+    if (!best || faults(got.out) < faults(best.got.out)) best = { model, got };
+    if (first || !faults(got.out)) { first = first || model; break; }
+    first = model;
+  }
+  if (best) {
+    const { model, got } = best;
+    // The first model to give a usable draft goes first for the next visitor.
+    if (!diagnose) chosen = first || model;
     if (!got.out.ok) return res.status(422).json({ error: "none" });
-    const reply = Object.assign(got.out, { ms: got.ms, model });
+    const reply = Object.assign(got.out, { ms, model: model.split(":")[0] });
     if (!diagnose) {
       memo.set(id, reply);
       if (memo.size > 300) memo.delete(memo.keys().next().value);

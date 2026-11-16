@@ -22,31 +22,22 @@ const conversation = (text) => [
 ];
 
 const str = { type: "string" };
+const item = { type: "object", additionalProperties: false, required: ["text", "caution"], properties: { text: str, caution: str } };
+const section = { type: "object", additionalProperties: false, required: ["heading", "style", "items"], properties: { heading: str, style: { type: "string", enum: STYLES }, items: { type: "array", items: item } } };
+// The keys are in working order: a model that lists the facts before it writes loses fewer of them.
 const SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["ok", "kind", "label", "title", "audience", "sections", "facts", "noise", "questions"],
+  required: ["ok", "kind", "facts", "noise", "label", "title", "audience", "sections", "questions"],
   properties: {
     ok: { type: "boolean" },
     kind: { type: "string", enum: KINDS },
+    facts: { type: "array", items: { type: "object", additionalProperties: false, required: ["id", "quote"], properties: { id: str, quote: str } } },
+    noise: { type: "array", items: str },
     label: str,
     title: str,
     audience: str,
-    sections: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["heading", "style", "items"],
-        properties: {
-          heading: str,
-          style: { type: "string", enum: STYLES },
-          items: { type: "array", items: { type: "object", additionalProperties: false, required: ["text", "caution"], properties: { text: str, caution: str } } },
-        },
-      },
-    },
-    facts: { type: "array", items: { type: "object", additionalProperties: false, required: ["id", "quote"], properties: { id: str, quote: str } } },
-    noise: { type: "array", items: str },
+    sections: { type: "array", items: section },
     questions: { type: "array", items: str },
   },
 };
@@ -183,6 +174,59 @@ function runs(line, known, used, max) {
 }
 const plain = (rs) => rs.map((r) => r.t).join("");
 
+// Capitals that are emphasis, not a name.
+const LOUD = new Set("not dont don't no never or and must do only always all any before after please now very ok okay so if the a an but then also note fyi asap todo tbd lol omg btw yes important warning caution urgent stop wait everyone nothing really".split(" "));
+const COUNT = { one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10", eleven: "11", twelve: "12" };
+/** The numbers in a text, written one way: 50k and 50,000 are both 50000. */
+function numbers(text, withWords) {
+  const out = new Set();
+  for (const m of text.matchAll(/(\d+(?:[.,:]\d+)*)(k\b)?/gi)) {
+    let n = m[1].replace(/,(?=\d{3}\b)/g, "");
+    if (m[2] && /^\d+$/.test(n)) n += "000";
+    out.add(n);
+  }
+  if (withWords) for (const w of text.toLowerCase().split(/[^a-z]+/)) if (COUNT[w]) out.add(COUNT[w]);
+  return out;
+}
+/**
+ * A check by rule, not by the model. Names and numbers are what a reader acts on, so each one in the message
+ * has to be in the document, and the document may not bring a number of its own.
+ * @returns {{count: number, missing: string[], added: string[]}} missing: the place in the message, a few words wide
+ */
+function audit(text, doc) {
+  const d = fold(doc).t.replace(/[<>]/g, ""), inDoc = numbers(d, true);
+  const words = text.split(/\s+/).filter(Boolean), seen = new Set(), missing = [];
+  let count = 0;
+  const strip = (w) => w.replace(/^[^\p{L}\p{N}#@]+|[^\p{L}\p{N}]+$/gu, "");
+  words.forEach((raw, i) => {
+    const w = strip(raw).replace(/['\u2019]s$/, "");
+    if (!w) return;
+    let key = "", found = false;
+    if (/\d/.test(w)) {
+      const n = [...numbers(w)][0];
+      key = "n:" + n;
+      found = inDoc.has(n);
+    } else {
+      const low = w.toLowerCase(), caps = w === w.toUpperCase() && /\p{Lu}/u.test(w), letters = w.replace(/[^\p{L}]/gu, "").length;
+      const mark = /^[#@]/.test(w) || /[\p{L}\p{N}][\/_][\p{L}\p{N}<]/u.test(w);
+      const first = i === 0 || /[.!?:]$/.test(words[i - 1]);
+      const inner = /\p{Ll}\p{Lu}/u.test(w);
+      const name = /\p{Lu}/u.test(w) && letters > 1 && !/^I(['\u2019]|$)/.test(w) && !LOUD.has(low) && !(caps && letters > 4) && (!first || caps || inner);
+      if (!mark && !name) return;
+      key = "w:" + low;
+      const bare = low.replace(/[<>]/g, "");
+      found = d.includes(bare) || (bare.length > 3 && bare.endsWith("s") && d.includes(bare.slice(0, -1)));
+    }
+    if (seen.has(key)) return;
+    seen.add(key);
+    count++;
+    if (!found) missing.push(words.slice(Math.max(0, i - 2), i + 2).join(" ").replace(/^[^\p{L}\p{N}#@]+|[^\p{L}\p{N}>]+$/gu, ""));
+  });
+  const said = numbers(text, true);
+  const added = [...numbers(d)].filter((n) => !said.has(n));
+  return { count, missing: missing.slice(0, 6), added: added.slice(0, 6) };
+}
+
 /**
  * Checks a model's answer against the message and turns it into what the page draws.
  * @returns {null | {ok: false} | object} null when the answer can't be used
@@ -233,6 +277,7 @@ function shape(text, answer) {
     raw: segments(text, ranges).map((s) => (s.k === "f" && !used.has(s.f) ? { t: s.t, k: "f" } : s)),
     questions,
     stats: { facts: known.size, cut: ranges.filter((r) => r.k === "n").length },
+    check: audit(text, [plain(title), plain(audience)].concat(sections.flatMap((s) => [s.heading].concat(s.items.flatMap((it) => [plain(it.runs), plain(it.caution || [])])))).join(" ")),
   };
 }
 
@@ -247,8 +292,8 @@ function show(out) {
     s.items.forEach((it, i) => { L.push(`${s.style === "steps" ? i + 1 + "." : s.style === "bullets" ? "-" : " "} ${mark(it.runs)}`); if (it.caution) L.push(`     ! ${mark(it.caution)}`); });
   }
   out.questions.forEach((q) => L.push(`? ${q}`));
-  L.push(`facts ${out.stats.facts}, cut ${out.stats.cut}`);
+  L.push(`facts ${out.stats.facts}, cut ${out.stats.cut}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}`);
   return L.join("\n");
 }
 
-module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, key, conversation, parse, shape, show, isNoise };
+module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, key, conversation, parse, shape, show, isNoise, audit };

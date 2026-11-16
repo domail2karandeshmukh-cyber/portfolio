@@ -3,53 +3,6 @@
  "answer": {
   "ok": true,
   "kind": "how-to",
-  "label": "How-to",
-  "title": "Reset MFA for a <f1>locked-out user</f1>",
-  "audience": "",
-  "sections": [
-   {
-    "heading": "Before you start",
-    "style": "bullets",
-    "items": [
-     {
-      "text": "<f8>Confirm that the request is genuine.</f8> <f9>Call the user on the number in the HR system</f9>, <f10>not the number in the ticket</f10>.",
-      "caution": ""
-     },
-     {
-      "text": "<f12>Contractor accounts follow a different process.</f12> <f13>Ask the IAM team.</f13>",
-      "caution": ""
-     }
-    ]
-   },
-   {
-    "heading": "Steps",
-    "style": "steps",
-    "items": [
-     {
-      "text": "In the <f2>admin console</f2>, <f3>find the user</f3>.",
-      "caution": ""
-     },
-     {
-      "text": "Select <f4>**Reset MFA**</f4>.",
-      "caution": "**Caution:** <f5>Don't select **Reset password**.</f5> <f6>It doesn't clear the user's old phone.</f6>"
-     },
-     {
-      "text": "Tell the user to expect an <f7>email to enroll again</f7>.",
-      "caution": ""
-     }
-    ]
-   },
-   {
-    "heading": "Check that it worked",
-    "style": "text",
-    "items": [
-     {
-      "text": "<f11>Check the log</f11> after the reset.",
-      "caution": ""
-     }
-    ]
-   }
-  ],
   "facts": [
    {
     "id": "f1",
@@ -109,6 +62,53 @@
    "!!",
    "oh and",
    "can someone please write this down properly. third time this month i've explained it"
+  ],
+  "label": "How-to",
+  "title": "Reset MFA for a <f1>locked-out user</f1>",
+  "audience": "",
+  "sections": [
+   {
+    "heading": "Before you start",
+    "style": "bullets",
+    "items": [
+     {
+      "text": "<f8>Confirm that the request is genuine.</f8> <f9>Call the user on the number in the HR system</f9>, <f10>not the number in the ticket</f10>.",
+      "caution": ""
+     },
+     {
+      "text": "<f12>Contractor accounts follow a different process.</f12> <f13>Ask the IAM team.</f13>",
+      "caution": ""
+     }
+    ]
+   },
+   {
+    "heading": "Steps",
+    "style": "steps",
+    "items": [
+     {
+      "text": "In the <f2>admin console</f2>, <f3>find the user</f3>.",
+      "caution": ""
+     },
+     {
+      "text": "Select <f4>**Reset MFA**</f4>.",
+      "caution": "**Caution:** <f5>Don't select **Reset password**.</f5> <f6>It doesn't clear the user's old phone.</f6>"
+     },
+     {
+      "text": "Tell the user to expect an <f7>email to enroll again</f7>.",
+      "caution": ""
+     }
+    ]
+   },
+   {
+    "heading": "Check that it worked",
+    "style": "text",
+    "items": [
+     {
+      "text": "<f11>Check the log</f11> after the reset.",
+      "caution": ""
+     }
+    ]
+   }
   ],
   "questions": [
    "Who does this: the service desk, or any administrator?",
