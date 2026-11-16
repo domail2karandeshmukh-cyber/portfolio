@@ -13,6 +13,7 @@ const LIMITED = LIVE || !process.env.VERCEL;
 // how a model takes a request for JSON when it has no support for a schema, and ">vertex" names the one provider
 // that may serve it. The first two are served by providers that the gateway lists as keeping no copy of a request.
 const MODELS = (process.env.DESK_MODELS || "meta/llama-4-maverick@json>bedrock,google/gemini-2.5-flash-lite>vertex,openai/gpt-4.1-mini").split(",").map((s) => s.trim()).filter(Boolean);
+const HOME = /^https:\/\/((www\.)?karandeshmukh\.dev|[a-z0-9-]+\.vercel\.app)$|^http:\/\/localhost(:\d+)?$/;
 const NAME = /^([^:@>]+)(?::([a-z]+))?(?:@([a-z]+))?(?:>([a-z0-9-]+))?$/;
 // One model may cost at most this much per token, in dollars, whoever asks for it.
 const CEILING = { input: 0.000001, output: 0.000005 };
@@ -93,6 +94,9 @@ module.exports = async (req, res) => {
   let text = "", sample = null;
   try {
     if (req.method === "POST") {
+      // A message comes from this site's own page. A browser on another site says where it is, and is turned away.
+      const from = String(req.headers.origin || "");
+      if (from && !HOME.test(from)) return res.status(403).json({ error: "origin" });
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
       text = b.text;
     } else if (req.method === "GET") {
