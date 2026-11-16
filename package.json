@@ -1,8 +1,8 @@
 {
   "name": "karandeshmukh-dev",
   "private": true,
-  "version": "2.0.0",
-  "description": "Portfolio of Karan Deshmukh. One content file builds the page, the PDF CV and the assistant's notes.",
+  "version": "3.0.0",
+  "description": "Portfolio of Karan Deshmukh. One content file builds the home page in five languages, the documentation library, the PDF CV and the assistant's notes.",
   "scripts": { "build": "node build.mjs" },
   "engines": { "node": "22.x" },
   "dependencies": {
