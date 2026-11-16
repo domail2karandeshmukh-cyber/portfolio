@@ -1,0 +1,65 @@
+{
+ "message": "ok for locked out users: go to the admin console, find the user, hit reset mfa (NOT reset password, that doesn't clear their old phone!!). they get an email to enroll again. oh and make sure it's actually them first, call the number in the HR system, don't trust the one in the ticket. check the log after. contractors are a different process, ask IAM\n\ncan someone please write this down properly. third time this month i've explained it",
+ "answer": {
+  "ok": true,
+  "kind": "how-to",
+  "label": "How-to",
+  "title": "Reset MFA for a <f1>locked-out user</f1>",
+  "audience": "",
+  "sections": [
+   {
+    "heading": "Before you start",
+    "style": "bullets",
+    "items": [
+     { "text": "<f8>Confirm that the request is genuine.</f8> <f9>Call the user on the number in the HR system</f9>, <f10>not the number in the ticket</f10>.", "caution": "" },
+     { "text": "<f12>Contractor accounts follow a different process.</f12> <f13>Ask the IAM team.</f13>", "caution": "" }
+    ]
+   },
+   {
+    "heading": "Steps",
+    "style": "steps",
+    "items": [
+     { "text": "In the <f2>admin console</f2>, <f3>find the user</f3>.", "caution": "" },
+     { "text": "Select <f4>**Reset MFA**</f4>.", "caution": "**Caution:** <f5>Don't select **Reset password**.</f5> <f6>It doesn't clear the user's old phone.</f6>" },
+     { "text": "Tell the user to expect an <f7>email to enroll again</f7>.", "caution": "" }
+    ]
+   },
+   {
+    "heading": "Check that it worked",
+    "style": "text",
+    "items": [
+     { "text": "<f11>Check the log</f11> after the reset.", "caution": "" }
+    ]
+   }
+  ],
+  "facts": [
+   { "id": "f1", "quote": "locked out users" },
+   { "id": "f2", "quote": "admin console" },
+   { "id": "f3", "quote": "find the user" },
+   { "id": "f4", "quote": "reset mfa" },
+   { "id": "f5", "quote": "NOT reset password" },
+   { "id": "f6", "quote": "doesn't clear their old phone" },
+   { "id": "f7", "quote": "email to enroll again" },
+   { "id": "f8", "quote": "make sure it's actually them" },
+   { "id": "f9", "quote": "call the number in the HR system" },
+   { "id": "f10", "quote": "don't trust the one in the ticket" },
+   { "id": "f11", "quote": "check the log" },
+   { "id": "f12", "quote": "contractors are a different process" },
+   { "id": "f13", "quote": "ask IAM" }
+  ],
+  "noise": [
+   "ok",
+   "hit",
+   "!!",
+   "oh and",
+   "can someone please write this down properly. third time this month i've explained it"
+  ],
+  "questions": [
+   "Who does this: the service desk, or any administrator?",
+   "Which admin console is it, and where on the user's page is Reset MFA?",
+   "What should the log show when the reset has worked?",
+   "What should happen when the user doesn't answer on the HR number?",
+   "Where is the contractor process written down?"
+  ]
+ }
+}

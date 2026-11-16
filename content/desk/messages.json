@@ -1,0 +1,17 @@
+{
+ "note": "Sample messages for the rewrite desk. They are invented. A draft, once recorded from the model through /api/rewrite?sample=<id>, is served from this file so that a sample always works.",
+ "messages": [
+  {
+   "id": "hotfix",
+   "text": "ok so to push a hotfix: branch off main NOT develop, name it hotfix/<ticket>. get one approval, two if it touches billing. merge, then wait for the staging run to go green before you hit promote, takes like 10 min. DONT promote on fridays after 3 unless Dana says ok lol. if the smoke test fails just roll back from the pipeline page, button's top right. tell #releases when it's out"
+  },
+  {
+   "id": "export",
+   "text": "customer says export to CSV gives an empty file. known thing, happens when the date range is over 90 days. it's not actually empty, the job times out at 30s and we only write the header row. workaround: split into ranges under 90 days OR use the API export which has no limit (needs an admin token tho). fix is planned for 4.12, no date yet. also seen on the PDF export but only for accounts with more than 50k rows i think?? not confirmed"
+  },
+  {
+   "id": "laptops",
+   "text": "notes from the sync with security: starting March 3 all laptops need disk encryption on or they lose VPN. IT will push it automatically to managed Macs, Windows people have to turn on BitLocker themselves (guide coming). personal devices are not allowed on VPN at all anymore. exceptions go through your manager then security, takes about 2 days. contractors same rules. someone asked about Linux, answer was \"we'll get back to you\""
+  }
+ ]
+}
