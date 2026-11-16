@@ -74,7 +74,7 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 .nav nav a{font-size:.97rem;color:var(--soft);text-decoration:none;padding:6px 0;border-bottom:1px solid transparent;white-space:nowrap}
 .nav nav a:hover,.nav nav a[aria-current]{color:var(--text);border-color:var(--teal)}
 .nav-act{display:flex;gap:8px;align-items:center}
-.nav-act .narrow{display:none}
+.nav-act .btn{gap:.28em}
 .icon-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 9px 0 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.05);color:var(--soft);cursor:pointer;transition:border-color .15s,color .15s}
 .icon-btn:hover{border-color:var(--teal);color:var(--text)}
 .lang{position:relative}
@@ -526,8 +526,7 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
  .wrap{width:calc(100% - 36px)}
  .docs,.more,.tools,.hub .docs,.hub .docs.compact,.library .docs{grid-template-columns:minmax(0,1fr)}
  .nav-in{gap:10px;height:62px}
- .nav-act .wide{display:none}
- .nav-act .narrow{display:inline}
+ .nav-act .wide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
  .lang summary{padding:0 10px}
  .tour{bottom:10px;grid-template-columns:auto minmax(0,1fr) auto auto auto;grid-template-areas:"say say say say say" "orb n pause next x";gap:10px 8px;padding:15px 12px 20px 15px}
  .tour p{font-size:.98rem}
