@@ -225,6 +225,9 @@ function audit(text, doc) {
   });
   const said = numbers(text, true);
   const added = [...numbers(d)].filter((n) => !said.has(n));
+  // A time of day completed by the model: "after 3" in the message, "after 3 PM" in the document.
+  const HALF = /\b\d{1,2}(?::\d\d)?\s?(?:am|pm|a\.m\.|p\.m\.)(?![\p{L}])/giu;
+  if (!/\b\d{1,2}(?::\d\d)?\s?(?:am|pm|a\.m\.|p\.m\.)(?![\p{L}])/iu.test(text)) for (const m of doc.matchAll(HALF)) if (!added.includes(m[0])) added.push(m[0]);
   // Doubt is checked the same way: a message that hedges should not become a document that sounds sure.
   const low = text.toLowerCase(), doubt = [];
   if (!SURE.test(d)) for (const m of low.matchAll(UNSURE)) if (doubt.length < 2 && !doubt.includes(m[0].trim())) doubt.push(m[0].trim());
@@ -296,7 +299,8 @@ function shape(text, answer) {
   const sections = sectionsIn
     .map((s) => ({
       heading: cased(String((s && s.heading) || "").replace(/[<>*]/g, "").replace(/\s+/g, " ").trim().slice(0, 60)),
-      style: STYLES.includes(s && s.style) ? s.style : "bullets",
+      // What to have or check first is a list, never a sequence, whatever the model called it.
+      style: /^before you (?:start|begin)/i.test(String((s && s.heading) || "").trim()) ? "bullets" : STYLES.includes(s && s.style) ? s.style : "bullets",
       items: list(s && s.items, 9)
         .map((it) => {
           const item = { runs: runs(typeof it === "string" ? it : it && it.text, known, used, 320) };

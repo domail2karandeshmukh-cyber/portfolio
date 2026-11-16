@@ -166,7 +166,8 @@ module.exports = async (req, res) => {
   const docs = drafts.filter((d) => d.out.ok && (!refused || d.out.stats.facts - d.out.stats.loose >= 3));
   if (!docs.length && refused) return res.status(422).json({ error: "none" });
   if (docs.length) {
-    const best = docs.reduce((a, b) => (D.grade(b.out) < D.grade(a.out) ? b : a));
+    // On a tie the model named first is preferred.
+    const best = docs.sort((a, b) => list.indexOf(a.model) - list.indexOf(b.model)).reduce((a, b) => (D.grade(b.out) < D.grade(a.out) ? b : a));
     const reply = Object.assign(best.out, { ms: Date.now() - began, model: best.model.split(/[:@>]/)[0] });
     if (LIVE) return res.status(200).json(reply);
     const notes = `${drafts.map((d) => `${d.model} ${d.out.ok ? "grade " + D.grade(d.out) : "refused"} ${d.ms} ms $${(d.usage && d.usage.cost) || "?"}`).join(" | ")}  ${tried.join(" | ")}`;
