@@ -13,7 +13,13 @@ const KINDS = ["how-to", "troubleshooting", "reference", "release-note", "policy
 const STYLES = ["steps", "bullets", "text"];
 
 const frame = (text) => `Message:\n"""\n${text}\n"""`;
-const SYSTEM = `${BRIEF.trim()}\n\n## Worked example\n\n${frame(EXAMPLE.message)}\n\nAnswer:\n${JSON.stringify(EXAMPLE.answer)}`;
+/** The conversation a model is given: the brief, the worked example as a first exchange, then the visitor's message. */
+const conversation = (text) => [
+  { role: "system", content: BRIEF.trim() },
+  { role: "user", content: frame(EXAMPLE.message) },
+  { role: "assistant", content: JSON.stringify(EXAMPLE.answer) },
+  { role: "user", content: frame(text) },
+];
 
 const str = { type: "string" };
 const SCHEMA = {
@@ -91,40 +97,53 @@ function fold(s) {
 }
 
 /**
- * Finds each quote in the message. Facts are looked for in the order given, each after the one before it,
- * because the brief asks for them in message order; a quote that isn't there is dropped.
- * @returns {{id?: string, a: number, b: number, k: "f"|"n"}[]} ranges in the original text, none overlapping
+ * Finds quotes in the message and adds their ranges to `taken`, never overlapping one already there.
+ * With `inOrder`, each quote is looked for after the one before it first, because the brief asks for facts
+ * in message order. A quote that isn't in the message is dropped.
+ * @param {{id?: string, quote: string}[]} quotes
+ * @param {{id?: string, a: number, b: number, k: "f"|"n"}[]} taken ranges in the original text
  */
-function locate(text, facts, noise) {
-  const F = fold(text), taken = [];
+function locate(F, quotes, k, taken, inOrder) {
   const free = (a, b) => taken.every((r) => b <= r.a || a >= r.b);
   const EDGE = /^[\s"'.,;:!?()[\]-]+|[\s"'.,;:!?()[\]-]+$/g;
-  const find = (quote, from) => {
-    const q = fold(String(quote || "")).t;
-    for (const s of [q, q.replace(EDGE, "")]) {
-      // One character is too little to place, unless it is the whole of a piece of noise such as "!!".
-      if (s.length < 2) continue;
-      for (const start of from ? [from, 0] : [0]) {
-        for (let i = F.t.indexOf(s, start); i >= 0; i = F.t.indexOf(s, i + 1)) {
+  let cursor = 0;
+  for (const q of quotes) {
+    const whole = fold(String(q.quote || "")).t;
+    let hit = null;
+    for (const s of [whole, whole.replace(EDGE, "")]) {
+      if (hit || s.length < 2) continue;
+      for (const start of inOrder && cursor ? [cursor, 0] : [0]) {
+        for (let i = F.t.indexOf(s, start); i >= 0 && !hit; i = F.t.indexOf(s, i + 1)) {
           const a = F.at[i], b = F.at[i + s.length - 1] + 1;
-          if (free(a, b)) return { a, b, end: i + s.length };
+          if (free(a, b)) hit = { a, b, end: i + s.length };
         }
+        if (hit) break;
       }
     }
-    return null;
-  };
-  let cursor = 0;
-  for (const f of facts) {
-    const hit = find(f.quote, cursor);
     if (!hit) continue;
-    taken.push({ id: f.id, a: hit.a, b: hit.b, k: "f" });
+    taken.push(q.id ? { id: q.id, a: hit.a, b: hit.b, k } : { a: hit.a, b: hit.b, k });
     cursor = hit.end;
   }
-  for (const q of noise) {
-    const hit = find(q, 0);
-    if (hit) taken.push({ a: hit.a, b: hit.b, k: "n" });
-  }
-  return taken.sort((x, y) => x.a - y.a);
+  return taken;
+}
+
+// Words that carry nothing on their own. A short quote counts as noise only when it is made of these.
+const FILLER = new Set("ok okay so lol haha um uh er well hey hi hello thanks thank thx pls please btw tho though oh and yeah yep right basically actually just like really kinda sorta i think guess mean you know anyway anyways fyi etc also then there here it's its is it a an the to of".split(" "));
+const FIRM = /\d|\b(not|no|never|none|dont|don't|doesnt|doesn't|wont|won't|cant|can't|cannot|unless|only|except|must|always|before|after|until)\b/;
+/**
+ * Whether a quote the model called noise may be struck out. Small models call facts noise, and a struck fact
+ * misleads, so the test is strict: no number, no negation or condition, and either nothing but filler words
+ * or a whole sentence that left no trace in the document.
+ */
+function isNoise(quote, doc) {
+  const q = fold(String(quote)).t;
+  if (FIRM.test(q)) return false;
+  const words = q.split(/[^\p{L}\p{N}']+/u).filter(Boolean);
+  const content = words.filter((w) => !FILLER.has(w));
+  if (!content.length) return true;
+  if (words.length < 5) return false;
+  const kept = content.filter((w) => w.length > 3 && doc.includes(w.slice(0, Math.max(4, w.length - 3)))).length;
+  return kept / content.length < 0.34;
 }
 
 /** The message as the page draws it: plain text, facts to highlight, noise to strike. */
@@ -175,9 +194,9 @@ function shape(text, answer) {
   const facts = list(answer.facts, 28)
     .map((f) => ({ id: String((f && f.id) || "").toLowerCase().trim(), quote: String((f && f.quote) || "") }))
     .filter((f, i, all) => /^f\d{1,2}$/.test(f.id) && f.quote.trim() && all.findIndex((o) => o.id === f.id) === i);
-  const noise = list(answer.noise, 20).map(String).filter((q) => q.trim());
-  const ranges = locate(text, facts, noise);
-  const known = new Set(ranges.filter((r) => r.k === "f").map((r) => r.id)), used = new Set();
+  const F = fold(text);
+  const ranges = locate(F, facts, "f", [], true);
+  const known = new Set(ranges.map((r) => r.id)), used = new Set();
 
   const title = runs(answer.title, known, used, 140);
   const audience = runs(answer.audience, known, used, 200);
@@ -199,6 +218,10 @@ function shape(text, answer) {
 
   // A draft needs a title, something to read, and at least two facts that can be followed from the message into it.
   if (!plain(title).trim() || !sections.length || used.size < 2) return null;
+  const doc = fold([plain(title), plain(audience)].concat(sections.flatMap((s) => [s.heading].concat(s.items.flatMap((it) => [plain(it.runs), plain(it.caution || [])])))).join(" ")).t;
+  const noise = list(answer.noise, 24).map(String).filter((q) => q.trim() && isNoise(q, doc)).map((quote) => ({ quote }));
+  locate(F, noise, "n", ranges, false);
+  ranges.sort((x, y) => x.a - y.a);
   return {
     ok: true,
     kind: KINDS.includes(answer.kind) ? answer.kind : "how-to",
@@ -213,4 +236,19 @@ function shape(text, answer) {
   };
 }
 
-module.exports = { SYSTEM, SCHEMA, MESSAGES, MIN, MAX, clean, key, frame, parse, shape, locate, segments, runs };
+/** A draft as plain text, for reading in a terminal: facts in [brackets], noise between ~tildes~. */
+function show(out) {
+  if (!out || !out.ok) return String(out && out.ok === false ? "(not a message)" : "(unusable)");
+  const mark = (rs) => rs.map((r) => (r.f ? `[${r.t}]` : r.t)).join("");
+  const L = [out.raw.map((s) => (s.k === "f" ? `[${s.t}]${s.f ? "" : "*"}` : s.k === "n" ? `~${s.t}~` : s.t)).join(""), "", `${out.label} (${out.kind}): ${mark(out.title)}`];
+  if (out.audience.length) L.push(mark(out.audience));
+  for (const s of out.sections) {
+    L.push(`## ${s.heading}`);
+    s.items.forEach((it, i) => { L.push(`${s.style === "steps" ? i + 1 + "." : s.style === "bullets" ? "-" : " "} ${mark(it.runs)}`); if (it.caution) L.push(`     ! ${mark(it.caution)}`); });
+  }
+  out.questions.forEach((q) => L.push(`? ${q}`));
+  L.push(`facts ${out.stats.facts}, cut ${out.stats.cut}`);
+  return L.join("\n");
+}
+
+module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, key, conversation, parse, shape, show, isNoise };

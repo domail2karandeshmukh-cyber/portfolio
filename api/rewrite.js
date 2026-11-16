@@ -5,6 +5,8 @@ const D = require("./_desk.js");
 
 const GATEWAY = "https://ai-gateway.vercel.sh";
 const LIVE = process.env.VERCEL_ENV === "production";
+// A preview deployment sits behind Vercel's sign-in, so the limits below are lifted there to let a model be tested.
+const LIMITED = LIVE || !process.env.VERCEL;
 // Tried in this order; the first that returns a usable draft answers the next visitor too.
 const MODELS = (process.env.DESK_MODELS || "google/gemini-2.5-flash-lite,deepseek/deepseek-v4-flash,alibaba/qwen3.7-flash,inclusionai/ling-3.0-flash").split(",").map((s) => s.trim()).filter(Boolean);
 // One model may cost at most this much per token, in dollars, whoever asks for it.
@@ -27,7 +29,7 @@ async function draft(model, token, text, opt = {}) {
       model,
       temperature: 0.2,
       max_tokens: 1600,
-      messages: [{ role: "system", content: D.SYSTEM }, { role: "user", content: D.frame(text) }],
+      messages: D.conversation(text),
     };
     if (format === "schema") body.response_format = { type: "json_schema", json_schema: { name: "draft", description: "A document drafted from a message, with its working", schema: D.SCHEMA } };
     if (format === "json") body.response_format = { type: "json_object" };
@@ -106,6 +108,16 @@ module.exports = async (req, res) => {
   if (q.probe === "models" && !LIVE) {
     try { return res.status(200).json(await eligible(token)); } catch (e) { return res.status(502).json({ error: String(e.message).slice(0, 120) }); }
   }
+  // On a preview, ?probe=eval&models=a,b&sample=id drafts one sample with several models and prints the drafts side by side.
+  if (q.probe === "eval" && !LIVE && sample) {
+    const got = await Promise.all(String(q.models || MODELS.join(",")).split(",").slice(0, 8).map(async (model) => {
+      const g = await draft(model.trim(), token, D.clean(sample.text), { raw: true, think: q.think ? String(q.think) : "" });
+      const head = `=== ${model}  ${g.ms || "-"} ms  $${(g.usage && g.usage.cost) || "?"}  out ${(g.usage && g.usage.completion_tokens) || "?"} tok (thinking ${(g.usage && g.usage.completion_tokens_details && g.usage.completion_tokens_details.reasoning_tokens) || 0})  ${g.format || ""}  ${g.tried.join(" | ")}`;
+      return head + "\n" + (g.out ? D.show(g.out) : "(no usable draft) " + String(g.content || "").slice(0, 400));
+    }));
+    res.setHeader("content-type", "text/plain; charset=utf-8");
+    return res.status(200).send(got.join("\n\n"));
+  }
 
   text = D.clean(text);
   if (text.length < D.MIN) return res.status(400).json({ error: "short" });
@@ -118,7 +130,7 @@ module.exports = async (req, res) => {
 
   const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
   const recent = (minute.get(ip) || []).filter((t) => now - t < 60000);
-  if (recent.length >= A_MINUTE || (daily.get(ip) || 0) >= EACH_A_DAY || total >= A_DAY) return res.status(429).json({ error: "busy" });
+  if (LIMITED && (recent.length >= A_MINUTE || (daily.get(ip) || 0) >= EACH_A_DAY || total >= A_DAY)) return res.status(429).json({ error: "busy" });
   recent.push(now); minute.set(ip, recent); daily.set(ip, (daily.get(ip) || 0) + 1); total++;
   if (minute.size > 5000) minute.clear();
 
