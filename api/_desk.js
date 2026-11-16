@@ -2,7 +2,6 @@
 // in the visitor's message with the place it lands in the document. api/rewrite.js adds the model.
 const fs = require("fs");
 const path = require("path");
-const crypto = require("crypto");
 
 const BRIEF = fs.readFileSync(path.join(__dirname, "..", "content", "desk", "brief.md"), "utf8");
 const EXAMPLE = require("../content/desk/example.json");
@@ -59,7 +58,6 @@ function clean(text) {
     .replace(/\n{3,}/g, "\n\n")
     .trim();
 }
-const key = (text) => crypto.createHash("sha256").update(text).digest("hex");
 
 /** A model's reply as an object, whether or not it wrapped the JSON in a code fence or a sentence. */
 function parse(content) {
@@ -309,4 +307,4 @@ function show(out) {
   return L.join("\n");
 }
 
-module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, key, conversation, parse, shape, show, isNoise, audit };
+module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, conversation, parse, shape, show, isNoise, audit };

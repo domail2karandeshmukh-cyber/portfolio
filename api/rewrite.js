@@ -17,7 +17,6 @@ const A_MINUTE = 4, EACH_A_DAY = 30, A_DAY = 300;
 
 let chosen = "";
 const formats = new Map();     // how each model accepts a request for JSON
-const memo = new Map();        // drafts already made by this copy of the function, by a hash of the message
 const minute = new Map(), daily = new Map();
 let day = "", total = 0;
 
@@ -32,6 +31,8 @@ async function draft(spec, token, text, opt = {}) {
       temperature: 0.2,
       max_tokens: effort ? 3200 : 1800,
       messages: D.conversation(text),
+      // Only a provider that keeps no copy of the request may serve it.
+      providerOptions: { gateway: { zeroDataRetention: true } },
     };
     if (format === "schema") body.response_format = { type: "json_schema", json_schema: { name: "draft", description: "A document drafted from a message, with its working", schema: D.SCHEMA } };
     if (format === "json") body.response_format = { type: "json_object" };
@@ -55,7 +56,7 @@ async function draft(spec, token, text, opt = {}) {
     if (r.ok && typeof content === "string") {
       formats.set(model, format);
       const out = D.shape(text, D.parse(content));
-      if (out) return { out, ms, format, usage: data.usage, content: opt.raw ? content : undefined, tried };
+      if (out) return { out, ms, format, usage: data.usage, kept: !(data.gateway && data.gateway.enabledZeroDataRetention), content: opt.raw ? content : undefined, tried };
       tried.push(`${model}/${format}: unusable draft`);
       if (opt.raw) return { out: null, ms, format, usage: data.usage, content, tried };
       break;
@@ -116,7 +117,7 @@ module.exports = async (req, res) => {
   if (q.probe === "eval" && !LIVE && sample) {
     const got = await Promise.all(String(q.models || MODELS.join(",")).split(",").slice(0, 8).map(async (model) => {
       const g = await draft(model.trim(), token, D.clean(sample.text), { raw: true });
-      const head = `=== ${model}  ${g.ms || "-"} ms  $${(g.usage && g.usage.cost) || "?"}  out ${(g.usage && g.usage.completion_tokens) || "?"} tok (thinking ${(g.usage && g.usage.completion_tokens_details && g.usage.completion_tokens_details.reasoning_tokens) || 0})  ${g.format || ""}  ${g.tried.join(" | ")}`;
+      const head = `=== ${model}  ${g.ms || "-"} ms  ${g.kept === false ? "zero retention" : "RETENTION NOT CONFIRMED"}  $${(g.usage && g.usage.cost) || "?"}  out ${(g.usage && g.usage.completion_tokens) || "?"} tok (thinking ${(g.usage && g.usage.completion_tokens_details && g.usage.completion_tokens_details.reasoning_tokens) || 0})  ${g.format || ""}  ${g.tried.join(" | ")}`;
       return head + "\n" + (g.out ? D.show(g.out) : "(no usable draft) " + String(g.content || "").slice(0, 400));
     }));
     res.setHeader("content-type", "text/plain; charset=utf-8");
@@ -127,10 +128,8 @@ module.exports = async (req, res) => {
   if (text.length < D.MIN) return res.status(400).json({ error: "short" });
   if (text.length > D.MAX) return res.status(400).json({ error: "long" });
 
-  const id = D.key(text);
   res.setHeader("cache-control", "no-store");
   const diagnose = !LIVE && (q.model || q.raw || q.show);
-  if (memo.has(id) && !diagnose && !q.live) return res.status(200).json(memo.get(id));
 
   const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
   const recent = (minute.get(ip) || []).filter((t) => now - t < 60000);
@@ -168,12 +167,8 @@ module.exports = async (req, res) => {
     if (!diagnose) chosen = first || model;
     if (!got.out.ok) return res.status(422).json({ error: "none" });
     const reply = Object.assign(got.out, { ms, model: model.split(/[:@]/)[0] });
-    if (!diagnose) {
-      memo.set(id, reply);
-      if (memo.size > 300) memo.delete(memo.keys().next().value);
-    }
     // On a preview, ?show=1 prints the draft as text.
-    if (!LIVE && q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`${reply.model}  ${ms} ms  ${tried.join(" | ")}\n${D.show(reply)}`); }
+    if (!LIVE && q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`${reply.model}  ${ms} ms  ${got.kept === false ? "zero retention" : "RETENTION NOT CONFIRMED"}  ${tried.join(" | ")}\n${D.show(reply)}`); }
     return res.status(200).json(LIVE ? reply : Object.assign({ format: got.format, usage: got.usage, tried }, reply));
   }
   chosen = "";
