@@ -9,7 +9,7 @@
   "github": "domail2karandeshmukh-cyber",
   "cv": "/Karan-Deshmukh-CV.pdf",
   "playlist": "PL0rlqpzQUJIP_xWzDM79apqJyZ_-C_8bn",
-  "links": {"linkedin": "https://www.linkedin.com/in/karan-deshmukh-a86986175/", "github": "https://github.com/domail2karandeshmukh-cyber", "youtube": "https://www.youtube.com/playlist?list=PL0rlqpzQUJIP_xWzDM79apqJyZ_-C_8bn", "samples": "https://karandeshmukh.dev/samples"}
+  "links": {"linkedin": "https://www.linkedin.com/in/karan-deshmukh-a86986175/", "github": "https://github.com/domail2karandeshmukh-cyber", "youtube": "https://www.youtube.com/playlist?list=PL0rlqpzQUJIP_xWzDM79apqJyZ_-C_8bn", "samples": "https://karandeshmukh.dev/samples", "docs": "https://karandeshmukh.dev/docs"}
  },
  "repos": {"trustnav": "7ba252df6715c234a03b2733d1747917ad0fe470", "ai-chainguard": "f38a2a68ba27c8ac8b34f82f9d9d232b4c77ecd6", "novatech-sentinel-v24": "04b1d5ddf77590c88efe0a0984521fbb689135ed", "group6-kc1-defect-prediction": "a3e937472c5dbd8f1d7691e4a65d45658f3e0581"},
  "summary": "Technical Writer with 5+ years of experience creating enterprise IT, cybersecurity/IAM, SaaS, and product documentation for global audiences. Translates complex security workflows and technical processes into clear, accurate knowledge-base content, technical explainers, SOPs, runbooks, troubleshooting guides, user guidance, and multimedia learning assets. Experienced across the content lifecycle from requirements and source gathering through drafting, SME validation, editorial review, approval, publication, migration, and controlled iteration. Hands-on experience documenting authentication, MFA, access-management and identity-lifecycle workflows, plus AI-assisted knowledge workflows with human validation.",
@@ -34,7 +34,7 @@
   {"role": "Associate Business Analyst", "org": "BPEC Solutions Pvt. Ltd.", "note": "", "dates": "Aug 2019 to Jun 2021", "place": "India", "web": 1, "points": ["Gathered and analyzed stakeholder requirements and transformed them into workflows, SOPs, implementation guidance, validation steps, and user-facing documentation", "Defined expected process outcomes and review criteria, resolved ambiguities with European clients, and coordinated revisions, approvals, and delivery schedules", "Maintained structured trackers in Excel and Google Sheets, analyzed recurring issues, and recommended documentation and process improvements"]}
  ],
  "selected": [
-  {"label": "Help-center samples", "text": "A step-by-step how-to with screenshots and an animation, and a nine-part set of Google Workspace FAQs for end users, published as web pages at karandeshmukh.dev/samples"},
+  {"label": "Help-center samples", "text": "A step-by-step how-to with screenshots and an animation, and a nine-part set of Google Workspace FAQs for end users, published as web pages at karandeshmukh.dev/docs"},
   {"label": "Security systems documentation (MSc)", "text": "Led and documented TrustNav (GNSS trust monitoring), AI-ChainGuard (AI supply chain integrity) and NOVATECH Sentinel (risk governance): explainers, a threat model, developer guides and release notes, published as docs-as-code at karandeshmukh.dev"},
   {"label": "AI-assisted enterprise knowledge", "text": "Improved source quality and prompt patterns for an internal GPT knowledge pack; validated AI-assisted content against approved technical knowledge before publication"},
   {"label": "AI assistant project", "text": "Documented functional requirements, technical specifications, test follow-up, dependencies, and GDPR considerations for an AI assistant MVP"},
@@ -66,27 +66,34 @@
   "report": {"label": "Report", "plural": "Reports and papers", "color": "#5A6283"}
  },
  "docs": [
-  {"id": "cg-threat", "type": "security", "start": true, "title": "Threat model", "short": "Threat model", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/04_threat_model.md", "blurb": "Asset-centric STRIDE analysis. Each threat is mapped to a verifier check and to the attack scenario that demonstrates it, and residual risks are stated."},
-  {"id": "tn-demo", "type": "howto", "title": "The demonstration in two minutes", "short": "Demo guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Demo_Guide.pdf", "pages": 2, "blurb": "A two-page guide for a reader who cannot attend the demo: the link, the four screens worth opening and what each one proves."},
-  {"id": "tn-how", "type": "concept", "title": "How TrustNav works, step by step", "short": "How it works", "project": "TrustNav", "repo": "trustnav", "path": "docs/HOW_IT_WORKS.md", "blurb": "The full pipeline from one receiver observation to the operator's screen, with a diagram and a table of what each signal means and why it matters."},
-  {"id": "kc1-build", "type": "howto", "title": "Manual Docker build guide", "short": "Build guide", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "MANUAL_BUILD_GUIDE.md", "blurb": "Takes a first-time user from checking Docker to three running interfaces, then covers troubleshooting. Every command is followed by what it does."},
-  {"id": "ns-release", "type": "release", "title": "Release notes, V2.4", "short": "Release notes", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "docs/RELEASE_NOTES_V2.4.md", "blurb": "What changed since V2.3, the tests that ran, the known limitations and the production check, written for the people presenting the release."},
-  {"id": "tn-glossary", "type": "reference", "title": "Glossary", "short": "Glossary", "project": "TrustNav", "repo": "trustnav", "path": "docs/GLOSSARY.md", "blurb": "Satellite-navigation terms in one line each, written for readers outside the field."},
-  {"id": "tn-code", "type": "dev", "title": "Code guide: every file and what it does", "short": "Code guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/CODE_GUIDE.md", "blurb": "Folder map, the job of each module, the tests, deployment and how to plug in a real receiver."},
-  {"id": "cg-arch", "type": "concept", "title": "Architecture", "short": "Architecture", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/05_architecture.md", "blurb": "How the CLI, API, ML pipeline and deployment gateway share one implementation of hashing, signing and verification. Diagrams are written in Mermaid."},
-  {"id": "ns-readme", "type": "reference", "title": "README: NOVATECH Sentinel", "short": "README", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "README.md", "blurb": "Fourteen sections from project overview to known limitations, including a plain statement of what is simulated and what is real."},
-  {"id": "kc1-readme", "type": "reference", "title": "README: KC1 defect prediction", "short": "README", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "README.md", "blurb": "Architecture, dataset, model selection, the prediction API and what is deliberately kept out of Git."},
-  {"id": "cg-report", "type": "report", "title": "AI-ChainGuard final report", "short": "Final report", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "report/AI-ChainGuard_Final_Report.pdf", "pages": 40, "blurb": "The whole project in one document, following the six phases of the course brief, with appendices."},
-  {"id": "cg-paper", "type": "report", "title": "Signed Is Not Safe", "short": "IEEE-format paper", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "paper/signed_is_not_safe.pdf", "pages": 6, "blurb": "The project written up as a six-page IEEE-format paper on where cryptographic integrity stops and semantic trust begins."},
-  {"id": "tn-report", "type": "report", "title": "TrustNav technical report", "short": "Technical report", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Technical_Documentation.pdf", "pages": 44, "blurb": "Requirements, approach, how it works, results, a critical review and project management in one file.", "list": false}
+  {"id": "cg-threat", "type": "security", "start": true, "title": "Threat model", "short": "Threat model", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/04_threat_model.md", "blurb": "Asset-centric STRIDE analysis. Each threat is mapped to a verifier check and to the attack scenario that demonstrates it, and residual risks are stated.", "shelf": "ai-chainguard", "slug": "threat-model", "lead": {"image": "docs/demo-screenshots/04_attack_lab_tamper.png", "alt": "Attack lab: a tampered dataset fails verification, with two failed checks listed", "caption": "The attack lab runs the threats in this model against the verifier."}},
+  {"id": "tn-demo", "type": "howto", "title": "The demonstration in two minutes", "short": "Demo guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Demo_Guide.pdf", "pages": 2, "blurb": "A two-page guide for a reader who cannot attend the demo: the link, the four screens worth opening and what each one proves.", "shelf": "trustnav", "slug": "demo-guide"},
+  {"id": "tn-how", "type": "concept", "title": "How TrustNav works, step by step", "short": "How it works", "project": "TrustNav", "repo": "trustnav", "path": "docs/HOW_IT_WORKS.md", "blurb": "The full pipeline from one receiver observation to the operator's screen, with a diagram and a table of what each signal means and why it matters.", "shelf": "trustnav", "slug": "how-it-works", "lead": {"image": "docs/images/console.png", "alt": "TrustNav console: a fleet list with trust scores, a map of the vehicles and an alerts panel", "caption": "The operator console. Every score and alert on it comes out of the steps below."}},
+  {"id": "kc1-build", "type": "howto", "title": "Manual Docker build guide", "short": "Build guide", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "MANUAL_BUILD_GUIDE.md", "blurb": "Takes a first-time user from checking Docker to three running interfaces, then covers troubleshooting. Every command is followed by what it does.", "shelf": "kc1", "slug": "build-guide"},
+  {"id": "ns-release", "type": "release", "title": "Release notes, V2.4", "short": "Release notes", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "docs/RELEASE_NOTES_V2.4.md", "blurb": "What changed since V2.3, the tests that ran, the known limitations and the production check, written for the people presenting the release.", "shelf": "novatech-sentinel", "slug": "release-notes", "lead": {"image": "docs/images/command.jpg", "alt": "Command Center: a map of the company's sites, the incident queue and the evidence ledger", "caption": "The Command Center in V2.4."}},
+  {"id": "tn-glossary", "type": "reference", "title": "Glossary", "short": "Glossary", "project": "TrustNav", "repo": "trustnav", "path": "docs/GLOSSARY.md", "blurb": "Satellite-navigation terms in one line each, written for readers outside the field.", "shelf": "trustnav", "slug": "glossary", "lead": {"image": "docs/images/kpi-strip.png", "alt": "Summary strip of the console: fleet trust 76, 7 platforms, 2 open incidents, 2 positions refused", "caption": "The console uses the terms defined on this page."}},
+  {"id": "tn-code", "type": "dev", "title": "Code guide: every file and what it does", "short": "Code guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/CODE_GUIDE.md", "blurb": "Folder map, the job of each module, the tests, deployment and how to plug in a real receiver.", "shelf": "trustnav", "slug": "code-guide", "lead": {"image": "docs/images/guide-2-replay.png", "alt": "Replay screen: a spoofing attack on a delivery van, with its trust score, the reasons and a timeline", "caption": "The replay screen, one of the dashboard screens whose code is described below."}},
+  {"id": "cg-arch", "type": "concept", "title": "Architecture", "short": "Architecture", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/05_architecture.md", "blurb": "How the CLI, API, ML pipeline and deployment gateway share one implementation of hashing, signing and verification. Diagrams are written in Mermaid.", "shelf": "ai-chainguard", "slug": "architecture", "lead": {"image": "docs/demo-screenshots/02_provenance_chain.png", "alt": "Provenance chain: signed stages linked from the datasets to the deployment", "caption": "The provenance chain as the console draws it."}},
+  {"id": "ns-readme", "type": "reference", "title": "README: NOVATECH Sentinel", "short": "README", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "README.md", "blurb": "Fourteen sections from project overview to known limitations, including a plain statement of what is simulated and what is real.", "shelf": "novatech-sentinel", "slug": "readme", "omit": ["Contents"]},
+  {"id": "kc1-readme", "type": "reference", "title": "README: KC1 defect prediction", "short": "README", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "README.md", "blurb": "Architecture, dataset, model selection, the prediction API and what is deliberately kept out of Git.", "shelf": "kc1", "slug": "readme"},
+  {"id": "cg-report", "type": "report", "title": "AI-ChainGuard final report", "short": "Final report", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "report/AI-ChainGuard_Final_Report.pdf", "pages": 40, "blurb": "The whole project in one document, following the six phases of the course brief, with appendices.", "shelf": "ai-chainguard", "slug": "final-report"},
+  {"id": "cg-paper", "type": "report", "title": "Signed Is Not Safe", "short": "IEEE-format paper", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "paper/signed_is_not_safe.pdf", "pages": 6, "blurb": "The project written up as a six-page IEEE-format paper on where cryptographic integrity stops and semantic trust begins.", "shelf": "ai-chainguard", "slug": "paper"},
+  {"id": "tn-report", "type": "report", "title": "TrustNav technical report", "short": "Technical report", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Technical_Documentation.pdf", "pages": 44, "blurb": "Requirements, approach, how it works, results, a critical review and project management in one file.", "shelf": "trustnav", "slug": "technical-report"}
  ],
  "samples": {
   "title": "Help-center samples",
   "index": false,
   "intro": "Two samples of end-user help content, published here as web pages: a step-by-step how-to with screenshots and a set of FAQs. Each page is built from a Google Doc by the same build that makes the rest of this site.",
   "items": [
-   {"kind": "article", "slug": "core42-portal", "file": "core42-portal", "type": "howto", "start": true, "label": "On this site", "title": "Access the Core42 AI Cloud Portal", "blurb": "A procedure for first-time users: create an individual account, verify the email address and sign in. Screenshots show where to click at each step, and a short animation shows the sign-up form.", "note": "Personal details in the screenshots are covered."},
-   {"kind": "set", "slug": "google-workspace-faqs", "type": "faq", "start": true, "label": "On this site", "title": "Google Workspace FAQs", "blurb": "Nine short guides that answer common end-user questions about Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat, most of them in a few numbered steps.",
+   {"kind": "article", "slug": "core42-portal", "file": "core42-portal", "type": "howto", "start": true, "label": "Help-center sample", "title": "Access the Core42 AI Cloud Portal", "blurb": "A procedure for first-time users: create an individual account, verify the email address and sign in. Screenshots show where to click at each step, and a short animation shows the sign-up form.", "note": "Personal details in the screenshots are covered.", "id": "core42"},
+   {
+    "kind": "set",
+    "slug": "google-workspace-faqs",
+    "type": "faq",
+    "start": true,
+    "label": "Help-center sample",
+    "title": "Google Workspace FAQs",
+    "blurb": "Nine short guides that answer common end-user questions about Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat, most of them in a few numbered steps.",
     "intro": "Answers to common end-user questions about nine Google Workspace apps. Choose an app to read its guide.",
     "omit": ["Overview", "Admin FAQs"],
     "edits": {
@@ -111,7 +118,8 @@
      {"slug": "forms", "file": "faq-google-forms", "name": "Google Forms"},
      {"slug": "meet", "file": "faq-google-meet", "name": "Google Meet"},
      {"slug": "chat", "file": "faq-google-chat", "name": "Google Chat"}
-    ]
+    ],
+    "id": "workspace-faqs"
    }
   ]
  },
@@ -126,16 +134,58 @@
   {"id": "sentinel", "name": "NOVATECH Sentinel", "role": "Project lead: platform design and documentation", "summary": "For security and risk teams that must show who decided what during an incident. An incident moves through seven gates, from detection to closure, with separation of duties and a hash-chained evidence ledger, so every decision has an owner and leaves proof. Where it stands: a working demo on a simulated company, labelled as such in the app.", "stack": "React, Vite, TypeScript, Supabase", "live": "https://sentinel.karandeshmukh.dev", "repo": "https://github.com/domail2karandeshmukh-cyber/novatech-sentinel-v24", "docs": ["ns-release", "ns-readme"], "liveLabel": "Open live app"}
  ],
  "more": [
-  {"name": "KC1 defect prediction", "role": "Docker packaging and documentation", "summary": "A machine-learning service that predicts defect-prone software modules. My part was the container setup and the documentation that gets a first-time user to a running API.", "links": [["Build guide", "doc:kc1-build"], ["README", "doc:kc1-readme"]]},
-  {"name": "BizAssist AI", "role": "Project manager", "summary": "Drafts euro-priced quotations for small businesses from a client request. I managed the project and documented its requirements, specifications and deployment.", "links": [["Live app", "https://bizassist.karandeshmukh.dev"]]},
-  {"name": "ReleasePilot AI", "role": "Solo project", "summary": "A multi-project release and compliance planner. APRIL, the assistant on this site, started here: she proposes project plans and waits for a human yes.", "links": [["Live app", "https://releasepilot.karandeshmukh.dev"]]}
+  {
+   "name": "KC1 defect prediction",
+   "role": "Docker packaging and documentation",
+   "summary": "A machine-learning service that predicts defect-prone software modules. My part was the container setup and the documentation that gets a first-time user to a running API.",
+   "links": [
+    ["Build guide", "doc:kc1-build"],
+    ["README", "doc:kc1-readme"]
+   ]
+  },
+  {
+   "name": "BizAssist AI",
+   "role": "Project manager",
+   "summary": "Drafts euro-priced quotations for small businesses from a client request. I managed the project and documented its requirements, specifications and deployment.",
+   "links": [
+    ["Live app", "https://bizassist.karandeshmukh.dev"]
+   ]
+  },
+  {
+   "name": "ReleasePilot AI",
+   "role": "Solo project",
+   "summary": "A multi-project release and compliance planner. April, the assistant on this site, started here: she proposes project plans and waits for a human yes.",
+   "links": [
+    ["Live app", "https://releasepilot.karandeshmukh.dev"]
+   ]
+  }
  ],
  "faq": [
   {"q": "What does Karan write?", "keys": "write|writing|document|docs|kind|type|sop|runbook", "a": "Knowledge-base articles, SOPs, runbooks, how-to and troubleshooting guides, mostly for IT, security and identity teams. At MongoDB he created and maintained 500+ of them."},
-  {"q": "Where can I read samples?", "keys": "sample|read|example|portfolio|library|faq|how-to", "a": "Two help-center samples open on this site, a how-to with screenshots and a set of Google Workspace FAQs: https://karandeshmukh.dev/samples The Writing samples section also links a dozen project documents on GitHub, from a Docker build guide to a threat model."},
+  {"q": "Where can I read samples?", "keys": "sample|read|example|portfolio|library|faq|how-to", "a": "Everything opens on this site, in the library: https://karandeshmukh.dev/docs It holds two help-center samples, a how-to with screenshots and a set of Google Workspace FAQs, and the documentation of Karan's security projects."},
   {"q": "Which tools does he use?", "keys": "tool|stack|zendesk|flare|glean|snagit|confluence|markdown|git", "a": "Zendesk Guide, Confluence, Document360 and MadCap Flare for knowledge bases; Git, GitHub and Markdown for docs-as-code; Glean and prompt engineering for AI-assisted knowledge; Snagit and Final Cut Pro for video and GIFs."},
   {"q": "What is TrustNav?", "keys": "trustnav|gnss|gps|spoof|jam|satellite", "a": "TrustNav checks every second whether a vehicle's satellite position can be believed, scores it from 0 to 100 and explains why. Karan led the project and its documentation. Live demo: https://trustnav.karandeshmukh.dev"},
   {"q": "Is he available?", "keys": "available|availab|hire|hiring|role|intern|freelance|contact|reach|start", "a": "Yes. Karan is open to technical writing roles: part-time, freelance, internship or apprenticeship, remote or hybrid from Angers, France. Message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/"},
-  {"q": "Who are you?", "keys": "who are you|april|assistant|jarvis|yourself", "a": "I'm APRIL: AI for Projects, Releases, Insights and Logs. Karan first built me inside ReleasePilot AI. Here I answer questions about his work from the same content file that builds this page."}
- ]
+  {"q": "Who are you?", "keys": "who are you|april|assistant|jarvis|yourself|your name", "a": "I'm April. My name stands for AI for Projects, Releases, Insights and Logs. Karan first built me inside ReleasePilot AI. Here I answer questions about his work from the same content file that builds this page."}
+ ],
+ "featured": ["core42", "workspace-faqs", "cg-threat"],
+ "library": {
+  "title": "Documentation library",
+  "intro": "Everything I can show in public, in one place: help-center samples, and the documentation of the security tools I led during my MSc. Every document opens here, with its screenshots and diagrams.",
+  "shelves": [
+   {"key": "help", "name": "Help-center samples", "blurb": "End-user help content: a step-by-step how-to and a set of FAQs."},
+   {"key": "trustnav", "name": "TrustNav", "project": "trustnav", "blurb": "Scores, once a second, how far each vehicle's satellite position can be believed."},
+   {"key": "ai-chainguard", "name": "AI-ChainGuard", "project": "chainguard", "blurb": "Links datasets, models and deployments into one signed chain, and checks it before a model loads."},
+   {"key": "novatech-sentinel", "name": "NOVATECH Sentinel", "project": "sentinel", "blurb": "Takes an incident through seven gates, from detection to closure, and keeps a ledger of who decided what."},
+   {"key": "kc1", "name": "KC1 defect prediction", "blurb": "A machine-learning service that predicts defect-prone software modules. I wrote its container setup and its documentation."}
+  ]
+ },
+ "locales": [
+  {"code": "en", "name": "English", "path": "/"},
+  {"code": "fr", "name": "Français", "path": "/fr", "offer": "Cette page existe en français.", "go": "Lire en français"},
+  {"code": "de", "name": "Deutsch", "path": "/de", "offer": "Diese Seite gibt es auch auf Deutsch.", "go": "Auf Deutsch lesen"},
+  {"code": "es", "name": "Español", "path": "/es", "offer": "Esta página también está en español.", "go": "Leer en español"},
+  {"code": "hi", "name": "हिन्दी", "path": "/hi", "offer": "यह पेज हिंदी में भी उपलब्ध है।", "go": "हिंदी में पढ़ें"}
+ ],
+ "strings": {"morning": "Good morning.", "afternoon": "Good afternoon.", "evening": "Good evening.", "intro": "I'm April, Karan's assistant. Ask me about his writing, his projects or his availability.", "thinking": "Thinking...", "offline": "I can't reach my AI model right now. Try one of the suggested questions, or message Karan on LinkedIn:", "voiceOn": "I'll read my answers aloud.", "voiceOff": "Voice is off.", "hello": "Hello, I'm April. Ask me anything about Karan's work, and I'll answer from his notes.", "palDocs": "Documents", "palHere": "On this page", "palAsk": "Ask April", "palNone": "No document matches. Press Enter to ask April.", "palHint": "Type to search the library, or ask April a question.", "copy": "Copy", "copied": "Copied", "close": "Close", "playing": "Now playing"}
 }

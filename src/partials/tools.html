@@ -1,0 +1,29 @@
+<button class="dock" type="button" data-april aria-haspopup="dialog"><span class="orb sm" aria-hidden="true"></span><span>Ask April</span></button>
+
+<div class="april" id="april" role="dialog" aria-labelledby="april-t" hidden>
+ <div class="april-head">
+  <span class="orb sm" id="orb" aria-hidden="true"></span>
+  <div><b id="april-t" class="aw" translate="no">April</b><small>Karan's assistant</small></div>
+  <button type="button" class="x speak" id="speak" aria-pressed="false" aria-label="Read answers aloud"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="wave" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/><path class="mute" d="M17 9l5 6M22 9l-5 6"/></svg></button>
+  <button type="button" class="x" id="april-x" aria-label="Close April">&times;</button>
+ </div>
+ <div class="log" id="log" aria-live="polite"></div>
+ <div class="chips" id="sugg"></div>
+ <form id="ask">
+  <input id="q" placeholder="Ask about Karan's work" aria-label="Your question" autocomplete="off" maxlength="300">
+  <button type="button" id="mic" aria-label="Ask by voice" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button>
+  <button class="send" aria-label="Send"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+ </form>
+ <p class="fine">April is an AI model answering from Karan's notes. She can be wrong, so check the linked source.</p>
+</div>
+
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Search the documentation" hidden>
+ <div class="pal-box">
+  <div class="pal-in"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg><input id="pal-q" type="search" placeholder="Search documents, sections and answers" aria-label="Search" autocomplete="off" spellcheck="false"><kbd aria-hidden="true">Esc</kbd></div>
+  <ul class="pal-list" id="pal-list" role="listbox" aria-label="Results"></ul>
+  <p class="pal-foot"><span>Documents are in English.</span><span aria-hidden="true"><kbd>&uarr;</kbd><kbd>&darr;</kbd> <kbd>Enter</kbd></span></p>
+ </div>
+</div>
+
+<script id="faq" type="application/json">{{faq}}</script>
+<script id="i18n" type="application/json">{{i18n}}</script>
