@@ -7,8 +7,9 @@ const GATEWAY = "https://ai-gateway.vercel.sh";
 const LIVE = process.env.VERCEL_ENV === "production";
 // A preview deployment sits behind Vercel's sign-in, so the limits below are lifted there to let a model be tested.
 const LIMITED = LIVE || !process.env.VERCEL;
-// Tried in this order. A model that reasons before it answers is written with its effort: "openai/gpt-5-mini:low".
-const MODELS = (process.env.DESK_MODELS || "google/gemini-2.5-flash-lite,openai/gpt-4.1-mini,mistral/mistral-small").split(",").map((s) => s.trim()).filter(Boolean);
+// Tried in this order. After the name, "@json" is how the model takes a request for JSON when it has no support
+// for a schema, and ":low" is the effort of a model that reasons before it answers.
+const MODELS = (process.env.DESK_MODELS || "meta/llama-4-maverick@json,google/gemini-2.5-flash-lite,openai/gpt-4.1-mini").split(",").map((s) => s.trim()).filter(Boolean);
 // One model may cost at most this much per token, in dollars, whoever asks for it.
 const CEILING = { input: 0.000001, output: 0.000005 };
 // A draft costs a fraction of a cent. These keep a bad day cheap: per visitor a minute, per visitor a day, in all a day.
@@ -21,9 +22,10 @@ const minute = new Map(), daily = new Map();
 let day = "", total = 0;
 
 async function draft(spec, token, text, opt = {}) {
-  const tried = [], [model, effort] = spec.split(":");
+  const tried = [], [, model, effort, given] = /^([^:@]+)(?::([a-z]+))?(?:@([a-z]+))?$/.exec(spec) || [0, spec];
   // The form that worked last time goes first.
-  const order = ["schema", "json", "plain"].sort((a, b) => (b === formats.get(model)) - (a === formats.get(model)));
+  const want = formats.get(model) || given;
+  const order = ["schema", "json", "plain"].sort((a, b) => (b === want) - (a === want));
   for (const format of order) {
     const body = {
       model,
@@ -92,6 +94,8 @@ module.exports = async (req, res) => {
       text = b.text;
     } else if (req.method === "GET") {
       sample = D.MESSAGES.find((m) => m.id === String(q.sample || "")) || null;
+      // On a preview a message can also come in the address, so that the service can be tried with a plain fetch.
+      if (!sample && !LIVE && q.text) sample = { id: "text", text: String(q.text) };
       if (!sample && !(q.probe && !LIVE)) return res.status(404).json({ error: "no such sample" });
       text = sample ? sample.text : "";
     } else return res.status(405).json({ error: "method" });
@@ -125,7 +129,7 @@ module.exports = async (req, res) => {
 
   const id = D.key(text);
   res.setHeader("cache-control", "no-store");
-  const diagnose = !LIVE && (q.model || q.raw);
+  const diagnose = !LIVE && (q.model || q.raw || q.show);
   if (memo.has(id) && !diagnose && !q.live) return res.status(200).json(memo.get(id));
 
   const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
@@ -138,14 +142,14 @@ module.exports = async (req, res) => {
   let list = chosen ? [chosen, ...MODELS.filter((m) => m !== chosen)] : MODELS;
   if (diagnose && q.model) {
     const cat = await fetch(`${GATEWAY}/v1/models`, { signal: AbortSignal.timeout(8000) }).then((r) => r.json()).catch(() => ({}));
-    const m = (cat.data || []).find((x) => x.id === String(q.model).split(":")[0]);
+    const m = (cat.data || []).find((x) => x.id === String(q.model).split(/[:@]/)[0]);
     if (!m || !(Number(m.pricing && m.pricing.input) <= CEILING.input) || !(Number(m.pricing && m.pricing.output) <= CEILING.output)) return res.status(400).json({ error: "model not allowed" });
     list = [q.model];
   }
 
   // The first usable draft wins, unless the check by rule finds a name or a number lost or added.
   // Then one more model is asked, and the draft with fewer faults is the one sent.
-  const tried = [], faults = (o) => o.check.missing.length + o.check.added.length;
+  const tried = [], faults = (o) => o.check.missing.length + o.check.added.length + o.check.doubt.length;
   let best = null, first = "", ms = 0;
   for (const model of list) {
     const got = await draft(model, token, text, { raw: diagnose && !!q.raw });
@@ -163,11 +167,13 @@ module.exports = async (req, res) => {
     // The first model to give a usable draft goes first for the next visitor.
     if (!diagnose) chosen = first || model;
     if (!got.out.ok) return res.status(422).json({ error: "none" });
-    const reply = Object.assign(got.out, { ms, model: model.split(":")[0] });
+    const reply = Object.assign(got.out, { ms, model: model.split(/[:@]/)[0] });
     if (!diagnose) {
       memo.set(id, reply);
       if (memo.size > 300) memo.delete(memo.keys().next().value);
     }
+    // On a preview, ?show=1 prints the draft as text.
+    if (!LIVE && q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`${reply.model}  ${ms} ms  ${tried.join(" | ")}\n${D.show(reply)}`); }
     return res.status(200).json(LIVE ? reply : Object.assign({ format: got.format, usage: got.usage, tried }, reply));
   }
   chosen = "";

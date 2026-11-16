@@ -50,13 +50,18 @@
   }
 
   /* The rewrite: an engineer's message, the markup, the published procedure.
-     A fact carries the same data-f in the message and in the document, so it can be followed from one to the other. */
+     A fact carries the same data-f in the message and in the document, so it can be followed from one to the other.
+     The same stage then takes a visitor's own message: /api/rewrite sends it back marked up, with a draft,
+     the questions still open and a check of its names and numbers. Everything it sends is drawn as text. */
   var rw = $("#rewrite");
   if (rw) (function () {
     var stage = $(".rw-stage", rw), raw = $(".rw-raw", rw), doc = $(".rw-doc", rw), tabs = $$(".rw-tabs button", rw);
     var state = +rw.dataset.state, timers = [], settle = 0, auto = false;
-    $$("mark", raw).forEach(function (m, i) { m.style.setProperty("--i", i); });
-    $$("s", raw).forEach(function (m, i) { m.style.setProperty("--i", i + 3); });
+    function stagger() {
+      $$("mark", raw).forEach(function (m, i) { m.style.setProperty("--i", Math.min(i, 16)); });
+      $$("s", raw).forEach(function (m, i) { m.style.setProperty("--i", Math.min(i + 3, 16)); });
+    }
+    stagger();
     function layer(s) { return s === 3 ? doc : raw; }
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     // Each fact leaves its place in one version and lands on its place in the other.
@@ -66,7 +71,7 @@
         var b = $('[data-f="' + a.dataset.f + '"]', to);
         var ra = a.getClientRects()[0], rb = b && b.getClientRects()[0];
         if (!ra || !rb) return;
-        var chip = document.createElement("span"), wait = 80 + i * 55;
+        var chip = document.createElement("span"), wait = 80 + Math.min(i, 18) * 55;
         chip.className = "rw-fly";
         chip.textContent = a.textContent;
         stage.appendChild(chip);
@@ -80,8 +85,8 @@
         later(function () { b.classList.add("lit"); }, wait + 720);
       });
     }
-    function set(s, quick) {
-      if (s === state) return;
+    function set(s, quick, again) {
+      if (s === state && !again) return;
       var was = state, h0 = stage.offsetHeight;
       $$(".rw-fly", stage).forEach(function (c) { c.remove(); });
       $$(".lit", rw).forEach(function (e) { e.classList.remove("lit"); });
@@ -113,12 +118,211 @@
     }
     tabs.forEach(function (b) { b.addEventListener("click", function () { stop(); set(+b.dataset.s); }); });
     $(".rw-again", rw).addEventListener("click", play);
+
+    /* ----- A visitor's own message ----- */
+    var tray = $("#try"), ta = $("#try-text"), note = $("#try-msg"), mine = $(".rw-you", rw), theirs = $(".rw-ex", rw), acts = $(".rw-acts", rw), stats = $("#rw-stats"), copy = $("#rw-copy");
+    var home = { raw: raw.innerHTML, doc: doc.innerHTML, lang: stage.getAttribute("lang") }, last = null, job = 0, busy = false, samples = null;
+    var KIND = { "how-to": "#0A8F7A", troubleshooting: "#CF3F5A", reference: "#1F78D1", "release-note": "#C97800", policy: "#3D4AB0", explainer: "#6A58E6" };
+    function el(tag, cls, text) {
+      var e = document.createElement(tag);
+      if (cls) e.className = cls;
+      if (text != null) e.textContent = text;
+      return e;
+    }
+    // One line of a draft: runs of text, bold where a label is named, in one wrapper where they carry a fact.
+    function line(into, runs) {
+      var box = null, id = null;
+      (runs || []).forEach(function (r) {
+        if ((r.f || null) !== id) {
+          id = r.f || null;
+          box = id ? into.appendChild(el("span")) : null;
+          if (box) box.dataset.f = id;
+        }
+        (box || into).appendChild(r.b ? el("b", "", r.t) : document.createTextNode(r.t));
+      });
+      return into;
+    }
+    function words(runs, md) { return (runs || []).map(function (r) { return md && r.b ? "**" + r.t + "**" : r.t; }).join(""); }
+    function fill(text, values) { return String(text || "").replace(/\{(\w)\}/g, function (m, k) { return k in values ? values[k] : m; }); }
+    function source(own) {
+      rw.dataset.src = own ? "yours" : "example";
+      theirs.hidden = own;
+      mine.hidden = !own;
+      // On a phone April's button would sit on the draft, so it steps aside until the example is back.
+      if (dock && innerWidth < 720 && panel && panel.hidden && (!tour || tour.hidden)) dock.hidden = own;
+      if (own) stage.removeAttribute("lang"); else stage.setAttribute("lang", home.lang);
+    }
+    // The message as it was pasted, then, once the draft is back, with its facts marked and its noise struck.
+    function message(text, parts) {
+      raw.textContent = "";
+      raw.appendChild(el("p", "raw-head", I.rwYours));
+      var p = raw.appendChild(el("p", "raw-msg mine"));
+      if (!parts) p.textContent = text;
+      else parts.forEach(function (s) {
+        if (s.k === "f") { var m = p.appendChild(el("mark", "", s.t)); if (s.f) m.dataset.f = s.f; }
+        else p.appendChild(s.k === "n" ? el("s", "", s.t) : document.createTextNode(s.t));
+      });
+      stagger();
+    }
+    function sheet(r) {
+      doc.textContent = "";
+      var type = doc.appendChild(el("p", "doc-type", r.label));
+      type.style.setProperty("--tc", KIND[r.kind] || KIND["how-to"]);
+      type.appendChild(el("span", "draft", I.rwDraft));
+      line(doc.appendChild(el("p", "doc-title")), r.title);
+      line(doc.appendChild(el("p", "doc-meta")), r.audience);
+      r.sections.forEach(function (s) {
+        if (s.heading) doc.appendChild(el("p", "doc-h", s.heading));
+        var list = s.style === "text" ? null : doc.appendChild(el(s.style === "steps" ? "ol" : "ul"));
+        s.items.forEach(function (it) {
+          var at = line(list ? list.appendChild(el("li")) : doc.appendChild(el("p")), it.runs);
+          if (it.caution) line((list ? at : doc).appendChild(el("p", "callout")), it.caution);
+        });
+      });
+      var open = doc.appendChild(el("div", "rw-q"));
+      if (r.questions.length) {
+        open.appendChild(el("p", "doc-h", I.rwAsk));
+        var ul = open.appendChild(el("ul"));
+        r.questions.forEach(function (t) { ul.appendChild(el("li", "", t)); });
+      }
+      // The check is made by rule on the server: a name or a number the draft lost, or a number it brought.
+      var c = r.check || {}, bad = [];
+      function quoted(list) { return list.map(function (m) { return "“" + m + "”"; }).join(", "); }
+      if (c.missing && c.missing.length) bad.push(fill(I.rwLost, { l: quoted(c.missing) }));
+      if (c.added && c.added.length) bad.push(fill(I.rwAdded, { l: c.added.join(", ") }));
+      if (c.doubt && c.doubt.length) bad.push(fill(I.rwDoubt, { l: quoted(c.doubt) }));
+      if (bad.length) open.appendChild(el("p", "rw-check bad", I.rwRule + " " + bad.join(" ")));
+      else if (c.count) open.appendChild(el("p", "rw-check", I.rwRule + " " + fill(I.rwChecked, { n: c.count })));
+      if (!open.firstChild) open.remove();
+    }
+    function markdown(r) {
+      var L = ["# " + words(r.title)];
+      if (r.audience && r.audience.length) L.push("", words(r.audience, true));
+      r.sections.forEach(function (s) {
+        L.push("", "## " + s.heading, "");
+        s.items.forEach(function (it, i) {
+          var lead = s.style === "steps" ? i + 1 + ". " : s.style === "bullets" ? "- " : "";
+          L.push(lead + words(it.runs, true));
+          if (it.caution) L.push((lead ? "   " : "") + "> " + words(it.caution, true));
+          if (!lead) L.push("");
+        });
+      });
+      if (r.questions.length) {
+        L.push("", "---", "", "## " + I.rwAsk, "");
+        r.questions.forEach(function (q) { L.push("- " + q); });
+      }
+      return L.join("\n").replace(/\n{3,}/g, "\n\n") + "\n";
+    }
+    function done(r) {
+      last = r;
+      message("", r.raw);
+      sheet(r);
+      delete rw.dataset.phase;
+      tabs.forEach(function (b) { b.disabled = false; });
+      stats.textContent = fill(I.rwStats, { f: r.stats.facts, n: r.stats.cut, q: r.questions.length, s: (Math.max(100, r.ms || 0) / 1000).toLocaleString(LANG, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) });
+      copy.hidden = !navigator.clipboard;
+      if (reduce) return set(3, true, true);
+      stop();
+      auto = true;
+      later(function () { if (auto) set(2); }, 450);
+      later(function () { if (auto) set(3); auto = false; }, 450 + 2500 + Math.min(r.raw.length, 36) * 40);
+    }
+    // The example comes back, as it was.
+    function back(why) {
+      job++;
+      busy = false;
+      stop();
+      raw.innerHTML = home.raw;
+      doc.innerHTML = home.doc;
+      stagger();
+      source(false);
+      delete rw.dataset.phase;
+      tabs.forEach(function (b) { b.disabled = false; });
+      acts.hidden = true;
+      last = null;
+      set(3, true, true);
+      note.textContent = why || "";
+    }
+    function load() {
+      samples = samples || fetch("/desk.json").then(function (r) { return r.json(); }).then(function (d) { return d.messages || []; }).catch(function () { samples = null; return []; });
+      return samples;
+    }
+    function send(text) {
+      text = String(text || "").trim();
+      note.textContent = "";
+      if (busy) return;
+      if (text.length < 40) { note.textContent = I.rwShort; ta.focus(); return; }
+      var run = ++job, began = Date.now();
+      busy = true;
+      tourOff();
+      stop();
+      source(true);
+      rw.dataset.phase = "wait";
+      message(text);
+      doc.textContent = "";
+      acts.hidden = false;
+      copy.hidden = true;
+      set(1, true, true);
+      tabs.forEach(function (b) { b.disabled = +b.dataset.s > 1; });
+      var top = rw.getBoundingClientRect().top;
+      if (top < 70 || top > innerHeight * 0.4) window.scrollTo({ top: top + window.pageYOffset - 84, behavior: reduce ? "auto" : "smooth" });
+      // A sample has its draft on file. Anything else goes to the model.
+      load().then(function (list) {
+        var known = list.filter(function (m) { return m.draft && m.text.trim() === text; })[0];
+        if (known) return known.draft;
+        var stopAt = window.AbortController ? new AbortController() : null;
+        if (stopAt) setTimeout(function () { stopAt.abort(); }, 29000);
+        return fetch("/api/rewrite", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: text }), signal: stopAt ? stopAt.signal : undefined })
+          .then(function (r) { if (!r.ok) throw r.status; return r.json(); });
+      }).then(function (r) {
+        if (run !== job) return;
+        if (!r || !r.ok || !r.raw || !r.sections) throw 0;
+        // Even a draft that is on file leaves the message on the stage for a moment before the pen comes down.
+        setTimeout(function () { if (run === job) { busy = false; done(r); } }, Math.max(0, 1500 - (Date.now() - began)));
+      }).catch(function (code) {
+        if (run === job) back(code === 429 ? I.rwBusy : code === 422 ? I.rwNone : I.rwFail);
+      });
+    }
+    if (tray && ta && I.rwYours) {
+      tray.hidden = false;
+      tray.addEventListener("submit", function (e) { e.preventDefault(); send(ta.value); });
+      ta.addEventListener("keydown", function (e) { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(ta.value); } });
+      ta.addEventListener("input", function () { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 2, 352) + "px"; note.textContent = ""; });
+      $$("[data-sample]", tray).forEach(function (b) {
+        b.addEventListener("click", function () {
+          load().then(function (list) {
+            var s = list.filter(function (m) { return m.id === b.dataset.sample; })[0];
+            if (!s) { note.textContent = I.rwFail; return; }
+            ta.value = s.text;
+            ta.dispatchEvent(new Event("input"));
+            send(s.text);
+          });
+        });
+      });
+      $("#rw-back").addEventListener("click", function () { back(); });
+      copy.addEventListener("click", function () {
+        if (!last || !navigator.clipboard) return;
+        var label = copy.dataset.label || (copy.dataset.label = copy.textContent);
+        navigator.clipboard.writeText(markdown(last)).then(function () {
+          copy.textContent = I.copied;
+          setTimeout(function () { copy.textContent = label; }, 1600);
+        });
+      });
+      // On a phone the keyboard leaves little room: April's button steps aside while a message is being typed.
+      ta.addEventListener("focus", function () { if (dock && innerWidth < 720) dock.hidden = true; });
+      ta.addEventListener("blur", function () { if (dock && panel && panel.hidden && (!tour || tour.hidden) && rw.dataset.src !== "yours") dock.hidden = false; });
+      if ("IntersectionObserver" in window) {
+        var warm = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { warm.disconnect(); load(); } }, { rootMargin: "200px" });
+        warm.observe(tray);
+      }
+    }
+
     // Without motion the page opens on the finished document. With it, the edit plays once when the stage is in view.
     if (reduce || !("IntersectionObserver" in window)) { set(3, true); return; }
     var io = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) return;
       io.disconnect();
-      play();
+      if (rw.dataset.src === "example") play();
     }, { threshold: 0.55 });
     io.observe(stage);
   })();

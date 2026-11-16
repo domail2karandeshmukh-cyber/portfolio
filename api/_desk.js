@@ -177,6 +177,9 @@ const plain = (rs) => rs.map((r) => r.t).join("");
 // Capitals that are emphasis, not a name.
 const LOUD = new Set("not dont don't no never or and must do only always all any before after please now very ok okay so if the a an but then also note fyi asap todo tbd lol omg btw yes important warning caution urgent stop wait everyone nothing really".split(" "));
 const COUNT = { one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10", eleven: "11", twelve: "12" };
+// How an English message says it isn't sure, and how a document can.
+const UNSURE = /\bi think\b|\bi guess\b|\bnot (?:yet )?confirmed\b|\bunconfirmed\b|\bnot (?:100% )?sure\b|\bmaybe\b|\bprobably\b|\bpossibly\b|\bno (?:date|eta)\b|\btb[dc]\b|\bafaik\b|\biirc\b|\bas far as i know\b/g;
+const SURE = /\bnot (?:yet )?(?:confirmed|known|decided|set|certain|sure)\b|\bunconfirmed\b|\bunknown\b|\bundecided\b|\bmay\b|\bmight\b|\bpossibly\b|\bprobably\b|\bno (?:date|eta|release date)\b|\bto be (?:confirmed|decided)\b|\breported(?:ly)?\b|\bappears\b|\bseems\b|\bbelieved\b/;
 /** The numbers in a text, written one way: 50k and 50,000 are both 50000. */
 function numbers(text, withWords) {
   const out = new Set();
@@ -224,8 +227,14 @@ function audit(text, doc) {
   });
   const said = numbers(text, true);
   const added = [...numbers(d)].filter((n) => !said.has(n));
-  return { count, missing: missing.slice(0, 6), added: added.slice(0, 6) };
+  // Doubt is checked the same way: a message that hedges should not become a document that sounds sure.
+  const low = text.toLowerCase(), doubt = [];
+  if (!SURE.test(d)) for (const m of low.matchAll(UNSURE)) if (doubt.length < 2 && !doubt.includes(m[0].trim())) doubt.push(m[0].trim());
+  return { count, missing: missing.slice(0, 6), added: added.slice(0, 6), doubt };
 }
+
+// Terms of the worked example. A small model sometimes carries one of its questions over to another message.
+const BORROWED = /\bcontractors?\b|\biam\b|\bmfa\b|\bhr (?:number|system)\b|\badmin console\b|\block(?:ed)?[ -]out\b|\benrol/;
 
 /**
  * Checks a model's answer against the message and turns it into what the page draws.
@@ -258,7 +267,11 @@ function shape(text, answer) {
         .filter((it) => plain(it.runs).trim()),
     }))
     .filter((s) => s.items.length);
-  const questions = list(answer.questions, 6).map((q) => String(q).replace(/\s+/g, " ").trim().slice(0, 200)).filter(Boolean);
+  const lowText = text.toLowerCase();
+  const questions = list(answer.questions, 8)
+    .map((q) => String(q).replace(/\s+/g, " ").trim().slice(0, 200))
+    .filter((q) => { const m = BORROWED.exec(q.toLowerCase()); return q && (!m || lowText.includes(m[0].slice(0, 5))); })
+    .slice(0, 5);
 
   // A draft needs a title, something to read, and at least two facts that can be followed from the message into it.
   if (!plain(title).trim() || !sections.length || used.size < 2) return null;
@@ -292,7 +305,7 @@ function show(out) {
     s.items.forEach((it, i) => { L.push(`${s.style === "steps" ? i + 1 + "." : s.style === "bullets" ? "-" : " "} ${mark(it.runs)}`); if (it.caution) L.push(`     ! ${mark(it.caution)}`); });
   }
   out.questions.forEach((q) => L.push(`? ${q}`));
-  L.push(`facts ${out.stats.facts}, cut ${out.stats.cut}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}`);
+  L.push(`facts ${out.stats.facts}, cut ${out.stats.cut}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}, doubt ${JSON.stringify(out.check.doubt)}`);
   return L.join("\n");
 }
 
