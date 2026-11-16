@@ -7,7 +7,8 @@ const GATEWAY = "https://ai-gateway.vercel.sh";
 const LIVE = process.env.VERCEL_ENV === "production";
 // A preview deployment sits behind Vercel's sign-in, so the limits below are lifted there to let a model be tested.
 const LIMITED = LIVE || !process.env.VERCEL;
-// Tried in this order. After the name, ":low" is the effort of a model that reasons before it answers, "@json" is
+// The first two draft every message side by side, and the rules in _desk.js pick the better draft.
+// The rest are asked, one at a time, only when neither of them gives a usable one. After the name, ":low" is the effort of a model that reasons before it answers, "@json" is
 // how a model takes a request for JSON when it has no support for a schema, and ">vertex" names the one provider
 // that may serve it. The first two are served by providers that the gateway lists as keeping no copy of a request.
 const MODELS = (process.env.DESK_MODELS || "meta/llama-4-maverick@json>bedrock,google/gemini-2.5-flash-lite>vertex,openai/gpt-4.1-mini").split(",").map((s) => s.trim()).filter(Boolean);
@@ -17,7 +18,6 @@ const CEILING = { input: 0.000001, output: 0.000005 };
 // A draft costs a fraction of a cent. These keep a bad day cheap: per visitor a minute, per visitor a day, in all a day.
 const A_MINUTE = 4, EACH_A_DAY = 30, A_DAY = 300;
 
-let chosen = "";
 const formats = new Map();     // how each model accepts a request for JSON
 const minute = new Map(), daily = new Map();
 let day = "", total = 0;
@@ -139,39 +139,40 @@ module.exports = async (req, res) => {
   if (minute.size > 5000) minute.clear();
 
   // On a preview, ?model= tries one model within the price ceiling and ?raw=1 returns what it wrote.
-  let list = chosen ? [chosen, ...MODELS.filter((m) => m !== chosen)] : MODELS;
+  let list = MODELS;
   if (diagnose && q.model) {
     const cat = await fetch(`${GATEWAY}/v1/models`, { signal: AbortSignal.timeout(8000) }).then((r) => r.json()).catch(() => ({}));
     const m = (cat.data || []).find((x) => x.id === String(q.model).split(/[:@>]/)[0]);
     if (!m || !(Number(m.pricing && m.pricing.input) <= CEILING.input) || !(Number(m.pricing && m.pricing.output) <= CEILING.output)) return res.status(400).json({ error: "model not allowed" });
-    list = [q.model];
+    list = [String(q.model)];
   }
 
-  // The first usable draft wins, unless the check by rule finds a name or a number lost or added.
-  // Then one more model is asked, and the draft with fewer faults is the one sent.
-  const tried = [], faults = (o) => o.check.missing.length + o.check.added.length + o.check.doubt.length;
-  let best = null, first = "", ms = 0;
-  for (const model of list) {
+  const began = Date.now(), tried = [], drafts = [];
+  const ask = async (model) => {
     const got = await draft(model, token, text, { raw: diagnose && !!q.raw });
     tried.push(...got.tried);
-    if (diagnose && q.raw && got.content !== undefined) return res.status(200).json({ model, ms: got.ms, format: got.format, usage: got.usage, usable: !!got.out, content: got.content, shaped: got.out });
-    if (!got.out) continue;
-    ms += got.ms;
-    if (!got.out.ok) { best = best || { model, got }; break; }
-    if (!best || faults(got.out) < faults(best.got.out)) best = { model, got };
-    if (first || !faults(got.out)) { first = first || model; break; }
-    first = model;
+    if (got.out) drafts.push(Object.assign(got, { model }));
+    return got;
+  };
+  const pair = await Promise.all(list.slice(0, 2).map(ask));
+  if (diagnose && q.raw) return res.status(200).json({ model: list[0], ms: pair[0].ms, format: pair[0].format, usage: pair[0].usage, usable: !!pair[0].out, content: pair[0].content, shaped: pair[0].out });
+  for (const model of list.slice(2)) {
+    if (drafts.length) break;
+    await ask(model);
   }
-  if (best) {
-    const { model, got } = best;
-    // The first model to give a usable draft goes first for the next visitor.
-    if (!diagnose) chosen = first || model;
-    if (!got.out.ok) return res.status(422).json({ error: "none" });
-    const reply = Object.assign(got.out, { ms, model: model.split(/[:@>]/)[0] });
+  // A document wins over a refusal only when it carries at least three facts: text that one model
+  // would not touch and the other turned into two thin lines is not a message.
+  const refused = drafts.some((d) => !d.out.ok);
+  const docs = drafts.filter((d) => d.out.ok && (!refused || d.out.stats.facts - d.out.stats.loose >= 3));
+  if (!docs.length && refused) return res.status(422).json({ error: "none" });
+  if (docs.length) {
+    const best = docs.reduce((a, b) => (D.grade(b.out) < D.grade(a.out) ? b : a));
+    const reply = Object.assign(best.out, { ms: Date.now() - began, model: best.model.split(/[:@>]/)[0] });
+    if (LIVE) return res.status(200).json(reply);
+    const notes = `${drafts.map((d) => `${d.model} ${d.out.ok ? "grade " + D.grade(d.out) : "refused"} ${d.ms} ms $${(d.usage && d.usage.cost) || "?"}`).join(" | ")}  ${tried.join(" | ")}`;
     // On a preview, ?show=1 prints the draft as text.
-    if (!LIVE && q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`${reply.model}  ${ms} ms  ${tried.join(" | ")}\n${D.show(reply)}`); }
-    return res.status(200).json(LIVE ? reply : Object.assign({ format: got.format, usage: got.usage, tried }, reply));
+    if (q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`picked ${reply.model} after ${reply.ms} ms\n${notes}\n${D.show(reply)}`); }
+    return res.status(200).json(Object.assign({ notes }, reply));
   }
-  chosen = "";
   return res.status(502).json(LIVE ? { error: "draft" } : { error: "draft", tried });
 };

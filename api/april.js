@@ -37,6 +37,7 @@ function notes() {
   L.push(`Video portfolio, which plays on the site: ${S.url}/#video | The same videos on YouTube: ${S.links.youtube}`);
   L.push(`The site is available in ${C.locales.map((l) => l.name).join(", ")}. The documents, the videos and the CV are in English.`);
   L.push("April also gives a one-minute spoken tour of the home page. It starts from the button \"Take the one-minute tour\" at the top of the page.");
+  L.push(`The rewrite desk, at the top of the home page (${S.url}/#rewrite): a visitor pastes a rough message from their own team, such as a chat message or meeting notes, and sees it marked up and drafted into a document, with the questions a writer would still ask the author. An AI model writes the draft by a brief Karan wrote, and a check written in code confirms that no name or number was lost. Karan's point: drafting is the quick part, and getting the questions answered is the job.`);
   L.push("About April: her name stands for AI for Projects, Releases, Insights and Logs. Karan first built April inside ReleasePilot AI, where she proposes project plans and waits for human approval.");
   return L.join("\n");
 }

@@ -285,6 +285,12 @@
     }
     if (tray && ta && I.rwYours) {
       tray.hidden = false;
+      var own = $(".rw-own", rw);
+      own.hidden = false;
+      own.addEventListener("click", function () {
+        tray.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+        ta.focus({ preventScroll: true });
+      });
       tray.addEventListener("submit", function (e) { e.preventDefault(); send(ta.value); });
       ta.addEventListener("keydown", function (e) { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(ta.value); } });
       ta.addEventListener("input", function () { ta.style.height = "auto"; ta.style.height = Math.min(ta.scrollHeight + 2, 352) + "px"; note.textContent = ""; });
@@ -567,7 +573,7 @@
     var at = -1, run = 0, paused = false, wait = 0, clips = {}, from = null;
     // Each line is recorded once on the server, then served from the CDN.
     function clip(i) {
-      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
+      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG + "&v=5").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
       return clips[i];
     }
     function go(i) {

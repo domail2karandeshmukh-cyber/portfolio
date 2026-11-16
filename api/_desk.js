@@ -231,8 +231,40 @@ function audit(text, doc) {
   return { count, missing: missing.slice(0, 6), added: added.slice(0, 6), doubt };
 }
 
-// Terms of the worked example. A small model sometimes carries one of its questions over to another message.
-const BORROWED = /\bcontractors?\b|\biam\b|\bmfa\b|\bhr (?:number|system)\b|\badmin console\b|\block(?:ed)?[ -]out\b|\benrol/;
+const MONTHS = new Set("monday tuesday wednesday thursday friday saturday sunday january february march april may june july august september october november december".split(" "));
+/**
+ * A Title Case Heading set in sentence case. Only a line in which every longer word after the first has a capital
+ * is touched. A word keeps its capital when the message or the body of the draft writes it that way inside a
+ * sentence (Dana, Windows), when it is a day or a month, or when it has capitals inside or throughout (BitLocker, VPN).
+ * @param {string} line a title or a heading, which may hold fact tags
+ * @param {string} prose the message and the body of the draft
+ */
+function sentenceCase(line, prose) {
+  const words = [];
+  const parts = line.split(/(<\/?f\d{1,2}>)/);
+  parts.forEach((p, i) => { if (i % 2 === 0) for (const m of p.matchAll(/[\p{L}\p{N}]+(?:['\u2019][\p{L}]+)?/gu)) words.push(m[0]); });
+  const capital = (w) => /^\p{Lu}\p{Ll}+/u.test(w) && w.slice(1) === w.slice(1).toLowerCase();
+  const rest = words.slice(1).filter((w) => w.replace(/[^\p{L}]/gu, "").length > 3);
+  if (!rest.length || !rest.every(capital)) return line;
+  const proper = (w) => MONTHS.has(w.toLowerCase().replace(/s$/, "")) || new RegExp(`[\\p{Ll}\\p{N},;)] ${w.replace(/[^\p{L}\p{N}']/gu, "")}(?![\\p{L}])`, "u").test(prose);
+  let seen = false;
+  return parts.map((p, i) => (i % 2 ? p : p.replace(/[\p{L}\p{N}]+(?:['\u2019][\p{L}]+)?/gu, (w) => {
+    const first = !seen;
+    seen = true;
+    return first || !capital(w) || proper(w) ? w : w.toLowerCase();
+  }))).join("");
+}
+// Terms of the worked example. A small model sometimes carries one of its questions over to another message,
+// so a question that uses one of them is kept only when the visitor's message uses it too.
+const BORROWED = [
+  [/\bcontractors?\b/, /\bcontractor/],
+  [/\biam\b/, /\biam\b/],
+  [/\bmfa\b/, /\bmfa\b/],
+  [/\bhr (?:number|system)\b/, /\bhr\b/],
+  [/\badmin console\b/, /\badmin console\b/],
+  [/\block(?:ed)?[ -]out\b/, /\block(?:ed)?[ -]?out/],
+  [/\benrol/, /\benrol/],
+];
 
 /**
  * Checks a model's answer against the message and turns it into what the page draws.
@@ -249,11 +281,21 @@ function shape(text, answer) {
   const ranges = locate(F, facts, "f", [], true);
   const known = new Set(ranges.map((r) => r.id)), used = new Set();
 
-  const title = runs(answer.title, known, used, 140);
-  const audience = runs(answer.audience, known, used, 200);
-  const sections = list(answer.sections, 5)
+  // What the rules below had to take out or put right. A tidy draft needs none of it.
+  let fixed = 0;
+  const sectionsIn = list(answer.sections, 5);
+  const prose = text + " " + sectionsIn.map((s) => list(s && s.items, 9).map((it) => `${(it && it.text) || ""} ${(it && it.caution) || ""}`).join(" ")).join(" ").replace(/<\/?f\d{1,2}>|\*\*/g, "");
+  const cased = (line) => { const t = sentenceCase(String(line || ""), prose); if (t !== String(line || "")) fixed++; return t; };
+  const title = runs(cased(answer.title), known, used, 140);
+  // A reader named in the document has to be named in the message. Otherwise the line is a guess, and it goes.
+  const lowText = text.toLowerCase();
+  const who = String(answer.audience || "").replace(/<\/?f\d{1,2}>|\*\*/g, "").toLowerCase().split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 3 && !FILLER.has(w) && !/^(this|that|with|from|your|their|them|they|have|will|what|when|who|whom|need|needs|want|wants|using|uses|document|guide|page|people|everyone|anyone|team|teams|staff|users?)$/.test(w));
+  const guessed = who.some((w) => !lowText.includes(w.slice(0, Math.max(4, w.length - 2))));
+  if (guessed && String(answer.audience || "").trim()) fixed++;
+  const audience = runs(guessed ? "" : answer.audience, known, used, 200);
+  const sections = sectionsIn
     .map((s) => ({
-      heading: String((s && s.heading) || "").replace(/[<>*]/g, "").replace(/\s+/g, " ").trim().slice(0, 60),
+      heading: cased(String((s && s.heading) || "").replace(/[<>*]/g, "").replace(/\s+/g, " ").trim().slice(0, 60)),
       style: STYLES.includes(s && s.style) ? s.style : "bullets",
       items: list(s && s.items, 9)
         .map((it) => {
@@ -265,11 +307,10 @@ function shape(text, answer) {
         .filter((it) => plain(it.runs).trim()),
     }))
     .filter((s) => s.items.length);
-  const lowText = text.toLowerCase();
-  const questions = list(answer.questions, 8)
-    .map((q) => String(q).replace(/\s+/g, " ").trim().slice(0, 200))
-    .filter((q) => { const m = BORROWED.exec(q.toLowerCase()); return q && (!m || lowText.includes(m[0].slice(0, 5))); })
-    .slice(0, 5);
+  const asked = list(answer.questions, 8).map((q) => String(q).replace(/\s+/g, " ").trim().slice(0, 200)).filter(Boolean);
+  const own = asked.filter((q) => !BORROWED.some(([inQuestion, inMessage]) => inQuestion.test(q.toLowerCase()) && !inMessage.test(lowText)));
+  fixed += asked.length - own.length;
+  const questions = own.slice(0, 5);
 
   // A draft needs a title, something to read, and at least two facts that can be followed from the message into it.
   if (!plain(title).trim() || !sections.length || used.size < 2) return null;
@@ -287,9 +328,23 @@ function shape(text, answer) {
     // A fact that never reached the document is still shown as kept in the message, without a partner.
     raw: segments(text, ranges).map((s) => (s.k === "f" && !used.has(s.f) ? { t: s.t, k: "f" } : s)),
     questions,
-    stats: { facts: known.size, cut: ranges.filter((r) => r.k === "n").length },
+    stats: { facts: known.size, cut: ranges.filter((r) => r.k === "n").length, loose: known.size - used.size, fixed },
     check: audit(text, [plain(title), plain(audience)].concat(sections.flatMap((s) => [s.heading].concat(s.items.flatMap((it) => [plain(it.runs), plain(it.caution || [])])))).join(" ")),
   };
+}
+
+/**
+ * How much is wrong with a draft, by rule: the lower, the better. When two models draft the same message,
+ * the draft with the lower grade is the one a visitor sees.
+ */
+function grade(out) {
+  const c = out.check;
+  let g = 10 * (c.missing.length + c.added.length + c.doubt.length);   // a name, a number or a doubt lost, or a number invented
+  g += 2 * out.stats.loose;                                            // a fact that never reached the document
+  g += out.stats.fixed;                                                // a guess or a slip that the rules had to take out
+  if (out.kind === "how-to" && !out.sections.some((s) => s.style === "steps")) g += 5;
+  if (out.questions.length < 2) g += 3;
+  return g;
 }
 
 /** A draft as plain text, for reading in a terminal: facts in [brackets], noise between ~tildes~. */
@@ -303,8 +358,8 @@ function show(out) {
     s.items.forEach((it, i) => { L.push(`${s.style === "steps" ? i + 1 + "." : s.style === "bullets" ? "-" : " "} ${mark(it.runs)}`); if (it.caution) L.push(`     ! ${mark(it.caution)}`); });
   }
   out.questions.forEach((q) => L.push(`? ${q}`));
-  L.push(`facts ${out.stats.facts}, cut ${out.stats.cut}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}, doubt ${JSON.stringify(out.check.doubt)}`);
+  L.push(`grade ${grade(out)}: facts ${out.stats.facts} (${out.stats.loose} not carried), cut ${out.stats.cut}, fixed by rule ${out.stats.fixed}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}, doubt ${JSON.stringify(out.check.doubt)}`);
   return L.join("\n");
 }
 
-module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, conversation, parse, shape, show, isNoise, audit };
+module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, conversation, parse, shape, show, grade, isNoise, audit };

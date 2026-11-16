@@ -59,10 +59,13 @@
    </div>
 
    <div class="rw" id="rewrite" data-state="1" data-src="example">
-    <div class="rw-tabs" role="group" aria-label="Choose a version">
-     <button type="button" data-s="1" aria-pressed="true">Message</button>
-     <button type="button" data-s="2" aria-pressed="false">Markup</button>
-     <button type="button" data-s="3" aria-pressed="false">Document</button>
+    <div class="rw-top">
+     <div class="rw-tabs" role="group" aria-label="Choose a version">
+      <button type="button" data-s="1" aria-pressed="true">Message</button>
+      <button type="button" data-s="2" aria-pressed="false">Markup</button>
+      <button type="button" data-s="3" aria-pressed="false">Document</button>
+     </div>
+     <button class="rw-own" type="button" hidden>Try your own message</button>
     </div>
     <figure class="rw-fig">
     <div class="rw-stage" lang="en" translate="no">
@@ -116,7 +119,7 @@
      <label for="try-text">Now try it on a message from your own team.</label>
      <textarea id="try-text" name="text" rows="3" maxlength="1400" placeholder="Paste a chat message, a ticket comment or meeting notes."></textarea>
      <div class="try-row">
-      <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
+      <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from a chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
       <button class="btn ink sm" type="submit">Mark it up</button>
      </div>
      <p class="try-note">An AI model drafts it by <a href="{{brief}}" target="_blank" rel="noopener">this brief</a>. This site doesn't keep your text. Leave out anything confidential all the same.</p>

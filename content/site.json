@@ -189,7 +189,7 @@
   {"code": "hi", "name": "हिन्दी", "path": "/hi", "offer": "यह पेज हिंदी में भी उपलब्ध है।", "go": "हिंदी में पढ़ें"}
  ],
  "tour": [
-  {"to": "top", "say": "Hello, I'm April. Karan turns what engineers know into documentation people can follow. Let me show you around in one minute."},
+  {"to": "top", "say": "Hello, I'm April. Karan turns what engineers know into documentation people can follow. You can try that on a message of your own, right here. First, let me show you around in one minute."},
   {"to": "writing", "say": "Start with the writing. Every document opens on this site: help-center samples, and the documentation of the security tools he led."},
   {"to": "projects", "say": "These are those tools. All three are live, and each one links to the documentation behind it."},
   {"to": "video", "say": "Some procedures are faster to watch than to read. His walkthrough videos play right here on the page."},

@@ -28,7 +28,16 @@ Work in the order below, and answer in the same order.
 9. `audience` is one sentence that says who the document is for. Fill it only when the message says who. Otherwise leave it empty.
 10. Write in the language of the message. `label` is the kind of document in that language, for example "How-to" or "Release note".
 
-Each section has a `heading`, a `style` and `items`. The style is `steps` for actions in order, `bullets` for a list in no order, and `text` for sentences. Use the headings a reader expects, such as "Before you start", "Steps" and "Check that it worked", where the message has something to put under them. Don't add a section the message has nothing for.
+Each section has a `heading`, a `style` and `items`. The style is `steps` for actions in order, `bullets` for a list in no order, and `text` for sentences.
+
+A how-to has these sections, in this order, and only the ones the message has something for:
+
+- "Before you start": what the reader needs, or has to check, before the first step.
+- "Steps": every action the reader takes, in order, in one list.
+- "If something goes wrong": what to do when a step fails.
+- "Check that it worked": only what the reader looks at to confirm the result.
+
+Other kinds of document take the headings their readers expect: "Problem", "Cause", "Workaround" and "Status" for troubleshooting, or "What changes", "What to do" and "Exceptions" for a release note or a policy. Never add a section the message has nothing for.
 
 ## 3. Ask what is still open
 
