@@ -1,5 +1,5 @@
 {
- "note": "Sample messages for the rewrite desk. They are invented. A draft, once recorded from the model through /api/rewrite?sample=<id>, is served from this file so that a sample always works.",
+ "note": "Sample messages for the rewrite desk. They are invented. Each record is a model's own answer to the brief, copied word for word from /api/rewrite?sample=<id>&record=1 on a preview deployment; the page's draft is made from it by the same rules as a live one, so a sample always works.",
  "messages": [
   {
    "id": "hotfix",

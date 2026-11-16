@@ -351,6 +351,17 @@ function grade(out) {
   return g;
 }
 
+/**
+ * The draft on file for a sample message. What is kept in content/desk/messages.json is the model's own answer,
+ * word for word; the draft is made from it here, by the same rules as a live one.
+ */
+function recorded(message) {
+  const r = message && message.record;
+  if (!r || !r.answer) return null;
+  const out = shape(clean(message.text), r.answer);
+  return out && out.ok ? Object.assign(out, { ms: r.ms, model: r.model }) : null;
+}
+
 /** A draft as plain text, for reading in a terminal: facts in [brackets], noise between ~tildes~. */
 function show(out) {
   if (!out || !out.ok) return String(out && out.ok === false ? "(not a message)" : "(unusable)");
@@ -366,4 +377,4 @@ function show(out) {
   return L.join("\n");
 }
 
-module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, conversation, parse, shape, show, grade, isNoise, audit };
+module.exports = { BRIEF, SCHEMA, MESSAGES, MIN, MAX, clean, conversation, parse, shape, recorded, show, grade, isNoise, audit };

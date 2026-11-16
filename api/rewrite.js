@@ -1,6 +1,7 @@
 // The rewrite desk. A visitor pastes a rough message; a model drafts the document by the brief in
 // content/desk/brief.md, and the page shows the message marked up, the draft, and the questions still open.
 // Nothing a visitor pastes is written to a log or kept by this function after the answer is sent.
+const crypto = require("crypto");
 const D = require("./_desk.js");
 
 const GATEWAY = "https://ai-gateway.vercel.sh";
@@ -56,8 +57,8 @@ async function draft(spec, token, text, opt = {}) {
     const content = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content;
     if (r.ok && typeof content === "string") {
       formats.set(model, format);
-      const out = D.shape(text, D.parse(content));
-      if (out) return { out, ms, format, usage: data.usage, content: opt.raw ? content : undefined, tried };
+      const answer = D.parse(content), out = D.shape(text, answer);
+      if (out) return { out, answer, ms, format, usage: data.usage, content: opt.raw ? content : undefined, tried };
       tried.push(`${model}/${format}: unusable draft`);
       if (opt.raw) return { out: null, ms, format, usage: data.usage, content, tried };
       break;
@@ -104,9 +105,10 @@ module.exports = async (req, res) => {
   } catch (e) { return res.status(400).json({ error: "bad request" }); }
 
   // A sample whose draft is on file costs nothing to show again.
-  if (sample && sample.draft && !q.live) {
+  const onFile = sample && !q.live && !q.record ? D.recorded(sample) : null;
+  if (onFile) {
     res.setHeader("cache-control", "public, max-age=3600, s-maxage=86400");
-    return res.status(200).json(Object.assign({ recorded: true }, sample.draft));
+    return res.status(200).json(Object.assign({ recorded: true }, onFile));
   }
 
   const token = process.env.AI_GATEWAY_API_KEY || req.headers["x-vercel-oidc-token"] || process.env.VERCEL_OIDC_TOKEN;
@@ -130,7 +132,7 @@ module.exports = async (req, res) => {
   if (text.length > D.MAX) return res.status(400).json({ error: "long" });
 
   res.setHeader("cache-control", "no-store");
-  const diagnose = !LIVE && (q.model || q.raw || q.show);
+  const diagnose = !LIVE && (q.model || q.raw || q.show || q.record);
 
   const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
   const recent = (minute.get(ip) || []).filter((t) => now - t < 60000);
@@ -171,6 +173,9 @@ module.exports = async (req, res) => {
     const reply = Object.assign(best.out, { ms: Date.now() - began, model: best.model.split(/[:@>]/)[0] });
     if (LIVE) return res.status(200).json(reply);
     const notes = `${drafts.map((d) => `${d.model} ${d.out.ok ? "grade " + D.grade(d.out) : "refused"} ${d.ms} ms $${(d.usage && d.usage.cost) || "?"}`).join(" | ")}  ${tried.join(" | ")}`;
+    // On a preview, ?record=1 returns the model's own answer, to be kept in content/desk/messages.json, with a
+    // fingerprint that shows whether a copy of it is exact.
+    if (q.record) { const answer = JSON.stringify(best.answer); return res.status(200).send(JSON.stringify({ model: reply.model, ms: reply.ms, grade: D.grade(best.out), sha: crypto.createHash("sha256").update(answer).digest("hex").slice(0, 16) }) + "\n" + answer); }
     // On a preview, ?show=1 prints the draft as text.
     if (q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`picked ${reply.model} after ${reply.ms} ms\n${notes}\n${D.show(reply)}`); }
     return res.status(200).json(Object.assign({ notes }, reply));

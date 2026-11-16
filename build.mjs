@@ -4,6 +4,7 @@
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
+import { createRequire } from "node:module";
 import sharp from "sharp";
 import { esc, host, sources, template } from "./lib/util.mjs";
 import { buildLibrary, docCard } from "./lib/library.mjs";
@@ -162,8 +163,9 @@ for (const loc of locales) {
 
 for (const f of ["site.css", "app.js", "favicon.svg"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
-const desk = JSON.parse(await fs.readFile("content/desk/messages.json", "utf8"));
-await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: desk.messages.map(({ id, text, draft }) => ({ id, text, draft })) }));
+const Desk = createRequire(import.meta.url)("./api/_desk.js");
+await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
+for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const urls = [...locales.map((l) => l.path), ...library.urls];
 await fs.writeFile(
