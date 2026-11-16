@@ -318,7 +318,10 @@
       });
       // On a phone the keyboard leaves little room: April's button steps aside while a message is being typed.
       ta.addEventListener("focus", function () { if (dock && innerWidth < 720) dock.hidden = true; });
-      ta.addEventListener("blur", function () { if (dock && panel && panel.hidden && (!tour || tour.hidden) && rw.dataset.src !== "yours") dock.hidden = false; });
+      // It comes back a moment after the box loses focus, never under a finger that is on its way to "Mark it up".
+      ta.addEventListener("blur", function () {
+        setTimeout(function () { if (dock && document.activeElement !== ta && panel && panel.hidden && (!tour || tour.hidden) && rw.dataset.src !== "yours") dock.hidden = false; }, 400);
+      });
       if ("IntersectionObserver" in window) {
         var warm = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { warm.disconnect(); load(); } }, { rootMargin: "200px" });
         warm.observe(tray);

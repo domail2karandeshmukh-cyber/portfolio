@@ -183,7 +183,7 @@ const LOUD = new Set("not dont don't no never or and must do only always all any
 const COUNT = { one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10", eleven: "11", twelve: "12" };
 // How an English message says it isn't sure, and how a document can.
 const UNSURE = /\bi think\b|\bi guess\b|\bnot (?:yet )?confirmed\b|\bunconfirmed\b|\bnot (?:100% )?sure\b|\bmaybe\b|\bprobably\b|\bpossibly\b|\bno (?:date|eta)\b|\btb[dc]\b|\bafaik\b|\biirc\b|\bas far as i know\b/g;
-const SURE = /\bnot (?:yet )?(?:confirmed|known|decided|set|certain|sure)\b|\bunconfirmed\b|\bunknown\b|\bundecided\b|\bmay\b|\bmight\b|\bpossibly\b|\bprobably\b|\bno (?:date|eta|release date)\b|\bto be (?:confirmed|decided)\b|\breported(?:ly)?\b|\bappears\b|\bseems\b|\bbelieved\b/;
+const SURE = /\bnot (?:yet )?(?:confirmed|known|decided|set|certain|sure)\b|\bunconfirmed\b|\bunknown\b|\bundecided\b|\bmay\b|\bmight\b|\bpossibly\b|\bprobably\b|\bno (?:date|eta|release date)\b|\bto be (?:confirmed|decided)\b|\breported(?:ly)?\b|\bappears\b|\bseems\b|\bbelieved\b|\bexpected\b|\blikely\b|\btentative(?:ly)?\b/;
 /** The numbers in a text, written one way: 50k and 50,000 are both 50000. */
 function numbers(text, withWords) {
   const out = new Set();
