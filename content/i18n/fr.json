@@ -51,6 +51,10 @@
   [
    "^(\\d+) guides?, (\\d+) questions?$",
    "$1 guides, $2 questions"
+  ],
+  [
+   "^Built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "Généré à partir du commit $1."
   ]
  ],
  "units": {
@@ -239,9 +243,6 @@
   "Markup": "Annotations",
   "Play it again": "Rejouer",
   "Try your own message": "Essayer avec votre message",
-  "Reading your message for the facts...": "Lecture de votre message, à la recherche des faits...",
-  "Your message, as it was sent.": "Votre message, tel qu'il a été envoyé.",
-  "Your message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "Votre message, annoté. En jaune, un fait à garder. Barré en rouge, du bruit à couper.",
   "A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.": "Un premier jet, rédigé par un modèle d'IA qui suit mes consignes. Rédiger est la partie rapide. Obtenir les réponses aux questions, c'est le métier.",
   "Copy as Markdown": "Copier en Markdown",
   "Back to my example": "Revenir à mon exemple",
@@ -266,6 +267,10 @@
   "The draft lost {l}.": "Le brouillon a perdu {l}.",
   "The draft adds {l}, which the message doesn't say.": "Le brouillon ajoute {l}, que le message ne dit pas.",
   "The message isn't sure about something ({l}). The draft doesn't say so.": "Le message exprime un doute ({l}). Le brouillon ne le dit pas.",
+  "Reading the message for its facts...": "Lecture du message, à la recherche des faits...",
+  "The message, as it was sent.": "Le message, tel qu'il a été envoyé.",
+  "The message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "Le message, annoté. En jaune, un fait à garder. Barré en rouge, du bruit à couper.",
+  "Sample message": "Exemple de message",
   "Play the video portfolio": "Lancer le portfolio vidéo",
   "Plays here. The videos are streamed from YouTube.": "Lecture sur place. Les vidéos sont diffusées depuis YouTube.",
   "Language": "Langue"

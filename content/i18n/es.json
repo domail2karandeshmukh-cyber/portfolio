@@ -43,6 +43,10 @@
   [
    "^(\\d+) guides?, (\\d+) questions?$",
    "$1 guías, $2 preguntas"
+  ],
+  [
+   "^Built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "Generado a partir del commit $1."
   ]
  ],
  "units": {
@@ -239,9 +243,6 @@
   "Document": "Documento",
   "Play it again": "Reproducir de nuevo",
   "Try your own message": "Probar con su mensaje",
-  "Reading your message for the facts...": "Leyendo su mensaje en busca de los datos...",
-  "Your message, as it was sent.": "Su mensaje, tal como se envió.",
-  "Your message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "Su mensaje, marcado. En amarillo, un dato que se conserva. Tachado en rojo, ruido que se elimina.",
   "A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.": "Un primer borrador, escrito por un modelo de IA que sigue mis instrucciones. Redactar es la parte rápida. Conseguir las respuestas a las preguntas es el trabajo.",
   "Copy as Markdown": "Copiar como Markdown",
   "Back to my example": "Volver a mi ejemplo",
@@ -266,6 +267,10 @@
   "The draft lost {l}.": "El borrador ha perdido {l}.",
   "The draft adds {l}, which the message doesn't say.": "El borrador añade {l}, que el mensaje no dice.",
   "The message isn't sure about something ({l}). The draft doesn't say so.": "El mensaje no está seguro de algo ({l}). El borrador no lo dice.",
+  "Reading the message for its facts...": "Leyendo el mensaje en busca de los datos...",
+  "The message, as it was sent.": "El mensaje, tal como se envió.",
+  "The message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "El mensaje, marcado. En amarillo, un dato que se conserva. Tachado en rojo, ruido que se elimina.",
+  "Sample message": "Mensaje de ejemplo",
   "Play the video portfolio": "Reproducir el portafolio de vídeo",
   "Plays here. The videos are streamed from YouTube.": "Se reproducen aquí. Los vídeos se transmiten desde YouTube.",
   "Language": "Idioma"

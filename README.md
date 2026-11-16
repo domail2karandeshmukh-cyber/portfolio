@@ -15,6 +15,7 @@ One content file, `content/site.json`, feeds everything. `build.mjs` and the mod
 | The CV (`public/Karan-Deshmukh-CV.pdf`) | `lib/cv.mjs` typesets it with pdfkit |
 | The social preview image (`public/og.png`) | `lib/og.mjs` draws it with the site fonts |
 | April, the site assistant | `api/april.js` reads the same content file for its notes |
+| The rewrite desk | `api/rewrite.js` drafts a visitor's message by the brief in `content/desk/brief.md` |
 
 `src/page.html` is the shell of every library page. `src/partials/` holds the parts both shells share. `src/site.css` and `src/app.js` serve every page.
 
@@ -29,6 +30,43 @@ The site is an editor's desk: white paper, black ink and one highlighter.
 ### The rewrite at the top of the home page
 
 The stage shows one message in three states: as it arrived, marked up, and published. Each fact carries the same `data-f` name in the message (`<mark data-f="hr">`) and in the document (`<span data-f="hr">`). The script uses that name to move the fact from one to the other. To add a fact, add it to both with a new name. Noise in the message is wrapped in `<s>`.
+
+## The rewrite desk
+
+Under the example, a visitor can put a message from their own team on the same stage. The page shows it marked up, then as a draft document, with the questions a writer would still ask the author and a check of its names and numbers.
+
+| File | What it holds |
+|---|---|
+| `content/desk/brief.md` | The brief the model follows. The page links to it. |
+| `content/desk/example.json` | The worked example the model is shown: the message from the top of the home page, and the answer to it. |
+| `content/desk/messages.json` | The three sample messages, each with the model's answer on file. |
+| `api/rewrite.js` | Takes the message, asks the models, sends the draft. |
+| `api/_desk.js` | The rules that check a model's answer. They need no network, so they can be tested alone. |
+
+How a draft is made:
+
+1. Two models draft the message side by side. `MODELS` in `api/rewrite.js` names them, and a third that is asked only when neither answers.
+2. The rules in `api/_desk.js` check each answer against the message. A fact has to be quoted from the message, word for word, to be marked. Noise is struck only when it is made of filler words, or is a sentence that left no trace in the draft. A reader the message doesn't name is taken out, and so is a question borrowed from the worked example.
+3. The same file checks the draft by rule, not by model: every name and number in the message has to be in the draft, the draft may not bring a number of its own, and doubt in the message has to survive.
+4. `grade()` gives each draft a number for what the rules found. The draft with the lower grade is the one sent.
+
+Everything a model writes reaches the page as text and is drawn with `textContent`. The address `/rewrite` leads to the stage.
+
+To change the brief, or to try another model, use a preview deployment. These addresses work only there:
+
+| Address | What it returns |
+|---|---|
+| `/api/rewrite?probe=models` | The models this account may run, cheapest first |
+| `/api/rewrite?probe=eval&sample=hotfix&models=a,b` | One sample drafted by several models, as text, side by side |
+| `/api/rewrite?sample=hotfix&show=1` | The draft a visitor would get, as text, with each model's grade |
+| `/api/rewrite?sample=hotfix&record=1` | The chosen model's own answer, with a fingerprint |
+| `/api/rewrite?text=...&show=1` | The same for any message |
+
+A sample's draft is not made when a visitor asks for it. The model's answer is kept in `content/desk/messages.json`, copied word for word from the `record=1` address, and the build makes the draft from it by the same rules as a live one. To record a sample again, copy the new answer into the file, then check that the SHA-256 of the copied JSON starts with the fingerprint the address gave. The build log says which samples have a draft on file.
+
+Limits, because each draft is paid for: a message is 40 to 1,400 characters, and each running copy of the function accepts 4 drafts a minute and 20 a day from one visitor, and 200 a day in total. The function keeps no copy of a message and writes none to a log.
+
+To test the rules without spending anything, stub the gateway: replace `fetch` with a function that returns a canned answer, then call the handler exported by `api/rewrite.js`.
 
 ## The documentation library
 
@@ -111,7 +149,7 @@ npm run build                                      # writes public/
 python3 -m http.server 8765 --directory public    # preview at http://localhost:8765
 ```
 
-The build needs Node.js 22 and a network connection: it fetches project files from GitHub and the video list from YouTube, and keeps copies in `.cache/`. The assistant does not run in the local preview. It answers from its built-in questions there.
+The build needs Node.js 22 and a network connection: it fetches project files from GitHub and the video list from YouTube, and keeps copies in `.cache/`. The assistant and live drafting do not run in the local preview. There, April answers from her built-in questions, and the rewrite desk works for its three samples.
 
 ## Deploy
 

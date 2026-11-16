@@ -44,6 +44,10 @@
   [
    "^(\\d+) guides?, (\\d+) questions?$",
    "$1 गाइड, $2 सवाल"
+  ],
+  [
+   "^Built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "कमिट $1 से बनाया गया।"
   ]
  ],
  "units": {
@@ -239,9 +243,6 @@
   "Document": "दस्तावेज़",
   "Play it again": "फिर से चलाएँ",
   "Try your own message": "अपना संदेश आज़माएँ",
-  "Reading your message for the facts...": "आपके संदेश में तथ्य खोजे जा रहे हैं...",
-  "Your message, as it was sent.": "आपका संदेश, जैसा भेजा गया था।",
-  "Your message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "आपका संदेश, निशान लगाकर। पीला: रखने लायक तथ्य। लाल रेखा: हटाने लायक शोर।",
   "A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.": "पहला ड्राफ़्ट, जिसे एक AI मॉडल ने मेरे निर्देशों के अनुसार लिखा है। ड्राफ़्ट लिखना जल्दी हो जाता है। असली काम है सवालों के जवाब जुटाना।",
   "Copy as Markdown": "Markdown के रूप में कॉपी करें",
   "Back to my example": "मेरे उदाहरण पर वापस जाएँ",
@@ -266,6 +267,10 @@
   "The draft lost {l}.": "ड्राफ़्ट में यह छूट गया: {l}।",
   "The draft adds {l}, which the message doesn't say.": "ड्राफ़्ट में {l} जोड़ा गया है, जो संदेश में नहीं है।",
   "The message isn't sure about something ({l}). The draft doesn't say so.": "संदेश किसी बात को लेकर पक्का नहीं है ({l})। ड्राफ़्ट में यह नहीं बताया गया।",
+  "Reading the message for its facts...": "संदेश में तथ्य खोजे जा रहे हैं...",
+  "The message, as it was sent.": "संदेश, जैसा भेजा गया था।",
+  "The message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "संदेश, निशान लगाकर। पीला: रखने लायक तथ्य। लाल रेखा: हटाने लायक शोर।",
+  "Sample message": "नमूना संदेश",
   "Play the video portfolio": "वीडियो पोर्टफ़ोलियो चलाएँ",
   "Plays here. The videos are streamed from YouTube.": "यहीं चलते हैं। वीडियो YouTube से स्ट्रीम होते हैं।",
   "Language": "भाषा"

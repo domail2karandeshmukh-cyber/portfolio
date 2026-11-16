@@ -5,6 +5,7 @@ import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
+import { execSync } from "node:child_process";
 import sharp from "sharp";
 import { esc, host, sources, template } from "./lib/util.mjs";
 import { buildLibrary, docCard } from "./lib/library.mjs";
@@ -108,6 +109,10 @@ const menu = (cur) =>
     : `<details class="lang"><summary aria-label="Language">${GLOBE}<span translate="no">${cur.code.toUpperCase()}</span></summary><div class="lang-menu" translate="no">${locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}"${l.code === cur.code ? ' aria-current="true"' : ""}>${esc(l.name)}</a>`).join("")}</div></details>`;
 const hreflang = locales.length < 2 ? "" : locales.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${S.url}${l.path}">`).join("\n") + `\n<link rel="alternate" hreflang="x-default" href="${S.url}/">`;
 
+// The commit this build was made from, linked in the footer.
+const commit = process.env.VERCEL_GIT_COMMIT_SHA || (() => { try { return execSync("git rev-parse HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return ""; } })();
+const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>.</p>` : "";
+
 const jsonld = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -132,7 +137,7 @@ for (const loc of locales) {
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
   };
   for (const d of C.docs) tokens[`doc:${d.id}`] = byId[d.id].url;
-  const slots = { ...parts, lang: menu(loc), hreflang, langlinks: locales.length < 2 ? esc(`${S.name}, ${S.location}`) : locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}">${esc(l.name)}</a>`).join("") };
+  const slots = { ...parts, rev, lang: menu(loc), hreflang, langlinks: locales.length < 2 ? esc(`${S.name}, ${S.location}`) : locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}">${esc(l.name)}</a>`).join("") };
   let html = home(tokens).replace(/<!--@(\w+)-->/g, (m, k) => {
     if (!(k in slots)) throw new Error(`Unknown slot ${k}`);
     return slots[k];

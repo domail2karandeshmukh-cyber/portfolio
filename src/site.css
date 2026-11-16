@@ -175,14 +175,15 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 .rw-try textarea{display:block;width:100%;min-height:5.4em;max-height:22em;resize:vertical;padding:13px 15px;border:0;border-radius:10px;background:var(--desk);color:var(--ink);font:400 .95rem/1.62 var(--mono)}
 .rw-try textarea::placeholder{color:var(--mute);opacity:1}
 .rw-try textarea:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:10px}
-.try-row{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;justify-content:space-between;margin-top:14px}
-.try-samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;font-size:.9rem;color:var(--mute)}
+.try-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 20px;align-items:start;margin-top:14px}
+.try-samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;padding-top:.12em;font-size:.9rem;color:var(--mute)}
 .try-samples .chip{background:#fff}
 .try-samples .chip:hover{background:var(--hl)}
 .try-note{margin:14px 0 0;font-size:.86rem;line-height:1.5;color:var(--mute)}
 .try-note a{color:var(--ink)}
 .try-msg{margin:12px 0 0;font-size:.97rem;font-weight:600;color:var(--red)}
 .try-msg:empty{display:none}
+.foot .rev{margin:0;font-size:.86rem}
 
 /* Paper: anything that is a document looks like one */
 .sheet{background:#fff;color:var(--ink);border-radius:4px}
@@ -629,6 +630,7 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
  .rw-try{padding:18px 16px 16px;margin-top:24px}
  .rw-try label{font-size:1.36rem}
  .rw-try textarea{font-size:1rem}
+ .try-row{grid-template-columns:minmax(0,1fr)}
  .try-row .btn{width:100%;justify-content:center}
  .doc-title{font-size:1.55rem}
  .excerpt .sheet{padding:24px 20px}

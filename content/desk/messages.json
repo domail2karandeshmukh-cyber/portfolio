@@ -285,7 +285,141 @@
   },
   {
    "id": "laptops",
-   "text": "notes from the sync with security: starting March 3 all laptops need disk encryption on or they lose VPN. IT will push it automatically to managed Macs, Windows people have to turn on BitLocker themselves (guide coming). personal devices are not allowed on VPN at all anymore. exceptions go through your manager then security, takes about 2 days. contractors same rules. someone asked about Linux, answer was \"we'll get back to you\""
+   "text": "notes from the sync with security: starting March 3 all laptops need disk encryption on or they lose VPN. IT will push it automatically to managed Macs, Windows people have to turn on BitLocker themselves (guide coming). personal devices are not allowed on VPN at all anymore. exceptions go through your manager then security, takes about 2 days. contractors same rules. someone asked about Linux, answer was \"we'll get back to you\"",
+   "record": {
+    "model": "google/gemini-2.5-flash-lite",
+    "ms": 3111,
+    "answer": {
+     "ok": true,
+     "kind": "policy",
+     "facts": [
+      {
+       "id": "f1",
+       "quote": "starting March 3"
+      },
+      {
+       "id": "f2",
+       "quote": "all laptops need disk encryption"
+      },
+      {
+       "id": "f3",
+       "quote": "or they lose VPN"
+      },
+      {
+       "id": "f4",
+       "quote": "IT will push it automatically"
+      },
+      {
+       "id": "f5",
+       "quote": "managed Macs"
+      },
+      {
+       "id": "f6",
+       "quote": "Windows people have to turn on BitLocker themselves"
+      },
+      {
+       "id": "f7",
+       "quote": "guide coming"
+      },
+      {
+       "id": "f8",
+       "quote": "personal devices are not allowed on VPN at all anymore"
+      },
+      {
+       "id": "f9",
+       "quote": "exceptions go through your manager then security"
+      },
+      {
+       "id": "f10",
+       "quote": "takes about 2 days"
+      },
+      {
+       "id": "f11",
+       "quote": "contractors same rules"
+      },
+      {
+       "id": "f12",
+       "quote": "Linux"
+      },
+      {
+       "id": "f13",
+       "quote": "we'll get back to you"
+      }
+     ],
+     "noise": [
+      "notes from the sync with security:",
+      "on",
+      "people",
+      "themselves",
+      "anymore",
+      "someone asked about",
+      "answer was"
+     ],
+     "label": "Policy",
+     "title": "Disk encryption and VPN access policy",
+     "audience": "This policy applies to all employees, including contractors.",
+     "sections": [
+      {
+       "heading": "What changes",
+       "style": "text",
+       "items": [
+        {
+         "text": "<f1>Starting March 3</f1>, <f2>all laptops need disk encryption</f2> <f3>or they lose VPN access</f3>.",
+         "caution": ""
+        },
+        {
+         "text": "<f8>Personal devices are not allowed on VPN at all anymore</f8>.",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "What to do",
+       "style": "steps",
+       "items": [
+        {
+         "text": "For <f5>managed Macs</f5>, <f4>IT will push disk encryption automatically</f4>.",
+         "caution": ""
+        },
+        {
+         "text": "For Windows devices, <f6>you have to turn on BitLocker yourself</f6>. A <f7>guide is coming</f7>.",
+         "caution": ""
+        },
+        {
+         "text": "<f11>Contractors must follow the same rules</f11>.",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "Exceptions",
+       "style": "steps",
+       "items": [
+        {
+         "text": "To request an exception, <f9>go through your manager then security</f9>. This process <f10>takes about 2 days</f10>.",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "Linux devices",
+       "style": "text",
+       "items": [
+        {
+         "text": "Regarding <f12>Linux</f12> devices, <f13>the team will get back to you</f13>.",
+         "caution": ""
+        }
+       ]
+      }
+     ],
+     "questions": [
+      "When will the guide for Windows BitLocker be available?",
+      "What is the process for Linux devices?",
+      "Who is considered 'security' for exception approvals?",
+      "Will there be a grace period after March 3 for users who haven't encrypted their laptops?"
+     ]
+    }
+   }
   }
  ]
 }

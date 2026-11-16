@@ -121,7 +121,7 @@
 
     /* ----- A visitor's own message ----- */
     var tray = $("#try"), ta = $("#try-text"), note = $("#try-msg"), mine = $(".rw-you", rw), theirs = $(".rw-ex", rw), acts = $(".rw-acts", rw), stats = $("#rw-stats"), copy = $("#rw-copy");
-    var home = { raw: raw.innerHTML, doc: doc.innerHTML, lang: stage.getAttribute("lang") }, last = null, job = 0, busy = false, samples = null;
+    var home = { raw: raw.innerHTML, doc: doc.innerHTML, lang: stage.getAttribute("lang") }, last = null, job = 0, busy = false, samples = null, sampled = false;
     var KIND = { "how-to": "#0A8F7A", troubleshooting: "#CF3F5A", reference: "#1F78D1", "release-note": "#C97800", policy: "#3D4AB0", explainer: "#6A58E6" };
     function el(tag, cls, text) {
       var e = document.createElement(tag);
@@ -155,7 +155,7 @@
     // The message as it was pasted, then, once the draft is back, with its facts marked and its noise struck.
     function message(text, parts) {
       raw.textContent = "";
-      raw.appendChild(el("p", "raw-head", I.rwYours));
+      raw.appendChild(el("p", "raw-head", sampled ? I.rwSample : I.rwYours));
       var p = raw.appendChild(el("p", "raw-msg mine"));
       if (!parts) p.textContent = text;
       else parts.forEach(function (s) {
@@ -244,7 +244,7 @@
       note.textContent = why || "";
     }
     function load() {
-      samples = samples || fetch("/desk.json").then(function (r) { return r.json(); }).then(function (d) { return d.messages || []; }).catch(function () { samples = null; return []; });
+      samples = samples || fetch("/desk.json").then(function (r) { return r.json(); }).then(function (d) { samples.list = d.messages || []; return samples.list; }).catch(function () { samples = null; return []; });
       return samples;
     }
     function send(text) {
@@ -254,6 +254,7 @@
       if (text.length < 40) { note.textContent = I.rwShort; ta.focus(); return; }
       var run = ++job, began = Date.now();
       busy = true;
+      sampled = !!(samples && samples.list && samples.list.some(function (m) { return m.text.trim() === text; }));
       tourOff();
       stop();
       source(true);
@@ -270,6 +271,7 @@
       load().then(function (list) {
         var known = list.filter(function (m) { return m.draft && m.text.trim() === text; })[0];
         if (known) return known.draft;
+        if (sampled) { sampled = false; message(text); }
         var stopAt = window.AbortController ? new AbortController() : null;
         if (stopAt) setTimeout(function () { stopAt.abort(); }, 29000);
         return fetch("/api/rewrite", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: text }), signal: stopAt ? stopAt.signal : undefined })

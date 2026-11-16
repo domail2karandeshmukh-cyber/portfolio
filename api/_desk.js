@@ -10,6 +10,7 @@ const MESSAGES = require("../content/desk/messages.json").messages;
 const MIN = 40, MAX = 1400;
 const KINDS = ["how-to", "troubleshooting", "reference", "release-note", "policy", "explainer"];
 const STYLES = ["steps", "bullets", "text"];
+const SEQUENCED = ["how-to", "troubleshooting"];
 
 const frame = (text) => `Message:\n"""\n${text}\n"""`;
 /** The conversation a model is given: the brief, the worked example as a first exchange, then the visitor's message. */
@@ -221,7 +222,9 @@ function audit(text, doc) {
       if (!mark && !name) return;
       key = "w:" + low;
       const bare = low.replace(/[<>]/g, "");
-      found = d.includes(bare) || (bare.length > 3 && bare.endsWith("s") && d.includes(bare.slice(0, -1)));
+      // A name is a whole word: "IT" is not found inside "with". It may come back as a plural or a possessive.
+      const whole = (w) => new RegExp(`(^|[^\\p{L}\\p{N}])${w.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}(s|'s)?([^\\p{L}\\p{N}]|$)`, "u").test(d);
+      found = whole(bare) || (bare.length > 3 && bare.endsWith("s") && whole(bare.slice(0, -1)));
     }
     if (seen.has(key)) return;
     seen.add(key);
@@ -308,14 +311,19 @@ function shape(text, answer) {
       style: /^before you (?:start|begin)/i.test(String((s && s.heading) || "").trim()) ? "bullets" : STYLES.includes(s && s.style) ? s.style : "bullets",
       items: list(s && s.items, 9)
         .map((it) => {
-          const item = { runs: runs(typeof it === "string" ? it : it && it.text, known, used, 320) };
-          const caution = runs(it && it.caution, known, used, 260);
+          // A caution opens with a bold word. A note without one is no warning, and it joins its item.
+          const body = String(typeof it === "string" ? it : (it && it.text) || ""), note = String((it && it.caution) || "").trim();
+          const warns = /^(?:<f\d{1,2}>)?\*\*[^*]{2,30}\*\*/.test(note);
+          const item = { runs: runs(note && !warns ? `${body} ${note}` : body, known, used, 420) };
+          const caution = warns ? runs(note, known, used, 260) : [];
           if (caution.length) item.caution = caution;
           return item;
         })
         .filter((it) => plain(it.runs).trim()),
     }))
-    .filter((s) => s.items.length);
+    .filter((s) => s.items.length)
+    // One step is not a sequence, and a rule, a change or a definition is not a procedure: only a how-to or a fix has numbered steps.
+    .map((s) => (s.style !== "steps" ? s : s.items.length === 1 ? Object.assign(s, { style: "text" }) : SEQUENCED.includes(answer.kind) ? s : Object.assign(s, { style: "bullets" })));
   const asked = list(answer.questions, 8).map((q) => String(q).replace(/\s+/g, " ").trim().slice(0, 200)).filter(Boolean);
   const own = asked.filter((q) => !BORROWED.some(([inQuestion, inMessage]) => inQuestion.test(q.toLowerCase()) && !inMessage.test(lowText)));
   fixed += asked.length - own.length;
@@ -325,6 +333,11 @@ function shape(text, answer) {
   if (!plain(title).trim() || !sections.length || used.size < 2) return null;
   const doc = fold([plain(title), plain(audience)].concat(sections.flatMap((s) => [s.heading].concat(s.items.flatMap((it) => [plain(it.runs), plain(it.caution || [])])))).join(" ")).t;
   const noise = list(answer.noise, 24).map(String).filter((q) => q.trim() && isNoise(q, doc)).map((quote) => ({ quote }));
+  // Of the facts without a tag in the document, how many left no trace in its words at all.
+  const lost = ranges.filter((r) => r.k === "f" && !used.has(r.id)).filter((r) => {
+    const words = fold(text.slice(r.a, r.b)).t.split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 3 && !FILLER.has(w));
+    return words.length && words.filter((w) => doc.includes(w.slice(0, Math.max(4, w.length - 3)))).length / words.length < 0.5;
+  }).length;
   locate(F, noise, "n", ranges, false);
   ranges.sort((x, y) => x.a - y.a);
   return {
@@ -337,7 +350,7 @@ function shape(text, answer) {
     // A fact that never reached the document is still shown as kept in the message, without a partner.
     raw: segments(text, ranges).map((s) => (s.k === "f" && !used.has(s.f) ? { t: s.t, k: "f" } : s)),
     questions,
-    stats: { facts: known.size, cut: ranges.filter((r) => r.k === "n").length, loose: known.size - used.size, fixed },
+    stats: { facts: known.size, cut: ranges.filter((r) => r.k === "n").length, loose: known.size - used.size, lost, fixed },
     check: audit(text, [plain(title), plain(audience)].concat(sections.flatMap((s) => [s.heading].concat(s.items.flatMap((it) => [plain(it.runs), plain(it.caution || [])])))).join(" ")),
   };
 }
@@ -349,8 +362,8 @@ function shape(text, answer) {
 function grade(out) {
   const c = out.check;
   let g = 10 * (c.missing.length + c.added.length + c.doubt.length);   // a name, a number or a doubt lost, or a number invented
-  g += 2 * out.stats.loose;                                            // a fact that never reached the document
-  g += out.stats.fixed;                                                // a guess or a slip that the rules had to take out
+  g += 4 * out.stats.lost + (out.stats.loose - out.stats.lost);        // a fact that never reached the document, or reached it without its tag
+  g += 3 * out.stats.fixed;                                            // a guess or a slip that the rules had to take out
   if (out.kind === "how-to" && !out.sections.some((s) => s.style === "steps")) g += 5;
   if (out.questions.length < 2) g += 3;
   return g;
@@ -378,7 +391,7 @@ function show(out) {
     s.items.forEach((it, i) => { L.push(`${s.style === "steps" ? i + 1 + "." : s.style === "bullets" ? "-" : " "} ${mark(it.runs)}`); if (it.caution) L.push(`     ! ${mark(it.caution)}`); });
   }
   out.questions.forEach((q) => L.push(`? ${q}`));
-  L.push(`grade ${grade(out)}: facts ${out.stats.facts} (${out.stats.loose} not carried), cut ${out.stats.cut}, fixed by rule ${out.stats.fixed}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}, doubt ${JSON.stringify(out.check.doubt)}`);
+  L.push(`grade ${grade(out)}: facts ${out.stats.facts} (${out.stats.loose} without a tag, ${out.stats.lost} of them lost), cut ${out.stats.cut}, fixed by rule ${out.stats.fixed}; names and numbers ${out.check.count}, missing ${JSON.stringify(out.check.missing)}, added ${JSON.stringify(out.check.added)}, doubt ${JSON.stringify(out.check.doubt)}`);
   return L.join("\n");
 }
 

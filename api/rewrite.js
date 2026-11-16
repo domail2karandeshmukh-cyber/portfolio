@@ -17,7 +17,7 @@ const NAME = /^([^:@>]+)(?::([a-z]+))?(?:@([a-z]+))?(?:>([a-z0-9-]+))?$/;
 // One model may cost at most this much per token, in dollars, whoever asks for it.
 const CEILING = { input: 0.000001, output: 0.000005 };
 // A draft costs a fraction of a cent. These keep a bad day cheap: per visitor a minute, per visitor a day, in all a day.
-const A_MINUTE = 4, EACH_A_DAY = 30, A_DAY = 300;
+const A_MINUTE = 4, EACH_A_DAY = 20, A_DAY = 200;
 
 const formats = new Map();     // how each model accepts a request for JSON
 const minute = new Map(), daily = new Map();

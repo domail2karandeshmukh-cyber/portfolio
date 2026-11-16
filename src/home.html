@@ -103,9 +103,9 @@
       <button class="rw-again" type="button">Play it again</button>
      </span>
      <span class="rw-you" aria-live="polite" hidden>
-      <span class="rw-wait">Reading your message for the facts...</span>
-      <span class="rw-cap" data-s="1">Your message, as it was sent.</span>
-      <span class="rw-cap" data-s="2">Your message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
+      <span class="rw-wait">Reading the message for its facts...</span>
+      <span class="rw-cap" data-s="1">The message, as it was sent.</span>
+      <span class="rw-cap" data-s="2">The message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
       <span class="rw-cap" data-s="3">A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.</span>
       <span class="rw-stats" id="rw-stats"></span>
      </span>
@@ -119,8 +119,8 @@
      <label for="try-text">Now try it on a message from your own team.</label>
      <textarea id="try-text" name="text" rows="3" maxlength="1400" placeholder="Paste a chat message, a ticket comment or meeting notes."></textarea>
      <div class="try-row">
-      <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from a chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
       <button class="btn ink sm" type="submit">Mark it up</button>
+      <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from a chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
      </div>
      <p class="try-note">An AI model drafts it by <a href="{{brief}}" target="_blank" rel="noopener">this brief</a>. This site doesn't keep your text. Leave out anything confidential all the same.</p>
      <p class="try-msg" id="try-msg" role="status"></p>
@@ -274,6 +274,7 @@
  <div class="wrap">
   <p>How this site is made: one content file builds this page, the library, the PDF CV and April's answers. Documents and screenshots are pulled from the project repositories when the site is built.</p>
   <p class="foot-langs" translate="no"><!--@langlinks--></p>
+  <!--@rev-->
  </div>
 </footer>
 

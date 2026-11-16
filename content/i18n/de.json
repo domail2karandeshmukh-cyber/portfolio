@@ -46,6 +46,10 @@
   [
    "^(\\d+) guides?, (\\d+) questions?$",
    "$1 Anleitungen, $2 Fragen"
+  ],
+  [
+   "^Built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "Erstellt aus Commit $1."
   ]
  ],
  "units": {
@@ -239,9 +243,6 @@
   "Document": "Dokument",
   "Play it again": "Noch einmal abspielen",
   "Try your own message": "Eigene Nachricht ausprobieren",
-  "Reading your message for the facts...": "Ihre Nachricht wird nach Fakten durchsucht...",
-  "Your message, as it was sent.": "Ihre Nachricht, so wie sie gesendet wurde.",
-  "Your message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "Ihre Nachricht, markiert. Gelb ist ein Fakt, der bleibt. Rot durchgestrichen ist Rauschen, das wegfällt.",
   "A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.": "Ein erster Entwurf, geschrieben von einem KI-Modell, das meinem Briefing folgt. Das Entwerfen geht schnell. Die Antworten auf die Fragen zu beschaffen, ist die eigentliche Arbeit.",
   "Copy as Markdown": "Als Markdown kopieren",
   "Back to my example": "Zurück zu meinem Beispiel",
@@ -266,6 +267,10 @@
   "The draft lost {l}.": "Im Entwurf fehlt: {l}.",
   "The draft adds {l}, which the message doesn't say.": "Der Entwurf fügt {l} hinzu, was in der Nachricht nicht steht.",
   "The message isn't sure about something ({l}). The draft doesn't say so.": "Die Nachricht ist sich bei etwas nicht sicher ({l}). Der Entwurf sagt das nicht.",
+  "Reading the message for its facts...": "Die Nachricht wird nach Fakten durchsucht...",
+  "The message, as it was sent.": "Die Nachricht, so wie sie gesendet wurde.",
+  "The message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "Die Nachricht, markiert. Gelb ist ein Fakt, der bleibt. Rot durchgestrichen ist Rauschen, das wegfällt.",
+  "Sample message": "Beispielnachricht",
   "Play the video portfolio": "Video-Portfolio abspielen",
   "Plays here. The videos are streamed from YouTube.": "Wird hier abgespielt. Die Videos werden von YouTube gestreamt.",
   "Language": "Sprache"
