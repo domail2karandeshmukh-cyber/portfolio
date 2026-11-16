@@ -23,39 +23,104 @@
     addEventListener("scroll", onNav, { passive: true });
   }
 
-  /* Hero: the engineer's message versus the published procedure */
-  var frame = $(".cmp-frame");
-  if (frame) (function () {
-    var range = $(".cmp-range"), tabs = $$(".cmp-tabs button"), raf = 0, touched = false;
-    function setX(v) {
-      v = Math.max(0, Math.min(100, v));
-      frame.style.setProperty("--x", v + "%");
-      range.value = v;
-      tabs[0].setAttribute("aria-pressed", v >= 50);
-      tabs[1].setAttribute("aria-pressed", v < 50);
+  /* The highlighter: a stroke is drawn when its words come into view */
+  var strokes = $$(".hl");
+  if (reduce || !("IntersectionObserver" in window)) strokes.forEach(function (m) { m.classList.add("on"); });
+  else {
+    var ho = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        ho.unobserve(e.target);
+        setTimeout(function () { e.target.classList.add("on"); }, 280);
+      });
+    }, { threshold: 0.85 });
+    strokes.forEach(function (m) { ho.observe(m); });
+  }
+
+  /* The featured documents are dealt onto the desk when they come into view */
+  var deck = $(".docs.feature");
+  if (deck && !reduce && "IntersectionObserver" in window) {
+    deck.classList.add("deal");
+    var dio = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return;
+      dio.disconnect();
+      deck.classList.remove("deal");
+    }, { threshold: 0.18 });
+    dio.observe(deck);
+  }
+
+  /* The rewrite: an engineer's message, the markup, the published procedure.
+     A fact carries the same data-f in the message and in the document, so it can be followed from one to the other. */
+  var rw = $("#rewrite");
+  if (rw) (function () {
+    var stage = $(".rw-stage", rw), raw = $(".rw-raw", rw), doc = $(".rw-doc", rw), tabs = $$(".rw-tabs button", rw);
+    var state = +rw.dataset.state, timers = [], settle = 0, auto = false;
+    $$("mark", raw).forEach(function (m, i) { m.style.setProperty("--i", i); });
+    $$("s", raw).forEach(function (m, i) { m.style.setProperty("--i", i + 3); });
+    function layer(s) { return s === 3 ? doc : raw; }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    // Each fact leaves its place in one version and lands on its place in the other.
+    function fly(from, to) {
+      var box = stage.getBoundingClientRect();
+      $$("[data-f]", from).forEach(function (a, i) {
+        var b = $('[data-f="' + a.dataset.f + '"]', to);
+        var ra = a.getClientRects()[0], rb = b && b.getClientRects()[0];
+        if (!ra || !rb) return;
+        var chip = document.createElement("span"), wait = 80 + i * 55;
+        chip.className = "rw-fly";
+        chip.textContent = a.textContent;
+        stage.appendChild(chip);
+        // Start and finish inside the stage, so a long fact never runs off the screen.
+        var room = box.width - chip.offsetWidth, x0 = Math.max(0, Math.min(ra.left - box.left - 4, room)), x1 = Math.max(0, Math.min(rb.left - box.left - 4, room));
+        chip.style.left = x0 + "px";
+        chip.style.top = ra.top - box.top + "px";
+        var end = "translate(" + (x1 - x0) + "px," + (rb.top - ra.top) + "px)";
+        chip.animate([{ transform: "translate(0,0)", opacity: 1 }, { transform: end, opacity: 1, offset: 0.8 }, { transform: end, opacity: 0 }],
+          { duration: 950, delay: wait, easing: "cubic-bezier(.6,0,.15,1)", fill: "both" }).onfinish = function () { chip.remove(); };
+        later(function () { b.classList.add("lit"); }, wait + 720);
+      });
     }
-    function glide(to, ms) {
-      cancelAnimationFrame(raf);
-      if (reduce) { setX(to); return; }
-      var from = parseFloat(range.value), t0 = performance.now();
-      (function step(t) {
-        var p = Math.min(1, Math.max(0, (t - t0) / ms)), e = 1 - Math.pow(1 - p, 3);
-        setX(from + (to - from) * e);
-        if (p < 1) raf = requestAnimationFrame(step);
-      })(t0);
+    function set(s, quick) {
+      if (s === state) return;
+      var was = state, h0 = stage.offsetHeight;
+      $$(".rw-fly", stage).forEach(function (c) { c.remove(); });
+      $$(".lit", rw).forEach(function (e) { e.classList.remove("lit"); });
+      if (!quick && !reduce && stage.animate && (was === 3) !== (s === 3)) fly(layer(was), layer(s));
+      state = s;
+      rw.dataset.state = s;
+      tabs.forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.s === s); });
+      var h1 = stage.offsetHeight;
+      if (quick || reduce || h0 === h1) return;
+      stage.style.height = h0 + "px";
+      void stage.offsetHeight;
+      stage.style.height = h1 + "px";
+      clearTimeout(settle);
+      settle = setTimeout(function () { stage.style.height = ""; }, 720);
     }
-    range.addEventListener("input", function () { touched = true; cancelAnimationFrame(raf); setX(+range.value); });
-    tabs.forEach(function (b) { b.addEventListener("click", function () { touched = true; glide(+b.dataset.x, 650); }); });
-    if (reduce || !("IntersectionObserver" in window)) setX(0);
-    else {
-      setX(100);
-      var io = new IntersectionObserver(function (es) {
-        if (!es[0].isIntersecting) return;
-        io.disconnect();
-        setTimeout(function () { if (!touched) glide(0, 1500); }, 1500);
-      }, { threshold: 0.4 });
-      io.observe(frame);
+    function stop() {
+      auto = false;
+      timers.forEach(clearTimeout);
+      timers = [];
     }
+    // The whole edit, start to finish: the message, then the markup, then the document.
+    function play() {
+      stop();
+      auto = true;
+      var lead = state === 1 ? 0 : 1500;
+      set(1);
+      later(function () { if (auto) set(2); }, lead + 1300);
+      later(function () { if (auto) set(3); auto = false; }, lead + 1300 + 2900);
+    }
+    tabs.forEach(function (b) { b.addEventListener("click", function () { stop(); set(+b.dataset.s); }); });
+    $(".rw-again", rw).addEventListener("click", play);
+    // Without motion the page opens on the finished document. With it, the edit plays once when the stage is in view.
+    if (reduce || !("IntersectionObserver" in window)) { set(3, true); return; }
+    var io = new IntersectionObserver(function (es) {
+      if (!es[0].isIntersecting) return;
+      io.disconnect();
+      play();
+    }, { threshold: 0.55 });
+    io.observe(stage);
   })();
 
   /* Key figures count up when they come into view */

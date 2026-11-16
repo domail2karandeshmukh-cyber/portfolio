@@ -6,9 +6,9 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { esc, host, sources, template } from "./lib/util.mjs";
-import { buildLibrary, docCard, docRow } from "./lib/library.mjs";
+import { buildLibrary, docCard } from "./lib/library.mjs";
 import { videos } from "./lib/video.mjs";
-import { translate } from "./lib/i18n.mjs";
+import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
 
@@ -57,14 +57,13 @@ const PLAY = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" wid
 
 const parts = {
   stats: C.stats.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
-  featured: C.featured.map((id) => docCard(byId[id], T)).join("\n"),
-  filters:
-    `<button class="chip" type="button" data-t="all" aria-pressed="true">All</button>` +
-    Object.entries(T)
-      .filter(([k]) => listed.some((d) => d.type === k))
-      .map(([k, t]) => `<button class="chip" type="button" data-t="${k}" aria-pressed="false">${esc(t.plural)}</button>`)
-      .join(""),
-  rows: listed.map((d) => docRow(d, T)).join("\n"),
+  // Three sheets on the desk. The first one is where to start.
+  featured: C.featured.map((id, i) => docCard({ ...byId[id], start: i === 0 }, T)).join("\n"),
+  // Every document as one line of titles under its kind: the breadth of the library at a glance.
+  index: Object.entries(T)
+    .filter(([k]) => listed.some((d) => d.type === k))
+    .map(([k, t]) => `<div><dt style="--tc:${t.color}">${esc(t.plural)}</dt><dd translate="no">${listed.filter((d) => d.type === k).map((d) => `<a href="${d.url}">${esc(d.title)}</a>`).join("")}</dd></div>`)
+    .join("\n"),
   systems: C.projects
     .map(
       (p) => `<article class="sys">
@@ -149,9 +148,14 @@ for (const loc of locales) {
       await fs.writeFile(`.cache/missing-${loc.code}.json`, JSON.stringify(done.missing, null, 1));
     }
   }
+  // The English page, before its apostrophes are set, is the list a translator works from.
+  if (loc.code === "en") {
+    await fs.mkdir(".cache", { recursive: true });
+    await fs.writeFile(".cache/units.json", JSON.stringify(units(html), null, 1));
+  }
   const dir = loc.path === "/" ? OUT : `${OUT}${loc.path}`;
   await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(`${dir}/index.html`, html);
+  await fs.writeFile(`${dir}/index.html`, typeset(html));
 }
 
 for (const f of ["site.css", "app.js", "favicon.svg"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);

@@ -18,6 +18,18 @@ One content file, `content/site.json`, feeds everything. `build.mjs` and the mod
 
 `src/page.html` is the shell of every library page. `src/partials/` holds the parts both shells share. `src/site.css` and `src/app.js` serve every page.
 
+## The look
+
+The site is an editor's desk: white paper, black ink and one highlighter.
+
+- **Yellow marks what matters, and nothing else.** A highlighted phrase is `<mark class="hl">` in the page text. Its stroke is drawn when the words come into view. Use it for one phrase in a section at most.
+- **Anything that is a document looks like one.** Document cards, the excerpt and the reading pages are sheets on a grey desk. Everything else is plain type on the page.
+- **The engineer's words are set in the mono face, the published ones in the serif.** The build also sets typographic apostrophes in running text and leaves the raw message and code as typed.
+
+### The rewrite at the top of the home page
+
+The stage shows one message in three states: as it arrived, marked up, and published. Each fact carries the same `data-f` name in the message (`<mark data-f="hr">`) and in the document (`<span data-f="hr">`). The script uses that name to move the fact from one to the other. To add a fact, add it to both with a new name. Noise in the message is wrapped in `<s>`.
+
 ## The documentation library
 
 The library has two sources.
@@ -78,7 +90,7 @@ The home page is written in English and translated at build time. The documents,
 - `patterns` translates text that carries numbers, such as reading times. Write a captured group as `$1`.
 - `keep` lists text that stays as it is, such as product names.
 
-After you change English text, run the build. It lists every piece that has no translation yet, writes the list to `.cache/missing-<language>.json`, and shows those pieces in English until you add them to `units`.
+After you change English text, run the build. It writes every piece of the English page to `.cache/units.json`, in reading order. For each language it lists the pieces that have no translation yet, writes that list to `.cache/missing-<language>.json`, and shows those pieces in English until you add them to `units`.
 
 ## April
 
