@@ -187,5 +187,13 @@
   {"code": "es", "name": "Español", "path": "/es", "offer": "Esta página también está en español.", "go": "Leer en español"},
   {"code": "hi", "name": "हिन्दी", "path": "/hi", "offer": "यह पेज हिंदी में भी उपलब्ध है।", "go": "हिंदी में पढ़ें"}
  ],
- "strings": {"morning": "Good morning.", "afternoon": "Good afternoon.", "evening": "Good evening.", "intro": "I'm April, Karan's assistant. Ask me about his writing, his projects or his availability.", "thinking": "Thinking...", "offline": "I can't reach my AI model right now. Try one of the suggested questions, or message Karan on LinkedIn:", "voiceOn": "I'll read my answers aloud.", "voiceOff": "Voice is off.", "hello": "Hello, I'm April. Ask me anything about Karan's work, and I'll answer from his notes.", "palDocs": "Documents", "palHere": "On this page", "palAsk": "Ask April", "palNone": "No document matches. Press Enter to ask April.", "palHint": "Type to search the library, or ask April a question.", "copy": "Copy", "copied": "Copied", "close": "Close"}
+ "tour": [
+  {"to": "top", "say": "Hello, I'm April. Karan turns what engineers know into documentation people can follow. Let me show you around in one minute."},
+  {"to": "writing", "say": "Start with the writing. Every document opens on this site: help-center samples, and the documentation of the security tools he led."},
+  {"to": "projects", "say": "These are those tools. All three are live, and each one links to the documentation behind it."},
+  {"to": "video", "say": "Some procedures are faster to watch than to read. His walkthrough videos play right here on the page."},
+  {"to": "experience", "say": "Behind this is more than five years of documentation and process work, including more than 500 articles he created and maintained at MongoDB."},
+  {"to": "contact", "say": "That's the tour. Karan is open to technical writing roles, so message him on LinkedIn, or ask me anything."}
+ ],
+ "strings": {"morning": "Good morning.", "afternoon": "Good afternoon.", "evening": "Good evening.", "intro": "I'm April, Karan's assistant. Ask me about his writing, his projects or his availability.", "thinking": "Thinking...", "offline": "I can't reach my AI model right now. Try one of the suggested questions, or message Karan on LinkedIn:", "voiceOn": "I'll read my answers aloud.", "voiceOff": "Voice is off.", "hello": "Hello, I'm April. Ask me anything about Karan's work, and I'll answer from his notes.", "palDocs": "Documents", "palHere": "On this page", "palAsk": "Ask April", "palNone": "No document matches. Press Enter to ask April.", "palHint": "Type to search the library, or ask April a question.", "copy": "Copy", "copied": "Copied", "close": "Close", "tourPause": "Pause the tour", "tourResume": "Resume the tour"}
 }

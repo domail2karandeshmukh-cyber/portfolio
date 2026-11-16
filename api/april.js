@@ -4,10 +4,13 @@ const C = require("../content/site.json");
 const S = C.site;
 
 const LANGUAGES = { en: "English", fr: "French", de: "German", es: "Spanish", hi: "Hindi" };
-// Her spoken greeting in each language, taken from the same translation files as the page.
-const HELLO = { en: C.strings.hello };
+// The lines she says without being asked: her greeting and the stops of her tour.
+// Each language takes them from the same translation file as the page.
+const SAY = { hello: C.strings.hello };
+C.tour.forEach((t, i) => { SAY["tour" + (i + 1)] = t.say; });
+const LINES = { en: SAY };
 [["fr", () => require("../content/i18n/fr.json")], ["de", () => require("../content/i18n/de.json")], ["es", () => require("../content/i18n/es.json")], ["hi", () => require("../content/i18n/hi.json")]].forEach(([code, load]) => {
-  try { HELLO[code] = load().units[C.strings.hello] || HELLO.en; } catch (e) {}
+  try { const u = load().units; LINES[code] = Object.fromEntries(Object.entries(SAY).map(([k, v]) => [k, u[v] || v])); } catch (e) {}
 });
 
 function notes() {
@@ -33,6 +36,7 @@ function notes() {
   L.push(`How the project documentation was made: ${C.method}`);
   L.push(`Video portfolio, which plays on the site: ${S.url}/#video | The same videos on YouTube: ${S.links.youtube}`);
   L.push(`The site is available in ${C.locales.map((l) => l.name).join(", ")}. The documents, the videos and the CV are in English.`);
+  L.push("April also gives a one-minute spoken tour of the home page. It starts from the button \"Take the one-minute tour\" at the top of the page.");
   L.push("About April: her name stands for AI for Projects, Releases, Insights and Logs. Karan first built April inside ReleasePilot AI, where she proposes project plans and waits for human approval.");
   return L.join("\n");
 }
@@ -79,7 +83,7 @@ const VOICES = [
 ].filter(Boolean);
 let voice = null;
 async function speak(token, text, lang, tried = []) {
-  const clean = String(text).replace(/https?:\/\/\S+/g, "").replace(/\s+/g, " ").trim().slice(0, 700);
+  const clean = String(text).replace(/https?:\/\/\S+/g, "").replace(/\s+/g, " ").trim().slice(0, 500);
   if (!clean) return null;
   for (const v of voice ? [voice] : VOICES) {
     try {
@@ -99,42 +103,55 @@ async function speak(token, text, lang, tried = []) {
 }
 
 const hits = new Map();
-let day = "", dayCount = 0, spoken = 0;
+const said = new Map();          // fixed lines already recorded by this copy of the function
+let day = "", dayCount = 0, spoken = 0, recorded = 0;
+// Speech is billed by the character, so each kind has a daily ceiling.
+const SPOKEN_ANSWERS_A_DAY = 80, RECORDINGS_A_DAY = 150;
 
 module.exports = async (req, res) => {
   const now = Date.now();
-  const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
-  const recent = (hits.get(ip) || []).filter((t) => now - t < 60000);
   const today = new Date().toISOString().slice(0, 10);
-  if (today !== day) { day = today; dayCount = 0; spoken = 0; }
-  if (recent.length >= 8 || dayCount >= 400) return res.status(429).json({ error: "busy" });
-  recent.push(now); hits.set(ip, recent); dayCount++;
-  if (hits.size > 5000) hits.clear();
+  if (today !== day) { day = today; dayCount = 0; spoken = 0; recorded = 0; }
 
-  const token = process.env.AI_GATEWAY_API_KEY || req.headers["x-vercel-oidc-token"] || process.env.VERCEL_OIDC_TOKEN;
-  if (!token) return res.status(503).json({ error: "no gateway token" });
-
-  let q = "", history = [], lang = "en", aloud = false, sayHello = false, probe = false;
+  let q = "", history = [], lang = "en", aloud = false, say = "", probe = false;
   try {
     if (req.method === "POST") {
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
       q = b.q; history = Array.isArray(b.history) ? b.history : []; lang = b.lang; aloud = b.voice === true;
-    } else { q = (req.query || {}).q; lang = (req.query || {}).lang; sayHello = (req.query || {}).say === "hello"; probe = "probe" in (req.query || {}); }
+    } else { q = (req.query || {}).q; lang = (req.query || {}).lang; say = String((req.query || {}).say || ""); probe = "probe" in (req.query || {}); }
   } catch (e) { return res.status(400).json({ error: "bad request" }); }
   lang = LANGUAGES[lang] ? lang : "en";
 
-  // One fixed line, so a visitor can hear the voice. The same audio is then served from the CDN.
-  if (sayHello) {
-    const tried = [];
-    const out = await speak(token, HELLO[lang] || HELLO.en, lang, tried);
-    if (!out) return res.status(502).json({ error: "voice", tried });
+  const token = process.env.AI_GATEWAY_API_KEY || req.headers["x-vercel-oidc-token"] || process.env.VERCEL_OIDC_TOKEN;
+  if (!token) return res.status(503).json({ error: "no gateway token" });
+
+  // A fixed line: her greeting or a stop of the tour. It is recorded once, then served from memory and from the CDN.
+  if (say) {
+    const text = (LINES[lang] || LINES.en)[say];
+    if (!text) return res.status(404).json({ error: "no such line" });
+    const key = lang + ":" + say, tried = [];
+    let out = said.get(key);
+    if (!out) {
+      if (recorded >= RECORDINGS_A_DAY) return res.status(429).json({ error: "busy" });
+      recorded++;
+      out = await speak(token, text, lang, tried);
+      if (!out) return res.status(502).json({ error: "voice", tried });
+      said.set(key, out);
+    }
     // ?probe answers with facts about the audio, for checking the voice without downloading it.
-    if (probe) return res.status(200).json({ voice: out.model, bytes: Buffer.from(out.audio, "base64").length, text: HELLO[lang] || HELLO.en, tried });
+    if (probe) return res.status(200).json({ voice: out.model, bytes: Buffer.from(out.audio, "base64").length, text, tried });
     res.setHeader("content-type", "audio/mpeg");
     res.setHeader("cache-control", "public, max-age=86400, s-maxage=2592000");
     res.setHeader("x-voice-model", out.model);
     return res.status(200).send(Buffer.from(out.audio, "base64"));
   }
+
+  // Questions: 8 a minute from one visitor, 400 a day in all.
+  const ip = String(req.headers["x-forwarded-for"] || "x").split(",")[0].trim();
+  const recent = (hits.get(ip) || []).filter((t) => now - t < 60000);
+  if (recent.length >= 8 || dayCount >= 400) return res.status(429).json({ error: "busy" });
+  recent.push(now); hits.set(ip, recent); dayCount++;
+  if (hits.size > 5000) hits.clear();
 
   q = String(q || "").trim().slice(0, 300);
   if (!q) return res.status(400).json({ error: "empty question" });
@@ -157,7 +174,7 @@ module.exports = async (req, res) => {
       // Some models reply to "where" questions with a link and nothing else.
       const answer = /^https?:\/\/\S+$/.test(out.answer) ? `You can find that here: ${out.answer}` : out.answer;
       const reply = { answer, model };
-      if (aloud && spoken < 250) {
+      if (aloud && spoken < SPOKEN_ANSWERS_A_DAY) {
         const sound = await speak(token, answer, lang);
         if (sound) { spoken++; reply.audio = sound.audio; reply.voice = sound.model; }
       }

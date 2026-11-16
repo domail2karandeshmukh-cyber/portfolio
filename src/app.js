@@ -107,6 +107,7 @@
   if (theater) theater.addEventListener("click", function (e) {
     var b = e.target.closest("[data-video],[data-list]");
     if (!b) return;
+    tourOff();
     var f = document.createElement("iframe");
     f.title = b.textContent.trim() || "Video";
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
@@ -121,9 +122,9 @@
   /* ---------- April ---------- */
   var panel = $("#april"), log = $("#log"), q = $("#q"), orb = $("#orb"), dock = $(".dock"), sugg = $("#sugg"), speakBtn = $("#speak");
   var hist = [], opener = null, greeted = false, voiceOn = store("april-voice") === "1";
-  var ctx = null, node = null;
+  var ctx = null, node = null, tourOff = function () {};
   function speaking(on) {
-    if (orb) orb.classList.toggle("talk", on);
+    [orb, $("#tour-orb")].forEach(function (o) { if (o) o.classList.toggle("talk", on); });
     var big = $(".orb-stage");
     if (big) big.classList.toggle("speaking", on);
   }
@@ -141,15 +142,16 @@
     if (window.speechSynthesis) speechSynthesis.cancel();
     speaking(false);
   }
-  function playBytes(buf) {
+  function playBytes(buf, done, still) {
     return new Promise(function (ok, no) {
       if (!ctx) return no();
       ctx.decodeAudioData(buf, function (audio) {
+        if (still && !still()) return ok();   // something newer started while this clip was being decoded
         hush();
         node = ctx.createBufferSource();
         node.buffer = audio;
         node.connect(ctx.destination);
-        node.onended = function () { speaking(false); };
+        node.onended = function () { speaking(false); if (done) done(); };
         node.start();
         speaking(true);
         ok();
@@ -163,8 +165,8 @@
   }
   /* The browser's own voices are the fallback: pick a woman's voice in the page's language. */
   var WOMAN = /female|woman|samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|serena|zira|jenny|aria|libby|sonia|michelle|am[eé]lie|audrey|marie|denise|julie|anna|petra|katja|vicki|marlene|m[oó]nica|paulina|elvira|luc[ií]a|sabina|lekha|swara|heera|kalpana/i;
-  function browserVoice(text) {
-    if (!window.speechSynthesis) return;
+  function browserVoice(text, done) {
+    if (!window.speechSynthesis) return false;
     speechSynthesis.cancel();
     var u = new SpeechSynthesisUtterance(text.replace(/https?:\/\/\S+/g, ""));
     var mine = speechSynthesis.getVoices().filter(function (v) { return v.lang.toLowerCase().indexOf(LANG) === 0; });
@@ -177,8 +179,9 @@
     u.lang = mine[0] ? mine[0].lang : LANG;
     u.rate = 0.98;
     u.onstart = function () { speaking(true); };
-    u.onend = u.onerror = function () { speaking(false); };
+    u.onend = u.onerror = function () { speaking(false); if (done) done(); };
     speechSynthesis.speak(u);
+    return true;
   }
   function say(text, audio) {
     if (!voiceOn) return;
@@ -235,6 +238,7 @@
         });
     }
     function openPanel(pre) {
+      tourOff();
       if (panel.hidden) opener = document.activeElement;
       panel.hidden = false;
       dock.hidden = true;
@@ -287,20 +291,103 @@
     }
   })();
 
-  /* "Hear her voice": one spoken line, so a visitor can judge the voice before asking anything */
-  $$("[data-hear]").forEach(function (b) {
-    if (!(window.AudioContext || window.webkitAudioContext || window.speechSynthesis)) return;
-    b.hidden = false;
-    b.addEventListener("click", function () {
-      unlock();
+  /* ---------- The tour: April walks the page and says one line at each stop ---------- */
+  var tour = $("#tour");
+  if (tour && I.tour1) (function () {
+    var stops = tour.dataset.stops.split(","), cap = $("#tour-say"), count = $("#tour-n"), fill = $(".tour-bar b", tour), pauseBtn = $("#tour-pause");
+    var at = -1, run = 0, paused = false, wait = 0, clips = {}, from = null;
+    // Each line is recorded once on the server, then served from the CDN.
+    function clip(i) {
+      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
+      return clips[i];
+    }
+    function go(i) {
+      var mine = ++run;
+      clearTimeout(wait);
       hush();
-      speaking(true);
-      fetch("/api/april?say=hello&lang=" + LANG)
-        .then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
-        .then(playBytes)
-        .catch(function () { speaking(false); browserVoice(I.hello); });
+      if (i >= stops.length) return end();
+      var text = I["tour" + (i + 1)], el = document.getElementById(stops[i]);
+      at = i;
+      paused = false;
+      tour.classList.remove("paused");
+      pauseBtn.setAttribute("aria-label", I.tourPause);
+      cap.removeAttribute("aria-live");
+      cap.textContent = text;
+      count.textContent = (i + 1) + " / " + stops.length;
+      fill.style.width = ((i + 1) / stops.length) * 100 + "%";
+      window.scrollTo({ top: i && el ? el.getBoundingClientRect().top + window.pageYOffset - 76 : 0, behavior: reduce ? "auto" : "smooth" });
+      function next() {
+        if (mine !== run) return;
+        clearTimeout(wait);
+        wait = setTimeout(function () { if (mine === run) go(i + 1); }, 700);
+      }
+      // No recorded voice: the browser's own voice reads the line, or the caption stands alone for a reading.
+      function quiet() {
+        if (mine !== run) return;
+        var began = Date.now(), read = 1500 + text.length * 50;
+        cap.setAttribute("aria-live", "polite");
+        cap.textContent = text;
+        var spoke = browserVoice(text, function () {
+          if (mine !== run) return;
+          var spent = Date.now() - began;
+          if (spent > 600 + text.length * 25) return next();
+          // It stopped at once, so it could not speak. Leave the caption up long enough to read.
+          clearTimeout(wait);
+          wait = setTimeout(next, Math.max(0, read - spent));
+        });
+        // The timer is also the way on when a browser's voice never reports that it has finished.
+        wait = setTimeout(next, spoke ? 2500 + text.length * 95 : read);
+      }
+      clip(i).then(function (buf) { if (mine === run) return playBytes(buf.slice(0), next, function () { return mine === run; }); }).catch(quiet);
+      if (i + 1 < stops.length) clip(i + 1).catch(function () {});
+    }
+    function pause() {
+      if (at < 0 || paused) return;
+      run++;
+      paused = true;
+      clearTimeout(wait);
+      hush();
+      tour.classList.add("paused");
+      pauseBtn.setAttribute("aria-label", I.tourResume);
+    }
+    function end() {
+      if (at < 0) return;
+      var inside = tour.contains(document.activeElement);
+      run++;
+      at = -1;
+      paused = false;
+      clearTimeout(wait);
+      hush();
+      tour.hidden = true;
+      if (dock && panel && panel.hidden) dock.hidden = false;
+      if (inside && from && from.focus) from.focus({ preventScroll: true });
+    }
+    tourOff = end;
+    $$("[data-tour]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (panel && !panel.hidden) $("#april-x").click();
+        from = b;
+        unlock();
+        tour.hidden = false;
+        if (dock) dock.hidden = true;
+        at = 0;
+        go(0);
+        pauseBtn.focus({ preventScroll: true });
+      });
     });
-  });
+    pauseBtn.addEventListener("click", function () { if (paused) { unlock(); go(at); } else pause(); });
+    $("#tour-next").addEventListener("click", function () { unlock(); go(at + 1); });
+    $("#tour-x").addEventListener("click", end);
+    // A visitor who scrolls away takes over: the tour waits until they resume it.
+    function took(e) { if (at >= 0 && !paused && !tour.contains(e.target)) pause(); }
+    addEventListener("wheel", took, { passive: true });
+    addEventListener("touchmove", took, { passive: true });
+    addEventListener("keydown", function (e) {
+      if (at < 0) return;
+      if (e.key === "Escape" && (!$("#pal") || $("#pal").hidden)) end();
+      else if (/^(ArrowUp|ArrowDown|PageUp|PageDown|Home|End| )$/.test(e.key) && !tour.contains(document.activeElement)) pause();
+    });
+  })();
 
   /* ---------- Search ---------- */
   var pal = $("#pal");

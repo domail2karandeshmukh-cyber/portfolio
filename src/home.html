@@ -52,7 +52,8 @@
    <p class="lead">Technical writer with 5+ years across enterprise IT, security and product documentation, most recently on contract at MongoDB. Now studying for an MSc in Cybersecurity and Data Science, and leading and documenting security systems of my own.</p>
    <div class="btns">
     <a class="btn paper" href="#writing">Read what I've written</a>
-    <a class="btn line" href="{{cv}}" download>Download CV</a>
+    <button class="btn line" type="button" data-tour><span class="orb xs" aria-hidden="true"></span><span>Take the one-minute tour</span></button>
+    <a class="btn line nojs" href="{{cv}}" download>Download CV</a>
    </div>
    <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
   </div>
@@ -161,7 +162,7 @@
    <div class="chips"><!--@asks--></div>
    <div class="btns">
     <button class="btn paper sm" type="button" data-april>Start a conversation</button>
-    <button class="btn line sm" type="button" data-hear hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Hear her voice</span></button>
+    <button class="btn line sm" type="button" data-tour><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Take the one-minute tour</span></button>
    </div>
   </div>
  </div>
@@ -225,6 +226,16 @@
  <p>How this site is made: one content file builds this page, the library, the PDF CV and April's answers. Documents and screenshots are pulled from the project repositories when the site is built.</p>
  <p class="foot-langs" translate="no"><!--@langlinks--></p>
 </footer>
+
+<div class="tour" id="tour" role="region" aria-label="April's tour" data-stops="{{stops}}" hidden>
+ <span class="orb sm" id="tour-orb" aria-hidden="true"></span>
+ <p id="tour-say"></p>
+ <span class="tour-n" id="tour-n" translate="no"></span>
+ <button type="button" class="x" id="tour-pause" aria-label="Pause the tour"><svg class="i-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg><svg class="i-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+ <button type="button" class="x" id="tour-next" aria-label="Next stop"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M6 5v14l9-7zM16 5h2.5v14H16z"/></svg></button>
+ <button type="button" class="x" id="tour-x" aria-label="End the tour">&times;</button>
+ <i class="tour-bar" aria-hidden="true"><b></b></i>
+</div>
 
 <!--#include tools-->
 <script src="/app.js" defer></script>

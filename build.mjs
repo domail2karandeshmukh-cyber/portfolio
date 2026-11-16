@@ -125,6 +125,9 @@ for (const loc of locales) {
     location: esc(S.location), availability: esc(S.availability),
     github: S.links.github, youtube: S.links.youtube,
     jsonld: JSON.stringify(jsonld),
+    // April's tour: the section each stop scrolls to, and the line she says there.
+    stops: C.tour.map((t) => t.to).join(","),
+    i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
   };
   for (const d of C.docs) tokens[`doc:${d.id}`] = byId[d.id].url;
   const slots = { ...parts, lang: menu(loc), hreflang, langlinks: locales.length < 2 ? esc(`${S.name}, ${S.location}`) : locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}">${esc(l.name)}</a>`).join("") };

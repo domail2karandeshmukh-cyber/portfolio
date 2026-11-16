@@ -75,13 +75,14 @@ After you change English text, run the build. It lists every piece that has no t
 
 ## April
 
-April answers questions about my work from the notes in `content/site.json`, in the visitor's language, in writing or out loud.
+April answers questions about my work from the notes in `content/site.json`, in the visitor's language, in writing or out loud. She also gives a one-minute spoken tour of the home page.
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
 - The voice is a text-to-speech model. `api/april.js` tries each entry in `VOICES` in order. To use another voice, set `APRIL_VOICE_MODEL` and `APRIL_VOICE` in the Vercel project.
 - If no voice model answers, the browser's own speech voice reads the answer instead.
 - To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke and lists the ones that failed.
-- As a guard against abuse, each running copy of the function accepts 8 questions a minute from one visitor, and 400 questions and 250 spoken answers a day in total.
+- The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Each line is recorded the first time a visitor needs it, then served from the CDN. Without a recorded voice, the browser's voice reads the line, or the caption stands alone.
+- Speech is billed by the character. As a guard against abuse, each running copy of the function accepts 8 questions a minute from one visitor, and 400 questions and 80 spoken answers a day in total.
 
 ## Build
 
