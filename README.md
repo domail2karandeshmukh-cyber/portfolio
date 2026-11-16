@@ -45,6 +45,13 @@ The small page previews on the document cards are screenshots of the pages thems
 python3 scripts/shoot-thumbs.py http://localhost:8765
 ```
 
+## Videos
+
+The video section lists the videos of the YouTube playlist named in `site.playlist`. The build copies each video's picture to `/img`, so a visitor's browser contacts YouTube only after a press on play. The video then plays in the page.
+
+- To add or remove a video, change the playlist on YouTube and build the site again. The build log lists the videos it found.
+- To show a clearer title than the one on YouTube, add the YouTube title and the title to show under `videos.titles` in `content/site.json`.
+
 ## Help-center samples
 
 1. `content/samples.json` lists the Google Docs. Each one must be shared as "anyone with the link can view" while the import runs.

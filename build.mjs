@@ -44,7 +44,7 @@ for (const [id, im] of Object.entries(C.images)) {
 // The library, and the videos
 const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings) };
 const library = await buildLibrary({ C, OUT, source, common });
-const reel = await videos({ playlist: S.playlist, OUT });
+const reel = await videos({ playlist: S.playlist, titles: C.videos?.titles, OUT });
 
 const byId = library.byId, listed = library.cards;
 const short = Object.fromEntries(C.docs.map((d) => [d.id, d.short]));

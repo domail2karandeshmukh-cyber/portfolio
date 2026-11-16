@@ -195,5 +195,8 @@
   {"to": "experience", "say": "Behind this is more than five years of documentation and process work, including more than 500 articles he created and maintained at MongoDB."},
   {"to": "contact", "say": "That's the tour. Karan is open to technical writing roles, so message him on LinkedIn, or ask me anything."}
  ],
+ "videos": {
+  "titles": {"Desk Booking with Audio": "Book a desk", "How-to: Book a Hotel in Navan": "Book a hotel in Navan", "How to Create a Gmail filter": "Create a Gmail filter", "Joining Your Team's 1Password Account": "Join your team's 1Password account", "VID 180 Adding Another Laptop to Okta Verify 1": "Add another laptop to Okta Verify", "How to Access and Use the Technology Catalog": "Access and use the Technology Catalog", "00 IT Orientation Intro Part": "IT orientation: introduction", "1 Corporate Account Okta": "Corporate account and Okta", "2 New Computer Setup": "New computer setup"}
+ },
  "strings": {"morning": "Good morning.", "afternoon": "Good afternoon.", "evening": "Good evening.", "intro": "I'm April, Karan's assistant. Ask me about his writing, his projects or his availability.", "thinking": "Thinking...", "offline": "I can't reach my AI model right now. Try one of the suggested questions, or message Karan on LinkedIn:", "voiceOn": "I'll read my answers aloud.", "voiceOff": "Voice is off.", "hello": "Hello, I'm April. Ask me anything about Karan's work, and I'll answer from his notes.", "palDocs": "Documents", "palHere": "On this page", "palAsk": "Ask April", "palNone": "No document matches. Press Enter to ask April.", "palHint": "Type to search the library, or ask April a question.", "copy": "Copy", "copied": "Copied", "close": "Close", "tourPause": "Pause the tour", "tourResume": "Resume the tour"}
 }
