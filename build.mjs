@@ -83,7 +83,7 @@ const parts = {
   theater: reel.length
     ? `<div class="theater" id="theater">
 <div class="stage"><button class="yt" type="button" data-video="${reel[0].id}"${reel[0].thumb ? ` style="background-image:url(${reel[0].thumb})"` : ""}>${PLAY}<b translate="no">${esc(reel[0].title)}</b><small>Plays here. The video is streamed from YouTube.</small></button></div>
-<ol class="reel">${reel.map((v, i) => `<li><button type="button" data-video="${v.id}" aria-pressed="${i === 0}">${v.thumb ? `<img src="${v.thumb}" width="960" height="540" alt="" loading="lazy" decoding="async">` : "<i></i>"}<span><b translate="no">${esc(v.title)}</b><small translate="no">${v.year}</small></span></button></li>`).join("")}</ol>
+<ol class="reel">${reel.map((v, i) => `<li><button type="button" data-video="${v.id}" aria-pressed="${i === 0}">${v.thumb ? `<img src="${v.thumb}" width="960" height="540" alt="" loading="lazy" decoding="async">` : "<i></i>"}<span><b translate="no">${esc(v.title)}</b><small translate="no">${esc(v.length || v.year)}</small></span></button></li>`).join("")}</ol>
 </div>`
     : `<div class="theater solo" id="theater"><div class="stage"><button class="yt" type="button" data-list="${S.playlist}">${PLAY}<b>Play the video portfolio</b><small>Plays here. The videos are streamed from YouTube.</small></button></div></div>`,
   tools:

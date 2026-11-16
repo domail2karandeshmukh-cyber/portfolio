@@ -78,7 +78,7 @@ const VOICES = [
   { model: "openai/tts-1", voice: "nova" },
 ].filter(Boolean);
 let voice = null;
-async function speak(token, text, lang) {
+async function speak(token, text, lang, tried = []) {
   const clean = String(text).replace(/https?:\/\/\S+/g, "").replace(/\s+/g, " ").trim().slice(0, 700);
   if (!clean) return null;
   for (const v of voice ? [voice] : VOICES) {
@@ -91,7 +91,8 @@ async function speak(token, text, lang) {
       });
       const d = await r.json().catch(() => ({}));
       if (r.ok && typeof d.audio === "string" && d.audio.length > 400) { voice = v; return { audio: d.audio, model: v.model }; }
-    } catch (e) {}
+      tried.push(`${v.model}:${r.status} ${String((d.error && (d.error.message || d.error.type)) || d.message || "").slice(0, 90)}`);
+    } catch (e) { tried.push(`${v.model}:${String(e.message).slice(0, 60)}`); }
   }
   voice = null;
   return null;
@@ -113,19 +114,22 @@ module.exports = async (req, res) => {
   const token = process.env.AI_GATEWAY_API_KEY || req.headers["x-vercel-oidc-token"] || process.env.VERCEL_OIDC_TOKEN;
   if (!token) return res.status(503).json({ error: "no gateway token" });
 
-  let q = "", history = [], lang = "en", aloud = false, sayHello = false;
+  let q = "", history = [], lang = "en", aloud = false, sayHello = false, probe = false;
   try {
     if (req.method === "POST") {
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
       q = b.q; history = Array.isArray(b.history) ? b.history : []; lang = b.lang; aloud = b.voice === true;
-    } else { q = (req.query || {}).q; lang = (req.query || {}).lang; sayHello = (req.query || {}).say === "hello"; }
+    } else { q = (req.query || {}).q; lang = (req.query || {}).lang; sayHello = (req.query || {}).say === "hello"; probe = "probe" in (req.query || {}); }
   } catch (e) { return res.status(400).json({ error: "bad request" }); }
   lang = LANGUAGES[lang] ? lang : "en";
 
   // One fixed line, so a visitor can hear the voice. The same audio is then served from the CDN.
   if (sayHello) {
-    const out = await speak(token, HELLO[lang] || HELLO.en, lang);
-    if (!out) return res.status(502).json({ error: "voice" });
+    const tried = [];
+    const out = await speak(token, HELLO[lang] || HELLO.en, lang, tried);
+    if (!out) return res.status(502).json({ error: "voice", tried });
+    // ?probe answers with facts about the audio, for checking the voice without downloading it.
+    if (probe) return res.status(200).json({ voice: out.model, bytes: Buffer.from(out.audio, "base64").length, text: HELLO[lang] || HELLO.en, tried });
     res.setHeader("content-type", "audio/mpeg");
     res.setHeader("cache-control", "public, max-age=86400, s-maxage=2592000");
     res.setHeader("x-voice-model", out.model);
