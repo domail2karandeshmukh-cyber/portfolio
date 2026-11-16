@@ -150,7 +150,8 @@
       mine.hidden = !own;
       // On a phone April's button would sit on the draft, so it steps aside until the example is back.
       if (dock && innerWidth < 720 && panel && panel.hidden && (!tour || tour.hidden)) dock.hidden = own;
-      if (own) stage.removeAttribute("lang"); else stage.setAttribute("lang", home.lang);
+      // The samples are in English, like the example. A visitor's own message may be in any language.
+      if (own && !sampled) stage.removeAttribute("lang"); else stage.setAttribute("lang", home.lang);
     }
     // The message as it was pasted, then, once the draft is back, with its facts marked and its noise struck.
     function message(text, parts) {
