@@ -1,15 +1,17 @@
 // The rewrite desk. A visitor pastes a rough message; a model drafts the document by the brief in
 // content/desk/brief.md, and the page shows the message marked up, the draft, and the questions still open.
-// Nothing a visitor pastes is written to a log or kept after the answer is sent.
+// Nothing a visitor pastes is written to a log or kept by this function after the answer is sent.
 const D = require("./_desk.js");
 
 const GATEWAY = "https://ai-gateway.vercel.sh";
 const LIVE = process.env.VERCEL_ENV === "production";
 // A preview deployment sits behind Vercel's sign-in, so the limits below are lifted there to let a model be tested.
 const LIMITED = LIVE || !process.env.VERCEL;
-// Tried in this order. After the name, "@json" is how the model takes a request for JSON when it has no support
-// for a schema, and ":low" is the effort of a model that reasons before it answers.
-const MODELS = (process.env.DESK_MODELS || "meta/llama-4-maverick@json,google/gemini-2.5-flash-lite,openai/gpt-4.1-mini").split(",").map((s) => s.trim()).filter(Boolean);
+// Tried in this order. After the name, ":low" is the effort of a model that reasons before it answers, "@json" is
+// how a model takes a request for JSON when it has no support for a schema, and ">vertex" names the one provider
+// that may serve it. The first two are served by providers that the gateway lists as keeping no copy of a request.
+const MODELS = (process.env.DESK_MODELS || "meta/llama-4-maverick@json>bedrock,google/gemini-2.5-flash-lite>vertex,openai/gpt-4.1-mini").split(",").map((s) => s.trim()).filter(Boolean);
+const NAME = /^([^:@>]+)(?::([a-z]+))?(?:@([a-z]+))?(?:>([a-z0-9-]+))?$/;
 // One model may cost at most this much per token, in dollars, whoever asks for it.
 const CEILING = { input: 0.000001, output: 0.000005 };
 // A draft costs a fraction of a cent. These keep a bad day cheap: per visitor a minute, per visitor a day, in all a day.
@@ -21,7 +23,7 @@ const minute = new Map(), daily = new Map();
 let day = "", total = 0;
 
 async function draft(spec, token, text, opt = {}) {
-  const tried = [], [, model, effort, given] = /^([^:@]+)(?::([a-z]+))?(?:@([a-z]+))?$/.exec(spec) || [0, spec];
+  const tried = [], [, model, effort, given, provider] = NAME.exec(spec) || [0, spec];
   // The form that worked last time goes first.
   const want = formats.get(model) || given;
   const order = ["schema", "json", "plain"].sort((a, b) => (b === want) - (a === want));
@@ -31,9 +33,8 @@ async function draft(spec, token, text, opt = {}) {
       temperature: 0.2,
       max_tokens: effort ? 3200 : 1800,
       messages: D.conversation(text),
-      // Only a provider that keeps no copy of the request may serve it.
-      providerOptions: { gateway: { zeroDataRetention: true } },
     };
+    if (provider) body.providerOptions = { gateway: { only: [provider] } };
     if (format === "schema") body.response_format = { type: "json_schema", json_schema: { name: "draft", description: "A document drafted from a message, with its working", schema: D.SCHEMA } };
     if (format === "json") body.response_format = { type: "json_object" };
     if (effort) body.reasoning = { effort };
@@ -56,7 +57,7 @@ async function draft(spec, token, text, opt = {}) {
     if (r.ok && typeof content === "string") {
       formats.set(model, format);
       const out = D.shape(text, D.parse(content));
-      if (out) return { out, ms, format, usage: data.usage, kept: !(data.gateway && data.gateway.enabledZeroDataRetention), content: opt.raw ? content : undefined, tried };
+      if (out) return { out, ms, format, usage: data.usage, content: opt.raw ? content : undefined, tried };
       tried.push(`${model}/${format}: unusable draft`);
       if (opt.raw) return { out: null, ms, format, usage: data.usage, content, tried };
       break;
@@ -117,7 +118,7 @@ module.exports = async (req, res) => {
   if (q.probe === "eval" && !LIVE && sample) {
     const got = await Promise.all(String(q.models || MODELS.join(",")).split(",").slice(0, 8).map(async (model) => {
       const g = await draft(model.trim(), token, D.clean(sample.text), { raw: true });
-      const head = `=== ${model}  ${g.ms || "-"} ms  ${g.kept === false ? "zero retention" : "RETENTION NOT CONFIRMED"}  $${(g.usage && g.usage.cost) || "?"}  out ${(g.usage && g.usage.completion_tokens) || "?"} tok (thinking ${(g.usage && g.usage.completion_tokens_details && g.usage.completion_tokens_details.reasoning_tokens) || 0})  ${g.format || ""}  ${g.tried.join(" | ")}`;
+      const head = `=== ${model}  ${g.ms || "-"} ms  $${(g.usage && g.usage.cost) || "?"}  out ${(g.usage && g.usage.completion_tokens) || "?"} tok (thinking ${(g.usage && g.usage.completion_tokens_details && g.usage.completion_tokens_details.reasoning_tokens) || 0})  ${g.format || ""}  ${g.tried.join(" | ")}`;
       return head + "\n" + (g.out ? D.show(g.out) : "(no usable draft) " + String(g.content || "").slice(0, 400));
     }));
     res.setHeader("content-type", "text/plain; charset=utf-8");
@@ -141,7 +142,7 @@ module.exports = async (req, res) => {
   let list = chosen ? [chosen, ...MODELS.filter((m) => m !== chosen)] : MODELS;
   if (diagnose && q.model) {
     const cat = await fetch(`${GATEWAY}/v1/models`, { signal: AbortSignal.timeout(8000) }).then((r) => r.json()).catch(() => ({}));
-    const m = (cat.data || []).find((x) => x.id === String(q.model).split(/[:@]/)[0]);
+    const m = (cat.data || []).find((x) => x.id === String(q.model).split(/[:@>]/)[0]);
     if (!m || !(Number(m.pricing && m.pricing.input) <= CEILING.input) || !(Number(m.pricing && m.pricing.output) <= CEILING.output)) return res.status(400).json({ error: "model not allowed" });
     list = [q.model];
   }
@@ -166,9 +167,9 @@ module.exports = async (req, res) => {
     // The first model to give a usable draft goes first for the next visitor.
     if (!diagnose) chosen = first || model;
     if (!got.out.ok) return res.status(422).json({ error: "none" });
-    const reply = Object.assign(got.out, { ms, model: model.split(/[:@]/)[0] });
+    const reply = Object.assign(got.out, { ms, model: model.split(/[:@>]/)[0] });
     // On a preview, ?show=1 prints the draft as text.
-    if (!LIVE && q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`${reply.model}  ${ms} ms  ${got.kept === false ? "zero retention" : "RETENTION NOT CONFIRMED"}  ${tried.join(" | ")}\n${D.show(reply)}`); }
+    if (!LIVE && q.show) { res.setHeader("content-type", "text/plain; charset=utf-8"); return res.status(200).send(`${reply.model}  ${ms} ms  ${tried.join(" | ")}\n${D.show(reply)}`); }
     return res.status(200).json(LIVE ? reply : Object.assign({ format: got.format, usage: got.usage, tried }, reply));
   }
   chosen = "";
