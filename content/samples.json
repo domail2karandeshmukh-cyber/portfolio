@@ -1,0 +1,24 @@
+{
+ "note": "Google Docs that scripts/import-samples.mjs copies into content/samples/. Each document must be shared as 'anyone with the link can view' while the import runs. 'redact' lists images that show personal details: the boxes are covered before the image is saved, and the import stops if the image has changed since the boxes were measured.",
+ "docs": [
+  {"slug": "core42-portal", "doc": "1wrB5Hfpl9ypxWhRb2xsFbO19BiEsbFef_efNjpdkx3E"},
+  {"slug": "faq-gmail", "doc": "1DZ6GljRlE4QnC0Efacj5nZVFGrLE0neAiR0XYINPBt0"},
+  {"slug": "faq-google-calendar", "doc": "1W7My3_AFbessZ-jrUV3vzgX_xN8DYacuRag3jBiQYwA"},
+  {"slug": "faq-google-drive", "doc": "1ULsZXigWSj_VhN8KgFdpT4ZMcYpVYF6U2lcGrBMlguM"},
+  {"slug": "faq-google-docs", "doc": "1bwLYM4agNGZTYfNE8OizGU8qiTYZMZOYe3HZ_kD5vNQ"},
+  {"slug": "faq-google-sheets", "doc": "17iaKuULGnr4WGfLXBYRUMFSSlh-9mdZ3I2lZUpri7BE"},
+  {"slug": "faq-google-slides", "doc": "1uWzlvms3miNc6VaErXdWJ8HkO8flZV60lzgD37p0xoE"},
+  {"slug": "faq-google-forms", "doc": "1rvHE5Sn0RcaRi8bZgF4CU49lWxh2CQjcfjVIVASoOoQ"},
+  {"slug": "faq-google-meet", "doc": "1B1sg0LHiwLIvzsekpKud40jM3KwacphXJIu1RMqQG4g"},
+  {"slug": "faq-google-chat", "doc": "1_sB-5c9QtH8M5IbxIP75SwrBXYEnc0Z_S3BWPQdSAEo"}
+ ],
+ "redact": {
+  "core42-portal": {
+   "4": {"reason": "the sign-up form shows a personal e-mail address and phone number", "sha256": "0e7a671a80980254d5a4cb3ab2c4a2949ed56ba252f221fe5ffe7be4e96a5a95", "width": 1100, "boxes": [[72, 314, 314, 37], [134, 369, 252, 38]], "track": {"anchor": [70, 301, 40, 15], "range": [-280, 40], "maxError": 12, "fallback": [56, 0, 344, 614]}},
+   "9": {"reason": "the e-mail shows the account's Tenant ID, which the original only blurs lightly", "sha256": "a394ff833192a4737640678b6afdbd25e37d2863be72a6b67257105215f30ac8", "width": 1600, "boxes": [[625, 799, 130, 30]]},
+   "10": {"reason": "the sign-in form shows the account's Tenant ID, which the original only blurs lightly", "sha256": "f34931244481a1c1e05be29097414a8376a254420134b817cc7d6a7c9979877d", "width": 1600, "boxes": [[587, 488, 98, 23]]},
+   "11": {"reason": "the sign-in form shows a personal e-mail address and the account's Tenant ID", "sha256": "1accfd0488419fee9a78da7bcc7058976555815bb94d376fbc12f7e2b9649906", "width": 1600, "boxes": [[670, 472, 261, 27], [670, 390, 110, 25, [232, 232, 232]]]},
+   "12": {"reason": "the side menu shows the account's Tenant ID, which the original only blurs lightly", "sha256": "e3f5b2e61bf0b19699b8b3d019a6d215f7b41a3fb9aaf8d376dad930d82ac839", "width": 1600, "boxes": [[41, 80, 94, 23]]}
+  }
+ }
+}

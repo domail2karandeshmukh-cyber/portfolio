@@ -1,0 +1,34 @@
+name: Import samples from Google Docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - content/samples.json
+      - scripts/import-samples.mjs
+      - scripts/redact.mjs
+      - .github/workflows/import-samples.yml
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install the image library
+        run: npm ci
+      - name: Copy the documents
+        run: node scripts/import-samples.mjs
+      - name: Commit what changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A content/samples
+          git diff --cached --quiet || git commit -m "Import samples from Google Docs"
+          git push
