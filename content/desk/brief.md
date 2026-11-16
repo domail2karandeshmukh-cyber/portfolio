@@ -32,8 +32,8 @@ Each section has a `heading`, a `style` and `items`. The style is `steps` for ac
 
 A how-to has these sections, in this order, and only the ones the message has something for:
 
-- "Before you start": what the reader needs, or has to check, before the first step.
-- "Steps": every action the reader takes, in order, in one list.
+- "Before you start": what the reader has to have, know or check before the first step.
+- "Steps": every action the reader takes, from the first to the last, in one numbered list. Telling someone that the work is done is the last step.
 - "If something goes wrong": what to do when a step fails.
 - "Check that it worked": only what the reader looks at to confirm the result.
 
