@@ -92,6 +92,7 @@ function fold(s) {
  * @param {{id?: string, quote: string}[]} quotes
  * @param {{id?: string, a: number, b: number, k: "f"|"n"}[]} taken ranges in the original text
  */
+const WORD = /[\p{L}\p{N}]/u;
 function locate(F, quotes, k, taken, inOrder) {
   const free = (a, b) => taken.every((r) => b <= r.a || a >= r.b);
   const EDGE = /^[\s"'.,;:!?()[\]-]+|[\s"'.,;:!?()[\]-]+$/g;
@@ -103,6 +104,8 @@ function locate(F, quotes, k, taken, inOrder) {
       if (hit || s.length < 2) continue;
       for (const start of inOrder && cursor ? [cursor, 0] : [0]) {
         for (let i = F.t.indexOf(s, start); i >= 0 && !hit; i = F.t.indexOf(s, i + 1)) {
+          // Whole words only: "an" is not found inside "and".
+          if ((WORD.test(s[0]) && WORD.test(F.t[i - 1] || "")) || (WORD.test(s[s.length - 1]) && WORD.test(F.t[i + s.length] || ""))) continue;
           const a = F.at[i], b = F.at[i + s.length - 1] + 1;
           if (free(a, b)) hit = { a, b, end: i + s.length };
         }
@@ -116,8 +119,10 @@ function locate(F, quotes, k, taken, inOrder) {
   return taken;
 }
 
-// Words that carry nothing on their own. A short quote counts as noise only when it is made of these.
-const FILLER = new Set("ok okay so lol haha um uh er well hey hi hello thanks thank thx pls please btw tho though oh and yeah yep right basically actually just like really kinda sorta i think guess mean you know anyway anyways fyi etc also then there here it's its is it a an the to of".split(" "));
+// Words that carry nothing: fillers, and the small words that travel with them ("oh and", "i think").
+// A short quote counts as noise only when it is made of these and holds at least one filler.
+const EMPTY = new Set("ok okay lol haha hehe um uh er erm well hey hi hello thanks thank thx pls please btw tho though oh yeah yep right basically actually just like really kinda sorta think guess mean know anyway anyways fyi honestly literally obviously".split(" "));
+const FILLER = new Set([...EMPTY, ..."so and i you also then there here it's its is it a an the to of".split(" ")]);
 const FIRM = /\d|\b(not|no|never|none|dont|don't|doesnt|doesn't|wont|won't|cant|can't|cannot|unless|only|except|must|always|before|after|until)\b/;
 /**
  * Whether a quote the model called noise may be struck out. Small models call facts noise, and a struck fact
@@ -129,7 +134,7 @@ function isNoise(quote, doc) {
   if (FIRM.test(q)) return false;
   const words = q.split(/[^\p{L}\p{N}']+/u).filter(Boolean);
   const content = words.filter((w) => !FILLER.has(w));
-  if (!content.length) return true;
+  if (!content.length) return !words.length || words.some((w) => EMPTY.has(w));
   if (words.length < 5) return false;
   const kept = content.filter((w) => w.length > 3 && doc.includes(w.slice(0, Math.max(4, w.length - 3)))).length;
   return kept / content.length < 0.34;
@@ -160,7 +165,7 @@ function runs(line, known, used, max) {
   for (const part of s.split(/(<\/?f\d{1,2}>|\*\*)/)) {
     const open = /^<(f\d{1,2})>$/.exec(part);
     if (part === "**") b = !b;
-    else if (open) f = known.has(open[1]) && !used.has(open[1]) ? (used.add(open[1]), open[1]) : null;
+    else if (open) f = open[1] === f ? f : known.has(open[1]) && !used.has(open[1]) ? (used.add(open[1]), open[1]) : null;   // a tag opened twice is one tag
     else if (/^<\/f\d{1,2}>$/.test(part)) f = null;
     else if (part) {
       const last = out[out.length - 1];

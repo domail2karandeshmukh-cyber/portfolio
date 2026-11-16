@@ -3,11 +3,285 @@
  "messages": [
   {
    "id": "hotfix",
-   "text": "ok so to push a hotfix: branch off main NOT develop, name it hotfix/<ticket>. get one approval, two if it touches billing. merge, then wait for the staging run to go green before you hit promote, takes like 10 min. DONT promote on fridays after 3 unless Dana says ok lol. if the smoke test fails just roll back from the pipeline page, button's top right. tell #releases when it's out"
+   "text": "ok so to push a hotfix: branch off main NOT develop, name it hotfix/<ticket>. get one approval, two if it touches billing. merge, then wait for the staging run to go green before you hit promote, takes like 10 min. DONT promote on fridays after 3 unless Dana says ok lol. if the smoke test fails just roll back from the pipeline page, button's top right. tell #releases when it's out",
+   "record": {
+    "model": "meta/llama-4-maverick",
+    "ms": 3593,
+    "answer": {
+     "ok": true,
+     "kind": "how-to",
+     "facts": [
+      {
+       "id": "f1",
+       "quote": "push a hotfix"
+      },
+      {
+       "id": "f2",
+       "quote": "branch off main"
+      },
+      {
+       "id": "f3",
+       "quote": "NOT develop"
+      },
+      {
+       "id": "f4",
+       "quote": "name it hotfix/<ticket>"
+      },
+      {
+       "id": "f5",
+       "quote": "get one approval"
+      },
+      {
+       "id": "f6",
+       "quote": "two if it touches billing"
+      },
+      {
+       "id": "f7",
+       "quote": "merge"
+      },
+      {
+       "id": "f8",
+       "quote": "wait for the staging run to go green"
+      },
+      {
+       "id": "f9",
+       "quote": "before you hit promote"
+      },
+      {
+       "id": "f10",
+       "quote": "takes like 10 min"
+      },
+      {
+       "id": "f11",
+       "quote": "DONT promote on fridays after 3"
+      },
+      {
+       "id": "f12",
+       "quote": "unless Dana says ok"
+      },
+      {
+       "id": "f13",
+       "quote": "if the smoke test fails"
+      },
+      {
+       "id": "f14",
+       "quote": "roll back from the pipeline page"
+      },
+      {
+       "id": "f15",
+       "quote": "button's top right"
+      },
+      {
+       "id": "f16",
+       "quote": "tell #releases when it's out"
+      }
+     ],
+     "noise": [
+      "ok so",
+      "lol"
+     ],
+     "label": "How-to",
+     "title": "Push a hotfix",
+     "audience": "",
+     "sections": [
+      {
+       "heading": "Before you start",
+       "style": "bullets",
+       "items": [
+        {
+         "text": "<f2>Branch off <f2>main</f2>,</f2> <f3>not develop</f3>.",
+         "caution": ""
+        },
+        {
+         "text": "<f4>Name the branch hotfix/<ticket>.</f4>",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "Steps",
+       "style": "steps",
+       "items": [
+        {
+         "text": "<f5>Get one approval for the hotfix.</f5> <f6>Get two if it touches billing.</f6>",
+         "caution": ""
+        },
+        {
+         "text": "<f7>Merge the hotfix.</f7>",
+         "caution": ""
+        },
+        {
+         "text": "<f8>Wait for the staging run to go green.</f8> This <f10>takes about 10 minutes.</f10>",
+         "caution": ""
+        },
+        {
+         "text": "Select <f9>**Promote**</f9>.",
+         "caution": "**Caution:** <f11>Don't promote on Fridays after 3</f11> <f12>unless Dana approves it.</f12>"
+        },
+        {
+         "text": "<f16>Tell #releases when the hotfix is live.</f16>",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "If something goes wrong",
+       "style": "steps",
+       "items": [
+        {
+         "text": "If the <f13>smoke test fails</f13>, <f14>roll back from the pipeline page</f14>.",
+         "caution": ""
+        },
+        {
+         "text": "Use the <f15>button at the top right</f15>.",
+         "caution": ""
+        }
+       ]
+      }
+     ],
+     "questions": [
+      "What is the ticket: a Jira ticket, or something else?",
+      "Who can give approval: any reviewer, or a specific person?",
+      "What counts as 'touching billing': a change to a specific folder, or a certain kind of change?",
+      "What is the name of the button at the top right of the pipeline page?",
+      "Who is Dana, and how do they say 'ok': email, chat, or something else?"
+     ]
+    }
+   }
   },
   {
    "id": "export",
-   "text": "customer says export to CSV gives an empty file. known thing, happens when the date range is over 90 days. it's not actually empty, the job times out at 30s and we only write the header row. workaround: split into ranges under 90 days OR use the API export which has no limit (needs an admin token tho). fix is planned for 4.12, no date yet. also seen on the PDF export but only for accounts with more than 50k rows i think?? not confirmed"
+   "text": "customer says export to CSV gives an empty file. known thing, happens when the date range is over 90 days. it's not actually empty, the job times out at 30s and we only write the header row. workaround: split into ranges under 90 days OR use the API export which has no limit (needs an admin token tho). fix is planned for 4.12, no date yet. also seen on the PDF export but only for accounts with more than 50k rows i think?? not confirmed",
+   "record": {
+    "model": "meta/llama-4-maverick",
+    "ms": 3208,
+    "answer": {
+     "ok": true,
+     "kind": "troubleshooting",
+     "facts": [
+      {
+       "id": "f1",
+       "quote": "export to CSV gives an empty file"
+      },
+      {
+       "id": "f2",
+       "quote": "date range is over 90 days"
+      },
+      {
+       "id": "f3",
+       "quote": "job times out at 30s"
+      },
+      {
+       "id": "f4",
+       "quote": "only write the header row"
+      },
+      {
+       "id": "f5",
+       "quote": "split into ranges under 90 days"
+      },
+      {
+       "id": "f6",
+       "quote": "API export"
+      },
+      {
+       "id": "f7",
+       "quote": "no limit"
+      },
+      {
+       "id": "f8",
+       "quote": "needs an admin token"
+      },
+      {
+       "id": "f9",
+       "quote": "fix is planned for 4.12"
+      },
+      {
+       "id": "f10",
+       "quote": "no date yet"
+      },
+      {
+       "id": "f11",
+       "quote": "PDF export"
+      },
+      {
+       "id": "f12",
+       "quote": "more than 50k rows"
+      },
+      {
+       "id": "f13",
+       "quote": "not confirmed"
+      }
+     ],
+     "noise": [
+      "known thing",
+      "it's",
+      "an",
+      "tho",
+      "also seen",
+      "i think??"
+     ],
+     "label": "Troubleshooting",
+     "title": "CSV export file is empty",
+     "audience": "",
+     "sections": [
+      {
+       "heading": "Problem",
+       "style": "text",
+       "items": [
+        {
+         "text": "The <f1>CSV export file is empty</f1> when the <f2>date range is over 90 days</f2>.",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "Cause",
+       "style": "text",
+       "items": [
+        {
+         "text": "The <f3>job times out at 30s</f3> and the file <f4>contains only the header row</f4>.",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "Workaround",
+       "style": "bullets",
+       "items": [
+        {
+         "text": "<f5>Split the export into date ranges under 90 days.</f5>",
+         "caution": ""
+        },
+        {
+         "text": "Use the <f6>API export</f6>, which has <f7>no limit</f7>. <f8>You'll need an admin token.</f8>",
+         "caution": ""
+        }
+       ]
+      },
+      {
+       "heading": "Status",
+       "style": "text",
+       "items": [
+        {
+         "text": "A fix is <f9>planned for version 4.12</f9>, <f10>release date TBC</f10>.",
+         "caution": ""
+        },
+        {
+         "text": "The <f11>PDF export</f11> may also be affected for accounts with <f12>over 50,000 rows</f12>. <f13>Status not confirmed.</f13>",
+         "caution": ""
+        }
+       ]
+      }
+     ],
+     "questions": [
+      "Is the date range check on the start date, the end date, or both?",
+      "Does the API export also time out at 30s, or is it asynchronous?",
+      "How does a user get an admin token?",
+      "Is there a link to the API documentation?",
+      "Is there a separate KB article for the PDF export issue?"
+     ]
+    }
+   }
   },
   {
    "id": "laptops",
