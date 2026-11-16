@@ -126,6 +126,8 @@ for (const loc of locales) {
     jsonld: JSON.stringify(jsonld),
     // April's tour: the section each stop scrolls to, and the line she says there.
     stops: C.tour.map((t) => t.to).join(","),
+    // The brief the drafting model follows is kept with the site's source, where anyone can read it.
+    brief: `${S.links.github}/${S.repo}/blob/main/content/desk/brief.md`,
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
   };
   for (const d of C.docs) tokens[`doc:${d.id}`] = byId[d.id].url;
@@ -159,6 +161,9 @@ for (const loc of locales) {
 }
 
 for (const f of ["site.css", "app.js", "favicon.svg"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+// The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
+const desk = JSON.parse(await fs.readFile("content/desk/messages.json", "utf8"));
+await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: desk.messages.map(({ id, text, draft }) => ({ id, text, draft })) }));
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const urls = [...locales.map((l) => l.path), ...library.urls];
 await fs.writeFile(
