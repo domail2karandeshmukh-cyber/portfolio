@@ -2,110 +2,409 @@
  "note": "The demonstration scenarios of the Documentation Studio. Every organization, product, person and address in them is fictional. Documents are in the workbench's Markdown; the samples named under each scenario are made by scripts/studio-samples.py and lib/samples.mjs.",
  "scenarios": [
   {
-   "id": "a-industrial", "letter": "A", "field": "Industrial engineering",
+   "id": "a-industrial",
+   "letter": "A",
+   "field": "Industrial engineering",
    "title": "Preventive maintenance: monthly equipment inspection",
-   "org": "Harbor Pump Station", "product": "the maintenance console",
+   "org": "Harbor Pump Station",
+   "product": "the maintenance console",
    "summary": "A technician inspects a feed pump every month, records four readings and closes the work order. The scenario shows an engineering procedure with prerequisites and cautions, an inspection record, annotated console screenshots, a revision-controlled procedure, and a narrated walkthrough.",
-   "skills": ["Engineering procedure", "Prerequisites and cautions", "Inspection record", "Annotated screenshots", "Revision control", "Narrated walkthrough"],
-   "docs": [
-    {"path": "content/workbench/maintenance-procedure.md", "kind": "Maintenance procedure"},
-    {"path": "content/scenarios/a-industrial/inspection-record.md", "kind": "Inspection record"},
-    {"path": "content/workbench/engineering-procedure.md", "kind": "Calibration procedure"},
-    {"path": "content/workbench/technical-report.md", "kind": "Technical report"}
+   "skills": [
+    "Engineering procedure",
+    "Prerequisites and cautions",
+    "Inspection record",
+    "Annotated screenshots",
+    "Revision control",
+    "Narrated walkthrough"
    ],
-   "samples": {"screenshots": ["console-work-order"], "guides": ["engineering-inspection"], "video": ["inspection-walkthrough"], "control": ["maintenance-procedure"], "dita": ["industrial-equipment"]}
+   "docs": [
+    {
+     "path": "content/workbench/maintenance-procedure.md",
+     "kind": "Maintenance procedure",
+     "cat": "maintenance"
+    },
+    {
+     "path": "content/scenarios/a-industrial/inspection-record.md",
+     "kind": "Inspection record",
+     "cat": "maintenance"
+    },
+    {
+     "path": "content/workbench/engineering-procedure.md",
+     "kind": "Calibration procedure",
+     "cat": "maintenance"
+    },
+    {
+     "path": "content/workbench/technical-report.md",
+     "kind": "Technical report",
+     "cat": "report"
+    }
+   ],
+   "samples": {
+    "screenshots": [
+     "console-work-order"
+    ],
+    "guides": [
+     "engineering-inspection"
+    ],
+    "video": [
+     "inspection-walkthrough"
+    ],
+    "control": [
+     "maintenance-procedure"
+    ],
+    "dita": [
+     "industrial-equipment"
+    ]
+   }
   },
   {
-   "id": "b-enterprise-it", "letter": "B", "field": "Enterprise IT",
+   "id": "b-enterprise-it",
+   "letter": "B",
+   "field": "Enterprise IT",
    "title": "Employee onboarding and access provisioning",
-   "org": "Meridian Freight", "product": "Meridian Identity and the Service Desk portal",
+   "org": "Meridian Freight",
+   "product": "Meridian Identity and the Service Desk portal",
    "summary": "A logistics company brings a new employee from a signed offer to a working account in a week. The scenario shows a standard operating procedure, a responsibility matrix, the hands-on provisioning procedure, an explanation of the approval workflow, a troubleshooting article, an internal knowledge base, and an illustrated step guide.",
-   "skills": ["SOP", "Roles and responsibilities", "Provisioning procedure", "Approval workflow", "Troubleshooting", "Knowledge-base articles", "Step-by-step visual instructions"],
-   "docs": [
-    {"path": "content/scenarios/b-enterprise-it/sop-onboarding.md", "kind": "SOP"},
-    {"path": "content/scenarios/b-enterprise-it/roles-and-responsibilities.md", "kind": "Roles and responsibilities"},
-    {"path": "content/scenarios/b-enterprise-it/provision-account.md", "kind": "Procedure"},
-    {"path": "content/scenarios/b-enterprise-it/how-approvals-work.md", "kind": "Explainer"},
-    {"path": "content/scenarios/b-enterprise-it/troubleshooting-first-day.md", "kind": "Troubleshooting"}
+   "skills": [
+    "SOP",
+    "Roles and responsibilities",
+    "Provisioning procedure",
+    "Approval workflow",
+    "Troubleshooting",
+    "Knowledge-base articles",
+    "Step-by-step visual instructions"
    ],
-   "kb": {"id": "meridian-it", "name": "Meridian IT knowledge base (fictional)", "articles": "content/scenarios/b-enterprise-it/kb", "also": [{"path": "content/scenarios/b-enterprise-it/troubleshooting-first-day.md", "category": "Onboarding", "section": "First-day problems", "audience": "agents", "labels": "onboarding, sign-in, troubleshooting"}]},
-   "samples": {"screenshots": ["identity-new-user"], "guides": ["it-onboarding"], "kb": ["meridian-it"], "control": ["sop-onboarding"], "dita": []}
+   "docs": [
+    {
+     "path": "content/scenarios/b-enterprise-it/sop-onboarding.md",
+     "kind": "SOP",
+     "cat": "sop"
+    },
+    {
+     "path": "content/scenarios/b-enterprise-it/roles-and-responsibilities.md",
+     "kind": "Roles and responsibilities",
+     "cat": "reference"
+    },
+    {
+     "path": "content/scenarios/b-enterprise-it/provision-account.md",
+     "kind": "Procedure",
+     "cat": "howto"
+    },
+    {
+     "path": "content/scenarios/b-enterprise-it/how-approvals-work.md",
+     "kind": "Explainer",
+     "cat": "concept"
+    },
+    {
+     "path": "content/scenarios/b-enterprise-it/troubleshooting-first-day.md",
+     "kind": "Troubleshooting",
+     "cat": "troubleshooting"
+    }
+   ],
+   "kb": {
+    "id": "meridian-it",
+    "name": "Meridian IT knowledge base (fictional)",
+    "articles": "content/scenarios/b-enterprise-it/kb",
+    "also": [
+     {
+      "path": "content/scenarios/b-enterprise-it/troubleshooting-first-day.md",
+      "category": "Onboarding",
+      "section": "First-day problems",
+      "audience": "agents",
+      "labels": "onboarding, sign-in, troubleshooting"
+     }
+    ]
+   },
+   "samples": {
+    "screenshots": [
+     "identity-new-user"
+    ],
+    "guides": [
+     "it-onboarding"
+    ],
+    "kb": [
+     "meridian-it"
+    ],
+    "control": [
+     "sop-onboarding"
+    ],
+    "dita": []
+   }
   },
   {
-   "id": "c-cloud", "letter": "C", "field": "Cloud and SaaS",
+   "id": "c-cloud",
+   "letter": "C",
+   "field": "Cloud and SaaS",
    "title": "Deploying and configuring a cloud service",
-   "org": "Lattice Cloud", "product": "Lattice Relay, a managed webhook relay",
+   "org": "Lattice Cloud",
+   "product": "Lattice Relay, a managed webhook relay",
    "summary": "A developer deploys a webhook relay from the command line, configures it with one file and three environment variables, and verifies a delivery. The scenario shows a developer guide with prerequisites, code and placeholders, a configuration reference, a troubleshooting article, and an explainer of how the service works.",
-   "skills": ["Developer guide", "Prerequisites", "Configuration", "Code examples", "Environment variables with placeholders", "Verification", "Troubleshooting", "Technical reference"],
-   "docs": [
-    {"path": "content/scenarios/c-cloud/developer-guide-deploy.md", "kind": "Developer guide"},
-    {"path": "content/scenarios/c-cloud/reference-configuration.md", "kind": "Technical reference"},
-    {"path": "content/scenarios/c-cloud/troubleshooting-deliveries.md", "kind": "Troubleshooting"},
-    {"path": "content/scenarios/c-cloud/concept-how-relay-works.md", "kind": "Explainer"}
+   "skills": [
+    "Developer guide",
+    "Prerequisites",
+    "Configuration",
+    "Code examples",
+    "Environment variables with placeholders",
+    "Verification",
+    "Troubleshooting",
+    "Technical reference"
    ],
-   "samples": {"screenshots": ["cloud-env"], "guides": ["cloud-config"], "control": [], "dita": ["developer-documentation", "technical-reference"]}
+   "docs": [
+    {
+     "path": "content/scenarios/c-cloud/developer-guide-deploy.md",
+     "kind": "Developer guide",
+     "cat": "dev"
+    },
+    {
+     "path": "content/scenarios/c-cloud/reference-configuration.md",
+     "kind": "Technical reference",
+     "cat": "reference"
+    },
+    {
+     "path": "content/scenarios/c-cloud/troubleshooting-deliveries.md",
+     "kind": "Troubleshooting",
+     "cat": "troubleshooting"
+    },
+    {
+     "path": "content/scenarios/c-cloud/concept-how-relay-works.md",
+     "kind": "Explainer",
+     "cat": "architecture"
+    }
+   ],
+   "samples": {
+    "screenshots": [
+     "cloud-env"
+    ],
+    "guides": [
+     "cloud-config"
+    ],
+    "control": [],
+    "dita": [
+     "developer-documentation",
+     "technical-reference"
+    ]
+   }
   },
   {
-   "id": "d-security", "letter": "D", "field": "Cybersecurity",
+   "id": "d-security",
+   "letter": "D",
+   "field": "Cybersecurity",
    "title": "Investigating a simulated Wazuh security alert",
-   "org": "Norrbyn Utilities", "product": "a SOC console fed by Wazuh",
+   "org": "Norrbyn Utilities",
+   "product": "a SOC console fed by Wazuh",
    "summary": "An analyst on shift works a brute-force alert from the alert to a closed, blocked or escalated case. The scenario shows an incident runbook with decision points, an explanation of the security event behind the alert, an escalation matrix, and annotated console screenshots. All data is simulated, with no real addresses or credentials.",
-   "skills": ["Incident runbook", "Security event explanation", "Investigation workflow", "Decision points", "Escalation guidance", "Screenshots"],
-   "docs": [
-    {"path": "content/scenarios/d-security/runbook-ssh-brute-force.md", "kind": "Incident runbook"},
-    {"path": "content/scenarios/d-security/concept-what-the-alert-means.md", "kind": "Security event explanation"},
-    {"path": "content/scenarios/d-security/reference-escalation.md", "kind": "Escalation matrix"}
+   "skills": [
+    "Incident runbook",
+    "Security event explanation",
+    "Investigation workflow",
+    "Decision points",
+    "Escalation guidance",
+    "Screenshots"
    ],
-   "samples": {"screenshots": ["soc-alert", "soc-alert-detail"], "guides": [], "control": ["runbook-ssh-brute-force"], "dita": []}
+   "docs": [
+    {
+     "path": "content/scenarios/d-security/runbook-ssh-brute-force.md",
+     "kind": "Incident runbook",
+     "cat": "security"
+    },
+    {
+     "path": "content/scenarios/d-security/concept-what-the-alert-means.md",
+     "kind": "Security event explanation",
+     "cat": "security"
+    },
+    {
+     "path": "content/scenarios/d-security/reference-escalation.md",
+     "kind": "Escalation matrix",
+     "cat": "security"
+    }
+   ],
+   "samples": {
+    "screenshots": [
+     "soc-alert",
+     "soc-alert-detail"
+    ],
+    "guides": [],
+    "control": [
+     "runbook-ssh-brute-force"
+    ],
+    "dita": []
+   }
   },
   {
-   "id": "e-support", "letter": "E", "field": "Customer support",
+   "id": "e-support",
+   "letter": "E",
+   "field": "Customer support",
    "title": "Resolving a SaaS product access problem",
-   "org": "Ledgerly", "product": "Ledgerly, a small-business accounting application, and its support console",
+   "org": "Ledgerly",
+   "product": "Ledgerly, a small-business accounting application, and its support console",
    "summary": "A customer is locked out before payroll. The scenario shows a help center in the shape of Zendesk Guide: categories and sections, a troubleshooting tree, an FAQ, customer-facing procedures, agent-facing internal articles kept apart from them, and a content revision. It also shows the agent's procedure as an illustrated guide.",
-   "skills": ["Zendesk-style help center", "Categories and sections", "Troubleshooting tree", "FAQ", "Customer-facing procedure", "Agent-facing internal article", "Content revision"],
-   "docs": [
-    {"path": "content/scenarios/e-support/kb/fix-sign-in-problems.md", "kind": "Troubleshooting tree"},
-    {"path": "content/scenarios/e-support/kb/reset-your-password.md", "kind": "Customer-facing procedure"},
-    {"path": "content/scenarios/e-support/kb/sign-in-and-security-faq.md", "kind": "FAQ"},
-    {"path": "content/scenarios/e-support/kb/unlock-a-customer-account.md", "kind": "Internal article"},
-    {"path": "content/scenarios/e-support/kb/verify-a-customers-identity.md", "kind": "Internal article"}
+   "skills": [
+    "Zendesk-style help center",
+    "Categories and sections",
+    "Troubleshooting tree",
+    "FAQ",
+    "Customer-facing procedure",
+    "Agent-facing internal article",
+    "Content revision"
    ],
-   "kb": {"id": "ledgerly", "name": "Ledgerly Help Center (fictional)", "articles": "content/scenarios/e-support/kb"},
-   "samples": {"screenshots": ["support-unlock", "ledgerly-users"], "guides": ["support-unlock"], "kb": ["ledgerly"], "control": [], "dita": ["saas-product-help"]}
+   "docs": [
+    {
+     "path": "content/scenarios/e-support/kb/fix-sign-in-problems.md",
+     "kind": "Troubleshooting tree",
+     "cat": "kb"
+    },
+    {
+     "path": "content/scenarios/e-support/kb/reset-your-password.md",
+     "kind": "Customer-facing procedure",
+     "cat": "kb"
+    },
+    {
+     "path": "content/scenarios/e-support/kb/sign-in-and-security-faq.md",
+     "kind": "FAQ",
+     "cat": "faq"
+    },
+    {
+     "path": "content/scenarios/e-support/kb/unlock-a-customer-account.md",
+     "kind": "Internal article",
+     "cat": "kb"
+    },
+    {
+     "path": "content/scenarios/e-support/kb/verify-a-customers-identity.md",
+     "kind": "Internal article",
+     "cat": "kb"
+    }
+   ],
+   "kb": {
+    "id": "ledgerly",
+    "name": "Ledgerly Help Center (fictional)",
+    "articles": "content/scenarios/e-support/kb"
+   },
+   "samples": {
+    "screenshots": [
+     "support-unlock",
+     "ledgerly-users"
+    ],
+    "guides": [
+     "support-unlock"
+    ],
+    "kb": [
+     "ledgerly"
+    ],
+    "control": [],
+    "dita": [
+     "saas-product-help"
+    ]
+   }
   },
   {
-   "id": "f-release", "letter": "F", "field": "Product documentation",
+   "id": "f-release",
+   "letter": "F",
+   "field": "Product documentation",
    "title": "Software release version 2.4",
-   "org": "Fieldbook", "product": "Fieldbook, a field-service application",
+   "org": "Fieldbook",
+   "product": "Fieldbook, a field-service application",
    "summary": "A release with three new features, five fixed issues, known limitations and a removed API. The scenario shows release notes, a migration guide for administrators, and a version history with a change-impact table by role.",
-   "skills": ["Release notes", "New features", "Fixed issues", "Known limitations", "Migration guidance", "Version history", "Change impact"],
-   "docs": [
-    {"path": "content/scenarios/f-release/release-notes-2-4.md", "kind": "Release notes"},
-    {"path": "content/scenarios/f-release/migration-guide.md", "kind": "Migration guide"},
-    {"path": "content/scenarios/f-release/version-history.md", "kind": "Version history and change impact"}
+   "skills": [
+    "Release notes",
+    "New features",
+    "Fixed issues",
+    "Known limitations",
+    "Migration guidance",
+    "Version history",
+    "Change impact"
    ],
-   "samples": {"screenshots": [], "guides": [], "control": ["release-notes-2-4"], "dita": ["release-documentation"]}
+   "docs": [
+    {
+     "path": "content/scenarios/f-release/release-notes-2-4.md",
+     "kind": "Release notes",
+     "cat": "release"
+    },
+    {
+     "path": "content/scenarios/f-release/migration-guide.md",
+     "kind": "Migration guide",
+     "cat": "howto"
+    },
+    {
+     "path": "content/scenarios/f-release/version-history.md",
+     "kind": "Version history and change impact",
+     "cat": "release"
+    }
+   ],
+   "samples": {
+    "screenshots": [],
+    "guides": [],
+    "control": [
+     "release-notes-2-4"
+    ],
+    "dita": [
+     "release-documentation"
+    ]
+   }
   },
   {
-   "id": "g-training", "letter": "G", "field": "Technical training",
+   "id": "g-training",
+   "letter": "G",
+   "field": "Technical training",
    "title": "Using a new software feature",
-   "org": "Beacon Reports", "product": "Beacon Reports, a reporting application",
+   "org": "Beacon Reports",
+   "product": "Beacon Reports, a reporting application",
    "summary": "A two-minute tutorial on scheduling a report for automatic delivery. The scenario shows annotated screenshots, a numbered procedural guide, a narrated training video with pointer effects and captions, and a downloadable training package.",
-   "skills": ["Annotated screenshots", "Numbered procedural guide", "Cursor effects", "Narrated video", "Captions", "Training package"],
-   "docs": [
-    {"path": "content/scenarios/g-training/tutorial-schedule-report.md", "kind": "Tutorial"}
+   "skills": [
+    "Annotated screenshots",
+    "Numbered procedural guide",
+    "Cursor effects",
+    "Narrated video",
+    "Captions",
+    "Training package"
    ],
-   "samples": {"screenshots": ["reports-schedule"], "guides": ["software-feature"], "video": ["schedule-a-report"], "control": [], "dita": []}
+   "docs": [
+    {
+     "path": "content/scenarios/g-training/tutorial-schedule-report.md",
+     "kind": "Tutorial",
+     "cat": "howto"
+    }
+   ],
+   "samples": {
+    "screenshots": [
+     "reports-schedule"
+    ],
+    "guides": [
+     "software-feature"
+    ],
+    "video": [
+     "schedule-a-report"
+    ],
+    "control": [],
+    "dita": []
+   }
   },
   {
-   "id": "h-publishing", "letter": "H", "field": "Structured publishing",
+   "id": "h-publishing",
+   "letter": "H",
+   "field": "Structured publishing",
    "title": "Multi-topic product documentation in DITA",
-   "org": "Several of the scenarios above", "product": "DITA 1.3 and DITA Open Toolkit",
+   "org": "Several of the scenarios above",
+   "product": "DITA 1.3 and DITA Open Toolkit",
    "summary": "Five DITA projects made from the scenarios' documents: concepts, tasks, references and troubleshooting topics under a map with keys, a relationship table and DITAVAL filters for each group of readers, validated against the OASIS DTDs and published to HTML5 and PDF.",
-   "skills": ["DITA concepts", "DITA tasks", "DITA references", "DITA maps", "Reusable content through keys", "Conditional output", "HTML and PDF publishing"],
+   "skills": [
+    "DITA concepts",
+    "DITA tasks",
+    "DITA references",
+    "DITA maps",
+    "Reusable content through keys",
+    "Conditional output",
+    "HTML and PDF publishing"
+   ],
    "docs": [],
-   "samples": {"dita": ["industrial-equipment", "developer-documentation", "saas-product-help", "technical-reference", "release-documentation"]}
+   "samples": {
+    "dita": [
+     "industrial-equipment",
+     "developer-documentation",
+     "saas-product-help",
+     "technical-reference",
+     "release-documentation"
+    ]
+   }
   }
  ]
 }

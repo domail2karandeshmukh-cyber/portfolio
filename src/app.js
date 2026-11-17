@@ -372,16 +372,33 @@
     io.observe(el);
   });
 
-  /* Documents: filter by type */
-  var chips = $$(".filters .chip"), cards = $$("#docs > li, [data-docs] > li");
+  /* Documents: filter by kind, and group by kind or by project */
+  var chips = $$(".filters .chip"), cards = $$("#docs > li, [data-docs] > li"), kind = "all", grouping = "kind";
+  function showDocs() {
+    cards.forEach(function (li) { li.hidden = !(kind === "all" || li.dataset.t === kind); });
+    $$(".shelf").forEach(function (s) {
+      var own = $$("[data-docs] > li", s), demo = $(".demo-rows", s);
+      if (demo) demo.hidden = !(kind === "all" || s.dataset.kind === kind) && own.length > 0;
+      s.hidden = own.length ? !own.some(function (li) { return !li.hidden; }) : !(kind === "all" || s.dataset.kind === kind);
+    });
+    $$(".lib-group").forEach(function (g) { g.hidden = g.dataset.group !== grouping; });
+  }
   chips.forEach(function (c) {
     c.addEventListener("click", function () {
-      var t = c.dataset.t;
+      kind = c.dataset.t;
       chips.forEach(function (o) { o.setAttribute("aria-pressed", o === c); });
-      cards.forEach(function (li) { li.hidden = !(t === "all" || li.dataset.t === t); });
-      $$(".shelf").forEach(function (s) { s.hidden = !$$("[data-docs] > li", s).some(function (li) { return !li.hidden; }); });
+      showDocs();
     });
   });
+  $$(".lib-tabs [data-group]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      grouping = b.dataset.group;
+      $$(".lib-tabs [data-group]").forEach(function (o) { o.setAttribute("aria-selected", o === b); });
+      try { localStorage.setItem("lib:group", grouping); } catch (e) {}
+      showDocs();
+    });
+  });
+  if ($(".lib-tabs")) { try { var g0 = localStorage.getItem("lib:group"); if (g0 === "project") { grouping = g0; $$(".lib-tabs [data-group]").forEach(function (o) { o.setAttribute("aria-selected", o.dataset.group === g0); }); } } catch (e) {} showDocs(); }
 
   /* Header: mark the section in view */
   var links = $$('.home .nav nav a[href^="#"]');
@@ -542,6 +559,7 @@
       // Every section once, with the words it can be found by: its title, its document, and its project.
       var all = [];
       docs.forEach(function (d) {
+        if (/fictional/i.test(d.k || "")) return;       // the studio's fictional demonstrations are not sources about Karan's work
         (d.s || []).forEach(function (sec) { all.push({ d: d, sec: sec, glossary: /glossary/i.test(d.t + " " + d.u), title: (d.t + " " + (d.p || "") + " " + sec[1]).toLowerCase(), text: String(sec[2] || "").toLowerCase() }); });
       });
       return all;

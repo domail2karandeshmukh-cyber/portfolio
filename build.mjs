@@ -92,6 +92,20 @@ await fs.mkdir(`${OUT}/workbench`, { recursive: true });
 await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
 await library.extra({ path: "/workbench", title: "Workbench", description: "Write a document, check it against the style guide as you type, and publish it for each reader as Markdown, HTML or DITA.", only: "search",
   kind: "Tool", shelf: "Library", text: [{ id: "", title: "", text: "Write a document in Markdown, check it against the style guide as you type, and publish it for more than one reader as Markdown, as HTML for a help center, or as DITA. It runs in your browser." }] });
+// The Documentation Studio's fictional scenarios join the search, labelled as demonstrations, so that a search for
+// "SOP" or "runbook" finds them. Their pages are written later, by lib/studio.mjs.
+{
+  const Doc = createRequire(import.meta.url)("./src/doc.js");
+  const demos = JSON.parse(await fs.readFile("content/scenarios/scenarios.json", "utf8")).scenarios;
+  for (const sc of demos) {
+    const text = [];
+    for (const d of sc.docs) {
+      const src = await fs.readFile(d.path, "utf8"), view = Doc.resolve(Doc.parse(src), Doc.GENERAL);
+      text.push({ id: d.path.split("/").pop().replace(/\.md$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-"), title: view.title || d.kind, text: Doc.text ? src.replace(/^---[\s\S]*?---\n/, "").replace(/[#*`>|_]/g, " ").replace(/\s+/g, " ").trim() : src });
+    }
+    if (text.length) await library.extra({ path: `/studio/scenarios/${sc.id}`, title: `${sc.title} (fictional demonstration)`, only: "search", kind: "Fictional demonstration", shelf: `Scenario ${sc.letter}: ${sc.field}`, text });
+  }
+}
 await library.finish();
 console.log(`style: ${guide.figures.passing} of ${guide.figures.docs} documents pass (${guide.figures.rules} rules, ${guide.figures.coded} checked by code)`);
 // The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name.
