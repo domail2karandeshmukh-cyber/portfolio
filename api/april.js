@@ -6,6 +6,7 @@ const S = C.site;
 const LANGUAGES = { en: "English", fr: "French", de: "German", es: "Spanish", hi: "Hindi" };
 // The lines she says without being asked: her greeting and the stops of her tour, in every language of the site.
 const { LINES, file: recording } = require("../lib/voice-lines.cjs");
+const Narration = require("../lib/narration.cjs");
 
 // What April can point at. A document's key is what she names when she offers to open it.
 const DOCS = {};
@@ -176,6 +177,9 @@ const FAMILY = [process.env.APRIL_VOICE_MODEL, "elevenlabs/eleven-v4", "elevenla
 const isBest = (model) => model === FAMILY[0];
 // Voices to listen to before choosing one: /api/april?say=tour1&voice=<name>. All of them are women's voices.
 const CANDIDATES = { sarah: "EXAVITQu4vr4xnSDxMaL", jessica: "cgSgspJ2msm6clMCkdW9", alice: "Xb7hH8MSUJpSbSDYk0k2", matilda: "XrExE9yKIg1WjnnlVkGX", lily: "pFZP5JQG7iQjIQuC4Bku", laura: "FGY2WhTYpPnrIDTdsKH5" };
+// The narrator of the videos is not April. Set NARRATOR_VOICE to change the voice; /api/april?narrate=<script>&seg=0&voice=<name> tries one of these.
+const NARRATOR_VOICE = process.env.NARRATOR_VOICE || "JBFqnCBsd6RMkjVDRZzb";
+const NARRATORS = { george: "JBFqnCBsd6RMkjVDRZzb", daniel: "onwK4e9ZLuTAKqWW03F9", brian: "nPczCjzI2devNBz1zQrb", liam: "TX3LPaxmHKxFdv7VOQHJ", charlie: "IKne3meq5aSn9XLyUdCD" };
 const resting = {};          // a model that has just failed, and the time it may be tried again
 /** Her words as they are spoken: an address is something to select, not to hear. */
 function forSpeech(text) {
@@ -250,7 +254,7 @@ module.exports = async (req, res) => {
   const today = new Date().toISOString().slice(0, 10);
   if (today !== day) { day = today; dayCount = 0; spoken = 0; recorded = 0; }
 
-  let q = "", history = [], lang = "en", aloud = false, say = "", probe = false, context = [], stream = false;
+  let q = "", history = [], lang = "en", aloud = false, say = "", probe = false, context = [], stream = false, narrate = "", seg = -1;
   try {
     if (req.method === "POST") {
       const b = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
@@ -258,6 +262,7 @@ module.exports = async (req, res) => {
       context = Array.isArray(b.context) ? b.context : []; stream = b.stream === true;
     } else {
       q = (req.query || {}).q; lang = (req.query || {}).lang; say = String((req.query || {}).say || ""); probe = "probe" in (req.query || {});
+      narrate = String((req.query || {}).narrate || ""); seg = parseInt((req.query || {}).seg, 10);
       // On a preview, a question in the address can carry passages too, so that they can be tried before a release.
       if (process.env.VERCEL_ENV !== "production" && (req.query || {}).context) context = JSON.parse(String(req.query.context));
     }
@@ -266,6 +271,30 @@ module.exports = async (req, res) => {
 
   const token = process.env.AI_GATEWAY_API_KEY || req.headers["x-vercel-oidc-token"] || process.env.VERCEL_OIDC_TOKEN;
   if (!token) return res.status(503).json({ error: "no gateway token" });
+
+  // A segment of a video's narration (lib/narration.cjs), in the narrator's voice, never April's. Recorded once, like her lines.
+  if (narrate) {
+    const script = Narration.SCRIPTS[narrate], piece = script && script.segments[seg];
+    if (!piece) return res.status(404).json({ error: "no such narration", scripts: Object.keys(Narration.SCRIPTS) });
+    const name = String((req.query || {}).voice || "").toLowerCase();
+    if (name && !NARRATORS[name]) return res.status(404).json({ error: "no such voice", voices: Object.keys(NARRATORS) });
+    const key = ["narration", narrate, seg, name].join(":"), tried = [];
+    let out = said.get(key);
+    if (!out) {
+      if (recorded >= RECORDINGS_A_DAY) return res.status(429).json({ error: "busy" });
+      recorded++;
+      out = await speak(token, piece.text, "en", tried, "recorded", { voice: NARRATORS[name] || NARRATOR_VOICE });
+      if (!out) return res.status(502).json({ error: "voice", tried });
+      if (isBest(out.model)) said.set(key, out);
+    }
+    if (probe) return res.status(200).json({ voice: out.model, ms: out.ms, bytes: Buffer.from(out.audio, "base64").length, text: piece.text, tried });
+    res.setHeader("content-type", "audio/mpeg");
+    res.setHeader("cache-control", isBest(out.model) ? "public, max-age=86400, s-maxage=2592000" : "public, max-age=300, s-maxage=600");
+    res.setHeader("x-voice-model", out.model);
+    res.setHeader("x-voice-best", isBest(out.model) ? "1" : "0");
+    res.setHeader("x-voice-file", Narration.file(narrate, piece));
+    return res.status(200).send(Buffer.from(out.audio, "base64"));
+  }
 
   // A fixed line: her greeting or a stop of the tour. It is recorded once, then served from memory and from the CDN.
   if (say) {
