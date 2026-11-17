@@ -32,7 +32,7 @@
 
   /* ---------- Drawing ---------- */
   function boxOf(m) { return { x: Math.min(m.x, m.x + m.w), y: Math.min(m.y, m.y + m.h), w: Math.abs(m.w), h: Math.abs(m.h) }; }
-  function textLines(ctx, m) { ctx.font = "600 " + m.size + "px 'Hanken Grotesk', Arial, sans-serif"; return String(m.text || " ").split("\n"); }
+  function textLines(ctx, m) { ctx.font = "600 " + m.size + "px 'Hanken', Arial, sans-serif"; return String(m.text || " ").split("\n"); }
   /** The rectangle a mark covers, for selection and for hit tests. */
   A.bounds = function (ctx, m) {
     if (BOX[m.type]) return boxOf(m);
@@ -83,7 +83,7 @@
       var r = m.size / 2;
       ctx.beginPath(); ctx.arc(m.x, m.y, r, 0, Math.PI * 2); ctx.fill();
       ctx.lineWidth = Math.max(2, r * 0.12); ctx.strokeStyle = "#fff"; ctx.stroke();
-      ctx.fillStyle = light(m.color) ? "#0B0B0C" : "#fff"; ctx.font = "700 " + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + "px 'Hanken Grotesk', Arial, sans-serif";
+      ctx.fillStyle = light(m.color) ? "#0B0B0C" : "#fff"; ctx.font = "700 " + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + "px 'Hanken', Arial, sans-serif";
       ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(m.n), m.x, m.y + r * 0.05);
     } else if (m.type === "text") {
       var lines = textLines(ctx, m), bb = A.bounds(ctx, m);
@@ -122,7 +122,7 @@
       if (m.type === "callout") {
         var r = m.size / 2;
         out.push('<circle cx="' + m.x + '" cy="' + m.y + '" r="' + r + '" fill="' + m.color + '" stroke="#fff" stroke-width="' + Math.max(2, r * 0.12) + '"/>');
-        out.push('<text x="' + m.x + '" y="' + m.y + '" dy=".36em" text-anchor="middle" font-family="Hanken Grotesk, Arial, sans-serif" font-weight="700" font-size="' + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + '" fill="' + (light(m.color) ? "#0B0B0C" : "#fff") + '">' + m.n + "</text>");
+        out.push('<text x="' + m.x + '" y="' + m.y + '" dy=".36em" text-anchor="middle" font-family="Hanken, Arial, sans-serif" font-weight="700" font-size="' + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + '" fill="' + (light(m.color) ? "#0B0B0C" : "#fff") + '">' + m.n + "</text>");
       }
       if (m.type === "text") {
         var lines = String(m.text || "").split("\n");
@@ -130,7 +130,7 @@
           var cv = document.createElement("canvas").getContext("2d"), bb = A.bounds(cv, m);
           out.push('<rect x="' + bb.x + '" y="' + bb.y + '" width="' + bb.w + '" height="' + bb.h + '" fill="' + (light(m.color) ? "#0B0B0C" : "#fff") + '" opacity=".92"/>');
         }
-        out.push('<text font-family="Hanken Grotesk, Arial, sans-serif" font-weight="600" font-size="' + m.size + '" fill="' + m.color + '">' + lines.map(function (l, i) { return '<tspan x="' + m.x + '" y="' + (m.y + i * m.size * 1.25 + m.size * 0.92) + '">' + e(l) + "</tspan>"; }).join("") + "</text>");
+        out.push('<text font-family="Hanken, Arial, sans-serif" font-weight="600" font-size="' + m.size + '" fill="' + m.color + '">' + lines.map(function (l, i) { return '<tspan x="' + m.x + '" y="' + (m.y + i * m.size * 1.25 + m.size * 0.92) + '">' + e(l) + "</tspan>"; }).join("") + "</text>");
       }
     });
     out.push("</svg>");
@@ -519,6 +519,8 @@
       history: function () { return past.map(function (p) { return p.label; }); },
     };
     setTool(opts.tool || "arrow"); setColor(color); logList(); panel();
+    // Text marks use the site's own typeface; draw again once it has loaded.
+    if (document.fonts && document.fonts.load) document.fonts.load("600 20px Hanken").then(function () { paint(); }, function () {});
     addEventListener("resize", function () { if (st.base) fit(); });
     return api;
   };
