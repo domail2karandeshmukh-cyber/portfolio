@@ -405,11 +405,32 @@
   /* ---------- April ---------- */
   var panel = $("#april"), log = $("#log"), q = $("#q"), orb = $("#orb"), dock = $(".dock"), sugg = $("#sugg"), speakBtn = $("#speak");
   var hist = [], opener = null, greeted = false, voiceOn = store("april-voice") === "1";
-  var ctx = null, node = null, tourOff = function () {};
-  function speaking(on) {
-    [orb, $("#tour-orb")].forEach(function (o) { if (o) o.classList.toggle("talk", on); });
+  var ctx = null, node = null, meter = null, level = 0, tourOff = function () {}, tourSay = function () {};
+  // While she thinks, or speaks in the browser's own voice, her orb beats. With a recorded voice it moves to the sound.
+  function speaking(on, heard) {
+    $$(".orb").forEach(function (o) { o.classList.toggle("talk", on && !heard); o.classList.toggle("live", !!(on && heard)); });
     var big = $(".orb-stage");
-    if (big) big.classList.toggle("speaking", on);
+    if (big) { big.classList.toggle("speaking", on && !heard); big.classList.toggle("live", !!(on && heard)); }
+    if (!on) document.documentElement.style.removeProperty("--lvl");
+  }
+  function listen(source) {
+    if (reduce || !ctx.createAnalyser) { source.connect(ctx.destination); return false; }
+    if (!meter) {
+      meter = ctx.createAnalyser();
+      meter.fftSize = 256;
+      meter.connect(ctx.destination);
+    }
+    source.connect(meter);
+    var wave = new Uint8Array(meter.fftSize);
+    (function tick() {
+      if (node !== source) return;
+      meter.getByteTimeDomainData(wave);
+      for (var i = 0, sum = 0; i < wave.length; i++) { var v = (wave[i] - 128) / 128; sum += v * v; }
+      level += (Math.min(1, Math.sqrt(sum / wave.length) * 4.5) - level) * 0.4;
+      document.documentElement.style.setProperty("--lvl", level.toFixed(3));
+      requestAnimationFrame(tick);
+    })();
+    return true;
   }
   function unlock() {
     try {
@@ -431,12 +452,12 @@
       ctx.decodeAudioData(buf, function (audio) {
         if (still && !still()) return ok();   // something newer started while this clip was being decoded
         hush();
-        node = ctx.createBufferSource();
-        node.buffer = audio;
-        node.connect(ctx.destination);
-        node.onended = function () { speaking(false); if (done) done(); };
-        node.start();
-        speaking(true);
+        var source = node = ctx.createBufferSource();
+        source.buffer = audio;
+        var heard = listen(source);
+        source.onended = function () { if (node === source) { node = null; speaking(false); } if (done) done(); };
+        source.start();
+        speaking(true, heard);
         ok();
       }, no);
     });
@@ -492,6 +513,41 @@
       log.scrollTop = log.scrollHeight;
       return d;
     }
+    // What she offers under an answer: a document, the CV, a way to reach Karan, another language.
+    function offer(bubble, label, href, how) {
+      var a = document.createElement("a");
+      a.className = "act";
+      a.textContent = label;
+      a.href = href;
+      if (how === "new") { a.target = "_blank"; a.rel = "noopener"; }
+      if (how === "save") a.setAttribute("download", "");
+      bubble.appendChild(a);
+      log.scrollTop = log.scrollHeight;
+    }
+    // What she does herself, on the home page: go to a section, play a video, run the desk, start her tour.
+    function act(a, bubble, answer) {
+      if (a.type === "doc") return offer(bubble, String(I.actOpen).replace("{t}", a.title), a.href);
+      if (a.type === "cv") return offer(bubble, I.actCv, a.href, "save");
+      if (a.type === "linkedin") return offer(bubble, I.actLinkedin, a.href, "new");
+      if (a.type === "lang") return offer(bubble, a.name, a.href);
+      var to = a.type === "go" ? a.to : a.type === "video" ? "video" : a.type === "desk" ? "rewrite" : "top", el = document.getElementById(to);
+      if (!body.classList.contains("home") || !el) return offer(bubble, I.actGo, (LANG === "en" ? "/" : "/" + LANG) + "#" + to);
+      if (a.type === "tour") { var start = $("[data-tour]"); if (start) setTimeout(function () { start.click(); }, 1100); return; }
+      // On a phone her panel covers the page, so it steps aside and her answer follows in the bar at the bottom.
+      if (innerWidth < 720) { closePanel(true); tourSay(answer); }
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 76, behavior: reduce ? "auto" : "smooth" });
+      setTimeout(function () {
+        if (a.type === "video") {
+          var want = String(a.match || "").toLowerCase().split(/\s+/).filter(function (w) { return w.length > 2; }), best = null, most = 0;
+          $$("#theater .reel button").forEach(function (b) {
+            var title = b.textContent.toLowerCase(), hits = want.filter(function (w) { return title.indexOf(w) > -1; }).length;
+            if (hits > most) { most = hits; best = b; }
+          });
+          (best || $("#theater .yt") || { click: function () {} }).click();
+        }
+        if (a.type === "desk") { var chip = $('#try [data-sample="' + a.sample + '"]'); if (chip) chip.click(); }
+      }, reduce ? 50 : 900);
+    }
     function offline(text) {
       var s = text.toLowerCase(), i;
       for (i = 0; i < FAQ.length; i++) if (FAQ[i].q.toLowerCase() === s) return FAQ[i].a;
@@ -518,6 +574,7 @@
           hist.push({ role: "user", content: text }, { role: "assistant", content: d.answer });
           hist = hist.slice(-6);
           say(d.answer, d.audio);
+          if (d.action) act(d.action, w, d.answer);
         });
     }
     function openPanel(pre) {
@@ -533,15 +590,15 @@
       }
       if (pre) ask(pre); else q.focus();
     }
-    function closePanel() {
+    function closePanel(keepVoice) {
       panel.hidden = true;
       dock.hidden = false;
-      hush();
-      if (opener && opener.focus) opener.focus();
+      if (keepVoice !== true) hush();
+      if (opener && opener.focus) opener.focus({ preventScroll: true });
     }
     window.askApril = openPanel;
     $$("[data-april]").forEach(function (b) { b.addEventListener("click", function () { openPanel(b.dataset.ask || ""); }); });
-    $("#april-x").addEventListener("click", closePanel);
+    $("#april-x").addEventListener("click", function () { closePanel(); });
     addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden && (!$("#pal") || $("#pal").hidden)) closePanel(); });
     $("#ask").addEventListener("submit", function (e) { e.preventDefault(); unlock(); var t = q.value; q.value = ""; ask(t); });
     FAQ.forEach(function (f) {
@@ -646,11 +703,24 @@
       if (inside && from && from.focus) from.focus({ preventScroll: true });
     }
     tourOff = end;
+    // One line of hers in the bar, outside a tour: her answer, while the page moves to what she is showing.
+    function hide() { tour.classList.remove("solo"); tour.hidden = true; if (dock && panel && panel.hidden) dock.hidden = false; }
+    tourSay = function (text) {
+      if (at >= 0 || !text) return;
+      clearTimeout(wait);
+      tour.classList.add("solo");
+      tour.hidden = false;
+      if (dock) dock.hidden = true;
+      cap.setAttribute("aria-live", "polite");
+      cap.textContent = text;
+      wait = setTimeout(hide, 3200 + text.length * 75);
+    };
     $$("[data-tour]").forEach(function (b) {
       b.addEventListener("click", function () {
         if (panel && !panel.hidden) $("#april-x").click();
         from = b;
         unlock();
+        tour.classList.remove("solo");
         tour.hidden = false;
         if (dock) dock.hidden = true;
         at = 0;
@@ -660,7 +730,7 @@
     });
     pauseBtn.addEventListener("click", function () { if (paused) { unlock(); go(at); } else pause(); });
     $("#tour-next").addEventListener("click", function () { unlock(); go(at + 1); });
-    $("#tour-x").addEventListener("click", end);
+    $("#tour-x").addEventListener("click", function () { if (tour.classList.contains("solo")) { clearTimeout(wait); hush(); hide(); } else end(); });
     // A visitor who scrolls away takes over: the tour waits until they resume it.
     function took(e) { if (at >= 0 && !paused && !tour.contains(e.target)) pause(); }
     addEventListener("wheel", took, { passive: true });

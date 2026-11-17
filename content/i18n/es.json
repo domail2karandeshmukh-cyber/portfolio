@@ -272,6 +272,10 @@
   "Sample message": "Mensaje de ejemplo",
   "Does your team write messages like this one? <a href=\"https://www.linkedin.com/in/karan-deshmukh-a86986175/\" target=\"_blank\" rel=\"noopener\">Message me on LinkedIn</a>.": "¿Su equipo escribe mensajes como este? <a href=\"https://www.linkedin.com/in/karan-deshmukh-a86986175/\" target=\"_blank\" rel=\"noopener\">Escríbame por LinkedIn</a>.",
   "I <span class=\"ed e1\" data-was=\"type\">turn</span> what engineers <span class=\"ed e2\" data-was=\"say\">know</span> into <mark class=\"hl\">docs people can <span class=\"ed e3\" data-was=\"read.\">follow.</span></mark>": "<span class=\"ed e1\" data-was=\"Transcribo\">Convierto</span> lo que <span class=\"ed e2\" data-was=\"dicen\">saben</span> los ingenieros en <mark class=\"hl\">documentación que cualquiera puede <span class=\"ed e3\" data-was=\"leer.\">seguir.</span></mark>",
+  "Open: {t}": "Abrir: {t}",
+  "Take me there": "Lléveme allí",
+  "Download the CV": "Descargar el CV",
+  "Message Karan on LinkedIn": "Escribir a Karan por LinkedIn",
   "Play the video portfolio": "Reproducir el portafolio de vídeo",
   "Plays here. The videos are streamed from YouTube.": "Se reproducen aquí. Los vídeos se transmiten desde YouTube.",
   "Language": "Idioma"

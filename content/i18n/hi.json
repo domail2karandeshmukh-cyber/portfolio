@@ -272,6 +272,10 @@
   "Sample message": "नमूना संदेश",
   "Does your team write messages like this one? <a href=\"https://www.linkedin.com/in/karan-deshmukh-a86986175/\" target=\"_blank\" rel=\"noopener\">Message me on LinkedIn</a>.": "क्या आपकी टीम भी ऐसे संदेश लिखती है? <a href=\"https://www.linkedin.com/in/karan-deshmukh-a86986175/\" target=\"_blank\" rel=\"noopener\">मुझे LinkedIn पर संदेश भेजें</a>।",
   "I <span class=\"ed e1\" data-was=\"type\">turn</span> what engineers <span class=\"ed e2\" data-was=\"say\">know</span> into <mark class=\"hl\">docs people can <span class=\"ed e3\" data-was=\"read.\">follow.</span></mark>": "इंजीनियर जो <span class=\"ed e1\" data-was=\"कहते\">जानते</span> हैं, उसे मैं <mark class=\"hl\">ऐसे दस्तावेज़ों में <span class=\"ed e2\" data-was=\"लिखता\">बदलता</span> हूँ जिन्हें लोग <span class=\"ed e3\" data-was=\"किसी तरह पढ़\">आसानी से समझ</span> सकें।</mark>",
+  "Open: {t}": "खोलें: {t}",
+  "Take me there": "वहाँ ले चलें",
+  "Download the CV": "CV डाउनलोड करें",
+  "Message Karan on LinkedIn": "करण को LinkedIn पर संदेश भेजें",
   "Play the video portfolio": "वीडियो पोर्टफ़ोलियो चलाएँ",
   "Plays here. The videos are streamed from YouTube.": "यहीं चलते हैं। वीडियो YouTube से स्ट्रीम होते हैं।",
   "Language": "भाषा"
