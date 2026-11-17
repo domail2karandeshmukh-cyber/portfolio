@@ -533,19 +533,28 @@
   }
   /* What the library says about a question: the three sections that match it best. They go with the question,
      so that she can answer from the documents themselves and link to the section she used. */
-  var LIB = null, SKIP = /^(the|and|for|with|what|which|where|when|does|how|are|can|you|his|her|about|tell|show|explain|karan|deshmukh|this|that|from|have|has|who|why|did|was|will|would|should|could|there|their|into|more|most|some|any|all|use|used|using|him|she|they|them|its|our|your|please|give|find|say|says|mean|means|document|documents|docs|library|site|page|work|write|writes|written|read|open|handle|deal|cover|include|contain|provide|need|want|help|happen|look|see|know|list|define|different|difference|between|like|kind|thing|way|part|much|many|long|really|just|also|then|than|been|being|were|here|make|made|take|get|got|doe|thi)$/;
+  var LIB = null, SKIP = /^(the|and|for|with|what|which|where|when|does|how|are|can|you|his|her|about|tell|show|explain|karan|deshmukh|this|that|from|have|has|who|why|did|was|will|would|should|could|there|their|into|more|most|some|any|all|use|used|using|him|she|they|them|its|our|your|please|give|find|say|says|mean|means|document|documents|docs|library|site|page|work|write|writes|written|read|open|handle|deal|cover|include|contain|provide|need|want|help|happen|look|see|know|list|define|different|difference|between|like|kind|thing|way|part|much|many|long|really|just|also|then|than|been|being|were|here|make|made|take|get|got|doe|thi|one|two|three|sentence|word|short|brief|briefly|simple|simply|plain|quick|quickly|line|paragraph|meaning|definition|stand|stands|term|exactly|actually|basically|summary|summarize|summarise|overview|detail)$/;
+  // The names of the projects, as words. A question about a project as a whole is answered from her notes, which describe each one.
+  var NAMES = {};
+  $$(".pm-menu b").forEach(function (b) { (b.textContent.toLowerCase().match(/[a-z0-9]{3,}/g) || []).forEach(function (w) { NAMES[w] = 1; }); });
   function passages(question) {
     LIB = LIB || fetch("/search.json").then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (docs) {
       // Every section once, with the words it can be found by: its title, its document, and its project.
       var all = [];
       docs.forEach(function (d) {
-        (d.s || []).forEach(function (sec) { all.push({ d: d, sec: sec, title: (d.t + " " + (d.p || "") + " " + sec[1]).toLowerCase(), text: String(sec[2] || "").toLowerCase() }); });
+        (d.s || []).forEach(function (sec) { all.push({ d: d, sec: sec, glossary: /glossary/i.test(d.t + " " + d.u), title: (d.t + " " + (d.p || "") + " " + sec[1]).toLowerCase(), text: String(sec[2] || "").toLowerCase() }); });
       });
       return all;
     });
     return LIB.then(function (all) {
-      var terms = (question.toLowerCase().match(/[a-z0-9][a-z0-9-]{2,}/g) || []).map(function (w) { return w.length > 4 ? w.replace(/s$/, "") : w; })
-        .filter(function (w, i, list) { return !SKIP.test(w) && list.indexOf(w) === i; });
+      // The words that say what the question is about. A technical name keeps its marks: c/n0, v2.4, api_app.py.
+      var terms = (question.toLowerCase().match(/[a-z0-9][a-z0-9/._-]{2,}/g) || [])
+        .map(function (w) { w = w.replace(/[/._-]+$/, ""); return w.length > 4 ? w.replace(/s$/, "") : w; })
+        .filter(function (w, i, list) { return w.length > 2 && !SKIP.test(w) && list.indexOf(w) === i; });
+      // A question that names only a project ("what does TrustNav do?") is about the project as a whole.
+      if (terms.every(function (w) { return w.split("-").every(function (part) { return part.length < 3 || NAMES[part]; }); })) return [];
+      // A question that asks what something is, or what it means, is answered best by a glossary.
+      var define = /^\s*(what|who)('s|\s+is|\s+are|\s+was)\b|\b(means?|meaning|stands? for|define|definition)\b/i.test(question);
       // A word that few sections hold says more about a question than a word that most of them hold.
       var weight = {}, known = 0;
       terms.forEach(function (w) {
@@ -554,20 +563,44 @@
         known += weight[w];
       });
       if (!known) return [];
-      var found = [];
+      var found = [], usual = all.reduce(function (sum, x) { return sum + x.text.length; }, 0) / all.length;
       all.forEach(function (x) {
-        var score = 0, at = -1, most = 0;
+        var score = 0;
         terms.forEach(function (w) {
-          var pos = x.text.indexOf(w);
+          if (!weight[w]) return;
           if (x.title.indexOf(w) > -1) score += weight[w] * 1.5;
-          if (pos > -1) { score += weight[w]; if (weight[w] > most) { most = weight[w]; at = pos; } }
+          // A section that comes back to a word says more about it than one that mentions it in passing, and a short
+          // section that holds the word says more than a long one (the usual measure for this is called BM25).
+          var times = x.text.split(w).length - 1;
+          if (times) score += weight[w] * times * 2.2 / (times + 1.2 * (0.25 + 0.75 * x.text.length / usual));
         });
-        if (score) found.push({ x: x, score: score / known, at: Math.max(0, at) });
+        if (define && x.glossary) score *= 2.5;
+        if (score) found.push({ x: x, score: score / known });
       });
       found.sort(function (m, n) { return n.score - m.score; });
-      // Only a section that holds most of what the question asks about is sent: a weak match would lead her astray.
-      return found.filter(function (f) { return f.score >= 0.6; }).slice(0, 2).map(function (f) {
-        var from = Math.max(0, f.at - 160), text = String(f.x.sec[2] || "");
+      // Only a section that holds most of what the question asks about is sent, and a second one only when it is
+      // nearly as good as the first: a weak match would lead her astray.
+      var top = found.length ? found[0].score : 0;
+      return found.filter(function (f) { return f.score >= 0.6 && f.score >= top * 0.7; }).slice(0, 2).map(function (f) {
+        var text = String(f.x.sec[2] || ""), low = f.x.text, starts = [0], from = 0, best = -1;
+        // The passage is the stretch of the section that holds the most of the question, with its words near the start.
+        // It begins at the start of a sentence, and in a glossary at the entry itself.
+        terms.forEach(function (w) {
+          for (var at = low.indexOf(w), n = 0; at > -1 && n < 12; at = low.indexOf(w, at + 1), n++) {
+            if (f.x.glossary) { starts.push(at); continue; }
+            var before = low.slice(Math.max(0, at - 240), at), ends = before.match(/[.?!#:]\s+(?=\S)/g), cut = ends ? before.lastIndexOf(ends[ends.length - 1]) + ends[ends.length - 1].length : -1;
+            starts.push(at < 240 ? 0 : cut > -1 ? at - before.length + cut : at - 120 + (low.slice(at - 120, at).indexOf(" ") + 1));
+          }
+        });
+        starts.forEach(function (start) {
+          var part = low.slice(start, start + 620), value = 0;
+          // A word counts for more the nearer it is to the start. In a glossary, the word that opens an entry counts double.
+          terms.forEach(function (w) {
+            var at = part.indexOf(w);
+            if (at > -1) value += weight[w] * (f.x.glossary ? (at < 40 ? 2 : 1) : 1.5 - 0.5 * at / 620);
+          });
+          if (value > best + 1e-9) { best = value; from = start; }
+        });
         return { t: f.x.d.t, s: f.x.sec[1], u: f.x.d.u + (f.x.sec[0] ? "#" + f.x.sec[0] : ""), x: (from ? "…" : "") + text.slice(from, from + 620), k: true };
       });
     }).catch(function () { LIB = null; return []; });

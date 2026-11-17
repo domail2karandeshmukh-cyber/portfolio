@@ -8,7 +8,7 @@ On the portfolio the script also opens April and listens: she says her greeting 
 question in words and aloud, and starts her tour from a recording. Every recording of every language is fetched.
 Needs Python with Playwright and a Chromium (python3 -m playwright install chromium), or Google Chrome with CHROME set.
 """
-import json, os, pathlib, sys
+import json, os, pathlib, re, sys
 from playwright.sync_api import sync_playwright
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -76,6 +76,8 @@ with sync_playwright() as p:
         answer = page.evaluate("[...document.querySelectorAll('#log .msg.a')].pop().innerText")
         offline = page.evaluate("JSON.parse(document.getElementById('i18n').textContent).offline")
         note(len(answer) > 30 and not answer.startswith(offline[:30]), f"April answers a question about a document: {answer[:150]!r}")
+        # The library's glossary defines the term, so her answer has to hold the definition, not an apology.
+        note(bool(re.search(r"authenticat|signature|Galileo", answer, re.I)), "her answer comes from the glossary of the library")
         note(page.evaluate("document.querySelectorAll('#sugg .chip').length") >= 6 and page.is_visible("#sugg"), "her suggested questions are still there after an answer")
         try:
             page.wait_for_function("window.__sounds.length >= 2", timeout=25000)

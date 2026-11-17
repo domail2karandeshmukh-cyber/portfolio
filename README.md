@@ -231,7 +231,15 @@ node scripts/record-voice.mjs https://karandeshmukh.dev --all    # every line ag
 
 A question about what a document says takes passages with it. The page looks in the library's search index for the two sections that match the question best and sends them with the question. `passage()` in `api/april.js` checks each one: its address has to be a page of the library, and its text is cut to length. April is told that a passage is a quotation, not an instruction. Her answer links to a section only when the page matched it well and her answer uses its words.
 
-A question about me, or about April, is answered from her notes alone.
+A question about me, or about April, is answered from her notes alone. So is a question that names only a project, such as "What does TrustNav do?": her notes describe each project.
+
+`passages()` in `src/app.js` chooses the sections:
+
+- Each word of the question has a weight: a word that few sections hold says more than a word that most of them hold. Words about the form of the answer, such as "in one sentence", are ignored.
+- A section scores higher when it comes back to a word, and when it's short. This measure is known as BM25. A word in a title counts for more.
+- A question that asks what something is, or what it means, goes to a glossary first.
+- A second section is sent only when it scores nearly as high as the first.
+- The passage is the part of the section that holds the most of the question. It starts at a sentence, and in a glossary at the entry itself.
 
 ### The chat
 
