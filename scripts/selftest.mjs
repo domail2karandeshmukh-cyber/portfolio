@@ -43,7 +43,7 @@ for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) 
     if (catalog) {
       const out = path.join(tmp, `${name}-${reader === undefined ? "all" : reader === Doc.GENERAL ? "general" : reader}.dita`);
       fs.writeFileSync(out, dita);
-      try { execFileSync("xmllint", ["--noout", "--valid", "--nonet", out], { env: { ...process.env, XML_CATALOG_FILES: catalog }, stdio: "pipe" }); checks++; }
+      try { execFileSync("xmllint", ["--huge", "--noout", "--valid", "--nonet", out], { env: { ...process.env, XML_CATALOG_FILES: catalog }, stdio: "pipe" }); checks++; }
       catch (e) { failed++; console.log(`FAIL  ${label}: the DITA is not valid\n${String(e.stderr).split("\n").slice(0, 6).join("\n")}`); }
     }
   }

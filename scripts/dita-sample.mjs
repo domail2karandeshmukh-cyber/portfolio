@@ -27,7 +27,7 @@ if (process.argv.includes("--publish")) {
   const home = process.env.DITA_HOME;
   if (!home) throw new Error("Set DITA_HOME to a DITA Open Toolkit folder.");
   const files = project.files.filter((f) => /\.(dita|ditamap)$/.test(f.name)).map((f) => `${SRC}/${f.name}`);
-  for (const f of files) execFileSync("xmllint", ["--noout", "--valid", "--nonet", f], { env: { ...process.env, XML_CATALOG_FILES: `${home}/catalog-dita.xml` }, stdio: "inherit" });
+  for (const f of files) execFileSync("xmllint", ["--huge", "--noout", "--valid", "--nonet", f], { env: { ...process.env, XML_CATALOG_FILES: `${home}/catalog-dita.xml` }, stdio: "inherit" });
   console.log(`dita: ${files.length} files are valid DITA 1.3 (OASIS DTDs from ${path.basename(home)})`);
   const dita = path.join(home, "bin", "dita"), input = `${SRC}/acme-console-help.ditamap`;
   fs.rmSync(`${OUT}/html5`, { recursive: true, force: true });
