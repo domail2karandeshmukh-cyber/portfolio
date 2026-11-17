@@ -103,16 +103,52 @@ async function ask(model, token, messages) {
   const reply = read(typeof c === "string" ? c : "");
   return Object.assign(reply, { ok: r.ok && !!reply.answer, status: r.status, detail: data && data.error && (data.error.message || data.error.type) });
 }
-/** A model's reply: the JSON it was asked for, or, from a model that ignored the form, plain words. */
+/** A model's reply: the JSON it was asked for, or, from a model that ignored the form or broke it, her words and whatever action can be read from the rest. */
 function read(content) {
-  const text = content.trim(), a = text.indexOf("{"), b = text.lastIndexOf("}");
+  const text = String(content).trim().replace(/^```\w*\s*|\s*```$/g, "");
+  const a = text.indexOf("{"), b = text.lastIndexOf("}");
+  let say = null, act = null, bare = false;
   if (a >= 0 && b > a) {
     try {
       const o = JSON.parse(text.slice(a, b + 1));
-      if (o && typeof o.say === "string") return { answer: o.say.replace(/\s+/g, " ").trim().slice(0, 700), action: action(o.do) };
+      if (o && typeof o.say === "string") { say = o.say; act = action(code(o.do)); }
     } catch (e) {}
   }
-  return { answer: text.replace(/^```\w*|```$/g, "").trim().slice(0, 700), action: null };
+  if (say == null) { say = text; bare = true; }
+  // The action written after the words, not beside them: ... "do": {"doc": "cg-threat"}. The words end where it begins.
+  const tail = TAIL.exec(say);
+  if (tail) {
+    say = say.slice(0, tail.index);
+    if (!act) act = action(after(tail[1]));
+  }
+  if (bare) {
+    // What is left of a form that was started and not finished: {"say": "...
+    const label = /^\s*\{?\s*["']say["']\s*[:=]\s*/i.exec(say);
+    if (label) say = say.slice(label[0].length).trim().replace(/^"([\s\S]*?)"?[\s,}]*$/, "$1").replace(/\\n/g, " ").replace(/\\(["'\/])/g, "$1");
+  }
+  return { answer: say.replace(/\s+/g, " ").trim().slice(0, 700), action: act };
+}
+const TAIL = /(?:[\s,;{]*["']do["']|\n\s*do)\s*[:=]\s*([\s\S]*)$/i;
+// What a model meant by "do", in whichever form it wrote it: "doc:cg-threat", {"doc": "cg-threat"} or {"type": "doc", "id": "cg-threat"}.
+function code(d) {
+  if (typeof d === "string") return d;
+  if (!d || typeof d !== "object" || Array.isArray(d)) return "";
+  const keys = Object.keys(d), word = (v) => (typeof v === "string" || typeof v === "number" ? String(v) : "");
+  if (typeof d.type === "string") {
+    const rest = keys.filter((k) => k !== "type").map((k) => word(d[k])).filter(Boolean)[0];
+    return rest ? d.type + ":" + rest : d.type;
+  }
+  if (keys.length !== 1) return "";
+  const value = word(d[keys[0]]);
+  return value ? keys[0] + ":" + value : keys[0];
+}
+// The same, from loose text that followed the words.
+function after(rest) {
+  const text = rest.trim().replace(/[\s,;]+$/, "");
+  for (const form of [text, text.replace(/\}\s*$/, ""), text.replace(/"\s*\}\s*$/, '"')]) {
+    try { return code(JSON.parse(form)); } catch (e) {}
+  }
+  return text.replace(/["'{}]/g, "").replace(/\s*:\s*/g, ":").trim();
 }
 
 // Her voice. The first entry that works is kept; set APRIL_VOICE_MODEL and APRIL_VOICE to choose another.
@@ -199,8 +235,10 @@ module.exports = async (req, res) => {
   const system = lang === "en" ? SYSTEM : `${SYSTEM}\nThe visitor reads the site in ${LANGUAGES[lang]}. Answer in ${LANGUAGES[lang]}, and keep the names of documents, tools and projects as they are.`;
   const messages = [{ role: "system", content: system }];
   history.slice(-6).forEach((m) => {
-    if (m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
-      messages.push({ role: m.role, content: m.content.slice(0, 600) });
+    if (!m || typeof m.content !== "string") return;
+    // Her earlier answers go back in the form she is asked to write, so a long chat doesn't teach her plain words.
+    if (m.role === "assistant") messages.push({ role: "assistant", content: JSON.stringify({ say: m.content.slice(0, 600), do: "" }) });
+    else if (m.role === "user") messages.push({ role: "user", content: m.content.slice(0, 600) });
   });
   messages.push({ role: "user", content: q });
 
