@@ -111,3 +111,21 @@
 .gd-dlg-head h2{font:500 1.4rem/1.2 var(--serif);margin:0}
 .gd-dlg-head p{margin:0;display:flex;gap:6px}
 @media (max-width:980px){.gd{grid-template-columns:1fr}.gd-preview{position:static;max-height:none}}
+
+/* DITA Studio */
+.dt{display:grid;gap:16px;max-width:1080px}
+.dt-card{background:#fff;border:1px solid var(--rule2);border-radius:10px;padding:18px 20px}
+.dt-card h2{font:500 1.55rem/1.2 var(--serif);margin:0 0 .5em}
+.dt-card h3{font:700 1rem/1.3 var(--sans);margin:1.2em 0 .5em}
+.dt-docs{border:0;padding:0;margin:0 0 12px}
+.dt-docs legend{font-weight:700;margin-bottom:6px}
+.dt-docs label{display:flex;gap:8px;align-items:center;padding:4px 0}
+.dt-docs small{color:var(--mute)}
+.dt-meta{display:block}
+.dt-table{width:100%;border-collapse:collapse;font-size:.93rem}
+.dt-table th,.dt-table td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--rule)}
+.dt-table .ok{color:var(--green);font-weight:600}
+.dt-table .no{color:var(--red);font-weight:600}
+.dt-code{max-height:320px;overflow:auto;font-size:.82rem}
+.dt-links{line-height:1.8}
+.dt-links a{color:var(--ink);font-weight:600}

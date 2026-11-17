@@ -1,0 +1,42 @@
+<div class="st-head">
+ <div>
+  <h1>DITA Studio</h1>
+  <p>Turn Markdown documents into a DITA 1.3 project: a map, a typed topic for each document (task, concept, reference or troubleshooting), keys for the variables, DITAVAL filters for each group of readers, and a relationship table. Then publish it with DITA Open Toolkit.</p>
+ </div>
+</div>
+<div class="dt">
+ <section class="dt-card" aria-labelledby="dt-make">
+  <h2 id="dt-make">Make a project</h2>
+  <fieldset class="dt-docs"><legend>Documents</legend><div id="dt-list"></div>
+   <p class="ann-btns"><label class="btn line sm" for="dt-files">Add Markdown files</label><input class="st-file" id="dt-files" type="file" accept=".md,.markdown,text/markdown,text/plain" multiple></p>
+  </fieldset>
+  <div class="gd dt-meta">
+   <label>Map title <input id="dt-title" type="text" maxlength="140" value="Acme Console help"></label>
+   <div class="gd-two"><label>Author <input id="dt-author" type="text" maxlength="80"></label><label>Version <input id="dt-version" type="text" maxlength="20" value="1.0"></label></div>
+   <label>Status <input id="dt-status" type="text" maxlength="40" value="Draft"></label>
+  </div>
+  <p class="ann-btns"><button class="btn ink sm" type="button" id="dt-go">Make the project</button><button class="btn line sm" type="button" id="dt-zip" disabled>Download the project (ZIP)</button></p>
+  <p class="st-status" id="dt-status-line" role="status" aria-live="polite"></p>
+  <div id="dt-result" hidden>
+   <h3>Topics</h3>
+   <div class="tbl"><table class="dt-table"><thead><tr><th scope="col">Title</th><th scope="col">Topic type</th><th scope="col">File</th><th scope="col">Check</th></tr></thead><tbody id="dt-topics"></tbody></table></div>
+   <h3>The map</h3>
+   <pre class="code dt-code" tabindex="0"><code id="dt-map"></code></pre>
+  </div>
+ </section>
+ <section class="dt-card" aria-labelledby="dt-pub">
+  <h2 id="dt-pub">Published with DITA Open Toolkit</h2>
+  <p>The workbench's six templates, made into one project by the same code as this page, then validated against the OASIS DITA 1.3 DTDs and published by DITA Open Toolkit <span id="dt-ver">4</span>. The HTML5 is filtered for the general reader; the PDF keeps the content for administrators.</p>
+  <ul class="dt-links">
+   <li><a href="/studio/dita/sample/html5/index.html">HTML5 output</a>, as DITA-OT wrote it</li>
+   <li><a href="/studio/dita/sample/acme-console-help.pdf">PDF output</a></li>
+   <li><a href="/studio/dita/sample/acme-console-help-dita.zip" download>The DITA source</a>: map, topics and filters</li>
+  </ul>
+  <p class="st-note" id="dt-when"></p>
+ </section>
+ <section class="dt-card" aria-labelledby="dt-flare">
+  <h2 id="dt-flare">Into other authoring tools</h2>
+  <p>The project uses formats that professional tools document as importable. MadCap Flare imports a DITA document set (Project &gt; Import &gt; DITA Document Set), Markdown files, and HTML. The workbench and the step guides export all three.</p>
+  <p class="st-note">What isn't tested: I don't have MadCap Flare, so importing these files into Flare itself hasn't been tried. The files are tested against the DITA standard and with DITA Open Toolkit, not against Flare.</p>
+ </section>
+</div>

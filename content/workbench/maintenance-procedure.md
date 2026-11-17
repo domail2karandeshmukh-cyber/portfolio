@@ -1,0 +1,47 @@
+---
+type: how-to
+id: MP-PS104-01
+owner: Maintenance planning
+version: 0.3
+status: In review
+vars:
+  asset: feed pump B
+---
+# Monthly inspection of {{asset}}
+
+Preventive maintenance procedure. The technician on shift records four readings and closes the work order. Fictional sample written for this portfolio: it isn't an operating instruction for real equipment.
+
+## Before you start
+
+- The work order is assigned to your shift.
+- You have read the site safety rules for the pump room.
+- The pump is running at its normal load.
+
+> **Warning:** Stay outside the guard while the pump runs. Take every reading from a gauge or the console.
+
+## Tools and materials
+
+- The maintenance console on a tablet
+- A handheld vibration meter
+
+## Steps
+
+1. Open the work order in the maintenance console, and then select **Record readings**.
+2. Read the discharge pressure on the local gauge, and enter it in bar.
+3. Read the bearing temperature on the console, and enter it in °C.
+4. Measure the vibration on the bearing housing with the meter, and enter it in mm/s.
+5. Look for leaks around the seal, and enter what you see.
+6. Select **Save readings**.
+
+## Acceptance criteria
+
+| Check | Expected |
+|---|---|
+| Discharge pressure | 3.8 to 4.6 bar |
+| Bearing temperature | Below 70 °C |
+| Vibration | Below 4.5 mm/s |
+| Seal leakage | None visible |
+
+## Check that it worked
+
+The work order shows **Ready to close**, and all four results are inside their expected range. Select **Close work order**. If a result is outside its range, don't close the work order: report it to the shift supervisor.

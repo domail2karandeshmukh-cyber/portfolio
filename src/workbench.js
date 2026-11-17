@@ -239,6 +239,12 @@
     return {
       md: { text: Doc.toMarkdown(view), file: name + ".md", mime: "text/markdown", about: "The document in one consistent form of Markdown, for a repository or a docs-as-code site." },
       html: { text: Doc.toHtml(view) + "\n", file: name + ".html", mime: "text/html", about: "Plain HTML with no classes and no styles. Paste it into the source view of a help center's article editor, and the editor has nothing to clean up." },
+      ditapkg: (function () {
+        // The whole project, not one reader's view: variables become keys, and each group's blocks are profiled for a DITAVAL filter.
+        var pk = Doc.toDitaPackage(doc);
+        return { text: pk.map, files: pk.files, file: Doc.slug(view.title || "document") + "-dita.zip", mime: "application/zip",
+          about: "A DITA 1.3 project in a ZIP: the map, the " + pk.kind + " topic, a key for each variable, " + (Doc.conditions(doc).length ? "a DITAVAL filter for each group of readers, " : "") + "and a README that says how to publish it with DITA Open Toolkit. Shown here: the map. To put several documents in one project, use the DITA Studio at /studio/dita." };
+      })(),
       dita: { text: dita, file: name + ".dita", mime: "application/xml", about: "A DITA 1.3 " + kind + " topic, for a structured authoring tool." + (kind === "task" ? " The prerequisites, the steps and the result each sit in the element DITA has for them." : kind === "troubleshooting" ? " The cause and each remedy sit in the elements DITA has for them." : "") }
     };
   }
@@ -277,6 +283,7 @@
     }
   }
   function download(o) {
+    if (o.files) { Kit.save(Kit.zip(o.files), o.file); say("Downloaded " + o.file + "."); return; }
     var url = URL.createObjectURL(new Blob([o.text], { type: o.mime + ";charset=utf-8" })), a = document.createElement("a");
     a.href = url;
     a.download = o.file;
@@ -499,7 +506,7 @@
   if (incoming) store.del(IN);
   ta.value = incoming || (saved != null && saved.trim() ? saved : first.source);
   if (incoming && saved && saved.trim() && saved !== incoming) past.push(saved);
-  if (["md", "html", "dita"].indexOf(state.out) < 0) state.out = "md";
+  if (["md", "html", "dita", "ditapkg"].indexOf(state.out) < 0) state.out = "md";
   menu();
   paintReview();
   setTab("preview");

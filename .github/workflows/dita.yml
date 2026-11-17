@@ -1,0 +1,44 @@
+name: Publish the DITA sample
+
+# Makes the workbench's templates into one DITA 1.3 project (scripts/dita-sample.mjs), validates every file against the
+# OASIS DTDs that DITA Open Toolkit ships, publishes HTML5 and PDF with DITA Open Toolkit, and commits the result to
+# content/dita-sample, which the site serves at /studio/dita/sample. Runs on demand, and when a template or the
+# document model changes.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["content/workbench/**", "src/doc.js", "scripts/dita-sample.mjs"]
+
+permissions:
+  contents: write
+
+env:
+  DITA_OT: "4.3.4"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install DITA Open Toolkit and xmllint
+        run: |
+          sudo apt-get install -y libxml2-utils
+          curl -sSL -o dita-ot.zip "https://github.com/dita-ot/dita-ot/releases/download/${DITA_OT}/dita-ot-${DITA_OT}.zip"
+          unzip -q dita-ot.zip -d "$RUNNER_TEMP"
+      - name: Validate and publish
+        run: DITA_HOME="$RUNNER_TEMP/dita-ot-${DITA_OT}" node scripts/dita-sample.mjs --publish
+      - name: Commit what was published
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/dita-sample
+          git diff --cached --quiet || git commit -m "Publish the DITA sample with DITA-OT ${DITA_OT}"
+          git push

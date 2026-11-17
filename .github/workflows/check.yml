@@ -26,6 +26,16 @@ jobs:
         run: node scripts/selftest.mjs
       - name: Follow every link
         run: node scripts/check-links.mjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Validate the DITA sample and publish it with DITA Open Toolkit
+        run: |
+          sudo apt-get install -y libxml2-utils
+          curl -sSL -o dita-ot.zip https://github.com/dita-ot/dita-ot/releases/download/4.3.4/dita-ot-4.3.4.zip
+          unzip -q dita-ot.zip -d "$RUNNER_TEMP"
+          DITA_HOME="$RUNNER_TEMP/dita-ot-4.3.4" node scripts/dita-sample.mjs --publish
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

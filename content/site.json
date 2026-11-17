@@ -194,7 +194,7 @@
    {"id": "reference", "name": "Reference", "about": "Tables of roles and limits, for looking things up."},
    {"id": "release-notes", "name": "Release notes", "about": "New, changed, fixed, and known issues, with the version set in one place."},
    {"id": "faq", "name": "FAQ", "about": "Questions as headings, each with a short answer."},
-   {"id": "explainer", "name": "Explainer", "about": "How something works, before any steps."}
+   {"id": "explainer", "name": "Explainer", "about": "How something works, before any steps."}, {"id": "sop", "name": "SOP", "about": "A standard operating procedure with its owner, version and records."}, {"id": "engineering-procedure", "name": "Engineering procedure", "about": "A calibration with a caution, a tolerance, and what to do when a reading is out of it."}, {"id": "maintenance-procedure", "name": "Maintenance procedure", "about": "A preventive inspection with tools, a warning, and acceptance criteria."}, {"id": "technical-report", "name": "Technical report", "about": "A test summary: what was tested, the results, and the conclusion."}, {"id": "developer-guide", "name": "Developer guide", "about": "An API request in numbered steps, with code and limits."}, {"id": "incident-runbook", "name": "Incident runbook", "about": "What the engineer on call does when an alert fires, and when to escalate."}
   ],
   "types": {"how-to": ["How-to", "#0A8F7A"], "troubleshooting": ["Troubleshooting", "#CF3F5A"], "reference": ["Reference", "#1F78D1"], "release-notes": ["Release notes", "#C97800"], "faq": ["FAQ", "#B03A9C"], "concept": ["Explainer", "#6A58E6"]}
  },

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="reset-mfa-for-a-locked-out-user" xml:lang="en">
+<title>Reset MFA for a locked-out user</title>
+<shortdesc>For the IT service desk. Takes about five minutes.</shortdesc>
+<taskbody>
+<prereq>
+<ul><li>Confirm that the request is genuine. Call the user on the number in the HR system, not the number in the ticket.</li><li>Contractor accounts follow a different process. Send those requests to the IAM team.</li></ul>
+</prereq>
+<steps>
+<step><cmd>In <ph keyref="product">Acme Console</ph>, open the user's profile.</cmd></step>
+<step><cmd>Select <uicontrol>Reset MFA</uicontrol>.</cmd><info><note type="caution">Don't select <uicontrol>Reset password</uicontrol>. It leaves the old device enrolled.</note></info></step>
+<step><cmd>Ask the user to open the enrollment email and register the new device.</cmd></step>
+</steps>
+<result>
+<p>The system log shows a new enrollment for the user.</p>
+</result>
+<postreq>
+<p audience="admin"><b>If the user has no second device</b></p>
+<ol audience="admin"><li>In <ph keyref="product">Acme Console</ph>, go to <b>Security</b> &gt; <b>Recovery codes</b>.</li><li>Select <b>Generate</b>, and then read the code to the user by phone.</li></ol>
+</postreq>
+</taskbody>
+</task>

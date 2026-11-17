@@ -329,6 +329,8 @@
   }
   function ditaBlocks(list, step) {
     return (list || []).map(function (b) {
+      // A block for one group of readers is profiled with audience, and a DITAVAL file chooses the readers when it is published.
+      if (b.t === "only") return ditaBlocks(b.blocks, step).replace(/^<(\w+)/gm, '<$1 audience="' + xml(b.tags.join(" ")) + '"');
       if (b.t === "p") return "<p>" + ditaRuns(b.runs, step) + "</p>";
       if (b.t === "h") return "<p><b>" + ditaRuns(b.runs) + "</b></p>";
       if (b.t === "code") return "<codeblock" + (b.lang ? ' outputclass="language-' + xml(b.lang) + '"' : "") + ">" + xml(b.text) + "</codeblock>";
@@ -410,5 +412,85 @@
     return head + '<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">\n<concept id="' + id + '" xml:lang="en">\n' + title + "\n" + short + (short ? "\n" : "") + "<conbody>\n" + (lead.length ? ditaBlocks(lead) + "\n" : "") + p.parts.map(section).join("\n") + "\n</conbody>\n</concept>\n";
   }
 
-  return { parse: parse, inline: inline, text: text, walk: walk, conditions: conditions, resolve: resolve, toHtml: toHtml, toMarkdown: toMarkdown, toDita: toDita, slug: slug, NOTES: NOTES, GENERAL: GENERAL };
+  /**
+   * A DITA project that a publishing tool such as DITA Open Toolkit can build: a map, the topic, a DITAVAL file for each reader,
+   * and a README. Variables become keys: the map defines each one once, and the topic refers to it with keyref.
+   * Blocks for one group of readers are kept, profiled with audience, instead of being resolved away.
+   * Front-matter fields id, author, owner, reviewer, version, status and date become the map's metadata.
+   * @returns {{files: {name: string, data: string}[], map: string, topic: string, kind: string}}
+   */
+  function toDitaPackage(doc) {
+    var vars = doc.meta.vars || {}, names = Object.keys(vars).filter(function (n) { return vars[n] !== ""; }), marks = {};
+    names.forEach(function (n) { marks[n] = "\u0001" + n + "\u0002"; });
+    var view = resolve(doc, undefined, marks, true);
+    var topic = toDita(view).replace(/\u0001([\w.-]+)\u0002/g, function (m, n) { return '<ph keyref="' + xml(n) + '">' + xml(vars[n]) + "</ph>"; });
+    var kind = (/<(task|concept|reference|troubleshooting) id=/.exec(topic) || [0, "concept"])[1];
+    var title = (view.title || "Untitled").replace(/\u0001([\w.-]+)\u0002/g, function (m, n) { return vars[n]; });
+    var base = slug(doc.meta.id || title), m = doc.meta, meta = [];
+    if (m.author) meta.push("<author>" + xml(m.author) + "</author>");
+    if (m.date && /^\d{4}-\d{2}-\d{2}$/.test(m.date)) meta.push('<critdates><created date="' + m.date + '"/></critdates>');
+    ["id", "version", "status", "owner", "reviewer"].forEach(function (k) { if (m[k]) meta.push('<othermeta name="' + k + '" content="' + xml(m[k]).replace(/"/g, "&quot;") + '"/>'); });
+    var map = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">\n<map id="' + base + '-map" xml:lang="en">\n<title>' + xml(title) + "</title>\n" +
+      (meta.length ? "<topicmeta>\n" + meta.join("\n") + "\n</topicmeta>\n" : "") +
+      names.map(function (n) { return '<keydef keys="' + xml(n) + '"><topicmeta><keywords><keyword>' + xml(vars[n]) + "</keyword></keywords></topicmeta></keydef>"; }).join("\n") + (names.length ? "\n" : "") +
+      '<topicref href="topics/' + base + '.dita" type="' + kind + '"/>\n</map>\n';
+    var conds = conditions(doc), files = [{ name: base + ".ditamap", data: map }, { name: "topics/" + base + ".dita", data: topic }];
+    var val = function (rules) { return '<?xml version="1.0" encoding="UTF-8"?>\n<val>\n' + rules.join("\n") + (rules.length ? "\n" : "") + "</val>\n"; };
+    if (conds.length) {
+      files.push({ name: "filters/general.ditaval", data: val(conds.map(function (c) { return '<prop action="exclude" att="audience" val="' + xml(c) + '"/>'; })) });
+      conds.forEach(function (c) { files.push({ name: "filters/" + slug(c) + ".ditaval", data: val(conds.filter(function (o) { return o !== c; }).map(function (o) { return '<prop action="exclude" att="audience" val="' + xml(o) + '"/>'; })) }); });
+    }
+    files.push({ name: "README.txt", data: "A DITA 1.3 project made by the workbench at karandeshmukh.dev.\n\n" + base + ".ditamap  the map: the title, the metadata, a key for each variable, and the topic\ntopics/" + base + ".dita  the " + kind + " topic\n" +
+      (conds.length ? "filters/  one DITAVAL file for each group of readers, and general.ditaval for readers in no group\n" : "") +
+      "\nTo publish it with DITA Open Toolkit 4:\n\n  dita --input=" + base + ".ditamap --format=html5 --output=out/html5" + (conds.length ? " --filter=filters/general.ditaval" : "") + "\n  dita --input=" + base + ".ditamap --format=pdf --output=out/pdf\n" });
+    return { files: files, map: map, topic: topic, kind: kind };
+  }
+
+  /**
+   * A DITA project of several documents: one map, a topic for each document, one key for each variable, a DITAVAL file for
+   * each group of readers, and a relationship table that links the tasks, troubleshooting topics and references to each other.
+   * @param {object[]} docs parsed documents
+   * @param {{title?: string, id?: string, author?: string, version?: string, status?: string}} [o]
+   * @returns {{files: {name: string, data: string}[], map: string, topics: {href: string, kind: string, title: string}[], problems: string[]}}
+   */
+  function toDitaProject(docs, o) {
+    o = o || {};
+    var keys = {}, topics = [], audiences = [], problems = [], used = {};
+    docs.forEach(function (doc) {
+      var pk = toDitaPackage(doc), t = pk.files[1], href = t.name, n = 2;
+      while (used[href]) href = t.name.replace(/\.dita$/, "-" + n++ + ".dita");
+      used[href] = 1;
+      var vars = doc.meta.vars || {};
+      Object.keys(vars).forEach(function (k) {
+        if (vars[k] === "") return;
+        if (keys[k] != null && keys[k] !== vars[k]) problems.push('The variable "' + k + '" has two values, "' + keys[k] + '" and "' + vars[k] + '". The map keeps the first one.');
+        else keys[k] = vars[k];
+      });
+      conditions(doc).forEach(function (c) { if (audiences.indexOf(c) < 0) audiences.push(c); });
+      topics.push({ href: href, kind: pk.kind, title: (doc.title || "Untitled").replace(/\{\{([\w.-]+)\}\}/g, function (m, k) { return vars[k] || m; }), data: pk.files[1].data });
+    });
+    var id = slug(o.id || o.title || "documentation"), meta = [];
+    if (o.author) meta.push("<author>" + xml(o.author) + "</author>");
+    ["version", "status"].forEach(function (k) { if (o[k]) meta.push('<othermeta name="' + k + '" content="' + xml(o[k]).replace(/"/g, "&quot;") + '"/>'); });
+    var of = function (kind) { return topics.filter(function (t) { return t.kind === kind; }); };
+    var cols = ["task", "troubleshooting", "reference"].filter(function (k) { return of(k).length; });
+    var rel = cols.length > 1 ? "<reltable>\n<relheader>" + cols.map(function (k) { return '<relcolspec type="' + k + '"/>'; }).join("") + "</relheader>\n<relrow>" +
+      cols.map(function (k) { return "<relcell>" + of(k).map(function (t) { return '<topicref href="' + t.href + '" type="' + k + '"/>'; }).join("") + "</relcell>"; }).join("") + "</relrow>\n</reltable>\n" : "";
+    var map = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">\n<map id="' + id + '" xml:lang="en">\n<title>' + xml(o.title || "Documentation") + "</title>\n" +
+      (meta.length ? "<topicmeta>\n" + meta.join("\n") + "\n</topicmeta>\n" : "") +
+      Object.keys(keys).map(function (k) { return '<keydef keys="' + xml(k) + '"><topicmeta><keywords><keyword>' + xml(keys[k]) + "</keyword></keywords></topicmeta></keydef>"; }).join("\n") + (Object.keys(keys).length ? "\n" : "") +
+      topics.map(function (t) { return '<topicref href="' + t.href + '" type="' + t.kind + '"/>'; }).join("\n") + "\n" + rel + "</map>\n";
+    var files = [{ name: id + ".ditamap", data: map }].concat(topics.map(function (t) { return { name: t.href, data: t.data }; }));
+    var val = function (ex) { return '<?xml version="1.0" encoding="UTF-8"?>\n<val>\n' + ex.map(function (a) { return '<prop action="exclude" att="audience" val="' + xml(a) + '"/>'; }).join("\n") + (ex.length ? "\n" : "") + "</val>\n"; };
+    if (audiences.length) {
+      files.push({ name: "filters/general.ditaval", data: val(audiences) });
+      audiences.forEach(function (a) { files.push({ name: "filters/" + slug(a) + ".ditaval", data: val(audiences.filter(function (x) { return x !== a; })) }); });
+    }
+    files.push({ name: "README.txt", data: "A DITA 1.3 project made at karandeshmukh.dev/studio/dita.\n\n" + id + ".ditamap  the map: " + topics.length + " topic(s), " + Object.keys(keys).length + " key(s)" + (rel ? ", and a relationship table" : "") + "\ntopics/  one topic for each document\n" +
+      (audiences.length ? "filters/  one DITAVAL file for each group of readers, and general.ditaval for readers in no group\n" : "") +
+      "\nTo publish it with DITA Open Toolkit 4:\n\n  dita --input=" + id + ".ditamap --format=html5 --output=out/html5" + (audiences.length ? " --filter=filters/general.ditaval" : "") + "\n  dita --input=" + id + ".ditamap --format=pdf --output=out/pdf\n\nTo bring it into MadCap Flare: Project > Import > DITA Document Set, and choose the map.\n" });
+    return { files: files, map: map, topics: topics.map(function (t) { return { href: t.href, kind: t.kind, title: t.title }; }), problems: problems };
+  }
+
+  return { parse: parse, inline: inline, text: text, walk: walk, conditions: conditions, resolve: resolve, toHtml: toHtml, toMarkdown: toMarkdown, toDita: toDita, toDitaPackage: toDitaPackage, toDitaProject: toDitaProject, slug: slug, NOTES: NOTES, GENERAL: GENERAL };
 });
