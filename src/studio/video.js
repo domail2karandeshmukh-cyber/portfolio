@@ -231,7 +231,13 @@
     var hit = clipAt(t), ev = timelineEvents(), cam = camera(t, ev);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
     ctx.setTransform(cam.z, 0, 0, cam.z, -cam.x * cam.z, -cam.y * cam.z);
-    if (hit) drawSource(source(hit.clip), MEDIA[hit.clip.media]); else { ctx.fillStyle = "#0B0B0C"; ctx.fillRect(0, 0, W, H); }
+    if (hit) drawSource(source(hit.clip), MEDIA[hit.clip.media]);
+    else {
+      // Nothing on the timeline yet: say so in the frame instead of showing a black picture.
+      ctx.fillStyle = "#1E1F23"; ctx.fillRect(0, 0, W, H); ctx.fillStyle = "#FFDF2B"; ctx.fillRect(96, H / 2 - 64, 72, 10);
+      ctx.fillStyle = "#fff"; ctx.font = font(40, 700); ctx.textBaseline = "top"; ctx.fillText("No footage yet", 96, H / 2 - 36);
+      ctx.fillStyle = "#B7B9BF"; ctx.font = font(26, 500); ctx.fillText("Open a sample, add a recording, or record the screen or the demo app.", 96, H / 2 + 22);
+    }
     var live = P.overlays.filter(function (o) { return t >= o.start && t < o.end; }).sort(function (a, b) { return (a.layer || 0) - (b.layer || 0); });
     live.forEach(function (o) {
       if (o.type === "blur") {
@@ -636,11 +642,13 @@
     tool: "video", title: "Open a video project",
     lead: "Two training videos made in this studio from recordings of fictional applications: the pointer with its halo and click ripples, zoom that follows each click, highlight boxes and step numbers on the controls, captions, and narration. Open one to play it, change it, and render it again. Or start from your own recording.",
     open: function (s) {
-      if (P.clips.length && !confirm("Replace the project on screen with " + s.title + "? Save it first to keep it.")) return;
-      say("Opening " + s.title + "…");
-      return Kit.fetchBytes(s.project).then(openProject).then(function () { sw.close(); say("Opened " + s.title + ": " + Math.round(duration()) + " s of footage with its recorded pointer" + (P.narration ? ", narration" : "") + (P.captions.length ? ", " + P.captions.length + " captions" : "") + " and " + P.overlays.length + " overlays. Play it, then export it."); });
+      return (P.clips.length ? Kit.confirm("Replace the project on screen?", s.title + " takes its place. Save the current project first if you want to keep it.", { ok: "Replace" }) : Promise.resolve(true)).then(function (yes) {
+        if (!yes) return;
+        say("Opening " + s.title + "…");
+        return Kit.fetchBytes(s.project).then(openProject).then(function () { sw.close(); say("Opened " + s.title + ": " + Math.round(duration()) + " s of footage with its recorded pointer" + (P.narration ? ", narration" : "") + (P.captions.length ? ", " + P.captions.length + " captions" : "") + " and " + P.overlays.length + " overlays. Play it, then export it."); });
+      });
     },
-    fail: fail, blank: function () { if (P.clips.length && !confirm("Start an empty project? Save the one on screen first to keep it.")) return; stopAll(); MEDIA = {}; P = blank(); sel = null; changed(); props(); show(0); sw.close(); say("Started an empty project. Add a recording, record the screen, or record the demo app."); }, blankLabel: "Start empty",
+    fail: fail, blank: function () { (P.clips.length ? Kit.confirm("Start an empty project?", "The one on screen is replaced. Save it first if you want to keep it.", { ok: "Start empty" }) : Promise.resolve(true)).then(function (yes) { if (!yes) return; stopAll(); MEDIA = {}; P = blank(); sel = null; changed(); props(); show(0); sw.close(); say("Started an empty project. Add a recording, record the screen, or record the demo app."); }); }, blankLabel: "Start empty",
     files: [{ label: "Open project", input: "vd-open" }, { label: "Add files", input: "vd-files" }],
     links: function (s) { return (s.video ? '<a href="' + Kit.esc(s.video) + '">MP4</a>' : "") + (s.captions ? '<a href="' + Kit.esc(s.captions) + '">WebVTT</a>' : ""); },
   });

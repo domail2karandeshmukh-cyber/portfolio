@@ -413,9 +413,11 @@
     });
 
     /* controls */
-    function setTool(t) {
+    var HINTS = { select: "Select a mark to move or resize it; the arrow keys nudge it. Delete removes it.", arrow: "Drag from the tail to the head of the arrow.", line: "Drag from one end to the other.", rect: "Drag a box around the control.", ellipse: "Drag an oval around the detail.", callout: "Select where the number goes. Each callout takes the next number.", text: "Select where the label starts, then type. Enter adds a line; Escape finishes.", highlight: "Drag over the words or the area to highlight.", spotlight: "Drag the area to keep bright; the rest dims.", blur: "Drag the area to blur. It stays editable until you export.", pixelate: "Drag the area to pixelate. It stays editable until you export.", redact: "Drag the area to black out. It is burned into the picture at once and can't be undone later.", crop: "Drag the part to keep, then select Crop." };
+    function setTool(t, quiet) {
       if (crop && t !== "crop") crop = null;
       tool = t;
+      if (!quiet && opts.status && HINTS[t]) opts.status(HINTS[t]);
       $$(".ann-tool").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.tool === t); });
       $(".ann-cropbar").hidden = t !== "crop"; $(".ann-redact-note").hidden = t !== "redact";
       cv.style.cursor = t === "select" ? "default" : "crosshair";
@@ -518,7 +520,7 @@
       undo: undo, redo: redo, setTool: setTool, fit: fit,
       history: function () { return past.map(function (p) { return p.label; }); },
     };
-    setTool(opts.tool || "arrow"); setColor(color); logList(); panel();
+    setTool(opts.tool || "arrow", true); setColor(color); logList(); panel();
     // Text marks use the site's own typeface; draw again once it has loaded.
     if (document.fonts && document.fonts.load) document.fonts.load("600 20px Hanken").then(function () { paint(); }, function () {});
     addEventListener("resize", function () { if (st.base) fit(); });

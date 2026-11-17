@@ -27,23 +27,27 @@
     }).join("") || '<li class="kb-none">No categories yet.</li>';
   }
   $("#kb-addcat").addEventListener("click", function () {
-    var n = prompt("Name of the new category:", "New category"); if (!n) return;
-    KB.categories.push({ id: uid("c"), name: n.slice(0, 80), description: "", sections: [] }); save("Added the category " + n + "."); tree();
+    Kit.ask("Add a category", "Name of the category", "", { max: 80, ok: "Add" }).then(function (n) {
+      if (!n) return;
+      KB.categories.push({ id: uid("c"), name: n.slice(0, 80), description: "", sections: [] }); save("Added the category " + n + ". Add a section to it, then articles to the section."); tree();
+    });
   });
   $("#kb-tree").addEventListener("click", function (e) {
     var open = e.target.closest("[data-open]"); if (open) { cur.article = open.dataset.open; cur.locale = "en-us"; editor(); tree(); $("#kb-title").focus(); return; }
     var b = e.target.closest("[data-act]"); if (!b) return;
     var id = b.dataset.id, act = b.dataset.act, cat = KB.categories.filter(function (c) { return c.id === id; })[0], sec = null, parent = null;
     KB.categories.forEach(function (c) { c.sections.forEach(function (s) { if (s.id === id) { sec = s; parent = c; } }); });
-    if (act === "add-section") { var n = prompt("Name of the new section:", "New section"); if (n) { cat.sections.push({ id: uid("s"), name: n.slice(0, 80), description: "", articles: [] }); save("Added the section " + n + "."); } }
+    if (act === "add-section") return Kit.ask("Add a section to " + cat.name, "Name of the section", "", { max: 80, ok: "Add" }).then(function (n) { if (n) { cat.sections.push({ id: uid("s"), name: n.slice(0, 80), description: "", articles: [] }); save("Added the section " + n + "."); tree(); } });
     if (act === "add-article") { var a = article("New article", "Write the answer here.\n"); sec.articles.push(a); cur.article = a.id; cur.locale = "en-us"; save("Added an article to " + sec.name + "."); editor(); }
-    if (act === "rename") { var o = cat || sec, m = prompt("New name:", o.name); if (m) { o.name = m.slice(0, 80); save("Renamed it to " + m + "."); } }
+    if (act === "rename") { var o = cat || sec; return Kit.ask("Rename " + o.name, "New name", o.name, { max: 80, ok: "Rename" }).then(function (m2) { if (m2) { o.name = m2.slice(0, 80); save("Renamed it to " + m2 + "."); tree(); } }); }
     if (act === "delete") {
       var target = cat || sec, count = cat ? cat.sections.reduce(function (n2, s) { return n2 + s.articles.length; }, 0) : sec.articles.length;
-      if (!confirm("Delete " + target.name + (count ? " and its " + count + " article(s)" : "") + "? You can't undo this, except from a saved project.")) return;
-      if (cat) KB.categories = KB.categories.filter(function (c) { return c !== cat; }); else parent.sections = parent.sections.filter(function (s) { return s !== sec; });
-      if (cur.article && !where(cur.article)) cur.article = null;
-      save("Deleted " + target.name + "."); editor();
+      return Kit.confirm("Delete " + target.name + "?", (count ? "Its " + count + " article(s) go with it. " : "") + "You can't undo this, except from an exported project.", { ok: "Delete", danger: true }).then(function (yes) {
+        if (!yes) return;
+        if (cat) KB.categories = KB.categories.filter(function (c) { return c !== cat; }); else parent.sections = parent.sections.filter(function (s) { return s !== sec; });
+        if (cur.article && !where(cur.article)) cur.article = null;
+        save("Deleted " + target.name + "."); editor(); tree();
+      });
     }
     tree();
   });
@@ -111,8 +115,11 @@
     save("Restored the version from " + new Date(h.at).toLocaleString() + "."); editor(); tree();
   });
   $("#kb-del").addEventListener("click", function () {
-    var w = where(cur.article); if (!confirm("Delete the article " + w.a.title + "?")) return;
-    w.s.articles = w.s.articles.filter(function (a) { return a !== w.a; }); cur.article = null; save("Deleted the article."); tree(); editor();
+    var w = where(cur.article);
+    Kit.confirm("Delete the article?", w.a.title + " and its history are removed from this knowledge base.", { ok: "Delete", danger: true }).then(function (yes) {
+      if (!yes) return;
+      w.s.articles = w.s.articles.filter(function (a) { return a !== w.a; }); cur.article = null; save("Deleted the article."); tree(); editor();
+    });
   });
   var checkT = 0;
   function check() {
@@ -211,12 +218,14 @@
     tool: "kb", title: "Open a knowledge base",
     lead: "Two fictional help centers with real article structure: one for customers of an accounting application, with an internal agent handbook kept apart, and one internal IT knowledge base. Open one and edit it, or start your own.",
     open: function (s) {
-      if (KB.categories.length && !confirm("Replace the knowledge base on screen with " + s.title + "? Export it first to keep it.")) return;
-      say("Opening " + s.title + "…");
-      return Kit.fetchJson(s.project).then(function (j) { use(clean(j)); var first = all()[0]; if (first) { cur.article = first.a.id; editor(); tree(); } sw.close(); say("Opened " + s.title + ": " + s.articles + " articles in " + s.categories + " categories" + (s.internal ? ", " + s.internal + " of them internal" : "") + "."); });
+      return (KB.categories.length ? Kit.confirm("Replace the knowledge base on screen?", s.title + " takes its place. Export the current one first if you want to keep it.", { ok: "Replace" }) : Promise.resolve(true)).then(function (yes) {
+        if (!yes) return;
+        say("Opening " + s.title + "…");
+        return Kit.fetchJson(s.project).then(function (j) { use(clean(j)); var first = all()[0]; if (first) { cur.article = first.a.id; editor(); tree(); } sw.close(); say("Opened " + s.title + ": " + s.articles + " articles in " + s.categories + " categories" + (s.internal ? ", " + s.internal + " of them internal" : "") + "."); });
+      });
     },
     fail: function (e) { say(e.message, true); },
-    blank: function () { if (KB.categories.length && !confirm("Start an empty knowledge base? Export the one on screen first to keep it.")) return; use(blankKB()); sw.close(); say("Started an empty knowledge base. Add a category first."); $("#kb-addcat").focus(); }, blankLabel: "Start empty",
+    blank: function () { (KB.categories.length ? Kit.confirm("Start an empty knowledge base?", "The one on screen is replaced. Export it first if you want to keep it.", { ok: "Start empty" }) : Promise.resolve(true)).then(function (yes) { if (!yes) return; use(blankKB()); sw.close(); say("Started an empty knowledge base. Add a category first."); $("#kb-addcat").focus(); }); }, blankLabel: "Start empty",
     files: [{ label: "Open a file", input: "kb-open" }],
   });
   var sw = Kit.startSwitch(start, $("#kb-slot"), $("#kb-samples"));

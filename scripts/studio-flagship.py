@@ -33,18 +33,27 @@ with sync_playwright() as p:
     def save(pg, selector, to, timeout=60000):
         with pg.expect_download(timeout=timeout) as d: pg.click(selector)
         d.value.save_as(str(to)); keep(to); return to
+    def sample(pg, sample_id):
+        """Opens one of the tool's sample cards by the sample's id."""
+        pg.wait_for_selector(".st-card", timeout=15000)
+        i = pg.evaluate("(id) => { const all = JSON.parse(JSON.stringify(document.querySelector('#sh-start, #gd-start, #kb-start, #dc-start, #dt-start, #vd-start')._entries || [])); return all.findIndex((e) => e.id === id); }", sample_id)
+        assert i >= 0, f"no sample {sample_id}"
+        pg.evaluate("(i) => document.querySelector('.st-card[data-start=\"' + i + '\"]').click()", i); pg.wait_for_timeout(1500)
+    def answer(pg, text):
+        """Fills the studio's own dialog (Kit.ask) and confirms it."""
+        pg.wait_for_selector(".st-ask [name=v]", timeout=5000); pg.fill(".st-ask [name=v]", text); pg.click(".st-ask [value=ok]"); pg.wait_for_timeout(200)
 
     # 1. Document control: the procedure goes from draft to published, with its three reviews.
     pg = page("/studio/control")
-    pg.click("#dc-sample"); pg.wait_for_timeout(600)
+    sample(pg, "maintenance-procedure")
     pg.fill("#dc-me", "Karan Deshmukh"); pg.dispatch_event("#dc-me", "change")
     for f, v in [("#dc-author", "Karan Deshmukh"), ("#dc-reviewer", "Maintenance planning lead (fictional)"), ("#dc-version", "1.0")]:
         pg.fill(f, v); pg.dispatch_event(f, "change")
     pg.click('[data-do="submit"]')
     for kind, comment in [("editorial", "Plain language, one action a step."), ("technical", "Ranges match the fictional pump data sheet."), ("safety", "Readings are taken from gauges and the console, outside the guard.")]:
         pg.click('[data-do="review"]'); pg.select_option("#dc-r-kind", kind); pg.fill("#dc-r-comment", comment); pg.click("#dc-r-save"); pg.wait_for_timeout(150)
-    pg.click('[data-do="approve"]'); answers.append("First release of the monthly inspection procedure")
-    pg.click('[data-do="publish"]'); pg.wait_for_timeout(300)
+    pg.click('[data-do="approve"]'); pg.wait_for_timeout(200)
+    pg.click('[data-do="publish"]'); answer(pg, "First release of the monthly inspection procedure"); pg.wait_for_timeout(300)
     assert pg.evaluate("studioControl.get().meta.status") == "Published", "the procedure didn't reach Published"
     audit = save(pg, "#dc-x-audit", OUT / "control/audit.zip")
     with zipfile.ZipFile(audit) as z:
@@ -67,23 +76,16 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
     pdf = next((OUT / "dita/pdf").glob("*.pdf")); pdf.rename(OUT / "procedure/MP-PS104-01.pdf"); shutil.rmtree(OUT / "dita/pdf"); keep(OUT / "procedure/MP-PS104-01.pdf")
     for f in (OUT / "dita/html5").rglob("*.html"): keep(f)
 
-    # 3. A screenshot: the access key redacted, the button to select numbered and boxed.
+    # 3. A screenshot: the access key redacted, the button to select numbered and boxed (the sample made by scripts/studio-samples.py).
     pg = page("/studio/screenshots")
-    pg.click("#sh-sample"); pg.wait_for_timeout(900)
-    pg.evaluate("""() => { const s = studioShots.state(), st = { name: "work-order-annotated", base: s.base, items: [] };
-      Annotate.redact(st, { x: 446, y: 553, w: 194, h: 28 });
-      [{ type: "rect", x: 244, y: 486, w: 158, h: 46 }, { type: "callout", x: 228, y: 509, n: 1, size: 36 }, { type: "arrow", x: 560, y: 430, x2: 410, y2: 500 },
-       { type: "text", x: 575, y: 410, text: "Start here", size: 26, box: true }]
-        .forEach((m) => st.items.push(Annotate.clean(Object.assign({ id: Annotate.id(), color: "#E5251B", stroke: 6 }, m), 1280, 800)));
-      return studioShots.loadProject(Annotate.toProject(st)); }""")
-    pg.wait_for_timeout(600)
+    sample(pg, "console-work-order")
     save(pg, "#sh-png", OUT / "screenshots/work-order-annotated.png"); save(pg, "#sh-svg", OUT / "screenshots/work-order-annotated.svg")
     save(pg, "#sh-save", OUT / "screenshots/work-order-annotated.screenshot.json")
     pg.close()
 
     # 4. The numbered, illustrated guide.
     pg = page("/studio/guides")
-    pg.click("#gd-sample"); pg.wait_for_timeout(1500)
+    sample(pg, "engineering-inspection")
     pg.fill("#gd-docid", "MP-PS104-01-G"); pg.fill("#gd-version", "1.0"); pg.wait_for_timeout(300)
     for sel, name in [("#gd-md", "guide-markdown.zip"), ("#gd-html", "guide.html"), ("#gd-pdf", "guide.pdf"), ("#gd-shots", "guide-screenshots.zip"), ("#gd-save", "guide-project.zip")]:
         save(pg, sel, OUT / "guide" / name)
@@ -91,10 +93,13 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
 
     # 5. The training video: footage with its recorded pointer, intro, highlight, warning, captions; rendered in the browser.
     pg = page("/studio/video")
-    pg.click("#vd-sample"); pg.wait_for_timeout(2500)
-    save(pg, "#vd-export", OUT / "video/inspection-walkthrough.mp4", timeout=180000)
+    pg.evaluate("() => studioVideo.open('/studio/samples/video/inspection-walkthrough/inspection-walkthrough.video.zip')"); pg.wait_for_timeout(2500)
+    raw = save(pg, "#vd-export", OUT / "video/inspection-walkthrough.studio.mp4", timeout=300000)
     save(pg, "#vd-srt", OUT / "video/inspection-walkthrough.srt"); save(pg, "#vd-vtt", OUT / "video/inspection-walkthrough.vtt")
     pg.close()
+    # The served copy has its sound as AAC (Chrome on Linux records Opus, which Safari doesn't play in an MP4); the picture is untouched.
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(OUT / "video/inspection-walkthrough.mp4")], check=True)
+    raw.unlink(); made.remove("video/inspection-walkthrough.studio.mp4"); keep(OUT / "video/inspection-walkthrough.mp4")
     b.close()
 
 json.dump({"made": made}, open(OUT / "files.json", "w"), indent=1)

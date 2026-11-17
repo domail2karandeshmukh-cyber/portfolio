@@ -8,6 +8,8 @@ NAME = "library"
 PAGE = "/docs/ai-chainguard/architecture/"
 FRAME = (1120, 630, 2)      # filmed at twice the window's size, where every edge falls on a whole pixel
 OUTPUT = (1920, 1080)
+NARRATION = 'library'          # the script in lib/narration.cjs; a scene's segment has the scene's name
+SEGMENTS = {}
 TOUCH = False
 
 LAST_CARD = (

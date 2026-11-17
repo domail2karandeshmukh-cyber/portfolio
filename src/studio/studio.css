@@ -322,3 +322,19 @@
 .sc-body table{font-size:.95rem}
 .sc-body.article{border:0;padding:0;margin:0;background:none;box-shadow:none}
 @media (max-width:700px){.st-thumbs{flex-wrap:wrap}.st-thumbs li{flex:1 1 45%}.sc-doc{padding:16px}}
+
+/* ---------- The studio's own small dialogs ---------- */
+.st-ask{border:0;border-radius:12px;padding:0;width:min(440px,92vw);box-shadow:0 30px 80px rgba(0,0,0,.3)}
+.st-ask::backdrop{background:rgba(20,20,18,.45)}
+.st-ask form{padding:20px 22px 18px}
+.st-ask h2{font:500 1.35rem/1.2 var(--serif);margin:0 0 .4em}
+.st-ask p{margin:0 0 .6em;color:var(--ink2);line-height:1.5}
+.st-ask label{display:block;font-weight:600;font-size:.92rem;margin:10px 0 0}
+.st-ask input,.st-ask textarea{display:block;width:100%;margin-top:4px;font:inherit;padding:8px 10px;border:1px solid var(--rule2);border-radius:8px;background:#fff}
+.st-ask-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.btn.danger{background:#C62828;color:#fff;border-color:#C62828}
+
+.vd-addrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 8px}
+.vd-addrow>span{flex:0 0 68px;font-size:.78rem;font-weight:600;color:var(--mute)}
+.vd-addsec h2{margin-bottom:8px}
+.vd-empty{color:#9a9a93}

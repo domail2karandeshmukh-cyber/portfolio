@@ -242,10 +242,10 @@
     Kit.readBytes(f).then(function (b) { return use(unpack(b), "Opened " + f.name + "."); }).catch(fail);
   });
   $("#gd-new").addEventListener("click", function () {
-    if (!confirmLeave()) return;
-    use(blank(), "Started a new guide. Your previous one is still in any project file you saved."); $("#gd-title").focus();
+    confirmLeave().then(function (yes) { if (yes) { use(blank(), "Started a new guide. Your previous one is still in any project file you saved."); $("#gd-title").focus(); } });
   });
-  function confirmLeave() { return guide.steps.length < 2 && !guide.title ? true : window.confirm("Start over? The guide on screen is replaced. Save the project first if you want to keep it."); }
+  /** Resolves true when the guide on screen may be replaced: it is empty, or the writer agreed. */
+  function confirmLeave() { return empty() ? Promise.resolve(true) : Kit.confirm("Replace the guide on screen?", "Save the project first if you want to keep it.", { ok: "Replace" }); }
 
   /* The samples: five guides from the fictional scenarios, each a project this tool saved, with the files it exported. */
   function empty() { return guide.steps.length < 2 && !guide.title && !guide.steps[0].title && !guide.steps[0].shot; }
@@ -253,9 +253,11 @@
     tool: "guides", title: "Open a guide",
     lead: "Five illustrated procedures from different fields, each one editable: reorder the steps, change the words, replace a picture, mark it up again. The links under each card open the HTML and PDF this tool exported from it.",
     open: function (s) {
-      if (!empty() && !confirmLeave()) return;
-      say("Opening " + s.title + "…");
-      return Kit.fetchBytes(s.project).then(function (bytes) { return use(unpack(bytes), "Opened the sample guide: " + s.title + ", " + s.steps + " steps. Every picture's marks stay editable: select Mark up on a step."); }).then(function () { sw.close(); });
+      return confirmLeave().then(function (yes) {
+        if (!yes) return;
+        say("Opening " + s.title + "…");
+        return Kit.fetchBytes(s.project).then(function (bytes) { return use(unpack(bytes), "Opened the sample guide: " + s.title + ", " + s.steps + " steps. Every picture's marks stay editable: select Mark up on a step."); }).then(function () { sw.close(); });
+      });
     },
     fail: fail, blank: function () { $("#gd-new").click(); sw.close(); }, blankLabel: "New blank guide",
     files: [{ label: "Open project", input: "gd-open" }],

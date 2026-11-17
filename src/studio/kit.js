@@ -230,6 +230,27 @@
     return { inline: inline, open: open, close: close };
   };
 
+  /* ---------- Small dialogs of the studio's own, instead of the browser's prompt and confirm ---------- */
+  function dialog(o) {
+    return new Promise(function (resolve) {
+      var dlg = document.createElement("dialog"); dlg.className = "st-ask"; dlg.setAttribute("aria-labelledby", "st-ask-h");
+      dlg.innerHTML = '<form method="dialog"><h2 id="st-ask-h">' + Kit.esc(o.title) + "</h2>" + (o.text ? "<p>" + Kit.esc(o.text) + "</p>" : "") +
+        (o.field ? '<label>' + Kit.esc(o.field) + (o.multi ? '<textarea name="v" rows="3" maxlength="' + (o.max || 300) + '">' + Kit.esc(o.value || "") + "</textarea>" : '<input name="v" type="text" maxlength="' + (o.max || 120) + '" value="' + Kit.esc(o.value || "") + '" autocomplete="off">') + "</label>" : "") +
+        '<div class="st-ask-acts"><button type="button" class="btn line sm" value="cancel">' + Kit.esc(o.cancel || "Cancel") + '</button><button type="submit" class="btn ' + (o.danger ? "danger" : "ink") + ' sm" value="ok">' + Kit.esc(o.ok || "OK") + "</button></div></form>";
+      document.body.appendChild(dlg);
+      var form = dlg.querySelector("form"), input = dlg.querySelector("[name=v]");
+      form.addEventListener("submit", function (e) { e.preventDefault(); var v = input ? input.value.trim() : true; if (o.field && !v && !o.optional) { input.focus(); return; } dlg.close(); resolve(o.field ? v : true); });
+      dlg.querySelector("[value=cancel]").addEventListener("click", function () { dlg.close(); resolve(o.field ? null : false); });
+      dlg.addEventListener("cancel", function () { resolve(o.field ? null : false); });
+      dlg.addEventListener("close", function () { dlg.remove(); });
+      dlg.showModal(); if (input) { input.focus(); if (input.select) input.select(); }
+    });
+  }
+  /** Asks for one value. Resolves with the text, or null when cancelled. */
+  Kit.ask = function (title, field, value, more) { return dialog(Object.assign({ title: title, field: field, value: value }, more || {})); };
+  /** Asks yes or no. Resolves true or false. */
+  Kit.confirm = function (title, text, more) { return dialog(Object.assign({ title: title, text: text, ok: "Yes" }, more || {})); };
+
   root.Kit = Kit;
   if (typeof module !== "undefined") module.exports = Kit;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -11,6 +11,8 @@ import re
 NAME = "rewrite-desk"
 PAGE = "/"
 FRAME = (432, 540, 2.5)   # 1080 x 1350: the 4:5 frame, which a phone feed shows largest
+NARRATION = 'rewrite-desk'          # the script in lib/narration.cjs; a scene's segment has the scene's name
+SEGMENTS = {}
 TOUCH = True
 
 

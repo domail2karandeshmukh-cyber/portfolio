@@ -90,15 +90,16 @@
     if (a === "submit") { setStatus("In review"); log("Submitted for review", "Checks passed at submission: style, required sections, links."); }
     if (a === "review") { $("#dc-review").hidden = false; $("#dc-r-kind").focus(); return; }
     if (a === "approve") { setStatus("Approved"); log("Approved", needed().map(function (k) { return REVIEWS[k] + ": " + approvedBy(k).by; }).join("; ")); }
-    if (a === "back") { var why = prompt("Why does it go back to draft?", "Changes requested"); if (why == null) return; setStatus("Draft"); log("Returned to draft", why); }
-    if (a === "publish") {
-      var change = prompt("What changed in this version? This goes in the revision history.", D.revisions.length ? "" : "First release"); if (!change) return;
+    if (a === "back") return Kit.ask("Return to draft", "Why does it go back to draft?", "Changes requested", { ok: "Return to draft" }).then(function (why) { if (why == null) return; setStatus("Draft"); log("Returned to draft", why); after(); });
+    if (a === "publish") return Kit.ask("Publish version " + (D.revisions.length ? bump(m.version, true) : m.version || "1.0"), "What changed in this version? It goes in the revision history.", D.revisions.length ? "" : "First release", { ok: "Publish", multi: true }).then(function (change) {
+      if (!change) return;
       var v = D.revisions.length ? bump(m.version, true) : m.version || "1.0"; m.version = v; setStatus("Published");
-      D.revisions.unshift({ version: v, date: today(), author: m.author || "", change: change, status: "Published" }); log("Published", "Version " + v + ": " + change);
-    }
+      D.revisions.unshift({ version: v, date: today(), author: m.author || "", change: change, status: "Published" }); log("Published", "Version " + v + ": " + change); after();
+    });
     if (a === "revise") { m.version = bump(m.version, false); setStatus("Draft"); D.revisions.forEach(function (r) { if (r.status === "Published") r.status = "Published (current)"; }); log("Started a new revision", "Draft version " + m.version); }
-    if (a === "supersede") { var by = prompt("Which document replaces it?", ""); if (by == null) return; setStatus("Superseded"); D.revisions.forEach(function (r) { if (/^Published/.test(r.status)) r.status = "Superseded"; }); log("Marked as superseded", by ? "Replaced by " + by : ""); }
-    save(); paint(); say("Status: " + D.meta.status + ".");
+    if (a === "supersede") return Kit.ask("Mark as superseded", "Which document replaces it?", "", { ok: "Mark as superseded", optional: true }).then(function (by) { if (by == null) return; setStatus("Superseded"); D.revisions.forEach(function (r) { if (/^Published/.test(r.status)) r.status = "Superseded"; }); log("Marked as superseded", by ? "Replaced by " + by : ""); after(); });
+    after();
+    function after() { save(); paint(); say("Status: " + D.meta.status + "."); }
   });
   $("#dc-r-save").addEventListener("click", function () {
     var k = $("#dc-r-kind").value, o = $("#dc-r-outcome").value, c = $("#dc-r-comment").value.trim(), by = $("#dc-me").value.trim();

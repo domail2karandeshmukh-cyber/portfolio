@@ -139,9 +139,14 @@
     "#film-text s{text-decoration:line-through;text-decoration-color:#FF5A4A;text-decoration-thickness:.09em;color:#B7B9BF}",
     "#film-site{position:absolute;right:24px;bottom:11px;font:600 12px/1 Hanken,system-ui,sans-serif;letter-spacing:.01em;color:#8E9097}",
     // The finger.
-    "#film-tap{position:fixed;left:0;top:0;z-index:9995;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:rgba(11,11,12,.16);box-shadow:0 0 0 2px rgba(11,11,12,.6),0 0 0 5px rgba(255,255,255,.75);opacity:0;pointer-events:none}",
-    "#film-tap.go{animation:film-tap .6s cubic-bezier(.3,0,.2,1) both}",
-    "@keyframes film-tap{0%{opacity:0;transform:scale(1.7)}30%{opacity:1;transform:scale(1)}40%{opacity:1;transform:scale(.8)}56%{opacity:1;transform:scale(.8)}100%{opacity:0;transform:scale(1.1)}}",
+    // A yellow halo the size of a fingertip. It travels to each control before the press, and stays where it last pressed, so the eye can follow it.
+    "#film-tap{position:fixed;left:0;top:0;z-index:9995;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:rgba(255,223,43,.5);box-shadow:0 0 0 2px rgba(11,11,12,.7),0 0 0 5px rgba(255,255,255,.8),0 4px 14px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:left .32s cubic-bezier(.2,.7,.2,1),top .32s cubic-bezier(.2,.7,.2,1),opacity .3s}",
+    "#film-tap.seen{opacity:.55}",
+    "#film-tap.go{animation:film-tap .7s cubic-bezier(.3,0,.2,1) both}",
+    "@keyframes film-tap{0%{opacity:.55;transform:scale(1.15)}35%{opacity:1;transform:scale(1)}45%{opacity:1;transform:scale(.78)}60%{opacity:1;transform:scale(.78)}100%{opacity:.55;transform:scale(1)}}",
+    "#film-tap::after{content:\"\";position:absolute;inset:-6px;border-radius:50%;border:3px solid rgba(229,37,27,.9);opacity:0;transform:scale(.6)}",
+    "#film-tap.go::after{animation:film-ripple .7s ease-out .3s both}",
+    "@keyframes film-ripple{0%{opacity:.9;transform:scale(.7)}100%{opacity:0;transform:scale(2.1)}}",
     // The last card rises from the caption bar. Its lines come in one after another.
     "#film-end{position:fixed;inset:0;z-index:9992;background:#0B0B0C;color:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 34px 16px;clip-path:inset(100% 0 0 0);transition:clip-path .62s cubic-bezier(.65,0,.2,1)}",
     "#film-end.on{clip-path:inset(0 0 0 0)}",
@@ -194,6 +199,7 @@
     var r = el.getBoundingClientRect();
     ring.style.left = Math.round(r.left + r.width / 2) + "px";
     ring.style.top = Math.round(r.top + r.height / 2) + "px";
+    ring.classList.add("seen");
     ring.classList.remove("go");
     void ring.offsetWidth;
     ring.classList.add("go");

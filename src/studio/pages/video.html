@@ -29,13 +29,13 @@
     <label class="vd-chk"><input type="checkbox" id="vd-burn" checked> Burn captions into the video</label></div>
   </div>
   <aside class="vd-side" aria-label="Edit">
-   <section><h2>Add at the playhead</h2>
+   <section class="vd-addsec"><h2>Add at the playhead</h2>
     <div class="vd-adds">
-     <button type="button" class="btn line sm" data-add="intro">Intro slide</button><button type="button" class="btn line sm" data-add="title">Title</button><button type="button" class="btn line sm" data-add="instruction">Instruction</button>
-     <button type="button" class="btn line sm" data-add="step">Step number</button><button type="button" class="btn line sm" data-add="arrow">Arrow</button><button type="button" class="btn line sm" data-add="box">Highlight box</button>
-     <button type="button" class="btn line sm" data-add="callout">Callout</button><button type="button" class="btn line sm" data-add="warning">Warning</button><button type="button" class="btn line sm" data-add="done">Confirmation</button><button type="button" class="btn line sm" data-add="lower">Lower third</button>
-     <button type="button" class="btn line sm" data-add="zoom">Zoom region</button><button type="button" class="btn line sm" data-add="blur">Blur region</button><button type="button" class="btn line sm" data-add="outro">Closing slide</button>
-     <button type="button" class="btn line sm" id="vd-caption">Caption</button><button type="button" class="btn line sm" id="vd-marker">Marker</button><button type="button" class="btn line sm" id="vd-click">Click</button><button type="button" class="btn line sm" id="vd-split">Split clip</button>
+     <div class="vd-addrow"><span>Slides</span><button type="button" class="btn line sm" data-add="intro">Intro slide</button><button type="button" class="btn line sm" data-add="outro">Closing slide</button></div>
+     <div class="vd-addrow"><span>Text</span><button type="button" class="btn line sm" data-add="title">Title</button><button type="button" class="btn line sm" data-add="instruction">Instruction</button><button type="button" class="btn line sm" data-add="callout">Callout</button><button type="button" class="btn line sm" data-add="warning">Warning</button><button type="button" class="btn line sm" data-add="done">Confirmation</button><button type="button" class="btn line sm" data-add="lower">Lower third</button></div>
+     <div class="vd-addrow"><span>Marks</span><button type="button" class="btn line sm" data-add="step">Step number</button><button type="button" class="btn line sm" data-add="arrow">Arrow</button><button type="button" class="btn line sm" data-add="box">Highlight box</button></div>
+     <div class="vd-addrow"><span>Picture</span><button type="button" class="btn line sm" data-add="zoom">Zoom region</button><button type="button" class="btn line sm" data-add="blur">Blur region</button></div>
+     <div class="vd-addrow"><span>Timeline</span><button type="button" class="btn line sm" id="vd-caption">Caption</button><button type="button" class="btn line sm" id="vd-marker">Chapter marker</button><button type="button" class="btn line sm" id="vd-click">Click</button><button type="button" class="btn line sm" id="vd-split">Split clip</button></div>
     </div></section>
    <section id="vd-props" class="vd-props" aria-label="Properties"></section>
   </aside>
