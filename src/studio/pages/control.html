@@ -1,0 +1,48 @@
+<div class="st-head">
+ <div>
+  <h1>Document Control</h1>
+  <p>Take one document from draft to published: its ID, version, owner and reviewer, the checks a program can run, the reviews people give, a revision history, and an audit log you can export. Editorial review, technical review and safety approval are separate, and a passing style check never counts as an approval.</p>
+ </div>
+</div>
+<div class="st-bar" role="toolbar" aria-label="Open a document">
+ <button class="btn line sm" type="button" id="dc-sample">Open the sample procedure</button>
+ <button class="btn line sm" type="button" id="dc-bench">Open my workbench document</button>
+ <label class="btn line sm" for="dc-file">Open a Markdown file</label><input class="st-file" id="dc-file" type="file" accept=".md,.markdown,text/markdown,text/plain">
+ <span class="sep" aria-hidden="true"></span>
+ <label class="dc-me">Your name <input id="dc-me" type="text" maxlength="60" autocomplete="name"></label>
+</div>
+<p class="st-status" id="dc-status" role="status" aria-live="polite"></p>
+<p id="dc-none" class="kb-hint">Open the sample procedure, your document from the workbench, or a Markdown file.</p>
+<div id="dc-doc" class="dc" hidden>
+ <section class="dt-card">
+  <ol class="dc-flow" id="dc-flow" aria-label="Status"></ol>
+  <div class="gd dc-meta">
+   <div class="gd-two"><label>Document ID <input id="dc-id" type="text"></label><label>Version <input id="dc-version" type="text"></label></div>
+   <label>Title <input id="dc-title" type="text"></label>
+   <div class="gd-two"><label>Author <input id="dc-author" type="text"></label><label>Owner <input id="dc-owner" type="text"></label></div>
+   <div class="gd-two"><label>Reviewer <input id="dc-reviewer" type="text"></label><label>Date <input id="dc-date" type="text" readonly></label></div>
+   <label class="vd-chk"><input type="checkbox" id="dc-safety"> Safety-related: publishing needs a safety approval</label>
+  </div>
+  <h2 class="dc-h">Actions</h2>
+  <p class="ann-btns" id="dc-actions"></p>
+  <div id="dc-review" class="dc-review" hidden>
+   <div class="gd-two"><label>Review <select id="dc-r-kind"><option value="editorial">Editorial review</option><option value="technical">Technical review</option><option value="safety">Safety approval</option></select></label>
+   <label>Outcome <select id="dc-r-outcome"><option value="approve">Approve</option><option value="changes">Changes needed</option></select></label></div>
+   <label>Comment <textarea id="dc-r-comment" rows="2" maxlength="600"></textarea></label>
+   <p class="ann-btns"><button class="btn ink sm" type="button" id="dc-r-save">Record the review</button><button class="btn line sm" type="button" id="dc-r-cancel">Cancel</button></p>
+  </div>
+  <h2 class="dc-h">Reviews this version needs</h2><ul class="dc-list" id="dc-reviews"></ul>
+  <h2 class="dc-h">Checks a program can run</h2><ul class="dc-list" id="dc-checks"></ul>
+  <p class="st-note">These checks find what code can find. They don't approve anything: approval is a person's decision, recorded above.</p>
+ </section>
+ <section class="dt-card">
+  <h2 class="dc-h">The document</h2>
+  <textarea id="dc-source" class="dc-source" rows="16" aria-label="The document, in Markdown. Only a draft can be edited."></textarea>
+  <p class="ann-btns"><button class="btn line sm" type="button" id="dc-x-md">Download the document</button><button class="btn ink sm" type="button" id="dc-x-audit">Export the audit history</button></p>
+  <h2 class="dc-h">Revision history</h2>
+  <div class="tbl"><table class="dt-table"><thead><tr><th scope="col">Version</th><th scope="col">Date</th><th scope="col">Author</th><th scope="col">Change</th><th scope="col">Status</th></tr></thead><tbody id="dc-revs"></tbody></table></div>
+  <h2 class="dc-h">Audit log</h2>
+  <div class="tbl dc-logbox"><table class="dt-table"><thead><tr><th scope="col">Time (UTC)</th><th scope="col">Who</th><th scope="col">Action</th><th scope="col">Detail</th><th scope="col">Version</th></tr></thead><tbody id="dc-log"></tbody></table></div>
+ </section>
+</div>
+<p class="st-note">A local demonstration: the names in the log are typed, not signed in, and everything stays in this browser. A real approval workflow needs accounts and a server that keeps the record.</p>
