@@ -98,6 +98,16 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 /* Hero */
 .hero{padding:clamp(30px,5.2vw,76px) 0 clamp(60px,8vw,116px)}
 .hero h1{max-width:13.2em}
+/* The headline is corrected in front of the reader. Three words are struck with the red pen and replaced, then the
+   highlighter comes down. Each new word holds its place from the start, so nothing on the page moves. */
+.ed{position:relative;display:inline-block}
+.ed::before{content:attr(data-was);position:absolute;left:0;top:0;white-space:nowrap;color:var(--ink);opacity:0;pointer-events:none;background:linear-gradient(var(--red),var(--red)) no-repeat 0 52%/0% .075em}
+.e1{--d:.35s}.e2{--d:.95s}.e3{--d:1.55s}
+.js .ed{animation:ed-now .5s calc(var(--d,0s) + .62s) ease-out backwards}
+.js .ed::before{animation:ed-was 1.05s var(--d,0s) cubic-bezier(.4,0,.2,1) backwards}
+@keyframes ed-was{0%,14%{opacity:1;background-size:0% .075em;transform:none}52%,60%{opacity:1;background-size:100% .075em;transform:none}100%{opacity:0;background-size:100% .075em;transform:translateY(-.2em)}}
+@keyframes ed-now{from{color:transparent}}
+.js .hero h1 .hl{transition-delay:2.3s}
 .hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5.4vw,88px);align-items:start;margin-top:clamp(30px,4.6vw,64px)}
 .hero-copy{position:sticky;top:104px}
 .lead{font-size:1.26rem;line-height:1.5;color:var(--ink2);max-width:31em;margin:0 0 1.5em}

@@ -331,10 +331,12 @@
 
     // Without motion the page opens on the finished document. With it, the edit plays once when the stage is in view.
     if (reduce || !("IntersectionObserver" in window)) { set(3, true); return; }
+    // When the page opens on the stage, the headline is corrected first. The stage waits its turn.
+    var opened = performance.now();
     var io = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) return;
       io.disconnect();
-      if (rw.dataset.src === "example") play();
+      later(function () { if (rw.dataset.src === "example") play(); }, Math.max(0, 2700 - (performance.now() - opened)));
     }, { threshold: 0.55 });
     io.observe(stage);
   })();

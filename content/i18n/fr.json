@@ -70,7 +70,6 @@
   "Search the documentation": "Rechercher dans la documentation",
   "Ask April": "Demander à April",
   "Download CV": "Télécharger le CV",
-  "I turn what engineers know into <mark class=\"hl\">docs people can follow.</mark>": "Je transforme le savoir des ingénieurs en <mark class=\"hl\">documentation que chacun peut suivre.</mark>",
   "Technical writer with 5+ years across enterprise IT, security and product documentation, most recently on contract at MongoDB. Now studying for an MSc in Cybersecurity and Data Science, and leading and documenting security systems of my own.": "Rédacteur technique depuis plus de 5 ans en informatique d'entreprise, sécurité et documentation produit, dernièrement en mission chez MongoDB. Je prépare aujourd'hui un MSc en cybersécurité et science des données, et je dirige et documente mes propres systèmes de sécurité.",
   "Read what I've written": "Lire mes documents",
   "Open to technical writing roles: part-time, freelance, internship or apprenticeship. Remote or hybrid. Based in Angers, France.": "Ouvert aux postes de rédaction technique : temps partiel, freelance, stage ou alternance. À distance ou en hybride. Basé à Angers, France.",
@@ -272,6 +271,7 @@
   "The message, marked up. Yellow is a fact to keep. A red line is noise to cut.": "Le message, annoté. En jaune, un fait à garder. Barré en rouge, du bruit à couper.",
   "Sample message": "Exemple de message",
   "Does your team write messages like this one? <a href=\"https://www.linkedin.com/in/karan-deshmukh-a86986175/\" target=\"_blank\" rel=\"noopener\">Message me on LinkedIn</a>.": "Votre équipe écrit des messages comme celui-ci ? <a href=\"https://www.linkedin.com/in/karan-deshmukh-a86986175/\" target=\"_blank\" rel=\"noopener\">Écrivez-moi sur LinkedIn</a>.",
+  "I <span class=\"ed e1\" data-was=\"type\">turn</span> what engineers <span class=\"ed e2\" data-was=\"say\">know</span> into <mark class=\"hl\">docs people can <span class=\"ed e3\" data-was=\"read.\">follow.</span></mark>": "Je <span class=\"ed e1\" data-was=\"transcris\">transforme</span> <span class=\"ed e2\" data-was=\"les mots\">le savoir</span> des ingénieurs en <mark class=\"hl\">documentation que chacun peut <span class=\"ed e3\" data-was=\"lire.\">suivre.</span></mark>",
   "Play the video portfolio": "Lancer le portfolio vidéo",
   "Plays here. The videos are streamed from YouTube.": "Lecture sur place. Les vidéos sont diffusées depuis YouTube.",
   "Language": "Langue"
