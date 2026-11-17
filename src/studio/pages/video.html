@@ -7,7 +7,7 @@
 <p class="vd-narrow" role="note">Editing a video needs a wider screen than this one. On a phone you can open the sample and play it; to edit and export, use a computer.</p>
 <div class="vd">
  <div class="st-bar" role="toolbar" aria-label="Footage and files">
-  <button class="btn line sm" type="button" id="vd-sample">Open the sample</button>
+  <button class="btn line sm" type="button" id="vd-samples">Samples</button>
   <label class="btn line sm" for="vd-files">Add files</label><input class="st-file" id="vd-files" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/webp,audio/*,.srt,.vtt">
   <button class="btn line sm" type="button" id="vd-screen">Record the screen</button>
   <button class="btn line sm" type="button" id="vd-demo">Record the demo app</button>
@@ -19,8 +19,9 @@
   <button class="btn line sm" type="button" id="vd-vtt">Captions (WebVTT)</button>
   <button class="btn line sm" type="button" id="vd-save" disabled>Save project</button>
  </div>
- <p class="st-status" id="vd-status" role="status" aria-live="polite">Open the sample, or add a recording, pictures, sound or caption files.</p>
+ <p class="st-status" id="vd-status" role="status" aria-live="polite">Open a sample below, or add a recording, pictures, sound or caption files.</p>
  <progress id="vd-progress" class="vd-progress" hidden aria-label="Rendering"></progress>
+ <div id="vd-slot"><div id="vd-start"></div></div>
  <div class="vd-grid">
   <div class="vd-preview" tabindex="0" aria-label="Preview. Space plays and pauses; the arrow keys step one frame.">
    <canvas id="vd-canvas" class="vd-canvas" aria-label="The video at the playhead"></canvas>
@@ -32,7 +33,7 @@
     <div class="vd-adds">
      <button type="button" class="btn line sm" data-add="intro">Intro slide</button><button type="button" class="btn line sm" data-add="title">Title</button><button type="button" class="btn line sm" data-add="instruction">Instruction</button>
      <button type="button" class="btn line sm" data-add="step">Step number</button><button type="button" class="btn line sm" data-add="arrow">Arrow</button><button type="button" class="btn line sm" data-add="box">Highlight box</button>
-     <button type="button" class="btn line sm" data-add="callout">Callout</button><button type="button" class="btn line sm" data-add="warning">Warning</button><button type="button" class="btn line sm" data-add="lower">Lower third</button>
+     <button type="button" class="btn line sm" data-add="callout">Callout</button><button type="button" class="btn line sm" data-add="warning">Warning</button><button type="button" class="btn line sm" data-add="done">Confirmation</button><button type="button" class="btn line sm" data-add="lower">Lower third</button>
      <button type="button" class="btn line sm" data-add="zoom">Zoom region</button><button type="button" class="btn line sm" data-add="blur">Blur region</button><button type="button" class="btn line sm" data-add="outro">Closing slide</button>
      <button type="button" class="btn line sm" id="vd-caption">Caption</button><button type="button" class="btn line sm" id="vd-marker">Marker</button><button type="button" class="btn line sm" id="vd-click">Click</button><button type="button" class="btn line sm" id="vd-split">Split clip</button>
     </div></section>

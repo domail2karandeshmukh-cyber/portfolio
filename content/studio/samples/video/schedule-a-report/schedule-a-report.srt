@@ -1,0 +1,51 @@
+1
+00:00:00,600 --> 00:00:10,530
+In this two-minute tutorial, you schedule a report so that it reaches your team every Monday morning, without anyone opening Beacon Reports.
+
+2
+00:00:11,130 --> 00:00:16,730
+Open the report you want to send. In the top-right corner, select Schedule.
+
+3
+00:00:17,330 --> 00:00:21,530
+Under Recipients, type each email address and press Enter.
+
+4
+00:00:21,530 --> 00:00:23,700
+The address appears as a chip.
+
+5
+00:00:23,700 --> 00:00:26,530
+Recipients don't need a Beacon account.
+
+6
+00:00:27,130 --> 00:00:31,460
+Choose how often the report is sent, the day, and the time.
+
+7
+00:00:31,460 --> 00:00:34,400
+The time is shown in your own time zone.
+
+8
+00:00:35,000 --> 00:00:40,960
+Choose the format: PDF for a report people read, Spreadsheet for one they work with.
+
+9
+00:00:40,960 --> 00:00:45,930
+Then select Preview to see the subject line and the attachment's name.
+
+10
+00:00:46,530 --> 00:00:48,530
+Select Save schedule.
+
+11
+00:00:49,130 --> 00:00:53,470
+A message confirms the schedule and names the next delivery.
+
+12
+00:00:53,470 --> 00:00:57,660
+The Schedules tab lists it, with Edit and Pause beside it.
+
+13
+00:00:57,660 --> 00:00:58,530
+You're done.

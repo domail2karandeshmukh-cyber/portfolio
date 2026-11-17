@@ -98,11 +98,15 @@
       var target = Math.min(4, W / Math.max(40, zr.w * W));
       z = 1 + (target - 1) * k; cx = W / 2 + ((zr.x + zr.w / 2) * W - W / 2) * k; cy = H / 2 + ((zr.y + zr.h / 2) * H - H / 2) * k;
     } else if (P.cursor.follow && ev.length) {
-      var env = 0;
-      ev.forEach(function (e) { if (!e.click) return; env = Math.max(env, Math.min(ease((t - (e.t - 1.0)) / 0.6), ease((e.t + 1.6 - t) / 0.6))); });
+      // The zoom rises before a click and settles after it. Clicks less than three seconds apart share one zoom, so the picture doesn't pump.
+      var env = 0, clicks = ev.filter(function (e) { return e.click; });
+      clicks.forEach(function (e, i) {
+        var next = clicks[i + 1], hold = next && next.t - e.t < 3 ? next.t : e.t + 1.6;
+        env = Math.max(env, Math.min(ease((t - (e.t - 1.0)) / 0.7), ease((hold - t) / 0.7)));
+      });
       if (env > 0) {
         var sx = 0, sy = 0, n = 0;
-        for (var s = 0; s < 6; s++) { var p = pointerAt(ev, t - s * 0.1); if (p) { sx += p.x; sy += p.y; n++; } }
+        for (var s = 0; s < 10; s++) { var p = pointerAt(ev, t - s * 0.1); if (p) { sx += p.x; sy += p.y; n++; } }
         if (n) { z = 1 + (P.cursor.factor - 1) * env; cx = W / 2 + (sx / n - W / 2) * env; cy = H / 2 + (sy / n - H / 2) * env; }
       }
     }
@@ -112,11 +116,11 @@
   }
 
   /* ---------- Drawing one frame ---------- */
-  var COLORS = { title: "#0B0B0C", step: "#E5251B", arrow: "#E5251B", box: "#E5251B", callout: "#E5251B", warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C" };
-  var TYPES = { title: "Title", step: "Step number", arrow: "Arrow", box: "Highlight box", callout: "Callout", warning: "Warning", instruction: "Instruction", zoom: "Zoom region", blur: "Blur region", intro: "Intro slide", outro: "Closing slide", lower: "Lower-third label" };
+  var COLORS = { title: "#0B0B0C", step: "#E5251B", arrow: "#E5251B", box: "#E5251B", callout: "#E5251B", warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
+  var TYPES = { title: "Title", step: "Step number", arrow: "Arrow", box: "Highlight box", callout: "Callout", warning: "Warning", instruction: "Instruction", done: "Confirmation", zoom: "Zoom region", blur: "Blur region", intro: "Intro slide", outro: "Closing slide", lower: "Lower-third label" };
   var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1 };          // drawn in the picture, so they zoom with it
   function font(px, w) { return (w || 600) + " " + Math.round(px) + "px 'Hanken', Arial, sans-serif"; }
-  function fade(o, t) { return Math.min(1, (t - o.start) / 0.25, (o.end - t) / 0.25); }
+  function fade(o, t) { var f = o.type === "intro" || o.type === "outro" ? 0.5 : 0.25; return Math.min(1, (t - o.start) / f, (o.end - t) / f); }
   function wrap(text, max, px) {
     ctx.font = font(px); var words = String(text || "").split(/\s+/), lines = [], line = "";
     words.forEach(function (w) { var test = line ? line + " " + w : w; if (ctx.measureText(test).width > max && line) { lines.push(line); line = w; } else line = test; });
@@ -172,6 +176,14 @@
       else { ctx.fillStyle = "#FFDF2B"; ctx.fillRect(x, y + bh - 6, bw + pad * 2, 6); }
       ctx.fillStyle = o.type === "warning" ? "#7A1010" : c; ctx.textBaseline = "top"; ctx.font = font(px, o.type === "title" ? 700 : 600);
       ls.forEach(function (l, i) { ctx.fillText(l, x + pad + (o.type === "warning" ? px * 1.4 : 0), y + pad * 0.7 + i * px * 1.3); });
+    } else if (o.type === "done") {
+      // A confirmation: a green pill with a check mark, for the moment an action has visibly worked.
+      ctx.font = font(px, 700); var dw = ctx.measureText(o.text || "Done").width, dx = o.x * W, dy = o.y * H, dh = px * 1.9, pop = Math.min(1, (t - o.start) / 0.3);
+      ctx.translate(dx + (dw + px * 2.6) / 2, dy + dh / 2); ctx.scale(0.85 + 0.15 * pop, 0.85 + 0.15 * pop); ctx.translate(-(dx + (dw + px * 2.6) / 2), -(dy + dh / 2));
+      ctx.fillStyle = c; roundRect(dx, dy, dw + px * 2.6, dh, dh / 2); ctx.fill();
+      ctx.strokeStyle = "#fff"; ctx.lineWidth = Math.max(3, px * 0.14); ctx.lineCap = ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(dx + px * 0.75, dy + dh * 0.52); ctx.lineTo(dx + px * 1.05, dy + dh * 0.7); ctx.lineTo(dx + px * 1.55, dy + dh * 0.32); ctx.stroke();
+      ctx.fillStyle = "#fff"; ctx.textBaseline = "middle"; ctx.fillText(o.text || "Done", dx + px * 1.95, dy + dh / 2 + 1);
     } else if (o.type === "lower") {
       var y2 = H - 250; ctx.font = font(px, 700); var tw = ctx.measureText(o.text || "").width;
       ctx.fillStyle = "#0B0B0C"; ctx.fillRect(64, y2, tw + 48, px * 1.8); ctx.fillStyle = "#FFDF2B"; ctx.fillRect(64, y2, 8, px * 1.8);
@@ -182,7 +194,7 @@
   function drawCaption(t) {
     var c = P.captions.filter(function (x) { return t >= x.start && t < x.end; })[0];
     if (!c) return;
-    var px = 34, ls = wrap(c.text, W * 0.78, px).slice(0, 2), bw = 0;
+    var px = 32, ls = wrap(c.text, W * 0.8, px).slice(0, 3), bw = 0;
     ctx.save(); ctx.font = font(px, 600); ls.forEach(function (l) { bw = Math.max(bw, ctx.measureText(l).width); });
     var bh = ls.length * px * 1.3 + 20, y = H - 56 - bh;
     ctx.fillStyle = "rgba(11,11,12,.82)"; roundRect(W / 2 - bw / 2 - 18, y, bw + 36, bh, 8); ctx.fill();
@@ -370,7 +382,8 @@
   function addOverlay(type) {
     if (!P.clips.length) return say("Add footage first.", true);
     var t = Math.min(playhead, Math.max(0, duration() - 0.5)), len = type === "intro" || type === "outro" ? 3 : type === "zoom" ? 2.5 : 3;
-    var o = { id: uid("o"), type: type, start: +t.toFixed(2), end: +Math.min(duration(), t + len).toFixed(2), x: 0.36, y: 0.32, w: 0.24, h: 0.14, text: "", color: COLORS[type], size: type === "step" ? 40 : 30, layer: P.overlays.length };
+    var o = { id: uid("o"), type: type, start: +t.toFixed(2), end: +Math.min(duration(), t + len).toFixed(2), x: 0.36, y: 0.32, w: 0.24, h: 0.14, text: "", color: COLORS[type], size: type === "step" ? 40 : type === "done" ? 28 : 30, layer: P.overlays.length };
+    if (type === "done") { o.text = "Saved"; o.x = 0.62; o.y = 0.12; }
     if (type === "title") { o.x = 0.05; o.y = 0.06; o.text = "Record the inspection readings"; }
     if (type === "instruction") { o.x = 0.05; o.y = 0.06; o.text = "Select Record readings"; }
     if (type === "warning") { o.x = 0.05; o.y = 0.06; o.text = "Close the work order only when every reading is in range"; }
@@ -613,29 +626,25 @@
   });
 
   /* ---------- The sample ---------- */
-  $("#vd-sample").addEventListener("click", function () {
-    say("Opening the sample...");
-    Promise.all([fetch("/studio/sample-walkthrough.mp4").then(function (r) { if (!r.ok) throw new Error("The sample footage couldn't be loaded."); return r.blob(); }), fetch("/studio/sample-walkthrough.cursor.json").then(function (r) { return r.json(); })]).then(function (got) {
-      stopAll(); MEDIA = {}; P = blank(); P.name = "pump-inspection-walkthrough"; sel = null;
-      return addMedia(got[0], "sample-walkthrough.mp4", "video", got[1].events).then(function (m) {
-        addClip(m);
-        var d = m.duration, clicks = got[1].events.filter(function (e) { return e.click; }).map(function (e) { return e.t; });
-        P.cursor.follow = true; P.cursor.numbers = true;
-        P.overlays.push({ id: uid("o"), type: "intro", start: 0, end: 2.6, x: 0, y: 0, w: 1, h: 1, text: "Record the readings for a pump inspection\nFictional sample made in the Video Studio.", color: "#0B0B0C", size: 30, layer: 0 });
-        P.overlays.push({ id: uid("o"), type: "lower", start: 2.7, end: 6.5, x: 0, y: 0, w: 0, h: 0, text: "Harbor Pump Station · fictional demo", color: "#0B0B0C", size: 26, layer: 1 });
-        P.overlays.push({ id: uid("o"), type: "blur", start: 0, end: clicks[0] + 0.4, x: 440 / 1280, y: 550 / 720, w: 206 / 1280, h: 34 / 720, text: "", color: "#1D4ED8", size: 30, layer: 1 });
-        P.overlays.push({ id: uid("o"), type: "box", start: clicks[0] - 1.6, end: clicks[0] + 0.6, x: 244 / 1280, y: 488 / 720, w: 158 / 1280, h: 42 / 720, text: "", color: "#E5251B", size: 30, layer: 2 });
-        P.overlays.push({ id: uid("o"), type: "warning", start: clicks[2] - 3.2, end: clicks[2] + 0.4, x: 0.05, y: 0.08, w: 0, h: 0, text: "Close the work order only when every reading is in range", color: "#C62828", size: 28, layer: 3 });
-        P.captions = [
-          { id: uid("k"), start: 2.8, end: clicks[0] - 0.2, text: "Open the work order and select Record readings." },
-          { id: uid("k"), start: clicks[0] + 0.4, end: clicks[1] - 0.2, text: "Enter each reading from the local gauge, then select Save readings." },
-          { id: uid("k"), start: clicks[1] + 0.4, end: Math.min(d - 0.1, clicks[2] + 1.4), text: "Check the results, then select Close work order." },
-        ];
-        P.markers = [{ id: uid("k"), t: 0, label: "Introduction" }, { id: uid("k"), t: clicks[0] - 1, label: "Record readings" }, { id: uid("k"), t: clicks[2] - 3, label: "Close the work order" }];
-        changed(); props(); return show(0);
-      });
-    }).then(function () { say("Opened the sample: footage of a fictional console with its recorded pointer, an intro, a highlight box, a warning, captions and chapter markers. Play it, then export it."); }, fail);
+  /* The samples: projects this studio saved, with footage of the fictional demo apps, their pointer, narration and captions. */
+  function openProject(bytes) {
+    var files = Kit.unzip(bytes), j;
+    try { j = JSON.parse(new TextDecoder().decode(files["project.json"])); } catch (e) { throw new Error("This archive isn't a video project."); }
+    return load(j, files);
+  }
+  var start = Kit.start($("#vd-start"), {
+    tool: "video", title: "Open a video project",
+    lead: "Two training videos made in this studio from recordings of fictional applications: the pointer with its halo and click ripples, zoom that follows each click, highlight boxes and step numbers on the controls, captions, and narration. Open one to play it, change it, and render it again. Or start from your own recording.",
+    open: function (s) {
+      if (P.clips.length && !confirm("Replace the project on screen with " + s.title + "? Save it first to keep it.")) return;
+      say("Opening " + s.title + "…");
+      return Kit.fetchBytes(s.project).then(openProject).then(function () { sw.close(); say("Opened " + s.title + ": " + Math.round(duration()) + " s of footage with its recorded pointer" + (P.narration ? ", narration" : "") + (P.captions.length ? ", " + P.captions.length + " captions" : "") + " and " + P.overlays.length + " overlays. Play it, then export it."); });
+    },
+    fail: fail, blank: function () { if (P.clips.length && !confirm("Start an empty project? Save the one on screen first to keep it.")) return; stopAll(); MEDIA = {}; P = blank(); sel = null; changed(); props(); show(0); sw.close(); say("Started an empty project. Add a recording, record the screen, or record the demo app."); }, blankLabel: "Start empty",
+    files: [{ label: "Open project", input: "vd-open" }, { label: "Add files", input: "vd-files" }],
+    links: function (s) { return (s.video ? '<a href="' + Kit.esc(s.video) + '">MP4</a>' : "") + (s.captions ? '<a href="' + Kit.esc(s.captions) + '">WebVTT</a>' : ""); },
   });
+  var sw = Kit.startSwitch(start, $("#vd-slot"), $("#vd-samples"));
 
   /* ---------- Export ---------- */
   function name() { return Kit.slug(P.name, "training-video"); }
@@ -723,11 +732,7 @@
   }
   $("#vd-open").addEventListener("change", function () {
     var f = this.files[0]; this.value = "";
-    Kit.readBytes(f, 400 * 1048576).then(function (bytes) {
-      var files = Kit.unzip(bytes), j;
-      try { j = JSON.parse(new TextDecoder().decode(files["project.json"])); } catch (e) { throw new Error("This archive isn't a video project."); }
-      return load(j, files);
-    }).then(function () { say("Opened " + f.name + "."); }, fail);
+    Kit.readBytes(f, 400 * 1048576).then(openProject).then(function () { say("Opened " + f.name + "."); }, fail);
   });
 
   /* ---------- Keeping the project in this browser ---------- */
@@ -741,6 +746,7 @@
     }, 900);
     $("#vd-export").disabled = !P.clips.length; $("#vd-save").disabled = !P.clips.length;
     $("#vd-burn").checked = P.burnCaptions;
+    if (window.studioVideo) sw.inline(!P.clips.length);
   }
   if (document.fonts && document.fonts.load) document.fonts.load("700 30px Hanken").then(function () { frame(playhead); }, function () {});
   Kit.store.get("video").then(function (s) {
@@ -754,5 +760,8 @@
     if (e.key === "ArrowLeft" || e.key === "ArrowRight") { if (!document.activeElement || !document.activeElement.closest(".vd-time,.vd-preview,.vd-tl")) return; e.preventDefault(); show(playhead + (e.key === "ArrowLeft" ? -1 : 1) * (e.shiftKey ? 1 : 1 / FPS)); }
   });
   addEventListener("resize", function () { timeline(); });
-  window.studioVideo = { project: function () { return P; }, media: function () { return MEDIA; }, duration: duration, show: show, frame: frame, last: function () { return lastExport; }, toSRT: function () { return toSRT(P.captions); }, toVTT: function () { return toVTT(P.captions); } };
+  window.studioVideo = { project: function () { return P; }, media: function () { return MEDIA; }, duration: duration, show: show, frame: frame, last: function () { return lastExport; }, toSRT: function () { return toSRT(P.captions); }, toVTT: function () { return toVTT(P.captions); },
+    /** Opens a project ZIP from an address, as the sample cards do. */
+    open: function (url) { return Kit.fetchBytes(url).then(openProject); } };
+  sw.inline(!P.clips.length);
 })();

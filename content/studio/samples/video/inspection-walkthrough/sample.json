@@ -1,0 +1,49 @@
+{
+ "id": "inspection-walkthrough",
+ "title": "Monthly inspection of feed pump B",
+ "scenario": "a-industrial",
+ "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, captions and narration.",
+ "seconds": 61.28,
+ "clicks": 3,
+ "narrated": false,
+ "overlays": 11,
+ "captions": 13,
+ "segments": [
+  {
+   "id": "intro",
+   "start": 0.6,
+   "seconds": 9.8,
+   "recorded": false
+  },
+  {
+   "id": "open",
+   "start": 11.2,
+   "seconds": 7.2,
+   "recorded": false
+  },
+  {
+   "id": "enter",
+   "start": 19.2,
+   "seconds": 12.47,
+   "recorded": false
+  },
+  {
+   "id": "check",
+   "start": 32.47,
+   "seconds": 7.2,
+   "recorded": false
+  },
+  {
+   "id": "close",
+   "start": 40.47,
+   "seconds": 8.4,
+   "recorded": false
+  },
+  {
+   "id": "outro",
+   "start": 49.67,
+   "seconds": 7.2,
+   "recorded": false
+  }
+ ]
+}
