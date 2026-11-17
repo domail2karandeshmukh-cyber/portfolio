@@ -162,7 +162,7 @@ const VOICES = {
 };
 // Voices to listen to before choosing one: /api/april?say=tour1&voice=<name>. All of them are women's voices.
 const CANDIDATES = { sarah: "EXAVITQu4vr4xnSDxMaL", jessica: "cgSgspJ2msm6clMCkdW9", alice: "Xb7hH8MSUJpSbSDYk0k2", matilda: "XrExE9yKIg1WjnnlVkGX", lily: "pFZP5JQG7iQjIQuC4Bku", laura: "FGY2WhTYpPnrIDTdsKH5" };
-const kept = {};
+const kept = {}, BEST = /eleven-v4/;
 /**
  * @param {"recorded"|"live"} kind which list of models to use
  * @param {{model?: string, voice?: string}} [only] one voice, or one model, to try instead of the usual ones
@@ -186,7 +186,7 @@ async function speak(token, text, lang, tried = [], kind = "live", only = null) 
         if (!only) kept[kind] = v;
         return { audio: d.audio, model: v.model, ms: Date.now() - began };
       }
-      tried.push(`${v.model}:${r.status} ${String((d.error && (d.error.message || d.error.type)) || d.message || "").slice(0, 90)}`);
+      tried.push(`${v.model}:${r.status} ${String((d.error && (d.error.message || d.error.type)) || d.message || "").slice(0, 220)}`);
     } catch (e) { tried.push(`${v.model}:${String(e.message).slice(0, 60)}`); }
   }
   if (!only) kept[kind] = null;
@@ -231,12 +231,13 @@ module.exports = async (req, res) => {
       recorded++;
       out = await speak(token, text, lang, tried, "recorded", only);
       if (!out) return res.status(502).json({ error: "voice", tried });
-      said.set(key, out);
+      // A recording by a stand-in model (the best one was busy) is not kept: the next request tries the best one again.
+      if (BEST.test(out.model)) said.set(key, out);
     }
     // ?probe answers with facts about the audio, for checking the voice without downloading it.
     if (probe) return res.status(200).json({ voice: out.model, ms: out.ms, bytes: Buffer.from(out.audio, "base64").length, text, tried });
     res.setHeader("content-type", "audio/mpeg");
-    res.setHeader("cache-control", "public, max-age=86400, s-maxage=2592000");
+    res.setHeader("cache-control", BEST.test(out.model) ? "public, max-age=86400, s-maxage=2592000" : "public, max-age=300, s-maxage=600");
     res.setHeader("x-voice-model", out.model);
     return res.status(200).send(Buffer.from(out.audio, "base64"));
   }
