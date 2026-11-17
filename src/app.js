@@ -37,6 +37,11 @@
     strokes.forEach(function (m) { ho.observe(m); });
   }
 
+  /* The headline's corrections are over in under three seconds. The struck words then leave the page for good,
+     so that no reader, and no screen reader, meets them again. */
+  var struck = $$(".ed[data-was]");
+  if (struck.length) setTimeout(function () { struck.forEach(function (e) { e.removeAttribute("data-was"); }); }, reduce ? 0 : 3200);
+
   /* The featured documents are dealt onto the desk when they come into view */
   var deck = $(".docs.feature");
   if (deck && !reduce && "IntersectionObserver" in window) {
