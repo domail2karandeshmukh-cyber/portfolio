@@ -1,11 +1,51 @@
 1
-00:00:02,800 --> 00:00:04,676
-Open the work order and select Record readings.
+00:00:00,600 --> 00:00:06,890
+This walkthrough shows the monthly inspection of feed pump B in the maintenance console.
 
 2
-00:00:05,276 --> 00:00:09,964
-Enter each reading from the local gauge, then select Save readings.
+00:00:06,890 --> 00:00:10,600
+It's a fictional procedure, made for this portfolio.
 
 3
-00:00:10,564 --> 00:00:16,961
-Check the results, then select Close work order.
+00:00:11,200 --> 00:00:12,680
+Open the work order.
+
+4
+00:00:12,680 --> 00:00:16,900
+It lists the four checks and the expected range for each.
+
+5
+00:00:16,900 --> 00:00:18,600
+Select Record readings.
+
+6
+00:00:19,200 --> 00:00:30,040
+Enter each reading as you took it from the local gauge: the discharge pressure in bar, the bearing temperature, the vibration, and whether the seal leaks.
+
+7
+00:00:30,040 --> 00:00:31,870
+Then select Save readings.
+
+8
+00:00:32,470 --> 00:00:35,470
+Every result now shows against its range.
+
+9
+00:00:35,470 --> 00:00:39,870
+All four are inside it, so the work order is ready to close.
+
+10
+00:00:40,470 --> 00:00:42,200
+Select Close work order.
+
+11
+00:00:42,200 --> 00:00:49,070
+If any reading had been outside its range, you would report it to the shift supervisor instead.
+
+12
+00:00:49,670 --> 00:00:51,210
+That's the procedure.
+
+13
+00:00:51,210 --> 00:00:57,070
+The written version, the step guide and the DITA output are in the same package.

@@ -3,7 +3,7 @@
  "title": "Schedule a report for automatic delivery",
  "scenario": "g-training",
  "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions.",
- "seconds": 62.74,
+ "seconds": 62.41,
  "clicks": 8,
  "narrated": false,
  "overlays": 21,
@@ -12,66 +12,66 @@
   {
    "id": "intro",
    "start": 0.6,
-   "seconds": 9.73,
+   "seconds": 9.4,
    "recorded": false
   },
   {
    "id": "open",
-   "start": 11.13,
+   "start": 10.8,
    "seconds": 5.4,
    "recorded": false
   },
   {
    "id": "recipients",
-   "start": 17.33,
+   "start": 17.0,
    "seconds": 9.0,
    "recorded": false
   },
   {
    "id": "repeat",
-   "start": 27.13,
+   "start": 26.8,
    "seconds": 7.07,
    "recorded": false
   },
   {
    "id": "format",
-   "start": 35.0,
+   "start": 34.67,
    "seconds": 10.73,
    "recorded": false
   },
   {
    "id": "save",
-   "start": 46.53,
+   "start": 46.2,
    "seconds": 1.8,
    "recorded": false
   },
   {
    "id": "done",
-   "start": 49.13,
+   "start": 48.8,
    "seconds": 9.2,
    "recorded": false
   }
  ],
  "exported": {
   "studio": {
-   "seconds": 62.99,
+   "seconds": 62.6,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "opus"
   },
   "served": {
-   "seconds": 63.03,
+   "seconds": 62.64,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "aac"
   },
-  "timeline": 62.75,
-  "chromeSeconds": 62.989938,
+  "timeline": 62.41,
+  "chromeSeconds": 62.600083,
   "meanVolumeDb": -91.0,
-  "status": "Exported schedule-a-report.mp4: 9.0 MB, 63.0 s, H.264 and Opus, checked by playing it back. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
-  "ok": false,
+  "status": "Exported schedule-a-report.mp4: 8.7 MB, 62.6 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
+  "ok": true,
   "errors": []
  }
 }

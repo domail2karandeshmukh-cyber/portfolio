@@ -19,6 +19,11 @@ DOCS.recruiters = { title: "For recruiters", href: "/recruiters" };
 DOCS.studio = { title: "Documentation Studio", href: "/studio" };
 DOCS.flagship = { title: "A maintenance procedure, start to finish", href: "/studio/flagship" };
 (C.studio ? C.studio.tools : []).forEach((t) => { DOCS["studio-" + t.id] = { title: t.title, href: "/studio/" + t.id }; });
+// The studio's eight fictional scenarios, each with a page of its documents and the samples made from them.
+const SCENARIOS = require("../content/scenarios/scenarios.json").scenarios;
+SCENARIOS.forEach((s) => { DOCS["scenario-" + s.letter.toLowerCase()] = { title: `Scenario ${s.letter}: ${s.title}`, href: "/studio/scenarios/" + s.id }; });
+// Whether the sample training videos have a voiceover yet: what the files hold, not what was planned.
+const VIDEO_SAMPLES = [require("../content/studio/samples/video/schedule-a-report/sample.json"), require("../content/studio/samples/video/inspection-walkthrough/sample.json")];
 const RULES = require("../src/style.js").RULES;
 const SECTIONS = ["writing", "engineering", "workbench", "projects", "video", "experience", "contact", "rewrite"];
 const DESK = require("../content/desk/messages.json").messages.map((m) => m.id);
@@ -76,6 +81,11 @@ function notes() {
   L.push(`The rewrite desk, at the top of the home page (${S.url}/#rewrite): a visitor pastes a rough message from their own team, such as a chat message or meeting notes, and sees it marked up and drafted into a document, with the questions a writer would still ask the author. An AI model writes the draft by a brief Karan wrote, and a check written in code confirms that no name or number was lost. Karan's point: drafting is the quick part, and getting the questions answered is the job.`);
   L.push(`- [doc:studio] The Documentation Studio (${S.url}/studio): working tools Karan built for this portfolio. They run in the visitor's browser, nothing is uploaded, and each one exports real files. The samples are fictional.`);
   (C.studio ? C.studio.tools : []).forEach((t) => L.push(`  - [doc:studio-${t.id}] ${t.title} (${S.url}/studio/${t.id}): ${t.blurb} Exports: ${t.out}.`));
+  L.push(`  - The samples come from eight fictional scenarios, each a different kind of documentation: ${SCENARIOS.map((s) => `[doc:scenario-${s.letter.toLowerCase()}] ${s.letter}. ${s.title} (${s.field})`).join("; ")}. The organizations, products, people and addresses in them are invented; scenario pages say so.`);
+  L.push("  The studio's interface is also in French, German, Spanish and Hindi (/fr/studio, /de/studio, /es/studio, /hi/studio); documents and samples stay in English, and a step guide has its own language for the headings the tool writes. The editors have undo and redo, and Ctrl+S saves a project.");
+  L.push(VIDEO_SAMPLES.every((v) => v.narrated)
+    ? "  The sample training videos have captions, a recorded pointer with click effects and zoom, and a synthetic voiceover made with a text-to-speech service; the Video Studio itself records narration from a microphone or takes an audio file."
+    : "  The sample training videos have captions and a recorded pointer with click effects and zoom, but no voiceover yet; the Video Studio records narration from a microphone or takes an audio file. Don't say the samples are narrated.");
   L.push(`  - [doc:flagship] A maintenance procedure, start to finish (${S.url}/studio/flagship): one fictional preventive-maintenance procedure taken through every tool, with every file the tools produced, in one download.`);
   L.push("  What the studio does not do: it is not connected to a Zendesk account (it exports the request bodies the Zendesk API takes); importing its files into MadCap Flare has not been tested, though Flare documents DITA, Markdown and HTML import; it has no text-to-speech or automatic transcription; Document Control is a local demonstration without sign-in. Building these tools shows how Karan works; it is not professional experience with the products they resemble.");
   L.push("About April: her name stands for AI for Projects, Releases, Insights and Logs. Karan first built April inside ReleasePilot AI, where she proposes project plans and waits for human approval.");

@@ -68,7 +68,7 @@ SAMPLES = {
                           "lower": "Beacon Reports · fictional demo", "blur": None,
                           "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions."},
     "inspection-walkthrough": {"demo": "console", "steps": console_steps, "title": "Monthly inspection of feed pump B", "scenario": "a-industrial",
-                               "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · fictional procedure", "outro": "Work order closed\nThe written procedure, the step guide and the DITA output are in the same package.",
+                               "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · fictional procedure", "outro": "Inspection recorded\nThe written procedure, the step guide and the DITA output are in the same package.",
                                "lower": "Harbor Pump Station · fictional demo", "blur": "#key",
                                "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions."},
 }
@@ -164,7 +164,9 @@ def make(sample_id):
     if s["blur"] and blurbox:
         overlay("blur", 0, m.boxes[0]["t"] + 0.5, x=(blurbox["x"] - 4) / W, y=(blurbox["y"] - 4) / H, w=(blurbox["w"] + 8) / W, h=(blurbox["h"] + 8) / H, layer=1)
     if sample_id == "inspection-walkthrough":
-        overlay("warning", starts[4] - 0.3, starts[4] + segs[4]["seconds"], x=0.05, y=0.08, w=0, h=0, text="Close the work order only when every reading is in range", size=28, layer=3)
+        # The warning comes before the last step, and goes as the pointer reaches the button; the confirmation follows it.
+        overlay("warning", starts[3] + segs[3]["seconds"] * 0.4, starts[4] + 1.2, x=0.05, y=0.08, w=0, h=0, text="Close the work order only when every reading is in range", size=28, layer=3)
+        overlay("done", starts[4] + 2.0, starts[4] + 5.6, x=0.66, y=0.12, w=0, h=0, text="Work order closed", size=28, layer=3)
     if sample_id == "schedule-a-report":
         overlay("done", starts[6] + 0.3, starts[6] + 4.2, x=0.62, y=0.12, w=0, h=0, text="Schedule saved", size=28, layer=3)
     overlay("outro", dur - 3.4, dur, text=s["outro"], size=30, layer=0)
