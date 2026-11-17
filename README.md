@@ -11,7 +11,7 @@ One content file, `content/site.json`, feeds everything. `build.mjs` and the mod
 | The home page, in five languages (`public/index.html`, `public/fr/`, `public/de/`, `public/es/`, `public/hi/`) | `build.mjs` fills the slots in `src/home.html`, then `lib/i18n.mjs` translates the finished page |
 | The documentation library (`public/docs/`, `public/samples/`) | `lib/library.mjs` and `lib/md.mjs` |
 | The search index (`public/search.json`) | `lib/library.mjs` |
-| The video list | `lib/video.mjs` reads the YouTube playlist named in `site.playlist` |
+| The films in the video section | `build.mjs` copies them from `content/films/` |
 | The CV (`public/Karan-Deshmukh-CV.pdf`) | `lib/cv.mjs` typesets it with pdfkit |
 | The social preview image (`public/og.png`) | `lib/og.mjs` draws it with the site fonts |
 | April, the site assistant | `api/april.js` reads the same content file for its notes |
@@ -107,12 +107,15 @@ The small page previews on the document cards are screenshots of the pages thems
 python3 scripts/shoot-thumbs.py http://localhost:8765
 ```
 
-## Videos
+## Films
 
-The video section lists the videos of the YouTube playlist named in `site.playlist`. The build copies each video's picture to `/img`, so a visitor's browser contacts YouTube only after a press on play. The video then plays in the page.
+The video section plays films that are kept with the site: nothing is streamed from another service, and no visitor's browser contacts one.
 
-- To add or remove a video, change the playlist on YouTube and build the site again. The build log lists the videos it found.
-- To show a clearer title than the one on YouTube, add the YouTube title and the title to show under `videos.titles` in `content/site.json`.
+- `films.items` in `content/site.json` lists them: an `id`, a title, a running time, and a line about the film.
+- Each film is two files in `content/films/`: `<id>.mp4` and a poster frame, `<id>.jpg`.
+- The films show this site's own tools, and `scripts/film/` makes them. See [The film](#the-film).
+
+Walkthroughs made for an employer are that employer's property. They are not in this repository and not on the site.
 
 ## Help-center samples
 
@@ -148,9 +151,11 @@ April answers questions about my work from the notes in `content/site.json`, in 
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
 - `MODELS` in `api/april.js` lists the chat models in the order they are tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
-- The voice is a text-to-speech model. `api/april.js` tries each entry in `VOICES` in order. To use another voice, set `APRIL_VOICE_MODEL` and `APRIL_VOICE` in the Vercel project.
-- If no voice model answers, the browser's own speech voice reads the answer instead.
-- To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke and lists the ones that failed.
+- The voice is a text-to-speech model. `VOICES` in `api/april.js` holds two lists. A line that is recorded once, such as a stop of the tour, goes to the most expressive model, because nobody waits for it. An answer is spoken while the visitor waits, so it goes to the quick model of the same family. In each list the first model that works is kept.
+- To put another model first, set `APRIL_VOICE_MODEL` in the Vercel project. To change the voice, set `APRIL_VOICE`.
+- To choose a voice by ear, open `/voices`. The page plays the first line of the tour in six women's voices, in each language. It is not linked from the site.
+- If no voice model answers, the browser's own voice reads the answer, and only a woman's voice in the page's language. Where a device offers none, April's words stay on the screen.
+- To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke, how long it took, and the ones that failed. On a preview deployment, add `&model=<id>` to try one speech model.
 - The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Each line is recorded the first time a visitor needs it, then served from the CDN. Without a recorded voice, the browser's voice reads the line, or the caption stands alone.
 - While April speaks, her orb moves to her voice. The script measures the loudness of the sound that is playing and sets it on the page as `--lvl`, a number from 0 to 1. The stylesheet turns that number into the orb's size and glow.
 - Speech is billed by the character. As a guard against abuse, each running copy of the function accepts 8 questions a minute from one visitor, and 400 questions and 80 spoken answers a day in total.

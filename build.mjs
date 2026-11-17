@@ -9,7 +9,6 @@ import { execSync } from "node:child_process";
 import sharp from "sharp";
 import { esc, host, sources, template } from "./lib/util.mjs";
 import { buildLibrary, docCard } from "./lib/library.mjs";
-import { videos } from "./lib/video.mjs";
 import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
@@ -43,10 +42,17 @@ for (const [id, im] of Object.entries(C.images)) {
   }
 }
 
-// The library, and the videos
+// The library, and the films
 const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings) };
 const library = await buildLibrary({ C, OUT, source, common });
-const reel = await videos({ playlist: S.playlist, titles: C.videos?.titles, OUT });
+// The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name.
+const reel = C.films?.items ?? [];
+await fs.mkdir(`${OUT}/films`, { recursive: true });
+for (const f of reel) {
+  await fs.copyFile(`content/films/${f.id}.mp4`, `${OUT}/films/${f.id}.mp4`);
+  await sharp(`content/films/${f.id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${OUT}/films/${f.id}.webp`);
+  console.log(`film: ${f.id} (${f.length}) ${f.title}`);
+}
 
 const byId = library.byId, listed = library.cards;
 const short = Object.fromEntries(C.docs.map((d) => [d.id, d.short]));
@@ -81,12 +87,18 @@ const parts = {
     .map((m) => `<li><h4 translate="no">${esc(m.name)}</h4><p class="role">${esc(m.role)}</p><p>${esc(m.summary)}</p><p class="links">${m.links.map(([t, h]) => link(t, h)).join("")}</p></li>`)
     .join("\n"),
   asks: C.faq.slice(0, 4).map((f) => `<button class="chip" type="button" data-april data-ask="${esc(f.q)}">${esc(f.q)}</button>`).join(""),
-  theater: reel.length
-    ? `<div class="theater" id="theater">
-<div class="stage"><button class="yt" type="button" data-video="${reel[0].id}"${reel[0].thumb ? ` style="background-image:url(${reel[0].thumb})"` : ""}>${PLAY}<b translate="no">${esc(reel[0].title)}</b><small>Plays here. The video is streamed from YouTube.</small></button></div>
-<ol class="reel">${reel.map((v, i) => `<li><button type="button" data-video="${v.id}" aria-pressed="${i === 0}">${v.thumb ? `<img src="${v.thumb}" width="960" height="540" alt="" loading="lazy" decoding="async">` : "<i></i>"}<span><b translate="no">${esc(v.title)}</b><small translate="no">${esc(v.length || v.year)}</small></span></button></li>`).join("")}</ol>
-</div>`
-    : `<div class="theater solo" id="theater"><div class="stage"><button class="yt" type="button" data-list="${S.playlist}">${PLAY}<b>Play the video portfolio</b><small>Plays here. The videos are streamed from YouTube.</small></button></div></div>`,
+  theater: (() => {
+    const film = (f) => `data-film="/films/${f.id}.mp4" data-poster="/films/${f.id}.webp"`;
+    const first = reel[0];
+    if (!first) return "";
+    return `<div class="theater${reel.length > 1 ? "" : " solo"}" id="theater">
+<div class="stage"><button class="yt" type="button" ${film(first)} style="background-image:url(/films/${first.id}.webp)">${PLAY}<b translate="no">${esc(first.title)}</b><small translate="no">${esc(first.about)}</small></button></div>${
+      reel.length > 1
+        ? `\n<ol class="reel">${reel.map((f, i) => `<li><button type="button" ${film(f)} aria-pressed="${i === 0}"><img src="/films/${f.id}.webp" width="960" height="540" alt="" loading="lazy" decoding="async"><span><b translate="no">${esc(f.title)}</b><small translate="no">${esc(f.length)}</small></span></button></li>`).join("")}</ol>`
+        : ""
+    }
+</div>`;
+  })(),
   tools:
     C.tools.map((t) => `<div><dt>${esc(t.group)}</dt><dd>${t.items.map((x) => `<span>${esc(x)}</span>`).join("")}</dd></div>`).join("") +
     `<div class="wide">Also: ${esc(C.foundations)}.</div>`,
@@ -113,6 +125,10 @@ const hreflang = locales.length < 2 ? "" : locales.map((l) => `<link rel="altern
 const commit = process.env.VERCEL_GIT_COMMIT_SHA || (() => { try { return execSync("git rev-parse HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return ""; } })();
 const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>.</p>` : "";
 
+// A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
+await fs.mkdir(`${OUT}/voices`, { recursive: true });
+await fs.copyFile("src/voices.html", `${OUT}/voices/index.html`);
+
 const jsonld = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -120,7 +136,7 @@ const jsonld = {
   jobTitle: S.role,
   url: S.url,
   address: { "@type": "PostalAddress", addressLocality: "Angers", addressCountry: "FR" },
-  sameAs: [S.links.linkedin, S.links.github, S.links.youtube],
+  sameAs: [S.links.linkedin, S.links.github],
 };
 const home = await template("src/home.html");
 for (const loc of locales) {
@@ -128,7 +144,8 @@ for (const loc of locales) {
     ...common,
     canonical: S.url + loc.path,
     location: esc(S.location), availability: esc(S.availability),
-    github: S.links.github, youtube: S.links.youtube,
+    github: S.links.github,
+    figures: String(C.stats.length),
     jsonld: JSON.stringify(jsonld),
     // April's tour: the section each stop scrolls to, and the line she says there.
     stops: C.tour.map((t) => t.to).join(","),

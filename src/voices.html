@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" class="js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>April's voice | Karan Deshmukh</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/site.css">
+<style>
+.pick{max-width:760px;margin:0 auto;padding:clamp(36px,7vw,84px) 22px 96px}
+.pick h1{font:500 clamp(2.2rem,6vw,3.4rem)/1.04 var(--serif);letter-spacing:-.03em;margin:0 0 .5em}
+.pick p{font-size:1.1rem;line-height:1.55;color:var(--ink2);max-width:36em}
+.pick ul{list-style:none;margin:36px 0 0;padding:0;border-top:1px solid var(--rule)}
+.pick li{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:14px;align-items:center;padding:16px 0;border-bottom:1px solid var(--rule)}
+.pick li b{font:600 1.15rem/1.2 var(--sans)}
+.pick li small{display:block;font-weight:400;font-size:.86rem;color:var(--mute);margin-top:2px}
+.pick li div{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{font:500 .95rem/1 var(--sans);padding:.62em .95em;border:1.5px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);cursor:pointer}
+.pick button[aria-pressed="true"]{background:var(--hl)}
+.pick button[data-state="wait"]{opacity:.55}
+.pick .msg{min-height:1.5em;font-size:.95rem;color:var(--red)}
+@media (max-width:560px){.pick li{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<main class="pick">
+<h1>Choose April's voice</h1>
+<p>Six women's voices read the first line of the tour. Listen in the languages that matter to you, then say which one April should keep. The first recording of a voice takes a few seconds.</p>
+<ul id="voices"></ul>
+<p class="msg" id="msg" role="status"></p>
+</main>
+<script>
+(function () {
+  var VOICES = [["sarah", "The voice she has now"], ["jessica", ""], ["alice", ""], ["matilda", ""], ["lily", ""], ["laura", ""]];
+  var LANGS = [["en", "English"], ["hi", "हिन्दी"], ["fr", "Français"], ["de", "Deutsch"], ["es", "Español"]];
+  var list = document.getElementById("voices"), msg = document.getElementById("msg"), sound = null, on = null;
+  function stop() { if (sound) { sound.pause(); sound = null; } if (on) { on.setAttribute("aria-pressed", "false"); on.removeAttribute("data-state"); on = null; } }
+  VOICES.forEach(function (v) {
+    var li = document.createElement("li"), name = document.createElement("b"), row = document.createElement("div");
+    name.textContent = v[0].charAt(0).toUpperCase() + v[0].slice(1);
+    if (v[1]) { var note = document.createElement("small"); note.textContent = v[1]; name.appendChild(note); }
+    LANGS.forEach(function (l) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.lang = l[0];
+      b.textContent = l[1];
+      b.setAttribute("aria-pressed", "false");
+      b.setAttribute("aria-label", name.firstChild.textContent + ", " + l[1]);
+      b.addEventListener("click", function () {
+        var same = on === b;
+        stop();
+        msg.textContent = "";
+        if (same) return;
+        on = b;
+        b.setAttribute("aria-pressed", "true");
+        b.setAttribute("data-state", "wait");
+        sound = new Audio("/api/april?say=tour1&lang=" + l[0] + "&voice=" + v[0] + "&v=1");
+        sound.onplaying = function () { b.removeAttribute("data-state"); };
+        sound.onended = stop;
+        sound.onerror = function () { stop(); msg.textContent = "That recording could not be made just now. Try again in a minute."; };
+        sound.play().catch(function () {});
+      });
+      row.appendChild(b);
+    });
+    li.appendChild(name);
+    li.appendChild(row);
+    list.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>

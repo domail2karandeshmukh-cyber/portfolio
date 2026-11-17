@@ -348,16 +348,16 @@
 
   /* Key figures count up when they come into view */
   if (!reduce && "IntersectionObserver" in window) $$("[data-count]").forEach(function (el) {
-    var m = /^(\d+)(.*)$/.exec(el.textContent.trim());
+    var m = /^(\d[\d,]*)(.*)$/.exec(el.textContent.trim());
     if (!m) return;
-    var to = +m[1], tail = m[2];
+    var to = +m[1].replace(/,/g, ""), tail = m[2];
     var io = new IntersectionObserver(function (es) {
       if (!es[0].isIntersecting) return;
       io.disconnect();
       var t0 = performance.now();
       (function step(t) {
         var p = Math.min(1, (t - t0) / 1300), e = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(to * e) + tail;
+        el.textContent = Math.round(to * e).toLocaleString(LANG) + tail;
         if (p < 1) requestAnimationFrame(step);
       })(t0);
     }, { threshold: 0.6 });
@@ -390,21 +390,23 @@
     links.forEach(function (a) { var s = $(a.getAttribute("href")); if (s) so.observe(s); });
   }
 
-  /* Video: plays in place. YouTube is contacted only after a press on play. */
+  /* Films: each one plays in place, from this site. */
   var theater = $("#theater");
   if (theater) theater.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-video],[data-list]");
+    var b = e.target.closest("[data-film]");
     if (!b) return;
     tourOff();
-    var f = document.createElement("iframe");
-    f.title = b.textContent.trim() || "Video";
-    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
-    f.allowFullscreen = true;
-    f.src = "https://www.youtube-nocookie.com/embed/" + (b.dataset.video || "videoseries") + "?autoplay=1&rel=0&playsinline=1" + (b.dataset.list ? "&list=" + b.dataset.list : "");
+    var v = document.createElement("video"), title = $("b", b);
+    v.controls = true;
+    v.autoplay = true;
+    v.playsInline = true;
+    v.src = b.dataset.film;
+    if (b.dataset.poster) v.poster = b.dataset.poster;
+    v.setAttribute("aria-label", title ? title.textContent.trim() : "Film");
     var stage = $(".stage", theater);
     stage.innerHTML = "";
-    stage.appendChild(f);
-    $$(".reel button", theater).forEach(function (o) { o.setAttribute("aria-pressed", o.dataset.video === b.dataset.video); });
+    stage.appendChild(v);
+    $$(".reel button", theater).forEach(function (o) { o.setAttribute("aria-pressed", o.dataset.film === b.dataset.film); });
   });
 
   /* ---------- April ---------- */
@@ -472,18 +474,21 @@
     for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
     return a.buffer;
   }
-  /* The browser's own voices are the fallback: pick a woman's voice in the page's language. */
-  var WOMAN = /female|woman|samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|serena|zira|jenny|aria|libby|sonia|michelle|am[eé]lie|audrey|marie|denise|julie|anna|petra|katja|vicki|marlene|m[oó]nica|paulina|elvira|luc[ií]a|sabina|lekha|swara|heera|kalpana/i;
+  /* The browser's own voices are the fallback. April speaks with a woman's voice in the page's language,
+     or not at all: where the device offers only a man's voice, her words stay on the screen. */
+  var WOMAN = /female|woman|samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|serena|zira|jenny|aria|libby|sonia|michelle|emma|olivia|clara|am[eé]lie|audrey|marie|denise|julie|c[eé]line|anna|petra|katja|vicki|marlene|helena|m[oó]nica|paulina|elvira|luc[ií]a|sabina|helia|lekha|swara|heera|kalpana/i;
+  var MAN = /\bmale\b|\bman\b|daniel|alex\b|fred\b|tom\b|thomas|david|mark\b|george|james|rishi|aaron|arthur|gordon|oliver|ravi|hemant|madhur|jorge|diego|juan|carlos|pablo|[aá]lvaro|martin|stefan|hans\b|markus|conrad|killian|yannick|klaus|nicolas|henri|paul\b|guy\b|ryan|eric\b|roger|brian|christopher|william|liam|andrew|reed\b|rocko|eddy|grandpa/i;
   function browserVoice(text, done) {
     if (!window.speechSynthesis) return false;
     speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(text.replace(/https?:\/\/\S+/g, ""));
     var mine = speechSynthesis.getVoices().filter(function (v) { return v.lang.toLowerCase().indexOf(LANG) === 0; });
     function score(v) {
       var woman = WOMAN.test(v.name) || (/google/i.test(v.name) && !/\bmale\b/i.test(v.name));
-      return (woman ? 4 : 0) + (/natural|neural|premium|enhanced|online/i.test(v.name) ? 2 : 0) + (v.localService ? 0 : 1);
+      return (woman ? 4 : MAN.test(v.name) ? -8 : 0) + (/natural|neural|premium|enhanced|online/i.test(v.name) ? 2 : 0) + (v.localService ? 0 : 1);
     }
     mine.sort(function (a, b) { return score(b) - score(a); });
+    if (mine[0] && score(mine[0]) < 0) return false;
+    var u = new SpeechSynthesisUtterance(text.replace(/https?:\/\/\S+/g, ""));
     if (mine[0]) u.voice = mine[0];
     u.lang = mine[0] ? mine[0].lang : LANG;
     u.rate = 0.98;
@@ -491,6 +496,12 @@
     u.onend = u.onerror = function () { speaking(false); if (done) done(); };
     speechSynthesis.speak(u);
     return true;
+  }
+  // One of her fixed lines, in her recorded voice. The browser's voice reads it only if the recording can't be had.
+  function line(name, text) {
+    fetch("/api/april?say=" + name + "&lang=" + LANG + "&v=6").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
+      .then(function (buf) { if (voiceOn) return playBytes(buf); })
+      .catch(function () { if (voiceOn) browserVoice(text); });
   }
   function say(text, audio) {
     if (!voiceOn) return;
@@ -619,7 +630,8 @@
       unlock();
       setVoice(!voiceOn);
       add("note", esc(voiceOn ? I.voiceOn : I.voiceOff));
-      if (voiceOn) browserVoice(I.voiceOn);
+      // The first thing a visitor hears is her own voice, not the device's.
+      if (voiceOn) line("voiceon", I.voiceOn);
     });
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition, mic = $("#mic");
     if (SR) {
@@ -643,7 +655,7 @@
     var at = -1, run = 0, paused = false, wait = 0, clips = {}, from = null;
     // Each line is recorded once on the server, then served from the CDN.
     function clip(i) {
-      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG + "&v=5").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
+      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG + "&v=6").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
       return clips[i];
     }
     function go(i) {

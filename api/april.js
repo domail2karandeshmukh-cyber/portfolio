@@ -6,7 +6,7 @@ const S = C.site;
 const LANGUAGES = { en: "English", fr: "French", de: "German", es: "Spanish", hi: "Hindi" };
 // The lines she says without being asked: her greeting and the stops of her tour.
 // Each language takes them from the same translation file as the page.
-const SAY = { hello: C.strings.hello };
+const SAY = { hello: C.strings.hello, voiceon: C.strings.voiceOn };
 C.tour.forEach((t, i) => { SAY["tour" + (i + 1)] = t.say; });
 const LINES = { en: SAY };
 [["fr", () => require("../content/i18n/fr.json")], ["de", () => require("../content/i18n/de.json")], ["es", () => require("../content/i18n/es.json")], ["hi", () => require("../content/i18n/hi.json")]].forEach(([code, load]) => {
@@ -19,7 +19,7 @@ C.samples.items.forEach((d) => { DOCS[d.id] = { title: d.title, href: `/samples/
 C.docs.forEach((d) => { DOCS[d.id] = { title: d.title, href: `/docs/${d.shelf}/${d.slug}` }; });
 const SECTIONS = ["writing", "projects", "video", "experience", "contact", "rewrite"];
 const DESK = require("../content/desk/messages.json").messages.map((m) => m.id);
-const VIDEOS = Object.values((C.videos && C.videos.titles) || {});
+const VIDEOS = ((C.films && C.films.items) || []).map((f) => f.title);
 
 /**
  * One action, checked: what the model names has to exist on the site.
@@ -61,8 +61,8 @@ function notes() {
   L.push("Project documentation (also kept on GitHub as docs-as-code):");
   C.docs.forEach((d) => L.push(`- [doc:${d.id}] ${d.title} (${C.types[d.type].label}, ${d.project}). ${d.blurb} ${S.url}/docs/${d.shelf}/${d.slug}`));
   L.push(`How the project documentation was made: ${C.method}`);
-  L.push(`Video portfolio, which plays on the site: ${S.url}/#video | The same videos on YouTube: ${S.links.youtube}`);
-  if (VIDEOS.length) L.push("The videos, by title: " + VIDEOS.join("; ") + ".");
+  L.push(`Films, which play on the site: ${S.url}/#video They show this site's own tools, and each was filmed by a script. The training videos Karan made for employers belong to those employers and are not public; he can talk a hiring team through that work.`);
+  if (VIDEOS.length) L.push("The films, by title: " + VIDEOS.join("; ") + ".");
   L.push(`The site is available in ${C.locales.map((l) => l.name).join(", ")}. The documents, the videos and the CV are in English.`);
   L.push("April also gives a one-minute spoken tour of the home page. It starts from the button \"Take the one-minute tour\" at the top of the page.");
   L.push(`The rewrite desk, at the top of the home page (${S.url}/#rewrite): a visitor pastes a rough message from their own team, such as a chat message or meeting notes, and sees it marked up and drafted into a document, with the questions a writer would still ask the author. An AI model writes the draft by a brief Karan wrote, and a check written in code confirms that no name or number was lost. Karan's point: drafting is the quick part, and getting the questions answered is the job.`);
@@ -78,7 +78,7 @@ You can also act on the site. Reply with one JSON object and nothing else: {"say
 "do" is one action that serves what was asked, or "" when none does:
 - go:writing, go:projects, go:video, go:experience, go:contact or go:rewrite takes the visitor to that part of the home page. go:rewrite is the rewrite desk.
 - doc:KEY offers to open one document. The keys are in the notes, written [doc:KEY].
-- video:TITLE plays one video. Use a title from the notes.
+- video:TITLE plays one film. Use a title from the notes.
 - tour starts your one-minute tour.
 - desk:hotfix, desk:export or desk:laptops runs a sample message on the rewrite desk.
 - cv offers the CV. linkedin offers to message Karan.
@@ -151,30 +151,45 @@ function after(rest) {
   return text.replace(/["'{}]/g, "").replace(/\s*:\s*/g, ":").trim();
 }
 
-// Her voice. The first entry that works is kept; set APRIL_VOICE_MODEL and APRIL_VOICE to choose another.
-const VOICES = [
-  process.env.APRIL_VOICE_MODEL ? { model: process.env.APRIL_VOICE_MODEL, voice: process.env.APRIL_VOICE || undefined } : null,
-  { model: "elevenlabs/eleven-flash-v2.5", voice: "EXAVITQu4vr4xnSDxMaL" },
-  { model: "openai/tts-1", voice: "nova" },
-].filter(Boolean);
-let voice = null;
-async function speak(token, text, lang, tried = []) {
+// Her voice. A line that is recorded once (her greeting, a stop of the tour) is spoken by the most expressive model:
+// nobody waits for it. An answer is spoken while the visitor waits, so it gets the quick model of the same family.
+// In each list the first model that works is kept. Set APRIL_VOICE_MODEL to put another one first, APRIL_VOICE to change the voice.
+const HER_VOICE = process.env.APRIL_VOICE || "EXAVITQu4vr4xnSDxMaL";
+const tier = (models, last) => [process.env.APRIL_VOICE_MODEL, ...models].filter(Boolean).map((model) => ({ model, voice: HER_VOICE })).concat([last]);
+const VOICES = {
+  recorded: tier(["elevenlabs/eleven-v4", "elevenlabs/eleven-v4-turbo", "elevenlabs/eleven-flash-v2.5"], { model: "openai/tts-1-hd", voice: "nova" }),
+  live: tier(["elevenlabs/eleven-v4-turbo", "elevenlabs/eleven-flash-v2.5"], { model: "openai/tts-1", voice: "nova" }),
+};
+// Voices to listen to before choosing one: /api/april?say=tour1&voice=<name>. All of them are women's voices.
+const CANDIDATES = { sarah: "EXAVITQu4vr4xnSDxMaL", jessica: "cgSgspJ2msm6clMCkdW9", alice: "Xb7hH8MSUJpSbSDYk0k2", matilda: "XrExE9yKIg1WjnnlVkGX", lily: "pFZP5JQG7iQjIQuC4Bku", laura: "FGY2WhTYpPnrIDTdsKH5" };
+const kept = {};
+/**
+ * @param {"recorded"|"live"} kind which list of models to use
+ * @param {{model?: string, voice?: string}} [only] one voice, or one model, to try instead of the usual ones
+ */
+async function speak(token, text, lang, tried = [], kind = "live", only = null) {
   const clean = String(text).replace(/https?:\/\/\S+/g, "").replace(/\s+/g, " ").trim().slice(0, 500);
   if (!clean) return null;
-  for (const v of voice ? [voice] : VOICES) {
+  let list = kept[kind] ? [kept[kind]] : VOICES[kind];
+  if (only) list = (only.model ? [{ model: only.model, voice: HER_VOICE }] : VOICES[kind].filter((v) => v.voice === HER_VOICE)).map((v) => ({ model: v.model, voice: only.voice || v.voice }));
+  for (const v of list) {
     try {
+      const began = Date.now();
       const r = await fetch(`${GATEWAY}/v4/ai/speech-model`, {
         method: "POST",
         headers: { authorization: "Bearer " + token, "ai-gateway-protocol-version": "0.0.1", "ai-speech-model-specification-version": "4", "ai-model-id": v.model, "content-type": "application/json" },
         body: JSON.stringify({ text: clean, voice: v.voice, outputFormat: "mp3", language: lang }),
-        signal: AbortSignal.timeout(20000),
+        signal: AbortSignal.timeout(25000),
       });
       const d = await r.json().catch(() => ({}));
-      if (r.ok && typeof d.audio === "string" && d.audio.length > 400) { voice = v; return { audio: d.audio, model: v.model }; }
+      if (r.ok && typeof d.audio === "string" && d.audio.length > 400) {
+        if (!only) kept[kind] = v;
+        return { audio: d.audio, model: v.model, ms: Date.now() - began };
+      }
       tried.push(`${v.model}:${r.status} ${String((d.error && (d.error.message || d.error.type)) || d.message || "").slice(0, 90)}`);
     } catch (e) { tried.push(`${v.model}:${String(e.message).slice(0, 60)}`); }
   }
-  voice = null;
+  if (!only) kept[kind] = null;
   return null;
 }
 
@@ -205,17 +220,21 @@ module.exports = async (req, res) => {
   if (say) {
     const text = (LINES[lang] || LINES.en)[say];
     if (!text) return res.status(404).json({ error: "no such line" });
-    const key = lang + ":" + say, tried = [];
+    // ?voice=<name> is one of the voices to choose from. On a preview, ?model=<id> tries one speech model.
+    const name = String((req.query || {}).voice || "").toLowerCase(), model = process.env.VERCEL_ENV === "production" ? "" : String((req.query || {}).model || "");
+    if (name && !CANDIDATES[name]) return res.status(404).json({ error: "no such voice", voices: Object.keys(CANDIDATES) });
+    const only = name || model ? { voice: CANDIDATES[name], model: model || undefined } : null;
+    const key = [lang, say, name, model].join(":"), tried = [];
     let out = said.get(key);
     if (!out) {
       if (recorded >= RECORDINGS_A_DAY) return res.status(429).json({ error: "busy" });
       recorded++;
-      out = await speak(token, text, lang, tried);
+      out = await speak(token, text, lang, tried, "recorded", only);
       if (!out) return res.status(502).json({ error: "voice", tried });
       said.set(key, out);
     }
     // ?probe answers with facts about the audio, for checking the voice without downloading it.
-    if (probe) return res.status(200).json({ voice: out.model, bytes: Buffer.from(out.audio, "base64").length, text, tried });
+    if (probe) return res.status(200).json({ voice: out.model, ms: out.ms, bytes: Buffer.from(out.audio, "base64").length, text, tried });
     res.setHeader("content-type", "audio/mpeg");
     res.setHeader("cache-control", "public, max-age=86400, s-maxage=2592000");
     res.setHeader("x-voice-model", out.model);
@@ -254,7 +273,7 @@ module.exports = async (req, res) => {
       const reply = { answer, model };
       if (out.action) reply.action = out.action;
       if (aloud && spoken < SPOKEN_ANSWERS_A_DAY) {
-        const sound = await speak(token, answer, lang);
+        const sound = await speak(token, answer, lang, [], "live");
         if (sound) { spoken++; reply.audio = sound.audio; reply.voice = sound.model; }
       }
       return res.status(200).json(reply);
