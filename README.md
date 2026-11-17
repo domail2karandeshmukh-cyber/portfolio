@@ -155,7 +155,7 @@ It checks that every template passes, that the first draft fails and then passes
 | `src/doc.js` | The document model: Markdown with front matter, variables (`{{name}}`), and conditions (`::: only admin`). It writes Markdown, HTML, and DITA. |
 | `src/style.js` | The rules and the checker |
 | `src/workbench.html`, `src/workbench.css`, `src/workbench.js` | The page: the editor, the preview for each reader, the findings with their fixes, and the three outputs |
-| `content/workbench/` | The starting documents: a first draft that breaks the guide, and six templates that pass it |
+| `content/workbench/` | The starting documents: a first draft that breaks the guide, and twelve templates that pass it |
 
 The build stops if a template fails the check, or if the first draft passes it.
 
@@ -164,6 +164,26 @@ The picture of the workbench on the home page is `content/shots/workbench.webp`.
 ```bash
 python3 scripts/shoot-pages.py http://localhost:8765
 ```
+
+## The Documentation Studio
+
+`/studio` holds six tools that run in the browser, like the workbench. Nothing a visitor adds is uploaded: images, recordings, and projects stay in the browser (IndexedDB) until the visitor downloads them.
+
+| Address | What it makes |
+|---|---|
+| `/studio/screenshots` | Annotated screenshots: arrows, callouts, numbered steps, highlights, crop, and redaction. Blur, pixelation, and black boxes are drawn into the exported pixels, so they can't be removed from the file. |
+| `/studio/guides` | Step-by-step guides from screenshots, exported as Markdown, HTML, and PDF (jsPDF, loaded only when a PDF is made) |
+| `/studio/video` | Training videos: clips, zoom, pointer effects, overlays, captions (SRT and WebVTT in and out), chapters, and narration from a microphone or a file. The browser records the timeline in real time with MediaRecorder; `src/studio/mp4.js` then rewrites the recorder's fragmented MP4 with one index, copying every sample unchanged, so players show its length and can seek. |
+| `/studio/kb` | A help-center knowledge base that runs locally: categories, sections, articles, search, and an export. It does not publish to Zendesk. |
+| `/studio/control` | Document control: Draft, In review, Approved, Published, Superseded, with separate editorial, technical, and safety approvals, revisions, and an audit trail. A clean style check is not an approval. |
+| `/studio/dita` | DITA 1.3 projects from the workbench templates or Markdown files: a map with keys, a relationship table, and DITAVAL filters |
+| `/studio/flagship` | A fictional preventive-maintenance package made with the tools above. Its procedures are samples, not approved instructions. |
+
+`lib/studio.mjs` builds the pages from `src/studio/`. `content/studio/` holds the samples, and `scripts/studio-*.py` make them again.
+
+### DITA
+
+`scripts/dita-sample.mjs` writes `content/dita-sample/src` from the workbench templates. With `--publish` and `DITA_HOME` set to a DITA-OT folder, it validates every file against the OASIS DTDs and publishes HTML5 and PDF. The workflow **Publish the DITA sample** does this on GitHub and commits the result.
 
 ## Films
 
@@ -317,7 +337,7 @@ The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 |---|---|
 | `node scripts/selftest.mjs` | The style checker and the document model. See [The style guide](#the-style-guide). |
 | `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
-| `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. The script also opens April and listens: her greeting, one answer in words and aloud, and the first stop of her tour. It fetches every recording in every language. |
+| `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. It also opens the recruiter page and the studio pages. The script also opens April and listens: her greeting, one answer in words and aloud, and the first stop of her tour. It fetches every recording in every language. |
 
 The workflow **Check the site** builds the site and runs all three. It runs on demand and every Monday morning, and GitHub sends an email when it fails. Run it after a release, once the release is live.
 

@@ -14,7 +14,8 @@ from playwright.sync_api import sync_playwright
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 site = json.loads((ROOT / "content/site.json").read_text(encoding="utf-8"))
 home = (sys.argv[1] if len(sys.argv) > 1 else site["site"]["url"]).rstrip("/")
-pages = [(home + p, 600) for p in ["/", "/fr", "/docs", "/style", "/workbench", "/samples/core42-portal", "/docs/trustnav/how-it-works"]]
+pages = [(home + p, 600) for p in ["/", "/fr", "/docs", "/style", "/workbench", "/samples/core42-portal", "/docs/trustnav/how-it-works", "/recruiters",
+                                  "/studio", "/studio/screenshots", "/studio/guides", "/studio/video", "/studio/kb", "/studio/control", "/studio/dita", "/studio/flagship"]]
 pages += [(p["live"], 300) for p in site["projects"] if p.get("live")]
 pages += [(h, 300) for m in site["more"] for _, h in m["links"] if h.startswith("http")]
 failed = []
