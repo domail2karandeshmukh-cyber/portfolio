@@ -220,6 +220,7 @@ function sourcesOf(answer, passages, lang, action) {
   const said = content(answer);
   return passages.filter((p) => {
     if (!p.strong || (action && action.type === "linkedin")) return false;
+    if (action && action.type === "doc" && action.href === p.u) return false;        // her button already opens that page
     if (lang !== "en") return answer.length > 60;          // her answer is in another language than the passage
     let shared = 0;
     content(p.x + " " + p.s).forEach((w) => { if (said.has(w)) shared++; });
