@@ -1,14 +1,14 @@
-name: Publish the DITA sample
+name: Publish the DITA samples
 
-# Makes the workbench's templates into one DITA 1.3 project (scripts/dita-sample.mjs), validates every file against the
-# OASIS DTDs that DITA Open Toolkit ships, publishes HTML5 and PDF with DITA Open Toolkit, and commits the result to
-# content/dita-sample, which the site serves at /studio/dita/sample. Runs on demand, and when a template or the
-# document model changes.
+# Makes each document set of lib/dita-sets.mjs into a DITA 1.3 project (scripts/dita-sample.mjs), validates every file
+# against the OASIS DTDs that DITA Open Toolkit ships, publishes HTML5 (with scripts/dita-html5.css) and PDF with DITA
+# Open Toolkit, and commits the result to content/dita-samples, which the site serves at /studio/dita/<set>.
+# Runs on demand, and when a set's documents, the list of sets, the document model or the publishing script changes.
 on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["content/workbench/**", "src/doc.js", "scripts/dita-sample.mjs"]
+    paths: ["content/workbench/**", "content/scenarios/**", "lib/dita-sets.mjs", "src/doc.js", "scripts/dita-sample.mjs", "scripts/dita-html5.css"]
 
 permissions:
   contents: write
@@ -39,6 +39,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add content/dita-sample
-          git diff --cached --quiet || git commit -m "Publish the DITA sample with DITA-OT ${DITA_OT}"
+          git add content/dita-samples
+          git diff --cached --quiet || git commit -m "Publish the DITA samples with DITA-OT ${DITA_OT}"
           git push

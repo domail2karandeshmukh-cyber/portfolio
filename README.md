@@ -203,7 +203,7 @@ The screenshot editor, the step guides, and the video editor have undo and redo 
 
 ### DITA
 
-`lib/dita-sets.mjs` lists the document sets. `scripts/dita-sample.mjs` writes each one to `content/dita-samples/<id>/src`. With `--publish` and `DITA_HOME` set to a DITA-OT folder, it validates every file against the OASIS DTDs and publishes HTML5 and PDF. The workflow **Publish the DITA sample** does this on GitHub and commits the result.
+`lib/dita-sets.mjs` lists the document sets. `scripts/dita-sample.mjs` writes each one to `content/dita-samples/<id>/src`. With `--publish` and `DITA_HOME` set to a DITA-OT folder, it validates every file against the OASIS DTDs and publishes HTML5 and PDF. The workflow **Publish the DITA samples** does this on GitHub and commits the result: on demand, and when a set's documents, the list of sets, the document model or the publishing script reaches `main`.
 
 The HTML5 is DITA-OT's own, with one custom stylesheet passed the documented way (`args.css`): `scripts/dita-html5.css` gives the links in the table of contents and in related links a target 24 pixels high (WCAG 2.2, success criterion 2.5.8). The flagship's DITA output is published with it too.
 

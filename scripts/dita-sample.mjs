@@ -8,7 +8,7 @@
 //                               and publish HTML5 and PDF into content/dita-samples/<id>/
 //
 // The projects are written by Doc.toDitaProject, the same code that makes a project in the browser at /studio/dita.
-// The site serves what this script last published, at /studio/dita/<id>/. The workflow "Publish the DITA sample" runs it.
+// The site serves what this script last published, at /studio/dita/<id>/. The workflow "Publish the DITA samples" runs it.
 // The HTML5 is DITA-OT's own, with one custom stylesheet passed the documented way (args.css): scripts/dita-html5.css,
 // which gives the links in the table of contents and in related links a target 24 pixels high (WCAG 2.2, 2.5.8).
 //
