@@ -1,0 +1,235 @@
+/* /studio/kb: a knowledge base in the shape of a help center (categories, sections, articles), kept in this browser.
+   Articles are written in the workbench's Markdown, checked with the style guide, and previewed as a help center
+   with search. Exports: Markdown and HTML for every article, and the request bodies the Zendesk Help Center API takes.
+   Nothing here talks to Zendesk: this is a local demonstration. Needs kit.js, doc.js and style.js. */
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); }, esc = Kit.esc;
+  function say(t, bad) { Kit.say($("#kb-status"), t, bad); }
+  var uid = function (p) { return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); };
+  var LOCALES = { "en-us": "English", fr: "French", de: "German", es: "Spanish", hi: "Hindi" };
+  var KB = null, cur = { article: null, locale: "en-us" }, view = "edit";
+
+  function blankKB() { return { name: "Help center", categories: [] }; }
+  function all() { var out = []; KB.categories.forEach(function (c) { c.sections.forEach(function (s) { s.articles.forEach(function (a) { out.push({ c: c, s: s, a: a }); }); }); }); return out; }
+  function where(id) { return all().filter(function (x) { return x.a.id === id; })[0]; }
+  function text(a, loc) { return loc === "en-us" ? a : (a.translations[loc] || null); }
+  function html(md) { var d = Doc.parse(md || ""); return Doc.toHtml(Doc.resolve(d, Doc.GENERAL)); }
+
+  /* ---------- The tree ---------- */
+  function tree() {
+    $("#kb-tree").innerHTML = KB.categories.map(function (c) {
+      return '<li class="kb-cat"><div class="kb-row"><b>' + esc(c.name) + '</b><span><button type="button" class="kb-x" data-act="add-section" data-id="' + c.id + '" aria-label="Add a section to ' + esc(c.name) + '">+ Section</button><button type="button" class="kb-x" data-act="rename" data-id="' + c.id + '" aria-label="Rename ' + esc(c.name) + '">Rename</button><button type="button" class="kb-x" data-act="delete" data-id="' + c.id + '" aria-label="Delete ' + esc(c.name) + '">Delete</button></span></div><ul>' +
+        c.sections.map(function (s) {
+          return '<li class="kb-sec"><div class="kb-row"><span>' + esc(s.name) + '</span><span><button type="button" class="kb-x" data-act="add-article" data-id="' + s.id + '" aria-label="Add an article to ' + esc(s.name) + '">+ Article</button><button type="button" class="kb-x" data-act="rename" data-id="' + s.id + '" aria-label="Rename ' + esc(s.name) + '">Rename</button><button type="button" class="kb-x" data-act="delete" data-id="' + s.id + '" aria-label="Delete ' + esc(s.name) + '">Delete</button></span></div><ul>' +
+            s.articles.map(function (a) { return '<li><button type="button" class="kb-art' + (cur.article === a.id ? " on" : "") + '" data-open="' + a.id + '" aria-current="' + (cur.article === a.id) + '">' + esc(a.title || "Untitled") + ' <small class="kb-st ' + a.status + '">' + (a.status === "published" ? "Published" : "Draft") + "</small></button></li>"; }).join("") + "</ul></li>";
+        }).join("") + "</ul></li>";
+    }).join("") || '<li class="kb-none">No categories yet.</li>';
+  }
+  $("#kb-addcat").addEventListener("click", function () {
+    var n = prompt("Name of the new category:", "New category"); if (!n) return;
+    KB.categories.push({ id: uid("c"), name: n.slice(0, 80), description: "", sections: [] }); save("Added the category " + n + "."); tree();
+  });
+  $("#kb-tree").addEventListener("click", function (e) {
+    var open = e.target.closest("[data-open]"); if (open) { cur.article = open.dataset.open; cur.locale = "en-us"; editor(); tree(); $("#kb-title").focus(); return; }
+    var b = e.target.closest("[data-act]"); if (!b) return;
+    var id = b.dataset.id, act = b.dataset.act, cat = KB.categories.filter(function (c) { return c.id === id; })[0], sec = null, parent = null;
+    KB.categories.forEach(function (c) { c.sections.forEach(function (s) { if (s.id === id) { sec = s; parent = c; } }); });
+    if (act === "add-section") { var n = prompt("Name of the new section:", "New section"); if (n) { cat.sections.push({ id: uid("s"), name: n.slice(0, 80), description: "", articles: [] }); save("Added the section " + n + "."); } }
+    if (act === "add-article") { var a = article("New article", "Write the answer here.\n"); sec.articles.push(a); cur.article = a.id; cur.locale = "en-us"; save("Added an article to " + sec.name + "."); editor(); }
+    if (act === "rename") { var o = cat || sec, m = prompt("New name:", o.name); if (m) { o.name = m.slice(0, 80); save("Renamed it to " + m + "."); } }
+    if (act === "delete") {
+      var target = cat || sec, count = cat ? cat.sections.reduce(function (n2, s) { return n2 + s.articles.length; }, 0) : sec.articles.length;
+      if (!confirm("Delete " + target.name + (count ? " and its " + count + " article(s)" : "") + "? You can't undo this, except from a saved project.")) return;
+      if (cat) KB.categories = KB.categories.filter(function (c) { return c !== cat; }); else parent.sections = parent.sections.filter(function (s) { return s !== sec; });
+      if (cur.article && !where(cur.article)) cur.article = null;
+      save("Deleted " + target.name + "."); editor();
+    }
+    tree();
+  });
+  function article(title, body, tags) { return { id: uid("a"), title: title, body: body, tags: tags || [], status: "draft", updated: new Date().toISOString(), translations: {}, history: [] }; }
+
+  /* ---------- The editor ---------- */
+  function editor() {
+    var w = cur.article && where(cur.article);
+    $("#kb-edit").hidden = !w; $("#kb-empty").hidden = !!w;
+    if (!w) return preview();
+    var a = w.a, t = text(a, cur.locale);
+    $("#kb-where").textContent = w.c.name + " › " + w.s.name;
+    $("#kb-locales").innerHTML = Object.keys(LOCALES).map(function (l) {
+      var has = l === "en-us" || a.translations[l];
+      return '<button type="button" class="kb-loc' + (l === cur.locale ? " on" : "") + (has ? "" : " missing") + '" data-loc="' + l + '" aria-pressed="' + (l === cur.locale) + '">' + LOCALES[l] + (has ? "" : " +") + "</button>";
+    }).join("");
+    var missing = !t;
+    $("#kb-fields").hidden = missing; $("#kb-prep").hidden = !missing;
+    if (missing) { $("#kb-prep-text").textContent = "There's no " + LOCALES[cur.locale] + " version of this article yet."; return preview(); }
+    $("#kb-title").value = t.title; $("#kb-body").value = t.body; $("#kb-tags").value = (a.tags || []).join(", ");
+    $("#kb-statusbox").value = t.status || a.status;
+    $("#kb-tags").disabled = cur.locale !== "en-us";
+    history(); check(); preview();
+  }
+  $("#kb-locales").addEventListener("click", function (e) { var b = e.target.closest("[data-loc]"); if (b) { cur.locale = b.dataset.loc; editor(); } });
+  $("#kb-prepare").addEventListener("click", function () {
+    var a = where(cur.article).a;
+    a.translations[cur.locale] = { title: a.title, body: a.body, status: "draft", needs: true };
+    save("Prepared a " + LOCALES[cur.locale] + " version: it starts as a copy of the English article, marked as a draft to translate. Nothing is translated by machine."); editor();
+  });
+  function edit(field, v) {
+    var a = where(cur.article).a, t = text(a, cur.locale);
+    if (field === "tags") a.tags = v.split(",").map(function (s) { return s.trim().toLowerCase(); }).filter(Boolean).slice(0, 20);
+    else t[field] = v;
+    if (field !== "status") a.updated = new Date().toISOString();
+    save(); tree(); preview(); if (field === "body") check();
+  }
+  $("#kb-title").addEventListener("input", function () { edit("title", this.value.slice(0, 150)); });
+  $("#kb-body").addEventListener("input", function () { edit("body", this.value.slice(0, 50000)); });
+  $("#kb-tags").addEventListener("change", function () { edit("tags", this.value); });
+  $("#kb-statusbox").addEventListener("change", function () {
+    var a = where(cur.article).a, t = text(a, cur.locale), was = t.status || a.status;
+    if (cur.locale === "en-us") a.status = this.value; else t.status = this.value;
+    snapshot(a, (was === this.value ? "Saved" : this.value === "published" ? "Published" : "Moved back to draft") + (cur.locale === "en-us" ? "" : " (" + LOCALES[cur.locale] + ")"));
+    save("Set the " + LOCALES[cur.locale] + " article to " + (this.value === "published" ? "published in this demo help center" : "draft") + ". Nothing is sent to Zendesk."); tree(); history();
+  });
+  function snapshot(a, note) {
+    var t = text(a, cur.locale);
+    a.history.unshift({ at: new Date().toISOString(), locale: cur.locale, title: t.title, body: t.body, status: t.status || a.status, note: note });
+    a.history = a.history.slice(0, 50);
+  }
+  $("#kb-version").addEventListener("click", function () { var a = where(cur.article).a; snapshot(a, "Saved a version"); save("Saved a version of the article in its history."); history(); });
+  function history() {
+    var a = where(cur.article).a;
+    $("#kb-history").innerHTML = a.history.length ? a.history.map(function (h, i) {
+      return "<li><span>" + esc(new Date(h.at).toLocaleString()) + " · " + esc(LOCALES[h.locale] || h.locale) + " · " + esc(h.note) + '</span><button type="button" class="kb-x" data-restore="' + i + '">Restore</button></li>';
+    }).join("") : "<li>No saved versions yet. Publishing or saving a version adds one.</li>";
+  }
+  $("#kb-history").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-restore]"); if (!b) return;
+    var a = where(cur.article).a, h = a.history[+b.dataset.restore], t = h.locale === "en-us" ? a : a.translations[h.locale];
+    if (!t) return;
+    snapshot(a, "Before restoring a version"); t.title = h.title; t.body = h.body; cur.locale = h.locale;
+    save("Restored the version from " + new Date(h.at).toLocaleString() + "."); editor(); tree();
+  });
+  $("#kb-del").addEventListener("click", function () {
+    var w = where(cur.article); if (!confirm("Delete the article " + w.a.title + "?")) return;
+    w.s.articles = w.s.articles.filter(function (a) { return a !== w.a; }); cur.article = null; save("Deleted the article."); tree(); editor();
+  });
+  var checkT = 0;
+  function check() {
+    clearTimeout(checkT);
+    checkT = setTimeout(function () {
+      var t = text(where(cur.article).a, cur.locale); if (!t) return;
+      var md = "# " + t.title + "\n\n" + t.body, sum = Style.summary(Style.check(md));
+      $("#kb-check").className = "kb-check" + (sum.passes ? " ok" : "");
+      $("#kb-check").textContent = cur.locale !== "en-us" ? "The style guide checks English only." : sum.passes ? "Passes the style check." + (sum.suggestion ? " " + sum.suggestion + " suggestion(s)." : "") : sum.error + " error(s) and " + sum.warning + " warning(s) to fix. Open the article in the workbench to see each one.";
+    }, 250);
+  }
+  $("#kb-bench").addEventListener("click", function () {
+    var t = text(where(cur.article).a, cur.locale);
+    try { localStorage.setItem("wb:doc", "# " + t.title + "\n\n" + t.body); } catch (e) {}
+    location.href = "/workbench";
+  });
+
+  /* ---------- The help center preview ---------- */
+  var q = "";
+  function preview() {
+    if (view !== "center") { var w = cur.article && where(cur.article), t = w && text(w.a, cur.locale); $("#kb-preview").innerHTML = t ? '<article class="kb-article"><h1>' + esc(t.title) + "</h1>" + html(t.body) + (w.a.tags.length ? '<p class="kb-tags">' + w.a.tags.map(function (g) { return "<span>" + esc(g) + "</span>"; }).join("") + "</p>" : "") + "</article>" : ""; return; }
+    var loc = cur.locale, pub = function (a) { var t = text(a, loc); return t && (loc === "en-us" ? a.status : t.status) === "published"; };
+    var h = '<div class="kb-hc"><p class="kb-hc-name">' + esc(KB.name) + '</p><label class="kb-search">Search <input type="search" id="kb-q" value="' + esc(q) + '" placeholder="How do I…"></label>';
+    if (q.trim()) {
+      var terms = q.toLowerCase().split(/\s+/).filter(function (w) { return w.length > 1; });
+      var hits = all().filter(function (x) { if (!pub(x.a)) return false; var t = text(x.a, loc), hay = (t.title + " " + t.body + " " + x.a.tags.join(" ")).toLowerCase(); return terms.every(function (w) { return hay.indexOf(w) > -1; }); });
+      h += "<p>" + hits.length + " result(s) for <b>" + esc(q) + "</b></p><ul class=\"kb-hits\">" + hits.map(function (x) { return '<li><button type="button" class="kb-link" data-read="' + x.a.id + '">' + esc(text(x.a, loc).title) + "</button><small>" + esc(x.c.name + " › " + x.s.name) + "</small></li>"; }).join("") + "</ul>";
+    } else {
+      h += KB.categories.map(function (c) {
+        return '<section class="kb-hc-cat"><h2>' + esc(c.name) + "</h2>" + c.sections.map(function (s) {
+          var arts = s.articles.filter(pub); if (!arts.length) return "";
+          return "<h3>" + esc(s.name) + "</h3><ul>" + arts.map(function (a) { return '<li><button type="button" class="kb-link" data-read="' + a.id + '">' + esc(text(a, loc).title) + "</button></li>"; }).join("") + "</ul>";
+        }).join("") + "</section>";
+      }).join("");
+      var drafts = all().filter(function (x) { return !pub(x.a); }).length;
+      if (drafts) h += '<p class="kb-hint">' + drafts + " draft(s) aren't shown. Readers see published articles only.</p>";
+    }
+    $("#kb-preview").innerHTML = h + "</div>";
+    var qi = $("#kb-q"); if (qi) { qi.oninput = function () { q = this.value; var pos = this.selectionStart; preview(); var n = $("#kb-q"); n.focus(); n.setSelectionRange(pos, pos); }; }
+  }
+  $("#kb-preview").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-read]"); if (!b) return;
+    var w = where(b.dataset.read), t = text(w.a, cur.locale);
+    $("#kb-preview").innerHTML = '<div class="kb-hc"><p><button type="button" class="kb-link" id="kb-back">‹ ' + esc(KB.name) + '</button> › ' + esc(w.c.name) + " › " + esc(w.s.name) + '</p><article class="kb-article"><h1>' + esc(t.title) + "</h1>" + html(t.body) + "</article></div>";
+    $("#kb-back").onclick = function () { preview(); };
+  });
+  document.querySelectorAll("[data-view]").forEach(function (b) {
+    b.addEventListener("click", function () { view = b.dataset.view; document.querySelectorAll("[data-view]").forEach(function (x) { x.setAttribute("aria-pressed", x === b); }); preview(); });
+  });
+
+  /* ---------- Exports ---------- */
+  function name() { return Kit.slug(KB.name, "help-center"); }
+  $("#kb-export").addEventListener("click", function () {
+    var files = [], api = { note: "Request bodies for the Zendesk Help Center API: POST /api/v2/help_center/sections/{section_id}/articles for each article, and POST /api/v2/help_center/articles/{article_id}/translations for each translation. Create the categories and sections first, and set user_segment_id and permission_group_id for your account. Made by karandeshmukh.dev/studio/kb; nothing has been sent.", categories: [] };
+    KB.categories.forEach(function (c, ci) {
+      var cat = { name: c.name, sections: [] }; api.categories.push(cat);
+      c.sections.forEach(function (s, si) {
+        var sec = { name: s.name, articles: [] }; cat.sections.push(sec);
+        s.articles.forEach(function (a, ai) {
+          var dir = (ci + 1) + "-" + Kit.slug(c.name) + "/" + (si + 1) + "-" + Kit.slug(s.name) + "/", base = (ai + 1) + "-" + Kit.slug(a.title);
+          [["en-us", a]].concat(Object.keys(a.translations).map(function (l) { return [l, a.translations[l]]; })).forEach(function (pair) {
+            var l = pair[0], t = pair[1], st = l === "en-us" ? a.status : t.status, suffix = l === "en-us" ? "" : "." + l;
+            files.push({ name: dir + base + suffix + ".md", data: "---\nstatus: " + st + "\nlocale: " + l + (a.tags.length ? "\nlabels: " + a.tags.join(", ") : "") + "\n---\n# " + t.title + "\n\n" + t.body.trim() + "\n" });
+            files.push({ name: dir + base + suffix + ".html", data: "<h1>" + esc(t.title) + "</h1>\n" + html(t.body) + "\n" });
+          });
+          sec.articles.push({ article: { title: a.title, body: html(a.body), locale: "en-us", draft: a.status !== "published", label_names: a.tags, user_segment_id: null, permission_group_id: null },
+            translations: Object.keys(a.translations).map(function (l) { var t = a.translations[l]; return { translation: { locale: l, title: t.title, body: html(t.body), draft: t.status !== "published" } }; }) });
+        });
+      });
+    });
+    files.push({ name: "zendesk-help-center-api.json", data: JSON.stringify(api, null, 1) });
+    files.push({ name: "knowledge-base.json", data: JSON.stringify({ app: "karandeshmukh.dev/studio/kb", version: 1, kb: KB }, null, 1) });
+    Kit.save(Kit.zip(files), name() + ".zip");
+    say("Exported " + (files.length - 2) / 2 + " article version(s) as Markdown and HTML, the API request bodies, and the project, in one ZIP.");
+  });
+  $("#kb-open").addEventListener("change", function () {
+    var f = this.files[0]; this.value = "";
+    Kit.readBytes(f).then(function (bytes) {
+      var j;
+      if (/\.zip$/i.test(f.name)) { var files = Kit.unzip(bytes); j = JSON.parse(new TextDecoder().decode(files["knowledge-base.json"] || new Uint8Array())); }
+      else j = JSON.parse(new TextDecoder().decode(bytes));
+      use(clean(j)); say("Opened " + f.name + ".");
+    }).catch(function (e) { say(e instanceof SyntaxError ? "This file isn't a knowledge base saved by this studio." : e.message, true); });
+  });
+  function clean(j) {
+    if (!j || j.app !== "karandeshmukh.dev/studio/kb" || !j.kb || !Array.isArray(j.kb.categories)) throw new Error("This file isn't a knowledge base saved by this studio.");
+    var s = function (v, n) { return String(v == null ? "" : v).slice(0, n); };
+    var art = function (a) { var tr = {}; Object.keys(a.translations || {}).forEach(function (l) { if (LOCALES[l] && l !== "en-us") { var t = a.translations[l]; tr[l] = { title: s(t.title, 150), body: s(t.body, 50000), status: t.status === "published" ? "published" : "draft" }; } });
+      return { id: uid("a"), title: s(a.title, 150), body: s(a.body, 50000), tags: (Array.isArray(a.tags) ? a.tags : []).map(function (x) { return s(x, 40); }).slice(0, 20), status: a.status === "published" ? "published" : "draft", updated: s(a.updated, 40), translations: tr,
+        history: (Array.isArray(a.history) ? a.history : []).slice(0, 50).map(function (h) { return { at: s(h.at, 40), locale: LOCALES[h.locale] ? h.locale : "en-us", title: s(h.title, 150), body: s(h.body, 50000), status: h.status === "published" ? "published" : "draft", note: s(h.note, 80) }; }) }; };
+    return { name: s(j.kb.name, 80) || "Help center", categories: j.kb.categories.slice(0, 50).map(function (c) { return { id: uid("c"), name: s(c.name, 80), description: s(c.description, 300), sections: (c.sections || []).slice(0, 100).map(function (x) { return { id: uid("s"), name: s(x.name, 80), description: s(x.description, 300), articles: (x.articles || []).slice(0, 500).map(art) }; }) }; }) };
+  }
+
+  /* ---------- The sample, and keeping the knowledge base in this browser ---------- */
+  $("#kb-sample").addEventListener("click", function () {
+    if (KB.categories.length && !confirm("Replace this knowledge base with the sample? Export it first to keep it.")) return;
+    fetch("/studio/templates.json").then(function (r) { return r.json(); }).then(function (t) {
+      var by = {}; t.forEach(function (x) { by[x.id] = x.source; });
+      function from(id, tags, pub) {
+        var d = Doc.parse(by[id]), md = Doc.toMarkdown(Doc.resolve(d, Doc.GENERAL)).replace(/^# .*\n+/, ""), a = article(Doc.resolve(d, Doc.GENERAL).title, md, tags);
+        if (pub) { a.status = "published"; a.history.unshift({ at: new Date().toISOString(), locale: "en-us", title: a.title, body: a.body, status: "published", note: "Published" }); }
+        return a;
+      }
+      var mfa = from("how-to", ["mfa", "account"], true);
+      mfa.translations.fr = { title: "Réinitialiser l'authentification multifacteur d'un utilisateur bloqué", body: mfa.body, status: "draft", needs: true };
+      KB = { name: "Acme Console help (fictional)", categories: [
+        { id: uid("c"), name: "Accounts and access", description: "", sections: [
+          { id: uid("s"), name: "Sign-in", description: "", articles: [mfa, from("troubleshooting", ["reports", "permissions"], true)] },
+          { id: uid("s"), name: "Roles", description: "", articles: [from("reference", ["roles"], true), from("sop", ["admin", "access"], false)] }] },
+        { id: uid("c"), name: "Using the console", description: "", sections: [
+          { id: uid("s"), name: "Releases", description: "", articles: [from("release-notes", ["release"], true)] },
+          { id: uid("s"), name: "Shared drives", description: "", articles: [from("faq", ["drives"], true)] }] }] };
+      cur = { article: mfa.id, locale: "en-us" }; save("Opened the sample: a fictional help center with six articles in two categories. One is a draft, and one has a French version prepared for translation."); tree(); editor();
+    });
+  });
+  function use(k) { KB = k; cur = { article: null, locale: "en-us" }; save(); tree(); editor(); }
+  var t0 = 0;
+  function save(msg) { if (msg) say(msg); clearTimeout(t0); t0 = setTimeout(function () { Kit.store.put("kb", { kb: KB }).catch(function () {}); }, 400); }
+  Kit.store.get("kb").then(function (s) { if (s && s.kb) { KB = s.kb; say("Reopened your knowledge base from this browser."); } }).catch(function () {}).then(function () { if (!KB) KB = blankKB(); tree(); editor(); });
+  window.studioKB = { get: function () { return KB; }, current: function () { return cur; } };
+})();

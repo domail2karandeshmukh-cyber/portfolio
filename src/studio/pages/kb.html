@@ -1,0 +1,38 @@
+<div class="st-head">
+ <div>
+  <h1>Knowledge Base Studio</h1>
+  <p>Organize a help center the way Zendesk Guide does: categories, sections and articles, with tags, draft and published states, a version history, and translations prepared for a translator. Preview it as readers see it, with search. This is a local demonstration: nothing is sent to Zendesk.</p>
+ </div>
+</div>
+<div class="st-bar" role="toolbar" aria-label="Knowledge base">
+ <button class="btn line sm" type="button" id="kb-sample">Open the sample</button>
+ <button class="btn line sm" type="button" id="kb-addcat">Add a category</button>
+ <label class="btn line sm" for="kb-open">Open</label><input class="st-file" id="kb-open" type="file" accept=".zip,.json,application/zip,application/json">
+ <span class="sep" aria-hidden="true"></span>
+ <button class="btn ink sm" type="button" id="kb-export">Export (ZIP)</button>
+</div>
+<p class="st-status" id="kb-status" role="status" aria-live="polite"></p>
+<div class="kb">
+ <nav class="kb-nav" aria-label="Categories, sections and articles"><ul class="kb-tree" id="kb-tree"></ul></nav>
+ <section class="kb-main" aria-label="Article">
+  <p id="kb-empty" class="kb-hint">Choose an article, or add one to a section.</p>
+  <div id="kb-edit" hidden>
+   <p class="kb-where" id="kb-where"></p>
+   <div class="kb-locales" id="kb-locales" role="group" aria-label="Language of the article"></div>
+   <div id="kb-prep" hidden><p id="kb-prep-text"></p><button class="btn ink sm" type="button" id="kb-prepare">Prepare a translation</button></div>
+   <div id="kb-fields" class="gd">
+    <label>Title <input id="kb-title" type="text" maxlength="150"></label>
+    <div class="gd-two"><label>Labels <small>Separated by commas</small><input id="kb-tags" type="text"></label><label>Status <select id="kb-statusbox"><option value="draft">Draft</option><option value="published">Published</option></select></label></div>
+    <label>Article <small>Markdown, as in the workbench</small><textarea id="kb-body" rows="14"></textarea></label>
+    <p class="kb-check" id="kb-check" role="status"></p>
+    <p class="ann-btns"><button class="btn line sm" type="button" id="kb-version">Save a version</button><button class="btn line sm" type="button" id="kb-bench">Open in the workbench</button><button class="btn line sm" type="button" id="kb-del">Delete the article</button></p>
+    <h3 class="kb-h">History</h3><ol class="kb-history" id="kb-history"></ol>
+   </div>
+  </div>
+ </section>
+ <section class="kb-side" aria-label="Preview">
+  <div class="wb-formats kb-views" role="group" aria-label="Preview"><button type="button" data-view="edit" aria-pressed="true">This article</button><button type="button" data-view="center" aria-pressed="false">Help center</button></div>
+  <div id="kb-preview" class="kb-preview"></div>
+ </section>
+</div>
+<p class="st-note">Connecting to a real Zendesk account would need your subdomain and an API token, kept on a server, never in this page; it isn't built, because there's no account to test it with. The export holds the request bodies the Help Center API takes for each article and translation, so the content can be published from a script you control.</p>
