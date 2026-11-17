@@ -17,7 +17,11 @@ const LINES = { en: SAY };
 const DOCS = {};
 C.samples.items.forEach((d) => { DOCS[d.id] = { title: d.title, href: `/samples/${d.slug}` }; });
 C.docs.forEach((d) => { DOCS[d.id] = { title: d.title, href: `/docs/${d.shelf}/${d.slug}` }; });
-const SECTIONS = ["writing", "projects", "video", "experience", "contact", "rewrite"];
+// Two pages that are not documents of the library, offered the same way.
+DOCS["style-guide"] = { title: "Style guide", href: "/style" };
+DOCS.workbench = { title: "Workbench", href: "/workbench" };
+const RULES = require("../src/style.js").RULES;
+const SECTIONS = ["writing", "workbench", "projects", "video", "experience", "contact", "rewrite"];
 const DESK = require("../content/desk/messages.json").messages.map((m) => m.id);
 const VIDEOS = ((C.films && C.films.items) || []).map((f) => f.title);
 
@@ -61,6 +65,8 @@ function notes() {
   L.push("Project documentation (also kept on GitHub as docs-as-code):");
   C.docs.forEach((d) => L.push(`- [doc:${d.id}] ${d.title} (${C.types[d.type].label}, ${d.project}). ${d.blurb} ${S.url}/docs/${d.shelf}/${d.slug}`));
   L.push(`How the project documentation was made: ${C.method}`);
+  L.push(`- [doc:style-guide] The style guide (${S.url}/style): the ${RULES.length} rules Karan's documents follow. It is based on the Microsoft Writing Style Guide, with a few house rules, and each rule has a reason and an example. A program checks ${RULES.filter((r) => r.level !== "review").length} of the rules in every document of the library each time the site is built, and each document's page says whether it passes. The page also lists what the check found in each document.`);
+  L.push(`- [doc:workbench] The workbench (${S.url}/workbench): a tool on this site for writing a document in Markdown. It checks the text against the style guide as the visitor types and offers fixes. It shows the document as each group of readers gets it, using conditions and variables, which is the single-sourcing idea of tools such as MadCap Flare. It publishes the document as Markdown, as plain HTML for a help center's article editor, or as DITA (task, concept, reference and troubleshooting topics). It has templates for a how-to, troubleshooting, a reference, release notes, an FAQ and an explainer. It runs in the visitor's browser and sends nothing to a server. A draft from the rewrite desk can be opened in it.`);
   L.push(`Films, which play on the site: ${S.url}/#video They show this site's own tools, and each was filmed by a script. The training videos Karan made for employers belong to those employers and are not public; he can talk a hiring team through that work.`);
   if (VIDEOS.length) L.push("The films, by title: " + VIDEOS.join("; ") + ".");
   L.push(`The site is available in ${C.locales.map((l) => l.name).join(", ")}. The documents, the videos and the CV are in English.`);
@@ -76,7 +82,7 @@ Answer only from the notes below. Speak about Karan in the third person. If the 
 You can also act on the site. Reply with one JSON object and nothing else: {"say": "...", "do": "..."}
 "say" is what you tell the visitor: one to three short, complete sentences, under 70 words in total, in plain text with no markdown. Answer only what was asked. Speak as yourself, in the first person. When "do" takes the visitor somewhere, plays a video, starts the tour or runs a sample, say that you are doing it. When "do" offers a document, the CV, LinkedIn or another language, say what it is and that the button under your answer opens it. Leave web addresses out.
 "do" is one action that serves what was asked, or "" when none does:
-- go:writing, go:projects, go:video, go:experience, go:contact or go:rewrite takes the visitor to that part of the home page. go:rewrite is the rewrite desk.
+- go:writing, go:workbench, go:projects, go:video, go:experience, go:contact or go:rewrite takes the visitor to that part of the home page. go:rewrite is the rewrite desk.
 - doc:KEY offers to open one document. The keys are in the notes, written [doc:KEY].
 - video:TITLE plays one film. Use a title from the notes.
 - tour starts your one-minute tour.

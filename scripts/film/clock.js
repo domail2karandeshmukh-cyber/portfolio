@@ -5,13 +5,14 @@
    step() is called, and then move by exactly the time asked for. Every frame of the film is therefore
    1/30 s after the one before it, however long the screenshot took.
 
-   The additions are a caption bar, a finger, and the last card. Everything else on screen is the site. */
+   The additions are a caption bar, a finger, and the last card. Everything else on screen is the site.
+   A film wider than it is tall gets one line of caption and a smaller pointer. */
 (function () {
   var realTimeout = window.setTimeout.bind(window);
   var realFrame = window.requestAnimationFrame.bind(window);
   var realScroll = window.scrollTo.bind(window);
   var now = 0, epoch = Date.now(), seq = 0;
-  var timers = new Map(), frames = [], seen = new Map(), tween = null, held = null;
+  var timers = new Map(), frames = [], seen = new Map(), tween = null, held = null, pans = [];
 
   /* ----- The clock ----- */
   window.setTimeout = function (fn, ms) {
@@ -95,6 +96,12 @@
       realScroll(0, tween.from + (tween.to - tween.from) * ease(p));
       if (p >= 1) tween = null;
     }
+    // A part of the page with its own scroll bar moves the same way.
+    pans = pans.filter(function (q) {
+      var done = Math.min(1, (now - q.t0) / q.ms);
+      q.el.scrollTop = q.from + (q.to - q.from) * ease(done);
+      return done < 1;
+    });
     if (part != null) {
       var bar = document.getElementById("film-bar");
       if (bar) bar.style.transform = "scaleX(" + Math.min(1, part).toFixed(5) + ")";
@@ -115,6 +122,8 @@
     "html{scroll-behavior:auto!important;scrollbar-width:none}",
     "::-webkit-scrollbar{display:none}",
     ".dock,.skip,#tour{display:none!important}",
+    // A caret blinks by the computer's clock, not the film's. Text is typed without one.
+    "textarea,input{caret-color:transparent!important}",
     // For the close-ups the site's own bar slides away.
     ".nav{transition:transform .45s cubic-bezier(.4,0,.2,1),border-color .2s!important}",
     ".film-close .nav{transform:translateY(-102%)}",
@@ -142,10 +151,22 @@
     "#film-end h2{margin:0;font:500 39px/1.1 Newsreader,Georgia,serif;letter-spacing:-.02em;text-wrap:balance}",
     "#film-end .url{margin:26px 0 0;align-self:flex-start;font:650 25px/1.2 Hanken,system-ui,sans-serif;letter-spacing:-.01em;background:#FFDF2B;color:#0B0B0C;padding:9px 14px 10px;border-radius:3px}",
     "#film-end .who{margin:46px 0 0;padding-top:22px;border-top:1px solid #303136;font:400 16.5px/1.45 Hanken,system-ui,sans-serif;color:#B7B9BF;text-wrap:pretty}",
-    "#film-end .who b{display:block;font-weight:650;font-size:21px;letter-spacing:-.01em;color:#fff;margin-bottom:4px}"
+    "#film-end .who b{display:block;font-weight:650;font-size:21px;letter-spacing:-.01em;color:#fff;margin-bottom:4px}",
+    // A wide film: one line of caption, the site's name beside it, a pointer the size of a cursor.
+    ".film-wide #film-cap{height:92px;padding:0 44px;display:flex;align-items:center}",
+    ".film-wide #film-cap::before{display:none}",
+    ".film-wide #film-text{font-size:31px}",
+    ".film-wide #film-site{right:44px;bottom:auto;top:50%;margin-top:-7px;font-size:15px}",
+    ".film-wide #film-tap{width:44px;height:44px;margin:-22px 0 0 -22px}",
+    ".film-wide #film-end{padding:0 110px 20px}",
+    ".film-wide #film-end h2{font-size:64px;max-width:16em}",
+    ".film-wide #film-end .url{margin-top:36px;font-size:33px;padding:11px 18px 12px}",
+    ".film-wide #film-end .who{margin-top:56px;padding-top:26px;max-width:40em;font-size:21px}",
+    ".film-wide #film-end .who b{font-size:27px;margin-bottom:6px}"
   ];
   function build() {
     if (document.getElementById("film-cap")) return;
+    if (innerWidth > innerHeight) document.documentElement.classList.add("film-wide");
     var css = document.createElement("style");
     css.textContent = CSS.join("\n");
     document.head.appendChild(css);
@@ -219,8 +240,39 @@
     return [r.top + window.pageYOffset, r.height];
   }
   function close(on) { document.documentElement.classList.toggle("film-close", !!on); }
+  function pan(selector, to, ms) {
+    var el = find(selector);
+    if (!el) return false;
+    pans.push({ el: el, from: el.scrollTop, to: Math.max(0, Math.min(to, el.scrollHeight - el.clientHeight)), t0: now, ms: ms || 700 });
+    return true;
+  }
+  // Typing: one character at a time on the film's clock, each one arriving the way a key press does.
+  function type(selector, text, each) {
+    var el = find(selector);
+    if (!el) return false;
+    el.focus({ preventScroll: true });
+    try { el.setSelectionRange(el.value.length, el.value.length); } catch (e) {}
+    text.split("").forEach(function (ch, i) {
+      window.setTimeout(function () {
+        var ok = false;
+        el.focus({ preventScroll: true });
+        try { ok = document.execCommand("insertText", false, ch); } catch (e) {}
+        if (!ok) { el.value += ch; el.dispatchEvent(new Event("input", { bubbles: true })); }
+      }, (i + 1) * (each || 55));
+    });
+    return true;
+  }
+  // A choice in a list of choices. The list itself belongs to the browser and is not part of the page's picture.
+  function pick(selector, value) {
+    var el = find(selector);
+    if (!el) return false;
+    el.value = value;
+    if (el.value !== value) return false;
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  }
 
-  window.__film = { step: step, sweep: sweep, glide: glide, caption: caption, tap: tap, down: down, up: up, end: end, top: top, box: box, close: close, now: function () { return now; } };
+  window.__film = { step: step, sweep: sweep, glide: glide, caption: caption, tap: tap, down: down, up: up, end: end, top: top, box: box, close: close, pan: pan, type: type, pick: pick, now: function () { return now; } };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { build(); sweep(); });
   else { build(); sweep(); }
 })();

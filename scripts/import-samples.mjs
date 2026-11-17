@@ -1,5 +1,7 @@
 // Copies the Google Docs listed in content/samples.json into content/samples/.
-//   Text:   the Markdown export of each document  ->  content/samples/<slug>.md
+//   Text:   the Markdown export of each document, with the style fixes that are safe to apply unseen
+//           (the rules named in AUTO in src/style.js)  ->  content/samples/<slug>.md
+//           A correction that needs a person is listed under "edits" in content/site.json and is made when the site is built.
 //   Images: taken at full size from the Word export, in document order, and saved as WebP
 //           (animations stay animated)            ->  content/samples/img/<slug>-<n>.webp
 //           Images listed under "redact" in samples.json have personal details covered first.
@@ -9,9 +11,11 @@ import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
+import { createRequire } from "node:module";
 import sharp from "sharp";
 import { redact } from "./redact.mjs";
 
+const Style = createRequire(import.meta.url)("../src/style.js");
 const list = JSON.parse(await fs.readFile("content/samples.json", "utf8"));
 const OUT = "content/samples";
 await fs.rm(OUT, { recursive: true, force: true });
@@ -87,8 +91,9 @@ for (const { slug, doc } of list.docs) {
       bytes += out.length;
     }
     md = md.replace(DEFINITION, (_, id) => `[${id}]: ${files[id]}`);
-    await fs.writeFile(`${OUT}/${slug}.md`, md);
-    console.log(`${slug}: ${kb(Buffer.byteLength(md))} of text, ${embedded.length} images (${kb(bytes)})`);
+    const tidy = Style.fixAll(md, Style.AUTO, { vars: false });
+    await fs.writeFile(`${OUT}/${slug}.md`, tidy.source);
+    console.log(`${slug}: ${kb(Buffer.byteLength(tidy.source))} of text, ${tidy.fixed} style fixes, ${embedded.length} images (${kb(bytes)})`);
   } catch (err) {
     failed++;
     console.error(`${slug}: FAILED, ${err.message}`);

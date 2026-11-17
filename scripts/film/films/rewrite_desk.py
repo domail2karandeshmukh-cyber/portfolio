@@ -8,6 +8,21 @@ Keep every duration a whole number of frames (a multiple of 1/30 s).
 """
 import re
 
+NAME = "rewrite-desk"
+PAGE = "/"
+FRAME = (432, 540, 2.5)   # 1080 x 1350: the 4:5 frame, which a phone feed shows largest
+TOUCH = True
+
+
+def prepare(page):
+    # The sample drafts are in hand before the first frame.
+    page.evaluate("() => fetch('/desk.json').then(r => r.text()).then(() => 1)")
+
+
+def state(f):
+    return f.js("() => { const r = document.querySelector('#rewrite'); return r.dataset.src + ' ' + r.dataset.state + (r.dataset.phase ? ' ' + r.dataset.phase : '') + ', scrolled to ' + Math.round(pageYOffset); }")
+
+
 HOTFIX = '#try [data-sample="hotfix"]'
 BAR = 104          # the caption bar's height in the page's pixels, as set in clock.js
 VIEW = 540 - BAR   # what is left of the frame above it

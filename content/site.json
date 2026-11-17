@@ -3,20 +3,20 @@
   "url": "https://karandeshmukh.dev",
   "name": "Karan Deshmukh",
   "role": "Technical Writer",
-  "focus": "Cybersecurity, AI and enterprise IT documentation",
+  "focus": "Cybersecurity, AI, and enterprise IT documentation",
   "location": "Angers, France",
-  "availability": "Open to technical writing roles: part-time, freelance, internship or apprenticeship. Remote or hybrid.",
+  "availability": "Open to technical writing roles: part-time, freelance, internship, or apprenticeship. Remote or hybrid.",
   "github": "domail2karandeshmukh-cyber",
   "cv": "/Karan-Deshmukh-CV.pdf",
   "links": {"linkedin": "https://www.linkedin.com/in/karan-deshmukh-a86986175/", "github": "https://github.com/domail2karandeshmukh-cyber", "samples": "https://karandeshmukh.dev/samples", "docs": "https://karandeshmukh.dev/docs"},
   "repo": "portfolio"
  },
- "repos": {"trustnav": "7ba252df6715c234a03b2733d1747917ad0fe470", "ai-chainguard": "f38a2a68ba27c8ac8b34f82f9d9d232b4c77ecd6", "novatech-sentinel-v24": "04b1d5ddf77590c88efe0a0984521fbb689135ed", "group6-kc1-defect-prediction": "a3e937472c5dbd8f1d7691e4a65d45658f3e0581"},
+ "repos": {"trustnav": "871ad39847316aecccc4435a2c0fd1a4fef7c2c4", "ai-chainguard": "d24c2eaee1e4358f89adbbd8f03240c4a8e16722", "novatech-sentinel-v24": "9ccce44ea2680073ead9b0bfac3f39971806bfe4", "group6-kc1-defect-prediction": "9b696fc8d30f6bb63735c44fc29d7471462954e5"},
  "summary": "Technical Writer with 5+ years of experience creating enterprise IT, cybersecurity/IAM, SaaS, and product documentation for global audiences. Translates complex security workflows and technical processes into clear, accurate knowledge-base content, technical explainers, SOPs, runbooks, troubleshooting guides, user guidance, and multimedia learning assets. Experienced across the content lifecycle from requirements and source gathering through drafting, SME validation, editorial review, approval, publication, migration, and controlled iteration. Hands-on experience documenting authentication, MFA, access-management and identity-lifecycle workflows, plus AI-assisted knowledge workflows with human validation.",
- "method": "Project documentation is written as docs-as-code in GitHub, drafted with AI assistance and reviewed by Karan.",
+ "method": "Project documentation is written as docs-as-code in GitHub, drafted with AI assistance, and reviewed by Karan.",
  "stats": [
-  {"n": "1,000+", "label": "guides and articles written, reviewed and maintained across my roles"},
-  {"n": "5+", "label": "years documenting IT, security and product work"},
+  {"n": "1,000+", "label": "guides and articles written, reviewed, and maintained across my roles"},
+  {"n": "5+", "label": "years documenting IT, security, and product work"},
   {"n": "29", "label": "languages covered by localization work at Magna"}
  ],
  "expertise": [
@@ -34,7 +34,7 @@
  ],
  "selected": [
   {"label": "Help-center samples", "text": "A step-by-step how-to with screenshots and an animation, and a nine-part set of Google Workspace FAQs for end users, published as web pages at karandeshmukh.dev/docs"},
-  {"label": "Security systems documentation (MSc)", "text": "Led and documented TrustNav (GNSS trust monitoring), AI-ChainGuard (AI supply chain integrity) and NOVATECH Sentinel (risk governance): explainers, a threat model, developer guides and release notes, published as docs-as-code at karandeshmukh.dev"},
+  {"label": "Security systems documentation (MSc)", "text": "Led and documented TrustNav (GNSS trust monitoring), AI-ChainGuard (AI supply chain integrity), and NOVATECH Sentinel (risk governance): explainers, a threat model, developer guides, and release notes, published as docs-as-code at karandeshmukh.dev"},
   {"label": "AI-assisted enterprise knowledge", "text": "Improved source quality and prompt patterns for an internal GPT knowledge pack; validated AI-assisted content against approved technical knowledge before publication"},
   {"label": "AI assistant project", "text": "Documented functional requirements, technical specifications, test follow-up, dependencies, and GDPR considerations for an AI assistant MVP"},
   {"label": "Cybersecurity and networking labs", "text": "Developing practical capability in network security, Windows/Linux, SOC/SIEM concepts, cloud security, incident response, VLANs, ACLs, NAT, SSH, and device-security controls through MSc coursework and structured labs"}
@@ -66,25 +66,25 @@
  },
  "docs": [
   {"id": "cg-threat", "type": "security", "start": true, "title": "Threat model", "short": "Threat model", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/04_threat_model.md", "blurb": "Asset-centric STRIDE analysis. Each threat is mapped to a verifier check and to the attack scenario that demonstrates it, and residual risks are stated.", "shelf": "ai-chainguard", "slug": "threat-model", "lead": {"image": "docs/demo-screenshots/04_attack_lab_tamper.png", "alt": "Attack lab: a tampered dataset fails verification, with two failed checks listed", "caption": "The attack lab runs the threats in this model against the verifier."}},
-  {"id": "tn-demo", "type": "howto", "title": "The demonstration in two minutes", "short": "Demo guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Demo_Guide.pdf", "pages": 2, "blurb": "A two-page guide for a reader who cannot attend the demo: the link, the four screens worth opening and what each one proves.", "shelf": "trustnav", "slug": "demo-guide"},
-  {"id": "tn-how", "type": "concept", "title": "How TrustNav works, step by step", "short": "How it works", "project": "TrustNav", "repo": "trustnav", "path": "docs/HOW_IT_WORKS.md", "blurb": "The full pipeline from one receiver observation to the operator's screen, with a diagram and a table of what each signal means and why it matters.", "shelf": "trustnav", "slug": "how-it-works", "lead": {"image": "docs/images/console.png", "alt": "TrustNav console: a fleet list with trust scores, a map of the vehicles and an alerts panel", "caption": "The operator console. Every score and alert on it comes out of the steps below."}},
+  {"id": "tn-demo", "type": "howto", "title": "The demonstration in two minutes", "short": "Demo guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Demo_Guide.pdf", "pages": 2, "blurb": "A two-page guide for a reader who cannot attend the demo: the link, the four screens worth opening, and what each one proves.", "shelf": "trustnav", "slug": "demo-guide"},
+  {"id": "tn-how", "type": "concept", "title": "How TrustNav works, step by step", "short": "How it works", "project": "TrustNav", "repo": "trustnav", "path": "docs/HOW_IT_WORKS.md", "blurb": "The full pipeline from one receiver observation to the operator's screen, with a diagram and a table of what each signal means and why it matters.", "shelf": "trustnav", "slug": "how-it-works", "lead": {"image": "docs/images/console.png", "alt": "TrustNav console: a fleet list with trust scores, a map of the vehicles, and an alerts panel", "caption": "The operator console. Every score and alert on it comes out of the steps below."}},
   {"id": "kc1-build", "type": "howto", "title": "Manual Docker build guide", "short": "Build guide", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "MANUAL_BUILD_GUIDE.md", "blurb": "Takes a first-time user from checking Docker to three running interfaces, then covers troubleshooting. Every command is followed by what it does.", "shelf": "kc1", "slug": "build-guide"},
-  {"id": "ns-release", "type": "release", "title": "Release notes, V2.4", "short": "Release notes", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "docs/RELEASE_NOTES_V2.4.md", "blurb": "What changed since V2.3, the tests that ran, the known limitations and the production check, written for the people presenting the release.", "shelf": "novatech-sentinel", "slug": "release-notes", "lead": {"image": "docs/images/command.jpg", "alt": "Command Center: a map of the company's sites, the incident queue and the evidence ledger", "caption": "The Command Center in V2.4."}},
+  {"id": "ns-release", "type": "release", "title": "Release notes, V2.4", "short": "Release notes", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "docs/RELEASE_NOTES_V2.4.md", "blurb": "What changed since V2.3, the tests that ran, the known limitations, and the production check, written for the people presenting the release.", "shelf": "novatech-sentinel", "slug": "release-notes", "lead": {"image": "docs/images/command.jpg", "alt": "Command Center: a map of the company's sites, the incident queue, and the evidence ledger", "caption": "The Command Center in V2.4."}},
   {"id": "tn-glossary", "type": "reference", "title": "Glossary", "short": "Glossary", "project": "TrustNav", "repo": "trustnav", "path": "docs/GLOSSARY.md", "blurb": "Satellite-navigation terms in one line each, written for readers outside the field.", "shelf": "trustnav", "slug": "glossary", "lead": {"image": "docs/images/kpi-strip.png", "alt": "Summary strip of the console: fleet trust 76, 7 platforms, 2 open incidents, 2 positions refused", "caption": "The console uses the terms defined on this page."}},
-  {"id": "tn-code", "type": "dev", "title": "Code guide: every file and what it does", "short": "Code guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/CODE_GUIDE.md", "blurb": "Folder map, the job of each module, the tests, deployment and how to plug in a real receiver.", "shelf": "trustnav", "slug": "code-guide", "lead": {"image": "docs/images/guide-2-replay.png", "alt": "Replay screen: a spoofing attack on a delivery van, with its trust score, the reasons and a timeline", "caption": "The replay screen, one of the dashboard screens whose code is described below."}},
-  {"id": "cg-arch", "type": "concept", "title": "Architecture", "short": "Architecture", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/05_architecture.md", "blurb": "How the CLI, API, ML pipeline and deployment gateway share one implementation of hashing, signing and verification. Diagrams are written in Mermaid.", "shelf": "ai-chainguard", "slug": "architecture", "lead": {"image": "docs/demo-screenshots/02_provenance_chain.png", "alt": "Provenance chain: signed stages linked from the datasets to the deployment", "caption": "The provenance chain as the console draws it."}},
+  {"id": "tn-code", "type": "dev", "title": "Code guide: every file and what it does", "short": "Code guide", "project": "TrustNav", "repo": "trustnav", "path": "docs/CODE_GUIDE.md", "blurb": "Folder map, the job of each module, the tests, deployment, and how to plug in a real receiver.", "shelf": "trustnav", "slug": "code-guide", "lead": {"image": "docs/images/guide-2-replay.png", "alt": "Replay screen: a spoofing attack on a delivery van, with its trust score, the reasons, and a timeline", "caption": "The replay screen, one of the dashboard screens whose code is described below."}},
+  {"id": "cg-arch", "type": "concept", "title": "Architecture", "short": "Architecture", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "docs/05_architecture.md", "blurb": "How the CLI, API, ML pipeline, and deployment gateway share one implementation of hashing, signing, and verification. Diagrams are written in Mermaid.", "shelf": "ai-chainguard", "slug": "architecture", "lead": {"image": "docs/demo-screenshots/02_provenance_chain.png", "alt": "Provenance chain: signed stages linked from the datasets to the deployment", "caption": "The provenance chain as the console draws it."}},
   {"id": "ns-readme", "type": "reference", "title": "README: NOVATECH Sentinel", "short": "README", "project": "NOVATECH Sentinel", "repo": "novatech-sentinel-v24", "path": "README.md", "blurb": "Fourteen sections from project overview to known limitations, including a plain statement of what is simulated and what is real.", "shelf": "novatech-sentinel", "slug": "readme", "omit": ["Contents"]},
-  {"id": "kc1-readme", "type": "reference", "title": "README: KC1 defect prediction", "short": "README", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "README.md", "blurb": "Architecture, dataset, model selection, the prediction API and what is deliberately kept out of Git.", "shelf": "kc1", "slug": "readme"},
+  {"id": "kc1-readme", "type": "reference", "title": "README: KC1 defect prediction", "short": "README", "project": "KC1 defect prediction", "repo": "group6-kc1-defect-prediction", "path": "README.md", "blurb": "Architecture, dataset, model selection, the prediction API, and what is deliberately kept out of Git.", "shelf": "kc1", "slug": "readme"},
   {"id": "cg-report", "type": "report", "title": "AI-ChainGuard final report", "short": "Final report", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "report/AI-ChainGuard_Final_Report.pdf", "pages": 40, "blurb": "The whole project in one document, following the six phases of the course brief, with appendices.", "shelf": "ai-chainguard", "slug": "final-report"},
   {"id": "cg-paper", "type": "report", "title": "Signed Is Not Safe", "short": "IEEE-format paper", "project": "AI-ChainGuard", "repo": "ai-chainguard", "path": "paper/signed_is_not_safe.pdf", "pages": 6, "blurb": "The project written up as a six-page IEEE-format paper on where cryptographic integrity stops and semantic trust begins.", "shelf": "ai-chainguard", "slug": "paper"},
-  {"id": "tn-report", "type": "report", "title": "TrustNav technical report", "short": "Technical report", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Technical_Documentation.pdf", "pages": 44, "blurb": "Requirements, approach, how it works, results, a critical review and project management in one file.", "shelf": "trustnav", "slug": "technical-report"}
+  {"id": "tn-report", "type": "report", "title": "TrustNav technical report", "short": "Technical report", "project": "TrustNav", "repo": "trustnav", "path": "docs/TrustNav_Technical_Documentation.pdf", "pages": 44, "blurb": "Requirements, approach, how it works, results, a critical review, and project management in one file.", "shelf": "trustnav", "slug": "technical-report"}
  ],
  "samples": {
   "title": "Help-center samples",
   "index": false,
   "intro": "Two samples of end-user help content, published here as web pages: a step-by-step how-to with screenshots and a set of FAQs. Each page is built from a Google Doc by the same build that makes the rest of this site.",
   "items": [
-   {"kind": "article", "slug": "core42-portal", "file": "core42-portal", "type": "howto", "start": true, "label": "Help-center sample", "title": "Access the Core42 AI Cloud Portal", "blurb": "A procedure for first-time users: create an individual account, verify the email address and sign in. Screenshots show where to click at each step, and a short animation shows the sign-up form.", "note": "Personal details in the screenshots are covered.", "id": "core42"},
+   {"kind": "article", "slug": "core42-portal", "file": "core42-portal", "type": "howto", "start": true, "label": "Help-center sample", "title": "Access the Core42 AI Cloud Portal", "blurb": "A procedure for first-time users: create an individual account, verify the email address, and sign in. Screenshots show what to select at each step, and a short animation shows the sign-up form.", "note": "Personal details in the screenshots are covered.", "id": "core42", "edits": [["* You have a supported web browser  \n* You have access to a personal email address  \n* You can access your email inbox to receive a verification code\n", "* You have a supported web browser.\n* You have access to a personal email address.\n* You can access your email inbox to receive a verification code.\n"]]},
    {
     "kind": "set",
     "slug": "google-workspace-faqs",
@@ -92,7 +92,7 @@
     "start": true,
     "label": "Help-center sample",
     "title": "Google Workspace FAQs",
-    "blurb": "Nine short guides that answer common end-user questions about Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat, most of them in a few numbered steps.",
+    "blurb": "Nine short guides that answer common end-user questions about Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet, and Chat, most of them in a few numbered steps.",
     "intro": "Answers to common end-user questions about nine Google Workspace apps. Choose an app to read its guide.",
     "omit": ["Overview", "Admin FAQs"],
     "edits": {
@@ -105,6 +105,15 @@
      ],
      "faq-google-docs": [
       ["up to 1.02 million characters  \n", "up to 1.02 million characters.\n"]
+     ],
+     "faq-google-calendar": [
+      ["next to \"Add a friend's calendar\"  \n", "next to **Add a friend's calendar**.\n"]
+     ],
+     "faq-google-drive": [
+      ["\n4. The app automatically syncs your selected items between your computer and Google Drive.", "\n\n   The app syncs your selected items between your computer and Google Drive."]
+     ],
+     "faq-google-meet": [
+      ["\n4. The recording is saved to Google Drive and shared with meeting participants.", "\n\n   Google Meet saves the recording to Google Drive and shares it with the meeting's participants."]
      ]
     },
     "articles": [
@@ -123,13 +132,13 @@
   ]
  },
  "images": {
-  "trustnav": {"repo": "trustnav", "path": "docs/images/console.png", "position": "left top", "alt": "TrustNav console: a fleet list with trust scores, a map of vehicles and open alerts during a replayed spoofing attack"},
+  "trustnav": {"repo": "trustnav", "path": "docs/images/console.png", "position": "left top", "alt": "TrustNav console: a fleet list with trust scores, a map of vehicles, and open alerts during a replayed spoofing attack"},
   "chainguard": {"repo": "ai-chainguard", "path": "report/figures/shot_website.png", "position": "top", "alt": "AI-ChainGuard project site with the headline Signed is not safe: a verified signed model on one side, a digit the model misreads on the other"},
   "sentinel": {"repo": "novatech-sentinel-v24", "path": "docs/images/landing.jpg", "position": "top", "alt": "NOVATECH Sentinel landing page: See the threat. Own the decision. Prove the response, beside a map of the company's offices and partners"}
  },
  "projects": [
-  {"id": "trustnav", "name": "TrustNav", "role": "Project lead: design, engine, console and documentation", "summary": "For fleet operators who need to know whether a vehicle's satellite position can be trusted. Once a second, TrustNav scores each van or drone from 0 to 100, explains in plain words why a position can't be believed, and holds back the positions it doesn't trust. It combines physical rules, anomaly models and Galileo OSNMA authentication. Where it stands: a working demo, replayed on recordings of real attacks from Jammertest 2024, and not yet run on a live fleet.", "stack": "Next.js, React, Python, Supabase", "live": "https://trustnav.karandeshmukh.dev", "repo": "https://github.com/domail2karandeshmukh-cyber/trustnav", "docs": ["tn-how", "tn-code", "tn-glossary", "tn-report"], "liveLabel": "Open live demo"},
-  {"id": "chainguard", "name": "AI-ChainGuard", "role": "Technical lead: security architecture and documentation", "summary": "For teams that deploy machine-learning models and need proof of where each one came from. Datasets, models and deployments are linked into one signed, hash-linked chain, and a deployment gate approves, warns or blocks before a model loads. It also measures where signatures stop helping: a signed model is not a safe model. Where it stands: a working tool with public source code, tested against 48 attack and control variants, and not yet used in production.", "stack": "Python, FastAPI, PyTorch, Ed25519, Docker, GitHub Actions", "live": "https://chainguard.karandeshmukh.dev", "repo": "https://github.com/domail2karandeshmukh-cyber/ai-chainguard", "docs": ["cg-threat", "cg-arch", "cg-report", "cg-paper"], "liveLabel": "Open project site"},
+  {"id": "trustnav", "name": "TrustNav", "role": "Project lead: design, engine, console, and documentation", "summary": "For fleet operators who need to know whether a vehicle's satellite position can be trusted. Once a second, TrustNav scores each van or drone from 0 to 100, explains in plain words why a position can't be believed, and holds back the positions it doesn't trust. It combines physical rules, anomaly models, and Galileo OSNMA authentication. Where it stands: a working demo, replayed on recordings of real attacks from Jammertest 2024, and not yet run on a live fleet.", "stack": "Next.js, React, Python, Supabase", "live": "https://trustnav.karandeshmukh.dev", "repo": "https://github.com/domail2karandeshmukh-cyber/trustnav", "docs": ["tn-how", "tn-code", "tn-glossary", "tn-report"], "liveLabel": "Open live demo"},
+  {"id": "chainguard", "name": "AI-ChainGuard", "role": "Technical lead: security architecture and documentation", "summary": "For teams that deploy machine-learning models and need proof of where each one came from. Datasets, models, and deployments are linked into one signed, hash-linked chain, and a deployment gate approves, warns, or blocks before a model loads. It also measures where signatures stop helping: a signed model is not a safe model. Where it stands: a working tool with public source code, tested against 48 attack and control variants, and not yet used in production.", "stack": "Python, FastAPI, PyTorch, Ed25519, Docker, GitHub Actions", "live": "https://chainguard.karandeshmukh.dev", "repo": "https://github.com/domail2karandeshmukh-cyber/ai-chainguard", "docs": ["cg-threat", "cg-arch", "cg-report", "cg-paper"], "liveLabel": "Open project site"},
   {"id": "sentinel", "name": "NOVATECH Sentinel", "role": "Project lead: platform design and documentation", "summary": "For security and risk teams that must show who decided what during an incident. An incident moves through seven gates, from detection to closure, with separation of duties and a hash-chained evidence ledger, so every decision has an owner and leaves proof. Where it stands: a working demo on a simulated company, labelled as such in the app.", "stack": "React, Vite, TypeScript, Supabase", "live": "https://sentinel.karandeshmukh.dev", "repo": "https://github.com/domail2karandeshmukh-cyber/novatech-sentinel-v24", "docs": ["ns-release", "ns-readme"], "liveLabel": "Open live app"}
  ],
  "more": [
@@ -145,7 +154,7 @@
   {
    "name": "BizAssist AI",
    "role": "Project manager",
-   "summary": "Drafts euro-priced quotations for small businesses from a client request. I managed the project and documented its requirements, specifications and deployment.",
+   "summary": "Drafts euro-priced quotations for small businesses from a client request. I managed the project and documented its requirements, specifications, and deployment.",
    "links": [
     ["Live app", "https://bizassist.karandeshmukh.dev"]
    ]
@@ -160,21 +169,40 @@
   }
  ],
  "faq": [
-  {"q": "What does Karan write?", "keys": "write|writing|document|docs|kind|type|sop|runbook", "a": "Knowledge-base articles, SOPs, runbooks, how-to and troubleshooting guides, mostly for IT, security and identity teams. Across his roles he has written and maintained more than 1,000 guides and articles, over 500 of them at MongoDB."},
-  {"q": "Where can I read samples?", "keys": "sample|read|example|portfolio|library|faq|how-to", "a": "Everything opens on this site, in the library: https://karandeshmukh.dev/docs It holds two help-center samples, a how-to with screenshots and a set of Google Workspace FAQs, and the documentation of Karan's security projects."},
-  {"q": "Which tools does he use?", "keys": "tool|stack|zendesk|flare|glean|snagit|confluence|markdown|git", "a": "Zendesk Guide, Confluence, Document360 and MadCap Flare for knowledge bases; Git, GitHub and Markdown for docs-as-code; Glean and prompt engineering for AI-assisted knowledge; Snagit and Final Cut Pro for video and GIFs."},
-  {"q": "What is TrustNav?", "keys": "trustnav|gnss|gps|spoof|jam|satellite", "a": "TrustNav checks every second whether a vehicle's satellite position can be believed, scores it from 0 to 100 and explains why. Karan led the project and its documentation. Live demo: https://trustnav.karandeshmukh.dev"},
-  {"q": "Is he available?", "keys": "available|availab|hire|hiring|role|intern|freelance|contact|reach|start", "a": "Yes. Karan is open to technical writing roles: part-time, freelance, internship or apprenticeship, remote or hybrid from Angers, France. Message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/"},
-  {"q": "Who are you?", "keys": "who are you|april|assistant|jarvis|yourself|your name", "a": "I'm April. My name stands for AI for Projects, Releases, Insights and Logs. Karan first built me inside ReleasePilot AI. Here I answer questions about his work from the same content file that builds this page."}
+  {"q": "What does Karan write?", "keys": "write|writing|document|docs|kind|type|sop|runbook", "a": "Knowledge-base articles, SOPs, runbooks, how-to guides, and troubleshooting guides, mostly for IT, security, and identity teams. Across his roles he has written and maintained more than 1,000 guides and articles, over 500 of them at MongoDB."},
+  {"q": "Where can I read samples?", "keys": "sample|read|example|portfolio|library|faq|how-to", "a": "Everything opens on this site, in the library: https://karandeshmukh.dev/docs It holds two help-center samples (a how-to with screenshots and a set of Google Workspace FAQs), and the documentation of Karan's security projects."},
+  {"q": "Which tools does he use?", "keys": "tool|stack|zendesk|flare|glean|snagit|confluence|markdown|git", "a": "Zendesk Guide, Confluence, Document360, and MadCap Flare for knowledge bases; Git, GitHub, and Markdown for docs-as-code; Glean and prompt engineering for AI-assisted knowledge; Snagit and Final Cut Pro for video and GIFs."},
+  {"q": "What is TrustNav?", "keys": "trustnav|gnss|gps|spoof|jam|satellite", "a": "TrustNav checks every second whether a vehicle's satellite position can be believed, scores it from 0 to 100, and explains why. Karan led the project and its documentation. Live demo: https://trustnav.karandeshmukh.dev"},
+  {"q": "Is he available?", "keys": "available|availab|hire|hiring|role|intern|freelance|contact|reach|start", "a": "Yes. Karan is open to technical writing roles: part-time, freelance, internship, or apprenticeship, remote or hybrid from Angers, France. Message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/"},
+  {"q": "Who are you?", "keys": "who are you|april|assistant|jarvis|yourself|your name", "a": "I'm April. My name stands for AI for Projects, Releases, Insights, and Logs. Karan first built me inside ReleasePilot AI. Here I answer questions about his work from the same content file that builds this page."},
+  {"q": "Does he follow a style guide?", "keys": "style guide|styleguide|style rule|microsoft|mstc|lint|consisten", "a": "Yes. Karan's documents follow a style guide based on the Microsoft Writing Style Guide. It's published on this site, and a program checks every document in the library against it on each build: https://karandeshmukh.dev/style"},
+  {"q": "What is the workbench?", "keys": "workbench|editor|dita|single.?sourc|write a doc|authoring", "a": "A tool on this site for writing a document. It checks your text against Karan's style guide as you type, shows the document as each group of readers gets it, and publishes it as Markdown, HTML for a help center, or DITA. It runs in your browser, and nothing you type leaves it: https://karandeshmukh.dev/workbench"}
  ],
  "featured": ["core42", "workspace-faqs", "cg-threat"],
+ "style": {
+  "terms": [],
+  "figure": "of the library's documents pass the style check that runs on every build"
+ },
+ "workbench": {
+  "first": "first-draft",
+  "templates": [
+   {"id": "first-draft", "name": "A first draft to fix", "about": "Breaks the style guide on purpose, so you can watch the check work."},
+   {"id": "how-to", "name": "How-to", "about": "A task in numbered steps, with a block that only administrators get."},
+   {"id": "troubleshooting", "name": "Troubleshooting", "about": "What the reader sees, why it happens, and what to do about it."},
+   {"id": "reference", "name": "Reference", "about": "Tables of roles and limits, for looking things up."},
+   {"id": "release-notes", "name": "Release notes", "about": "New, changed, fixed, and known issues, with the version set in one place."},
+   {"id": "faq", "name": "FAQ", "about": "Questions as headings, each with a short answer."},
+   {"id": "explainer", "name": "Explainer", "about": "How something works, before any steps."}
+  ],
+  "types": {"how-to": ["How-to", "#0A8F7A"], "troubleshooting": ["Troubleshooting", "#CF3F5A"], "reference": ["Reference", "#1F78D1"], "release-notes": ["Release notes", "#C97800"], "faq": ["FAQ", "#B03A9C"], "concept": ["Explainer", "#6A58E6"]}
+ },
  "library": {
   "title": "Documentation library",
   "intro": "Everything I can show in public, in one place: help-center samples, and the documentation of the security tools I led during my MSc. Every document opens here, with its screenshots and diagrams.",
   "shelves": [
    {"key": "help", "name": "Help-center samples", "blurb": "End-user help content: a step-by-step how-to and a set of FAQs."},
    {"key": "trustnav", "name": "TrustNav", "project": "trustnav", "blurb": "Scores, once a second, how far each vehicle's satellite position can be believed."},
-   {"key": "ai-chainguard", "name": "AI-ChainGuard", "project": "chainguard", "blurb": "Links datasets, models and deployments into one signed chain, and checks it before a model loads."},
+   {"key": "ai-chainguard", "name": "AI-ChainGuard", "project": "chainguard", "blurb": "Links datasets, models, and deployments into one signed chain, and checks it before a model loads."},
    {"key": "novatech-sentinel", "name": "NOVATECH Sentinel", "project": "sentinel", "blurb": "Takes an incident through seven gates, from detection to closure, and keeps a ledger of who decided what."},
    {"key": "kc1", "name": "KC1 defect prediction", "blurb": "A machine-learning service that predicts defect-prone software modules. I wrote its container setup and its documentation."}
   ]
@@ -189,6 +217,7 @@
  "tour": [
   {"to": "top", "say": "Hello, I'm April. Karan turns what engineers know into documentation people can follow. You can try that on a message of your own, right here. First, let me show you around in one minute."},
   {"to": "writing", "say": "Start with the writing. Every document opens on this site: help-center samples, and the documentation of the security tools he led."},
+  {"to": "workbench", "say": "This is the workbench. Write a document here, and it checks every sentence against his style guide, then publishes it as Markdown, HTML, or DITA."},
   {"to": "projects", "say": "These are those tools. All three are live, and each one links to the documentation behind it."},
   {"to": "video", "say": "Some procedures are faster to watch than to read. These short films show the tools on this site, and each one was filmed by a script."},
   {"to": "experience", "say": "Behind this is more than five years of documentation work, and more than a thousand guides and articles across three roles."},
@@ -196,8 +225,11 @@
  ],
  "films": {
   "items": [
-   {"id": "rewrite-desk", "title": "From a chat message to a checked draft", "length": "0:29", "about": "The rewrite desk: a pasted message is marked up, drafted and checked."}
+   {"id": "style-check", "title": "Check a draft against the style guide", "length": "0:25", "about": "The workbench: a draft with problems, the style check, one fix, and then every fix."},
+   {"id": "one-source", "title": "One source, a page for each reader", "length": "0:28", "about": "The workbench: a block for administrators, the page each reader gets, and three outputs."},
+   {"id": "library", "title": "Read and search the library", "length": "0:21", "about": "A document page: its contents list, a diagram at full size, and the search."},
+   {"id": "rewrite-desk", "title": "From a chat message to a checked draft", "length": "0:29", "about": "The rewrite desk: a pasted message is marked up, drafted, and checked."}
   ]
  },
- "strings": {"morning": "Good morning.", "afternoon": "Good afternoon.", "evening": "Good evening.", "intro": "I'm April, Karan's assistant. Ask me about his writing, his projects or his availability.", "thinking": "Thinking...", "offline": "I can't reach my AI model right now. Try one of the suggested questions, or message Karan on LinkedIn:", "voiceOn": "I'll read my answers aloud.", "voiceOff": "Voice is off.", "hello": "Hello, I'm April. Ask me anything about Karan's work, and I'll answer from his notes.", "palDocs": "Documents", "palHere": "On this page", "palAsk": "Ask April", "palNone": "No document matches. Press Enter to ask April.", "palHint": "Type to search the library, or ask April a question.", "copy": "Copy", "copied": "Copied", "close": "Close", "tourPause": "Pause the tour", "tourResume": "Resume the tour", "rwYours": "Your message", "rwDraft": "Draft", "rwAsk": "Questions to settle before publishing", "rwShort": "Paste at least a couple of sentences.", "rwBusy": "The desk is busy right now. Try again in a minute, or start from a sample.", "rwNone": "There aren't enough facts in that to make a document. Try a message that explains how something is done, or start from a sample.", "rwFail": "That didn't work. Try again, or start from a sample.", "rwStats": "Facts kept: {f}. Noise cut: {n}. Questions: {q}. Drafting time: {s} s.", "rwRule": "Checked by code, not by the model.", "rwChecked": "Every name and number in the message ({n}) is in the draft.", "rwLost": "The draft lost {l}.", "rwAdded": "The draft adds {l}, which the message doesn't say.", "rwDoubt": "The message isn't sure about something ({l}). The draft doesn't say so.", "rwSample": "Sample message", "actOpen": "Open: {t}", "actGo": "Take me there", "actCv": "Download the CV", "actLinkedin": "Message Karan on LinkedIn"}
+ "strings": {"morning": "Good morning.", "afternoon": "Good afternoon.", "evening": "Good evening.", "intro": "I'm April, Karan's assistant. Ask me about his writing, his projects, or his availability.", "thinking": "Thinking...", "offline": "I can't reach my AI model right now. Try one of the suggested questions, or message Karan on LinkedIn:", "voiceOn": "I'll read my answers aloud.", "voiceOff": "Voice is off.", "hello": "Hello, I'm April. Ask me anything about Karan's work, and I'll answer from his notes.", "palDocs": "Documents", "palHere": "On this page", "palAsk": "Ask April", "palNone": "No document matches. Press Enter to ask April.", "palHint": "Type to search the library, or ask April a question.", "copy": "Copy", "copied": "Copied", "close": "Close", "tourPause": "Pause the tour", "tourResume": "Resume the tour", "rwYours": "Your message", "rwDraft": "Draft", "rwAsk": "Questions to settle before publishing", "rwShort": "Paste at least a couple of sentences.", "rwBusy": "The desk is busy right now. Try again in a minute, or start from a sample.", "rwNone": "There aren't enough facts in that to make a document. Try a message that explains how something is done, or start from a sample.", "rwFail": "That didn't work. Try again, or start from a sample.", "rwStats": "Facts kept: {f}. Noise cut: {n}. Questions: {q}. Drafting time: {s} s.", "rwRule": "Checked by code, not by the model.", "rwChecked": "Every name and number in the message ({n}) is in the draft.", "rwLost": "The draft lost {l}.", "rwAdded": "The draft adds {l}, which the message doesn't say.", "rwDoubt": "The message isn't sure about something ({l}). The draft doesn't say so.", "rwSample": "Sample message", "actOpen": "Open: {t}", "actGo": "Take me there", "actCv": "Download the CV", "actLinkedin": "Message Karan on LinkedIn"}
 }

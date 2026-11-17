@@ -1,0 +1,186 @@
+/* The workbench: the manuscript on the left, what it becomes on the right.
+   It uses the site's own paper, ink, highlighter and red pen (site.css), and adds only what an editor needs. */
+.bench main{padding:22px 0 44px}
+.bench .foot{padding-bottom:40px}
+.wb-head{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:14px 40px;margin:0 0 18px}
+.wb-head h1{font-size:clamp(2rem,3.3vw,2.8rem);line-height:1;letter-spacing:-.03em}
+.wb-head p{margin:.6em 0 0;max-width:47em;font-size:1rem;line-height:1.5;color:var(--ink2)}
+.wb-head p a,.wb-help a,.wb-nojs a{color:var(--ink);font-weight:600;text-decoration-color:var(--hl);text-decoration-thickness:2px}
+.wb-start{display:flex;align-items:center;gap:4px;position:relative}
+.wb-nojs{margin:0 0 18px;padding:.8em 1em;background:#FFF4B8;border-left:3px solid var(--ink)}
+
+/* Templates */
+.wb-menu{position:relative}
+.wb-menu summary{list-style:none;cursor:pointer}
+.wb-menu summary::-webkit-details-marker{display:none}
+.wb-menu summary::after{content:"";width:.42em;height:.42em;margin:-.2em 0 0 .7em;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.wb-menu[open] summary::after{transform:rotate(-135deg);margin-top:.2em}
+.wb-pop{position:absolute;z-index:20;top:calc(100% + 8px);left:0;width:min(360px,calc(100vw - 40px));padding:6px;background:#fff;border:1px solid var(--rule2);border-radius:10px;box-shadow:0 22px 50px -18px rgba(0,0,0,.42)}
+.wb-pop button{display:block;width:100%;padding:.65em .8em;border:0;border-radius:6px;background:none;text-align:left;font:inherit;color:var(--ink);cursor:pointer}
+.wb-pop button:hover,.wb-pop button:focus-visible{background:var(--hl)}
+.wb-pop b{display:block;font-size:.98rem}
+.wb-pop small{display:block;margin-top:.1em;font-size:.86rem;line-height:1.35;color:var(--ink2)}
+
+/* The menu opens toward the middle of the page: on a wide window the button is at the right, and on a narrower one it has moved under the title. */
+@media (min-width:1200px){.wb-pop{left:auto;right:0}}
+
+/* Two panes that fill the window */
+.wb-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);gap:18px;height:max(460px,calc(100vh - 238px));height:max(460px,calc(100dvh - 238px))}
+.wb-src,.wb-out{display:flex;flex-direction:column;min-width:0;min-height:0;border:1px solid var(--rule2);border-radius:8px;overflow:hidden;box-shadow:var(--lift)}
+.wb-src{background:#fff}
+.wb-out{background:#E7E7E3}
+.wb-src:focus-within{border-color:var(--ink)}
+
+/* The source */
+.wb-tools{display:flex;flex-wrap:wrap;gap:2px;padding:7px 8px;border-bottom:1px solid var(--rule)}
+.wb-tools button{padding:.55em .62em;border:0;border-radius:6px;background:none;font:600 .82rem/1 var(--sans);color:var(--ink2);cursor:pointer}
+.wb-tools button:hover{background:var(--desk);color:var(--ink)}
+.wb-ed{position:relative;flex:1;min-height:0;--gut:3.5rem;--pad:18px}
+.wb-back{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.wb-back::before{content:"";position:absolute;top:0;bottom:0;left:calc(var(--gut) - 10px);width:1px;background:rgba(222,58,43,.42)}
+#wb-lines{padding:14px 0 48px}
+.wb-ed textarea,.ln{font:400 .9rem/1.7 var(--mono);letter-spacing:0;font-variant-ligatures:none;-moz-tab-size:2;tab-size:2;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
+.wb-ed textarea{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;padding:14px var(--pad) 48px var(--gut);border:0;border-radius:0;outline:0;resize:none;background:transparent;color:var(--ink);caret-color:var(--red);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--rule2) transparent}
+.ln{position:relative;padding:0 var(--pad) 0 var(--gut);color:transparent}
+.ln::before{content:attr(data-l);position:absolute;left:0;width:calc(var(--gut) - 20px);text-align:right;color:#A9ABB0;font-variant-numeric:tabular-nums}
+.ln.fm{background:#F5F5F2}
+.ln.cond{box-shadow:inset 3px 0 0 #9DB5F5}
+.ln.cur{background:#FFF7C7}
+.ln.cur::before{color:var(--ink)}
+.ln.has-fix::after,.ln.has-adv::after{content:"";position:absolute;left:calc(var(--gut) - 14px);top:.62em;width:7px;height:7px;border-radius:50%;background:var(--red)}
+.ln.has-adv::after{background:#fff;box-shadow:inset 0 0 0 1.5px #8A8C92}
+.ln mark{background:none;color:transparent}
+.ln mark.fix{text-decoration:underline wavy var(--red);text-decoration-thickness:1.5px;text-underline-offset:3px;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}
+.ln mark.adv{text-decoration:underline dotted #7C7E85;text-decoration-thickness:2px;text-underline-offset:3px;-webkit-text-decoration-skip-ink:none;text-decoration-skip-ink:none}
+.wb-status{display:flex;align-items:center;gap:6px 16px;flex-wrap:wrap;margin:0;padding:8px 14px;border-top:1px solid var(--rule);font-size:.84rem;color:var(--mute)}
+.wb-status #wb-saved{margin-left:auto}
+.wb-undo,.wb-link{padding:0;border:0;background:none;font:600 .84rem/1.3 var(--sans);color:var(--ink);text-decoration:underline;text-decoration-color:var(--hl);text-decoration-thickness:2px;text-underline-offset:.2em;cursor:pointer}
+
+/* Tabs. The chosen one has the highlighter under its word. */
+.wb-bar{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;padding:0 14px 0 8px;background:#fff;border-bottom:1px solid var(--rule)}
+.wb-tabs{display:flex}
+.wb-tabs [role=tab]{position:relative;z-index:0;display:inline-flex;align-items:center;gap:.5em;padding:15px 11px 14px;border:0;background:none;font:600 .95rem/1 var(--sans);color:var(--ink2);cursor:pointer}
+.wb-tabs [role=tab]:hover{color:var(--ink)}
+.wb-tabs [role=tab][aria-selected=true]{color:var(--ink)}
+.wb-tabs [role=tab][aria-selected=true] span{background:linear-gradient(var(--hl),var(--hl)) no-repeat 0 92%/100% .46em}
+#t-write{display:none}
+.wb-n{min-width:1.55em;height:1.55em;padding:0 .4em;border-radius:1em;background:var(--red);color:#fff;font:700 .76rem/1.55em var(--sans);text-align:center}
+.wb-n.ok{background:var(--green)}
+.wb-reader{display:flex;align-items:center;gap:.6em;font:600 .86rem/1 var(--sans);color:var(--ink2)}
+.wb-reader select{max-width:15.5em;padding:.5em 2em .5em .7em;border:1px solid var(--rule2);border-radius:6px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%230B0B0C' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right .7em center/.72em;font:600 .86rem/1.2 var(--sans);color:var(--ink);-webkit-appearance:none;appearance:none;cursor:pointer}
+
+/* Panels: a sheet on the desk */
+.wb-panel{flex:1;min-height:0;overflow-y:auto;padding:18px 22px 30px;scrollbar-width:thin;scrollbar-color:var(--rule2) transparent}
+.wb-meta{display:flex;align-items:center;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;max-width:760px;margin:0 auto 12px;min-height:1.9em}
+.wb-vars{margin:0;font-size:.84rem;color:var(--ink2)}
+.wb-vars span{margin-right:.7em;font-weight:700;color:var(--ink)}
+.wb-vars code{font:400 .8rem var(--mono);padding:.12em .4em;border-radius:4px;background:#fff}
+.wb-vars i{display:inline-block;width:1em}
+.wb-seal{margin-left:auto;display:inline-flex;align-items:center;gap:.5em;padding:.42em .8em;border:0;border-radius:999px;background:var(--red);color:#fff;font:700 .82rem/1 var(--sans);cursor:pointer}
+.wb-seal.ok{background:var(--green)}
+.wb-seal.ok::before{content:"";width:.36em;height:.66em;margin:-.14em .1em 0 .1em;border:solid #fff;border-width:0 2.2px 2.2px 0;transform:rotate(42deg)}
+.wb-sheet,.wb-proof{max-width:760px;margin:0 auto;border:1px solid var(--rule)}
+.wb-sheet{padding:34px clamp(22px,3.6vw,44px) 40px;font-size:1rem;box-shadow:0 1px 1px rgba(0,0,0,.05),0 18px 30px -22px rgba(0,0,0,.35)}
+.wb-sheet h1{margin:0 0 .5em;font:500 clamp(1.8rem,2.6vw,2.35rem)/1.05 var(--serif);letter-spacing:-.028em}
+.wb-sheet h2{font-size:1.5rem;margin:1.5em 0 .5em}
+.wb-sheet h3{font-size:1.2rem;margin:1.5em 0 .45em}
+.wb-sheet :is(p,h1,h2,h3,h4,li,pre,.note)[data-line]{cursor:default}
+.wb-sheet .at{box-shadow:-12px 0 0 #fff,-16px 0 0 var(--hl)}
+.wb-sheet li.at{box-shadow:-46px 0 0 #fff,-50px 0 0 var(--hl)}
+.wb-sheet ul>li.at{box-shadow:-26px 0 0 #fff,-30px 0 0 var(--hl)}
+.wb-sheet .note{margin:.7em 0 .9em;padding:.6em .85em;border-left:3px solid var(--ink);border-radius:0 6px 6px 0;background:#FFF4B8}
+.wb-sheet .note p{margin:0;color:var(--ink)}
+.wb-sheet .note.is-note,.wb-sheet .note.is-tip{border-left-color:var(--blue);background:#E9EFFD}
+.wb-sheet .note.is-quote{border-left-color:var(--rule2);background:none}
+.wb-sheet .only{position:relative;margin:1.3em -12px;padding:1.9em 12px .2em;border:1.5px dashed #9DB5F5;border-radius:8px}
+.wb-sheet .only::before{content:"Only for: " attr(data-tags);position:absolute;top:0;left:12px;transform:translateY(-50%);padding:.25em .6em;border-radius:4px;background:#E9EFFD;font:700 .76rem/1.2 var(--sans);color:#1E3A8A}
+.wb-sheet .only>:first-child{margin-top:0}
+.wb-sheet .var{border-bottom:2px dashed var(--red);font-family:var(--mono);font-size:.9em}
+.wb-img{display:block;margin:.6em 0;padding:.9em 1em;border:1.5px dashed var(--rule2);border-radius:6px;font-size:.92rem;color:var(--ink2)}
+.wb-img b{margin-right:.5em;color:var(--ink)}
+.wb-img small{display:block;margin-top:.2em;font:400 .78rem var(--mono);color:var(--mute);overflow-wrap:anywhere}
+.wb-empty{color:var(--mute)!important}
+
+/* Style check and Publish share a proof sheet */
+.wb-proof{padding:26px clamp(20px,3vw,34px) 30px;box-shadow:0 1px 1px rgba(0,0,0,.05),0 18px 30px -22px rgba(0,0,0,.35)}
+.wb-verdict{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-bottom:18px;border-bottom:2px solid var(--ink)}
+.wb-verdict>div{flex:1 1 15em}
+.wb-verdict h2{font-size:1.75rem;letter-spacing:-.025em;outline-offset:6px}
+.wb-verdict.ok h2::before{content:"";display:inline-block;width:.3em;height:.58em;margin:0 .5em .08em .12em;border:solid var(--green);border-width:0 3.5px 3.5px 0;transform:rotate(42deg)}
+.wb-verdict p{margin:.35em 0 0;font-size:.95rem;color:var(--ink2)}
+.wb-group{margin:1.5em 0 0;padding-bottom:.5em;border-bottom:1px solid var(--rule2);font:700 .86rem/1.2 var(--sans);letter-spacing:0;color:var(--ink2)}
+.wb-found{list-style:none;margin:0;padding:0}
+.wb-found>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 18px;padding:14px 0;border-bottom:1px solid var(--rule)}
+.wb-rule{display:flex;align-items:baseline;flex-wrap:wrap;gap:.2em .8em;margin:0 0 .25em}
+.wb-rule a{font-weight:700;color:var(--ink);text-decoration:none;background:linear-gradient(var(--hl),var(--hl)) no-repeat 0 100%/100% 2px}
+.wb-rule a:hover{background-size:100% 100%}
+.wb-msg{margin:0;font-size:.94rem;line-height:1.5;color:var(--ink2)}
+.wb-chg{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25em .9em;margin:.55em 0 0;font:400 .84rem/1.6 var(--mono);color:var(--ink2);overflow-wrap:anywhere}
+.wb-chg del{color:var(--ink2);text-decoration:line-through var(--red);text-decoration-thickness:1.5px}
+.wb-chg ins{padding:.08em .35em;border-radius:3px;background:var(--hl);color:var(--ink);text-decoration:none}
+.wb-chg span{font:400 .88rem/1.5 var(--sans)}
+.wb-acts{display:flex;flex-direction:column;align-items:flex-end;gap:8px;min-width:5.6em}
+.wb-acts .wb-link{font-size:.8rem;color:var(--ink2)}
+.wb-review{margin-top:2em}
+.wb-review h2{font-size:1.25rem}
+.wb-review>p{margin:.4em 0 .8em;font-size:.94rem;color:var(--ink2)}
+.wb-review ul{list-style:none;margin:0;padding:0}
+.wb-review li{padding:.6em 0;border-top:1px solid var(--rule)}
+.wb-review label{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8em;align-items:start;font-size:.94rem;line-height:1.5;color:var(--ink2);cursor:pointer}
+.wb-review input{width:1.1em;height:1.1em;margin:.22em 0 0;accent-color:var(--ink)}
+.wb-review b{color:var(--ink)}
+.wb-gate{margin:0 0 1.2em;padding:.7em .9em;border-left:3px solid var(--red);border-radius:0 6px 6px 0;background:#FCF1EF;font-size:.94rem;color:var(--ink)!important}
+.wb-gate.ok{border-left-color:var(--green);background:#E8F6EE}
+.wb-formats{display:inline-flex;padding:3px;border-radius:9px;background:var(--desk)}
+.wb-formats button{padding:.6em 1.05em;border:0;border-radius:7px;background:none;font:600 .9rem/1 var(--sans);color:var(--ink2);cursor:pointer}
+.wb-formats button[aria-pressed=true]{background:var(--ink);color:#fff}
+.wb-about{margin:.9em 0 .9em;font-size:.94rem;color:var(--ink2)}
+.wb-code{max-height:min(46vh,430px);margin:0 0 1.1em;white-space:pre-wrap;overflow-wrap:anywhere}
+pre.wb-code code{white-space:pre-wrap;overflow-wrap:anywhere}
+.wb-proof .btns{display:flex;flex-wrap:wrap;gap:8px}
+
+.wb-help{margin-top:22px;max-width:880px}
+.wb-help summary{font-weight:600;cursor:pointer}
+.wb-help .tbl{margin-top:12px}
+.wb-help table{width:100%;border-collapse:collapse;font-size:.93rem;line-height:1.5}
+.wb-help th{padding:.5em .9em .5em 0;border-bottom:2px solid var(--ink);text-align:left}
+.wb-help td{padding:.6em .9em .6em 0;border-bottom:1px solid var(--rule2);vertical-align:top;color:var(--ink2)}
+.wb-help td:first-child{white-space:nowrap}
+.wb-help code{font:400 .86em var(--mono);padding:.1em .35em;border-radius:4px;background:#fff}
+.wb-help p{margin:.9em 0 0;font-size:.93rem;color:var(--ink2)}
+
+/* On a narrow screen there is one pane at a time, and writing is one of the tabs. */
+@media (max-width:900px){
+ .wb-grid{display:flex;flex-direction:column;gap:0;height:auto}
+ .wb-src{display:none;border-top:0;border-radius:0 0 8px 8px}
+ .wb-grid[data-view=write] .wb-src{display:flex}
+ .wb-grid[data-view=write] .wb-out{border-radius:8px 8px 0 0;box-shadow:none}
+ .wb-out{order:-1}
+ #t-write{display:inline-flex}
+ .wb-ed{flex:none;--gut:2.7rem;--pad:12px}
+ .wb-ed textarea{overflow:hidden}
+ .wb-panel{overflow:visible;padding:14px 12px 22px}
+ .wb-bar{padding:0 8px 0 2px}
+ .wb-tabs [role=tab]{padding:14px 9px 13px;font-size:.9rem}
+ .wb-reader{width:100%;padding:0 6px 10px;justify-content:space-between}
+ .wb-sheet{padding:24px 18px 28px}
+ .wb-sheet .only{margin-inline:-8px;padding-inline:8px}
+ .wb-found>li{grid-template-columns:minmax(0,1fr)}
+ .wb-acts{flex-direction:row;align-items:center;gap:16px}
+ .wb-help td:first-child{white-space:normal}
+}
+@media (max-width:600px){
+ .wb-start{width:100%}
+}
+
+/* Printing gives the document, and nothing of the tool. */
+@media print{
+ .bench .nav,.bench .foot,.wb-head,.wb-src,.wb-bar,.wb-meta,.wb-help,#p-check,#p-publish,.skip{display:none!important}
+ .bench,.wb-out{background:#fff!important}
+ .bench main{padding:0;width:auto}
+ .wb-grid{display:block;height:auto}
+ .wb-out{border:0;box-shadow:none;overflow:visible}
+ #p-preview,#p-preview[hidden]{display:block!important;overflow:visible;padding:0}
+ .wb-sheet{max-width:none;border:0;box-shadow:none;padding:0}
+ .wb-sheet .at{box-shadow:none}
+}

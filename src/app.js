@@ -125,7 +125,7 @@
     $(".rw-again", rw).addEventListener("click", play);
 
     /* ----- A visitor's own message ----- */
-    var tray = $("#try"), ta = $("#try-text"), note = $("#try-msg"), mine = $(".rw-you", rw), theirs = $(".rw-ex", rw), acts = $(".rw-acts", rw), stats = $("#rw-stats"), copy = $("#rw-copy");
+    var tray = $("#try"), ta = $("#try-text"), note = $("#try-msg"), mine = $(".rw-you", rw), theirs = $(".rw-ex", rw), acts = $(".rw-acts", rw), stats = $("#rw-stats"), copy = $("#rw-copy"), bench = $("#rw-open");
     var home = { raw: raw.innerHTML, doc: doc.innerHTML, lang: stage.getAttribute("lang") }, last = null, job = 0, busy = false, samples = null, sampled = false;
     var KIND = { "how-to": "#0A8F7A", troubleshooting: "#CF3F5A", reference: "#1F78D1", "release-note": "#C97800", policy: "#3D4AB0", explainer: "#6A58E6" };
     function el(tag, cls, text) {
@@ -227,6 +227,7 @@
       tabs.forEach(function (b) { b.disabled = false; });
       stats.textContent = fill(I.rwStats, { f: r.stats.facts, n: r.stats.cut, q: r.questions.length, s: (Math.max(100, r.ms || 0) / 1000).toLocaleString(LANG, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) });
       copy.hidden = !navigator.clipboard;
+      if (bench) bench.hidden = false;
       if (reduce) return set(3, true, true);
       stop();
       auto = true;
@@ -269,6 +270,7 @@
       doc.textContent = "";
       acts.hidden = false;
       copy.hidden = true;
+      if (bench) bench.hidden = true;
       set(1, true, true);
       tabs.forEach(function (b) { b.disabled = +b.dataset.s > 1; });
       var top = rw.getBoundingClientRect().top;
@@ -314,6 +316,12 @@
         });
       });
       $("#rw-back").addEventListener("click", function () { back(); });
+      // The draft goes to the workbench through this browser's storage. Nothing is sent to a server for it.
+      if (bench) bench.addEventListener("click", function () {
+        if (!last) return;
+        try { localStorage.setItem("wb:incoming", markdown(last)); } catch (e) { return; }
+        location.href = "/workbench";
+      });
       copy.addEventListener("click", function () {
         if (!last || !navigator.clipboard) return;
         var label = copy.dataset.label || (copy.dataset.label = copy.textContent);
@@ -499,7 +507,7 @@
   }
   // One of her fixed lines, in her recorded voice. The browser's voice reads it only if the recording can't be had.
   function line(name, text) {
-    fetch("/api/april?say=" + name + "&lang=" + LANG + "&v=6").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
+    fetch("/api/april?say=" + name + "&lang=" + LANG + "&v=7").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
       .then(function (buf) { if (voiceOn) return playBytes(buf); })
       .catch(function () { if (voiceOn) browserVoice(text); });
   }
@@ -655,7 +663,7 @@
     var at = -1, run = 0, paused = false, wait = 0, clips = {}, from = null;
     // Each line is recorded once on the server, then served from the CDN.
     function clip(i) {
-      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG + "&v=6").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
+      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG + "&v=7").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
       return clips[i];
     }
     function go(i) {

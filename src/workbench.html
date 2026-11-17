@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Workbench | Karan Deshmukh</title>
+<meta name="description" content="Write a document in Markdown, check it against a style guide as you type, and publish it for more than one reader as Markdown, HTML or DITA. It runs in your browser, and nothing you type leaves it.">
+<link rel="canonical" href="{{url}}/workbench">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Workbench | Karan Deshmukh">
+<meta property="og:description" content="Write a document, check it against a style guide, and publish it for each reader as Markdown, HTML or DITA. It runs in your browser.">
+<meta property="og:url" content="{{url}}/workbench">
+<meta property="og:image" content="{{url}}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/hanken.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ahm.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/workbench.css">
+<script>document.documentElement.className="js"</script>
+</head>
+<body class="sample bench">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav stuck">
+ <div class="wrap nav-in">
+  <a class="brand" href="/">Karan Deshmukh</a>
+  <nav aria-label="Site">
+   <a href="/docs">Library</a><a href="/style">Style guide</a><a href="/workbench" aria-current="page">Workbench</a><a href="/#projects">Projects</a><a href="/#contact">Contact</a>
+  </nav>
+  <div class="nav-act">
+   <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
+  </div>
+ </div>
+</header>
+
+<main id="main" class="wrap wb">
+ <div class="wb-head">
+  <div>
+   <h1>Workbench</h1>
+   <p>Write a document, check it against <a href="/style">my style guide</a> as you type, and publish it for each kind of reader. It runs in your browser, and nothing you type leaves it.</p>
+  </div>
+  <div class="wb-start">
+   <details class="wb-menu" id="wb-new">
+    <summary class="btn line sm">Start from a template</summary>
+    <div class="wb-pop" id="wb-templates"></div>
+   </details>
+   <button class="btn text sm" type="button" id="wb-open">Open a file</button>
+   <input type="file" id="wb-file" accept=".md,.markdown,.txt,text/markdown,text/plain" hidden>
+  </div>
+ </div>
+
+ <noscript><p class="wb-nojs">The workbench needs JavaScript. The <a href="/style">style guide</a> and the <a href="/docs">library</a> don't.</p></noscript>
+
+ <div class="wb-grid" id="wb" data-view="preview">
+  <section class="wb-src" id="wb-src" aria-label="Source">
+   <div class="wb-tools" role="toolbar" aria-label="Insert">
+    <button type="button" data-do="h2" title="Make this line a heading">Heading</button>
+    <button type="button" data-do="b" title="Bold, for a name on the screen (Ctrl+B)">Bold</button>
+    <button type="button" data-do="link" title="Link the selected words">Link</button>
+    <button type="button" data-do="ul" title="Make the selected lines a list">List</button>
+    <button type="button" data-do="ol" title="Make the selected lines numbered steps">Steps</button>
+    <button type="button" data-do="note" title="Add a note. Change the first word to Tip, Important, Caution or Warning">Note</button>
+    <button type="button" data-do="code" title="Set the selection as code">Code</button>
+    <button type="button" data-do="table" title="Add a table">Table</button>
+    <button type="button" data-do="only" title="Keep the selected lines for one group of readers">Condition</button>
+    <button type="button" data-do="var" title="Add a name that gets its value when you publish">Variable</button>
+   </div>
+   <div class="wb-ed" id="wb-ed">
+    <div class="wb-back" aria-hidden="true"><div id="wb-lines"></div></div>
+    <textarea id="wb-text" aria-label="The document, in Markdown" spellcheck="true" autocomplete="off" autocapitalize="sentences"></textarea>
+   </div>
+   <p class="wb-status"><span id="wb-count"></span><button type="button" class="wb-undo" id="wb-undo" hidden>Undo</button><span id="wb-saved"></span></p>
+  </section>
+
+  <section class="wb-out" aria-label="Result">
+   <div class="wb-bar">
+    <div class="wb-tabs" role="tablist" aria-label="Views">
+     <button type="button" role="tab" id="t-write" data-tab="write" aria-controls="wb-src" aria-selected="false" tabindex="-1"><span>Write</span></button>
+     <button type="button" role="tab" id="t-preview" data-tab="preview" aria-controls="p-preview" aria-selected="true"><span>Preview</span></button>
+     <button type="button" role="tab" id="t-check" data-tab="check" aria-controls="p-check" aria-selected="false" tabindex="-1"><span>Style check</span><b class="wb-n" id="wb-n"></b></button>
+     <button type="button" role="tab" id="t-publish" data-tab="publish" aria-controls="p-publish" aria-selected="false" tabindex="-1"><span>Publish</span></button>
+    </div>
+    <label class="wb-reader" id="wb-reader-wrap" hidden><span>Reader</span><select id="wb-reader"></select></label>
+   </div>
+
+   <div class="wb-panel" id="p-preview" role="tabpanel" aria-labelledby="t-preview" tabindex="0">
+    <div class="wb-meta"><p class="wb-vars" id="wb-vars"></p><button type="button" class="wb-seal" id="wb-seal"></button></div>
+    <article class="sheet article wb-sheet" id="wb-sheet"></article>
+   </div>
+
+   <div class="wb-panel" id="p-check" role="tabpanel" aria-labelledby="t-check" tabindex="0" hidden>
+    <div class="sheet wb-proof">
+     <div class="wb-verdict" id="wb-verdict"></div>
+     <div id="wb-found"></div>
+     <section class="wb-review">
+      <h2>For a reviewer</h2>
+      <p>No program can check these. Tick each one once someone has read the document for it.</p>
+      <ul id="wb-review"></ul>
+     </section>
+    </div>
+   </div>
+
+   <div class="wb-panel" id="p-publish" role="tabpanel" aria-labelledby="t-publish" tabindex="0" hidden>
+    <div class="sheet wb-proof">
+     <p class="wb-gate" id="wb-gate"></p>
+     <div class="wb-formats" role="group" aria-label="Format">
+      <button type="button" data-out="md" aria-pressed="true">Markdown</button>
+      <button type="button" data-out="html" aria-pressed="false">HTML</button>
+      <button type="button" data-out="dita" aria-pressed="false">DITA</button>
+     </div>
+     <p class="wb-about" id="wb-about"></p>
+     <pre class="code wb-code" id="wb-code" tabindex="0" aria-label="The output"><code></code></pre>
+     <div class="btns">
+      <button class="btn ink sm" type="button" id="wb-copy">Copy</button>
+      <button class="btn inkline sm" type="button" id="wb-save">Download</button>
+      <button class="btn text sm" type="button" id="wb-print">Print, or save as PDF</button>
+     </div>
+    </div>
+   </div>
+  </section>
+ </div>
+
+ <details class="wb-help">
+  <summary>What you can write, besides Markdown</summary>
+  <div class="tbl"><table>
+   <thead><tr><th>You write</th><th>What it does</th></tr></thead>
+   <tbody>
+    <tr><td><code>::: only admin</code><br>the lines<br><code>:::</code></td><td>Keeps the lines between for one group of readers. Choose <b>Reader</b> to see the document as each group gets it.</td></tr>
+    <tr><td><code>&#123;&#123;product&#125;&#125;</code></td><td>A name that gets its value when you publish. Set the value under <code>vars:</code> at the top of the document, and change it once for every place it's used.</td></tr>
+    <tr><td><code>&gt; **Caution:** the text</code></td><td>A note. The first word can also be Note, Tip, Important or Warning.</td></tr>
+    <tr><td><code>type: how-to</code></td><td>The kind of document, on a line at the top. It decides the DITA topic: <code>how-to</code>, <code>troubleshooting</code>, <code>reference</code>, <code>release-notes</code>, <code>faq</code> or <code>concept</code>.</td></tr>
+    <tr><td><code>&lt;!-- style: off passive (why) --&gt;</code></td><td>Leaves one rule out of the check for this document, and says why.</td></tr>
+   </tbody>
+  </table></div>
+  <p>Select a paragraph in the preview to find it in the source.</p>
+ </details>
+ <p class="vh" id="wb-live" role="status" aria-live="polite"></p>
+</main>
+
+<footer class="foot">
+ <div class="wrap">
+  <p>The products in the templates are invented. The workbench keeps your draft in this browser's storage and nowhere else.</p>
+  <p><a href="/">Karan Deshmukh, technical writer</a></p>
+ </div>
+</footer>
+
+<script id="wb-data" type="application/json">{{data}}</script>
+<script src="/doc.js"></script>
+<script src="/style.js"></script>
+<script src="/workbench.js"></script>
+</body>
+</html>

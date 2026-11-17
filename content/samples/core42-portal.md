@@ -16,59 +16,59 @@ Before you begin, ensure the following requirements are met:
 
 To create a new Individual account in the Core42 AI Cloud Portal, follow these steps:
 
-1. Open a **web browser**  
-2. Navigate to the [**Core42 website**](https://www.core42.ai/)  
-3. Select **AI Cloud**:  
+1. Open a **web browser**.  
+2. Navigate to the [**Core42 website**](https://www.core42.ai/).  
+3. Select **AI Cloud**.  
    ![][image1]
 
-4. Select **Get started:**  
+4. Select **Get started**.  
    **![][image2]**
 
    **Note**: If you already have an AI Cloud profile, select **Log In** instead.
 
-5. In the sign-up window, select **Individual:**  
+5. In the sign-up window, select **Individual**.  
    **![][image3]**
 
    **Important**: Select **Individual** to create a personal account.
 
-6. Refer to the following **animation** to complete the sign-up form:  
+6. Refer to the following **animation** to complete the sign-up form.  
    ![][image4]
 
-7. In **Email Verification**, enter the **6-digit** verification code from your email
+7. In **Email Verification**, enter the **6-digit** verification code from your email.
 
    **Note**: If you do **not** receive the code, check your spam or junk folder, then retry.
 
-8. Select **Verify Code:**  
+8. Select **Verify Code**.  
     **![][image5]**
 
-9. Confirm the verification success message displays:  
+9. Confirm the verification success message displays.  
    ![][image6]
 
 ## **Sign in to the Core42 AI Cloud Portal**
 
 To sign in to the Core42 AI Cloud Portal after your account is created, follow these steps:
 
-1. On the [**Core42 website**](https://www.core42.ai/), select **AI Cloud:**  
+1. On the [**Core42 website**](https://www.core42.ai/), select **AI Cloud**.  
    ![][image7]
 
-2. Select **Log In:**  
+2. Select **Log In**.  
    **![][image8]**
 
-3. Copy the **Tenant ID** from the email you receive:  
+3. Copy the **Tenant ID** from the email you receive.  
    ![][image9]
 
-4. Enter the **Tenant Name/ID** you receive in the email  
-5. Select **Login:**  
+4. Enter the **Tenant Name/ID** you receive in the email.  
+5. Select **Login**.  
    **![][image10]**
 
 6. In the sign-in window, enter the following details:  
-   1. Verify the tenant name displays by default  
-   2. Enter your username or email address  
-   3. Enter your password  
-   4. Select **Sign In:**  
+   1. Verify the tenant name displays by default.  
+   2. Enter your username or email address.  
+   3. Enter your password.  
+   4. Select **Sign In**.  
       ![][image11]
 
-7. Confirm the **Welcome to Core42 AI Cloud platform** page displays:  
+7. Confirm the **Welcome to Core42 AI Cloud platform** page displays.  
    ![][image12]
 
 [image1]: img/core42-portal-1.webp

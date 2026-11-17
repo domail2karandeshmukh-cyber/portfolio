@@ -9,6 +9,7 @@ import { execSync } from "node:child_process";
 import sharp from "sharp";
 import { esc, host, sources, template } from "./lib/util.mjs";
 import { buildLibrary, docCard } from "./lib/library.mjs";
+import { styleGuide } from "./lib/styleguide.mjs";
 import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
@@ -45,6 +46,27 @@ for (const [id, im] of Object.entries(C.images)) {
 // The library, and the films
 const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings) };
 const library = await buildLibrary({ C, OUT, source, common });
+// The style guide: its rules, and what the check found in each document of the library.
+const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/main/src/style.js` });
+await library.extra({ path: "/style", title: "Style guide", description: `The ${guide.figures.rules} rules my documents follow, based on the Microsoft Writing Style Guide. Code checks ${guide.figures.coded} of them on every build.`,
+  trail: [["Portfolio", "/"], ["Library", "/docs"], ["Style guide"]], body: guide.body, kind: "Style guide", shelf: "Library", text: guide.text });
+
+// The workbench: a page of its own. Its starting documents are files in content/workbench/, and each is checked here,
+// so a template that breaks the style guide never ships. The first draft is the one that is meant to break it.
+const Style = createRequire(import.meta.url)("./src/style.js");
+const starts = [];
+for (const t of C.workbench.templates) {
+  const text = await fs.readFile(`content/workbench/${t.id}.md`, "utf8"), sum = Style.summary(Style.check(text));
+  if (t.id === C.workbench.first ? sum.passes : !sum.passes || sum.suggestion) throw new Error(`content/workbench/${t.id}.md: ${t.id === C.workbench.first ? "the first draft should have something to fix" : `${sum.error} error(s), ${sum.warning} warning(s) and ${sum.suggestion} suggestion(s) in a template`}`);
+  starts.push({ ...t, source: text });
+}
+const bench = await template("src/workbench.html");
+await fs.mkdir(`${OUT}/workbench`, { recursive: true });
+await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
+await library.extra({ path: "/workbench", title: "Workbench", description: "Write a document, check it against the style guide as you type, and publish it for each reader as Markdown, HTML or DITA.", only: "search",
+  kind: "Tool", shelf: "Library", text: [{ id: "", title: "", text: "Write a document in Markdown, check it against the style guide as you type, and publish it for more than one reader as Markdown, as HTML for a help center, or as DITA. It runs in your browser." }] });
+await library.finish();
+console.log(`style: ${guide.figures.passing} of ${guide.figures.docs} documents pass (${guide.figures.rules} rules, ${guide.figures.coded} checked by code)`);
 // The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name.
 const reel = C.films?.items ?? [];
 await fs.mkdir(`${OUT}/films`, { recursive: true });
@@ -52,6 +74,13 @@ for (const f of reel) {
   await fs.copyFile(`content/films/${f.id}.mp4`, `${OUT}/films/${f.id}.mp4`);
   await sharp(`content/films/${f.id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${OUT}/films/${f.id}.webp`);
   console.log(`film: ${f.id} (${f.length}) ${f.title}`);
+}
+
+// The key figures: the ones in the content file, and one the build works out from the style check.
+const figures = [...C.stats, { n: `${Math.round((100 * guide.figures.passing) / guide.figures.docs)}%`, label: C.style.figure }];
+// Pictures of this site's own pages, made by scripts/shoot-pages.py
+for (const f of existsSync("content/shots") ? await fs.readdir("content/shots") : []) {
+  for (const w of [800, 1600]) await sharp(`content/shots/${f}`).resize({ width: w }).webp({ quality: 82 }).toFile(`${OUT}/img/${f.replace(/\.\w+$/, "")}-${w}.webp`);
 }
 
 const byId = library.byId, listed = library.cards;
@@ -64,7 +93,7 @@ const link = (text, h, cls = "") => {
 const PLAY = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
 
 const parts = {
-  stats: C.stats.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
+  stats: figures.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
   // Three sheets on the desk. The first one is where to start.
   featured: C.featured.map((id, i) => docCard({ ...byId[id], start: i === 0 }, T)).join("\n"),
   // Every document as one line of titles under its kind: the breadth of the library at a glance.
@@ -145,7 +174,8 @@ for (const loc of locales) {
     canonical: S.url + loc.path,
     location: esc(S.location), availability: esc(S.availability),
     github: S.links.github,
-    figures: String(C.stats.length),
+    figures: String(figures.length),
+    rules: String(guide.figures.rules), coded: String(guide.figures.coded),
     jsonld: JSON.stringify(jsonld),
     // April's tour: the section each stop scrolls to, and the line she says there.
     stops: C.tour.map((t) => t.to).join(","),
@@ -165,6 +195,8 @@ for (const loc of locales) {
     const dict = JSON.parse(await fs.readFile(`content/i18n/${loc.code}.json`, "utf8"));
     const done = translate(html, dict);
     html = done.html.replace('<html lang="en">', `<html lang="${loc.code}">`).replace('data-lang="en"', `data-lang="${loc.code}"`);
+    // French, German and Spanish set a narrow space before the percent sign.
+    if (["fr", "de", "es"].includes(loc.code)) html = html.replace(/(<b data-count>\d+)%(<\/b>)/g, `$1${String.fromCharCode(0x202f)}%$2`);
     if (dict.note) html = html.replace(/(<p class="avail">[\s\S]*?<\/p>)/, `$1\n   <p class="tnote">${esc(dict.note)}</p>`);
     if (done.missing.length) {
       console.log(`i18n: ${loc.code} has ${done.missing.length} untranslated piece(s), shown in English:`);
@@ -183,13 +215,14 @@ for (const loc of locales) {
   await fs.writeFile(`${dir}/index.html`, typeset(html));
 }
 
-for (const f of ["site.css", "app.js", "favicon.svg"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+// doc.js and style.js are the document model and the style checker. The build uses them, and so does the workbench in a browser.
+for (const f of ["site.css", "app.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
 const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
-const urls = [...locales.map((l) => l.path), ...library.urls];
+const urls = [...locales.map((l) => l.path), ...library.urls, "/style", "/workbench"];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

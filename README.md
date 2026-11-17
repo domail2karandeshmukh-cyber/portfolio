@@ -11,21 +11,22 @@ One content file, `content/site.json`, feeds everything. `build.mjs` and the mod
 | The home page, in five languages (`public/index.html`, `public/fr/`, `public/de/`, `public/es/`, `public/hi/`) | `build.mjs` fills the slots in `src/home.html`, then `lib/i18n.mjs` translates the finished page |
 | The documentation library (`public/docs/`, `public/samples/`) | `lib/library.mjs` and `lib/md.mjs` |
 | The search index (`public/search.json`) | `lib/library.mjs` |
-| The films in the video section | `build.mjs` copies them from `content/films/` |
+| The style guide (`public/style/`) | `lib/styleguide.mjs` writes it from the rules in `src/style.js` and from the result of the check for every document |
+| The workbench (`public/workbench/`) | `build.mjs` fills `src/workbench.html` with the starting documents in `content/workbench/` |
+| The films in the video section | `scripts/film/film.py` films the built pages, frame by frame, and `build.mjs` copies the films from `content/films/` |
 | The CV (`public/Karan-Deshmukh-CV.pdf`) | `lib/cv.mjs` typesets it with pdfkit |
 | The social preview image (`public/og.png`) | `lib/og.mjs` draws it with the site fonts |
 | April, the site assistant | `api/april.js` reads the same content file for its notes |
 | The rewrite desk | `api/rewrite.js` drafts a visitor's message by the brief in `content/desk/brief.md` |
-| The 30-second film of the site | `scripts/film/film.py` films the built home page, frame by frame |
 
-`src/page.html` is the shell of every library page. `src/partials/` holds the parts both shells share. `src/site.css` and `src/app.js` serve every page.
+`src/page.html` is the shell of every library page. `src/partials/` holds the parts both shells share. `src/site.css` serves every page. `src/app.js` serves every page except the workbench, which has its own script and style sheet.
 
 ## The look
 
-The site is an editor's desk: white paper, black ink and one highlighter.
+The site is an editor's desk: white paper, black ink, and one highlighter.
 
 - **Yellow marks what matters, and nothing else.** A highlighted phrase is `<mark class="hl">` in the page text. Its stroke is drawn when the words come into view. Use it for one phrase in a section at most.
-- **Anything that is a document looks like one.** Document cards, the excerpt and the reading pages are sheets on a grey desk. Everything else is plain type on the page.
+- **Anything that is a document looks like one.** Document cards, the excerpt, and the reading pages are sheets on a grey desk. Everything else is plain type on the page.
 - **The engineer's words are set in the mono face, the published ones in the serif.** The build also sets typographic apostrophes in running text and leaves the raw message and code as typed.
 
 ### The headline that corrects itself
@@ -34,7 +35,7 @@ The headline opens as a weaker sentence and is corrected in front of the reader:
 
 A corrected word is `<span class="ed e1" data-was="type">turn</span>`. The element holds the word that stays. `data-was` holds the word it replaces. `e1`, `e2` and `e3` set the order of the corrections.
 
-- **The sentence that stays is the page's text.** It is what a search engine reads, and what a visitor sees without scripts or with reduced motion.
+- **The sentence that stays is the page's text.** It's what a search engine reads, and what a visitor sees without scripts or with reduced motion.
 - **The struck words are drawn, never read aloud.** Their text alternative is empty, and the script removes them when the correction is over. A screen reader is given the final sentence from the first moment.
 - **Each language corrects words of its own.** In `content/i18n/<language>.json` the headline keeps its three `ed` elements, with the `data-was` words written for that language. The corrections don't have to fall on the same words as in English.
 - **Nothing on the page moves.** Each new word holds its place from the start, and the old word is drawn over it. A `data-was` word much longer than its replacement would run into the next word, so keep the pair close in length.
@@ -58,13 +59,13 @@ Under the example, a visitor can put a message from their own team on the same s
 How a draft is made:
 
 1. Two models draft the message side by side. `MODELS` in `api/rewrite.js` names them, and a third that is asked only when neither answers.
-2. The rules in `api/_desk.js` check each answer against the message. A fact has to be quoted from the message, word for word, to be marked. Noise is struck only when it is made of filler words, or is a sentence that left no trace in the draft. A reader the message doesn't name is taken out, and so is a question borrowed from the worked example.
+2. The rules in `api/_desk.js` check each answer against the message. A fact has to be quoted from the message, word for word, to be marked. Noise is struck only when it's made of filler words, or is a sentence that left no trace in the draft. A reader the message doesn't name is taken out, and so is a question borrowed from the worked example.
 3. The same file checks the draft by rule, not by model: every name and number in the message has to be in the draft, the draft may not bring a number of its own, and doubt in the message has to survive.
 4. `grade()` gives each draft a number for what the rules found. The draft with the lower grade is the one sent.
 
 Everything a model writes reaches the page as text and is drawn with `textContent`. The address `/rewrite` leads to the stage.
 
-To change the brief, or to try another model, use a preview deployment. These addresses work only there:
+To change the brief, or to try another model, use a preview deployment. These addresses work only there.
 
 | Address | What it returns |
 |---|---|
@@ -74,7 +75,7 @@ To change the brief, or to try another model, use a preview deployment. These ad
 | `/api/rewrite?sample=hotfix&record=1` | The chosen model's own answer, with a fingerprint |
 | `/api/rewrite?text=...&show=1` | The same for any message |
 
-A sample's draft is not made when a visitor asks for it. The model's answer is kept in `content/desk/messages.json`, copied word for word from the `record=1` address, and the build makes the draft from it by the same rules as a live one. To record a sample again, copy the new answer into the file, then check that the SHA-256 of the copied JSON starts with the fingerprint the address gave. The build log says which samples have a draft on file.
+A sample's draft isn't made when a visitor asks for it. The model's answer is kept in `content/desk/messages.json`, copied word for word from the `record=1` address, and the build makes the draft from it by the same rules as a live one. To record a sample again, copy the new answer into the file, then check that the SHA-256 of the copied JSON starts with the fingerprint the address gave. The build log says which samples have a draft on file.
 
 Limits, because each draft is paid for: a message is 40 to 1,400 characters, and each running copy of the function accepts 4 drafts a minute and 20 a day from one visitor, and 200 a day in total. The function keeps no copy of a message and writes none to a log.
 
@@ -91,20 +92,67 @@ To add a project document, add an entry to `docs` in `content/site.json` with it
 
 ### Diagrams
 
-Mermaid diagrams are drawn ahead of the build and saved in `content/diagrams/`, one SVG per diagram, named after a fingerprint of the diagram's source. When a diagram changes in a project repository, the build reports that a drawing is missing. Draw it again:
+Mermaid diagrams are drawn ahead of the build and saved in `content/diagrams/`, one SVG per diagram, named after a fingerprint of the diagram's source. When a diagram changes in a project repository, the build reports that a drawing is missing. Draw it again.
 
 ```bash
 python3 scripts/render-diagrams.py <folder that holds the project repositories> <path to mermaid.min.js>
 ```
 
-The script needs Python, Playwright and Google Chrome.
+The script needs Python, Playwright, and Google Chrome.
 
 ### Card previews
 
-The small page previews on the document cards are screenshots of the pages themselves, saved in `content/thumbs/`. After a document changes, build the site, serve `public/` on a local port, and take them again:
+The small page previews on the document cards are screenshots of the pages themselves, saved in `content/thumbs/`. After a document changes, build the site, serve `public/` on a local port, and take them again.
 
 ```bash
 python3 scripts/shoot-thumbs.py http://localhost:8765
+```
+
+## The style guide
+
+`src/style.js` holds the rules. Each rule has a reason, two examples, and the page of the Microsoft Writing Style Guide that it rests on. A house rule says that it's one.
+
+- `lib/styleguide.mjs` writes the page `/style` from those rules. The page ends with a table of every document in the library: whether it passes, and what the check would still change.
+- The build checks every document in the library and prints the result. The fourth figure on the home page is the share of the documents that pass.
+- A finding is an error, a warning, or advice. A document passes when it has no errors and no warnings.
+- To leave a rule out of the check for one document, put a comment on a line of its own: `<!-- style: off rule-id (the reason) -->`.
+
+The same checker runs from the command line.
+
+```bash
+node scripts/style.mjs check docs/guide.md README.md           # findings, one per line
+node scripts/style.mjs fix docs/guide.md                       # apply the fixes that are safe to apply unseen
+node scripts/style.mjs fix --rules step-period docs/guide.md   # apply the fixes of one rule
+```
+
+A fix is safe to apply unseen when it can't change what a sentence says: a period at the end of a step, "select" for "click", a serial comma. `AUTO` in `src/style.js` names those rules, and the command line and the import of the samples apply only those. In the workbench, the writer sees each change before making it and can undo it.
+
+`scripts/selftest.mjs` tests the checker and the document model against the workbench's own documents.
+
+```bash
+node scripts/selftest.mjs
+DITA_CATALOG=/path/to/dita-1.3/catalog.xml node scripts/selftest.mjs   # also validates the DITA output with xmllint
+```
+
+It checks that every template passes, that the first draft fails and then passes once the fixes are applied, that the check catches the first example of every rule and accepts the second, and that the guide's own words pass.
+
+## The workbench
+
+`/workbench` is a writing tool that runs in the browser. Nothing a visitor types leaves the page.
+
+| File | What it holds |
+|---|---|
+| `src/doc.js` | The document model: Markdown with front matter, variables (`{{name}}`), and conditions (`::: only admin`). It writes Markdown, HTML, and DITA. |
+| `src/style.js` | The rules and the checker |
+| `src/workbench.html`, `src/workbench.css`, `src/workbench.js` | The page: the editor, the preview for each reader, the findings with their fixes, and the three outputs |
+| `content/workbench/` | The starting documents: a first draft that breaks the guide, and six templates that pass it |
+
+The build stops if a template fails the check, or if the first draft passes it.
+
+The picture of the workbench on the home page is `content/shots/workbench.webp`. After the workbench changes, build the site, serve `public/` on a local port, and take the picture again.
+
+```bash
+python3 scripts/shoot-pages.py http://localhost:8765
 ```
 
 ## Films
@@ -113,15 +161,15 @@ The video section plays films that are kept with the site: nothing is streamed f
 
 - `films.items` in `content/site.json` lists them: an `id`, a title, a running time, and a line about the film.
 - Each film is two files in `content/films/`: `<id>.mp4` and a poster frame, `<id>.jpg`.
-- The films show this site's own tools, and `scripts/film/` makes them. See [The film](#the-film).
+- The films show this site's own tools, and `scripts/film/` makes them. See [How the films are made](#how-the-films-are-made).
 
-Walkthroughs made for an employer are that employer's property. They are not in this repository and not on the site.
+Walkthroughs made for an employer are that employer's property. They aren't in this repository and not on the site.
 
 ## Help-center samples
 
 1. `content/samples.json` lists the Google Docs. Each one must be shared as "anyone with the link can view" while the import runs.
-2. The workflow **Import samples from Google Docs** runs `scripts/import-samples.mjs`. It saves each document as Markdown in `content/samples/` and its images as WebP in `content/samples/img/`, then commits the result. It runs when `content/samples.json` or an import script changes on `main`, and on demand from the **Actions** tab.
-3. The `samples` section of `content/site.json` sets each page's title, address and summary, the sections to leave out, and small corrections to the text.
+2. The workflow **Import samples from Google Docs** runs `scripts/import-samples.mjs`. It saves each document as Markdown in `content/samples/` and its images as WebP in `content/samples/img/`, then commits the result. Before it saves a document, it applies the style fixes that are safe to apply unseen. See [The style guide](#the-style-guide). It runs when `content/samples.json` or an import script changes on `main`, and on demand from the **Actions** tab.
+3. The `samples` section of `content/site.json` sets each page's title, address, and summary, the sections to leave out, and the corrections that need a person (`edits`). The build makes each correction only if its text is in the document exactly once, and says so when it isn't.
 
 To publish another document, add it to `content/samples.json`, run the import, then add it to `samples` in `content/site.json`.
 
@@ -129,13 +177,13 @@ While `samples.index` is `false` in `content/site.json`, the sample pages ask se
 
 ### Personal details in screenshots
 
-Some screenshots show an email address, a phone number or an account ID. The `redact` section of `content/samples.json` lists those images and the areas to cover. The import covers those areas before it saves the image. Each rule records a fingerprint (`sha256`) of the original image: if the image changes in the document, the import stops until the areas are measured again.
+Some screenshots show an email address, a phone number, or an account ID. The `redact` section of `content/samples.json` lists those images and the areas to cover. The import covers those areas before it saves the image. Each rule records a fingerprint (`sha256`) of the original image: if the image changes in the document, the import stops until the areas are measured again.
 
 Check every new screenshot for personal details before you add its document to the list.
 
 ## Translations
 
-The home page is written in English and translated at build time. The documents, the videos and the CV stay in English, and each translated page says so.
+The home page is written in English and translated at build time. The documents, the videos, and the CV stay in English, and each translated page says so.
 
 - `locales` in `content/site.json` lists the languages.
 - `content/i18n/<language>.json` holds one dictionary per language. A language is built only if its file exists.
@@ -150,10 +198,10 @@ After you change English text, run the build. It writes every piece of the Engli
 April answers questions about my work from the notes in `content/site.json`, in the visitor's language, in writing or out loud. She also gives a one-minute spoken tour of the home page.
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
-- `MODELS` in `api/april.js` lists the chat models in the order they are tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
+- `MODELS` in `api/april.js` lists the chat models in the order they're tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
 - The voice is a text-to-speech model. `VOICES` in `api/april.js` holds two lists. A line that is recorded once, such as a stop of the tour, goes to the most expressive model, because nobody waits for it. An answer is spoken while the visitor waits, so it goes to the quick model of the same family. In each list the first model that works is kept.
 - To put another model first, set `APRIL_VOICE_MODEL` in the Vercel project. To change the voice, set `APRIL_VOICE`.
-- To choose a voice by ear, open `/voices`. The page plays the first line of the tour in six women's voices, in each language. It is not linked from the site.
+- To choose a voice by ear, open `/voices`. The page plays the first line of the tour in six women's voices, in each language. It isn't linked from the site.
 - If no voice model answers, the browser's own voice reads the answer, and only a woman's voice in the page's language. Where a device offers none, April's words stay on the screen.
 - To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke, how long it took, and the ones that failed. On a preview deployment, add `&model=<id>` to try one speech model.
 - The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Each line is recorded the first time a visitor needs it, then served from the CDN. Without a recorded voice, the browser's voice reads the line, or the caption stands alone.
@@ -162,11 +210,11 @@ April answers questions about my work from the notes in `content/site.json`, in 
 
 ### What April can do on the page
 
-April doesn't only answer. Asked to show a document, play a video or try the rewrite desk, she does it.
+April doesn't only answer. Asked to show a document, play a video, or try the rewrite desk, she does it.
 
 The model answers with two things: what to say, and one action code. `action()` in `api/april.js` checks the code against lists built from `content/site.json`, and sends the page an action only when the code names something that exists. An address never comes from the model: it comes from the content file.
 
-A small model doesn't always keep to the form it is asked for. `read()` in the same file takes what it gets: when the action is written after the words instead of beside them, her words end where the action begins, and the action is read from the rest. The visitor sees clean words either way.
+A small model doesn't always keep to the form it's asked for. `read()` in the same file takes what it gets: when the action is written after the words instead of beside them, her words end where the action begins, and the action is read from the rest. The visitor sees clean words either way.
 
 | Code | What the page does |
 |---|---|
@@ -182,30 +230,38 @@ On a phone the panel covers the page, so it closes before the page moves, and th
 
 To add an action, add its code to the list in the system prompt, check it in `action()`, and carry it out in `act()` in `src/app.js`. To check April on a deployment, open `/api/april?q=<a question>`. The reply shows the answer, the model that gave it, and the action.
 
-## The film
+## How the films are made
 
-`scripts/film/` makes a 30-second film of the site for a post: the headline, then one sample on the rewrite desk from message to draft.
+`scripts/film/` makes the films. Each film shows one of the site's own pages at work.
 
-The film is not a screen recording. `film.py` opens the built home page in Chrome, in its phone layout, and takes one picture per frame. Before the page's own scripts run, `clock.js` replaces the page's clock: timers, animations, transitions and scrolling move only when the film says so, by exactly 1/30 s per frame. A slow screenshot can't make the film stutter, and two renders of the same site give the same film.
+| Film | Page | Frame |
+|---|---|---|
+| `style-check` | The workbench: the check finds what a draft breaks, and the fixes make it pass | 1920 by 1080 pixels |
+| `one-source` | The workbench: one source, a page for each reader, three outputs | 1920 by 1080 pixels |
+| `library` | A document in the library, and a search | 1920 by 1080 pixels |
+| `rewrite-desk` | The home page in its phone layout: the headline, then one sample on the rewrite desk | 1080 by 1350 pixels, the 4:5 frame that a phone feed shows largest |
+
+A film isn't a screen recording. `film.py` opens the built page in Chrome and takes one picture per frame. Before the page's own scripts run, `clock.js` replaces the page's clock: timers, animations, transitions, and scrolling move only when the film says so, by exactly 1/30 s per frame. A slow screenshot can't make the film stutter, and two renders of the same site give the same film.
 
 | File | What it holds |
 |---|---|
-| `scripts/film/scenario.py` | The scenes: where the camera goes, the captions, the press on a sample, the last card |
-| `scripts/film/clock.js` | The clock, and the look of the caption bar, the finger and the last card |
-| `scripts/film/film.py` | Runs the scenes, encodes each to its own file, and joins them |
+| `scripts/film/films/<film>.py` | One film: the page it opens, the size of its frame, and its scenes with their captions |
+| `scripts/film/clock.js` | The clock, and the look of the caption bar, the pointer, and the last card |
+| `scripts/film/film.py` | Runs the scenes of a film, encodes each scene to its own file, and joins the files |
 
-The page does its own work in the film: the corrections, the markup and the draft are the site's code. The numbers in the captions are read off the page.
+The page does its own work in a film: the findings, the fixes, the outputs, and the search results are the site's code. The numbers in the captions are read off the page.
 
 ```bash
 npm run build && python3 -m http.server 8765 --directory public &
-python3 scripts/film/film.py http://localhost:8765 sheet 0.5       # a small frame every 0.5 s, on contact sheets
-python3 scripts/film/film.py http://localhost:8765 stills 2.1,12   # full-size frames at those seconds
-python3 scripts/film/film.py http://localhost:8765 render          # the film: .cache/film/karandeshmukh-dev.mp4
+python3 scripts/film/film.py http://localhost:8765 style-check sheet 0.5       # a small frame every 0.5 s, on contact sheets
+python3 scripts/film/film.py http://localhost:8765 style-check stills 2.1,12   # full-size frames at those seconds
+python3 scripts/film/film.py http://localhost:8765 style-check render          # the film, in .cache/film/style-check/
+python3 scripts/film/film.py http://localhost:8765 style-check render 03-findings   # that scene again, then the film
 ```
 
-Look at the sheet before a render: it comes from the same page and the same clock. After a change to one scene, name it (`render 03-markup`) and only that scene is filmed again.
+Look at the sheet before a render: it comes from the same page and the same clock. To publish a film, copy it and a poster frame to `content/films/`, and list it under `films.items` in `content/site.json`.
 
-The film is 1080 by 1350 pixels, the 4:5 frame that a phone feed shows largest. The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
+The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 
 ## Build
 
@@ -215,8 +271,8 @@ npm run build                                      # writes public/
 python3 -m http.server 8765 --directory public    # preview at http://localhost:8765
 ```
 
-The build needs Node.js 22 and a network connection: it fetches project files from GitHub and the video list from YouTube, and keeps copies in `.cache/`. The assistant and live drafting do not run in the local preview. There, April answers from her built-in questions, and the rewrite desk works for its three samples.
+The build needs Node.js 22 and a network connection: it fetches project files from GitHub and keeps copies in `.cache/`. The assistant and live drafting don't run in the local preview. There, April answers from her built-in questions, and the rewrite desk works for its three samples.
 
 ## Deploy
 
-The site runs on Vercel, in the project `karan-deshmukh`. `vercel.json` sets the build command, the output directory and the cache rules. Vercel serves `public/404.html` for any address that does not exist.
+The site runs on Vercel, in the project `karan-deshmukh`. `vercel.json` sets the build command, the output directory, and the cache rules. Vercel serves `public/404.html` for any address that doesn't exist.
