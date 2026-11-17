@@ -170,6 +170,66 @@
     el.classList.toggle("bad", !!bad);
   };
 
+  /* ---------- The sample library ---------- */
+  var idx = null;
+  /** The sample index (/studio/samples/index.json), fetched once. */
+  Kit.samples = function () {
+    if (!idx) idx = fetch("/studio/samples/index.json").then(function (r) { if (!r.ok) throw new Error("The samples couldn't be loaded."); return r.json(); }).catch(function (e) { idx = null; throw e; });
+    return idx;
+  };
+  Kit.fetchJson = function (url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error("The sample couldn't be loaded (" + r.status + ")."); return r.json(); }); };
+  Kit.fetchBytes = function (url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error("The sample couldn't be loaded (" + r.status + ")."); return r.arrayBuffer(); }).then(function (b) { return new Uint8Array(b); }); };
+  Kit.fetchText = function (url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error("The sample couldn't be loaded (" + r.status + ")."); return r.text(); }); };
+  /**
+   * A start panel: the tool's samples as cards, a blank start, and the file inputs the tool already has.
+   * opts: { tool, title, lead, open(entry), blank(), files: [{label, input (an existing <input type=file> id)}], note }
+   * Returns { el, refresh }. The panel is rendered into host; the caller shows or hides it.
+   */
+  Kit.start = function (host, opts) {
+    var esc = Kit.esc;
+    host.innerHTML = '<div class="st-start"><div class="st-start-h"><h2>' + esc(opts.title || "Start") + "</h2><p>" + esc(opts.lead || "Open a sample to see what the tool does, start from nothing, or open your own file. Samples are fictional.") + '</p></div><ul class="st-cards" aria-label="Samples"><li class="st-wait">Loading the samples…</li></ul>' +
+      '<div class="st-start-acts">' + (opts.blank ? '<button type="button" class="btn ink sm" data-start="blank">' + esc(opts.blankLabel || "Start blank") + "</button>" : "") +
+      (opts.files || []).map(function (f) { return '<label class="btn line sm" for="' + f.input + '">' + esc(f.label) + "</label>"; }).join("") + (opts.extra || "") + "</div>" + (opts.note ? '<p class="st-note">' + esc(opts.note) + "</p>" : "") + "</div>";
+    var list = host.querySelector(".st-cards");
+    host.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-start]"); if (!b) return;
+      if (b.dataset.start === "blank") return opts.blank && opts.blank();
+      var entry = (host._entries || [])[+b.dataset.start]; if (!entry) return;
+      b.disabled = true; b.classList.add("busy");
+      Promise.resolve(opts.open(entry)).catch(function (err) { if (opts.fail) opts.fail(err); }).then(function () { b.disabled = false; b.classList.remove("busy"); });
+    });
+    Kit.samples().then(function (all) {
+      var entries = (all[opts.tool] || []).slice(); host._entries = entries;
+      if (!entries.length) { list.innerHTML = '<li class="st-wait">No samples for this tool yet.</li>'; return; }
+      list.innerHTML = entries.map(function (s, i) {
+        return '<li><button type="button" class="st-card" data-start="' + i + '" aria-label="Open the sample: ' + esc(s.title) + '">' +
+          (s.preview ? '<img src="' + esc(s.preview) + '" alt="" loading="lazy" width="320" height="200">' : '<span class="st-card-no" aria-hidden="true">' + esc((s.kind || s.type || opts.tool).slice(0, 1).toUpperCase()) + "</span>") +
+          '<span class="st-card-t"><b>' + esc(s.title) + "</b><small>" + esc(s.scenarioLabel || "") + "</small>" + (s.blurb ? "<span>" + esc(s.blurb) + "</span>" : "") + "</span></button>" +
+          (opts.links ? '<span class="st-card-links">' + opts.links(s) + "</span>" : "") + "</li>";
+      }).join("");
+    }).catch(function () { list.innerHTML = '<li class="st-wait">The samples couldn\'t be loaded. You can still start blank or open a file.</li>'; });
+    return host;
+  };
+
+  /**
+   * Shows a start panel inline (in slot) while nothing is open, and in a dialog from a toolbar button once something is.
+   * Returns { inline(show), open(), close() }.
+   */
+  Kit.startSwitch = function (host, slot, button) {
+    var dlg = document.createElement("dialog"); dlg.className = "st-dlg"; dlg.setAttribute("aria-label", "Samples");
+    var x = document.createElement("button"); x.type = "button"; x.className = "btn line sm st-dlg-x"; x.textContent = "Close";
+    dlg.appendChild(x); document.body.appendChild(dlg);
+    var inlineNow = true;
+    function inline(show) { inlineNow = show; if (dlg.open) return; slot.appendChild(host); slot.hidden = !show; }
+    function open() { dlg.insertBefore(host, x); slot.hidden = true; dlg.showModal(); }
+    function close() { if (dlg.open) dlg.close(); }
+    dlg.addEventListener("close", function () { slot.appendChild(host); slot.hidden = !inlineNow; });
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) close(); });
+    x.addEventListener("click", close);
+    if (button) button.addEventListener("click", open);
+    return { inline: inline, open: open, close: close };
+  };
+
   root.Kit = Kit;
   if (typeof module !== "undefined") module.exports = Kit;
 })(typeof window !== "undefined" ? window : globalThis);

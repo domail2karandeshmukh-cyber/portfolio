@@ -247,44 +247,35 @@
   });
   function confirmLeave() { return guide.steps.length < 2 && !guide.title ? true : window.confirm("Start over? The guide on screen is replaced. Save the project first if you want to keep it."); }
 
-  /* The sample: a fictional pump inspection, with three pictures marked up by code, the way a writer would. */
-  $("#gd-sample").addEventListener("click", function () {
-    if (!confirmLeave()) return;
-    var names = ["sample-console", "sample-console-reading", "sample-console-close"];
-    Promise.all(names.map(function (n) { return new Promise(function (ok, no) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = function () { no(new Error("The sample pictures couldn't be loaded.")); }; i.src = "/studio/" + n + ".png"; }); })).then(function (imgs) {
-      var g = { title: "Record the readings for a monthly pump inspection", docId: "SOP-DEMO-014", version: "0.3 (draft)",
-        intro: "Fictional sample for this portfolio. Record the four inspection readings for a feed pump in the maintenance console, then close the work order.",
-        prereq: "You're signed in to the maintenance console as a technician on the shift the work order is assigned to.\nYou have the readings from the local gauges.",
-        warn: "This is a fictional procedure written to show the studio. Don't use it to maintain real equipment.",
-        done: "The work order shows Ready to close, and all four results are inside their expected range.", steps: [] };
-      var shots = [
-        ["Open the work order and select Record readings", "The work order lists the four checks and their expected values.", [{ type: "callout", x: 230, y: 509, n: 1 }, { type: "rect", x: 244, y: 486, w: 158, h: 46 }, { type: "redact", x: 446, y: 553, w: 194, h: 28 }]],
-        ["Enter each reading as shown on the local gauge, then select Save readings", "Enter the discharge pressure in bar, the bearing temperature in °C, the vibration in mm/s, and whether the seal leaks.", [{ type: "callout", x: 240, y: 238, n: 2 }, { type: "callout", x: 250, y: 518, n: 3 }, { type: "rect", x: 258, y: 498, w: 136, h: 40 }]],
-        ["Check that all four results are inside their range, then select Close work order", "If a result is outside its range, don't close the work order. Report the reading to your supervisor.", [{ type: "highlight", x: 990, y: 300, w: 260, h: 170, color: "#FFDF2B" }, { type: "callout", x: 230, y: 509, n: 4 }]],
-      ];
-      shots.forEach(function (d, i) {
-        var st = { name: names[i], base: Kit.canvasOf(imgs[i]), items: [] };
-        d[2].forEach(function (m) {
-          if (m.type === "redact") return Annotate.redact(st, m);
-          st.items.push(Annotate.clean(Object.assign({ id: Annotate.id(), color: "#E5251B", stroke: 6, size: 36 }, m), 1280, 800));
-        });
-        var s = step(d[0], d[1]); s.shot = Annotate.toProject(st); g.steps.push(s);
-      });
-      return use(g, "Opened the sample guide: a fictional pump inspection in three steps. The access key in the first picture is already redacted.");
-    }).catch(fail);
+  /* The samples: five guides from the fictional scenarios, each a project this tool saved, with the files it exported. */
+  function empty() { return guide.steps.length < 2 && !guide.title && !guide.steps[0].title && !guide.steps[0].shot; }
+  var start = Kit.start($("#gd-start"), {
+    tool: "guides", title: "Open a guide",
+    lead: "Five illustrated procedures from different fields, each one editable: reorder the steps, change the words, replace a picture, mark it up again. The links under each card open the HTML and PDF this tool exported from it.",
+    open: function (s) {
+      if (!empty() && !confirmLeave()) return;
+      say("Opening " + s.title + "…");
+      return Kit.fetchBytes(s.project).then(function (bytes) { return use(unpack(bytes), "Opened the sample guide: " + s.title + ", " + s.steps + " steps. Every picture's marks stay editable: select Mark up on a step."); }).then(function () { sw.close(); });
+    },
+    fail: fail, blank: function () { $("#gd-new").click(); sw.close(); }, blankLabel: "New blank guide",
+    files: [{ label: "Open project", input: "gd-open" }],
+    links: function (s) { return '<a href="' + Kit.esc(s.html) + '" target="_blank" rel="noopener">HTML</a><a href="' + Kit.esc(s.pdf) + '" target="_blank" rel="noopener">PDF</a><a href="' + Kit.esc(s.markdown) + '">Markdown</a>'; },
   });
+  var sw = Kit.startSwitch(start, $("#gd-slot"), $("#gd-samples"));
 
   /* ---------- Keeping the guide in this browser ---------- */
   var timer = 0;
   function changed(now) {
-    preview();
+    preview(); sw.inline(empty());
     clearTimeout(timer);
     timer = setTimeout(function () { Kit.store.put("guide", { guide: guide }).catch(function () {}); }, now ? 0 : 700);
   }
   Kit.store.get("guide").then(function (saved) {
     if (saved && saved.guide && Array.isArray(saved.guide.steps)) return use(saved.guide, "Reopened your last guide from this browser.");
-    fill(); preview();
-  }).catch(function () { fill(); preview(); });
+    fill(); preview(); sw.inline(true);
+  }).catch(function () { fill(); preview(); sw.inline(true); });
 
-  window.studioGuide = { get: function () { return guide; }, markdown: markdown, html: htmlFile, pics: function () { return pics; } };
+  window.studioGuide = { get: function () { return guide; }, markdown: markdown, html: htmlFile, pics: function () { return pics; },
+    /** Opens a guide object, such as a sample. Steps may carry a screenshot project in `shot`. */
+    load: function (g, note) { var out = blank(); Object.keys(out).forEach(function (k) { if (k !== "steps" && g[k] != null) out[k] = String(g[k]); }); out.steps = (g.steps || []).map(function (s) { var st = step(s.title, s.body); st.shot = s.shot || null; return st; }); if (!out.steps.length) out.steps.push(step()); return use(out, note || "Opened the guide."); } };
 })();

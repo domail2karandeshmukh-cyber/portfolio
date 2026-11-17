@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="runbook-service-stops-responding" xml:lang="en">
+<title>Runbook: <ph keyref="service">the readings service</ph> stops responding</title>
+<shortdesc>For the engineer on call. Follow it when the alert "Readings API not responding" fires. Fictional sample.</shortdesc>
+<taskbody>
+<prereq>
+<ul><li>You're on call, and you have access to the status page and the deployment tool.</li><li>Tell the incident channel that you're working on the alert.</li></ul>
+</prereq>
+<steps>
+<step><cmd>Open the status page, and then check whether the database shows as healthy.</cmd></step>
+<step><cmd>If the database is healthy, restart <ph keyref="service">the readings service</ph> in the deployment tool.</cmd></step>
+<step><cmd>Wait two minutes, and then check whether the alert clears.</cmd></step>
+<step><cmd>If the alert stays, roll back to the last version that worked.</cmd></step>
+<step><cmd>Post the time and the action you took in the incident channel.</cmd></step>
+</steps>
+<result>
+<p>The alert clears, and a test request to the readings API gets the status 200.</p>
+</result>
+<postreq>
+<p><b>Escalate</b></p>
+<p>If the service still doesn't respond after the rollback, page the platform team lead. Give them the time the alert fired and every action you took.</p>
+</postreq>
+</taskbody>
+</task>

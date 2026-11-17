@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="read-the-inspection-results-from-the-product-api" xml:lang="en">
+<title>Read the inspection results from the <ph keyref="product">Acme Console</ph> API</title>
+<shortdesc>Developer guide. You send one request and get the readings of a work order as JSON. Fictional API, written for this portfolio.</shortdesc>
+<taskbody>
+<prereq>
+<ul><li>You have an API token with the scope <codeph>readings:read</codeph>.</li><li>You know the number of the work order.</li></ul>
+</prereq>
+<steps>
+<step><cmd>Store your token in an environment variable, so it never appears in your code.</cmd><info><codeblock outputclass="language-bash">export ACME_TOKEN="your token"</codeblock></info></step>
+<step><cmd>Send a request for the work order.</cmd><info><codeblock outputclass="language-bash">curl -H "Authorization: Bearer $ACME_TOKEN" https://api.example.com/v1/work-orders/WO-2291/readings</codeblock></info></step>
+<step><cmd>Read the <codeph>readings</codeph> list in the response. Each reading has a <codeph>check</codeph>, a <codeph>value</codeph> and a <codeph>unit</codeph>.</cmd></step>
+</steps>
+<result>
+<p>The response has the status 200, and the list has four readings. A status of 401 means the token is missing or out of date.</p>
+</result>
+<postreq>
+<p><b>Limits</b></p>
+<p>You can send 60 requests a minute with one token. A request over the limit gets the status 429, and you can try again after the number of seconds in the <codeph>Retry-After</codeph> header.</p>
+</postreq>
+</taskbody>
+</task>

@@ -1,0 +1,1158 @@
+{
+ "note": "What scripts/studio-samples.py makes: screenshots of the fictional demo apps (src/studio/demos), marked up in the Screenshot Studio, and step guides built from them in the Step Guide Studio. Positions are resolved from element ids in the demo page, so a layout change moves the marks with it.",
+ "frames": {
+  "console-work-order": {
+   "demo": "console",
+   "view": "",
+   "marks": [
+    {
+     "type": "redact",
+     "at": "#key",
+     "pad": 3
+    },
+    {
+     "type": "rect",
+     "at": "#record",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#record",
+     "side": "left",
+     "n": 1
+    },
+    {
+     "type": "arrow",
+     "to": "#record",
+     "side": "right",
+     "from": [
+      150,
+      -70
+     ]
+    },
+    {
+     "type": "text",
+     "to": "#record",
+     "side": "right",
+     "from": [
+      160,
+      -112
+     ],
+     "text": "Start here"
+    }
+   ]
+  },
+  "console-reading": {
+   "demo": "console",
+   "view": "reading",
+   "marks": [
+    {
+     "type": "callout",
+     "at": "#f-pressure",
+     "side": "left",
+     "n": 2
+    },
+    {
+     "type": "rect",
+     "at": "#save",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#save",
+     "side": "left",
+     "n": 3
+    }
+   ]
+  },
+  "console-close": {
+   "demo": "console",
+   "view": "close",
+   "marks": [
+    {
+     "type": "highlight",
+     "at": "#check",
+     "pad": 6,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#closewo",
+     "side": "left",
+     "n": 4
+    }
+   ]
+  },
+  "cloud-env": {
+   "demo": "cloud",
+   "view": "",
+   "marks": [
+    {
+     "type": "redact",
+     "at": "#apikey",
+     "pad": 2
+    },
+    {
+     "type": "callout",
+     "at": "#edit-url",
+     "side": "right",
+     "n": 1
+    },
+    {
+     "type": "callout",
+     "at": "#add-token",
+     "side": "right",
+     "n": 2
+    },
+    {
+     "type": "rect",
+     "at": "#deploy",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#deploy",
+     "side": "left",
+     "n": 3
+    },
+    {
+     "type": "highlight",
+     "at": "#note",
+     "pad": 2,
+     "color": "#FFDF2B"
+    }
+   ]
+  },
+  "cloud-config-tab": {
+   "demo": "cloud",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#tab-config",
+     "pad": 6
+    },
+    {
+     "type": "callout",
+     "at": "#tab-config",
+     "side": "above",
+     "n": 1
+    },
+    {
+     "type": "redact",
+     "at": "#apikey",
+     "pad": 2
+    }
+   ]
+  },
+  "cloud-edit-url": {
+   "demo": "cloud",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#row-url",
+     "pad": 4
+    },
+    {
+     "type": "callout",
+     "at": "#edit-url",
+     "side": "right",
+     "n": 2
+    },
+    {
+     "type": "redact",
+     "at": "#apikey",
+     "pad": 2
+    }
+   ]
+  },
+  "cloud-add": {
+   "demo": "cloud",
+   "view": "add",
+   "marks": [
+    {
+     "type": "callout",
+     "at": "#var-name",
+     "side": "left",
+     "n": 3
+    },
+    {
+     "type": "callout",
+     "at": "#var-value",
+     "side": "left",
+     "n": 4
+    },
+    {
+     "type": "rect",
+     "at": "#save-var",
+     "pad": 8
+    }
+   ]
+  },
+  "cloud-deploy": {
+   "demo": "cloud",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#deploy",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#deploy",
+     "side": "left",
+     "n": 5
+    },
+    {
+     "type": "redact",
+     "at": "#apikey",
+     "pad": 2
+    }
+   ]
+  },
+  "cloud-deployed": {
+   "demo": "cloud",
+   "view": "deployed",
+   "marks": [
+    {
+     "type": "highlight",
+     "at": "#newdeploy",
+     "pad": 2,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "rect",
+     "at": "#deploying",
+     "pad": 4,
+     "color": "#0D9A57"
+    }
+   ]
+  },
+  "identity-new-user": {
+   "demo": "identity",
+   "view": "",
+   "marks": [
+    {
+     "type": "redact",
+     "at": "#f-email",
+     "pad": 2
+    },
+    {
+     "type": "redact",
+     "at": "#f-empno",
+     "pad": 2
+    },
+    {
+     "type": "callout",
+     "at": "#f-start",
+     "side": "left",
+     "n": 1
+    },
+    {
+     "type": "callout",
+     "at": "#f-manager",
+     "side": "left",
+     "n": 2
+    },
+    {
+     "type": "rect",
+     "at": "#p-groups",
+     "pad": 4,
+     "color": "#1D4ED8"
+    },
+    {
+     "type": "callout",
+     "at": "#p-groups",
+     "side": "left",
+     "n": 3,
+     "color": "#1D4ED8"
+    },
+    {
+     "type": "rect",
+     "at": "#create",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#create",
+     "side": "left",
+     "n": 4
+    },
+    {
+     "type": "arrow",
+     "to": "#f-account",
+     "side": "topright",
+     "from": [
+      110,
+      -150
+     ]
+    },
+    {
+     "type": "text",
+     "to": "#f-account",
+     "side": "topright",
+     "from": [
+      30,
+      -196
+     ],
+     "text": "Proposed by the system. Don't change it.",
+     "size": 20,
+     "color": "#0B0B0C"
+    }
+   ]
+  },
+  "identity-nav": {
+   "demo": "identity",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#nav-users",
+     "pad": 2
+    },
+    {
+     "type": "callout",
+     "at": "#nav-users",
+     "side": "right",
+     "n": 1
+    },
+    {
+     "type": "redact",
+     "at": "#f-email",
+     "pad": 2
+    },
+    {
+     "type": "redact",
+     "at": "#f-empno",
+     "pad": 2
+    }
+   ]
+  },
+  "identity-form": {
+   "demo": "identity",
+   "view": "",
+   "marks": [
+    {
+     "type": "redact",
+     "at": "#f-email",
+     "pad": 2
+    },
+    {
+     "type": "redact",
+     "at": "#f-empno",
+     "pad": 2
+    },
+    {
+     "type": "callout",
+     "at": "#f-start",
+     "side": "left",
+     "n": 2
+    },
+    {
+     "type": "callout",
+     "at": "#f-dept",
+     "side": "left",
+     "n": 3
+    }
+   ]
+  },
+  "identity-panels": {
+   "demo": "identity",
+   "view": "",
+   "marks": [
+    {
+     "type": "redact",
+     "at": "#f-email",
+     "pad": 2
+    },
+    {
+     "type": "redact",
+     "at": "#f-empno",
+     "pad": 2
+    },
+    {
+     "type": "rect",
+     "at": "#p-groups",
+     "pad": 4
+    },
+    {
+     "type": "callout",
+     "at": "#p-groups",
+     "side": "left",
+     "n": 4
+    },
+    {
+     "type": "rect",
+     "at": "#p-licence",
+     "pad": 4
+    },
+    {
+     "type": "callout",
+     "at": "#p-licence",
+     "side": "left",
+     "n": 5
+    }
+   ]
+  },
+  "identity-create": {
+   "demo": "identity",
+   "view": "",
+   "marks": [
+    {
+     "type": "redact",
+     "at": "#f-email",
+     "pad": 2
+    },
+    {
+     "type": "redact",
+     "at": "#f-empno",
+     "pad": 2
+    },
+    {
+     "type": "rect",
+     "at": "#create",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#create",
+     "side": "left",
+     "n": 6
+    }
+   ]
+  },
+  "identity-created": {
+   "demo": "identity",
+   "view": "created",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#prereg",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#prereg",
+     "side": "left",
+     "n": 7
+    },
+    {
+     "type": "highlight",
+     "at": "#enrol",
+     "pad": 3,
+     "color": "#FFDF2B"
+    }
+   ]
+  },
+  "ledgerly-users": {
+   "demo": "ledgerly-admin",
+   "view": "",
+   "marks": [
+    {
+     "type": "callout",
+     "at": "#invite",
+     "side": "left",
+     "n": 1
+    },
+    {
+     "type": "highlight",
+     "at": "#row-invited",
+     "pad": 0,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#row-invited",
+     "side": "inleft",
+     "n": 2
+    },
+    {
+     "type": "rect",
+     "at": "#admins",
+     "pad": 4,
+     "color": "#1D4ED8"
+    },
+    {
+     "type": "text",
+     "to": "#admins",
+     "side": "below",
+     "from": [
+      0,
+      42
+     ],
+     "text": "Keep at least two administrators",
+     "size": 20,
+     "color": "#1D4ED8"
+    },
+    {
+     "type": "pixelate",
+     "at": "#svc-email",
+     "pad": 2
+    }
+   ]
+  },
+  "support-unlock": {
+   "demo": "support",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#verified",
+     "pad": 4,
+     "color": "#0D9A57"
+    },
+    {
+     "type": "callout",
+     "at": "#verified",
+     "side": "above",
+     "n": 1,
+     "color": "#0D9A57"
+    },
+    {
+     "type": "highlight",
+     "at": "#lock",
+     "pad": 0,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "rect",
+     "at": "#unlock",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#unlock",
+     "side": "below",
+     "n": 2
+    },
+    {
+     "type": "callout",
+     "at": "#reset",
+     "side": "below",
+     "n": 3
+    },
+    {
+     "type": "blur",
+     "at": "#attempts td:nth-child(5)",
+     "pad": 2,
+     "all": true
+    }
+   ]
+  },
+  "support-find": {
+   "demo": "support",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": ".top input",
+     "pad": 4
+    },
+    {
+     "type": "callout",
+     "at": ".top input",
+     "side": "right",
+     "n": 1
+    }
+   ]
+  },
+  "support-verified": {
+   "demo": "support",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#verified",
+     "pad": 4,
+     "color": "#0D9A57"
+    },
+    {
+     "type": "callout",
+     "at": "#verified",
+     "side": "above",
+     "n": 2,
+     "color": "#0D9A57"
+    }
+   ]
+  },
+  "support-attempts": {
+   "demo": "support",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#attempts",
+     "pad": 4
+    },
+    {
+     "type": "callout",
+     "at": "#attempts",
+     "side": "above",
+     "n": 3
+    },
+    {
+     "type": "highlight",
+     "at": "#note",
+     "pad": 2,
+     "color": "#FFDF2B"
+    }
+   ]
+  },
+  "support-actions": {
+   "demo": "support",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#unlock",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#unlock",
+     "side": "below",
+     "n": 4
+    },
+    {
+     "type": "callout",
+     "at": "#reset",
+     "side": "below",
+     "n": 5
+    }
+   ]
+  },
+  "support-unlocked": {
+   "demo": "support",
+   "view": "unlocked",
+   "marks": [
+    {
+     "type": "highlight",
+     "at": "#unlocked",
+     "pad": 0,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#unlocked",
+     "side": "above",
+     "n": 6
+    }
+   ]
+  },
+  "soc-alert": {
+   "demo": "soc",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#alert-top",
+     "pad": 2
+    },
+    {
+     "type": "callout",
+     "at": "#alert-top",
+     "side": "above",
+     "n": 1
+    },
+    {
+     "type": "rect",
+     "at": "#j-rule",
+     "pad": 3,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#j-rule",
+     "side": "left",
+     "n": 2,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "rect",
+     "at": "#j-data",
+     "pad": 3,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#j-data",
+     "side": "left",
+     "n": 3,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "rect",
+     "at": "#triage",
+     "pad": 4,
+     "color": "#0D9A57"
+    },
+    {
+     "type": "callout",
+     "at": "#triage",
+     "side": "left",
+     "n": 4,
+     "color": "#0D9A57"
+    },
+    {
+     "type": "text",
+     "to": "#json",
+     "side": "below",
+     "from": [
+      0,
+      34
+     ],
+     "text": "Decision: external source, a user that exists, no success in 24 h. Medium: open a case.",
+     "size": 20,
+     "color": "#FFFFFF"
+    }
+   ]
+  },
+  "soc-alert-detail": {
+   "demo": "soc",
+   "view": "",
+   "crop": {
+    "at": "#json",
+    "pad": 16
+   },
+   "marks": [
+    {
+     "type": "highlight",
+     "at": "#j-rule",
+     "pad": 3,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "highlight",
+     "at": "#j-data",
+     "pad": 3,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#j-agent",
+     "side": "right",
+     "n": 1,
+     "color": "#FFFFFF"
+    }
+   ]
+  },
+  "reports-schedule": {
+   "demo": "reports",
+   "view": "",
+   "dialog": true,
+   "marks": [
+    {
+     "type": "callout",
+     "at": "#rcpt",
+     "side": "left",
+     "n": 1
+    },
+    {
+     "type": "callout",
+     "at": "#rep",
+     "side": "left",
+     "n": 2
+    },
+    {
+     "type": "callout",
+     "at": "#time",
+     "side": "right",
+     "n": 3
+    },
+    {
+     "type": "callout",
+     "at": "#fmt",
+     "side": "left",
+     "n": 4
+    },
+    {
+     "type": "highlight",
+     "at": "#preview",
+     "pad": 3,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "rect",
+     "at": "#save",
+     "pad": 6
+    },
+    {
+     "type": "callout",
+     "at": "#save",
+     "side": "right",
+     "n": 5
+    }
+   ]
+  },
+  "reports-open": {
+   "demo": "reports",
+   "view": "",
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#open",
+     "pad": 8
+    },
+    {
+     "type": "callout",
+     "at": "#open",
+     "side": "left",
+     "n": 1
+    }
+   ]
+  },
+  "reports-recipients": {
+   "demo": "reports",
+   "view": "",
+   "dialog": true,
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#rcpt",
+     "pad": 4
+    },
+    {
+     "type": "callout",
+     "at": "#rcpt",
+     "side": "left",
+     "n": 2
+    }
+   ]
+  },
+  "reports-repeat": {
+   "demo": "reports",
+   "view": "",
+   "dialog": true,
+   "marks": [
+    {
+     "type": "callout",
+     "at": "#rep",
+     "side": "left",
+     "n": 3
+    },
+    {
+     "type": "callout",
+     "at": "#day",
+     "side": "above",
+     "n": 4
+    },
+    {
+     "type": "callout",
+     "at": "#time",
+     "side": "right",
+     "n": 5
+    }
+   ]
+  },
+  "reports-preview": {
+   "demo": "reports",
+   "view": "",
+   "dialog": true,
+   "preview": true,
+   "marks": [
+    {
+     "type": "callout",
+     "at": "#fmt",
+     "side": "left",
+     "n": 6
+    },
+    {
+     "type": "rect",
+     "at": "#preview",
+     "pad": 6
+    },
+    {
+     "type": "callout",
+     "at": "#preview",
+     "side": "above",
+     "n": 7
+    }
+   ]
+  },
+  "reports-save": {
+   "demo": "reports",
+   "view": "",
+   "dialog": true,
+   "preview": true,
+   "marks": [
+    {
+     "type": "rect",
+     "at": "#save",
+     "pad": 6
+    },
+    {
+     "type": "callout",
+     "at": "#save",
+     "side": "right",
+     "n": 8
+    }
+   ]
+  },
+  "reports-saved": {
+   "demo": "reports",
+   "view": "",
+   "saved": true,
+   "marks": [
+    {
+     "type": "highlight",
+     "at": "#rows",
+     "pad": 2,
+     "color": "#FFDF2B"
+    },
+    {
+     "type": "callout",
+     "at": "#rows",
+     "side": "left",
+     "n": 9
+    }
+   ]
+  }
+ },
+ "screenshots": [
+  {
+   "id": "cloud-env",
+   "scenario": "c-cloud",
+   "frame": "cloud-env",
+   "title": "Cloud service configuration",
+   "blurb": "Three numbered callouts for the three actions, a key redacted in the pixels, and a note highlighted."
+  },
+  {
+   "id": "identity-new-user",
+   "scenario": "b-enterprise-it",
+   "frame": "identity-new-user",
+   "title": "Enterprise IT: a new user form",
+   "blurb": "Numbered callouts in the order the fields are filled, personal data redacted, and an arrow with a label for the one field not to touch."
+  },
+  {
+   "id": "ledgerly-users",
+   "scenario": "e-support",
+   "frame": "ledgerly-users",
+   "title": "SaaS account administration",
+   "blurb": "A spotlight on the number that matters, a highlighted row, a pixelated address, and a text label."
+  },
+  {
+   "id": "support-unlock",
+   "scenario": "e-support",
+   "frame": "support-unlock",
+   "title": "Support troubleshooting: a locked account",
+   "blurb": "Green for what to check first, red for the actions, and a blurred column of network addresses."
+  },
+  {
+   "id": "console-work-order",
+   "scenario": "a-industrial",
+   "frame": "console-work-order",
+   "title": "Engineering console: a work order",
+   "blurb": "A service key redacted, the button to select boxed and numbered, and an arrow that says where to start."
+  },
+  {
+   "id": "soc-alert",
+   "scenario": "d-security",
+   "frame": "soc-alert",
+   "title": "Security monitoring: a Wazuh alert",
+   "blurb": "The fields that decide the triage boxed in yellow on a dark console, and the decision written next to the action."
+  },
+  {
+   "id": "soc-alert-detail",
+   "scenario": "d-security",
+   "frame": "soc-alert-detail",
+   "title": "Security monitoring: cropped alert detail",
+   "blurb": "The alert JSON cropped and enlarged, with the two decisive lines highlighted."
+  },
+  {
+   "id": "reports-schedule",
+   "scenario": "g-training",
+   "frame": "reports-schedule",
+   "title": "Software product: a schedule dialog",
+   "blurb": "Five numbered callouts that follow the order of the tutorial, and the preview button highlighted."
+  }
+ ],
+ "guides": [
+  {
+   "id": "it-onboarding",
+   "scenario": "b-enterprise-it",
+   "title": "Create a new employee's account",
+   "docId": "IT-PR-031-G",
+   "version": "1.4",
+   "intro": "Create the identity a new employee signs in with, in Meridian Identity, and give it the standard access for the department. Fictional sample written for this portfolio.",
+   "prereq": "The onboarding request is checked and assigned to you.\nYou have the Identity administrator role in Meridian Identity.\nYou have the HR record open: legal name, start date, manager, department, location and job title.",
+   "warn": "Enter the attributes exactly as the HR record has them. Payroll, badges and expenses read them from the identity every night.",
+   "done": "The user's page shows Inactive until the start date, the department and location groups, the Standard employee licence, and a pre-registered device.",
+   "steps": [
+    {
+     "frame": "identity-nav",
+     "title": "Select Users, and then select New user",
+     "body": "The new-user form opens with the fields the HR record fills."
+    },
+    {
+     "frame": "identity-form",
+     "title": "Enter the name, the start date, and the department",
+     "body": "The account stays inactive until 08:00 on the start date. Let the system propose the account name: the mailbox and home drive use it."
+    },
+    {
+     "frame": "identity-panels",
+     "title": "Check the groups and the licence",
+     "body": "The department and location groups come from the request. The Standard employee licence creates the mailbox within an hour."
+    },
+    {
+     "frame": "identity-create",
+     "title": "Select Create",
+     "body": "If the page shows Attribute conflict, another account has the same employee number. Don't create a second identity: send the request back to HR."
+    },
+    {
+     "frame": "identity-created",
+     "title": "Pre-register the laptop, and then generate the enrolment link",
+     "body": "Enter the serial number from the hardware order. Copy the enrolment link into the request's welcome message; it works for fourteen days from the start date."
+    }
+   ]
+  },
+  {
+   "id": "support-unlock",
+   "scenario": "e-support",
+   "title": "Unlock a customer's account",
+   "docId": "SUP-AG-004",
+   "version": "2.0",
+   "intro": "Internal procedure for support agents of Ledgerly: a customer is locked out and can't wait for the lock to lift. Verify who you're talking to before you change anything. Fictional sample written for this portfolio.",
+   "prereq": "The customer has opened a ticket and is in the conversation with you.\nYou have the Support agent role in the support console.",
+   "warn": "Never unlock on the request of someone who isn't the account holder or an administrator of the company, however urgent the request sounds.",
+   "done": "The Sign-in tab shows Unlocked by with your name and the ticket number, the customer can sign in, and the ticket note says what you did and why.",
+   "steps": [
+    {
+     "frame": "support-find",
+     "title": "Find the account by its email address",
+     "body": "The customer record opens with the ticket beside it."
+    },
+    {
+     "frame": "support-verified",
+     "title": "Check that the customer is verified in this conversation",
+     "body": "The green banner names the method and the time. Without it, send a verification code first."
+    },
+    {
+     "frame": "support-attempts",
+     "title": "Review the recent sign-in attempts",
+     "body": "Attempts from the customer's usual location and device point to a mistyped password. Attempts from elsewhere mean you reset the password instead of unlocking."
+    },
+    {
+     "frame": "support-actions",
+     "title": "Select Unlock, or send a reset link if the customer isn't sure of the password",
+     "body": "Enter the ticket number as the reason. A reset link unlocks the account when it's used."
+    },
+    {
+     "frame": "support-unlocked",
+     "title": "Check the confirmation, and then record what you did in the ticket",
+     "body": "The customer receives an email that support unlocked the account."
+    }
+   ]
+  },
+  {
+   "id": "cloud-config",
+   "scenario": "c-cloud",
+   "title": "Add an environment variable to a relay and deploy it",
+   "docId": "DG-RELAY-101-G",
+   "version": "3.0",
+   "intro": "Give the relay the token your application expects, from the Lattice Cloud console, and deploy the change. Fictional sample written for this portfolio: the console and the service are invented.",
+   "prereq": "You have the Developer role in the project.\nYou have the token your application expects in the Authorization header.",
+   "warn": "A value is stored encrypted and never shown again after you save it. Keep it in your password manager as well.",
+   "done": "The deployment shows Live with a passing health check, and the variable's row shows today's date under Last set.",
+   "steps": [
+    {
+     "frame": "cloud-config-tab",
+     "title": "Open the relay, and then select the Configuration tab",
+     "body": "The tab lists every environment variable with the date it was last set. Values other than the target URL are never shown."
+    },
+    {
+     "frame": "cloud-edit-url",
+     "title": "Check the target URL",
+     "body": "Select Edit if your application's address has changed. The relay posts every delivery to it."
+    },
+    {
+     "frame": "cloud-add",
+     "title": "Select Add on the empty row, and then enter the name and the value",
+     "body": "Choose the environments the value applies to. Reference it in relay.yaml as ${RELAY_TARGET_TOKEN}."
+    },
+    {
+     "frame": "cloud-deploy",
+     "title": "Select Deploy changes",
+     "body": "A changed variable takes effect at the next deployment, not before."
+    },
+    {
+     "frame": "cloud-deployed",
+     "title": "Check that the deployment is live and the health check passed",
+     "body": "The new deployment is at the top of the list. A failed health check keeps the previous deployment serving traffic."
+    }
+   ]
+  },
+  {
+   "id": "engineering-inspection",
+   "scenario": "a-industrial",
+   "title": "Record the readings for a monthly pump inspection",
+   "docId": "MP-PS104-01-G",
+   "version": "1.0",
+   "intro": "Record the four inspection readings for a feed pump in the maintenance console, then close the work order. Fictional sample written for this portfolio: it isn't an operating instruction for real equipment.",
+   "prereq": "You're signed in to the maintenance console as a technician on the shift the work order is assigned to.\nYou have the readings from the local gauges.",
+   "warn": "Stay outside the guard while the pump runs. Take every reading from a gauge or the console.",
+   "done": "The work order shows Ready to close, and all four results are inside their expected range.",
+   "steps": [
+    {
+     "frame": "console-work-order",
+     "title": "Open the work order and select Record readings",
+     "body": "The work order lists the four checks and their expected values."
+    },
+    {
+     "frame": "console-reading",
+     "title": "Enter each reading as shown on the local gauge, then select Save readings",
+     "body": "Enter the discharge pressure in bar, the bearing temperature in °C, the vibration in mm/s, and whether the seal leaks."
+    },
+    {
+     "frame": "console-close",
+     "title": "Check that all four results are inside their range, then select Close work order",
+     "body": "If a result is outside its range, don't close the work order. Report the reading to your supervisor."
+    }
+   ]
+  },
+  {
+   "id": "software-feature",
+   "scenario": "g-training",
+   "title": "Schedule a report for automatic delivery",
+   "docId": "TR-BR-007-G",
+   "version": "1.0",
+   "intro": "Send a report to the people who need it every week or every month, without opening Beacon Reports on the day. Fictional sample written for this portfolio: the application is invented.",
+   "prereq": "You can open the report you want to send.\nYou have the recipients' email addresses.",
+   "warn": "",
+   "done": "A message confirms the schedule and names the next delivery, and the report's Schedules tab lists it.",
+   "steps": [
+    {
+     "frame": "reports-open",
+     "title": "Open the report, and then select Schedule",
+     "body": "The schedule dialog opens."
+    },
+    {
+     "frame": "reports-recipients",
+     "title": "Enter each recipient and press Enter",
+     "body": "Each address appears as a chip under the field. Recipients don't need a Beacon account."
+    },
+    {
+     "frame": "reports-repeat",
+     "title": "Choose how often, the day, and the time",
+     "body": "The time is shown in your time zone. The report uses the data available at that moment."
+    },
+    {
+     "frame": "reports-preview",
+     "title": "Choose the format, and then select Preview",
+     "body": "PDF for a report people read, Spreadsheet for one they work with. The preview shows the subject, the attachment's name and the recipients."
+    },
+    {
+     "frame": "reports-save",
+     "title": "Select Save schedule",
+     "body": "The dialog closes and a message names the next delivery."
+    },
+    {
+     "frame": "reports-saved",
+     "title": "Check the schedule on the Schedules tab",
+     "body": "Select Edit to change it or Pause to stop it without deleting it."
+    }
+   ]
+  }
+ ]
+}

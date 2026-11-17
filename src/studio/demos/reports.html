@@ -1,0 +1,54 @@
+<!doctype html><html lang="en"><head><title>Demo app: a fictional reporting application</title><meta name="robots" content="noindex"><meta charset="utf-8"><style>
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 'Segoe UI',Arial,sans-serif;color:#1a1d2e;background:#f5f6fb;min-height:720px}
+.top{display:flex;align-items:center;gap:18px;height:52px;padding:0 22px;background:#fff;border-bottom:1px solid #dfe2ef}.top b{font-size:17px;color:#3346d3}.top nav{display:flex;gap:16px;height:52px}.top nav span{color:#4a4f6a;display:flex;align-items:center;border-bottom:2px solid transparent}.top nav span.on{color:#3346d3;font-weight:600;border-bottom-color:#3346d3}
+.demo{background:#ffd23f;color:#1a1d2e;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px}.top .who{margin-left:auto;font-size:13px;color:#4a4f6a}
+main{padding:18px 24px}.head{display:flex;align-items:center;gap:12px}h1{font-size:21px;margin:0}.sub{color:#4a4f6a;margin:2px 0 12px}
+.btn{display:inline-block;border:0;font:inherit;cursor:pointer;padding:9px 16px;border-radius:8px;background:#3346d3;color:#fff;font-weight:600}.btn.alt{background:#fff;color:#3346d3;border:1px solid #3346d3}.btn.sm{padding:5px 10px;font-size:13px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #dfe2ef;margin:6px 0 14px}.tabs button{border:0;background:none;font:inherit;padding:8px 12px;color:#4a4f6a;cursor:pointer}.tabs button.on{color:#3346d3;border-bottom:2px solid #3346d3;font-weight:600}
+.card{background:#fff;border:1px solid #dfe2ef;border-radius:10px;padding:16px 18px}
+.chart{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;align-items:end;height:300px;padding:10px 10px 0;border-bottom:1px solid #dfe2ef}.bar{background:#3346d3;border-radius:6px 6px 0 0;position:relative}.bar.b2{background:#9aa6f0}.bar span{position:absolute;top:-22px;left:0;right:0;text-align:center;font-size:12px;color:#4a4f6a}
+.lbl{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;padding:8px 10px 0;font-size:12px;color:#4a4f6a;text-align:center}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}.kpi{background:#fff;border:1px solid #dfe2ef;border-radius:10px;padding:12px 14px}.kpi small{color:#4a4f6a}.kpi div{font-size:20px;font-weight:700}
+.legend{font-size:12px;color:#4a4f6a;margin-top:8px}.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin:0 4px 0 12px;background:#3346d3}.legend i.b2{background:#9aa6f0}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #eef0f7}th{font-size:12px;color:#4a4f6a;text-transform:uppercase;letter-spacing:.4px}
+.ov{position:fixed;inset:0;background:rgba(26,29,46,.45);display:none;align-items:flex-start;justify-content:center;padding-top:60px}.ov.open{display:flex}
+.dlg{width:560px;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.25);padding:20px 22px}.dlg h2{margin:0 0 4px;font-size:18px}.dlg p.s{margin:0 0 12px;color:#4a4f6a;font-size:13px}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 4px}.in{width:100%;border:1px solid #b9bed6;border-radius:6px;padding:8px 10px;font:inherit;background:#fff}.in:focus{outline:2px solid #3346d3;border-color:#3346d3}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;min-height:24px}.chip{background:#e8ecfb;color:#1a1d2e;border-radius:999px;padding:3px 10px;font-size:13px}
+.preview{margin-top:12px;border:1px dashed #b9bed6;border-radius:8px;padding:10px 12px;font-size:13px;display:none}.preview.show{display:block}.preview b{display:block}.preview .page{margin-top:8px;height:64px;background:linear-gradient(#f0f2fa,#fff);border:1px solid #dfe2ef;border-radius:4px}
+.acts{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#1a1d2e;color:#fff;padding:12px 18px;border-radius:8px;font-weight:600;display:none;box-shadow:0 8px 30px rgba(0,0,0,.3)}.toast.show{display:block}.toast i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2ecc71;margin-right:8px}
+.empty{color:#4a4f6a;padding:20px 0}.st{display:inline-block;padding:2px 8px;border-radius:999px;background:#e3f6ea;color:#127a3e;font-size:12px;font-weight:600}
+</style></head><body>
+<div class="top"><b>Beacon Reports</b><nav><span>Home</span><span class="on">Reports</span><span>Dashboards</span><span>Data</span></nav><span class="demo">FICTIONAL DEMO</span><span class="who">dana.k@meridian.example</span></div>
+<main><div class="head"><h1>Monthly revenue by region</h1><span class="st">Shared with Sales</span><span style="flex:1"></span><button class="btn alt" id="export">Export</button><button class="btn" id="open" style="margin-left:10px">Schedule</button></div>
+<p class="sub">Reports / Sales / Monthly revenue by region · Data as of today 06:00</p>
+<div class="tabs"><button class="on" data-tab="report">Report</button><button data-tab="schedules">Schedules <span id="count">(0)</span></button><button>History</button></div>
+<section id="report"><div class="kpis"><div class="kpi"><small>Revenue, October</small><div>€4.82 M</div></div><div class="kpi"><small>Versus September</small><div>+6.1%</div></div><div class="kpi"><small>Best region</small><div>North</div></div><div class="kpi"><small>Orders</small><div>18,204</div></div></div>
+<div class="card"><div class="chart"><div class="bar" style="height:78%"><span>1.21</span></div><div class="bar b2" style="height:54%"><span>0.84</span></div><div class="bar" style="height:92%"><span>1.43</span></div><div class="bar b2" style="height:40%"><span>0.62</span></div><div class="bar" style="height:47%"><span>0.72</span></div><div class="bar b2" style="height:0%" hidden></div></div>
+<div class="lbl"><span>North</span><span>East</span><span>West</span><span>South</span><span>Central</span><span></span></div><div class="legend">Revenue in € million, October 2026.<i></i>Direct sales<i class="b2"></i>Partner sales</div></div></section>
+<section id="schedules" hidden><div class="card"><table><thead><tr><th>Recipients</th><th>Repeat</th><th>Format</th><th>Next delivery</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table><p class="empty" id="none">No schedules yet. Select Schedule to send this report automatically.</p></div></section></main>
+<div class="ov" id="ov"><form class="dlg" onsubmit="return false"><h2>Schedule this report</h2><p class="s">Beacon sends the report as an attachment, from you, at the times you choose.</p>
+<label for="rcpt">Recipients</label><input class="in" id="rcpt" placeholder="Type an email address and press Enter" autocomplete="off"><div class="chips" id="chips"></div>
+<div class="row"><div><label for="rep">Repeat</label><select class="in" id="rep"><option>Weekly</option><option>Monthly</option></select></div><div><label for="day">Day</label><select class="in" id="day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option></select></div><div><label for="time">Time</label><select class="in" id="time"><option>07:00</option><option selected>08:00</option><option>09:00</option><option>12:00</option></select></div></div>
+<label for="fmt">Format</label><select class="in" id="fmt"><option>PDF</option><option>Spreadsheet</option></select>
+<div class="preview" id="pv"><b>Preview</b><div>Subject: Monthly revenue by region · <span id="pv-when">weekly on Monday at 08:00</span></div><div>Attachment: monthly-revenue-by-region.<span id="pv-ext">pdf</span> · To: <span id="pv-to">nobody yet</span></div><div class="page"></div></div>
+<div class="acts"><button class="btn alt" type="button" id="cancel">Cancel</button><button class="btn alt" type="button" id="preview">Preview</button><button class="btn" type="button" id="save">Save schedule</button></div></form></div>
+<div class="toast" id="toast"><i></i><span id="toast-text"></span></div>
+<script>
+// A fictional reporting app for recording walkthroughs in the Video Studio. The schedule dialog works end to end.
+var $ = function (s) { return document.querySelector(s); }, to = [], saved = [];
+function tab(n) { document.querySelectorAll(".tabs [data-tab]").forEach(function (b) { b.classList.toggle("on", b.dataset.tab === n); }); $("#report").hidden = n !== "report"; $("#schedules").hidden = n !== "schedules"; }
+document.querySelectorAll(".tabs [data-tab]").forEach(function (b) { b.addEventListener("click", function () { tab(b.dataset.tab); }); });
+$("#open").addEventListener("click", function () { $("#ov").classList.add("open"); $("#rcpt").focus(); });
+$("#cancel").addEventListener("click", function () { $("#ov").classList.remove("open"); });
+$("#rcpt").addEventListener("keydown", function (e) { if (e.key !== "Enter") return; e.preventDefault(); var v = this.value.trim(); if (!v) return; to.push(v); this.value = ""; $("#chips").innerHTML = to.map(function (t) { return '<span class="chip">' + t + "</span>"; }).join(""); });
+function when() { return ($("#rep").value === "Weekly" ? "weekly on " + $("#day").value : "monthly on day " + (["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].indexOf($("#day").value) + 1)) + " at " + $("#time").value; }
+$("#preview").addEventListener("click", function () { $("#pv-when").textContent = when(); $("#pv-ext").textContent = $("#fmt").value === "PDF" ? "pdf" : "xlsx"; $("#pv-to").textContent = to.join(", ") || "nobody yet"; $("#pv").classList.add("show"); });
+$("#save").addEventListener("click", function () {
+  saved.push({ to: to.slice(), when: when(), fmt: $("#fmt").value }); $("#ov").classList.remove("open");
+  $("#rows").innerHTML = saved.map(function (s) { return "<tr><td>" + s.to.join(", ") + "</td><td>" + s.when + "</td><td>" + s.fmt + "</td><td>Monday 24 November, 08:00</td><td><span class='st'>Active</span></td><td><span class='btn alt sm'>Edit</span> <span class='btn alt sm'>Pause</span></td></tr>"; }).join("");
+  $("#none").hidden = true; $("#count").textContent = "(" + saved.length + ")"; tab("schedules");
+  $("#toast-text").textContent = "Schedule saved. Next delivery: Monday 24 November, 08:00."; $("#toast").classList.add("show"); setTimeout(function () { $("#toast").classList.remove("show"); }, 4000);
+});
+</script></body></html>

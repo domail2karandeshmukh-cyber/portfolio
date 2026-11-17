@@ -5,14 +5,15 @@
  </div>
 </div>
 <div class="st-bar" role="toolbar" aria-label="Open a document">
- <button class="btn line sm" type="button" id="dc-sample">Open the sample procedure</button>
+ <button class="btn line sm" type="button" id="dc-samples">Samples</button>
  <button class="btn line sm" type="button" id="dc-bench">Open my workbench document</button>
  <label class="btn line sm" for="dc-file">Open a Markdown file</label><input class="st-file" id="dc-file" type="file" accept=".md,.markdown,text/markdown,text/plain">
  <span class="sep" aria-hidden="true"></span>
  <label class="dc-me">Your name <input id="dc-me" type="text" maxlength="60" autocomplete="name"></label>
 </div>
 <p class="st-status" id="dc-status" role="status" aria-live="polite"></p>
-<p id="dc-none" class="kb-hint">Open the sample procedure, your document from the workbench, or a Markdown file.</p>
+<div id="dc-slot"><div id="dc-start"></div></div>
+<p id="dc-none" class="kb-hint" hidden></p>
 <div id="dc-doc" class="dc" hidden>
  <section class="dt-card">
   <ol class="dc-flow" id="dc-flow" aria-label="Status"></ol>

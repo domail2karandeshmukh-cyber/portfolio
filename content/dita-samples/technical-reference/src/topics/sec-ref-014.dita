@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="escalation-matrix-for-security-cases" xml:lang="en">
+<title>Escalation matrix for security cases</title>
+<shortdesc>Who the analyst on shift tells, how quickly, and through which channel, for each severity of case at <ph keyref="org">Norrbyn Utilities</ph>. The matrix applies to every case the SOC opens, whatever raised it. Fictional sample written for this portfolio: the roles are real kinds of roles, and the people behind them aren't named.</shortdesc>
+<refbody>
+<section><title>Severities</title>
+<simpletable><sthead><stentry>Severity</stentry><stentry>Definition</stentry><stentry>Examples</stentry></sthead><strow><stentry>Low</stentry><stentry>An attempt that failed, from outside, against something that isn't exposed. No sign of success, no internal source.</stentry><stentry>A port scan. A brute-force attempt against users that don't exist.</stentry></strow><strow><stentry>Medium</stentry><stentry>An attempt with a chance of success, or anything from an internal source until it's explained.</stentry><stentry>A brute-force attempt against accounts that exist. Malware blocked on a workstation. An internal host probing another.</stentry></strow><strow><stentry>High</stentry><stentry>Evidence that an attacker got in, or that data left.</stentry><stentry>A successful sign-in from an attacking source. Ransomware activity. Credentials found in a public place.</stentry></strow><strow><stentry>Critical</stentry><stentry>High, and the safety of people or the supply of water or power is affected or threatened.</stentry><stentry>Access to a control-system network. A compromised engineering workstation that can reach field devices.</stentry></strow></simpletable>
+</section>
+<section><title>Who to tell, and when</title>
+<p>The clock starts at the finding that set the severity, not at the alert.</p>
+<simpletable><sthead><stentry>Severity</stentry><stentry>Tell</stentry><stentry>Within</stentry><stentry>Channel</stentry></sthead><strow><stentry>Low</stentry><stentry>Nobody now. Summarise in the shift handover.</stentry><stentry>End of shift</stentry><stentry>Shift log</stentry></strow><strow><stentry>Medium</stentry><stentry>The SOC lead, in the daily review. If found at night, the SOC lead by message.</stentry><stentry>Next daily review, or one hour at night</stentry><stentry>Case comment with the <b>Review</b> tag; the SOC channel at night</stentry></strow><strow><stentry>High</stentry><stentry>The incident lead on call.</stentry><stentry>Fifteen minutes</stentry><stentry>Phone call from the on-call rota, then the case number by message</stentry></strow><strow><stentry>Critical</stentry><stentry>The incident lead on call, then the operations duty manager.</stentry><stentry>Fifteen minutes for both</stentry><stentry>Phone calls. Don't rely on messages at this severity.</stentry></strow></simpletable>
+<p>If the incident lead doesn't answer within ten minutes, call the next person on the rota. Record every call you make in the case, answered or not.</p>
+</section>
+<section><title>What to have ready when you call</title>
+<ol><li>The case number.</li><li>The severity and the finding that set it, in one sentence.</li><li>The hosts and accounts involved.</li><li>What you have already done, including any block.</li><li>What you want decided, such as isolating a host, locking an account, or calling someone else in.</li></ol>
+</section>
+<section><title>Who decides what</title>
+<simpletable><sthead><stentry>Decision</stentry><stentry>Who</stentry></sthead><strow><stentry>Block an external address for 24 hours</stentry><stentry>The analyst on shift</stentry></strow><strow><stentry>Block an internal address</stentry><stentry>The SOC lead</stentry></strow><strow><stentry>Isolate a host</stentry><stentry>The incident lead</stentry></strow><strow><stentry>Lock a privileged account</stentry><stentry>The incident lead</stentry></strow><strow><stentry>Declare a security incident</stentry><stentry>The incident lead</stentry></strow><strow><stentry>Involve the operations duty manager</stentry><stentry>The incident lead</stentry></strow><strow><stentry>Inform the regulator or the police</stentry><stentry>The head of security, with legal counsel</stentry></strow><strow><stentry>Tell customers or the public</stentry><stentry>Communications, on the head of security's request</stentry></strow></simpletable>
+</section>
+<section><title>Handover</title>
+<p>A High or Critical case never changes hands without a conversation. At the end of a shift, the analyst walks the next analyst through the case timeline, and both add a handover comment. The incident lead stays the same until they hand over themselves.</p>
+</section>
+<section><title>Related documents</title>
+<ul><li>RB-SEC-012: <i>Investigate a Wazuh alert: SSH brute-force attempt</i>.</li><li>SEC-EXP-013: <i>What the alert means: SSH authentication failures in Wazuh</i>.</li></ul>
+</section>
+</refbody>
+</reference>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="industrial-equipment" xml:lang="en">
+<title>Feed pump B: inspection and calibration</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Sample: fictional"/>
+</topicmeta>
+<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<keydef keys="tag"><topicmeta><keywords><keyword>PS-104</keyword></keywords></topicmeta></keydef>
+<keydef keys="rig"><topicmeta><keywords><keyword>test rig TR-2</keyword></keywords></topicmeta></keydef>
+<topicref href="topics/mp-ps104-01.dita" type="task"/>
+<topicref href="topics/mr-ps104-01.dita" type="reference"/>
+<topicref href="topics/ep-tr2-004.dita" type="task"/>
+<topicref href="topics/tr-2026-07.dita" type="concept"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/mp-ps104-01.dita" type="task"/><topicref href="topics/ep-tr2-004.dita" type="task"/></relcell><relcell><topicref href="topics/mr-ps104-01.dita" type="reference"/></relcell></relrow>
+</reltable>
+</map>

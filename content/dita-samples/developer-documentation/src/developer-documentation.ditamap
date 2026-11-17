@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="developer-documentation" xml:lang="en">
+<title>Lattice Relay developer documentation</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Sample: fictional"/>
+</topicmeta>
+<keydef keys="cloud"><topicmeta><keywords><keyword>Lattice Cloud</keyword></keywords></topicmeta></keydef>
+<keydef keys="service"><topicmeta><keywords><keyword>Lattice Relay</keyword></keywords></topicmeta></keydef>
+<keydef keys="cli"><topicmeta><keywords><keyword>lattice</keyword></keywords></topicmeta></keydef>
+<keydef keys="region"><topicmeta><keywords><keyword>eu-west-2</keyword></keywords></topicmeta></keydef>
+<topicref href="topics/dg-relay-100.dita" type="concept"/>
+<topicref href="topics/dg-relay-101.dita" type="task"/>
+<topicref href="topics/dg-relay-103.dita" type="troubleshooting"/>
+<topicref href="topics/dg-relay-102.dita" type="reference"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/dg-relay-101.dita" type="task"/></relcell><relcell><topicref href="topics/dg-relay-103.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/dg-relay-102.dita" type="reference"/></relcell></relrow>
+</reltable>
+</map>

@@ -1,0 +1,170 @@
+{
+ "screenshots": [
+  {
+   "id": "cloud-env",
+   "scenario": "c-cloud",
+   "title": "Cloud service configuration",
+   "blurb": "Three numbered callouts for the three actions, a key redacted in the pixels, and a note highlighted.",
+   "project": "screenshots/cloud-env/project.screenshot.json",
+   "before": "screenshots/cloud-env/before.png",
+   "after": "screenshots/cloud-env/after.png",
+   "preview": "screenshots/cloud-env/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 6
+  },
+  {
+   "id": "identity-new-user",
+   "scenario": "b-enterprise-it",
+   "title": "Enterprise IT: a new user form",
+   "blurb": "Numbered callouts in the order the fields are filled, personal data redacted, and an arrow with a label for the one field not to touch.",
+   "project": "screenshots/identity-new-user/project.screenshot.json",
+   "before": "screenshots/identity-new-user/before.png",
+   "after": "screenshots/identity-new-user/after.png",
+   "preview": "screenshots/identity-new-user/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 10
+  },
+  {
+   "id": "ledgerly-users",
+   "scenario": "e-support",
+   "title": "SaaS account administration",
+   "blurb": "A spotlight on the number that matters, a highlighted row, a pixelated address, and a text label.",
+   "project": "screenshots/ledgerly-users/project.screenshot.json",
+   "before": "screenshots/ledgerly-users/before.png",
+   "after": "screenshots/ledgerly-users/after.png",
+   "preview": "screenshots/ledgerly-users/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 6
+  },
+  {
+   "id": "support-unlock",
+   "scenario": "e-support",
+   "title": "Support troubleshooting: a locked account",
+   "blurb": "Green for what to check first, red for the actions, and a blurred column of network addresses.",
+   "project": "screenshots/support-unlock/project.screenshot.json",
+   "before": "screenshots/support-unlock/before.png",
+   "after": "screenshots/support-unlock/after.png",
+   "preview": "screenshots/support-unlock/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 7
+  },
+  {
+   "id": "console-work-order",
+   "scenario": "a-industrial",
+   "title": "Engineering console: a work order",
+   "blurb": "A service key redacted, the button to select boxed and numbered, and an arrow that says where to start.",
+   "project": "screenshots/console-work-order/project.screenshot.json",
+   "before": "screenshots/console-work-order/before.png",
+   "after": "screenshots/console-work-order/after.png",
+   "preview": "screenshots/console-work-order/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 5
+  },
+  {
+   "id": "soc-alert",
+   "scenario": "d-security",
+   "title": "Security monitoring: a Wazuh alert",
+   "blurb": "The fields that decide the triage boxed in yellow on a dark console, and the decision written next to the action.",
+   "project": "screenshots/soc-alert/project.screenshot.json",
+   "before": "screenshots/soc-alert/before.png",
+   "after": "screenshots/soc-alert/after.png",
+   "preview": "screenshots/soc-alert/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 9
+  },
+  {
+   "id": "soc-alert-detail",
+   "scenario": "d-security",
+   "title": "Security monitoring: cropped alert detail",
+   "blurb": "The alert JSON cropped and enlarged, with the two decisive lines highlighted.",
+   "project": "screenshots/soc-alert-detail/project.screenshot.json",
+   "before": "screenshots/soc-alert-detail/before.png",
+   "after": "screenshots/soc-alert-detail/after.png",
+   "preview": "screenshots/soc-alert-detail/preview.jpg",
+   "width": 466,
+   "height": 584.640625,
+   "marks": 3
+  },
+  {
+   "id": "reports-schedule",
+   "scenario": "g-training",
+   "title": "Software product: a schedule dialog",
+   "blurb": "Five numbered callouts that follow the order of the tutorial, and the preview button highlighted.",
+   "project": "screenshots/reports-schedule/project.screenshot.json",
+   "before": "screenshots/reports-schedule/before.png",
+   "after": "screenshots/reports-schedule/after.png",
+   "preview": "screenshots/reports-schedule/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 7
+  }
+ ],
+ "guides": [
+  {
+   "id": "it-onboarding",
+   "scenario": "b-enterprise-it",
+   "title": "Create a new employee's account",
+   "blurb": "Create the identity a new employee signs in with, in Meridian Identity, and give it the standard access for the department.",
+   "steps": 5,
+   "project": "guides/it-onboarding/it-onboarding.guide.zip",
+   "html": "guides/it-onboarding/guide.html",
+   "pdf": "guides/it-onboarding/guide.pdf",
+   "markdown": "guides/it-onboarding/guide-markdown.zip",
+   "preview": "guides/it-onboarding/preview.jpg"
+  },
+  {
+   "id": "support-unlock",
+   "scenario": "e-support",
+   "title": "Unlock a customer's account",
+   "blurb": "Internal procedure for support agents of Ledgerly: a customer is locked out and can't wait for the lock to lift. Verify who you're talking to before you change anything.",
+   "steps": 5,
+   "project": "guides/support-unlock/support-unlock.guide.zip",
+   "html": "guides/support-unlock/guide.html",
+   "pdf": "guides/support-unlock/guide.pdf",
+   "markdown": "guides/support-unlock/guide-markdown.zip",
+   "preview": "guides/support-unlock/preview.jpg"
+  },
+  {
+   "id": "cloud-config",
+   "scenario": "c-cloud",
+   "title": "Add an environment variable to a relay and deploy it",
+   "blurb": "Give the relay the token your application expects, from the Lattice Cloud console, and deploy the change.",
+   "steps": 5,
+   "project": "guides/cloud-config/cloud-config.guide.zip",
+   "html": "guides/cloud-config/guide.html",
+   "pdf": "guides/cloud-config/guide.pdf",
+   "markdown": "guides/cloud-config/guide-markdown.zip",
+   "preview": "guides/cloud-config/preview.jpg"
+  },
+  {
+   "id": "engineering-inspection",
+   "scenario": "a-industrial",
+   "title": "Record the readings for a monthly pump inspection",
+   "blurb": "Record the four inspection readings for a feed pump in the maintenance console, then close the work order.",
+   "steps": 3,
+   "project": "guides/engineering-inspection/engineering-inspection.guide.zip",
+   "html": "guides/engineering-inspection/guide.html",
+   "pdf": "guides/engineering-inspection/guide.pdf",
+   "markdown": "guides/engineering-inspection/guide-markdown.zip",
+   "preview": "guides/engineering-inspection/preview.jpg"
+  },
+  {
+   "id": "software-feature",
+   "scenario": "g-training",
+   "title": "Schedule a report for automatic delivery",
+   "blurb": "Send a report to the people who need it every week or every month, without opening Beacon Reports on the day.",
+   "steps": 6,
+   "project": "guides/software-feature/software-feature.guide.zip",
+   "html": "guides/software-feature/guide.html",
+   "pdf": "guides/software-feature/guide.pdf",
+   "markdown": "guides/software-feature/guide-markdown.zip",
+   "preview": "guides/software-feature/preview.jpg"
+  }
+ ]
+}

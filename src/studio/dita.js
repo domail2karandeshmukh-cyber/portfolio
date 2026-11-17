@@ -10,18 +10,34 @@
   function list() {
     $("#dt-list").innerHTML = docs.map(function (d, i) {
       return '<label><input type="checkbox" data-i="' + i + '"' + (d.on ? " checked" : "") + "> " + Kit.esc(d.title) + " <small>" + Kit.esc(d.from) + "</small></label>";
-    }).join("");
+    }).join("") || '<p class="kb-hint">No documents yet. Choose a document set above, or add Markdown files.</p>';
+    sw.inline(!docs.length);
   }
   $("#dt-list").addEventListener("change", function (e) { var i = +e.target.dataset.i; if (docs[i]) docs[i].on = e.target.checked; });
   function add(source, from, on) {
     var d = Doc.parse(source);
     docs.push({ source: source, from: from, on: on !== false, title: (d.title || "Untitled").replace(/\{\{([\w.-]+)\}\}/g, function (m, k) { return (d.meta.vars || {})[k] || m; }) });
   }
-  fetch("/studio/templates.json").then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (t) {
-    t.forEach(function (x) { add(x.source, "workbench template: " + x.name); });
-    try { var mine = localStorage.getItem("wb:doc"); if (mine && mine.trim()) add(mine, "your document in the workbench", false); } catch (e) {}
-    list();
-  }).catch(function () { say("The templates couldn't be loaded. You can still add Markdown files.", true); });
+  /* The document sets: the scenarios' documents, grouped the way a writer would publish them. */
+  var panel = Kit.start($("#dt-start"), {
+    tool: "dita", title: "Choose a document set",
+    lead: "Six sets of Markdown documents from the fictional scenarios. Choose one to load its documents, and then make the project: a map with keys for the variables, a typed topic for each document, DITAVAL filters for each group of readers, and a relationship table. The links open what DITA Open Toolkit published from the same set.",
+    open: function (s) {
+      say("Loading " + s.title + "…");
+      return Promise.all(s.docs.map(Kit.fetchText)).then(function (sources) {
+        docs = []; sources.forEach(function (src) { add(src, s.title); });
+        try { var mine = localStorage.getItem("wb:doc"); if (mine && mine.trim()) add(mine, "your document in the workbench", false); } catch (e) {}
+        $("#dt-title").value = s.map; list(); sw.close(); $("#dt-result").hidden = true; $("#dt-zip").disabled = true; project = null;
+        say("Loaded " + s.docs.length + " documents of " + s.title + ". Select Make the project.");
+        $("#dt-go").focus();
+      });
+    },
+    fail: function (e) { say(e.message, true); },
+    files: [{ label: "Add Markdown files", input: "dt-files" }],
+    links: function (s) { return s.published ? '<a href="' + Kit.esc(s.published.html5) + '">HTML5</a><a href="' + Kit.esc(s.published.pdf) + '">PDF</a><a href="' + Kit.esc(s.published.zip) + '">DITA source</a>' : ""; },
+  });
+  var sw = Kit.startSwitch(panel, $("#dt-slot"), $("#dt-samples"));
+  list();
   $("#dt-files").addEventListener("change", function () {
     var files = Array.prototype.slice.call(this.files, 0, 30); this.value = "";
     Promise.all(files.map(function (f) { return Kit.readText(f).then(function (t) { add(t, f.name); }); })).then(function () { list(); say("Added " + files.length + " file(s)."); }, function (e) { say(e.message, true); });
@@ -60,9 +76,15 @@
     Kit.save(Kit.zip(project.files.map(function (f) { return { name: name + "/" + f.name, data: f.data }; })), name + "-dita.zip");
     say("Downloaded " + name + "-dita.zip. Its README says how to publish it.");
   });
-  fetch("/studio/dita/sample/published.json").then(function (r) { return r.json(); }).then(function (p) {
-    $("#dt-ver").textContent = p.ditaOt;
-    $("#dt-when").textContent = "Published on " + p.at + ": " + p.validated + " files validated against the DITA " + p.dita + " DTDs, then HTML5 for the " + p.html5 + " and PDF for " + p.pdf + ".";
+  Kit.samples().then(function (all) {
+    var sets = (all.dita || []).filter(function (s) { return s.published; }), ver = sets.length ? sets[0].published.ditaOt : "";
+    if (ver) $("#dt-ver").textContent = ver;
+    $("#dt-published tbody").innerHTML = sets.map(function (s) {
+      var p = s.published;
+      return "<tr><td>" + Kit.esc(s.title) + "<br><small>" + Kit.esc(s.map) + "</small></td><td>" + p.topics + "</td><td>" + Kit.esc(p.at) + "<br><small>" + p.validated + " files validated" + (p.audiences && p.audiences.length ? ", filters for " + Kit.esc(p.audiences.join(", ")) : "") + "</small></td><td><a href=\"" + Kit.esc(p.html5) + "\">HTML5</a> · <a href=\"" + Kit.esc(p.pdf) + "\">PDF</a> · <a href=\"" + Kit.esc(p.zip) + "\" download>DITA source</a></td></tr>";
+    }).join("");
+    var files = sets.reduce(function (n, s) { return n + s.published.validated; }, 0);
+    $("#dt-when").textContent = sets.length ? files + " files across " + sets.length + " projects were validated against the OASIS DITA " + sets[0].published.dita + " DTDs with xmllint before DITA Open Toolkit published them. The workflow \"Publish the DITA sample\" does this on GitHub and commits the result." : "";
   }).catch(function () {});
   window.studioDita = { project: function () { return project; } };
 })();

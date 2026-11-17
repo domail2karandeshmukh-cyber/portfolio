@@ -1,0 +1,37 @@
+<!doctype html><html lang="en"><head><title>Demo app: a fictional support console</title><meta name="robots" content="noindex"><meta charset="utf-8"><style>
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 'Segoe UI',Arial,sans-serif;color:#24201c;background:#f7f4f0}
+.top{display:flex;align-items:center;gap:16px;height:52px;padding:0 20px;background:#3b2a1e;color:#fff}.top b{font-size:16px}.top input{margin-left:12px;width:360px;padding:7px 10px;border-radius:6px;border:0;font:inherit}.top .who{margin-left:auto;font-size:13px;opacity:.9}
+.demo{background:#ffd23f;color:#3b2a1e;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px}
+main{display:grid;grid-template-columns:300px 1fr;gap:18px;padding:18px 22px;height:748px}
+.card{background:#fff;border:1px solid #e2dad2;border-radius:8px;padding:16px}.card h2{font-size:13px;margin:0 0 10px;color:#7a6a5c;text-transform:uppercase;letter-spacing:.5px}
+.kv div{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #f1ece6;font-size:13px}.kv div:last-child{border:0}.kv span:last-child{font-weight:600;text-align:right}
+.verified{margin-top:12px;padding:9px 12px;border-radius:6px;background:#e8f6ee;border:1px solid #a9d9bb;color:#127a3e;font-weight:600;font-size:13px}
+h1{font-size:20px;margin:0 0 2px}.sub{color:#7a6a5c;margin:0 0 12px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid #e2dad2;margin-bottom:14px}.tabs span{padding:8px 12px;color:#5a4d42}.tabs span.on{color:#d9641e;border-bottom:2px solid #d9641e;font-weight:600}
+.lock{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:8px;background:#fdecea;border:1px solid #f2b8b5;margin-bottom:14px}.lock b{color:#c62828;font-size:15px}
+.btn{display:inline-block;border:0;font:inherit;cursor:pointer;padding:8px 14px;border-radius:6px;background:#d9641e;color:#fff;font-weight:600;margin-right:8px}.btn.alt{background:#fff;color:#d9641e;border:1px solid #d9641e}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:8px;border-bottom:1px solid #f1ece6}th{color:#7a6a5c;font-size:12px}
+.bad{color:#c62828;font-weight:600}.ok{color:#127a3e;font-weight:600}
+.note{margin-top:12px;font-size:13px;color:#5a4d42}
+</style></head><body>
+<div class="top"><b>Ledgerly Support</b><input value="amira@harbourlane.example" readonly><span class="demo">FICTIONAL DEMO</span><span class="who">Agent · Ticket #48213</span></div>
+<main><div><div class="card"><h2>Customer</h2><div class="kv"><div><span>Name</span><span>Amira Haddad</span></div><div><span>Company</span><span>Harbour Lane Bakery</span></div><div><span>Role</span><span>Administrator</span></div><div><span>Plan</span><span>Business</span></div><div><span>Email</span><span>amira@harbourlane.example</span></div><div><span>Phone on file</span><span>+31 6 1234 5678</span></div><div><span>Customer since</span><span>March 2024</span></div><div><span>Two-step verification</span><span>Authenticator app</span></div></div>
+<div class="verified" id="verified">Verified: code sent to the account email, read back at 09:31</div></div>
+<div class="card" style="margin-top:14px"><h2>Ticket #48213</h2><div class="kv"><div><span>Opened</span><span>Today, 09:26</span></div><div><span>Channel</span><span>Chat</span></div><div><span>Subject</span><span>Locked out before payroll</span></div><div><span>Priority</span><span>High</span></div></div></div></div>
+<div><section data-view="locked" style="display:contents"><h1>Amira Haddad</h1><p class="sub">Harbour Lane Bakery · Administrator · Business plan</p>
+<div class="tabs"><span>Overview</span><span class="on">Sign-in</span><span>Billing</span><span>Activity</span><span>Notes</span></div>
+<div class="lock" id="lock"><div><b>Account locked</b><div>Since 09:14 today · 10 wrong passwords in 4 minutes · Lifts on its own at 09:29, or now with a reset</div></div></div>
+<p><button class="btn" id="unlock" data-go="unlocked">Unlock</button><button class="btn alt" id="reset">Send a reset link</button><button class="btn alt" id="code">Send a verification code</button></p>
+<div class="card" id="attempts"><h2>Recent sign-in attempts</h2><table><tr><th>Time</th><th>Result</th><th>Location</th><th>Device</th><th>Address</th></tr>
+<tr><td>09:14:02</td><td class="bad">Wrong password (10th)</td><td>Rotterdam, NL</td><td>Chrome on Windows</td><td>198.51.100.23</td></tr>
+<tr><td>09:13:51</td><td class="bad">Wrong password</td><td>Rotterdam, NL</td><td>Chrome on Windows</td><td>198.51.100.23</td></tr>
+<tr><td>09:10:40</td><td class="bad">Wrong password</td><td>Rotterdam, NL</td><td>Chrome on Windows</td><td>198.51.100.23</td></tr>
+<tr><td>Yesterday, 17:48</td><td class="ok">Signed in</td><td>Rotterdam, NL</td><td>Chrome on Windows</td><td>198.51.100.23</td></tr>
+<tr><td>Yesterday, 08:03</td><td class="ok">Signed in</td><td>Rotterdam, NL</td><td>Ledgerly app on iOS</td><td>198.51.100.23</td></tr></table>
+<p class="note" id="note">All attempts come from the customer's usual location and device. The customer says she changed her password yesterday evening and may have mistyped the new one.</p></div></section><section data-view="unlocked" style="display:contents"><h1>Amira Haddad</h1><p class="sub">Harbour Lane Bakery · Administrator · Business plan</p><div class="tabs"><span>Overview</span><span class="on">Sign-in</span><span>Billing</span><span>Activity</span><span>Notes</span></div><div class="lock" style="background:#e8f6ee;border-color:#a9d9bb" id="unlocked"><div><b style="color:#127a3e">Account unlocked</b><div>By you at 09:32 · Reason: ticket #48213 · The customer has been emailed that support unlocked the account</div></div></div><div class="card"><h2>Ticket note, added</h2><p style="margin:0;font-size:13px">Verified by code to the account email at 09:31. Lock caused by 10 wrong passwords from the customer's usual device after a password change. Unlocked; advised to use the reset link if the new password is unknown, and to keep two-step verification on.</p></div><div class="card" style="margin-top:14px"><h2>Next step for the customer</h2><p style="margin:0;font-size:13px">Sign in with the password set yesterday evening. If it fails once more, select <b>Forgot your password?</b> on the sign-in page: the reset link unlocks the account at once.</p></div></section></div></main><script>
+// Views: a section with data-view is shown when the address ends with #its-name; the first one otherwise. Buttons with data-go switch views.
+(function(){function show(n){var all=document.querySelectorAll("[data-view]");if(!all.length)return;var hit=false;all.forEach(function(s){var on=s.dataset.view===n;s.style.display=on?"contents":"none";hit=hit||on;});if(!hit){all.forEach(function(s,i){s.style.display=i>0?"none":"contents";});}}
+show(location.hash.slice(1));addEventListener("hashchange",function(){show(location.hash.slice(1));});
+document.addEventListener("click",function(e){var b=e.target.closest("[data-go]");if(b){location.hash=b.dataset.go;}});})();
+</script>
+</body></html>

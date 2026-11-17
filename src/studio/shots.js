@@ -4,7 +4,7 @@
   var status = document.getElementById("sh-status");
   function say(t, bad) { Kit.say(status, t, bad); }
   var ed = Annotate.editor(document.getElementById("sh-editor"), { status: say, onChange: function () { buttons(); autosave(); } });
-  function buttons() { ["sh-png", "sh-jpg", "sh-svg", "sh-save"].forEach(function (id) { document.getElementById(id).disabled = !ed.hasImage(); }); }
+  function buttons() { ["sh-png", "sh-jpg", "sh-svg", "sh-save"].forEach(function (id) { document.getElementById(id).disabled = !ed.hasImage(); }); if (window.studioShots) sw.inline(!ed.hasImage()); }
   function name() { return Kit.slug(ed.state().name, "screenshot"); }
 
   function open(img, label) { ed.load(img, label); say("Opened " + label + ". " + img.width + " × " + img.height + " pixels."); }
@@ -28,12 +28,17 @@
     var f = e.dataTransfer.files[0];
     Kit.readImage(f).then(function (img) { open(img, f.name.replace(/\.\w+$/, "")); }, fail);
   });
-  document.getElementById("sh-sample").addEventListener("click", function () {
-    var img = new Image();
-    img.onload = function () { open(img, "maintenance-console-sample"); say("Opened the sample: a fictional maintenance console. Try redacting the access key, then number the steps."); };
-    img.onerror = function () { fail(new Error("The sample couldn't be loaded.")); };
-    img.src = "/studio/sample-console.png";
+  /* The samples: annotated screenshots of the fictional demo apps, each one a project file this tool saved. */
+  var start = Kit.start(document.getElementById("sh-start"), {
+    tool: "screenshots", title: "Open a screenshot",
+    lead: "Eight annotated screenshots of fictional applications, each one a project you can edit: move a callout, change a colour, or undo a mark. Or open your own image. Nothing is uploaded.",
+    open: function (s) { say("Opening " + s.title + "…"); return Kit.fetchJson(s.project).then(function (p) { return ed.loadProject(p); }).then(function () { sw.close(); say("Opened the sample " + s.title + ": " + s.marks + " marks, all editable. The redactions were burned into the picture when the sample was made."); }); },
+    fail: fail,
+    files: [{ label: "Open image", input: "sh-file" }, { label: "Open project", input: "sh-proj" }],
+    links: function (s) { return '<a href="' + Kit.esc(s.before) + '" target="_blank" rel="noopener">Before</a><a href="' + Kit.esc(s.after) + '" target="_blank" rel="noopener">After</a>'; },
+    note: "Each card opens the project behind the picture. Before and After open the original screenshot and the exported file.",
   });
+  var sw = Kit.startSwitch(start, document.getElementById("sh-slot"), document.getElementById("sh-samples"));
   // One frame of a screen, window or tab the visitor picks in the browser's own dialog. Sharing stops as soon as the frame is taken.
   document.getElementById("sh-capture").addEventListener("click", function () {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) return fail(new Error("This browser can't capture the screen. Take a screenshot and open or paste it instead."));
@@ -70,6 +75,6 @@
   Kit.store.get("screenshot").then(function (p) {
     if (p && !ed.hasImage()) return ed.loadProject(p).then(function () { say("Reopened your last screenshot from this browser."); });
   }).catch(function () {});
-  buttons();
   window.studioShots = ed;
+  buttons();
 })();

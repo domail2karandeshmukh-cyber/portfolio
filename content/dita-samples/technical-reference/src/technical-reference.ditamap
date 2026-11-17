@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="technical-reference" xml:lang="en">
+<title>Reference set: roles, escalation and configuration</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Sample: fictional"/>
+</topicmeta>
+<keydef keys="company"><topicmeta><keywords><keyword>Meridian Freight</keyword></keywords></topicmeta></keydef>
+<keydef keys="desk"><topicmeta><keywords><keyword>Service Desk</keyword></keywords></topicmeta></keydef>
+<keydef keys="org"><topicmeta><keywords><keyword>Norrbyn Utilities</keyword></keywords></topicmeta></keydef>
+<keydef keys="cloud"><topicmeta><keywords><keyword>Lattice Cloud</keyword></keywords></topicmeta></keydef>
+<keydef keys="service"><topicmeta><keywords><keyword>Lattice Relay</keyword></keywords></topicmeta></keydef>
+<keydef keys="cli"><topicmeta><keywords><keyword>lattice</keyword></keywords></topicmeta></keydef>
+<keydef keys="product"><topicmeta><keywords><keyword>Fieldbook</keyword></keywords></topicmeta></keydef>
+<topicref href="topics/it-ref-032.dita" type="reference"/>
+<topicref href="topics/sec-ref-014.dita" type="reference"/>
+<topicref href="topics/dg-relay-102.dita" type="reference"/>
+<topicref href="topics/rn-fb-hist.dita" type="reference"/>
+</map>

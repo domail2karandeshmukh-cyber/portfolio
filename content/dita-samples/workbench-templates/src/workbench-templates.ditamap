@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="workbench-templates" xml:lang="en">
+<title>Acme Console help (fictional sample)</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Sample: fictional"/>
+</topicmeta>
+<keydef keys="product"><topicmeta><keywords><keyword>Acme Console</keyword></keywords></topicmeta></keydef>
+<keydef keys="version"><topicmeta><keywords><keyword>4.2</keyword></keywords></topicmeta></keydef>
+<keydef keys="rig"><topicmeta><keywords><keyword>test rig TR-2</keyword></keywords></topicmeta></keydef>
+<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<keydef keys="service"><topicmeta><keywords><keyword>the readings service</keyword></keywords></topicmeta></keydef>
+<topicref href="topics/reset-mfa-for-a-locked-out-user.dita" type="task"/>
+<topicref href="topics/a-report-shows-access-is-denied.dita" type="troubleshooting"/>
+<topicref href="topics/workspace-roles.dita" type="reference"/>
+<topicref href="topics/acme-console-4-2-release-notes.dita" type="concept"/>
+<topicref href="topics/shared-drives-questions-and-answers.dita" type="concept"/>
+<topicref href="topics/how-single-sign-on-works.dita" type="concept"/>
+<topicref href="topics/sop-it-021.dita" type="task"/>
+<topicref href="topics/ep-tr2-004.dita" type="task"/>
+<topicref href="topics/mp-ps104-01.dita" type="task"/>
+<topicref href="topics/tr-2026-07.dita" type="concept"/>
+<topicref href="topics/dg-api-002.dita" type="task"/>
+<topicref href="topics/rb-read-003.dita" type="task"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/reset-mfa-for-a-locked-out-user.dita" type="task"/><topicref href="topics/sop-it-021.dita" type="task"/><topicref href="topics/ep-tr2-004.dita" type="task"/><topicref href="topics/mp-ps104-01.dita" type="task"/><topicref href="topics/dg-api-002.dita" type="task"/><topicref href="topics/rb-read-003.dita" type="task"/></relcell><relcell><topicref href="topics/a-report-shows-access-is-denied.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/workspace-roles.dita" type="reference"/></relcell></relrow>
+</reltable>
+</map>

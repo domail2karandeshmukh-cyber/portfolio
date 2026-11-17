@@ -4,14 +4,16 @@
   <p>Turn Markdown documents into a DITA 1.3 project: a map, a typed topic for each document (task, concept, reference or troubleshooting), keys for the variables, DITAVAL filters for each group of readers, and a relationship table. Then publish it with DITA Open Toolkit.</p>
  </div>
 </div>
+<div id="dt-slot"><div id="dt-start"></div></div>
 <div class="dt">
  <section class="dt-card" aria-labelledby="dt-make">
   <h2 id="dt-make">Make a project</h2>
-  <fieldset class="dt-docs"><legend>Documents</legend><div id="dt-list"></div>
+  <p class="ann-btns"><button class="btn line sm" type="button" id="dt-samples">Document sets</button></p>
+  <fieldset class="dt-docs"><legend>Documents</legend><div id="dt-list"><p class="kb-hint">No documents yet. Choose a document set above, or add Markdown files.</p></div>
    <p class="ann-btns"><label class="btn line sm" for="dt-files">Add Markdown files</label><input class="st-file" id="dt-files" type="file" accept=".md,.markdown,text/markdown,text/plain" multiple></p>
   </fieldset>
   <div class="gd dt-meta">
-   <label>Map title <input id="dt-title" type="text" maxlength="140" value="Acme Console help"></label>
+   <label>Map title <input id="dt-title" type="text" maxlength="140" value="Documentation"></label>
    <div class="gd-two"><label>Author <input id="dt-author" type="text" maxlength="80"></label><label>Version <input id="dt-version" type="text" maxlength="20" value="1.0"></label></div>
    <label>Status <input id="dt-status" type="text" maxlength="40" value="Draft"></label>
   </div>
@@ -26,12 +28,8 @@
  </section>
  <section class="dt-card" aria-labelledby="dt-pub">
   <h2 id="dt-pub">Published with DITA Open Toolkit</h2>
-  <p>The workbench's six templates, made into one project by the same code as this page, then validated against the OASIS DITA 1.3 DTDs and published by DITA Open Toolkit <span id="dt-ver">4</span>. The HTML5 is filtered for the general reader; the PDF keeps the content for administrators.</p>
-  <ul class="dt-links">
-   <li><a href="/studio/dita/sample/html5/index.html">HTML5 output</a>, as DITA-OT wrote it</li>
-   <li><a href="/studio/dita/sample/acme-console-help.pdf">PDF output</a></li>
-   <li><a href="/studio/dita/sample/acme-console-help-dita.zip" download>The DITA source</a>: map, topics and filters</li>
-  </ul>
+  <p>Each document set below was made into a project by the same code as this page, validated against the OASIS DITA 1.3 DTDs, and published by DITA Open Toolkit <span id="dt-ver">4</span>. The HTML5 is filtered for the general reader; where a set has content for administrators, the PDF keeps it.</p>
+  <div class="tbl"><table class="dt-table" id="dt-published"><thead><tr><th scope="col">Document set</th><th scope="col">Topics</th><th scope="col">Published</th><th scope="col">Output</th></tr></thead><tbody></tbody></table></div>
   <p class="st-note" id="dt-when"></p>
  </section>
  <section class="dt-card" aria-labelledby="dt-flare">

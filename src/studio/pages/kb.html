@@ -5,13 +5,14 @@
  </div>
 </div>
 <div class="st-bar" role="toolbar" aria-label="Knowledge base">
- <button class="btn line sm" type="button" id="kb-sample">Open the sample</button>
+ <button class="btn line sm" type="button" id="kb-samples">Samples</button>
  <button class="btn line sm" type="button" id="kb-addcat">Add a category</button>
  <label class="btn line sm" for="kb-open">Open</label><input class="st-file" id="kb-open" type="file" accept=".zip,.json,application/zip,application/json">
  <span class="sep" aria-hidden="true"></span>
  <button class="btn ink sm" type="button" id="kb-export">Export (ZIP)</button>
 </div>
 <p class="st-status" id="kb-status" role="status" aria-live="polite"></p>
+<div id="kb-slot"><div id="kb-start"></div></div>
 <div class="kb">
  <nav class="kb-nav" aria-label="Categories, sections and articles"><ul class="kb-tree" id="kb-tree"></ul></nav>
  <section class="kb-main" aria-label="Article">
@@ -23,6 +24,7 @@
    <div id="kb-fields" class="gd">
     <label>Title <input id="kb-title" type="text" maxlength="150"></label>
     <div class="gd-two"><label>Labels <small>Separated by commas</small><input id="kb-tags" type="text"></label><label>Status <select id="kb-statusbox"><option value="draft">Draft</option><option value="published">Published</option></select></label></div>
+    <label>Who can read it <select id="kb-audience"><option value="customers">Everyone: customers and visitors</option><option value="agents">Agents only: internal</option></select></label>
     <label>Article <small>Markdown, as in the workbench</small><textarea id="kb-body" rows="14"></textarea></label>
     <p class="kb-check" id="kb-check" role="status"></p>
     <p class="ann-btns"><button class="btn line sm" type="button" id="kb-version">Save a version</button><button class="btn line sm" type="button" id="kb-bench">Open in the workbench</button><button class="btn line sm" type="button" id="kb-del">Delete the article</button></p>
@@ -31,7 +33,7 @@
   </div>
  </section>
  <section class="kb-side" aria-label="Preview">
-  <div class="wb-formats kb-views" role="group" aria-label="Preview"><button type="button" data-view="edit" aria-pressed="true">This article</button><button type="button" data-view="center" aria-pressed="false">Help center</button></div>
+  <div class="wb-formats kb-views" role="group" aria-label="Preview"><button type="button" data-view="edit" aria-pressed="true">This article</button><button type="button" data-view="center" aria-pressed="false">Help center</button><button type="button" data-view="agent" aria-pressed="false">Agent view</button></div>
   <div id="kb-preview" class="kb-preview"></div>
  </section>
 </div>

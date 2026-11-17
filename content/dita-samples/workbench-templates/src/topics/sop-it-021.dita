@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
+<task id="grant-temporary-administrator-access" xml:lang="en">
+<title>Grant temporary administrator access</title>
+<shortdesc>Standard operating procedure for the IT service desk. Use it when an engineer needs administrator rights in <ph keyref="product">Acme Console</ph> for a fixed time. Fictional sample.</shortdesc>
+<taskbody>
+<prereq>
+<ul><li>The request names the engineer, the workspace, the reason, and the end date.</li><li>The engineer's manager has approved the request in the ticket.</li><li>Access lasts eight hours at most. For a longer time, send the request to the IAM team.</li></ul>
+</prereq>
+<steps>
+<step><cmd>In <ph keyref="product">Acme Console</ph>, open <uicontrol>Access</uicontrol> &gt; <uicontrol>Temporary roles</uicontrol>.</cmd></step>
+<step><cmd>Select <uicontrol>Grant</uicontrol>, and then choose the engineer and the workspace.</cmd></step>
+<step><cmd>Set the end time to the one in the request.</cmd></step>
+<step><cmd>Paste the ticket number in <uicontrol>Reason</uicontrol>, and then select <uicontrol>Save</uicontrol>.</cmd></step>
+<step><cmd>Add a comment to the ticket with the end time, and set the ticket to <uicontrol>Waiting for expiry</uicontrol>.</cmd></step>
+</steps>
+<result>
+<p>The engineer appears under <b>Temporary roles</b> with the end time you set. When that time passes, the role ends on its own and the ticket closes.</p>
+</result>
+<postreq>
+<p><b>Records</b></p>
+<p>The change log in <ph keyref="product">Acme Console</ph> keeps who granted the role, to whom, and why. Auditors read it each quarter.</p>
+</postreq>
+</taskbody>
+</task>

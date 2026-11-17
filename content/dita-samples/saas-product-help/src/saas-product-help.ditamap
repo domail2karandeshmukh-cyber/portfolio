@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="saas-product-help" xml:lang="en">
+<title>Ledgerly help: sign-in and access</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Sample: fictional"/>
+</topicmeta>
+<topicref href="topics/fix-sign-in-problems.dita" type="task"/>
+<topicref href="topics/reset-your-password.dita" type="task"/>
+<topicref href="topics/why-your-account-is-locked-and-how-to-unlock-it.dita" type="concept"/>
+<topicref href="topics/manage-users-and-roles.dita" type="task"/>
+<topicref href="topics/sign-in-and-security-questions-and-answers.dita" type="concept"/>
+</map>

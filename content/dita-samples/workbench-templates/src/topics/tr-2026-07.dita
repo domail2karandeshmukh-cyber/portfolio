@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
+<concept id="test-report-seal-leakage-on-feed-pump-b" xml:lang="en">
+<title>Test report: seal leakage on feed pump B</title>
+<shortdesc>A summary of a three-week test on a fictional pump. Written for this portfolio.</shortdesc>
+<conbody>
+<section><title>Summary</title>
+<p>The seal on feed pump B leaked in two of six weekly inspections. A new seal of the same type stopped the leak. The cause was a worn shaft sleeve, not the seal.</p>
+</section>
+<section><title>What was tested</title>
+<p>Each week, the technician recorded the discharge pressure, the bearing temperature, the vibration, and any visible leak. The test ran for three weeks before the repair and three weeks after it.</p>
+</section>
+<section><title>Results</title>
+<simpletable><sthead><stentry>Week</stentry><stentry>Leak seen</stentry><stentry>Vibration</stentry></sthead><strow><stentry>1</stentry><stentry>No</stentry><stentry>2.8 mm/s</stentry></strow><strow><stentry>2</stentry><stentry>Yes</stentry><stentry>3.6 mm/s</stentry></strow><strow><stentry>3</stentry><stentry>Yes</stentry><stentry>4.1 mm/s</stentry></strow><strow><stentry>4</stentry><stentry>No</stentry><stentry>2.7 mm/s</stentry></strow></simpletable>
+</section>
+<section><title>Conclusion</title>
+<p>Replace the shaft sleeve with the seal at the next overhaul of each pump of this type. Add a vibration check to the monthly inspection, so the technician sees a worn sleeve before the seal leaks.</p>
+</section>
+</conbody>
+</concept>

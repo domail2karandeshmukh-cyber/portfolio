@@ -58,8 +58,8 @@
   function approvedBy(kind2) { return reviewsOf(D.meta.version).filter(function (r) { return r.kind === kind2 && r.outcome === "approve"; })[0]; }
   function needed() { return ["editorial", "technical"].concat(D.safety ? ["safety"] : []); }
   function paint() {
-    if (!D) { $("#dc-doc").hidden = true; $("#dc-none").hidden = false; return; }
-    $("#dc-doc").hidden = false; $("#dc-none").hidden = true;
+    if (!D) { $("#dc-doc").hidden = true; sw.inline(true); return; }
+    $("#dc-doc").hidden = false; sw.inline(false);
     var m = D.meta;
     ["id", "title", "version", "author", "owner", "reviewer", "date"].forEach(function (k) { var el = $("#dc-" + k); if (el && document.activeElement !== el) el.value = m[k] || ""; });
     $("#dc-safety").checked = !!D.safety;
@@ -135,13 +135,21 @@
     D.meta.status = "Draft"; D.source = withMeta(D.source, D.meta);
     log("Opened", from); save(); paint(); say("Opened " + from + ". It starts as a draft.");
   }
-  $("#dc-sample").addEventListener("click", function () {
-    fetch("/studio/templates.json").then(function (r) { return r.json(); }).then(function (t) { start(t.filter(function (x) { return x.id === "maintenance-procedure"; })[0].source, "the sample maintenance procedure (fictional)"); });
+  /* The samples: documents from the fictional scenarios, each with its control fields already in the front matter. */
+  var panel = Kit.start($("#dc-start"), {
+    tool: "control", title: "Open a document",
+    lead: "Four documents of different kinds, each on its way through review: a maintenance procedure, an IT standard operating procedure, a security runbook, and release notes. Open one and take it from draft to published, with its reviews and audit trail. Or open your own.",
+    open: function (s) { say("Opening " + s.title + "…"); return Kit.fetchText(s.url).then(function (t) { start(t, s.title + " (" + s.kind.toLowerCase() + ", fictional)"); sw.close(); }); },
+    fail: function (e) { say(e.message, true); },
+    files: [{ label: "Open a Markdown file", input: "dc-file" }],
+    extra: '<button type="button" class="btn line sm" id="dc-bench2">Open my workbench document</button>',
   });
+  var sw = Kit.startSwitch(panel, $("#dc-slot"), $("#dc-samples"));
+  $("#dc-bench2").addEventListener("click", function () { $("#dc-bench").click(); });
   $("#dc-bench").addEventListener("click", function () {
     var s = null; try { s = localStorage.getItem("wb:doc"); } catch (e) {}
     if (!s || !s.trim()) return say("The workbench has no document in this browser yet.", true);
-    start(s, "your document from the workbench");
+    start(s, "your document from the workbench"); sw.close();
   });
   $("#dc-file").addEventListener("change", function () { var f = this.files[0]; this.value = ""; Kit.readText(f).then(function (t) { start(t, f.name); }, function (e) { say(e.message, true); }); });
 
