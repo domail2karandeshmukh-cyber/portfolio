@@ -8,7 +8,7 @@ On the portfolio the script also opens April and listens: she says her greeting 
 question in words and aloud, and starts her tour from a recording. Every recording of every language is fetched.
 Needs Python with Playwright and a Chromium (python3 -m playwright install chromium), or Google Chrome with CHROME set.
 """
-import json, os, pathlib, re, sys
+import json, os, pathlib, re, subprocess, sys
 from playwright.sync_api import sync_playwright
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -65,7 +65,9 @@ with sync_playwright() as p:
     page.goto(home + "/", wait_until="load", timeout=45000)
     page.wait_for_timeout(1500)
     clips = page.evaluate("JSON.parse(document.getElementById('voice').textContent)")
-    note(len(clips) >= 9, f"her fixed lines have recordings kept with the site: {len(clips)} of 9")
+    lines = json.loads(subprocess.run(["node", "-e", "console.log(JSON.stringify(Object.keys(require(process.argv[1]).LINES.en)))", str(ROOT / "lib/voice-lines.cjs")], capture_output=True, text=True, check=True).stdout)
+    missing = [k for k in lines if k not in clips]
+    note(not missing, f"her fixed lines have recordings kept with the site: {len(lines) - len(missing)} of {len(lines)}" + (f", none for {', '.join(missing)}" if missing else ""))
     page.click(".dock")
     page.wait_for_timeout(3000)
     note(len(sounds()) == 1 and sounds()[0] > 3 and not asked, f"she says her greeting when her panel opens, from its recording: {sounds()} s" + (f", asked of her service: {asked[:2]}" if asked else ""))
