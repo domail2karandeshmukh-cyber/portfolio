@@ -44,7 +44,33 @@ for (const [id, im] of Object.entries(C.images)) {
 }
 
 // The library, and the films
-const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings) };
+// April's recorded lines: content/voice/<language>/<line>.<fingerprint of its words>.mp3, made by scripts/record-voice.mjs.
+// A recording is published only while its words are the words of the line. A line without one is spoken by her service.
+const Voice = createRequire(import.meta.url)("./lib/voice-lines.cjs");
+const recorded = {};
+for (const [code, lines] of Object.entries(Voice.LINES)) {
+  recorded[code] = {};
+  for (const [id, text] of Object.entries(lines)) {
+    const name = Voice.file(id, text);
+    if (!existsSync(`content/voice/${code}/${name}`)) continue;
+    await fs.mkdir(`${OUT}/voice/${code}`, { recursive: true });
+    await fs.copyFile(`content/voice/${code}/${name}`, `${OUT}/voice/${code}/${name}`);
+    recorded[code][id] = name;
+  }
+}
+{
+  const all = Object.keys(Voice.LINES.en).length, have = Object.entries(recorded).map(([code, r]) => `${code} ${Object.keys(r).length}`);
+  console.log(`voice: recordings of April's ${all} lines: ${have.join(", ")}${Object.values(recorded).every((r) => Object.keys(r).length === all) ? "" : ". Run the workflow \"Record April's voice\" for the rest."}`);
+}
+// Every project that has a live site, for the Projects menu in the header and the row of links at the top of the home page.
+const liveSites = [
+  ...C.projects.filter((p) => p.live).map((p) => ({ name: p.name, href: p.live, label: p.liveLabel || "Open live demo" })),
+  ...C.more.flatMap((m) => m.links.filter(([, h]) => /^https?:/.test(h)).map(([t, h]) => ({ name: m.name, href: h, label: t }))),
+];
+const pmenu = (all) => `<details class="pm"><summary>Projects</summary><div class="pm-menu">${liveSites
+  .map((p) => `<a href="${p.href}" target="_blank" rel="noopener"><b translate="no">${esc(p.name)}</b><small>${esc(p.label)}</small></a>`)
+  .join("")}<a class="pm-all" href="${all}">All projects</a></div></details>`;
+const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects") };
 const library = await buildLibrary({ C, OUT, source, common });
 // The style guide: its rules, and what the check found in each document of the library.
 const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/main/src/style.js` });
@@ -62,7 +88,7 @@ for (const t of C.workbench.templates) {
 }
 const bench = await template("src/workbench.html");
 await fs.mkdir(`${OUT}/workbench`, { recursive: true });
-await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
+await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
 await library.extra({ path: "/workbench", title: "Workbench", description: "Write a document, check it against the style guide as you type, and publish it for each reader as Markdown, HTML or DITA.", only: "search",
   kind: "Tool", shelf: "Library", text: [{ id: "", title: "", text: "Write a document in Markdown, check it against the style guide as you type, and publish it for more than one reader as Markdown, as HTML for a help center, or as DITA. It runs in your browser." }] });
 await library.finish();
@@ -182,6 +208,9 @@ for (const loc of locales) {
     // The brief the drafting model follows is kept with the site's source, where anyone can read it.
     brief: `${S.links.github}/${S.repo}/blob/main/content/desk/brief.md`,
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
+    voice: json(recorded[loc.code] || {}),
+    pmenu: pmenu("#projects"),
+    livelinks: liveSites.map((p) => `<a href="${p.href}" target="_blank" rel="noopener" translate="no">${esc(p.name)}</a>`).join(""),
   };
   for (const d of C.docs) tokens[`doc:${d.id}`] = byId[d.id].url;
   const slots = { ...parts, rev, lang: menu(loc), hreflang, langlinks: locales.length < 2 ? esc(`${S.name}, ${S.location}`) : locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}">${esc(l.name)}</a>`).join("") };

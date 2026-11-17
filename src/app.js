@@ -384,7 +384,7 @@
   });
 
   /* Header: mark the section in view */
-  var links = $$(".home .nav nav a");
+  var links = $$('.home .nav nav a[href^="#"]');
   if (links.length && "IntersectionObserver" in window) {
     var so = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
@@ -393,6 +393,9 @@
           if (a.getAttribute("href") === "#" + e.target.id) a.setAttribute("aria-current", "true");
           else a.removeAttribute("aria-current");
         });
+        // The Projects menu stands for its section in the row of links.
+        var pm = $(".nav .pm");
+        if (pm) pm.classList.toggle("here", e.target.id === "projects");
       });
     }, { rootMargin: "-45% 0px -50% 0px" });
     links.forEach(function (a) { var s = $(a.getAttribute("href")); if (s) so.observe(s); });
@@ -419,7 +422,7 @@
 
   /* ---------- April ---------- */
   var panel = $("#april"), log = $("#log"), q = $("#q"), orb = $("#orb"), dock = $(".dock"), sugg = $("#sugg"), speakBtn = $("#speak");
-  var hist = [], opener = null, greeted = false, voiceOn = store("april-voice") === "1";
+  var hist = [], opener = null, greeted = false, voiceOn = store("april-voice") !== "0";      // her voice is on until a visitor mutes it
   var ctx = null, node = null, meter = null, level = 0, tourOff = function () {}, tourSay = function () {};
   // While she thinks, or speaks in the browser's own voice, her orb beats. With a recorded voice it moves to the sound.
   function speaking(on, heard) {
@@ -458,7 +461,6 @@
   function hush() {
     try { if (node) { node.onended = null; node.stop(); } } catch (e) {}
     node = null;
-    if (window.speechSynthesis) speechSynthesis.cancel();
     speaking(false);
   }
   function playBytes(buf, done, still) {
@@ -482,45 +484,70 @@
     for (var i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i);
     return a.buffer;
   }
-  /* The browser's own voices are the fallback. April speaks with a woman's voice in the page's language,
-     or not at all: where the device offers only a man's voice, her words stay on the screen. */
-  var WOMAN = /female|woman|samantha|karen|moira|tessa|fiona|victoria|allison|ava|susan|serena|zira|jenny|aria|libby|sonia|michelle|emma|olivia|clara|am[eé]lie|audrey|marie|denise|julie|c[eé]line|anna|petra|katja|vicki|marlene|helena|m[oó]nica|paulina|elvira|luc[ií]a|sabina|helia|lekha|swara|heera|kalpana/i;
-  var MAN = /\bmale\b|\bman\b|daniel|alex\b|fred\b|tom\b|thomas|david|mark\b|george|james|rishi|aaron|arthur|gordon|oliver|ravi|hemant|madhur|jorge|diego|juan|carlos|pablo|[aá]lvaro|martin|stefan|hans\b|markus|conrad|killian|yannick|klaus|nicolas|henri|paul\b|guy\b|ryan|eric\b|roger|brian|christopher|william|liam|andrew|reed\b|rocko|eddy|grandpa/i;
-  function browserVoice(text, done) {
-    if (!window.speechSynthesis) return false;
-    speechSynthesis.cancel();
-    var mine = speechSynthesis.getVoices().filter(function (v) { return v.lang.toLowerCase().indexOf(LANG) === 0; });
-    function score(v) {
-      var woman = WOMAN.test(v.name) || (/google/i.test(v.name) && !/\bmale\b/i.test(v.name));
-      return (woman ? 4 : MAN.test(v.name) ? -8 : 0) + (/natural|neural|premium|enhanced|online/i.test(v.name) ? 2 : 0) + (v.localService ? 0 : 1);
-    }
-    mine.sort(function (a, b) { return score(b) - score(a); });
-    if (mine[0] && score(mine[0]) < 0) return false;
-    var u = new SpeechSynthesisUtterance(text.replace(/https?:\/\/\S+/g, ""));
-    if (mine[0]) u.voice = mine[0];
-    u.lang = mine[0] ? mine[0].lang : LANG;
-    u.rate = 0.98;
-    u.onstart = function () { speaking(true); };
-    u.onend = u.onerror = function () { speaking(false); if (done) done(); };
-    speechSynthesis.speak(u);
-    return true;
-  }
-  // One of her fixed lines, in her recorded voice. The browser's voice reads it only if the recording can't be had.
-  function line(name, text) {
-    fetch("/api/april?say=" + name + "&lang=" + LANG + "&v=7").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
+  /* Her fixed lines are recordings kept with the site. A line that has no recording yet is asked of her service.
+     She has one voice. When it can't be had, her words stay on the screen and nothing else speaks for her. */
+  var CLIPS = read("voice", {});
+  function clipUrl(name) { return CLIPS[name] ? "/voice/" + LANG + "/" + CLIPS[name] : "/api/april?say=" + name + "&lang=" + LANG + "&v=8"; }
+  function line(name) {
+    fetch(clipUrl(name)).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
       .then(function (buf) { if (voiceOn) return playBytes(buf); })
-      .catch(function () { if (voiceOn) browserVoice(text); });
+      .catch(function () {});
   }
-  function say(text, audio) {
-    if (!voiceOn) return;
-    if (audio) playBytes(bytes(audio)).catch(function () { browserVoice(text); });
-    else browserVoice(text);
+  function say(audio) {
+    if (voiceOn && audio) playBytes(bytes(audio)).catch(function () {});
   }
+  // Every control that mutes her shows the same state: the button in her panel, and the one in the tour's bar.
+  var voiceButtons = [];
   function setVoice(on) {
     voiceOn = on;
     store("april-voice", on ? "1" : "0");
-    if (speakBtn) speakBtn.setAttribute("aria-pressed", on);
+    voiceButtons.forEach(function (b) {
+      var label = on ? I.voiceIsOn : I.voiceIsOff, text = $("span", b);
+      b.setAttribute("aria-pressed", on);
+      if (text) text.textContent = label; else b.setAttribute("aria-label", label);
+    });
     if (!on) hush();
+  }
+  /* What the library says about a question: the three sections that match it best. They go with the question,
+     so that she can answer from the documents themselves and link to the section she used. */
+  var LIB = null, SKIP = /^(the|and|for|with|what|which|where|when|does|how|are|can|you|his|her|about|tell|show|explain|karan|deshmukh|this|that|from|have|has|who|why|did|was|will|would|should|could|there|their|into|more|most|some|any|all|use|used|using|him|she|they|them|its|our|your|please|give|find|say|says|mean|means|document|documents|docs|library|site|page|work|write|writes|written|read|open|handle|deal|cover|include|contain|provide|need|want|help|happen|look|see|know|list|define|different|difference|between|like|kind|thing|way|part|much|many|long|really|just|also|then|than|been|being|were|here|make|made|take|get|got|doe|thi)$/;
+  function passages(question) {
+    LIB = LIB || fetch("/search.json").then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(function (docs) {
+      // Every section once, with the words it can be found by: its title, its document, and its project.
+      var all = [];
+      docs.forEach(function (d) {
+        (d.s || []).forEach(function (sec) { all.push({ d: d, sec: sec, title: (d.t + " " + (d.p || "") + " " + sec[1]).toLowerCase(), text: String(sec[2] || "").toLowerCase() }); });
+      });
+      return all;
+    });
+    return LIB.then(function (all) {
+      var terms = (question.toLowerCase().match(/[a-z0-9][a-z0-9-]{2,}/g) || []).map(function (w) { return w.length > 4 ? w.replace(/s$/, "") : w; })
+        .filter(function (w, i, list) { return !SKIP.test(w) && list.indexOf(w) === i; });
+      // A word that few sections hold says more about a question than a word that most of them hold.
+      var weight = {}, known = 0;
+      terms.forEach(function (w) {
+        var held = all.filter(function (x) { return x.title.indexOf(w) > -1 || x.text.indexOf(w) > -1; }).length;
+        weight[w] = held ? Math.log(1 + all.length / held) : 0;
+        known += weight[w];
+      });
+      if (!known) return [];
+      var found = [];
+      all.forEach(function (x) {
+        var score = 0, at = -1, most = 0;
+        terms.forEach(function (w) {
+          var pos = x.text.indexOf(w);
+          if (x.title.indexOf(w) > -1) score += weight[w] * 1.5;
+          if (pos > -1) { score += weight[w]; if (weight[w] > most) { most = weight[w]; at = pos; } }
+        });
+        if (score) found.push({ x: x, score: score / known, at: Math.max(0, at) });
+      });
+      found.sort(function (m, n) { return n.score - m.score; });
+      // Only a section that holds most of what the question asks about is sent: a weak match would lead her astray.
+      return found.filter(function (f) { return f.score >= 0.6; }).slice(0, 2).map(function (f) {
+        var from = Math.max(0, f.at - 160), text = String(f.x.sec[2] || "");
+        return { t: f.x.d.t, s: f.x.sec[1], u: f.x.d.u + (f.x.sec[0] ? "#" + f.x.sec[0] : ""), x: (from ? "…" : "") + text.slice(from, from + 620), k: true };
+      });
+    }).catch(function () { LIB = null; return []; });
   }
 
   if (panel) (function () {
@@ -578,28 +605,99 @@
       for (i = 0; i < FAQ.length; i++) if (new RegExp(FAQ[i].keys).test(s)) return FAQ[i].a;
       return I.offline + " " + body.dataset.linkedin;
     }
+    var asked = {}, chipFor = {};
+    // The chat is kept for this tab, so it is still there after a visit to a document she offered.
+    function keep() {
+      try {
+        var last = $$(".msg", log).filter(function (m) { return !m.classList.contains("wait"); }).slice(-40);
+        sessionStorage.setItem("april-chat", JSON.stringify({ log: last.map(function (m) { return m.outerHTML; }).join(""), hist: hist, asked: asked }));
+      } catch (e) {}
+    }
+    function restore() {
+      try {
+        var was = JSON.parse(sessionStorage.getItem("april-chat") || "null");
+        if (!was || !was.log) return false;
+        log.innerHTML = was.log;
+        hist = Array.isArray(was.hist) ? was.hist : [];
+        asked = was.asked || {};
+        return true;
+      } catch (e) { return false; }
+    }
+    function greet() {
+      var h = new Date().getHours();
+      add("a", esc((h < 12 ? I.morning : h < 18 ? I.afternoon : I.evening) + " " + I.intro));
+    }
+    // The suggested questions stay under the chat. After an answer, the ones on its subject come first and the ones already asked go last.
+    function order(text, answer) {
+      var both = ((text || "") + " " + (answer || "")).toLowerCase().trim();
+      FAQ.map(function (f, i) { return { f: f, i: i, rank: asked[f.q] ? 2 : both && new RegExp(f.keys).test(both) ? 0 : 1 }; })
+        .sort(function (a, b) { return a.rank - b.rank || a.i - b.i; })
+        .forEach(function (x) { var b = chipFor[x.f.q]; if (b) { b.classList.toggle("asked", !!asked[x.f.q]); sugg.appendChild(b); } });
+      sugg.scrollLeft = 0;
+    }
+    // Her words, then what the answer carries: a button, and the sections of the library it rests on.
+    function finish(w, text, d) {
+      speaking(false);
+      w.className = "msg a";
+      w.innerHTML = rich(d.answer);
+      hist.push({ role: "user", content: text }, { role: "assistant", content: d.answer });
+      hist = hist.slice(-6);
+      if (d.action) act(d.action, w, d.answer);
+      if (d.sources && d.sources.length) {
+        var src = document.createElement("p");
+        src.className = "src";
+        src.innerHTML = "<span>" + esc(I.sources) + "</span>" + d.sources.map(function (x) { return '<a href="' + esc(x.href) + '">' + esc(x.title) + "</a>"; }).join("");
+        w.appendChild(src);
+      }
+      order(text, d.answer);
+      log.scrollTop = log.scrollHeight;
+      keep();
+    }
+    // A reply comes as lines: her words on the first, shown at once, and her voice on the second when it is ready.
+    function lines(r, each) {
+      function feed(text) { text.split("\n").forEach(function (l) { if (l.trim()) { try { each(JSON.parse(l)); } catch (e) {} } }); }
+      if (!r.body || !r.body.getReader || !window.TextDecoder) return r.text().then(feed);
+      var reader = r.body.getReader(), dec = new TextDecoder(), rest = "";
+      return (function pump() {
+        return reader.read().then(function (x) {
+          if (x.value) rest += dec.decode(x.value, { stream: true });
+          var cut = rest.lastIndexOf("\n");
+          if (cut > -1) { feed(rest.slice(0, cut)); rest = rest.slice(cut + 1); }
+          if (!x.done) return pump();
+          if (rest.trim()) feed(rest);
+        });
+      })();
+    }
     function ask(text) {
       text = String(text || "").trim();
       if (!text) return;
-      sugg.hidden = true;
       hush();
       add("u", esc(text));
-      var w = add("a wait", esc(I.thinking));
+      asked[text] = 1;
+      var w = add("a wait", esc(I.thinking)), done = false;
       speaking(true);
-      fetch("/api/april", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: text, history: hist, lang: LANG, voice: voiceOn }) })
-        .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-        .then(function (d) { if (!d.answer) throw 0; return d; })
-        .catch(function () { return { answer: offline(text) }; })
-        .then(function (d) {
-          speaking(false);
-          w.className = "msg a";
-          w.innerHTML = rich(d.answer);
-          log.scrollTop = log.scrollHeight;
-          hist.push({ role: "user", content: text }, { role: "assistant", content: d.answer });
-          hist = hist.slice(-6);
-          say(d.answer, d.audio);
-          if (d.action) act(d.action, w, d.answer);
+      function fail() { if (!done) { done = true; finish(w, text, { answer: offline(text) }); } }
+      // A question about Karan or about her is answered from her notes. A question about what a document says takes passages with it.
+      var personal = /\b(he|his|him|karan|karan's|you|your|yourself|april)\b/i.test(text) || FAQ.some(function (f) { return f.q.toLowerCase() === text.toLowerCase(); });
+      Promise.race([personal ? [] : passages(text), new Promise(function (ok) { setTimeout(function () { ok([]); }, 900); })]).then(function (found) {
+        return fetch("/api/april", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ q: text, history: hist, lang: LANG, voice: voiceOn, context: found, stream: true }) });
+      }).then(function (r) {
+        if (!r.ok) throw 0;
+        return lines(r, function (d) {
+          if (d.answer && !done) { done = true; finish(w, text, d); }
+          if (d.audio && done) say(d.audio);
         });
+      }).then(fail, fail);
+    }
+    function fresh() {
+      hush();
+      log.innerHTML = "";
+      hist = [];
+      asked = {};
+      try { sessionStorage.removeItem("april-chat"); } catch (e) {}
+      greet();
+      order();
+      q.focus();
     }
     function openPanel(pre) {
       tourOff();
@@ -609,8 +707,8 @@
       unlock();
       if (!greeted) {
         greeted = true;
-        var h = new Date().getHours();
-        add("a", esc((h < 12 ? I.morning : h < 18 ? I.afternoon : I.evening) + " " + I.intro));
+        if (restore()) { $$(".msg.wait", log).forEach(function (m) { m.remove(); }); order(); log.scrollTop = log.scrollHeight; }
+        else greet();
       }
       if (pre) ask(pre); else q.focus();
     }
@@ -632,14 +730,18 @@
       b.textContent = f.q;
       b.addEventListener("click", function () { unlock(); ask(f.q); });
       sugg.appendChild(b);
+      chipFor[f.q] = b;
     });
-    speakBtn.setAttribute("aria-pressed", voiceOn);
+    $("#april-new").addEventListener("click", fresh);
+    voiceButtons.push(speakBtn);
+    setVoice(voiceOn);
     speakBtn.addEventListener("click", function () {
       unlock();
       setVoice(!voiceOn);
       add("note", esc(voiceOn ? I.voiceOn : I.voiceOff));
-      // The first thing a visitor hears is her own voice, not the device's.
-      if (voiceOn) line("voiceon", I.voiceOn);
+      // What a visitor hears first is her own voice, saying that it is on.
+      if (voiceOn) line("voiceon");
+      keep();
     });
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition, mic = $("#mic");
     if (SR) {
@@ -649,7 +751,7 @@
         var r = new SR();
         r.lang = { en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES", hi: "hi-IN" }[LANG] || "en-US";
         mic.classList.add("on");
-        r.onresult = function (e) { setVoice(true); ask(e.results[0][0].transcript); };
+        r.onresult = function (e) { ask(e.results[0][0].transcript); };
         r.onend = r.onerror = function () { mic.classList.remove("on"); };
         r.start();
       });
@@ -661,9 +763,9 @@
   if (tour && I.tour1) (function () {
     var stops = tour.dataset.stops.split(","), cap = $("#tour-say"), count = $("#tour-n"), fill = $(".tour-bar b", tour), pauseBtn = $("#tour-pause");
     var at = -1, run = 0, paused = false, wait = 0, clips = {}, from = null;
-    // Each line is recorded once on the server, then served from the CDN.
+    // Each line is a recording. A line that fails is asked for again the next time it is wanted.
     function clip(i) {
-      if (!clips[i]) clips[i] = fetch("/api/april?say=tour" + (i + 1) + "&lang=" + LANG + "&v=7").then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); });
+      if (!clips[i]) clips[i] = fetch(clipUrl("tour" + (i + 1))).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); }).catch(function (e) { clips[i] = null; throw e; });
       return clips[i];
     }
     function go(i) {
@@ -686,23 +788,15 @@
         clearTimeout(wait);
         wait = setTimeout(function () { if (mine === run) go(i + 1); }, 700);
       }
-      // No recorded voice: the browser's own voice reads the line, or the caption stands alone for a reading.
+      // No voice, because she is muted or the recording can't be had: the caption stands for the time it takes to read it.
       function quiet() {
         if (mine !== run) return;
-        var began = Date.now(), read = 1500 + text.length * 50;
         cap.setAttribute("aria-live", "polite");
         cap.textContent = text;
-        var spoke = browserVoice(text, function () {
-          if (mine !== run) return;
-          var spent = Date.now() - began;
-          if (spent > 600 + text.length * 25) return next();
-          // It stopped at once, so it could not speak. Leave the caption up long enough to read.
-          clearTimeout(wait);
-          wait = setTimeout(next, Math.max(0, read - spent));
-        });
-        // The timer is also the way on when a browser's voice never reports that it has finished.
-        wait = setTimeout(next, spoke ? 2500 + text.length * 95 : read);
+        clearTimeout(wait);
+        wait = setTimeout(next, 1500 + text.length * 50);
       }
+      if (!voiceOn) return quiet();
       clip(i).then(function (buf) { if (mine === run) return playBytes(buf.slice(0), next, function () { return mine === run; }); }).catch(quiet);
       if (i + 1 < stops.length) clip(i + 1).catch(function () {});
     }
@@ -754,6 +848,13 @@
       });
     });
     pauseBtn.addEventListener("click", function () { if (paused) { unlock(); go(at); } else pause(); });
+    var mute = $("#tour-voice");
+    if (mute) {
+      voiceButtons.push(mute);
+      setVoice(voiceOn);
+      // The stop she is at starts again, with her voice or without it.
+      mute.addEventListener("click", function () { unlock(); setVoice(!voiceOn); if (at >= 0 && !paused) go(at); });
+    }
     $("#tour-next").addEventListener("click", function () { unlock(); go(at + 1); });
     $("#tour-x").addEventListener("click", function () { if (tour.classList.contains("solo")) { clearTimeout(wait); hush(); hide(); } else end(); });
     // A visitor who scrolls away takes over: the tour waits until they resume it.
@@ -939,6 +1040,13 @@
   /* On a phone the list of pages is one scrolling row: bring the current page into view. */
   var current = $(".toc [aria-current]");
   if (current) current.parentNode.scrollLeft += current.getBoundingClientRect().left - current.parentNode.getBoundingClientRect().left - 24;
+
+  /* ---------- The Projects menu: it closes on a click outside it, on Escape, and when one of its links is chosen ---------- */
+  var pmenu = $(".nav .pm");
+  if (pmenu) {
+    addEventListener("click", function (e) { if (pmenu.open && (!pmenu.contains(e.target) || e.target.closest(".pm-menu a"))) pmenu.open = false; });
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && pmenu.open) { pmenu.open = false; $("summary", pmenu).focus(); } });
+  }
 
   /* ---------- Languages ---------- */
   var menu = $(".lang");

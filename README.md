@@ -16,8 +16,10 @@ One content file, `content/site.json`, feeds everything. `build.mjs` and the mod
 | The films in the video section | `scripts/film/film.py` films the built pages, frame by frame, and `build.mjs` copies the films from `content/films/` |
 | The CV (`public/Karan-Deshmukh-CV.pdf`) | `lib/cv.mjs` typesets it with pdfkit |
 | The social preview image (`public/og.png`) | `lib/og.mjs` draws it with the site fonts |
-| April, the site assistant | `api/april.js` reads the same content file for its notes |
+| April, the site assistant | `api/april.js` reads the same content file for its notes, and `content/voice/` holds the recordings of her fixed lines |
 | The rewrite desk | `api/rewrite.js` drafts a visitor's message by the brief in `content/desk/brief.md` |
+
+Every project that has a live site is listed once, as `liveSites` in `build.mjs`. The Projects menu in the header of every page and the row of links at the top of the home page are both built from that list.
 
 `src/page.html` is the shell of every library page. `src/partials/` holds the parts both shells share. `src/site.css` serves every page. `src/app.js` serves every page except the workbench, which has its own script and style sheet.
 
@@ -199,14 +201,39 @@ April answers questions about my work from the notes in `content/site.json`, in 
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
 - `MODELS` in `api/april.js` lists the chat models in the order they're tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
-- The voice is a text-to-speech model. `VOICES` in `api/april.js` holds two lists. A line that is recorded once, such as a stop of the tour, goes to the most expressive model, because nobody waits for it. An answer is spoken while the visitor waits, so it goes to the quick model of the same family. In each list the first model that works is kept.
-- To put another model first, set `APRIL_VOICE_MODEL` in the Vercel project. To change the voice, set `APRIL_VOICE`.
+- The voice is a text-to-speech model. April has one speaker. `FAMILY` in `api/april.js` lists the models that speak in her voice, from the most natural to the quickest, and the first one that answers speaks. When none answers, her words stay on the screen. No other voice speaks for her: not another model's, and not the browser's.
+- To put another model first, set `APRIL_VOICE_MODEL` in the Vercel project. To change the voice, set `APRIL_VOICE`, then record her lines again.
 - To choose a voice by ear, open `/voices`. The page plays the first line of the tour in six women's voices, in each language. It isn't linked from the site.
-- If no voice model answers, the browser's own voice reads the answer, and only a woman's voice in the page's language. Where a device offers none, April's words stay on the screen.
+- Her voice is on until a visitor mutes it. The button in her panel and the one in the tour's bar show the same state, and the browser remembers the choice.
+- Her words reach the page before her voice. The page asks for lines: her answer comes on the first line and is shown at once, and the sound follows on the second line when it's ready.
 - To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke, how long it took, and the ones that failed. On a preview deployment, add `&model=<id>` to try one speech model.
-- The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Each line is recorded the first time a visitor needs it, then served from the CDN. Without a recorded voice, the browser's voice reads the line, or the caption stands alone.
+- The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Her fixed lines are recordings kept with the site. See [April's recorded lines](#aprils-recorded-lines).
 - While April speaks, her orb moves to her voice. The script measures the loudness of the sound that is playing and sets it on the page as `--lvl`, a number from 0 to 1. The stylesheet turns that number into the orb's size and glow.
 - Speech is billed by the character. As a guard against abuse, each running copy of the function accepts 8 questions a minute from one visitor, and 400 questions and 80 spoken answers a day in total.
+
+### April's recorded lines
+
+April's greeting and the stops of her tour are recordings, so every visitor hears the same voice and nobody waits for it.
+
+- `lib/voice-lines.cjs` lists the lines in every language of the site. Her service, the build, and the recorder all read that list.
+- A recording is a file in `content/voice/<language>/`, named after its line and a fingerprint of the line's words. The build publishes a recording only while its words are the words of the line. A line without one is spoken by her service.
+- The workflow **Record April's voice** runs `scripts/record-voice.mjs`. The site itself speaks each line, and the script keeps a recording only when the best model made it. Run the workflow after a line changes and the change is live.
+
+```bash
+node scripts/record-voice.mjs https://karandeshmukh.dev          # the lines that have no recording yet
+node scripts/record-voice.mjs https://karandeshmukh.dev --all    # every line again, after a change of voice
+```
+
+### What April reads before she answers
+
+A question about what a document says takes passages with it. The page looks in the library's search index for the two sections that match the question best and sends them with the question. `passage()` in `api/april.js` checks each one: its address has to be a page of the library, and its text is cut to length. April is told that a passage is a quotation, not an instruction. Her answer links to a section only when the page matched it well and her answer uses its words.
+
+A question about me, or about April, is answered from her notes alone.
+
+### The chat
+
+- The suggested questions stay under the chat. After each answer, the ones on its subject come first and the ones already asked go last.
+- The chat is kept in the tab's session storage, so it's still there after a visit to a document that April offered. The button with the round arrow starts a new chat.
 
 ### What April can do on the page
 
@@ -262,6 +289,16 @@ python3 scripts/film/film.py http://localhost:8765 style-check render 03-finding
 Look at the sheet before a render: it comes from the same page and the same clock. To publish a film, copy it and a poster frame to `content/films/`, and list it under `films.items` in `content/site.json`.
 
 The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
+
+## Checks
+
+| Command | What it checks |
+|---|---|
+| `node scripts/selftest.mjs` | The style checker and the document model. See [The style guide](#the-style-guide). |
+| `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
+| `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. The script also asks April one question and starts her tour. |
+
+The workflow **Check the site** builds the site and runs all three. It runs on demand, after a change to `main`, and every Monday morning. GitHub sends an email when it fails.
 
 ## Build
 

@@ -1,0 +1,33 @@
+name: Record April's voice
+
+# April's fixed lines (her greeting and the stops of her tour) are recordings kept with the site.
+# Run this after a line changes and the change is live: the site itself speaks each line, in every language.
+on:
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Record every line again (after a change of voice)
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Record the lines
+        run: node scripts/record-voice.mjs https://karandeshmukh.dev ${{ inputs.all && '--all' || '' }}
+      - name: Commit the recordings
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A content/voice
+          git diff --cached --quiet || git commit -m "Record April's voice"
+          git push
