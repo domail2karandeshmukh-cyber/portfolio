@@ -369,6 +369,7 @@ The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 |---|---|
 | `node scripts/selftest.mjs` | The style checker and the document model. See [The style guide](#the-style-guide). |
 | `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
+| `python3 tests/studio/run.py http://localhost:8765` | The studio, end to end in a real browser: each tool opens two different inputs, is edited, saved, reopened and exported, every export is opened and its content checked, a bad file is refused, and no script error occurs; on a phone where the tool supports it (249 checks in nine scripts). Set `CHROME` for Google Chrome and `DITA_HOME` for the DITA tests. |
 | `python3 scripts/check-a11y.py http://localhost:8765` | Every page of a local build with axe-core, on a desktop and on a phone: WCAG 2.0, 2.1 and 2.2 at levels A and AA, plus best practices. A WCAG problem fails the check. Install the checker first with `npm install --no-save axe-core`. |
 | `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. It also opens the recruiter page and the studio pages. The script also opens April and listens: her greeting, one answer in words and aloud, and the first stop of her tour. It fetches every recording in every language. |
 
