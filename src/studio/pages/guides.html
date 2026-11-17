@@ -1,0 +1,39 @@
+<div class="st-head">
+ <div>
+  <h1>Step Guide Studio</h1>
+  <p>Build a numbered procedure from screenshots: a title and an instruction for each step, a marked-up picture, the prerequisites, the warnings, and the check that tells the reader they're done. Export it as Markdown, HTML or PDF.</p>
+ </div>
+</div>
+<div class="st-bar" role="toolbar" aria-label="Open and export">
+ <button class="btn line sm" type="button" id="gd-new">New guide</button>
+ <button class="btn line sm" type="button" id="gd-sample">Open the sample guide</button>
+ <label class="btn line sm" for="gd-open">Open project</label><input class="st-file" id="gd-open" type="file" accept=".zip,application/zip">
+ <span class="sep" aria-hidden="true"></span>
+ <button class="btn ink sm" type="button" id="gd-md">Export Markdown</button>
+ <button class="btn line sm" type="button" id="gd-html">Export HTML</button>
+ <button class="btn line sm" type="button" id="gd-pdf">Export PDF</button>
+ <button class="btn line sm" type="button" id="gd-shots">Screenshots (ZIP)</button>
+ <button class="btn line sm" type="button" id="gd-save">Save project</button>
+</div>
+<p class="st-status" id="gd-status" role="status" aria-live="polite"></p>
+<div class="gd">
+ <div class="gd-edit">
+  <section class="gd-meta" aria-label="About this guide">
+   <label>Title <input id="gd-title" type="text" maxlength="140"></label>
+   <div class="gd-two"><label>Document ID <input id="gd-docid" type="text" maxlength="40"></label><label>Version <input id="gd-version" type="text" maxlength="20"></label></div>
+   <label>What the reader achieves <textarea id="gd-intro" rows="2" maxlength="600"></textarea></label>
+   <label>Before you start <small>One prerequisite a line</small><textarea id="gd-prereq" rows="3" maxlength="2000"></textarea></label>
+   <label>Warnings <small>One a line</small><textarea id="gd-warn" rows="2" maxlength="2000"></textarea></label>
+  </section>
+  <h2 class="gd-h">Steps</h2>
+  <ol class="gd-steps" id="gd-steps"></ol>
+  <p class="gd-add"><button class="btn ink sm" type="button" id="gd-addstep">Add a step</button></p>
+  <section class="gd-meta"><label>How the reader knows it worked <textarea id="gd-done" rows="2" maxlength="600"></textarea></label></section>
+ </div>
+ <div class="gd-preview" aria-label="Preview"><p class="gd-ptitle">Preview</p><div id="gd-preview" class="gd-doc"></div></div>
+</div>
+<dialog class="gd-dialog" id="gd-dialog" aria-labelledby="gd-dlg-title">
+ <div class="gd-dlg-head"><h2 id="gd-dlg-title">Mark up the picture</h2><p><button class="btn ink sm" type="button" id="gd-dlg-ok">Done</button> <button class="btn line sm" type="button" id="gd-dlg-no">Cancel</button></p></div>
+ <div id="gd-editor"></div>
+</dialog>
+<p class="st-note">Pictures are kept with the guide in this browser and in the project file. Each picture can be marked up with the same tools as the Screenshot Studio, including permanent redaction. The PDF uses a standard font, so it shows Latin-script languages only.</p>

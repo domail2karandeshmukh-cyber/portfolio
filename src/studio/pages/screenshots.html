@@ -1,0 +1,20 @@
+<div class="st-head">
+ <div>
+  <h1>Screenshot Studio</h1>
+  <p>Mark up a screenshot the way a procedure needs it: arrows, numbered callouts, highlights, a spotlight, and redaction that can't be undone in the file. Export a PNG, JPEG or SVG, or save the project and keep editing later.</p>
+ </div>
+</div>
+<div class="st-bar" role="toolbar" aria-label="Open and export">
+ <label class="btn line sm" for="sh-file">Open image</label><input class="st-file" id="sh-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+ <button class="btn line sm" type="button" id="sh-capture">Capture screen</button>
+ <button class="btn line sm" type="button" id="sh-sample">Start from the sample</button>
+ <label class="btn line sm" for="sh-proj">Open project</label><input class="st-file" id="sh-proj" type="file" accept=".json,application/json">
+ <span class="sep" aria-hidden="true"></span>
+ <button class="btn ink sm" type="button" id="sh-png" disabled>Export PNG</button>
+ <button class="btn line sm" type="button" id="sh-jpg" disabled>Export JPEG</button>
+ <button class="btn line sm" type="button" id="sh-svg" disabled>Export SVG</button>
+ <button class="btn line sm" type="button" id="sh-save" disabled>Save project</button>
+</div>
+<p class="st-status" id="sh-status" role="status" aria-live="polite">You can also paste an image with Ctrl+V or drop a file on the canvas.</p>
+<div id="sh-editor"></div>
+<p class="st-note">Screen capture asks your browser for permission and takes one frame: sharing stops at once, and nothing is uploaded. Opening an image here drops its hidden metadata, such as camera, place and editing software, from every export. Shortcuts: V select, A arrow, R rectangle, N callout, T text, X redact, C crop, Ctrl+Z undo, arrow keys to move the selected mark.</p>

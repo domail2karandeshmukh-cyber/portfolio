@@ -1,0 +1,175 @@
+/* Documentation Studio: the parts every tool shares.
+   Files are made in the browser and nothing leaves it: a ZIP writer, downloads, checks on what a visitor opens,
+   and a small store for projects kept in this browser (IndexedDB). */
+(function (root) {
+  "use strict";
+  var Kit = {};
+
+  /* ---------- Limits on what a visitor can open ---------- */
+  Kit.LIMITS = { image: 15 * 1024 * 1024, pixels: 8000, project: 60 * 1024 * 1024, video: 300 * 1024 * 1024, audio: 50 * 1024 * 1024, text: 2 * 1024 * 1024 };
+  var IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
+
+  /** Reads an image file a visitor chose. Rejects anything that isn't a PNG, JPEG, WebP or GIF of a sensible size. */
+  Kit.readImage = function (file) {
+    return new Promise(function (ok, no) {
+      if (!file) return no(new Error("No file was chosen."));
+      if (IMAGE_TYPES.indexOf(file.type) < 0) return no(new Error("This file isn't a PNG, JPEG, WebP or GIF image."));
+      if (file.size > Kit.LIMITS.image) return no(new Error("This image is larger than 15 MB. Choose a smaller one."));
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+        if (img.naturalWidth > Kit.LIMITS.pixels || img.naturalHeight > Kit.LIMITS.pixels) return no(new Error("This image is wider or taller than 8,000 pixels."));
+        ok(img);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); no(new Error("This image can't be read. The file may be damaged.")); };
+      img.src = url;
+    });
+  };
+  /** An image from a data URL that a project file holds. Only PNG, JPEG and WebP data is accepted. */
+  Kit.imageFromData = function (data) {
+    return new Promise(function (ok, no) {
+      if (typeof data !== "string" || !/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(data)) return no(new Error("The project holds an image in a form this studio doesn't open."));
+      var img = new Image();
+      img.onload = function () { ok(img); };
+      img.onerror = function () { no(new Error("An image in the project can't be read.")); };
+      img.src = data;
+    });
+  };
+  /** A canvas with an image drawn on it. Drawing on a canvas drops the file's hidden metadata (camera, place, software). */
+  Kit.canvasOf = function (img, w, h) {
+    var c = document.createElement("canvas");
+    c.width = w || img.naturalWidth || img.width; c.height = h || img.naturalHeight || img.height;
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    return c;
+  };
+  Kit.readText = function (file, max) {
+    return new Promise(function (ok, no) {
+      if (!file) return no(new Error("No file was chosen."));
+      if (file.size > (max || Kit.LIMITS.text)) return no(new Error("This file is too large to open here."));
+      var r = new FileReader();
+      r.onload = function () { ok(String(r.result)); };
+      r.onerror = function () { no(new Error("This file can't be read.")); };
+      r.readAsText(file);
+    });
+  };
+  Kit.readBytes = function (file, max) {
+    return new Promise(function (ok, no) {
+      if (!file) return no(new Error("No file was chosen."));
+      if (file.size > (max || Kit.LIMITS.project)) return no(new Error("This file is too large to open here."));
+      var r = new FileReader();
+      r.onload = function () { ok(new Uint8Array(r.result)); };
+      r.onerror = function () { no(new Error("This file can't be read.")); };
+      r.readAsArrayBuffer(file);
+    });
+  };
+
+  /* ---------- Screen capture ---------- */
+  /** One frame of a screen, window or tab that the visitor picks in the browser's own dialog. Sharing stops as soon as the frame is taken. */
+  Kit.captureScreen = function () {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) return Promise.reject(new Error("This browser can't capture the screen. Take a screenshot and add it as a file instead."));
+    return navigator.mediaDevices.getDisplayMedia({ video: true, audio: false }).then(function (stream) {
+      var v = document.createElement("video"); v.muted = true; v.srcObject = stream;
+      return v.play().then(function () { return new Promise(function (ok) { setTimeout(ok, 350); }); }).then(function () {
+        var c = document.createElement("canvas"); c.width = v.videoWidth; c.height = v.videoHeight; c.getContext("2d").drawImage(v, 0, 0);
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        return c;
+      });
+    }, function (e) { throw new Error(e && e.name === "NotAllowedError" ? "Screen capture was cancelled. Nothing was captured." : "The screen couldn't be captured."); });
+  };
+
+  /* ---------- Downloads ---------- */
+  Kit.save = function (blob, name) {
+    var a = document.createElement("a"), url = URL.createObjectURL(blob);
+    a.href = url; a.download = name; a.rel = "noopener";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  };
+  Kit.canvasBlob = function (canvas, type, quality) {
+    return new Promise(function (ok, no) { canvas.toBlob(function (b) { b ? ok(b) : no(new Error("The image couldn't be made.")); }, type || "image/png", quality); });
+  };
+  Kit.dataToBytes = function (data) {
+    var bin = atob(data.split(",")[1]), out = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
+  };
+  Kit.slug = function (s, fallback) { return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || fallback || "untitled"; };
+  Kit.esc = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+
+  /* ---------- ZIP (stored, no compression) ---------- */
+  var CRC = (function () { var t = new Uint32Array(256); for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+  function crc32(b) { var c = 0xffffffff; for (var i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 0xff] ^ (c >>> 8); return (c ^ 0xffffffff) >>> 0; }
+  var enc = new TextEncoder();
+  /** files: [{name, data: string | Uint8Array}] -> Blob of a ZIP archive that any unzip tool opens. */
+  Kit.zip = function (files) {
+    var parts = [], central = [], offset = 0, now = new Date();
+    var time = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1), date = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+    files.forEach(function (f) {
+      var name = enc.encode(f.name), data = typeof f.data === "string" ? enc.encode(f.data) : f.data, crc = crc32(data);
+      var head = new DataView(new ArrayBuffer(30));
+      head.setUint32(0, 0x04034b50, true); head.setUint16(4, 20, true); head.setUint16(6, 0x0800, true); head.setUint16(8, 0, true);
+      head.setUint16(10, time, true); head.setUint16(12, date, true); head.setUint32(14, crc, true);
+      head.setUint32(18, data.length, true); head.setUint32(22, data.length, true); head.setUint16(26, name.length, true); head.setUint16(28, 0, true);
+      parts.push(new Uint8Array(head.buffer), name, data);
+      var cd = new DataView(new ArrayBuffer(46));
+      cd.setUint32(0, 0x02014b50, true); cd.setUint16(4, 20, true); cd.setUint16(6, 20, true); cd.setUint16(8, 0x0800, true); cd.setUint16(10, 0, true);
+      cd.setUint16(12, time, true); cd.setUint16(14, date, true); cd.setUint32(16, crc, true); cd.setUint32(20, data.length, true); cd.setUint32(24, data.length, true);
+      cd.setUint16(28, name.length, true); cd.setUint32(42, offset, true);
+      central.push(new Uint8Array(cd.buffer), name);
+      offset += 30 + name.length + data.length;
+    });
+    var size = central.reduce(function (s, p) { return s + p.length; }, 0), end = new DataView(new ArrayBuffer(22));
+    end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true);
+    end.setUint32(12, size, true); end.setUint32(16, offset, true);
+    return new Blob(parts.concat(central, [new Uint8Array(end.buffer)]), { type: "application/zip" });
+  };
+  /** Reads a ZIP that this studio wrote (stored entries only). Returns {name: Uint8Array}. Paths that climb out of the archive are refused. */
+  Kit.unzip = function (bytes) {
+    var v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength), out = {}, dec = new TextDecoder(), at = 0, count = 0;
+    while (at + 30 <= bytes.length && v.getUint32(at, true) === 0x04034b50) {
+      var method = v.getUint16(at + 8, true), size = v.getUint32(at + 18, true), nlen = v.getUint16(at + 26, true), xlen = v.getUint16(at + 28, true);
+      var name = dec.decode(bytes.subarray(at + 30, at + 30 + nlen)), start = at + 30 + nlen + xlen;
+      if (method !== 0) throw new Error("This archive is compressed. Open a project package that this studio saved.");
+      if (/(^|\/)\.\.(\/|$)|^\//.test(name)) throw new Error("This archive holds a file with an unsafe path.");
+      if (++count > 2000) throw new Error("This archive holds too many files.");
+      out[name] = bytes.subarray(start, start + size);
+      at = start + size;
+    }
+    if (!count) throw new Error("This file isn't a project package.");
+    return out;
+  };
+
+  /* ---------- Projects kept in this browser ---------- */
+  function db() {
+    return new Promise(function (ok, no) {
+      if (!root.indexedDB) return no(new Error("This browser can't keep projects. Save the project file instead."));
+      var r = indexedDB.open("kd-studio", 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore("projects"); };
+      r.onsuccess = function () { ok(r.result); };
+      r.onerror = function () { no(new Error("This browser can't keep projects. Save the project file instead.")); };
+    });
+  }
+  function tx(mode, fn) {
+    return db().then(function (d) {
+      return new Promise(function (ok, no) {
+        var t = d.transaction("projects", mode), s = t.objectStore("projects"), r = fn(s);
+        t.oncomplete = function () { ok(r && r.result); };
+        t.onerror = function () { no(t.error || new Error("The project couldn't be kept.")); };
+      });
+    });
+  }
+  Kit.store = {
+    put: function (key, value) { return tx("readwrite", function (s) { return s.put(value, key); }); },
+    get: function (key) { return tx("readonly", function (s) { return s.get(key); }); },
+    del: function (key) { return tx("readwrite", function (s) { return s.delete(key); }); },
+  };
+
+  /* ---------- A status line that screen readers announce ---------- */
+  Kit.say = function (el, text, bad) {
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle("bad", !!bad);
+  };
+
+  root.Kit = Kit;
+  if (typeof module !== "undefined") module.exports = Kit;
+})(typeof window !== "undefined" ? window : globalThis);

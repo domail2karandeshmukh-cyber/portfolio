@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{title}} | Karan Deshmukh</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{url}}{{path}}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{title}} | Karan Deshmukh">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="{{url}}{{path}}">
+<meta property="og:image" content="{{url}}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/hanken.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/site.css">
+<link rel="stylesheet" href="/studio/studio.css">
+<script>document.documentElement.className="js"</script>
+</head>
+<body class="sample studio {{bodyclass}}">
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav stuck">
+ <div class="wrap nav-in">
+  <a class="brand" href="/">Karan Deshmukh</a>
+  <nav aria-label="Site">
+   <a href="/docs">Library</a><a href="/workbench">Workbench</a><a href="/studio"{{studiocurrent}}>Studio</a>{{pmenu}}<a href="/#contact">Contact</a>
+  </nav>
+  <div class="nav-act">
+   <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
+  </div>
+ </div>
+</header>
+<main id="main" class="wrap st-main">
+ <nav class="crumbs" aria-label="Breadcrumb">{{crumbs}}</nav>
+{{body}}
+</main>
+<footer class="foot">
+ <div class="wrap">
+  <p>The studio runs in your browser. What you open or make here stays on this device unless you download it. Samples are fictional and are not operating instructions.</p>
+  <p><a href="/">Karan Deshmukh, technical documentation specialist</a></p>
+ </div>
+</footer>
+<noscript><p class="wrap st-nojs">The studio needs JavaScript.</p></noscript>
+{{scripts}}
+</body>
+</html>

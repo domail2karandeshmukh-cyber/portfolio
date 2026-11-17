@@ -3,8 +3,12 @@
   "private": true,
   "version": "8.0.0-phase2",
   "description": "Portfolio of Karan Deshmukh. One content file builds the home page in five languages, the documentation library, the PDF CV and the assistant's notes.",
-  "scripts": { "build": "node build.mjs" },
-  "engines": { "node": "22.x" },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "engines": {
+    "node": "22.x"
+  },
   "dependencies": {
     "@fontsource-variable/atkinson-hyperlegible-mono": "5.3.0",
     "@fontsource-variable/hanken-grotesk": "5.3.0",
@@ -14,6 +18,7 @@
     "@fontsource/newsreader": "5.3.0",
     "fontkit": "2.0.4",
     "highlight.js": "11.12.0",
+    "jspdf": "^4.2.1",
     "marked": "18.2.1",
     "node-html-parser": "9.0.7",
     "pdfkit": "0.20.2",

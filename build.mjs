@@ -13,6 +13,7 @@ import { styleGuide } from "./lib/styleguide.mjs";
 import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
+import { buildStudio } from "./lib/studio.mjs";
 
 const C = JSON.parse(await fs.readFile("content/site.json", "utf8"));
 const S = C.site, T = C.types, OUT = "public";
@@ -295,7 +296,8 @@ const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
-const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench"];
+const studio = await buildStudio({ S, OUT, pmenu: common.pmenu });
+const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`
