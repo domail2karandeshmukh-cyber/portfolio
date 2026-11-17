@@ -46,6 +46,14 @@ A corrected word is `<span class="ed e1" data-was="type">turn</span>`. The eleme
 
 The stage shows one message in three states: as it arrived, marked up, and published. Each fact carries the same `data-f` name in the message (`<mark data-f="hr">`) and in the document (`<span data-f="hr">`). The script uses that name to move the fact from one to the other. To add a fact, add it to both with a new name. Noise in the message is wrapped in `<s>`.
 
+## The page for recruiters
+
+`/recruiters` is the portfolio in one page: the figures, each role with its first achievement, three documents to read with the reader's problem each one solves, the tools on this site, availability, and education. The build writes it from `recruiters` in `content/site.json` and from the same experience and education that make the CV, so the two can't disagree. The home page links to it under the main buttons.
+
+## Engineering and maintenance documentation
+
+The section `#engineering` on the home page comes from `engineering` in `content/site.json`: the documentation work at Magna, and the fields where the same discipline applies. It names those fields as places the skills apply, not as places I've worked. April reads the same text.
+
 ## The rewrite desk
 
 Under the example, a visitor can put a message from their own team on the same stage. The page shows it marked up, then as a draft document, with the questions a writer would still ask the author and a check of its names and numbers.

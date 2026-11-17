@@ -118,7 +118,19 @@ const link = (text, h, cls = "") => {
 };
 const PLAY = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
 
+// Engineering and maintenance documentation: the Magna years, and where the same discipline applies.
+const E = C.engineering;
+const engineering = `
+  <div class="sec-head">
+   <h2>${esc(E.title)}</h2>
+   <p>${esc(E.intro)}</p>
+  </div>
+  <dl class="tools eng">${E.items.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>
+  <p class="eng-note">${esc(E.grounding)} ${esc(E.applies)}</p>
+  <p class="eng-note"><a href="#experience">Read about my roles</a></p>`;
+
 const parts = {
+  engineering,
   stats: figures.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
   // Three sheets on the desk. The first one is where to start.
   featured: C.featured.map((id, i) => docCard({ ...byId[id], start: i === 0 }, T)).join("\n"),
@@ -179,6 +191,38 @@ const hreflang = locales.length < 2 ? "" : locales.map((l) => `<link rel="altern
 // The commit this build was made from, linked in the footer.
 const commit = process.env.VERCEL_GIT_COMMIT_SHA || (() => { try { return execSync("git rev-parse HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return ""; } })();
 const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>.</p>` : "";
+
+// The page for recruiters: who I am, the figures, the employers, three documents to read, and how to reach me, on one screen or two.
+{
+  const R = C.recruiters, sample = (x) => byId[x.id];
+  const role = (e) => `<li><p class="when">${esc(e.dates)}</p><h3>${esc(e.role)}, <span translate="no">${esc(e.org)}</span></h3><p>${esc(e.points[0])}.</p></li>`;
+  const body = `<article class="rec">
+<h1>${esc(S.name)}</h1>
+<p class="rec-role">${esc(S.role)}</p>
+<p class="rec-lead">${esc(R.intro)}</p>
+<p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Message me on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
+<ul class="rec-figs">${R.figures.map(([n, l]) => `<li><b>${esc(n)}</b><span>${esc(l)}</span></li>`).join("")}</ul>
+<h2>Experience</h2>
+<ol class="rec-roles">${C.experience.map(role).join("")}</ol>
+<p class="rec-more"><a href="/#engineering">Engineering and maintenance documentation at Magna</a><a href="/#experience">Every role in full</a></p>
+<h2>Three documents to read</h2>
+<ol class="rec-docs">${R.samples.map((x) => `<li><p class="when">${esc(x.skill)}</p><h3><a href="${sample(x).url}">${esc(sample(x).title)}</a></h3><p><b>The reader's problem.</b> ${esc(x.problem)}</p><p><b>What it shows.</b> ${esc(x.shows)}</p></li>`).join("")}</ol>
+<h2>Tools I built to show how I work</h2>
+<ul class="rec-tools">
+<li><a href="/workbench">Workbench</a>: write a document, check it against my style guide as you type, and publish it as Markdown, HTML, or DITA.</li>
+<li><a href="/style">Style guide</a>: ${guide.figures.rules} rules, ${guide.figures.coded} of them checked by code on every build.</li>
+<li><a href="/#rewrite">Rewrite desk</a>: an engineer's chat message turned into a how-to, with every fact checked.</li>
+<li><a href="/docs">Library</a>: every document on this site, with search.</li>
+</ul>
+<h2>Availability</h2>
+<p>${esc(S.availability)} Based in ${esc(S.location)}.</p>
+<p>Languages: ${esc(C.languages.join(", "))}.</p>
+<h2>Education</h2>
+<ul class="rec-edu">${C.education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}, ${esc(e.dates)}</li>`).join("")}</ul>
+</article>`;
+  await library.extra({ path: "/recruiters", title: `${S.name} | For recruiters`, description: `${S.role} with 5+ years across industrial engineering, enterprise IT, and cybersecurity. Experience, figures, three writing samples, and contact in one page.`,
+    trail: [["Portfolio", "/"], ["For recruiters"]], body });
+}
 
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
 await fs.mkdir(`${OUT}/voices`, { recursive: true });
@@ -251,7 +295,7 @@ const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
-const urls = [...locales.map((l) => l.path), ...library.urls, "/style", "/workbench"];
+const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench"];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

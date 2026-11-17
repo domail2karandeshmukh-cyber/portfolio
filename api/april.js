@@ -14,8 +14,9 @@ C.docs.forEach((d) => { DOCS[d.id] = { title: d.title, href: `/docs/${d.shelf}/$
 // Two pages that are not documents of the library, offered the same way.
 DOCS["style-guide"] = { title: "Style guide", href: "/style" };
 DOCS.workbench = { title: "Workbench", href: "/workbench" };
+DOCS.recruiters = { title: "For recruiters", href: "/recruiters" };
 const RULES = require("../src/style.js").RULES;
-const SECTIONS = ["writing", "workbench", "projects", "video", "experience", "contact", "rewrite"];
+const SECTIONS = ["writing", "engineering", "workbench", "projects", "video", "experience", "contact", "rewrite"];
 const DESK = require("../content/desk/messages.json").messages.map((m) => m.id);
 const VIDEOS = ((C.films && C.films.items) || []).map((f) => f.title);
 
@@ -46,6 +47,9 @@ function notes() {
   L.push("Key figures: " + C.stats.map((x) => `${x.n} ${x.label}`).join("; ") + ".");
   L.push("Experience:");
   C.experience.forEach((e) => L.push(`- ${e.role}, ${e.org}${e.note ? " (" + e.note + ")" : ""}, ${e.dates}, ${e.place}. ${e.points.join(". ")}.`));
+  const E = C.engineering;
+  L.push(`Engineering and maintenance documentation (a section of the home page, ${S.url}/#engineering): ${E.intro} ${E.items.map(([t, d]) => `${t}: ${d}`).join(" ")} ${E.grounding} ${E.applies} Karan has not worked in offshore wind or renewable energy; the section says where his skills apply, not where he has worked.`);
+  L.push(`- [doc:recruiters] A one-page summary for recruiters (${S.url}/recruiters): figures, roles, three documents to read with the reader's problem each one solves, and contact.`);
   L.push("Expertise: " + C.expertise.map((x) => `${x.label}: ${x.text}`).join(". ") + ".");
   L.push("Tools: " + C.tools.map((t) => `${t.group}: ${t.items.join(", ")}`).join(". ") + `. Also ${C.foundations}.`);
   L.push("Education: " + C.education.map((e) => `${e.title}, ${e.org}, ${e.dates}${e.note ? " (" + e.note + ")" : ""}`).join("; ") + ".");
@@ -76,7 +80,7 @@ Answer only from the notes below. Speak about Karan in the third person. If the 
 You can also act on the site. Reply with one JSON object and nothing else: {"say": "...", "do": "..."}
 "say" is what you tell the visitor: one to three short, complete sentences, under 70 words in total, in plain text with no markdown. Answer only what was asked. Speak as yourself, in the first person. When "do" takes the visitor somewhere, plays a video, starts the tour or runs a sample, say that you are doing it. When "do" offers a document, the CV, LinkedIn or another language, say what it is and that the button under your answer opens it. Leave web addresses out.
 "do" is one action that serves what was asked, or "" when none does:
-- go:writing, go:workbench, go:projects, go:video, go:experience, go:contact or go:rewrite takes the visitor to that part of the home page. go:rewrite is the rewrite desk.
+- go:writing, go:engineering, go:workbench, go:projects, go:video, go:experience, go:contact or go:rewrite takes the visitor to that part of the home page. go:rewrite is the rewrite desk.
 - doc:KEY offers to open one document. The keys are in the notes, written [doc:KEY].
 - video:TITLE plays one film. Use a title from the notes.
 - tour starts your one-minute tour.
