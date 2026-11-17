@@ -5,16 +5,16 @@
 main{display:grid;grid-template-columns:470px 1fr;height:750px}
 .list{border-right:1px solid #263241;overflow:hidden}.list h2,.detail h2{font-size:12px;margin:0;padding:12px 16px;color:#9fb0c3;text-transform:uppercase;letter-spacing:.6px}
 .alert{display:grid;grid-template-columns:44px 1fr auto;gap:10px;padding:10px 16px;border-bottom:1px solid #1d2733;cursor:pointer}.alert.on{background:#1a2634;box-shadow:inset 3px 0 #ff4d4d}
-.lvl{font-weight:700;text-align:center;border-radius:4px;padding:6px 0;font-size:14px}.l10{background:#ff4d4d;color:#fff}.l7{background:#ffb84d;color:#0f141a}.l5{background:#4d8fff;color:#fff}.l3{background:#3a4b5e;color:#dfe6ee}
+.lvl{font-weight:700;text-align:center;border-radius:4px;padding:6px 0;font-size:14px}.l10{background:#d63a3a;color:#fff}.l7{background:#ffb84d;color:#0f141a}.l5{background:#2f6fe0;color:#fff}.l3{background:#3a4b5e;color:#dfe6ee}
 .alert b{display:block;color:#fff;font-size:13px}.alert small{color:#9fb0c3}.when{color:#9fb0c3;font-size:12px}
 .detail{padding:0 20px 20px}.hd{display:flex;align-items:center;gap:12px;padding:10px 0 12px}.hd h1{font-size:17px;margin:0;color:#fff}.tag{font-size:11px;padding:2px 8px;border-radius:999px;background:#2b1f1f;color:#ff8a8a;border:1px solid #5a2a2a;font-weight:600}
 .btn{display:inline-block;border:0;font:inherit;cursor:pointer;padding:7px 12px;border-radius:5px;background:#2f6fed;color:#fff;font-weight:600;margin-right:8px}.btn.alt{background:#1a2634;color:#dfe6ee;border:1px solid #34465a}.btn.red{background:#b3261e}
 .cols{display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:12px}
 pre{margin:0;background:#0a0e13;border:1px solid #263241;border-radius:6px;padding:12px 14px;font:12px/1.5 Consolas,"SF Mono",monospace;color:#cfe0f4;min-height:430px;white-space:pre-wrap;word-break:break-all}.k{color:#8fb7ff}.s{color:#ffd28a}.n{color:#9ae6b4}
-.side .box{background:#161d26;border:1px solid #263241;border-radius:6px;padding:12px 14px;margin-bottom:12px}.box h3{font-size:12px;margin:0 0 8px;color:#9fb0c3;text-transform:uppercase;letter-spacing:.5px}.box div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1d2733;font-size:12px}.box div:last-child{border:0}.box span:last-child{color:#fff;font-weight:600}
+.side .box{background:#161d26;border:1px solid #263241;border-radius:6px;padding:12px 14px;margin-bottom:12px}.box .detail h2{font-size:12px;margin:0 0 8px;padding:0;color:#9fb0c3;text-transform:uppercase;letter-spacing:.5px}.box div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1d2733;font-size:12px}.box div:last-child{border:0}.box span:last-child{color:#fff;font-weight:600}
 .tl div{display:block;padding:4px 0;font-size:12px;color:#dfe6ee}.tl time{color:#9fb0c3;margin-right:8px;font-family:Consolas,monospace}
 </style></head><body>
-<div class="top"><b>SOC console</b><span style="color:#9fb0c3">Norrbyn Utilities · Wazuh alerts, simulated feed</span><span class="demo">FICTIONAL DEMO</span><span class="who">Analyst on shift · 03:16 UTC</span></div>
+<header class="top"><b>SOC console</b><span style="color:#9fb0c3">Norrbyn Utilities · Wazuh alerts, simulated feed</span><span class="demo">FICTIONAL DEMO</span><span class="who">Analyst on shift · 03:16 UTC</span></header>
 <main><div class="list"><h2>Open alerts · 6</h2>
 <div class="alert on" id="alert-top"><span class="lvl l10">10</span><div><b>sshd: brute force trying to get access to the system</b><small>Rule 5763 · web-01 · from 203.0.113.45 · user deploy</small></div><span class="when">03:14</span></div>
 <div class="alert"><span class="lvl l7">7</span><div><b>Integrity checksum changed</b><small>Rule 550 · app-02 · /etc/ssh/sshd_config</small></div><span class="when">02:51</span></div>
@@ -40,7 +40,7 @@ pre{margin:0;background:#0a0e13;border:1px solid #263241;border-radius:6px;paddi
   <span class="k">"location"</span>: <span class="s">"/var/log/auth.log"</span>,
   <span class="k">"manager"</span>: { <span class="k">"name"</span>: <span class="s">"wazuh-mgr-01"</span> }
 }</pre>
-<div class="side"><div class="box" id="triage"><h3>Triage</h3><div><span>Source internal?</span><span>No (203.0.113.0/24)</span></div><div><span>Target user exists?</span><span>Yes: deploy</span></div><div><span>Success after failures?</span><span>None in 24 h</span></div><div><span>Threat intel</span><span>Known scanner</span></div><div><span>SSH open to internet?</span><span>Yes</span></div></div>
-<div class="box tl"><h3>Related events, web-01</h3><div><time>03:14:07</time>5763 brute force, 14th firing</div><div><time>03:12:30</time>5716 failed password, deploy</div><div><time>02:47:10</time>5710 non-existent user, oracle</div><div><time>02:40:02</time>31101 web 400 errors ×12</div><div><time>01:30:44</time>5715 success, ops-maint from 10.20.4.17</div></div>
-<div class="box"><h3>Case</h3><div><span>Severity</span><span>Medium</span></div><div><span>Assigned</span><span>Unassigned</span></div><div><span>Runbook</span><span>RB-SEC-012</span></div></div></div></div></div></main>
+<div class="side"><div class="box" id="triage"><h2>Triage</h2><div><span>Source internal?</span><span>No (203.0.113.0/24)</span></div><div><span>Target user exists?</span><span>Yes: deploy</span></div><div><span>Success after failures?</span><span>None in 24 h</span></div><div><span>Threat intel</span><span>Known scanner</span></div><div><span>SSH open to internet?</span><span>Yes</span></div></div>
+<div class="box tl"><h2>Related events, web-01</h2><div><time>03:14:07</time>5763 brute force, 14th firing</div><div><time>03:12:30</time>5716 failed password, deploy</div><div><time>02:47:10</time>5710 non-existent user, oracle</div><div><time>02:40:02</time>31101 web 400 errors ×12</div><div><time>01:30:44</time>5715 success, ops-maint from 10.20.4.17</div></div>
+<div class="box"><h2>Case</h2><div><span>Severity</span><span>Medium</span></div><div><span>Assigned</span><span>Unassigned</span></div><div><span>Runbook</span><span>RB-SEC-012</span></div></div></div></div></div></main>
 </body></html>

@@ -102,7 +102,7 @@ To add a project document, add an entry to `docs` in `content/site.json` with it
 
 ### Diagrams
 
-Mermaid diagrams are drawn ahead of the build and saved in `content/diagrams/`, one SVG per diagram, named after a fingerprint of the diagram's source. When a diagram changes in a project repository, the build reports that a drawing is missing. Draw it again.
+Each diagram has an **Enlarge** button that opens it over the page (a click on the drawing does the same). The figure itself is not a button, so a screen reader reads the drawing's text. Mermaid diagrams are drawn ahead of the build and saved in `content/diagrams/`, one SVG per diagram, named after a fingerprint of the diagram's source. When a diagram changes in a project repository, the build reports that a drawing is missing. Draw it again.
 
 ```bash
 python3 scripts/render-diagrams.py <folder that holds the project repositories> <path to mermaid.min.js>
@@ -202,6 +202,8 @@ The screenshot editor, the step guides, and the video editor have undo and redo 
 ### DITA
 
 `lib/dita-sets.mjs` lists the document sets. `scripts/dita-sample.mjs` writes each one to `content/dita-samples/<id>/src`. With `--publish` and `DITA_HOME` set to a DITA-OT folder, it validates every file against the OASIS DTDs and publishes HTML5 and PDF. The workflow **Publish the DITA sample** does this on GitHub and commits the result.
+
+The HTML5 is DITA-OT's own, with one custom stylesheet passed the documented way (`args.css`): `scripts/dita-html5.css` gives the links in the table of contents and in related links a target 24 pixels high (WCAG 2.2, success criterion 2.5.8). The flagship's DITA output is published with it too.
 
 The script raises xmllint's entity-amplification limit, because libxml2 stops reading the OASIS DTDs without it. It does so only for those DTDs and for files it wrote itself. Nothing a visitor adds is parsed that way: the browser's DITA Studio takes Markdown, and checks the XML it makes with DOMParser, which loads no DTD.
 
@@ -365,9 +367,10 @@ The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 |---|---|
 | `node scripts/selftest.mjs` | The style checker and the document model. See [The style guide](#the-style-guide). |
 | `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
+| `python3 scripts/check-a11y.py http://localhost:8765` | Every page of a local build with axe-core, on a desktop and on a phone: WCAG 2.0, 2.1 and 2.2 at levels A and AA, plus best practices. A WCAG problem fails the check. Install the checker first with `npm install --no-save axe-core`. |
 | `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. It also opens the recruiter page and the studio pages. The script also opens April and listens: her greeting, one answer in words and aloud, and the first stop of her tour. It fetches every recording in every language. |
 
-The workflow **Check the site** builds the site and runs all three. It runs on demand and every Monday morning, and GitHub sends an email when it fails. Run it after a release, once the release is live.
+The workflow **Check the site** builds the site and runs the self-test, the link check and the live check; run the accessibility check on your own build. It runs on demand and every Monday morning, and GitHub sends an email when it fails. Run it after a release, once the release is live.
 
 ## Build
 

@@ -1,4 +1,4 @@
-<!doctype html><html><head><title>Demo app: a fictional maintenance console</title><meta name="robots" content="noindex"><meta charset="utf-8"><style>
+<!doctype html><html lang="en"><head><title>Demo app: a fictional maintenance console</title><meta name="robots" content="noindex"><meta charset="utf-8"><style>
 *{box-sizing:border-box}body{margin:0;font:15px/1.45 'Segoe UI',Arial,sans-serif;color:#1d2433;background:#eef1f5}
 .top{display:flex;align-items:center;gap:18px;height:56px;padding:0 22px;background:#16324f;color:#fff}
 .top b{font-size:17px}.top span{opacity:.8}.top .who{margin-left:auto;font-size:14px}
@@ -17,8 +17,8 @@ form{background:#fff;border:1px solid #d5dbe3;border-radius:8px;padding:18px;max
 .in{border:1px solid #b9c3d0;border-radius:6px;padding:9px 10px;background:#fff}.in.f{border:2px solid #1f6feb}
 .check{margin-top:18px;padding:12px;background:#e8f6ee;border:1px solid #9fd5b4;border-radius:6px;color:#127a3e;font-weight:600}
 </style></head><body>
-<div class="top"><b>Harbor Pump Station</b><span>Maintenance console</span><span class="demo">FICTIONAL DEMO</span><span class="who">Technician TX-4471 · Shift B</span></div>
-<div class="wrap"><div class="side"><a class="on">Work orders</a><a>Assets</a><a>Readings</a><a>Spare parts</a><a>Reports</a></div><main><section data-view="overview"><h1>Work order WO-2291: monthly inspection of feed pump B</h1><p class="sub">Asset PS-104 · Due today · Assigned to Shift B</p>
+<header class="top"><b>Harbor Pump Station</b><span>Maintenance console</span><span class="demo">FICTIONAL DEMO</span><span class="who">Technician TX-4471 · Shift B</span></header>
+<div class="wrap"><nav class="side" aria-label="Menu"><a class="on">Work orders</a><a>Assets</a><a>Readings</a><a>Spare parts</a><a>Reports</a></nav><main><section data-view="overview"><h1>Work order WO-2291: monthly inspection of feed pump B</h1><p class="sub">Asset PS-104 · Due today · Assigned to Shift B</p>
 <div class="cards"><div class="card"><small>Status</small><div class="warn">Open</div></div><div class="card"><small>Last reading</small><div>4.2 bar</div></div><div class="card"><small>Checks done</small><div>0 of 4</div></div></div>
 <table><tr><th>#</th><th>Check</th><th>Expected</th><th>Result</th></tr><tr><td>1</td><td>Discharge pressure</td><td>3.8 to 4.6 bar</td><td>Not recorded</td></tr><tr><td>2</td><td>Bearing temperature</td><td>Below 70 °C</td><td>Not recorded</td></tr><tr><td>3</td><td>Vibration</td><td>Below 4.5 mm/s</td><td>Not recorded</td></tr><tr><td>4</td><td>Seal leakage</td><td>None visible</td><td>Not recorded</td></tr></table>
 <p style="margin-top:18px"><button class="btn" id="record" data-go="reading">Record readings</button><span class="btn alt">Attach photo</span></p>

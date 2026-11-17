@@ -62,9 +62,11 @@ with sync_playwright() as p:
         (OUT / "procedure/MP-PS104-01.md").write_bytes(z.read(md)); keep(OUT / "procedure/MP-PS104-01.md")
     pg.close()
 
-    # 2. The same procedure as HTML, as a DITA project, and published by DITA Open Toolkit.
+    # 2. The same procedure as HTML (the document model's plain HTML, saved as a page with its title and language),
+    #    as a DITA project, and published by DITA Open Toolkit (HTML5 with scripts/dita-html5.css: larger link targets).
     js = """const Doc=require(process.argv[1]), fs=require("fs"), path=require("path"), src=fs.readFileSync(process.argv[2],"utf8"), out=process.argv[3];
-const d=Doc.parse(src); fs.writeFileSync(path.join(out,"procedure/MP-PS104-01.html"), Doc.toHtml(Doc.resolve(d, Doc.GENERAL))+"\\n");
+const d=Doc.parse(src), r=Doc.resolve(d, Doc.GENERAL), esc=(s)=>s.replace(/[&<>"]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"})[c]);
+fs.writeFileSync(path.join(out,"procedure/MP-PS104-01.html"), '<!DOCTYPE html>\\n<html lang="en">\\n<head>\\n<meta charset="utf-8">\\n<meta name="viewport" content="width=device-width, initial-scale=1">\\n<title>'+esc(r.title)+'</title>\\n</head>\\n<body>\\n<main>\\n'+Doc.toHtml(r)+'\\n</main>\\n</body>\\n</html>\\n');
 for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",f.name); fs.mkdirSync(path.dirname(to),{recursive:true}); fs.writeFileSync(to,f.data); }"""
     subprocess.run(["node", "-e", js, str(ROOT / "src/doc.js"), str(OUT / "procedure/MP-PS104-01.md"), str(OUT)], check=True)
     keep(OUT / "procedure/MP-PS104-01.html")
@@ -73,7 +75,7 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
         subprocess.run(["xmllint", "--noout", "--valid", "--nonet", str(f)], check=True, env=env); keep(f)
     m = next((OUT / "dita/src").glob("*.ditamap"))
     subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=pdf", f"--output={OUT}/dita/pdf"], check=True, capture_output=True)
-    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=html5", f"--output={OUT}/dita/html5"], check=True, capture_output=True)
+    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=html5", f"--output={OUT}/dita/html5", f"--args.cssroot={ROOT / 'scripts'}", "--args.css=dita-html5.css", "--args.copycss=yes"], check=True, capture_output=True)
     pdf = next((OUT / "dita/pdf").glob("*.pdf")); pdf.rename(OUT / "procedure/MP-PS104-01.pdf"); shutil.rmtree(OUT / "dita/pdf"); keep(OUT / "procedure/MP-PS104-01.pdf")
     for f in (OUT / "dita/html5").rglob("*.html"): keep(f)
 

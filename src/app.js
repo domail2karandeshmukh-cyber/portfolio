@@ -1045,6 +1045,32 @@
     });
   })();
 
+  /* ---------- Wide tables ---------- */
+  /* A table wider than its column scrolls sideways. Then it takes the keyboard focus, so the arrow keys can scroll it,
+     and it is announced as a region named after the section it is in. */
+  var tbls = $$(".tbl");
+  var wide = function (t) {
+    var on = t.scrollWidth > t.clientWidth + 1;
+    if (on === (t.getAttribute("role") === "region")) return;
+    if (on) {
+      // Named after its section; numbered when the section has more than one table.
+      var h = t.previousElementSibling, n = 1, s = t.nextElementSibling, more = false;
+      while (h && !/^H[2-4]$/.test(h.tagName)) { if (h.classList.contains("tbl")) n++; h = h.previousElementSibling; }
+      while (s && !/^H[2-4]$/.test(s.tagName)) { if (s.classList.contains("tbl")) more = true; s = s.nextElementSibling; }
+      t.setAttribute("role", "region");
+      t.setAttribute("aria-label", (n > 1 || more ? "Table " + n : "Table") + (h ? ": " + h.textContent.replace(/#\s*$/, "").trim() : ""));
+      t.tabIndex = 0;
+    } else {
+      t.removeAttribute("role"); t.removeAttribute("aria-label"); t.removeAttribute("tabindex");
+    }
+  };
+  tbls.forEach(wide);
+  if (tbls.length && "ResizeObserver" in window) {
+    // The frame and the table inside it: a table grows without its frame changing size when the fonts arrive.
+    var tro = new ResizeObserver(function (es) { es.forEach(function (e) { wide(e.target.closest(".tbl")); }); });
+    tbls.forEach(function (t) { tro.observe(t); if (t.firstElementChild) tro.observe(t.firstElementChild); });
+  }
+
   /* ---------- Library pages ---------- */
   var article = $(".article");
   if (article) {
@@ -1097,11 +1123,8 @@
       } else if (d && $("svg", d)) {
         var copy = $("svg", d).cloneNode(true);
         copy.removeAttribute("style");
-        enlarge(d, copy, "Diagram");
+        enlarge($(".diagram-open", d) || d, copy, "Diagram");
       }
-    });
-    article.addEventListener("keydown", function (e) {
-      if ((e.key === "Enter" || e.key === " ") && e.target.classList && e.target.classList.contains("diagram")) { e.preventDefault(); e.target.click(); }
     });
     $$("[data-pdf]", article).forEach(function (b) {
       if (innerWidth < 880) return;

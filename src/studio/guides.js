@@ -50,8 +50,8 @@
         '<label class="btn line sm">' + (s.shot ? T("Replace picture") : T("Add picture")) + '<input class="st-file gd-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label>' +
         '<button type="button" class="btn line sm gd-cap">' + T("Capture screen") + "</button>" +
         (s.shot ? '<button type="button" class="btn line sm gd-mark">' + T("Mark up") + '</button><button type="button" class="btn line sm gd-rmpic">' + T("Remove picture") + "</button>" : "") +
-        '<button type="button" class="btn line sm gd-up"' + (i ? "" : " disabled") + ' aria-label="' + esc(T("Move step {n} up", { n: i + 1 })) + '">' + T("Move up") + "</button>" +
-        '<button type="button" class="btn line sm gd-down"' + (i < guide.steps.length - 1 ? "" : " disabled") + ' aria-label="' + esc(T("Move step {n} down", { n: i + 1 })) + '">' + T("Move down") + "</button>" +
+        '<button type="button" class="btn line sm gd-up"' + (i ? "" : " disabled") + ' aria-label="' + esc(T("Move up: step {n}", { n: i + 1 })) + '">' + T("Move up") + "</button>" +
+        '<button type="button" class="btn line sm gd-down"' + (i < guide.steps.length - 1 ? "" : " disabled") + ' aria-label="' + esc(T("Move down: step {n}", { n: i + 1 })) + '">' + T("Move down") + "</button>" +
         '<button type="button" class="btn line sm gd-del" aria-label="' + esc(T("Delete step {n}", { n: i + 1 })) + '">' + T("Delete") + "</button></div></div></li>";
     }).join("");
   }

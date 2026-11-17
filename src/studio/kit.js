@@ -259,7 +259,8 @@
       var entries = (all[opts.tool] || []).slice(); host._entries = entries;
       if (!entries.length) { list.innerHTML = '<li class="st-wait">' + esc(T("No samples for this tool yet.")) + "</li>"; return; }
       list.innerHTML = entries.map(function (s, i) {
-        return '<li><button type="button" class="st-card" data-start="' + i + '" aria-label="' + esc(T("Open the sample: {title}", { title: T(s.title) })) + '">' +
+        // The card's name is what it shows (title, scenario, summary), so speech input and screen readers agree with the screen.
+        return '<li><button type="button" class="st-card" data-start="' + i + '">' +
           (s.preview ? '<img src="' + esc(s.preview) + '" alt="" loading="lazy" width="320" height="200">' : '<span class="st-card-no" aria-hidden="true">' + esc((s.kind || s.type || opts.tool).slice(0, 1).toUpperCase()) + "</span>") +
           '<span class="st-card-t"><b>' + esc(T(s.title)) + "</b><small>" + esc(T(s.scenarioLabel || "")) + "</small>" + (s.blurb ? "<span>" + esc(T(s.blurb)) + "</span>" : "") + "</span></button>" +
           (opts.links ? '<span class="st-card-links">' + opts.links(s) + "</span>" : "") + "</li>";

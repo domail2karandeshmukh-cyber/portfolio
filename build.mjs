@@ -182,8 +182,8 @@ const parts = {
 </div>`;
   })(),
   tools:
-    C.tools.map((t) => `<div><dt>${esc(t.group)}</dt><dd>${t.items.map((x) => `<span>${esc(x)}</span>`).join("")}</dd></div>`).join("") +
-    `<div class="wide">Also: ${esc(C.foundations)}.</div>`,
+    C.tools.map((t) => `<div><dt>${esc(t.group)}</dt><dd>${t.items.map((x) => `<span>${esc(x)}</span>`).join("")}</dd></div>`).join(""),
+  toolsAlso: `Also: ${esc(C.foundations)}.`,
   roles: C.experience
     .map(
       (e) => `<li><time>${esc(e.dates)}</time><div><h3>${esc(e.role)}</h3><p class="org"><b translate="no">${esc(e.org)}</b> <span>${e.note ? esc(e.note) + ", " : ""}${esc(e.place)}</span></p><ul>${e.points.slice(0, e.web).map((p) => `<li>${esc(p)}.</li>`).join("")}</ul></div></li>`
@@ -200,7 +200,7 @@ const GLOBE = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" strok
 const menu = (cur) =>
   locales.length < 2
     ? ""
-    : `<details class="lang"><summary aria-label="Language">${GLOBE}<span translate="no">${cur.code.toUpperCase()}</span></summary><div class="lang-menu" translate="no">${locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}"${l.code === cur.code ? ' aria-current="true"' : ""}>${esc(l.name)}</a>`).join("")}</div></details>`;
+    : `<details class="lang"><summary><span class="vh">Language</span> ${GLOBE}<span translate="no">${cur.code.toUpperCase()}</span></summary><div class="lang-menu" translate="no">${locales.map((l) => `<a href="${l.path}" lang="${l.code}" hreflang="${l.code}"${l.code === cur.code ? ' aria-current="true"' : ""}>${esc(l.name)}</a>`).join("")}</div></details>`;
 const hreflang = locales.length < 2 ? "" : locales.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${S.url}${l.path}">`).join("\n") + `\n<link rel="alternate" hreflang="x-default" href="${S.url}/">`;
 
 // The commit this build was made from, linked in the footer.

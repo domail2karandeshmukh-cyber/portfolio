@@ -37,7 +37,7 @@
 .wb-tools button:hover{background:var(--desk);color:var(--ink)}
 .wb-ed{position:relative;flex:1;min-height:0;--gut:3.5rem;--pad:18px}
 .wb-back{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.wb-back::before{content:"";position:absolute;top:0;bottom:0;left:calc(var(--gut) - 10px);width:1px;background:rgba(222,58,43,.42)}
+.wb-back::before{content:"";position:absolute;top:0;bottom:0;left:calc(var(--gut) - 10px);width:1px;background:rgba(206,47,32,.42)}
 #wb-lines{padding:14px 0 48px}
 .wb-ed textarea,.ln{font:400 .9rem/1.7 var(--mono);letter-spacing:0;font-variant-ligatures:none;-moz-tab-size:2;tab-size:2;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
 .wb-ed textarea{position:absolute;inset:0;display:block;width:100%;height:100%;margin:0;padding:14px var(--pad) 48px var(--gut);border:0;border-radius:0;outline:0;resize:none;background:transparent;color:var(--ink);caret-color:var(--red);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--rule2) transparent}

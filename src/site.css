@@ -6,7 +6,7 @@
 /* The editor's desk: white paper, black ink, one highlighter. Yellow marks what matters and nothing else. */
 :root{
  --paper:#fff;--desk:#F3F3F0;--ink:#0B0B0C;--ink2:#3B3D42;--mute:#696C73;--rule:#DDDDD9;--rule2:#B8B9B5;
- --hl:#FFDF2B;--red:#DE3A2B;--blue:#1D4ED8;--green:#0D9A57;
+ --hl:#FFDF2B;--red:#CE2F20;--blue:#1D4ED8;--green:#0B7E47;
  --night:#0B0B0C;--night2:#18191C;--nline:#303136;--ntext:#F5F5F2;--nsoft:#B7B9BF;
  --serif:"Newsreader","Deva",Georgia,"Times New Roman",serif;
  --sans:"Hanken","Deva",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -136,7 +136,7 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 .lead{font-size:1.26rem;line-height:1.5;color:var(--ink2);max-width:31em;margin:0 0 1.5em}
 .avail{display:flex;gap:.7em;align-items:baseline;color:var(--mute);font-size:.97rem;margin:1.9em 0 0;max-width:32em}
 .tnote{margin:.9em 0 0;padding-left:1.3em;max-width:34em;color:var(--mute);font-size:.9rem}
-.dot{flex:none;width:.6em;height:.6em;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(13,154,87,.16)}
+.dot{flex:none;width:.6em;height:.6em;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(11,126,71,.16)}
 
 /* The rewrite: one message, marked up, then published. Each fact keeps its identity across the three. */
 .rw{min-width:0}
@@ -329,7 +329,7 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 .shot img{display:block;width:100%;height:auto}
 .live{display:inline-flex;align-items:center;gap:.6em;margin:0 0 1em;padding:.36em .8em .36em .7em;border:1.5px solid var(--ink);border-radius:999px;font:700 .8rem/1 var(--sans);color:var(--ink)!important}
 .live .dot{animation:pulse 2s ease-out infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(13,154,87,.55)}100%{box-shadow:0 0 0 9px rgba(13,154,87,0)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(11,126,71,.55)}100%{box-shadow:0 0 0 9px rgba(11,126,71,0)}}
 .sys h3{font-size:2.3rem;letter-spacing:-.028em}
 .role{color:var(--ink);font-weight:600;font-size:1.02rem;margin:.55em 0 1em}
 .sys p{color:var(--ink2)}
@@ -398,7 +398,7 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 .tools dt{font-weight:700}
 .tools dd{margin:0;color:var(--ink2);font-size:1.1rem}
 .tools dd span:not(:last-child)::after{content:", "}
-.tools>.wide{display:block;border-bottom:0;padding-bottom:0;color:var(--mute);font-size:.97rem}
+.tools-also{margin:0;padding:17px 0 0;color:var(--mute);font-size:.97rem}
 
 /* Experience */
 .xp{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:clamp(32px,5.4vw,88px);align-items:start}
@@ -589,6 +589,8 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
 .diagram{position:relative;margin:.9em 0 1.3em;padding:18px 14px;border:1px solid var(--rule2);border-radius:6px;background:#fff;overflow-x:auto;text-align:center;cursor:zoom-in}
 .diagram:hover{border-color:var(--ink)}
 .diagram svg{max-width:100%;height:auto}
+.diagram-open{display:block;margin:12px 0 0 auto;padding:.42em .85em;border:1px solid var(--rule2);border-radius:999px;background:#fff;color:var(--ink);font:600 .8rem/1 var(--sans);cursor:zoom-in}
+.diagram-open:hover{border-color:var(--ink)}
 .cover{display:block;max-width:540px;margin:1.8em auto 0;border:1px solid var(--rule2);box-shadow:var(--lift);cursor:pointer}
 .cover img{display:block;width:100%;height:auto}
 .pdfview{display:block;width:100%;height:84vh;margin-top:1.4em;border:1px solid var(--rule2);border-radius:6px;background:#fff}
