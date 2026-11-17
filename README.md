@@ -161,6 +161,8 @@ April doesn't only answer. Asked to show a document, play a video or try the rew
 
 The model answers with two things: what to say, and one action code. `action()` in `api/april.js` checks the code against lists built from `content/site.json`, and sends the page an action only when the code names something that exists. An address never comes from the model: it comes from the content file.
 
+A small model doesn't always keep to the form it is asked for. `read()` in the same file takes what it gets: when the action is written after the words instead of beside them, her words end where the action begins, and the action is read from the rest. The visitor sees clean words either way.
+
 | Code | What the page does |
 |---|---|
 | `go:writing`, `go:projects`, `go:video`, `go:experience`, `go:contact`, `go:rewrite` | Scrolls to that part of the home page |

@@ -37,7 +37,7 @@ def markup(f):
     # The press has just happened. The message is on the stage, and the camera goes up to it.
     f.glide(f.top("#rewrite .rw-stage") - 12, 900)
     f.run(0.3)
-    f.caption("Here is a sample: hotfix steps,<br><mark>as someone typed them in a chat</mark>.")
+    f.caption("Here is a sample: hotfix steps,<br><mark>the way they get typed in a chat</mark>.")
     f.run(1.9)
     f.caption("<mark>Yellow</mark> is a fact to keep.<br>A <s>red line</s> is noise to cut.")
     f.run(3.6)
