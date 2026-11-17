@@ -176,14 +176,33 @@ python3 scripts/shoot-pages.py http://localhost:8765
 | `/studio/video` | Training videos: clips, zoom, pointer effects, overlays, captions (SRT and WebVTT in and out), chapters, and narration from a microphone or a file. The browser records the timeline in real time with MediaRecorder; `src/studio/mp4.js` then rewrites the recorder's fragmented MP4 with one index, copying every sample unchanged, so players show its length and can seek. |
 | `/studio/kb` | A help-center knowledge base that runs locally: categories, sections, articles, search, and an export. It does not publish to Zendesk. |
 | `/studio/control` | Document control: Draft, In review, Approved, Published, Superseded, with separate editorial, technical, and safety approvals, revisions, and an audit trail. A clean style check is not an approval. |
-| `/studio/dita` | DITA 1.3 projects from the workbench templates or Markdown files: a map with keys, a relationship table, and DITAVAL filters |
+| `/studio/dita` | DITA 1.3 projects from the scenarios' document sets, the workbench templates, or Markdown files: a map with keys, a relationship table, and DITAVAL filters |
 | `/studio/flagship` | A fictional preventive-maintenance package made with the tools above. Its procedures are samples, not approved instructions. |
+| `/studio/scenarios/<id>` | One of the eight fictional scenarios: its documents, rendered, and the samples the tools made from it |
 
-`lib/studio.mjs` builds the pages from `src/studio/`. `content/studio/` holds the samples, and `scripts/studio-*.py` make them again.
+`lib/studio.mjs` builds the pages from `src/studio/`.
+
+### Samples and scenarios
+
+Every sample comes from one of eight fictional scenarios, each a different kind of documentation: industrial maintenance, IT onboarding, a cloud developer guide, a security alert, a SaaS help center, release notes, a feature tutorial, and DITA publishing. `content/scenarios/scenarios.json` lists them, with their documents and the samples each tool shows. The organizations, products, people, and addresses are invented, and every page says so.
+
+- `src/studio/demos/` holds the fictional applications that screenshots and recordings are made from.
+- `scripts/studio-samples.py` makes the annotated screenshots and the step guides; `content/studio/samples/spec.json` says what each one marks.
+- `scripts/studio-video-sample.py` records the two video projects from the demo apps, and `scripts/studio-video-export.py` renders them in the Video Studio itself and checks the files with ffprobe.
+- `scripts/studio-flagship.py` takes one procedure through every tool.
+- `lib/samples.mjs` builds the sample index each tool's start panel reads, and orders it so each tool opens on a different scenario.
+
+A video's narration comes from `lib/narration.cjs`, recorded by `scripts/record-narration.mjs` into `content/narration/`. Until a segment is recorded, the sample is made without sound and its description doesn't call it narrated.
+
+### Editing
+
+The screenshot editor, the step guides, and the video editor have undo and redo (Ctrl+Z, Ctrl+Shift+Z) and save the project with Ctrl+S. A step guide has a language of its own for the headings the tool writes, separate from the interface's.
 
 ### DITA
 
-`scripts/dita-sample.mjs` writes `content/dita-sample/src` from the workbench templates. With `--publish` and `DITA_HOME` set to a DITA-OT folder, it validates every file against the OASIS DTDs and publishes HTML5 and PDF. The workflow **Publish the DITA sample** does this on GitHub and commits the result.
+`lib/dita-sets.mjs` lists the document sets. `scripts/dita-sample.mjs` writes each one to `content/dita-samples/<id>/src`. With `--publish` and `DITA_HOME` set to a DITA-OT folder, it validates every file against the OASIS DTDs and publishes HTML5 and PDF. The workflow **Publish the DITA sample** does this on GitHub and commits the result.
+
+The script raises xmllint's entity-amplification limit, because libxml2 stops reading the OASIS DTDs without it. It does so only for those DTDs and for files it wrote itself. Nothing a visitor adds is parsed that way: the browser's DITA Studio takes Markdown, and checks the XML it makes with DOMParser, which loads no DTD.
 
 ## Films
 
@@ -222,6 +241,14 @@ The home page is written in English and translated at build time. The documents,
 - `keep` lists text that stays as it is, such as product names.
 
 After you change English text, run the build. It writes every piece of the English page to `.cache/units.json`, in reading order. For each language it lists the pieces that have no translation yet, writes that list to `.cache/missing-<language>.json`, and shows those pieces in English until you add them to `units`.
+
+### The studio in other languages
+
+The studio's interface is translated too, at `/fr/studio`, `/de/studio`, `/es/studio`, and `/hi/studio`. Documents, samples, and scenario pages stay in English.
+
+- `content/i18n/studio/<language>.json` holds the studio's own words. The home page's dictionary is the base, so the navigation reads the same.
+- The build translates each page's text, and puts the words its scripts use in `window.__studioT`. In the scripts, `T("...")` translates a message, with `{name}` for a value, and `K("...")` marks English that is kept as data and translated where it's shown.
+- The build writes the list to translate to `.cache/studio-units.json`, and what each language still lacks to `.cache/studio-missing-<language>.json`.
 
 ## April
 

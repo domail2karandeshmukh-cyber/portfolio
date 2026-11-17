@@ -37,7 +37,7 @@ kbd{font:600 .72rem/1 var(--mono);border:1px solid var(--rule2);border-radius:5p
 html[lang=hi] h1,html[lang=hi] h2,html[lang=hi] h3,html[lang=hi] h4,html[lang=hi] .doc-title{line-height:1.28;letter-spacing:0;font-weight:600}
 html[lang=hi] body:not(.studio) h1{font-size:clamp(2.1rem,5.4vw,4.9rem)}
 html[lang=hi] body:not(.studio) h2{font-size:clamp(1.9rem,4vw,3.4rem)}
-html[lang=de] h1{font-size:clamp(2.4rem,6.4vw,6rem)}
+html[lang=de] body:not(.studio) h1{font-size:clamp(2.4rem,6.4vw,6rem)}
 html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 
 /* The highlighter. A stroke is drawn once, when its words come into view. */
