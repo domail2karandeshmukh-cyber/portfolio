@@ -1,11 +1,10 @@
 name: Check the site
 
 # Builds the site, tests the checker and the document model, follows every link, and opens the live site and every
-# live project in a real browser. Runs on demand, after a change to main, and every Monday morning.
+# live project in a real browser. Runs on demand and every Monday morning. Run it after a release, once the
+# release is live: the last step looks at the live site, not at this copy of the repository.
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
   schedule:
     - cron: "17 6 * * 1"
 
@@ -33,7 +32,4 @@ jobs:
       - name: Install a browser
         run: pip install playwright && python -m playwright install --with-deps chromium
       - name: Open the live site and the live projects
-        # A push is checked before it is deployed, so the live site may be a version behind: wait for the deployment.
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then sleep 240; fi
-          python scripts/check-live.py
+        run: python scripts/check-live.py

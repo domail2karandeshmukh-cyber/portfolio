@@ -298,7 +298,7 @@ The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 | `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
 | `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. The script also asks April one question and starts her tour. |
 
-The workflow **Check the site** builds the site and runs all three. It runs on demand, after a change to `main`, and every Monday morning. GitHub sends an email when it fails.
+The workflow **Check the site** builds the site and runs all three. It runs on demand and every Monday morning, and GitHub sends an email when it fails. Run it after a release, once the release is live.
 
 ## Build
 
