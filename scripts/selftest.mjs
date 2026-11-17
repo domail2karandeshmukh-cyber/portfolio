@@ -8,8 +8,10 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import { spawnSync, execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
+// libxml2 2.11 and later stop reading the OASIS DTDs at their entity-amplification limit unless it is raised.
+const XMLLINT_LIMITS = (() => { try { const h = spawnSync("xmllint", ["--help"], { encoding: "utf8" }); return ["--huge"].concat(/--max-ampl/.test((h.stdout || "") + (h.stderr || "")) ? ["--max-ampl", "1000"] : []); } catch { return ["--huge"]; } })();
 const require = createRequire(import.meta.url);
 const Doc = require("../src/doc.js"), Style = require("../src/style.js");
 
@@ -43,7 +45,7 @@ for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) 
     if (catalog) {
       const out = path.join(tmp, `${name}-${reader === undefined ? "all" : reader === Doc.GENERAL ? "general" : reader}.dita`);
       fs.writeFileSync(out, dita);
-      try { execFileSync("xmllint", ["--huge", "--noout", "--valid", "--nonet", out], { env: { ...process.env, XML_CATALOG_FILES: catalog }, stdio: "pipe" }); checks++; }
+      try { execFileSync("xmllint", [...XMLLINT_LIMITS, "--noout", "--valid", "--nonet", out], { env: { ...process.env, XML_CATALOG_FILES: catalog }, stdio: "pipe" }); checks++; }
       catch (e) { failed++; console.log(`FAIL  ${label}: the DITA is not valid\n${String(e.stderr).split("\n").slice(0, 6).join("\n")}`); }
     }
   }
