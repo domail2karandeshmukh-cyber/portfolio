@@ -259,7 +259,7 @@
     },
     fail: fail, blank: function () { $("#gd-new").click(); sw.close(); }, blankLabel: "New blank guide",
     files: [{ label: "Open project", input: "gd-open" }],
-    links: function (s) { return '<a href="' + Kit.esc(s.html) + '" target="_blank" rel="noopener">HTML</a><a href="' + Kit.esc(s.pdf) + '" target="_blank" rel="noopener">PDF</a><a href="' + Kit.esc(s.markdown) + '">Markdown</a>'; },
+    links: function (s) { return '<a href="' + Kit.esc(s.html) + '" target="_blank" rel="noopener">HTML</a><a href="' + Kit.esc(s.pdf) + '" target="_blank" rel="noopener">PDF</a>'; },
   });
   var sw = Kit.startSwitch(start, $("#gd-slot"), $("#gd-samples"));
 

@@ -115,7 +115,6 @@
    "project": "guides/it-onboarding/it-onboarding.guide.zip",
    "html": "guides/it-onboarding/guide.html",
    "pdf": "guides/it-onboarding/guide.pdf",
-   "markdown": "guides/it-onboarding/guide-markdown.zip",
    "preview": "guides/it-onboarding/preview.jpg"
   },
   {
@@ -127,7 +126,6 @@
    "project": "guides/support-unlock/support-unlock.guide.zip",
    "html": "guides/support-unlock/guide.html",
    "pdf": "guides/support-unlock/guide.pdf",
-   "markdown": "guides/support-unlock/guide-markdown.zip",
    "preview": "guides/support-unlock/preview.jpg"
   },
   {
@@ -139,7 +137,6 @@
    "project": "guides/cloud-config/cloud-config.guide.zip",
    "html": "guides/cloud-config/guide.html",
    "pdf": "guides/cloud-config/guide.pdf",
-   "markdown": "guides/cloud-config/guide-markdown.zip",
    "preview": "guides/cloud-config/preview.jpg"
   },
   {
@@ -151,7 +148,6 @@
    "project": "guides/engineering-inspection/engineering-inspection.guide.zip",
    "html": "guides/engineering-inspection/guide.html",
    "pdf": "guides/engineering-inspection/guide.pdf",
-   "markdown": "guides/engineering-inspection/guide-markdown.zip",
    "preview": "guides/engineering-inspection/preview.jpg"
   },
   {
@@ -163,7 +159,6 @@
    "project": "guides/software-feature/software-feature.guide.zip",
    "html": "guides/software-feature/guide.html",
    "pdf": "guides/software-feature/guide.pdf",
-   "markdown": "guides/software-feature/guide-markdown.zip",
    "preview": "guides/software-feature/preview.jpg"
   }
  ]

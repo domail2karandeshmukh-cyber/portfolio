@@ -24,6 +24,25 @@ W, H = 1280, 800
 index = json.loads((SAMPLES / "index.json").read_text(encoding="utf8")) if (SAMPLES / "index.json").exists() else {}
 
 
+def shrink(png_bytes):
+    """A screenshot of a flat user interface in 256 colours: a third of the size, and nothing a reader can see. Keeps the file a PNG the tool reads."""
+    im = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+    if len(im.getcolors(maxcolors=300) or [0] * 301) > 256:
+        im = im.convert("RGB").quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    out = io.BytesIO(); im.save(out, "PNG", optimize=True); return out.getvalue()
+
+def shrink_data_urls(text):
+    import re
+    return re.sub(r"data:image/png;base64,([A-Za-z0-9+/=]+)", lambda m: "data:image/png;base64," + base64.b64encode(shrink(base64.b64decode(m.group(1)))).decode(), text)
+
+def shrink_zip(path):
+    """Re-packs a stored ZIP the tool saved, with every PNG in it shrunk. Entries stay stored, which is what the tool's reader expects."""
+    import zipfile
+    src = zipfile.ZipFile(path); items = [(i.filename, src.read(i.filename)) for i in src.infolist()]; src.close()
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_STORED) as z:
+        for name, data in items: z.writestr(name, shrink(data) if name.endswith(".png") else data)
+
+
 def preview(png_path, to, width=640):
     im = Image.open(png_path).convert("RGB")
     im.thumbnail((width, width * 3))
@@ -117,10 +136,10 @@ with sync_playwright() as p:
         for s in spec["screenshots"]:
             d = SAMPLES / "screenshots" / s["id"]; shutil.rmtree(d, ignore_errors=True); d.mkdir(parents=True)
             png, items, redactions, size = frame(s["frame"])
-            (d / "before.png").write_bytes(png)
+            (d / "before.png").write_bytes(shrink(png))
             project = pg.evaluate(BUILD, [base64.b64encode(png).decode(), items, redactions, s["id"]])
             pg.evaluate("(p) => studioShots.loadProject(p)", project); pg.wait_for_timeout(400)
-            (d / "project.screenshot.json").write_text(json.dumps(pg.evaluate("studioShots.project()")), encoding="utf8")
+            (d / "project.screenshot.json").write_text(shrink_data_urls(json.dumps(pg.evaluate("studioShots.project()"))), encoding="utf8")
             download(pg, "#sh-png", d / "after.png")
             preview(d / "after.png", d / "preview.jpg")
             n = len(items) + len(redactions)
@@ -143,15 +162,14 @@ with sync_playwright() as p:
             guide = {k: g.get(k, "") for k in ["title", "docId", "version", "intro", "prereq", "warn", "done"]}
             guide["steps"] = steps
             pg.evaluate("(g) => studioGuide.load(g)", guide); pg.wait_for_timeout(800)
-            download(pg, "#gd-save", d / f"{g['id']}.guide.zip")
-            download(pg, "#gd-html", d / "guide.html")
+            shrink_zip(download(pg, "#gd-save", d / f"{g['id']}.guide.zip"))
+            html = download(pg, "#gd-html", d / "guide.html"); html.write_text(shrink_data_urls(html.read_text(encoding="utf8")), encoding="utf8")
             download(pg, "#gd-pdf", d / "guide.pdf", timeout=120000)
-            download(pg, "#gd-md", d / "guide-markdown.zip")
             first = pg.evaluate("() => { const g = studioGuide.get(), p = studioGuide.pics(); return p[g.steps[0].id].toDataURL('image/png'); }")
             (d / "step-01.png").write_bytes(base64.b64decode(first.split(",", 1)[1]))
             preview(d / "step-01.png", d / "preview.jpg"); (d / "step-01.png").unlink()
             out.append({"id": g["id"], "scenario": g["scenario"], "title": g["title"], "blurb": g["intro"].replace(" Fictional sample written for this portfolio.", "").split(" Fictional sample")[0], "steps": len(steps),
-                        "project": f"guides/{g['id']}/{g['id']}.guide.zip", "html": f"guides/{g['id']}/guide.html", "pdf": f"guides/{g['id']}/guide.pdf", "markdown": f"guides/{g['id']}/guide-markdown.zip", "preview": f"guides/{g['id']}/preview.jpg"})
+                        "project": f"guides/{g['id']}/{g['id']}.guide.zip", "html": f"guides/{g['id']}/guide.html", "pdf": f"guides/{g['id']}/guide.pdf", "preview": f"guides/{g['id']}/preview.jpg"})
             print("guide", g["id"], len(steps), "steps")
         assert not pg.errors, pg.errors
         pg.close(); index["guides"] = out
