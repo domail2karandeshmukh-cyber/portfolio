@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="mp-ps104-01-map" xml:lang="en">
+<title>Monthly inspection of feed pump B</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-17"/></critdates>
+<othermeta name="id" content="MP-PS104-01"/>
+<othermeta name="version" content="1.0"/>
+<othermeta name="status" content="Published"/>
+<othermeta name="owner" content="Maintenance planning"/>
+<othermeta name="reviewer" content="Maintenance planning lead (fictional)"/>
+</topicmeta>
+<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<topicref href="topics/mp-ps104-01.dita" type="task"/>
+</map>

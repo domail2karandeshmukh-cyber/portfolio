@@ -1,0 +1,101 @@
+"""The flagship demonstration: one fictional preventive-maintenance procedure taken through every tool of the
+Documentation Studio, by driving the tools in a browser the way a writer would. Every file it keeps is a file a tool made.
+
+    python3 scripts/studio-flagship.py http://localhost:8765     a local build of the site, served
+    (set DITA_HOME to a DITA Open Toolkit folder, and CHROME to Google Chrome if Playwright has no Chromium)
+
+Writes content/studio/flagship/. The build serves those files at /studio/flagship and puts them in one ZIP.
+"""
+import json, os, pathlib, shutil, subprocess, sys, zipfile
+from playwright.sync_api import sync_playwright
+
+BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765").rstrip("/")
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+OUT = ROOT / "content/studio/flagship"
+DITA = os.environ.get("DITA_HOME")
+if not DITA: sys.exit("Set DITA_HOME to a DITA Open Toolkit folder.")
+shutil.rmtree(OUT, ignore_errors=True)
+for d in ["procedure", "control", "screenshots", "guide", "video", "dita"]: (OUT / d).mkdir(parents=True)
+made = []
+def keep(path):
+    made.append(str(pathlib.Path(path).relative_to(OUT)))
+    print("made", made[-1])
+
+with sync_playwright() as p:
+    chrome = os.environ.get("CHROME")
+    args = ["--no-sandbox", "--autoplay-policy=no-user-gesture-required"]
+    b = p.chromium.launch(executable_path=chrome, args=args) if chrome else p.chromium.launch(args=args)
+    ctx = b.new_context(viewport={"width": 1440, "height": 1000}, accept_downloads=True)
+    answers = []
+    def page(path):
+        pg = ctx.new_page(); pg.on("dialog", lambda d: d.accept(answers.pop(0) if answers else ""))
+        pg.goto(BASE + path, wait_until="load"); pg.wait_for_timeout(900); return pg
+    def save(pg, selector, to, timeout=60000):
+        with pg.expect_download(timeout=timeout) as d: pg.click(selector)
+        d.value.save_as(str(to)); keep(to); return to
+
+    # 1. Document control: the procedure goes from draft to published, with its three reviews.
+    pg = page("/studio/control")
+    pg.click("#dc-sample"); pg.wait_for_timeout(600)
+    pg.fill("#dc-me", "Karan Deshmukh"); pg.dispatch_event("#dc-me", "change")
+    for f, v in [("#dc-author", "Karan Deshmukh"), ("#dc-reviewer", "Maintenance planning lead (fictional)"), ("#dc-version", "1.0")]:
+        pg.fill(f, v); pg.dispatch_event(f, "change")
+    pg.click('[data-do="submit"]')
+    for kind, comment in [("editorial", "Plain language, one action a step."), ("technical", "Ranges match the fictional pump data sheet."), ("safety", "Readings are taken from gauges and the console, outside the guard.")]:
+        pg.click('[data-do="review"]'); pg.select_option("#dc-r-kind", kind); pg.fill("#dc-r-comment", comment); pg.click("#dc-r-save"); pg.wait_for_timeout(150)
+    pg.click('[data-do="approve"]'); answers.append("First release of the monthly inspection procedure")
+    pg.click('[data-do="publish"]'); pg.wait_for_timeout(300)
+    assert pg.evaluate("studioControl.get().meta.status") == "Published", "the procedure didn't reach Published"
+    audit = save(pg, "#dc-x-audit", OUT / "control/audit.zip")
+    with zipfile.ZipFile(audit) as z:
+        md = [n for n in z.namelist() if n.endswith(".md")][0]
+        (OUT / "procedure/MP-PS104-01.md").write_bytes(z.read(md)); keep(OUT / "procedure/MP-PS104-01.md")
+    pg.close()
+
+    # 2. The same procedure as HTML, as a DITA project, and published by DITA Open Toolkit.
+    js = """const Doc=require(process.argv[1]), fs=require("fs"), path=require("path"), src=fs.readFileSync(process.argv[2],"utf8"), out=process.argv[3];
+const d=Doc.parse(src); fs.writeFileSync(path.join(out,"procedure/MP-PS104-01.html"), Doc.toHtml(Doc.resolve(d, Doc.GENERAL))+"\\n");
+for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",f.name); fs.mkdirSync(path.dirname(to),{recursive:true}); fs.writeFileSync(to,f.data); }"""
+    subprocess.run(["node", "-e", js, str(ROOT / "src/doc.js"), str(OUT / "procedure/MP-PS104-01.md"), str(OUT)], check=True)
+    keep(OUT / "procedure/MP-PS104-01.html")
+    env = dict(os.environ, XML_CATALOG_FILES=f"{DITA}/catalog-dita.xml")
+    for f in (OUT / "dita/src").rglob("*.dita*"):
+        subprocess.run(["xmllint", "--noout", "--valid", "--nonet", str(f)], check=True, env=env); keep(f)
+    m = next((OUT / "dita/src").glob("*.ditamap"))
+    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=pdf", f"--output={OUT}/dita/pdf"], check=True, capture_output=True)
+    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=html5", f"--output={OUT}/dita/html5"], check=True, capture_output=True)
+    pdf = next((OUT / "dita/pdf").glob("*.pdf")); pdf.rename(OUT / "procedure/MP-PS104-01.pdf"); shutil.rmtree(OUT / "dita/pdf"); keep(OUT / "procedure/MP-PS104-01.pdf")
+    for f in (OUT / "dita/html5").rglob("*.html"): keep(f)
+
+    # 3. A screenshot: the access key redacted, the button to select numbered and boxed.
+    pg = page("/studio/screenshots")
+    pg.click("#sh-sample"); pg.wait_for_timeout(900)
+    pg.evaluate("""() => { const s = studioShots.state(), st = { name: "work-order-annotated", base: s.base, items: [] };
+      Annotate.redact(st, { x: 446, y: 553, w: 194, h: 28 });
+      [{ type: "rect", x: 244, y: 486, w: 158, h: 46 }, { type: "callout", x: 228, y: 509, n: 1, size: 36 }, { type: "arrow", x: 560, y: 430, x2: 410, y2: 500 },
+       { type: "text", x: 575, y: 410, text: "Start here", size: 26, box: true }]
+        .forEach((m) => st.items.push(Annotate.clean(Object.assign({ id: Annotate.id(), color: "#E5251B", stroke: 6 }, m), 1280, 800)));
+      return studioShots.loadProject(Annotate.toProject(st)); }""")
+    pg.wait_for_timeout(600)
+    save(pg, "#sh-png", OUT / "screenshots/work-order-annotated.png"); save(pg, "#sh-svg", OUT / "screenshots/work-order-annotated.svg")
+    save(pg, "#sh-save", OUT / "screenshots/work-order-annotated.screenshot.json")
+    pg.close()
+
+    # 4. The numbered, illustrated guide.
+    pg = page("/studio/guides")
+    pg.click("#gd-sample"); pg.wait_for_timeout(1500)
+    pg.fill("#gd-docid", "MP-PS104-01-G"); pg.fill("#gd-version", "1.0"); pg.wait_for_timeout(300)
+    for sel, name in [("#gd-md", "guide-markdown.zip"), ("#gd-html", "guide.html"), ("#gd-pdf", "guide.pdf"), ("#gd-shots", "guide-screenshots.zip"), ("#gd-save", "guide-project.zip")]:
+        save(pg, sel, OUT / "guide" / name)
+    pg.close()
+
+    # 5. The training video: footage with its recorded pointer, intro, highlight, warning, captions; rendered in the browser.
+    pg = page("/studio/video")
+    pg.click("#vd-sample"); pg.wait_for_timeout(2500)
+    save(pg, "#vd-export", OUT / "video/inspection-walkthrough.mp4", timeout=180000)
+    save(pg, "#vd-srt", OUT / "video/inspection-walkthrough.srt"); save(pg, "#vd-vtt", OUT / "video/inspection-walkthrough.vtt")
+    pg.close()
+    b.close()
+
+json.dump({"made": made}, open(OUT / "files.json", "w"), indent=1)
+print(len(made), "files")

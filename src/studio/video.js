@@ -663,7 +663,10 @@
     }).then(function () { return new Promise(function (ok) { setTimeout(ok, 300); }); }).then(function () { rec.stop(); return stopped; }).then(function () {
       a.out.disconnect(dest);
       var ext = /mp4/.test(type) ? "mp4" : "webm", blob = new Blob(parts, { type: type.split(";")[0] });
-      return verify(blob).then(function (len) {
+      return (ext === "mp4" && window.Mp4 ? blob.arrayBuffer().then(function (buf) {
+        // The recorder writes the file in pieces and never records its length. Rewrite it with one index so players show the right length and can seek.
+        var flat = Mp4.flatten(buf); return flat.unchanged ? blob : new Blob([flat.bytes], { type: "video/mp4" });
+      }) : Promise.resolve(blob)).then(function (b) { blob = b; return verify(blob); }).then(function (len) {
         lastExport = { blob: blob, ext: ext, seconds: len };
         Kit.save(blob, name() + "." + ext);
         var codecs = (/codecs=([^;]+)/.exec(rec.mimeType || type) || [0, ""])[1].replace(/avc1[.\w]*/, "H.264").replace(/mp4a[.\w]*/, "AAC").replace(/opus/, "Opus").replace(/vp9/, "VP9").replace(/,/g, " and ");
@@ -676,7 +679,7 @@
   function verify(blob) {
     return new Promise(function (ok, no) {
       var v = document.createElement("video"), url = URL.createObjectURL(blob); v.muted = true; v.preload = "metadata";
-      var settle = function (d) { URL.revokeObjectURL(url); if (d > 0.5) ok(d); else no(new Error("The video file was made but can't be played back. Nothing was saved.")); };
+      var settle = function (d) { URL.revokeObjectURL(url); if (d > 0.5 && Math.abs(d - duration()) < Math.max(1, duration() * 0.05)) ok(d); else if (d > 0.5) no(new Error("The video file lasts " + d.toFixed(1) + " s but the timeline lasts " + duration().toFixed(1) + " s, so it wasn't saved. Keep this tab visible while it renders, then try again.")); else no(new Error("The video file was made but can't be played back. Nothing was saved.")); };
       v.onloadedmetadata = function () { if (isFinite(v.duration)) return settle(v.duration); v.currentTime = 1e9; v.ontimeupdate = function () { v.ontimeupdate = null; settle(v.duration); }; };
       v.onerror = function () { URL.revokeObjectURL(url); no(new Error("The video file was made but can't be played back. Nothing was saved.")); };
       v.src = url;

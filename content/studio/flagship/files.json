@@ -1,0 +1,23 @@
+{
+ "made": [
+  "control/audit.zip",
+  "procedure/MP-PS104-01.md",
+  "procedure/MP-PS104-01.html",
+  "dita/src/mp-ps104-01.ditamap",
+  "dita/src/topics/mp-ps104-01.dita",
+  "procedure/MP-PS104-01.pdf",
+  "dita/html5/index.html",
+  "dita/html5/topics/mp-ps104-01.html",
+  "screenshots/work-order-annotated.png",
+  "screenshots/work-order-annotated.svg",
+  "screenshots/work-order-annotated.screenshot.json",
+  "guide/guide-markdown.zip",
+  "guide/guide.html",
+  "guide/guide.pdf",
+  "guide/guide-screenshots.zip",
+  "guide/guide-project.zip",
+  "video/inspection-walkthrough.mp4",
+  "video/inspection-walkthrough.srt",
+  "video/inspection-walkthrough.vtt"
+ ]
+}

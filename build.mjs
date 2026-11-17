@@ -211,6 +211,8 @@ const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github
 <h2>Tools I built to show how I work</h2>
 <ul class="rec-tools">
 <li><a href="/workbench">Workbench</a>: write a document, check it against my style guide as you type, and publish it as Markdown, HTML, or DITA.</li>
+<li><a href="/studio">Documentation Studio</a>: screenshots with permanent redaction, numbered step guides, training videos with captions, DITA projects published with DITA Open Toolkit, a help center, and document control.</li>
+<li><a href="/studio/flagship">A maintenance procedure, start to finish</a>: one fictional procedure taken through every tool, with every file it produced.</li>
 <li><a href="/style">Style guide</a>: ${guide.figures.rules} rules, ${guide.figures.coded} of them checked by code on every build.</li>
 <li><a href="/#rewrite">Rewrite desk</a>: an engineer's chat message turned into a how-to, with every fact checked.</li>
 <li><a href="/docs">Library</a>: every document on this site, with search.</li>
@@ -296,7 +298,7 @@ const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
-const studio = await buildStudio({ S, OUT, pmenu: common.pmenu, templates: starts });
+const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, templates: starts });
 const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,

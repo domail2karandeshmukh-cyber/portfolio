@@ -241,3 +241,14 @@
 .dc-logbox{max-height:260px;overflow:auto}
 [aria-disabled="true"]{opacity:.55}
 @media (max-width:1000px){.dc{grid-template-columns:1fr}}
+
+/* The flagship demonstration */
+.fl-warn{padding:10px 14px;background:#FFF4B8;border-left:4px solid var(--ink);border-radius:4px;max-width:60em}
+.fl-media{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+.fl-media figure{margin:0;background:#fff;border:1px solid var(--rule2);border-radius:10px;padding:10px}
+.fl-media video,.fl-media img{display:block;width:100%;height:auto;border-radius:6px;background:#000}
+.fl-media figcaption{font-size:.88rem;color:var(--ink2);margin-top:8px;line-height:1.45}
+.fl-h{font:500 1.6rem/1.2 var(--serif);margin:26px 0 10px}
+.fl-table td:first-child{color:var(--mute);width:2.5em}
+.fl-table a{color:var(--ink);font-weight:600;word-break:break-all}
+@media (max-width:860px){.fl-media{grid-template-columns:1fr}}

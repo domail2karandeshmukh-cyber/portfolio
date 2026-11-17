@@ -15,6 +15,9 @@ C.docs.forEach((d) => { DOCS[d.id] = { title: d.title, href: `/docs/${d.shelf}/$
 DOCS["style-guide"] = { title: "Style guide", href: "/style" };
 DOCS.workbench = { title: "Workbench", href: "/workbench" };
 DOCS.recruiters = { title: "For recruiters", href: "/recruiters" };
+DOCS.studio = { title: "Documentation Studio", href: "/studio" };
+DOCS.flagship = { title: "A maintenance procedure, start to finish", href: "/studio/flagship" };
+(C.studio ? C.studio.tools : []).forEach((t) => { DOCS["studio-" + t.id] = { title: t.title, href: "/studio/" + t.id }; });
 const RULES = require("../src/style.js").RULES;
 const SECTIONS = ["writing", "engineering", "workbench", "projects", "video", "experience", "contact", "rewrite"];
 const DESK = require("../content/desk/messages.json").messages.map((m) => m.id);
@@ -70,6 +73,10 @@ function notes() {
   L.push(`The site is available in ${C.locales.map((l) => l.name).join(", ")}. The documents, the videos and the CV are in English.`);
   L.push("April also gives a one-minute spoken tour of the home page. It starts from the button \"Take the one-minute tour\" at the top of the page.");
   L.push(`The rewrite desk, at the top of the home page (${S.url}/#rewrite): a visitor pastes a rough message from their own team, such as a chat message or meeting notes, and sees it marked up and drafted into a document, with the questions a writer would still ask the author. An AI model writes the draft by a brief Karan wrote, and a check written in code confirms that no name or number was lost. Karan's point: drafting is the quick part, and getting the questions answered is the job.`);
+  L.push(`- [doc:studio] The Documentation Studio (${S.url}/studio): working tools Karan built for this portfolio. They run in the visitor's browser, nothing is uploaded, and each one exports real files. The samples are fictional.`);
+  (C.studio ? C.studio.tools : []).forEach((t) => L.push(`  - [doc:studio-${t.id}] ${t.title} (${S.url}/studio/${t.id}): ${t.blurb} Exports: ${t.out}.`));
+  L.push(`  - [doc:flagship] A maintenance procedure, start to finish (${S.url}/studio/flagship): one fictional preventive-maintenance procedure taken through every tool, with every file the tools produced, in one download.`);
+  L.push("  What the studio does not do: it is not connected to a Zendesk account (it exports the request bodies the Zendesk API takes); importing its files into MadCap Flare has not been tested, though Flare documents DITA, Markdown and HTML import; it has no text-to-speech or automatic transcription; Document Control is a local demonstration without sign-in. Building these tools shows how Karan works; it is not professional experience with the products they resemble.");
   L.push("About April: her name stands for AI for Projects, Releases, Insights and Logs. Karan first built April inside ReleasePilot AI, where she proposes project plans and waits for human approval.");
   return L.join("\n");
 }
