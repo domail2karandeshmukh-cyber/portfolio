@@ -64,13 +64,13 @@ def console_steps():
 
 SAMPLES = {
     "schedule-a-report": {"demo": "reports", "steps": reports_steps, "title": "Schedule a report for automatic delivery", "scenario": "g-training",
-                          "intro": "Schedule a report for automatic delivery\nBeacon Reports · a two-minute tutorial · fictional application", "outro": "You're done\nThe Schedules tab lists the schedule and its next delivery.",
+                          "intro": "Schedule a report for automatic delivery\nBeacon Reports · a short tutorial · fictional application", "outro": "You're done\nThe Schedules tab lists the schedule and its next delivery.",
                           "lower": "Beacon Reports · fictional demo", "blur": None,
-                          "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels, captions and narration."},
+                          "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions."},
     "inspection-walkthrough": {"demo": "console", "steps": console_steps, "title": "Monthly inspection of feed pump B", "scenario": "a-industrial",
                                "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · fictional procedure", "outro": "Work order closed\nThe written procedure, the step guide and the DITA output are in the same package.",
                                "lower": "Harbor Pump Station · fictional demo", "blur": "#key",
-                               "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, captions and narration."},
+                               "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions."},
 }
 
 
@@ -196,7 +196,7 @@ def make(sample_id):
         if narr: z.write(narr, "media/narration.mp3")
     footage.unlink()
     if narr: narr.unlink()
-    info = {"id": sample_id, "title": s["title"], "scenario": s["scenario"], "blurb": s["blurb"], "seconds": round(dur, 2), "clicks": len(clicks), "narrated": bool(narr), "overlays": len(ov), "captions": len(out_caps),
+    info = {"id": sample_id, "title": s["title"], "scenario": s["scenario"], "blurb": s["blurb"].rstrip(".") + (", with a synthetic voiceover." if narr else "."), "seconds": round(dur, 2), "clicks": len(clicks), "narrated": bool(narr), "overlays": len(ov), "captions": len(out_caps),
             "segments": [{"id": g["id"], "start": round(st, 2), "seconds": g["seconds"], "recorded": bool(g["file"])} for g, st in zip(segs, starts)]}
     old = json.loads((d / "sample.json").read_text()) if (d / "sample.json").exists() else {}
     if old.get("exported"): info["exported"] = old["exported"]           # what the export script last measured; it reruns after this

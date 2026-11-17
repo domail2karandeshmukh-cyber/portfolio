@@ -2,7 +2,7 @@
  "id": "inspection-walkthrough",
  "title": "Monthly inspection of feed pump B",
  "scenario": "a-industrial",
- "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, captions and narration.",
+ "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions.",
  "seconds": 61.28,
  "clicks": 3,
  "narrated": false,

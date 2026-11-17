@@ -6,13 +6,16 @@
 (function (root) {
   "use strict";
   var Kit = root.Kit;
+  var T = Kit && Kit.t || function (s, v) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return v && k in v ? v[k] : m; }); };
   var A = {};
 
   /* ---------- The marks ---------- */
   var BOX = { rect: 1, ellipse: 1, highlight: 1, spotlight: 1, blur: 1, pixelate: 1, redact: 1 };
   var LINE = { arrow: 1, line: 1 };
   A.TYPES = ["arrow", "line", "rect", "ellipse", "callout", "text", "highlight", "spotlight", "blur", "pixelate"];
-  A.NAMES = { arrow: "Arrow", line: "Line", rect: "Rectangle", ellipse: "Ellipse", callout: "Numbered callout", text: "Text", highlight: "Highlight", spotlight: "Spotlight", blur: "Blur", pixelate: "Pixelate", redact: "Redaction" };
+  A.NAMES = { arrow: T("Arrow"), line: T("Line"), rect: T("Rectangle"), ellipse: T("Ellipse"), callout: T("Numbered callout"), text: T("Text"), highlight: T("Highlight"), spotlight: T("Spotlight"), blur: T("Blur"), pixelate: T("Pixelate"), redact: T("Redaction") };
+  /** The same names as they read inside a sentence of the history: Added arrow. */
+  A.NOUNS = { arrow: T("arrow"), line: T("line"), rect: T("rectangle"), ellipse: T("ellipse"), callout: T("numbered callout"), text: T("text"), highlight: T("highlight"), spotlight: T("spotlight"), blur: T("blur"), pixelate: T("pixelation"), redact: T("redaction") };
   A.COLORS = ["#E5251B", "#0B0B0C", "#1D4ED8", "#0D9A57", "#FFDF2B", "#FFFFFF"];
 
   function num(v, lo, hi, d) { v = Number(v); return isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d; }
@@ -185,7 +188,7 @@
       image: state.base.toDataURL("image/png"), items: state.items.map(function (m) { return A.clean(m, state.base.width, state.base.height); }).filter(Boolean) };
   };
   A.fromProject = function (p) {
-    if (!p || p.app !== "karandeshmukh.dev/studio/screenshots" || p.version !== 1) return Promise.reject(new Error("This isn't a screenshot project saved by this studio."));
+    if (!p || p.app !== "karandeshmukh.dev/studio/screenshots" || p.version !== 1) return Promise.reject(new Error(T("This isn't a screenshot project saved by this studio.")));
     return Kit.imageFromData(p.image).then(function (img) {
       var base = Kit.canvasOf(img);
       return { name: String(p.name || "screenshot").slice(0, 80), base: base, items: (Array.isArray(p.items) ? p.items : []).slice(0, 500).map(function (m) { return A.clean(m, base.width, base.height); }).filter(Boolean) };
@@ -194,19 +197,19 @@
 
   /* ---------- The editor ---------- */
   var TOOLS = [
-    ["select", "Select and move", "V", '<path d="M5 3l14 8-6 2-2 6z"/>'],
-    ["arrow", "Arrow", "A", '<path d="M4 20L19 5M19 5h-8M19 5v8"/>'],
-    ["line", "Line", "L", '<path d="M4 20L20 4"/>'],
-    ["rect", "Rectangle", "R", '<rect x="4" y="6" width="16" height="12" rx="1"/>'],
-    ["ellipse", "Ellipse", "E", '<ellipse cx="12" cy="12" rx="8" ry="6"/>'],
-    ["callout", "Numbered callout", "N", '<circle cx="12" cy="12" r="8"/><path d="M11 9l2-1v8"/>'],
-    ["text", "Text", "T", '<path d="M5 6h14M12 6v13"/>'],
-    ["highlight", "Highlight", "H", '<path d="M4 18h16"/><rect x="6" y="6" width="12" height="9" fill="currentColor" opacity=".35" stroke="none"/>'],
-    ["spotlight", "Spotlight", "S", '<rect x="3" y="4" width="18" height="16" fill="currentColor" opacity=".25" stroke="none"/><rect x="8" y="8" width="8" height="8"/>'],
-    ["blur", "Blur", "B", '<circle cx="12" cy="12" r="7" stroke-dasharray="2 3"/>'],
-    ["pixelate", "Pixelate", "P", '<path d="M4 4h5v5H4zM9 9h6v6H9zM15 15h5v5h-5zM15 4h5v5h-5zM4 15h5v5H4z"/>'],
-    ["redact", "Redact (permanent)", "X", '<rect x="4" y="8" width="16" height="8" fill="currentColor"/>'],
-    ["crop", "Crop", "C", '<path d="M7 3v14h14M3 7h14v14"/>'],
+    ["select", T("Select and move"), "V", '<path d="M5 3l14 8-6 2-2 6z"/>'],
+    ["arrow", T("Arrow"), "A", '<path d="M4 20L19 5M19 5h-8M19 5v8"/>'],
+    ["line", T("Line"), "L", '<path d="M4 20L20 4"/>'],
+    ["rect", T("Rectangle"), "R", '<rect x="4" y="6" width="16" height="12" rx="1"/>'],
+    ["ellipse", T("Ellipse"), "E", '<ellipse cx="12" cy="12" rx="8" ry="6"/>'],
+    ["callout", T("Numbered callout"), "N", '<circle cx="12" cy="12" r="8"/><path d="M11 9l2-1v8"/>'],
+    ["text", T("Text"), "T", '<path d="M5 6h14M12 6v13"/>'],
+    ["highlight", T("Highlight"), "H", '<path d="M4 18h16"/><rect x="6" y="6" width="12" height="9" fill="currentColor" opacity=".35" stroke="none"/>'],
+    ["spotlight", T("Spotlight"), "S", '<rect x="3" y="4" width="18" height="16" fill="currentColor" opacity=".25" stroke="none"/><rect x="8" y="8" width="8" height="8"/>'],
+    ["blur", T("Blur"), "B", '<circle cx="12" cy="12" r="7" stroke-dasharray="2 3"/>'],
+    ["pixelate", T("Pixelate"), "P", '<path d="M4 4h5v5H4zM9 9h6v6H9zM15 15h5v5h-5zM15 4h5v5h-5zM4 15h5v5H4z"/>'],
+    ["redact", T("Redact (permanent)"), "X", '<rect x="4" y="8" width="16" height="8" fill="currentColor"/>'],
+    ["crop", T("Crop"), "C", '<path d="M7 3v14h14M3 7h14v14"/>'],
   ];
   function icon(path) { return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + "</svg>"; }
 
@@ -221,33 +224,33 @@
     var past = [], future = [];
     host.classList.add("ann");
     host.innerHTML =
-      '<div class="ann-tools" role="toolbar" aria-label="Drawing tools">' + TOOLS.map(function (t) {
+      '<div class="ann-tools" role="toolbar" aria-label="' + T("Drawing tools") + '">' + TOOLS.map(function (t) {
         return '<button type="button" class="ann-tool" data-tool="' + t[0] + '" aria-pressed="false" title="' + t[1] + " (" + t[2] + ')" aria-label="' + t[1] + '" aria-keyshortcuts="' + t[2] + '">' + icon(t[3]) + "</button>";
       }).join("") + "</div>" +
-      '<div class="ann-stage" tabindex="0" aria-label="Image. Draw with the selected tool; use the arrow keys to move the selected mark."><div class="ann-empty"><p><b>No image yet.</b> Open a file, paste an image, capture your screen, or start from the sample.</p></div><canvas class="ann-canvas" hidden></canvas></div>' +
+      '<div class="ann-stage" tabindex="0" aria-label="' + T("Image. Draw with the selected tool; use the arrow keys to move the selected mark.") + '"><div class="ann-empty"><p>' + T("<b>No image yet.</b> Open a sample, open a file, paste an image or capture your screen.") + '</p></div><canvas class="ann-canvas" hidden></canvas></div>' +
       '<aside class="ann-side">' +
-      ' <section class="ann-props" aria-label="Properties"><h2>Style</h2>' +
-      '  <div class="ann-swatches" role="radiogroup" aria-label="Color">' + A.COLORS.map(function (c) { return '<button type="button" role="radio" aria-checked="false" class="ann-sw" data-color="' + c + '" style="--c:' + c + '" aria-label="Color ' + c + '"></button>'; }).join("") + '<input type="color" class="ann-color" aria-label="Another color" value="#E5251B"></div>' +
-      '  <label class="ann-row">Stroke <input type="range" class="ann-stroke" min="1" max="30" value="6"><output class="ann-stroke-v">6</output></label>' +
-      '  <div class="ann-sel" hidden><h2 class="ann-sel-name">Selected</h2>' +
-      '   <label class="ann-row ann-f-text" hidden>Text <textarea class="ann-text" rows="2" maxlength="500"></textarea></label>' +
-      '   <label class="ann-row ann-f-size" hidden>Size <input type="number" class="ann-size" min="8" max="300"></label>' +
-      '   <label class="ann-row ann-f-n" hidden>Number <input type="number" class="ann-n" min="1" max="999"></label>' +
-      '   <label class="ann-row ann-f-amount" hidden>Strength <input type="range" class="ann-amount" min="2" max="60"></label>' +
-      '   <label class="ann-row ann-f-box" hidden><input type="checkbox" class="ann-box"> Background behind the text</label>' +
+      ' <section class="ann-props" aria-label="' + T("Properties") + '"><h2>' + T("Style") + "</h2>" +
+      '  <div class="ann-swatches" role="radiogroup" aria-label="' + T("Color") + '">' + A.COLORS.map(function (c) { return '<button type="button" role="radio" aria-checked="false" class="ann-sw" data-color="' + c + '" style="--c:' + c + '" aria-label="' + T("Color {hex}", { hex: c }) + '"></button>'; }).join("") + '<input type="color" class="ann-color" aria-label="' + T("Another color") + '" value="#E5251B"></div>' +
+      '  <label class="ann-row">' + T("Stroke") + ' <input type="range" class="ann-stroke" min="1" max="30" value="6"><output class="ann-stroke-v">6</output></label>' +
+      '  <div class="ann-sel" hidden><h2 class="ann-sel-name">' + T("Selected") + "</h2>" +
+      '   <label class="ann-row ann-f-text" hidden>' + T("Text") + ' <textarea class="ann-text" rows="2" maxlength="500"></textarea></label>' +
+      '   <label class="ann-row ann-f-size" hidden>' + T("Size") + ' <input type="number" class="ann-size" min="8" max="300"></label>' +
+      '   <label class="ann-row ann-f-n" hidden>' + T("Number") + ' <input type="number" class="ann-n" min="1" max="999"></label>' +
+      '   <label class="ann-row ann-f-amount" hidden>' + T("Strength") + ' <input type="range" class="ann-amount" min="2" max="60"></label>' +
+      '   <label class="ann-row ann-f-box" hidden><input type="checkbox" class="ann-box"> ' + T("Background behind the text") + "</label>" +
       '   <div class="ann-row ann-pos"><label>X <input type="number" class="ann-x"></label><label>Y <input type="number" class="ann-y"></label></div>' +
-      '   <p class="ann-btns"><button type="button" class="btn line sm ann-up">Bring forward</button><button type="button" class="btn line sm ann-down">Send back</button><button type="button" class="btn line sm ann-del">Delete</button></p>' +
+      '   <p class="ann-btns"><button type="button" class="btn line sm ann-up">' + T("Bring forward") + '</button><button type="button" class="btn line sm ann-down">' + T("Send back") + '</button><button type="button" class="btn line sm ann-del">' + T("Delete") + "</button></p>" +
       "  </div>" +
-      '  <div class="ann-cropbar" hidden><p>Drag over the part to keep, then apply.</p><p class="ann-btns"><button type="button" class="btn ink sm ann-crop-ok">Apply crop</button><button type="button" class="btn line sm ann-crop-no">Cancel</button></p></div>' +
-      '  <p class="ann-note ann-redact-note" hidden>Redaction paints over the pixels of the image itself. After you draw it, no export or saved project holds what was under it. Undo works only until you leave this page.</p>' +
+      '  <div class="ann-cropbar" hidden><p>' + T("Drag over the part to keep, then apply.") + '</p><p class="ann-btns"><button type="button" class="btn ink sm ann-crop-ok">' + T("Apply crop") + '</button><button type="button" class="btn line sm ann-crop-no">' + T("Cancel") + "</button></p></div>" +
+      '  <p class="ann-note ann-redact-note" hidden>' + T("Redaction paints over the pixels of the image itself. After you draw it, no export or saved project holds what was under it. Undo works only until you leave this page.") + "</p>" +
       " </section>" +
-      ' <section class="ann-layers" aria-label="Layers"><h2>Layers</h2><ol class="ann-list"></ol><p class="ann-hint">Top of the list is drawn last.</p></section>' +
-      ' <section class="ann-image" aria-label="Image"><h2>Image</h2>' +
-      '  <p class="ann-btns"><button type="button" class="btn line sm ann-rot">Rotate 90°</button></p>' +
-      '  <label class="ann-row">Width <input type="number" class="ann-w" min="16" max="8000"> px <button type="button" class="btn line sm ann-resize">Resize</button></label>' +
-      '  <div class="ann-row ann-zoom"><button type="button" class="btn line sm ann-zout" aria-label="Zoom out">−</button><output class="ann-zv">100%</output><button type="button" class="btn line sm ann-zin" aria-label="Zoom in">+</button><button type="button" class="btn line sm ann-zfit">Fit</button></div>' +
+      ' <section class="ann-layers" aria-label="' + T("Layers") + '"><h2>' + T("Layers") + '</h2><ol class="ann-list"></ol><p class="ann-hint">' + T("Top of the list is drawn last.") + "</p></section>" +
+      ' <section class="ann-image" aria-label="' + T("Image") + '"><h2>' + T("Image") + "</h2>" +
+      '  <p class="ann-btns"><button type="button" class="btn line sm ann-rot">' + T("Rotate 90°") + "</button></p>" +
+      '  <label class="ann-row">' + T("Width") + ' <input type="number" class="ann-w" min="16" max="8000"> px <button type="button" class="btn line sm ann-resize">' + T("Resize") + "</button></label>" +
+      '  <div class="ann-row ann-zoom"><button type="button" class="btn line sm ann-zout" aria-label="' + T("Zoom out") + '">−</button><output class="ann-zv">100%</output><button type="button" class="btn line sm ann-zin" aria-label="' + T("Zoom in") + '">+</button><button type="button" class="btn line sm ann-zfit">' + T("Fit") + "</button></div>" +
       " </section>" +
-      ' <section class="ann-hist" aria-label="History"><h2>History</h2><p class="ann-btns"><button type="button" class="btn line sm ann-undo" aria-keyshortcuts="Control+Z">Undo</button><button type="button" class="btn line sm ann-redo" aria-keyshortcuts="Control+Shift+Z">Redo</button></p><ol class="ann-log"></ol></section>' +
+      ' <section class="ann-hist" aria-label="' + T("History") + '"><h2>' + T("History") + '</h2><p class="ann-btns"><button type="button" class="btn line sm ann-undo" aria-keyshortcuts="Control+Z">' + T("Undo") + '</button><button type="button" class="btn line sm ann-redo" aria-keyshortcuts="Control+Shift+Z">' + T("Redo") + '</button></p><ol class="ann-log"></ol></section>' +
       "</aside>";
     var $ = function (s) { return host.querySelector(s); }, $$ = function (s) { return Array.prototype.slice.call(host.querySelectorAll(s)); };
     var cv = $(".ann-canvas"), ctx = cv.getContext("2d"), stage = $(".ann-stage");
@@ -273,7 +276,7 @@
     /* view */
     function fit(force) {
       if (!st.base) return;
-      cv.width = st.base.width; cv.height = st.base.height;
+      if (cv.width !== st.base.width || cv.height !== st.base.height) { cv.width = st.base.width; cv.height = st.base.height; paint(); }   // a new size clears the canvas
       if (force !== false) {
         var avail = Math.max(200, stage.clientWidth - 32), availH = Math.max(200, (opts.compact ? 420 : stage.clientHeight) - 32);
         zoom = Math.min(1, avail / st.base.width, availH / st.base.height);
@@ -347,8 +350,8 @@
         return;
       }
       if (tool === "callout" || tool === "text") {
-        var nm = A.clean({ id: A.id(), type: tool, x: p.x, y: p.y, color: color, stroke: stroke, n: nextNumber(), size: tool === "text" ? Math.max(18, Math.round(st.base.width / 45)) : Math.max(28, Math.round(st.base.width / 36)), text: "Type your text", box: true }, st.base.width, st.base.height);
-        st.items.push(nm); sel = nm.id; commit("Added " + A.NAMES[tool].toLowerCase());
+        var nm = A.clean({ id: A.id(), type: tool, x: p.x, y: p.y, color: color, stroke: stroke, n: nextNumber(), size: tool === "text" ? Math.max(18, Math.round(st.base.width / 45)) : Math.max(28, Math.round(st.base.width / 36)), text: T("Type your text"), box: true }, st.base.width, st.base.height);
+        st.items.push(nm); sel = nm.id; commit(T("Added {mark}", { mark: A.NOUNS[tool] }));
         if (tool === "text") { var ta = $(".ann-text"); ta.focus(); ta.select(); }
         return;
       }
@@ -379,13 +382,13 @@
       if (!drag) return;
       var d = drag; drag = null;
       if (d.kind === "crop") { paint(); return; }
-      if (d.kind === "move" || d.kind === "handle") { if (d.moved) commit("Moved " + A.NAMES[find(d.id).type].toLowerCase()); return; }
+      if (d.kind === "move" || d.kind === "handle") { if (d.moved) commit(T("Moved {mark}", { mark: A.NOUNS[find(d.id).type] })); return; }
       var m = d.preview;
       if (!m) { paint(); return; }
       var size = BOX[m.type] ? Math.min(m.w, m.h) : Math.hypot(m.x2 - m.x, m.y2 - m.y);
       if (size < 4) { paint(); return; }
-      if (m.type === "redact") { A.redact(st, boxOf(m)); fit(false); commit("Redacted an area (permanent)"); return; }
-      st.items.push(m); sel = m.id; commit("Added " + A.NAMES[m.type].toLowerCase());
+      if (m.type === "redact") { A.redact(st, boxOf(m)); fit(false); commit(T("Redacted an area (permanent)")); return; }
+      st.items.push(m); sel = m.id; commit(T("Added {mark}", { mark: A.NOUNS[m.type] }));
     }
     cv.addEventListener("pointerup", end);
     cv.addEventListener("pointercancel", function () { drag = null; paint(); });
@@ -406,14 +409,14 @@
         e.preventDefault();
         var s = e.shiftKey ? 10 : 1, dx = e.key === "ArrowLeft" ? -s : e.key === "ArrowRight" ? s : 0, dy = e.key === "ArrowUp" ? -s : e.key === "ArrowDown" ? s : 0;
         m.x += dx; m.y += dy; if (LINE[m.type]) { m.x2 += dx; m.y2 += dy; }
-        clearTimeout(host._nudge); host._nudge = setTimeout(function () { commit("Moved " + A.NAMES[m.type].toLowerCase()); }, 400);
+        clearTimeout(host._nudge); host._nudge = setTimeout(function () { commit(T("Moved {mark}", { mark: A.NOUNS[m.type] })); }, 400);
         paint(); panel(); return;
       }
       TOOLS.forEach(function (t) { if (e.key.toUpperCase() === t[2] && e.key.length === 1) { setTool(t[0]); e.preventDefault(); } });
     });
 
     /* controls */
-    var HINTS = { select: "Select a mark to move or resize it; the arrow keys nudge it. Delete removes it.", arrow: "Drag from the tail to the head of the arrow.", line: "Drag from one end to the other.", rect: "Drag a box around the control.", ellipse: "Drag an oval around the detail.", callout: "Select where the number goes. Each callout takes the next number.", text: "Select where the label starts, then type. Enter adds a line; Escape finishes.", highlight: "Drag over the words or the area to highlight.", spotlight: "Drag the area to keep bright; the rest dims.", blur: "Drag the area to blur. It stays editable until you export.", pixelate: "Drag the area to pixelate. It stays editable until you export.", redact: "Drag the area to black out. It is burned into the picture at once and can't be undone later.", crop: "Drag the part to keep, then select Crop." };
+    var HINTS = { select: T("Select a mark to move or resize it; the arrow keys nudge it. Delete removes it."), arrow: T("Drag from the tail to the head of the arrow."), line: T("Drag from one end to the other."), rect: T("Drag a box around the control."), ellipse: T("Drag an oval around the detail."), callout: T("Select where the number goes. Each callout takes the next number."), text: T("Select where the label starts, then type. Enter adds a line; Escape finishes."), highlight: T("Drag over the words or the area to highlight."), spotlight: T("Drag the area to keep bright; the rest dims."), blur: T("Drag the area to blur. It stays editable until you export."), pixelate: T("Drag the area to pixelate. It stays editable until you export."), redact: T("Drag the area to black out. It is burned into the picture at once and can't be undone later."), crop: T("Drag the part to keep, then select Apply crop.") };
     function setTool(t, quiet) {
       if (crop && t !== "crop") crop = null;
       tool = t;
@@ -427,38 +430,38 @@
     function setColor(c) {
       color = c; $(".ann-color").value = c;
       $$(".ann-sw").forEach(function (b) { b.setAttribute("aria-checked", b.dataset.color.toLowerCase() === c.toLowerCase()); });
-      var m = sel && find(sel); if (m && m.type !== "redact") { m.color = c; commit("Changed color"); }
+      var m = sel && find(sel); if (m && m.type !== "redact") { m.color = c; commit(T("Changed color")); }
     }
     $$(".ann-sw").forEach(function (b) { b.addEventListener("click", function () { setColor(b.dataset.color); }); });
     $(".ann-color").addEventListener("change", function () { setColor(this.value); });
     $(".ann-stroke").addEventListener("input", function () { stroke = +this.value; $(".ann-stroke-v").textContent = stroke; var m = sel && find(sel); if (m) { m.stroke = stroke; paint(); } });
-    $(".ann-stroke").addEventListener("change", function () { if (sel && find(sel)) commit("Changed stroke"); });
+    $(".ann-stroke").addEventListener("change", function () { if (sel && find(sel)) commit(T("Changed stroke")); });
     function field(cls, key, label, parse) {
       var el = $(cls);
       el.addEventListener("input", function () { var m = sel && find(sel); if (!m) return; m[key] = parse ? parse(el) : el.value; paint(); });
       el.addEventListener("change", function () { if (sel && find(sel)) commit(label); });
     }
-    field(".ann-text", "text", "Edited text");
-    field(".ann-size", "size", "Changed size", function (el) { return num(el.value, 8, 300, 28); });
-    field(".ann-n", "n", "Changed number", function (el) { return Math.round(num(el.value, 1, 999, 1)); });
-    field(".ann-amount", "amount", "Changed strength", function (el) { return num(el.value, 2, 60, 12); });
-    field(".ann-box", "box", "Changed text background", function (el) { return el.checked; });
-    field(".ann-x", "x", "Moved", function (el) { var m = find(sel), v = +el.value || 0; if (LINE[m.type]) { m.x2 += v - m.x; } return v; });
-    field(".ann-y", "y", "Moved", function (el) { var m = find(sel), v = +el.value || 0; if (LINE[m.type]) { m.y2 += v - m.y; } return v; });
-    function remove(id) { st.items = st.items.filter(function (m) { return m.id !== id; }); sel = null; commit("Deleted a mark"); }
+    field(".ann-text", "text", T("Edited text"));
+    field(".ann-size", "size", T("Changed size"), function (el) { return num(el.value, 8, 300, 28); });
+    field(".ann-n", "n", T("Changed number"), function (el) { return Math.round(num(el.value, 1, 999, 1)); });
+    field(".ann-amount", "amount", T("Changed strength"), function (el) { return num(el.value, 2, 60, 12); });
+    field(".ann-box", "box", T("Changed text background"), function (el) { return el.checked; });
+    field(".ann-x", "x", T("Moved"), function (el) { var m = find(sel), v = +el.value || 0; if (LINE[m.type]) { m.x2 += v - m.x; } return v; });
+    field(".ann-y", "y", T("Moved"), function (el) { var m = find(sel), v = +el.value || 0; if (LINE[m.type]) { m.y2 += v - m.y; } return v; });
+    function remove(id) { st.items = st.items.filter(function (m) { return m.id !== id; }); sel = null; commit(T("Deleted a mark")); }
     function move(id, by) {
       var i = st.items.findIndex(function (m) { return m.id === id; }), j = i + by;
       if (i < 0 || j < 0 || j >= st.items.length) return;
-      var t = st.items[i]; st.items[i] = st.items[j]; st.items[j] = t; commit(by > 0 ? "Brought forward" : "Sent back");
+      var t = st.items[i]; st.items[i] = st.items[j]; st.items[j] = t; commit(by > 0 ? T("Brought forward") : T("Sent back"));
     }
     $(".ann-del").addEventListener("click", function () { if (sel) remove(sel); });
     $(".ann-up").addEventListener("click", function () { if (sel) move(sel, 1); });
     $(".ann-down").addEventListener("click", function () { if (sel) move(sel, -1); });
     $(".ann-undo").addEventListener("click", undo); $(".ann-redo").addEventListener("click", redo);
-    $(".ann-rot").addEventListener("click", function () { if (!st.base) return; A.rotate(st); fit(); commit("Rotated 90°"); });
+    $(".ann-rot").addEventListener("click", function () { if (!st.base) return; A.rotate(st); fit(); commit(T("Rotated 90°")); });
     $(".ann-resize").addEventListener("click", function () {
       if (!st.base) return; var w = Math.round(+$(".ann-w").value);
-      if (A.resize(st, w)) { fit(); commit("Resized to " + w + " px wide"); } else if (opts.status) opts.status("Choose a width between 16 and 8,000 pixels.", true);
+      if (A.resize(st, w)) { fit(); commit(T("Resized to {w} px wide", { w: w })); } else if (opts.status) opts.status(T("Choose a width between 16 and 8,000 pixels."), true);
     });
     $(".ann-zin").addEventListener("click", function () { setZoom(zoom * 1.25); });
     $(".ann-zout").addEventListener("click", function () { setZoom(zoom / 1.25); });
@@ -467,7 +470,7 @@
     function applyCrop() {
       if (!crop) return;
       var r = norm(crop); crop = null;
-      if (A.crop(st, r)) { fit(); commit("Cropped to " + Math.round(r.w) + " × " + Math.round(r.h)); } else paint();
+      if (A.crop(st, r)) { fit(); commit(T("Cropped to {w} × {h}", { w: Math.round(r.w), h: Math.round(r.h) })); } else paint();
       setTool("select");
     }
     $(".ann-crop-ok").addEventListener("click", applyCrop);
@@ -492,13 +495,13 @@
       $(".ann-list").innerHTML = st.items.slice().reverse().map(function (it) {
         var label = A.NAMES[it.type] + (it.type === "callout" ? " " + it.n : it.type === "text" ? ": " + String(it.text).slice(0, 24) : "");
         return '<li class="' + (it.id === sel ? "on" : "") + '" data-id="' + it.id + '"><button type="button" class="ann-pick" aria-pressed="' + (it.id === sel) + '"><span class="ann-dot" style="background:' + it.color + '"></span>' + Kit.esc(label) + "</button>" +
-          '<button type="button" class="ann-eye" aria-pressed="' + !it.hidden + '" aria-label="' + (it.hidden ? "Show " : "Hide ") + Kit.esc(label) + '">' + (it.hidden ? "Hidden" : "Shown") + "</button></li>";
-      }).join("") || '<li class="ann-none">No marks yet.</li>';
+          '<button type="button" class="ann-eye" aria-pressed="' + !it.hidden + '" aria-label="' + Kit.esc(it.hidden ? T("Show {mark}", { mark: label }) : T("Hide {mark}", { mark: label })) + '">' + (it.hidden ? T("Hidden") : T("Shown")) + "</button></li>";
+      }).join("") || '<li class="ann-none">' + T("No marks yet.") + "</li>";
     }
     $(".ann-list").addEventListener("click", function (e) {
       var li = e.target.closest("li[data-id]"); if (!li) return;
       var m = find(li.dataset.id);
-      if (e.target.closest(".ann-eye")) { m.hidden = !m.hidden; commit(m.hidden ? "Hid a mark" : "Showed a mark"); return; }
+      if (e.target.closest(".ann-eye")) { m.hidden = !m.hidden; commit(m.hidden ? T("Hid a mark") : T("Showed a mark")); return; }
       sel = m.id; panel(); paint();
     });
 
@@ -507,11 +510,11 @@
       sel = null; crop = null; past = []; future = [];
       $(".ann-empty").hidden = true; cv.hidden = false; host.classList.add("has-image");
       requestAnimationFrame(function () { fit(); paint(); });
-      fit(); snap("Opened " + st.name); paint(); panel(); changed();
+      fit(); snap(T("Opened {name}", { name: st.name })); paint(); panel(); changed();
     }
     var api = {
       load: load,
-      loadProject: function (p) { return A.fromProject(p).then(function (s) { load(s.base, s.name); st.items = s.items; past = []; snap("Opened project " + s.name); paint(); panel(); changed(); }); },
+      loadProject: function (p) { return A.fromProject(p).then(function (s) { load(s.base, s.name); st.items = s.items; past = []; snap(T("Opened project {name}", { name: s.name })); paint(); panel(); changed(); }); },
       state: function () { return st; },
       hasImage: function () { return !!st.base; },
       exportCanvas: function () { return A.flatten(st); },
@@ -523,7 +526,7 @@
     setTool(opts.tool || "arrow", true); setColor(color); logList(); panel();
     // Text marks use the site's own typeface; draw again once it has loaded.
     if (document.fonts && document.fonts.load) document.fonts.load("600 20px Hanken").then(function () { paint(); }, function () {});
-    addEventListener("resize", function () { if (st.base) fit(); });
+    addEventListener("resize", function () { if (st.base) { fit(); paint(); } });
     return api;
   };
 

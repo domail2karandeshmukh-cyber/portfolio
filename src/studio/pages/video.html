@@ -13,6 +13,8 @@
   <button class="btn line sm" type="button" id="vd-demo">Record the demo app</button>
   <button class="btn line sm" type="button" id="vd-mic">Record narration</button>
   <label class="btn line sm" for="vd-open">Open project</label><input class="st-file" id="vd-open" type="file" accept=".zip,application/zip">
+  <button class="btn line sm" type="button" id="vd-undo" disabled aria-keyshortcuts="Control+Z">Undo</button>
+  <button class="btn line sm" type="button" id="vd-redo" disabled aria-keyshortcuts="Control+Shift+Z">Redo</button>
   <span class="sep" aria-hidden="true"></span>
   <button class="btn ink sm" type="button" id="vd-export" disabled>Export video</button>
   <button class="btn line sm" type="button" id="vd-srt">Captions (SRT)</button>
@@ -42,4 +44,4 @@
  </div>
  <div class="vd-tl" id="vd-timeline" aria-label="Timeline: select an item to edit it, or select a place to move the playhead"></div>
 </div>
-<p class="st-note">The export plays the timeline once in real time and records it, so a 30-second video takes about 30 seconds. Chrome and Edge make MP4; browsers that can't make MP4 make WebM, and the studio says which. The file is checked by playing it back before it's saved. Text-to-speech and automatic transcription aren't included: record or add the narration, and write or import the captions.</p>
+<p class="st-note">The export plays the timeline once in real time and records it, so a 30-second video takes about 30 seconds. Chrome and Edge make MP4; browsers that can't make MP4 make WebM, and the studio says which. The file is checked by playing it back before it's saved. Text-to-speech and automatic transcription aren't included: record or add the narration, and write or import the captions. Shortcuts: Space plays and pauses, the arrow keys move one frame (one second with Shift), Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save the project.</p>

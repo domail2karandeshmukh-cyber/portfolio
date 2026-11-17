@@ -6,6 +6,7 @@
    that the file it made can be played. Nothing is uploaded. Needs kit.js. */
 (function () {
   "use strict";
+  var T = Kit.t;
   var $ = function (s, r) { return (r || document).querySelector(s); }, $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var esc = Kit.esc, status = $("#vd-status");
   function say(t, bad) { Kit.say(status, t, bad); }
@@ -25,22 +26,22 @@
   function duration() { return P.clips.reduce(function (s, c) { return s + (c.out - c.in); }, 0); }
   /** The clip under timeline time t, with its start on the timeline. */
   function clipAt(t) {
-    var T = 0;
-    for (var i = 0; i < P.clips.length; i++) { var c = P.clips[i], d = c.out - c.in; if (t < T + d || i === P.clips.length - 1) return { clip: c, start: T, index: i }; T += d; }
+    var acc = 0;
+    for (var i = 0; i < P.clips.length; i++) { var c = P.clips[i], d = c.out - c.in; if (t < acc + d || i === P.clips.length - 1) return { clip: c, start: acc, index: i }; acc += d; }
     return null;
   }
-  function clipStart(c) { var T = 0; for (var i = 0; i < P.clips.length; i++) { if (P.clips[i] === c) return T; T += P.clips[i].out - P.clips[i].in; } return 0; }
+  function clipStart(c) { var acc = 0; for (var i = 0; i < P.clips.length; i++) { if (P.clips[i] === c) return acc; acc += P.clips[i].out - P.clips[i].in; } return 0; }
 
   /* ---------- Media ---------- */
   var VIDEO = ["video/mp4", "video/webm", "video/quicktime"], AUDIO = ["audio/mpeg", "audio/mp4", "audio/wav", "audio/x-wav", "audio/webm", "audio/ogg", "audio/aac", "video/webm"];
   function addMedia(blob, name, kind, cursor) {
     var limit = kind === "audio" ? Kit.LIMITS.audio : kind === "image" ? Kit.LIMITS.image : Kit.LIMITS.video;
-    if (blob.size > limit) return Promise.reject(new Error(name + " is larger than " + Math.round(limit / 1048576) + " MB."));
+    if (blob.size > limit) return Promise.reject(new Error(T("{name} is larger than {mb} MB.", { name: name, mb: Math.round(limit / 1048576) })));
     var id = uid("m"), url = URL.createObjectURL(blob), m = { id: id, kind: kind, name: name, blob: blob, url: url, cursor: cursor || [] };
     return new Promise(function (ok, no) {
       if (kind === "image") {
         var img = new Image(); img.onload = function () { m.el = img; m.w = img.naturalWidth; m.h = img.naturalHeight; m.duration = 4; ok(m); };
-        img.onerror = function () { no(new Error(name + " can't be read as an image.")); }; img.src = url; return;
+        img.onerror = function () { no(new Error(T("{name} can't be read as an image.", { name: name }))); }; img.src = url; return;
       }
       var el = document.createElement(kind === "audio" ? "audio" : "video");
       el.preload = "auto"; el.muted = false; el.playsInline = true; el.crossOrigin = "anonymous";
@@ -53,7 +54,7 @@
         m.duration = el.duration; done();
       };
       function done() { m.el = el; m.w = el.videoWidth || 0; m.h = el.videoHeight || 0; ok(m); }
-      el.onerror = function () { no(new Error(name + " can't be played in this browser.")); };
+      el.onerror = function () { no(new Error(T("{name} can't be played in this browser.", { name: name }))); };
       el.src = url;
     }).then(function (m2) { MEDIA[id] = m2; return m2; });
   }
@@ -64,11 +65,11 @@
   /* ---------- Cursor ---------- */
   /** The pointer events of the whole timeline, in timeline seconds: each clip keeps the events of its stretch of footage. */
   function timelineEvents() {
-    var out = [], T = 0, n = 0;
+    var out = [], acc = 0, n = 0;
     P.clips.forEach(function (c) {
       var m = MEDIA[c.media];
-      (m && m.cursor || []).forEach(function (e) { if (e.t >= c.in && e.t < c.out) out.push({ t: T + e.t - c.in, x: e.x * W / (m.w || W), y: e.y * H / (m.h || H), click: !!e.click, src: e, clip: c }); });
-      T += c.out - c.in;
+      (m && m.cursor || []).forEach(function (e) { if (!e.id) e.id = uid("e"); if (e.t >= c.in && e.t < c.out) out.push({ t: acc + e.t - c.in, x: e.x * W / (m.w || W), y: e.y * H / (m.h || H), click: !!e.click, src: e, clip: c }); });
+      acc += c.out - c.in;
     });
     out.sort(function (a, b) { return a.t - b.t; });
     out.forEach(function (e) { if (e.click) e.n = ++n; });
@@ -117,10 +118,10 @@
 
   /* ---------- Drawing one frame ---------- */
   var COLORS = { title: "#0B0B0C", step: "#E5251B", arrow: "#E5251B", box: "#E5251B", callout: "#E5251B", warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
-  var TYPES = { title: "Title", step: "Step number", arrow: "Arrow", box: "Highlight box", callout: "Callout", warning: "Warning", instruction: "Instruction", done: "Confirmation", zoom: "Zoom region", blur: "Blur region", intro: "Intro slide", outro: "Closing slide", lower: "Lower-third label" };
+  var TYPES = { title: T("Title"), step: T("Step number"), arrow: T("Arrow"), box: T("Highlight box"), callout: T("Callout"), warning: T("Warning"), instruction: T("Instruction"), done: T("Confirmation"), zoom: T("Zoom region"), blur: T("Blur region"), intro: T("Intro slide"), outro: T("Closing slide"), lower: T("Lower-third label") };
   var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1 };          // drawn in the picture, so they zoom with it
   function font(px, w) { return (w || 600) + " " + Math.round(px) + "px 'Hanken', Arial, sans-serif"; }
-  function fade(o, t) { var f = o.type === "intro" || o.type === "outro" ? 0.5 : 0.25; return Math.min(1, (t - o.start) / f, (o.end - t) / f); }
+  function fade(o, t) { var f = o.type === "intro" || o.type === "outro" ? 0.5 : 0.25; return Math.min(1, o.start <= 0 ? 1 : (t - o.start) / f, (o.end - t) / f); }   // a slide that opens the video is there from the first frame
   function wrap(text, max, px) {
     ctx.font = font(px); var words = String(text || "").split(/\s+/), lines = [], line = "";
     words.forEach(function (w) { var test = line ? line + " " + w : w; if (ctx.measureText(test).width > max && line) { lines.push(line); line = w; } else line = test; });
@@ -178,12 +179,12 @@
       ls.forEach(function (l, i) { ctx.fillText(l, x + pad + (o.type === "warning" ? px * 1.4 : 0), y + pad * 0.7 + i * px * 1.3); });
     } else if (o.type === "done") {
       // A confirmation: a green pill with a check mark, for the moment an action has visibly worked.
-      ctx.font = font(px, 700); var dw = ctx.measureText(o.text || "Done").width, dx = o.x * W, dy = o.y * H, dh = px * 1.9, pop = Math.min(1, (t - o.start) / 0.3);
+      ctx.font = font(px, 700); var dw = ctx.measureText(o.text || T("Done")).width, dx = o.x * W, dy = o.y * H, dh = px * 1.9, pop = Math.min(1, (t - o.start) / 0.3);
       ctx.translate(dx + (dw + px * 2.6) / 2, dy + dh / 2); ctx.scale(0.85 + 0.15 * pop, 0.85 + 0.15 * pop); ctx.translate(-(dx + (dw + px * 2.6) / 2), -(dy + dh / 2));
       ctx.fillStyle = c; roundRect(dx, dy, dw + px * 2.6, dh, dh / 2); ctx.fill();
       ctx.strokeStyle = "#fff"; ctx.lineWidth = Math.max(3, px * 0.14); ctx.lineCap = ctx.lineJoin = "round";
       ctx.beginPath(); ctx.moveTo(dx + px * 0.75, dy + dh * 0.52); ctx.lineTo(dx + px * 1.05, dy + dh * 0.7); ctx.lineTo(dx + px * 1.55, dy + dh * 0.32); ctx.stroke();
-      ctx.fillStyle = "#fff"; ctx.textBaseline = "middle"; ctx.fillText(o.text || "Done", dx + px * 1.95, dy + dh / 2 + 1);
+      ctx.fillStyle = "#fff"; ctx.textBaseline = "middle"; ctx.fillText(o.text || T("Done"), dx + px * 1.95, dy + dh / 2 + 1);
     } else if (o.type === "lower") {
       var y2 = H - 250; ctx.font = font(px, 700); var tw = ctx.measureText(o.text || "").width;
       ctx.fillStyle = "#0B0B0C"; ctx.fillRect(64, y2, tw + 48, px * 1.8); ctx.fillStyle = "#FFDF2B"; ctx.fillRect(64, y2, 8, px * 1.8);
@@ -235,8 +236,8 @@
     else {
       // Nothing on the timeline yet: say so in the frame instead of showing a black picture.
       ctx.fillStyle = "#1E1F23"; ctx.fillRect(0, 0, W, H); ctx.fillStyle = "#FFDF2B"; ctx.fillRect(96, H / 2 - 64, 72, 10);
-      ctx.fillStyle = "#fff"; ctx.font = font(40, 700); ctx.textBaseline = "top"; ctx.fillText("No footage yet", 96, H / 2 - 36);
-      ctx.fillStyle = "#B7B9BF"; ctx.font = font(26, 500); ctx.fillText("Open a sample, add a recording, or record the screen or the demo app.", 96, H / 2 + 22);
+      ctx.fillStyle = "#fff"; ctx.font = font(40, 700); ctx.textBaseline = "top"; ctx.fillText(T("No footage yet"), 96, H / 2 - 36);
+      ctx.fillStyle = "#B7B9BF"; ctx.font = font(26, 500); ctx.fillText(T("Open a sample, add a recording, or record the screen or the demo app."), 96, H / 2 + 22);
     }
     var live = P.overlays.filter(function (o) { return t >= o.start && t < o.end; }).sort(function (a, b) { return (a.layer || 0) - (b.layer || 0); });
     live.forEach(function (o) {
@@ -251,6 +252,10 @@
     if (!live.some(function (o) { return (o.type === "intro" || o.type === "outro") && fade(o, t) > 0.5; })) drawCursor(ev, t, cam);
     live.forEach(function (o) { if (!WORLD[o.type] && o.type !== "zoom") drawScreen(o, t); });
     if (P.burnCaptions) drawCaption(t);
+    if (!exporting && sel && sel.kind === "cursor") {
+      var se = ev.filter(function (e) { return e.src && e.src.id === sel.id; })[0];
+      if (se) { ctx.setLineDash([6, 5]); ctx.strokeStyle = "#1D4ED8"; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc((se.x - cam.x) * cam.z, (se.y - cam.y) * cam.z, 24, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); }
+    }
     if (!exporting && sel && sel.kind === "overlay") {
       var so = find(P.overlays, sel.id);
       if (so && t >= so.start && t < so.end && so.type !== "intro" && so.type !== "outro" && so.type !== "lower") {
@@ -286,7 +291,7 @@
     var hit = clipAt(t); if (!hit) return Promise.resolve();
     var m = MEDIA[hit.clip.media]; if (!m || m.kind !== "video") return Promise.resolve();
     var want = hit.clip.in + (t - hit.start);
-    if (Math.abs(m.el.currentTime - want) < 0.02) return Promise.resolve();
+    if (Math.abs(m.el.currentTime - want) < 0.02 && m.el.readyState >= 2) return Promise.resolve();   // until a frame is decoded, seeking is what makes one
     return new Promise(function (ok) { var done = function () { m.el.removeEventListener("seeked", done); ok(); }; m.el.addEventListener("seeked", done); m.el.currentTime = want; setTimeout(ok, 1500); });
   }
   function show(t) { playhead = Math.max(0, Math.min(duration(), t)); return seekClip(playhead).then(function () { frame(playhead); ruler(); }); }
@@ -326,9 +331,9 @@
   $("#vd-play").addEventListener("click", function () {
     if (!P.clips.length) return;
     if (playing) { playing = false; return; }
-    playing = true; this.textContent = "Pause"; var b = this;
+    playing = true; this.textContent = T("Pause"); var b = this;
     if (playhead >= duration() - 0.05) playhead = 0;
-    run(playhead).then(function () { b.textContent = "Play"; ruler(); });
+    run(playhead).then(function () { b.textContent = T("Play"); ruler(); });
   });
 
   /* ---------- Timeline ---------- */
@@ -341,15 +346,18 @@
   function timeline() {
     var d = Math.max(duration(), 1);
     scale = Math.max(24, Math.min(160, (tl.clientWidth - 140) / d));
-    var w = d * scale + 40, T = 0, ev = timelineEvents();
+    var w = d * scale + 40, acc = 0, ev = timelineEvents();
     var rows = [
-      ["Video", P.clips.map(function (c, i) { var x = T * scale, cw = (c.out - c.in) * scale; T += c.out - c.in; var m = MEDIA[c.media];
-        return '<button type="button" class="vd-item vd-clip' + on("clip", c.id) + '" data-kind="clip" data-id="' + c.id + '" style="left:' + x + "px;width:" + Math.max(8, cw - 2) + 'px" aria-label="Clip ' + (i + 1) + ": " + esc(m ? m.name : "") + ", " + (c.out - c.in).toFixed(1) + ' seconds">' + esc(m ? m.name : "?") + "</button>"; }).join("")],
-      ["Layers", P.overlays.map(function (o) { return bar("overlay", o, TYPES[o.type] + (o.text ? ": " + o.text.split("\n")[0] : "")); }).join("")],
-      ["Captions", P.captions.map(function (c) { return bar("caption", c, c.text); }).join("")],
-      ["Cursor", ev.map(function (e) { return '<span class="vd-ev' + (e.click ? " click" : "") + '" style="left:' + e.t * scale + 'px"' + (e.click ? ' title="Click ' + e.n + " at " + e.t.toFixed(2) + ' s"' : "") + "></span>"; }).join("")],
-      ["Narration", P.narration && MEDIA[P.narration.media] ? bar("narration", { id: "n", start: P.narration.offset, end: P.narration.offset + ((P.narration.trimOut || MEDIA[P.narration.media].duration) - (P.narration.trimIn || 0)) }, MEDIA[P.narration.media].name) : ""],
-      ["Markers", P.markers.map(function (k) { return '<button type="button" class="vd-mark' + on("marker", k.id) + '" data-kind="marker" data-id="' + k.id + '" style="left:' + k.t * scale + 'px" title="' + esc(k.label) + '" aria-label="Marker: ' + esc(k.label) + '"></button>'; }).join("")],
+      [T("Video"), P.clips.map(function (c, i) { var x = acc * scale, cw = (c.out - c.in) * scale; acc += c.out - c.in; var m = MEDIA[c.media];
+        return '<button type="button" class="vd-item vd-clip' + on("clip", c.id) + '" data-kind="clip" data-id="' + c.id + '" style="left:' + x + "px;width:" + Math.max(8, cw - 2) + 'px" aria-label="' + esc(T("Clip {n}: {name}, {s} seconds", { n: i + 1, name: m ? m.name : "", s: (c.out - c.in).toFixed(1) })) + '">' + esc(m ? m.name : "?") + "</button>"; }).join("")],
+      [T("Layers"), P.overlays.map(function (o) { return bar("overlay", o, TYPES[o.type] + (o.text ? ": " + o.text.split("\n")[0] : "")); }).join("")],
+      [T("Captions"), P.captions.map(function (c) { return bar("caption", c, c.text); }).join("")],
+      [T("Cursor"), ev.map(function (e) {
+        if (!e.click) return '<span class="vd-ev" style="left:' + e.t * scale + 'px"></span>';
+        var lb = esc(T("Click {n} at {t} s", { n: e.n, t: e.t.toFixed(2) }));
+        return '<button type="button" class="vd-ev click' + (sel && sel.kind === "cursor" && sel.id === e.src.id ? " on" : "") + '" data-kind="cursor" data-id="' + esc(e.src.id) + '" data-media="' + esc(e.clip.media) + '" data-t="' + e.t.toFixed(3) + '" style="left:' + e.t * scale + 'px" title="' + lb + '" aria-label="' + lb + '"></button>'; }).join("")],
+      [T("Narration"), P.narration && MEDIA[P.narration.media] ? bar("narration", { id: "n", start: P.narration.offset, end: P.narration.offset + ((P.narration.trimOut || MEDIA[P.narration.media].duration) - (P.narration.trimIn || 0)) }, MEDIA[P.narration.media].name) : ""],
+      [T("Markers"), P.markers.map(function (k) { return '<button type="button" class="vd-mark' + on("marker", k.id) + '" data-kind="marker" data-id="' + k.id + '" style="left:' + k.t * scale + 'px" title="' + esc(k.label) + '" aria-label="' + esc(T("Marker: {label}", { label: k.label })) + '"></button>'; }).join("")],
     ];
     tl.innerHTML = '<div class="vd-tracks" style="width:' + (w + 120) + 'px">' + rows.map(function (r) { return '<div class="vd-row"><span class="vd-label">' + r[0] + '</span><div class="vd-lane" style="width:' + w + 'px">' + r[1] + "</div></div>"; }).join("") +
       '<div class="vd-head" id="vd-head" aria-hidden="true"></div></div>';
@@ -357,16 +365,17 @@
   }
   function on(kind, id) { return sel && sel.kind === kind && sel.id === id ? " on" : ""; }
   function bar(kind, o, label) {
-    return '<button type="button" class="vd-item vd-' + kind + on(kind, o.id) + '" data-kind="' + kind + '" data-id="' + o.id + '" style="left:' + o.start * scale + "px;width:" + Math.max(10, (o.end - o.start) * scale - 2) + 'px" aria-label="' + esc(label) + ", " + o.start.toFixed(1) + " to " + o.end.toFixed(1) + ' seconds">' + esc(label) + "</button>";
+    return '<button type="button" class="vd-item vd-' + kind + on(kind, o.id) + '" data-kind="' + kind + '" data-id="' + o.id + '" style="left:' + o.start * scale + "px;width:" + Math.max(10, (o.end - o.start) * scale - 2) + 'px" aria-label="' + esc(T("{label}, {a} to {b} seconds", { label: label, a: o.start.toFixed(1), b: o.end.toFixed(1) })) + '">' + esc(label) + "</button>";
   }
   function find(list, id) { for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i]; return null; }
   // Click on the timeline: choose an item, or move the playhead. Drag a layer, caption or narration bar to move it in time.
   var drag = null;
   tl.addEventListener("pointerdown", function (e) {
     var lane = e.target.closest(".vd-lane"); if (!lane) return;
-    var x = e.clientX - lane.getBoundingClientRect().left, item = e.target.closest(".vd-item,.vd-mark");
+    var x = e.clientX - lane.getBoundingClientRect().left, item = e.target.closest(".vd-item,.vd-mark,.vd-ev.click");
     if (item) {
-      sel = { kind: item.dataset.kind, id: item.dataset.id }; props(); timeline();
+      sel = { kind: item.dataset.kind, id: item.dataset.id, media: item.dataset.media }; props(); timeline();
+      if (sel.kind === "cursor") { show(+item.dataset.t); return; }
       var o = sel.kind === "overlay" ? find(P.overlays, sel.id) : sel.kind === "caption" ? find(P.captions, sel.id) : sel.kind === "narration" ? P.narration : null;
       if (o) { drag = { o: o, x: e.clientX, start: o.start != null ? o.start : o.offset, end: o.end, edge: e.target.closest(".vd-item") && x > (o.end || 0) * scale - 10 && sel.kind !== "narration" }; tl.setPointerCapture(e.pointerId); }
       show(Math.max(0, x / scale));
@@ -386,45 +395,46 @@
 
   /* ---------- Editing ---------- */
   function addOverlay(type) {
-    if (!P.clips.length) return say("Add footage first.", true);
+    if (!P.clips.length) return say(T("Add footage first."), true);
     var t = Math.min(playhead, Math.max(0, duration() - 0.5)), len = type === "intro" || type === "outro" ? 3 : type === "zoom" ? 2.5 : 3;
     var o = { id: uid("o"), type: type, start: +t.toFixed(2), end: +Math.min(duration(), t + len).toFixed(2), x: 0.36, y: 0.32, w: 0.24, h: 0.14, text: "", color: COLORS[type], size: type === "step" ? 40 : type === "done" ? 28 : 30, layer: P.overlays.length };
-    if (type === "done") { o.text = "Saved"; o.x = 0.62; o.y = 0.12; }
-    if (type === "title") { o.x = 0.05; o.y = 0.06; o.text = "Record the inspection readings"; }
-    if (type === "instruction") { o.x = 0.05; o.y = 0.06; o.text = "Select Record readings"; }
-    if (type === "warning") { o.x = 0.05; o.y = 0.06; o.text = "Close the work order only when every reading is in range"; }
-    if (type === "callout") o.text = "Enter the value from the local gauge";
+    if (type === "done") { o.text = T("Saved"); o.x = 0.62; o.y = 0.12; }
+    if (type === "title") { o.x = 0.05; o.y = 0.06; o.text = T("Name this part of the task"); }
+    if (type === "instruction") { o.x = 0.05; o.y = 0.06; o.text = T("Select the control the pointer moves to"); }
+    if (type === "warning") { o.x = 0.05; o.y = 0.06; o.text = T("Say what to check before going on"); }
+    if (type === "callout") o.text = T("Explain this part of the screen");
     if (type === "step") { o.text = String(P.overlays.filter(function (x) { return x.type === "step"; }).length + 1); o.w = o.h = 0.04; }
-    if (type === "lower") o.text = "Harbor Pump Station · fictional demo";
-    if (type === "intro") { o.text = "Record the readings for a pump inspection\nA two-minute walkthrough. Fictional sample."; if (!t) o.start = 0; }
-    if (type === "outro") { o.text = "You're done\nThe work order shows Ready to close."; o.end = +duration().toFixed(2); o.start = +Math.max(0, duration() - 3).toFixed(2); }
+    if (type === "lower") o.text = T("Name of the application · fictional demo");
+    if (type === "intro") { o.text = T("Title of the video") + "\n" + T("What the viewer will be able to do."); if (!t) o.start = 0; }
+    if (type === "outro") { o.text = T("You're done") + "\n" + T("What the viewer should now see on the screen."); o.end = +duration().toFixed(2); o.start = +Math.max(0, duration() - 3).toFixed(2); }
     if (type === "arrow") { o.w = 0.12; o.h = 0.12; }
     P.overlays.push(o); sel = { kind: "overlay", id: o.id }; changed(); props();
-    say("Added " + TYPES[type].toLowerCase() + " from " + o.start.toFixed(1) + " s to " + o.end.toFixed(1) + " s. Drag it on the picture to place it.");
+    say(T("New layer: {type}, from {a} s to {b} s. Drag it on the picture to place it.", { type: TYPES[type], a: o.start.toFixed(1), b: o.end.toFixed(1) }));
   }
   $$("[data-add]").forEach(function (b) { b.addEventListener("click", function () { addOverlay(b.dataset.add); }); });
   $("#vd-split").addEventListener("click", function () {
     var hit = clipAt(playhead); if (!hit) return;
     var at = hit.clip.in + (playhead - hit.start);
-    if (at - hit.clip.in < 0.2 || hit.clip.out - at < 0.2) return say("Move the playhead away from the edge of the clip to split it.", true);
+    if (at - hit.clip.in < 0.2 || hit.clip.out - at < 0.2) return say(T("Move the playhead away from the edge of the clip to split it."), true);
     var b = { id: uid("c"), media: hit.clip.media, in: at, out: hit.clip.out }; hit.clip.out = at;
-    P.clips.splice(hit.index + 1, 0, b); sel = { kind: "clip", id: b.id }; changed(); props(); say("Split the clip at " + clock(playhead) + ".");
+    P.clips.splice(hit.index + 1, 0, b); sel = { kind: "clip", id: b.id }; changed(); props(); say(T("Split the clip at {t}.", { t: clock(playhead) }));
   });
   $("#vd-caption").addEventListener("click", function () {
-    if (!P.clips.length) return say("Add footage first.", true);
-    var c = { id: uid("k"), start: +playhead.toFixed(2), end: +Math.min(duration(), playhead + 2.5).toFixed(2), text: "Caption text" };
+    if (!P.clips.length) return say(T("Add footage first."), true);
+    var c = { id: uid("k"), start: +playhead.toFixed(2), end: +Math.min(duration(), playhead + 2.5).toFixed(2), text: T("Caption text") };
     P.captions.push(c); P.captions.sort(function (a, b) { return a.start - b.start; }); sel = { kind: "caption", id: c.id }; changed(); props();
     var f = $("#vd-props [data-f=text]"); if (f) { f.focus(); f.select(); }
   });
   $("#vd-marker").addEventListener("click", function () {
-    var k = { id: uid("k"), t: +playhead.toFixed(2), label: "Chapter " + (P.markers.length + 1) }; P.markers.push(k); P.markers.sort(function (a, b) { return a.t - b.t; }); sel = { kind: "marker", id: k.id }; changed(); props();
+    var k = { id: uid("k"), t: +playhead.toFixed(2), label: T("Chapter {n}", { n: P.markers.length + 1 }) }; P.markers.push(k); P.markers.sort(function (a, b) { return a.t - b.t; }); sel = { kind: "marker", id: k.id }; changed(); props();
   });
   $("#vd-click").addEventListener("click", function () {
     // A click added by hand, for footage that has no recorded pointer: at the playhead, where the last pointer event was, or the middle.
-    var hit = clipAt(playhead); if (!hit) return;
+    var hit = clipAt(playhead); if (!hit) return say(T("Add footage first."), true);
     var m = MEDIA[hit.clip.media], ev = timelineEvents(), p = pointerAt(ev, playhead) || { x: W / 2, y: H / 2 };
-    m.cursor = (m.cursor || []).concat([{ t: +(hit.clip.in + playhead - hit.start).toFixed(3), x: p.x * (m.w || W) / W, y: p.y * (m.h || H) / H, click: true }]).sort(function (a, b) { return a.t - b.t; });
-    sel = { kind: "cursor", id: String(m.cursor.length) }; changed(); props(); say("Added a click at " + clock(playhead) + ". Drag on the picture to move it.");
+    var ne = { id: uid("e"), t: +(hit.clip.in + playhead - hit.start).toFixed(3), x: p.x * (m.w || W) / W, y: p.y * (m.h || H) / H, click: true };
+    m.cursor = (m.cursor || []).concat([ne]).sort(function (a, b) { return a.t - b.t; });
+    sel = { kind: "cursor", id: ne.id, media: m.id }; changed(); props(); frame(playhead); say(T("Added a click at {t}. Drag on the picture to move it.", { t: clock(playhead) }));
   });
 
   /* ---------- Properties ---------- */
@@ -434,41 +444,45 @@
   }
   function props() {
     var box = $("#vd-props"), h = "";
-    if (!sel) { box.innerHTML = '<p class="vd-hint">Choose a clip, layer, caption or marker on the timeline to edit it.</p>' + cursorPanel(); bindProps(); return; }
+    if (!sel) { box.innerHTML = '<p class="vd-hint">' + T("Choose a clip, layer, caption, click or marker on the timeline to edit it.") + "</p>" + cursorPanel(); bindProps(); return; }
     if (sel.kind === "clip") {
       var c = find(P.clips, sel.id); if (!c) { sel = null; return props(); }
       var m = MEDIA[c.media], i = P.clips.indexOf(c);
-      h = "<h3>Clip " + (i + 1) + ": " + esc(m.name) + "</h3>" + field("Starts at (s in the footage)", "in", c.in.toFixed(2)) + field("Ends at (s in the footage)", "out", c.out.toFixed(2)) +
-        '<p class="ann-btns"><button type="button" class="btn line sm" data-act="in-here">Start here</button><button type="button" class="btn line sm" data-act="out-here">End here</button>' +
-        '<button type="button" class="btn line sm" data-act="left"' + (i ? "" : " disabled") + '>Move earlier</button><button type="button" class="btn line sm" data-act="right"' + (i < P.clips.length - 1 ? "" : " disabled") + '>Move later</button><button type="button" class="btn line sm" data-act="del">Delete clip</button></p>';
+      h = "<h3>" + esc(T("Clip {n}: {name}", { n: i + 1, name: m.name })) + "</h3>" + field(T("Starts at (s in the footage)"), "in", c.in.toFixed(2)) + field(T("Ends at (s in the footage)"), "out", c.out.toFixed(2)) +
+        '<p class="ann-btns"><button type="button" class="btn line sm" data-act="in-here">' + T("Start here") + '</button><button type="button" class="btn line sm" data-act="out-here">' + T("End here") + "</button>" +
+        '<button type="button" class="btn line sm" data-act="left"' + (i ? "" : " disabled") + ">" + T("Move earlier") + '</button><button type="button" class="btn line sm" data-act="right"' + (i < P.clips.length - 1 ? "" : " disabled") + ">" + T("Move later") + '</button><button type="button" class="btn line sm" data-act="del">' + T("Delete clip") + "</button></p>";
     } else if (sel.kind === "overlay") {
       var o = find(P.overlays, sel.id); if (!o) { sel = null; return props(); }
-      h = "<h3>" + TYPES[o.type] + "</h3>" + (/zoom|blur|arrow|box/.test(o.type) ? "" : field(o.type === "intro" || o.type === "outro" ? "Text (first line is the title)" : "Text", "text", o.text, "textarea")) +
-        '<div class="vd-two">' + field("Start (s)", "start", o.start.toFixed(2)) + field("End (s)", "end", o.end.toFixed(2)) + "</div>" +
-        (o.type === "intro" || o.type === "outro" || o.type === "lower" ? "" : '<div class="vd-two">' + field("X (%)", "x", Math.round(o.x * 100), "number", ' step="1"') + field("Y (%)", "y", Math.round(o.y * 100), "number", ' step="1"') + "</div>") +
-        (/zoom|blur|box|arrow|callout/.test(o.type) ? '<div class="vd-two">' + field("Width (%)", "w", Math.round(o.w * 100), "number", ' step="1"') + field("Height (%)", "h", Math.round(o.h * 100), "number", ' step="1"') + "</div>" : "") +
-        (/zoom|blur/.test(o.type) ? "" : '<div class="vd-two">' + field("Size (px)", "size", o.size, "number", ' step="1"') + field("Color", "color", o.color, "color", "") + "</div>") +
-        '<p class="ann-btns"><button type="button" class="btn line sm" data-act="up">Bring forward</button><button type="button" class="btn line sm" data-act="down">Send back</button><button type="button" class="btn line sm" data-act="del">Delete</button></p>';
+      h = "<h3>" + TYPES[o.type] + "</h3>" + (/zoom|blur|arrow|box/.test(o.type) ? "" : field(o.type === "intro" || o.type === "outro" ? T("Text (first line is the title)") : T("Text"), "text", o.text, "textarea")) +
+        '<div class="vd-two">' + field(T("Start (s)"), "start", o.start.toFixed(2)) + field(T("End (s)"), "end", o.end.toFixed(2)) + "</div>" +
+        (o.type === "intro" || o.type === "outro" || o.type === "lower" ? "" : '<div class="vd-two">' + field(T("X (%)"), "x", Math.round(o.x * 100), "number", ' step="1"') + field(T("Y (%)"), "y", Math.round(o.y * 100), "number", ' step="1"') + "</div>") +
+        (/zoom|blur|box|arrow|callout/.test(o.type) ? '<div class="vd-two">' + field(T("Width (%)"), "w", Math.round(o.w * 100), "number", ' step="1"') + field(T("Height (%)"), "h", Math.round(o.h * 100), "number", ' step="1"') + "</div>" : "") +
+        (/zoom|blur/.test(o.type) ? "" : '<div class="vd-two">' + field(T("Size (px)"), "size", o.size, "number", ' step="1"') + field(T("Color"), "color", o.color, "color", "") + "</div>") +
+        '<p class="ann-btns"><button type="button" class="btn line sm" data-act="up">' + T("Bring forward") + '</button><button type="button" class="btn line sm" data-act="down">' + T("Send back") + '</button><button type="button" class="btn line sm" data-act="del">' + T("Delete") + "</button></p>";
     } else if (sel.kind === "caption") {
       var k = find(P.captions, sel.id); if (!k) { sel = null; return props(); }
-      h = "<h3>Caption</h3>" + field("Text", "text", k.text, "textarea") + '<div class="vd-two">' + field("Start (s)", "start", k.start.toFixed(2)) + field("End (s)", "end", k.end.toFixed(2)) + "</div>" +
-        '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">Delete</button></p>';
+      h = "<h3>" + T("Caption") + "</h3>" + field(T("Text"), "text", k.text, "textarea") + '<div class="vd-two">' + field(T("Start (s)"), "start", k.start.toFixed(2)) + field(T("End (s)"), "end", k.end.toFixed(2)) + "</div>" +
+        '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">' + T("Delete") + "</button></p>";
     } else if (sel.kind === "marker") {
       var mk = find(P.markers, sel.id); if (!mk) { sel = null; return props(); }
-      h = "<h3>Marker</h3>" + field("Label", "label", mk.label, "text") + field("Time (s)", "t", mk.t.toFixed(2)) + '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">Delete</button></p>';
+      h = "<h3>" + T("Marker") + "</h3>" + field(T("Label"), "label", mk.label, "text") + field(T("Time (s)"), "t", mk.t.toFixed(2)) + '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">' + T("Delete") + "</button></p>";
     } else if (sel.kind === "narration") {
       var n = P.narration, nm = MEDIA[n.media];
-      h = "<h3>Narration: " + esc(nm.name) + "</h3>" + '<div class="vd-two">' + field("Starts at (s on the timeline)", "offset", n.offset.toFixed(2)) + field("Volume (%)", "volume", Math.round(n.volume * 100), "number", ' step="5" min="0" max="200"') + "</div>" +
-        '<div class="vd-two">' + field("Trim start (s)", "trimIn", (n.trimIn || 0).toFixed(2)) + field("Trim end (s)", "trimOut", (n.trimOut || nm.duration).toFixed(2)) + "</div>" +
-        '<div class="vd-two">' + field("Fade in (s)", "fadeIn", n.fadeIn) + field("Fade out (s)", "fadeOut", n.fadeOut) + "</div>" + '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">Remove narration</button></p>';
+      h = "<h3>" + esc(T("Narration: {name}", { name: nm.name })) + "</h3>" + '<div class="vd-two">' + field(T("Starts at (s on the timeline)"), "offset", n.offset.toFixed(2)) + field(T("Volume (%)"), "volume", Math.round(n.volume * 100), "number", ' step="5" min="0" max="200"') + "</div>" +
+        '<div class="vd-two">' + field(T("Trim start (s)"), "trimIn", (n.trimIn || 0).toFixed(2)) + field(T("Trim end (s)"), "trimOut", (n.trimOut || nm.duration).toFixed(2)) + "</div>" +
+        '<div class="vd-two">' + field(T("Fade in (s)"), "fadeIn", n.fadeIn) + field(T("Fade out (s)"), "fadeOut", n.fadeOut) + "</div>" + '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">' + T("Remove narration") + "</button></p>";
+    } else if (sel.kind === "cursor") {
+      var ce = clickEvent(); if (!ce) { sel = null; return props(); }
+      h = "<h3>" + T("Click") + "</h3>" + '<div class="vd-two">' + field(T("X (px in the footage)"), "x", Math.round(ce.x), "number", ' step="1"') + field(T("Y (px in the footage)"), "y", Math.round(ce.y), "number", ' step="1"') + "</div>" +
+        field(T("Time (s in the footage)"), "t", ce.t.toFixed(2)) + '<p class="ann-btns"><button type="button" class="btn line sm" data-act="del">' + T("Delete click") + "</button></p>";
     }
     box.innerHTML = h + cursorPanel(); bindProps();
   }
   function cursorPanel() {
     var c = P.cursor, chk = function (k, l) { return '<label class="vd-chk"><input type="checkbox" data-cur="' + k + '"' + (c[k] ? " checked" : "") + "> " + l + "</label>"; };
-    return '<h3 class="vd-sep">Cursor</h3>' + chk("show", "Show the pointer") + chk("halo", "Halo") + chk("ripple", "Click ripple") + chk("spotlight", "Spotlight around the pointer") + chk("numbers", "Number the clicks") + chk("follow", "Zoom in on each click") +
-      '<label class="vd-row">Size <input type="range" data-cur="size" min="0.6" max="2" step="0.1" value="' + c.size + '"></label><label class="vd-row">Zoom <input type="range" data-cur="factor" min="1.2" max="3" step="0.1" value="' + c.factor + '"></label>' +
-      '<p class="vd-hint">' + timelineEvents().filter(function (e) { return e.click; }).length + " click(s) on the timeline. Footage recorded in the demo app brings its pointer with it; for other footage, add clicks by hand.</p>";
+    return '<h3 class="vd-sep">' + T("Cursor") + "</h3>" + chk("show", T("Show the pointer")) + chk("halo", T("Halo")) + chk("ripple", T("Click ripple")) + chk("spotlight", T("Spotlight around the pointer")) + chk("numbers", T("Number the clicks")) + chk("follow", T("Zoom in on each click")) +
+      '<label class="vd-row">' + T("Size") + ' <input type="range" data-cur="size" min="0.6" max="2" step="0.1" value="' + c.size + '"></label><label class="vd-row">' + T("Zoom") + ' <input type="range" data-cur="factor" min="1.2" max="3" step="0.1" value="' + c.factor + '"></label>' +
+      '<p class="vd-hint">' + T("{n} click(s) on the timeline. Footage recorded in the demo app brings its pointer with it; for other footage, add clicks by hand.", { n: timelineEvents().filter(function (e) { return e.click; }).length }) + "</p>";
   }
   function bindProps() {
     var box = $("#vd-props");
@@ -482,6 +496,7 @@
       if (sel.kind === "caption") { var k2 = find(P.captions, sel.id); k2[f] = v; if (k2.end <= k2.start) k2.end = k2.start + 0.2; }
       if (sel.kind === "marker") { var mk = find(P.markers, sel.id); mk[f] = f === "t" ? Math.max(0, v) : v; }
       if (sel.kind === "narration") { P.narration[f] = f === "volume" ? Math.max(0, Math.min(2, v / 100)) : Math.max(0, v); }
+      if (sel.kind === "cursor") { var ce = clickEvent(); if (!ce || !isFinite(v)) return; ce[f] = Math.max(0, v); if (f === "t") MEDIA[sel.media].cursor.sort(function (a, b) { return a.t - b.t; }); }
       if (e.type === "change") { changed(true); props(); } else { frame(playhead); }
     };
     box.onclick = function (e) {
@@ -502,13 +517,24 @@
         if (sel.kind === "caption") P.captions = P.captions.filter(function (x) { return x.id !== sel.id; });
         if (sel.kind === "marker") P.markers = P.markers.filter(function (x) { return x.id !== sel.id; });
         if (sel.kind === "narration") P.narration = null;
+        if (sel.kind === "cursor" && MEDIA[sel.media]) MEDIA[sel.media].cursor = MEDIA[sel.media].cursor.filter(function (x) { return x.id !== sel.id; });
         sel = null;
       }
       changed(true); props(); show(Math.min(playhead, duration()));
     };
   }
   // Drag a selected layer on the picture to place it. Drag the pointer of a hand-added click to move it.
+  function clickEvent() { var m = sel && MEDIA[sel.media], list = m && m.cursor || []; for (var i = 0; i < list.length; i++) if (list[i].id === sel.id) return list[i]; return null; }
   cv.addEventListener("pointerdown", function (e) {
+    if (sel && sel.kind === "cursor") {
+      var ce = clickEvent(), m = MEDIA[sel.media]; if (!ce) return;
+      var r0 = cv.getBoundingClientRect(), cam0 = camera(playhead, timelineEvents());
+      var at = function (ev) { var x = (ev.clientX - r0.left) * W / r0.width, y = (ev.clientY - r0.top) * H / r0.height; return { x: (x / cam0.z + cam0.x) * (m.w || W) / W, y: (y / cam0.z + cam0.y) * (m.h || H) / H }; };
+      cv.setPointerCapture(e.pointerId); var p0 = at(e); ce.x = Math.max(0, p0.x); ce.y = Math.max(0, p0.y); frame(playhead);
+      cv.onpointermove = function (ev) { var p = at(ev); ce.x = Math.max(0, p.x); ce.y = Math.max(0, p.y); frame(playhead); };
+      cv.onpointerup = function () { cv.onpointermove = cv.onpointerup = null; changed(true); props(); };
+      return;
+    }
     if (!sel || sel.kind !== "overlay") return;
     var o = find(P.overlays, sel.id); if (!o || /intro|outro|lower/.test(o.type)) return;
     var r = cv.getBoundingClientRect(), sx = W / r.width, sy = H / r.height, cam = camera(playhead, timelineEvents()), world = WORLD[o.type] || o.type === "zoom";
@@ -535,12 +561,12 @@
     });
     return out.slice(0, 2000);
   }
-  $("#vd-srt").addEventListener("click", function () { if (!P.captions.length) return say("There are no captions yet.", true); Kit.save(new Blob([toSRT(P.captions)], { type: "application/x-subrip" }), name() + ".srt"); say("Exported " + name() + ".srt."); });
+  $("#vd-srt").addEventListener("click", function () { if (!P.captions.length) return say(T("There are no captions yet."), true); Kit.save(new Blob([toSRT(P.captions)], { type: "application/x-subrip" }), name() + ".srt"); say(T("Exported {file}.", { file: name() + ".srt" })); });
   $("#vd-vtt").addEventListener("click", function () {
-    if (!P.captions.length) return say("There are no captions yet.", true);
+    if (!P.captions.length) return say(T("There are no captions yet."), true);
     Kit.save(new Blob([toVTT(P.captions)], { type: "text/vtt" }), name() + ".vtt");
     if (P.markers.length) Kit.save(new Blob(["WEBVTT\n\n" + P.markers.map(function (k, i) { var next = P.markers[i + 1] ? P.markers[i + 1].t : duration(); return "chapter-" + (i + 1) + "\n" + stamp(k.t, ".") + " --> " + stamp(next, ".") + "\n" + k.label + "\n"; }).join("\n")], { type: "text/vtt" }), name() + ".chapters.vtt");
-    say("Exported " + name() + ".vtt" + (P.markers.length ? ", and the markers as " + name() + ".chapters.vtt" : "") + ".");
+    say(P.markers.length ? T("Exported {file}, and the markers as {chapters}.", { file: name() + ".vtt", chapters: name() + ".chapters.vtt" }) : T("Exported {file}.", { file: name() + ".vtt" }));
   });
   $("#vd-burn").addEventListener("change", function () { P.burnCaptions = this.checked; frame(playhead); changed(true); });
 
@@ -551,10 +577,10 @@
     files.reduce(function (p, f) {
       return p.then(function () {
         var k = kindOf(f);
-        if (k === "captions") return Kit.readText(f).then(function (t) { var c = parseCaptions(t); if (!c.length) throw new Error(f.name + " holds no captions this studio can read."); P.captions = P.captions.concat(c).sort(function (a, b) { return a.start - b.start; }); say("Imported " + c.length + " captions from " + f.name + "."); });
-        if (k === "audio") return addMedia(f, f.name, "audio").then(function (m) { P.narration = { media: m.id, offset: +playhead.toFixed(2), volume: 1, fadeIn: 0.3, fadeOut: 0.5, trimIn: 0, trimOut: +m.duration.toFixed(2) }; say("Added " + f.name + " as narration, starting at " + clock(playhead) + "."); });
-        if (k === "video" || k === "image") return addMedia(f, f.name, k).then(function (m) { addClip(m); say("Added " + f.name + " to the end of the video."); });
-        throw new Error(f.name + " isn't a video, image, audio or caption file this studio opens.");
+        if (k === "captions") return Kit.readText(f).then(function (t) { var c = parseCaptions(t); if (!c.length) throw new Error(T("{name} holds no captions this studio can read.", { name: f.name })); P.captions = P.captions.concat(c).sort(function (a, b) { return a.start - b.start; }); say(T("Imported {n} captions from {name}.", { n: c.length, name: f.name })); });
+        if (k === "audio") return addMedia(f, f.name, "audio").then(function (m) { P.narration = { media: m.id, offset: +playhead.toFixed(2), volume: 1, fadeIn: 0.3, fadeOut: 0.5, trimIn: 0, trimOut: +m.duration.toFixed(2) }; say(T("Added {name} as narration, starting at {t}.", { name: f.name, t: clock(playhead) })); });
+        if (k === "video" || k === "image") return addMedia(f, f.name, k).then(function (m) { addClip(m); say(T("Added {name} to the end of the video.", { name: f.name })); });
+        throw new Error(T("{name} isn't a video, image, audio or caption file this studio opens.", { name: f.name }));
       });
     }, Promise.resolve()).then(function () { changed(); props(); show(playhead); }, fail);
   });
@@ -571,36 +597,36 @@
   var screenRec = null;
   $("#vd-screen").addEventListener("click", function () {
     if (screenRec) { screenRec.stop(); return; }
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder) return fail(new Error("This browser can't record the screen. Record it with another tool and add the file."));
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder) return fail(new Error(T("This browser can't record the screen. Record it with another tool and add the file.")));
     navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 30 }, audio: false }).then(function (stream) {
-      var b = $("#vd-screen"); b.textContent = "Stop recording"; say("Recording what you chose to share. Select Stop recording when you're done. The pointer of another app or tab isn't recorded as events, only as pixels.");
+      var b = $("#vd-screen"); b.textContent = T("Stop recording"); say(T("Recording what you chose to share. Select Stop recording when you're done. The pointer of another app or tab isn't recorded as events, only as pixels."));
       stream.getVideoTracks()[0].addEventListener("ended", function () { if (screenRec) screenRec.stop(); });
       screenRec = recordStream(stream, 0, function (blob) {
-        screenRec = null; b.textContent = "Record the screen";
-        addMedia(blob, "screen recording", "video").then(function (m) { addClip(m); changed(); props(); show(0); say("Added the screen recording: " + m.duration.toFixed(1) + " s."); }, fail);
+        screenRec = null; b.textContent = T("Record the screen");
+        addMedia(blob, T("screen recording"), "video").then(function (m) { addClip(m); changed(); props(); show(0); say(T("Added the screen recording: {s} s.", { s: m.duration.toFixed(1) })); }, fail);
       });
-    }, function (e) { fail(new Error(e && e.name === "NotAllowedError" ? "Screen recording was cancelled. Nothing was recorded." : "The screen couldn't be recorded.")); });
+    }, function (e) { fail(new Error(e && e.name === "NotAllowedError" ? T("Screen recording was cancelled. Nothing was recorded.") : T("The screen couldn't be recorded."))); });
   });
   var micRec = null;
   $("#vd-mic").addEventListener("click", function () {
     if (micRec) { micRec.stop(); return; }
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) return fail(new Error("This browser can't record from a microphone. Record the narration elsewhere and add the file."));
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) return fail(new Error(T("This browser can't record from a microphone. Record the narration elsewhere and add the file.")));
     navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }).then(function (stream) {
-      var b = $("#vd-mic"), at = +playhead.toFixed(2); b.textContent = "Stop narration"; say("Recording narration from " + clock(at) + ". Read your script, then select Stop narration.");
+      var b = $("#vd-mic"), at = +playhead.toFixed(2); b.textContent = T("Stop narration"); say(T("Recording narration from {t}. Read your script, then select Stop narration.", { t: clock(at) }));
       micRec = recordStream(stream, 0, function (blob) {
-        micRec = null; b.textContent = "Record narration";
-        addMedia(blob, "narration", "audio").then(function (m) { P.narration = { media: m.id, offset: at, volume: 1, fadeIn: 0.2, fadeOut: 0.4, trimIn: 0, trimOut: +m.duration.toFixed(2) }; sel = { kind: "narration", id: "n" }; changed(); props(); say("Added the narration: " + m.duration.toFixed(1) + " s, starting at " + clock(at) + "."); }, fail);
+        micRec = null; b.textContent = T("Record narration");
+        addMedia(blob, T("narration"), "audio").then(function (m) { P.narration = { media: m.id, offset: at, volume: 1, fadeIn: 0.2, fadeOut: 0.4, trimIn: 0, trimOut: +m.duration.toFixed(2) }; sel = { kind: "narration", id: "n" }; changed(); props(); say(T("Added the narration: {s} s, starting at {t}.", { s: m.duration.toFixed(1), t: clock(at) })); }, fail);
       });
-    }, function (e) { fail(new Error(e && e.name === "NotAllowedError" ? "The microphone wasn't allowed. Nothing was recorded." : "The microphone couldn't be used.")); });
+    }, function (e) { fail(new Error(e && e.name === "NotAllowedError" ? T("The microphone wasn't allowed. Nothing was recorded.") : T("The microphone couldn't be used."))); });
   });
 
   /* The demo app, recorded with its pointer. It fills this tab while it records; sharing this tab makes the recorded
      pixels and the logged pointer events line up. Pointer events from other tabs or apps aren't visible to a web page. */
   var demoRec = null;
   $("#vd-demo").addEventListener("click", function () {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder) return fail(new Error("This browser can't record the screen."));
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder) return fail(new Error(T("This browser can't record the screen.")));
     var box = document.createElement("div"); box.className = "vd-demo";
-    box.innerHTML = '<iframe src="/studio/demo-console.html" title="Demo app: a fictional maintenance console"></iframe><button class="btn ink sm" type="button">Stop recording</button>';
+    box.innerHTML = '<iframe src="/studio/demo-console.html" title="' + esc(T("Demo app: a fictional maintenance console")) + '"></iframe><button class="btn ink sm" type="button">' + T("Stop recording") + "</button>";
     document.body.appendChild(box);
     var ifr = box.querySelector("iframe"), events = [], t0 = 0, last = 0;
     function log(e, click) {
@@ -617,39 +643,39 @@
       demoRec = recordStream(stream, 0, function (blob) {
         demoRec = null; box.remove();
         var good = !surface || surface === "browser";
-        addMedia(blob, "demo app recording", "video").then(function (m) {
+        addMedia(blob, T("demo app recording"), "video").then(function (m) {
           // The events were logged in page pixels; the footage has its own size.
           m.cursor = good ? events.map(function (e) { return { t: e.t, x: e.x * (m.w || vw) / vw, y: e.y * (m.h || vh) / vh, click: e.click }; }) : [];
           addClip(m); changed(); props(); show(0);
-          say("Added the demo recording: " + m.duration.toFixed(1) + " s" + (good ? ", with " + events.filter(function (e) { return e.click; }).length + " click(s) and the pointer's path." : ". You shared something other than this tab, so the pointer events don't match the picture and weren't kept."));
+          say(good ? T("Added the demo recording: {s} s, with {n} click(s) and the pointer's path.", { s: m.duration.toFixed(1), n: events.filter(function (e) { return e.click; }).length }) : T("Added the demo recording: {s} s. You shared something other than this tab, so the pointer events don't match the picture and weren't kept.", { s: m.duration.toFixed(1) }));
         }, fail);
       });
       t0 = performance.now();
       stream.getVideoTracks()[0].addEventListener("ended", function () { if (demoRec) demoRec.stop(); });
       box.querySelector("button").addEventListener("click", function () { if (demoRec) demoRec.stop(); });
-      say("Recording the demo app. Use it as a reader would, then select Stop recording.");
-    }, function (e) { box.remove(); fail(new Error(e && e.name === "NotAllowedError" ? "Recording was cancelled. Nothing was recorded." : "The tab couldn't be recorded.")); });
+      say(T("Recording the demo app. Use it as a reader would, then select Stop recording."));
+    }, function (e) { box.remove(); fail(new Error(e && e.name === "NotAllowedError" ? T("Recording was cancelled. Nothing was recorded.") : T("The tab couldn't be recorded."))); });
   });
 
   /* ---------- The sample ---------- */
   /* The samples: projects this studio saved, with footage of the fictional demo apps, their pointer, narration and captions. */
   function openProject(bytes) {
     var files = Kit.unzip(bytes), j;
-    try { j = JSON.parse(new TextDecoder().decode(files["project.json"])); } catch (e) { throw new Error("This archive isn't a video project."); }
+    try { j = JSON.parse(new TextDecoder().decode(files["project.json"])); } catch (e) { throw new Error(T("This archive isn't a video project.")); }
     return load(j, files);
   }
   var start = Kit.start($("#vd-start"), {
-    tool: "video", title: "Open a video project",
-    lead: "Two training videos made in this studio from recordings of fictional applications: the pointer with its halo and click ripples, zoom that follows each click, highlight boxes and step numbers on the controls, captions, and narration. Open one to play it, change it, and render it again. Or start from your own recording.",
+    tool: "video", title: T("Open a video project"),
+    lead: T("Two training videos made in this studio from recordings of fictional applications: the pointer with its halo and click ripples, zoom that follows each click, highlight boxes and step numbers on the controls, and captions. Open one to play it, change it, and render it again. Or start from your own recording."),
     open: function (s) {
-      return (P.clips.length ? Kit.confirm("Replace the project on screen?", s.title + " takes its place. Save the current project first if you want to keep it.", { ok: "Replace" }) : Promise.resolve(true)).then(function (yes) {
+      return (P.clips.length ? Kit.confirm(T("Replace the project on screen?"), T("{title} takes its place. Save the current project first if you want to keep it.", { title: T(s.title) }), { ok: T("Replace") }) : Promise.resolve(true)).then(function (yes) {
         if (!yes) return;
-        say("Opening " + s.title + "…");
-        return Kit.fetchBytes(s.project).then(openProject).then(function () { sw.close(); say("Opened " + s.title + ": " + Math.round(duration()) + " s of footage with its recorded pointer" + (P.narration ? ", narration" : "") + (P.captions.length ? ", " + P.captions.length + " captions" : "") + " and " + P.overlays.length + " overlays. Play it, then export it."); });
+        say(T("Opening {title}…", { title: T(s.title) }));
+        return Kit.fetchBytes(s.project).then(openProject).then(function () { sw.close(); say(T("Opened {title}: {s} s of footage with its recorded pointer, {layers} layers and {captions} captions.", { title: T(s.title), s: Math.round(duration()), layers: P.overlays.length, captions: P.captions.length }) + (P.narration ? " " + T("It has narration.") : "") + " " + T("Play it, then export it.")); });
       });
     },
-    fail: fail, blank: function () { (P.clips.length ? Kit.confirm("Start an empty project?", "The one on screen is replaced. Save it first if you want to keep it.", { ok: "Start empty" }) : Promise.resolve(true)).then(function (yes) { if (!yes) return; stopAll(); MEDIA = {}; P = blank(); sel = null; changed(); props(); show(0); sw.close(); say("Started an empty project. Add a recording, record the screen, or record the demo app."); }); }, blankLabel: "Start empty",
-    files: [{ label: "Open project", input: "vd-open" }, { label: "Add files", input: "vd-files" }],
+    fail: fail, blank: function () { (P.clips.length ? Kit.confirm(T("Start an empty project?"), T("The one on screen is replaced. Save it first if you want to keep it."), { ok: T("Start empty") }) : Promise.resolve(true)).then(function (yes) { if (!yes) return; stopAll(); MEDIA = {}; P = blank(); sel = null; changed(); hist.reset(); props(); show(0); sw.close(); say(T("Started an empty project. Add a recording, record the screen, or record the demo app.")); }); }, blankLabel: T("Start empty"),
+    files: [{ label: T("Open project"), input: "vd-open" }, { label: T("Add files"), input: "vd-files" }],
     links: function (s) { return (s.video ? '<a href="' + Kit.esc(s.video) + '">MP4</a>' : "") + (s.captions ? '<a href="' + Kit.esc(s.captions) + '">WebVTT</a>' : ""); },
   });
   var sw = Kit.startSwitch(start, $("#vd-slot"), $("#vd-samples"));
@@ -663,16 +689,16 @@
     return "";
   }
   $("#vd-export").addEventListener("click", function () {
-    if (!P.clips.length) return say("Add footage first.", true);
+    if (!P.clips.length) return say(T("Add footage first."), true);
     if (exporting) return;
-    var type = pickType(); if (!type) return fail(new Error("This browser can't make a video file. Use a current version of Chrome, Edge, Firefox or Safari."));
+    var type = pickType(); if (!type) return fail(new Error(T("This browser can't make a video file. Use a current version of Chrome, Edge, Firefox or Safari.")));
     var a = audioGraph(); if (a.ac.state === "suspended") a.ac.resume();
     var dest = a.ac.createMediaStreamDestination(); a.out.connect(dest);
     var stream = new MediaStream(cv.captureStream(FPS).getVideoTracks().concat(dest.stream.getAudioTracks()));
     var rec = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 6000000, audioBitsPerSecond: 160000 }), parts = [];
     rec.ondataavailable = function (e) { if (e.data.size) parts.push(e.data); };
     exporting = true; sel = null; props(); var prog = $("#vd-progress"), total = duration(); prog.hidden = false; prog.value = 0; prog.max = total;
-    $("#vd-export").disabled = true; say("Rendering in real time: " + clock(total) + ". Keep this tab open and visible.");
+    $("#vd-export").disabled = true; say(T("Rendering in real time: {t}. Keep this tab open and visible.", { t: clock(total) }));
     var stopped = new Promise(function (ok) { rec.onstop = ok; });
     show(0).then(function () {
       rec.start(500); playing = true;
@@ -682,12 +708,13 @@
       var ext = /mp4/.test(type) ? "mp4" : "webm", blob = new Blob(parts, { type: type.split(";")[0] });
       return (ext === "mp4" && window.Mp4 ? blob.arrayBuffer().then(function (buf) {
         // The recorder writes the file in pieces and never records its length. Rewrite it with one index so players show the right length and can seek.
-        var flat = Mp4.flatten(buf); return flat.unchanged ? blob : new Blob([flat.bytes], { type: "video/mp4" });
+        var flat; try { flat = Mp4.flatten(buf); } catch (e) { return blob; }   // the recorder's own file still plays
+        return flat.unchanged ? blob : new Blob([flat.bytes], { type: "video/mp4" });
       }) : Promise.resolve(blob)).then(function (b) { blob = b; return verify(blob); }).then(function (len) {
         lastExport = { blob: blob, ext: ext, seconds: len };
         Kit.save(blob, name() + "." + ext);
-        var codecs = (/codecs=([^;]+)/.exec(rec.mimeType || type) || [0, ""])[1].replace(/avc1[.\w]*/, "H.264").replace(/mp4a[.\w]*/, "AAC").replace(/opus/, "Opus").replace(/vp9/, "VP9").replace(/,/g, " and ");
-        say("Exported " + name() + "." + ext + ": " + (blob.size / 1048576).toFixed(1) + " MB, " + len.toFixed(1) + " s" + (codecs ? ", " + codecs : "") + ", checked by playing it back." + (ext === "webm" ? " This browser makes WebM, not MP4." : /Opus/.test(codecs) ? " Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound." : ""));
+        var codecs = (/codecs=([^;]+)/.exec(rec.mimeType || type) || [0, ""])[1].replace(/avc1[.\w]*/, "H.264").replace(/mp4a[.\w]*/, "AAC").replace(/opus/, "Opus").replace(/vp9/, "VP9").replace(/,/g, " " + T("and") + " ");
+        say(T("Exported {file}: {mb} MB, {s} s, checked by playing it back.", { file: name() + "." + ext, mb: (blob.size / 1048576).toFixed(1), s: len.toFixed(1) }) + (codecs ? " " + T("Picture and sound: {codecs}.", { codecs: codecs }) : "") + (ext === "webm" ? " " + T("This browser makes WebM, not MP4.") : /Opus/.test(codecs) ? " " + T("Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.") : ""));
       });
     }).catch(fail).then(function () { exporting = false; playing = false; prog.hidden = true; $("#vd-export").disabled = false; frame(playhead); });
   });
@@ -696,9 +723,9 @@
   function verify(blob) {
     return new Promise(function (ok, no) {
       var v = document.createElement("video"), url = URL.createObjectURL(blob); v.muted = true; v.preload = "metadata";
-      var settle = function (d) { URL.revokeObjectURL(url); if (d > 0.5 && Math.abs(d - duration()) < Math.max(1, duration() * 0.05)) ok(d); else if (d > 0.5) no(new Error("The video file lasts " + d.toFixed(1) + " s but the timeline lasts " + duration().toFixed(1) + " s, so it wasn't saved. Keep this tab visible while it renders, then try again.")); else no(new Error("The video file was made but can't be played back. Nothing was saved.")); };
+      var settle = function (d) { URL.revokeObjectURL(url); if (d > 0.5 && Math.abs(d - duration()) < Math.max(1, duration() * 0.05)) ok(d); else if (d > 0.5) no(new Error(T("The video file lasts {d} s but the timeline lasts {t} s, so it wasn't saved. Keep this tab visible while it renders, then try again.", { d: d.toFixed(1), t: duration().toFixed(1) }))); else no(new Error(T("The video file was made but can't be played back. Nothing was saved."))); };
       v.onloadedmetadata = function () { if (isFinite(v.duration)) return settle(v.duration); v.currentTime = 1e9; v.ontimeupdate = function () { v.ontimeupdate = null; settle(v.duration); }; };
-      v.onerror = function () { URL.revokeObjectURL(url); no(new Error("The video file was made but can't be played back. Nothing was saved.")); };
+      v.onerror = function () { URL.revokeObjectURL(url); no(new Error(T("The video file was made but can't be played back. Nothing was saved."))); };
       v.src = url;
     });
   }
@@ -713,12 +740,12 @@
     var j = projectJson(), keys = Object.keys(MEDIA);
     Promise.all(keys.map(function (k) { return MEDIA[k].blob.arrayBuffer(); })).then(function (bufs) {
       var files = [{ name: "project.json", data: JSON.stringify(j, null, 1) }].concat(keys.map(function (k, i) { return { name: j.media[k].file, data: new Uint8Array(bufs[i]) }; }));
-      Kit.save(Kit.zip(files), name() + ".video.zip"); say("Saved the project with its footage and sound. Open it here to keep editing.");
+      Kit.save(Kit.zip(files), name() + ".video.zip"); say(T("Saved the project with its footage and sound. Open it here to keep editing."));
     }, fail);
   });
   function num(v, lo, hi, d) { v = Number(v); return isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d; }
   function load(j, blobs) {
-    if (!j || j.app !== "karandeshmukh.dev/studio/video" || j.version !== 1 || !j.project) throw new Error("This isn't a video project saved by this studio.");
+    if (!j || j.app !== "karandeshmukh.dev/studio/video" || j.version !== 1 || !j.project) throw new Error(T("This isn't a video project saved by this studio."));
     var src = j.project, ids = Object.keys(j.media || {}).slice(0, 50);
     stopAll(); MEDIA = {}; var next = blank(); next.name = String(src.name || "training-video").slice(0, 80); next.burnCaptions = src.burnCaptions !== false; next.clipVolume = num(src.clipVolume, 0, 2, 1);
     Object.keys(next.cursor).forEach(function (k) { if (src.cursor && k in src.cursor) next.cursor[k] = typeof next.cursor[k] === "boolean" ? !!src.cursor[k] : num(src.cursor[k], 0.5, 3, next.cursor[k]); });
@@ -735,18 +762,19 @@
       next.captions = (src.captions || []).slice(0, 2000).map(function (c) { return { id: uid("k"), start: num(c.start, 0, 1e5, 0), end: num(c.end, 0, 1e5, 1), text: String(c.text || "").slice(0, 300) }; });
       next.markers = (src.markers || []).slice(0, 200).map(function (k) { return { id: uid("k"), t: num(k.t, 0, 1e5, 0), label: String(k.label || "").slice(0, 80) }; });
       if (src.narration && map[src.narration.media]) { var n = src.narration; next.narration = { media: map[n.media], offset: num(n.offset, 0, 1e5, 0), volume: num(n.volume, 0, 2, 1), fadeIn: num(n.fadeIn, 0, 30, 0), fadeOut: num(n.fadeOut, 0, 30, 0), trimIn: num(n.trimIn, 0, 1e5, 0), trimOut: num(n.trimOut, 0, 1e5, 0) || undefined }; }
-      P = next; sel = null; changed(true); props(); return show(0);
+      P = next; sel = null; changed(true); if (hist) hist.reset(); props(); return show(0);
     });
   }
   $("#vd-open").addEventListener("change", function () {
     var f = this.files[0]; this.value = "";
-    Kit.readBytes(f, 400 * 1048576).then(openProject).then(function () { say("Opened " + f.name + "."); }, fail);
+    Kit.readBytes(f, 400 * 1048576).then(openProject).then(function () { say(T("Opened {name}.", { name: f.name })); }, fail);
   });
 
   /* ---------- Keeping the project in this browser ---------- */
   var timer = 0;
   function changed(light) {
-    if (!light) timeline(); else timeline();
+    timeline();
+    if (hist) hist.record();
     clearTimeout(timer);
     timer = setTimeout(function () {
       var j = projectJson(), blobs = {}; Object.keys(MEDIA).forEach(function (k) { blobs[j.media[k].file] = MEDIA[k].blob; });
@@ -756,10 +784,20 @@
     $("#vd-burn").checked = P.burnCaptions;
     if (window.studioVideo) sw.inline(!P.clips.length);
   }
+  /* ---------- Undo and redo: the timeline and the pointer events, kept after each change ---------- */
+  var hist = Kit.history({
+    get: function () { var c = {}; Object.keys(MEDIA).forEach(function (k) { c[k] = MEDIA[k].cursor || []; }); return { P: P, cursor: c }; },
+    set: function (s) { P = s.P; Object.keys(s.cursor).forEach(function (k) { if (MEDIA[k]) MEDIA[k].cursor = s.cursor[k]; }); sel = null; changed(true); props(); show(Math.min(playhead, duration())); },
+    onChange: function (h) { $("#vd-undo").disabled = !h.canUndo(); $("#vd-redo").disabled = !h.canRedo(); },
+  });
+  function undo() { if (!exporting && hist.undo()) say(T("Undid the last change.")); }
+  function redo() { if (!exporting && hist.redo()) say(T("Redid the change.")); }
+  $("#vd-undo").addEventListener("click", undo); $("#vd-redo").addEventListener("click", redo);
+  Kit.keys({ save: function () { if (!$("#vd-save").disabled) $("#vd-save").click(); }, undo: undo, redo: redo });
   if (document.fonts && document.fonts.load) document.fonts.load("700 30px Hanken").then(function () { frame(playhead); }, function () {});
   Kit.store.get("video").then(function (s) {
     if (!s || !s.json) return;
-    var blobs = {}; return Promise.all(Object.keys(s.blobs || {}).map(function (k) { return s.blobs[k].arrayBuffer().then(function (b) { blobs[k] = new Uint8Array(b); }); })).then(function () { return load(s.json, blobs); }).then(function () { say("Reopened your last video project from this browser."); });
+    var blobs = {}; return Promise.all(Object.keys(s.blobs || {}).map(function (k) { return s.blobs[k].arrayBuffer().then(function (b) { blobs[k] = new Uint8Array(b); }); })).then(function () { return load(s.json, blobs); }).then(function () { say(T("Reopened your last video project from this browser.")); });
   }).catch(function () {}).then(function () { if (!P.clips.length) { frame(0); timeline(); props(); } changed(true); });
 
   addEventListener("keydown", function (e) {

@@ -8,6 +8,8 @@
  <button class="btn line sm" type="button" id="gd-new">New guide</button>
  <button class="btn line sm" type="button" id="gd-samples">Samples</button>
  <label class="btn line sm" for="gd-open">Open project</label><input class="st-file" id="gd-open" type="file" accept=".zip,application/zip">
+ <button class="btn line sm" type="button" id="gd-undo" disabled aria-keyshortcuts="Control+Z">Undo</button>
+ <button class="btn line sm" type="button" id="gd-redo" disabled aria-keyshortcuts="Control+Shift+Z">Redo</button>
  <span class="sep" aria-hidden="true"></span>
  <button class="btn ink sm" type="button" id="gd-md">Export Markdown</button>
  <button class="btn line sm" type="button" id="gd-html">Export HTML</button>
@@ -22,6 +24,8 @@
   <section class="gd-meta" aria-label="About this guide">
    <label>Title <input id="gd-title" type="text" maxlength="140"></label>
    <div class="gd-two"><label>Document ID <input id="gd-docid" type="text" maxlength="40"></label><label>Version <input id="gd-version" type="text" maxlength="20"></label></div>
+   <label>Language of the guide <select id="gd-lang" aria-describedby="gd-lang-h"><option value="en" lang="en" translate="no">English</option><option value="fr" lang="fr" translate="no">Français</option><option value="de" lang="de" translate="no">Deutsch</option><option value="es" lang="es" translate="no">Español</option><option value="hi" lang="hi" translate="no">हिन्दी</option></select></label>
+   <p class="gd-hint" id="gd-lang-h">The headings the tool writes, such as Before you start and Steps, follow this language. Your own words are never translated.</p>
    <label>What the reader achieves <textarea id="gd-intro" rows="2" maxlength="600"></textarea></label>
    <label>Before you start <small>One prerequisite a line</small><textarea id="gd-prereq" rows="3" maxlength="2000"></textarea></label>
    <label>Warnings <small>One a line</small><textarea id="gd-warn" rows="2" maxlength="2000"></textarea></label>
@@ -37,4 +41,4 @@
  <div class="gd-dlg-head"><h2 id="gd-dlg-title">Mark up the picture</h2><p><button class="btn ink sm" type="button" id="gd-dlg-ok">Done</button> <button class="btn line sm" type="button" id="gd-dlg-no">Cancel</button></p></div>
  <div id="gd-editor"></div>
 </dialog>
-<p class="st-note">Pictures are kept with the guide in this browser and in the project file. Each picture can be marked up with the same tools as the Screenshot Studio, including permanent redaction. The PDF uses a standard font, so it shows Latin-script languages only.</p>
+<p class="st-note">Pictures are kept with the guide in this browser and in the project file. Each picture can be marked up with the same tools as the Screenshot Studio, including permanent redaction. The PDF uses a standard font, so it shows Latin-script languages only. Shortcuts: Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save the project.</p>

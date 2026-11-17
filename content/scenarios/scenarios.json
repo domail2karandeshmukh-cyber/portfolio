@@ -8,14 +8,14 @@
    "title": "Preventive maintenance: monthly equipment inspection",
    "org": "Harbor Pump Station",
    "product": "the maintenance console",
-   "summary": "A technician inspects a feed pump every month, records four readings and closes the work order. The scenario shows an engineering procedure with prerequisites and cautions, an inspection record, annotated console screenshots, a revision-controlled procedure, and a narrated walkthrough.",
+   "summary": "A technician inspects a feed pump every month, records four readings and closes the work order. The scenario shows an engineering procedure with prerequisites and cautions, an inspection record, annotated console screenshots, a revision-controlled procedure, and a recorded walkthrough with captions.",
    "skills": [
     "Engineering procedure",
     "Prerequisites and cautions",
     "Inspection record",
     "Annotated screenshots",
     "Revision control",
-    "Narrated walkthrough"
+    "Training walkthrough with captions"
    ],
    "docs": [
     {
@@ -344,17 +344,17 @@
   {
    "id": "g-training",
    "letter": "G",
+   "package": true,
    "field": "Technical training",
    "title": "Using a new software feature",
    "org": "Beacon Reports",
    "product": "Beacon Reports, a reporting application",
-   "summary": "A two-minute tutorial on scheduling a report for automatic delivery. The scenario shows annotated screenshots, a numbered procedural guide, a narrated training video with pointer effects and captions, and a downloadable training package.",
+   "summary": "A short tutorial on scheduling a report for automatic delivery. The scenario shows annotated screenshots, a numbered procedural guide, a training video with pointer effects and captions, and a downloadable training package.",
    "skills": [
     "Annotated screenshots",
     "Numbered procedural guide",
     "Cursor effects",
-    "Narrated video",
-    "Captions",
+    "Training video with captions",
     "Training package"
    ],
    "docs": [
@@ -383,8 +383,9 @@
    "letter": "H",
    "field": "Structured publishing",
    "title": "Multi-topic product documentation in DITA",
-   "org": "Several of the scenarios above",
+   "org": "",
    "product": "DITA 1.3 and DITA Open Toolkit",
+   "note": "The documents come from scenarios A to G, whose organizations, products, people and addresses are invented. DITA 1.3 and DITA Open Toolkit are real: the projects were validated and published with them.",
    "summary": "Five DITA projects made from the scenarios' documents: concepts, tasks, references and troubleshooting topics under a map with keys, a relationship table and DITAVAL filters for each group of readers, validated against the OASIS DTDs and published to HTML5 and PDF.",
    "skills": [
     "DITA concepts",
