@@ -430,6 +430,12 @@
     v.playsInline = true;
     v.src = b.dataset.film;
     if (b.dataset.poster) v.poster = b.dataset.poster;
+    // A narrated film's spoken words, as captions the viewer can turn on: its own titles are already drawn in the picture.
+    if (b.dataset.captions) {
+      var tr = document.createElement("track");
+      tr.kind = "captions"; tr.srclang = "en"; tr.label = "English"; tr.src = b.dataset.captions;
+      v.appendChild(tr);
+    }
     v.setAttribute("aria-label", title ? title.textContent.trim() : "Film");
     var stage = $(".stage", theater);
     stage.innerHTML = "";

@@ -197,6 +197,10 @@ Every sample comes from one of eight fictional scenarios, each a different kind 
 
 A video's narration comes from `lib/narration.cjs`, recorded by `scripts/record-narration.mjs` into `content/narration/`. Until a segment is recorded, the sample is made without sound and its description doesn't call it narrated.
 
+The narration is a synthetic voice: ElevenLabs v4 through the Vercel AI Gateway, in a premade narrator's voice that is not April's. The workflow **Record the narration** runs the recorder on GitHub against the live site, which speaks each segment once, and commits what it recorded; segments already recorded are kept, so a run costs only what changed (all six scripts, about 3,300 characters, cost about $0.27 at $0.00008 a character). Deploy a change to a script before recording it.
+
+In a sample video, each action happens as the narrator names its control. `timing()` in `scripts/studio-video-sample.py` finds where each sentence of a segment starts in its recording, at the pauses, and places a phrase inside its sentence by its share of the characters; each step says which phrase it waits for. The flagship's page says whether its video has a voiceover from `files.json`, which `scripts/studio-flagship.py` writes.
+
 ### Editing
 
 The screenshot editor, the step guides, and the video editor have undo and redo (Ctrl+Z, Ctrl+Shift+Z) and save the project with Ctrl+S. A step guide has a language of its own for the headings the tool writes, separate from the interface's.
@@ -214,7 +218,7 @@ The script raises xmllint's entity-amplification limit, because libxml2 stops re
 The video section plays films that are kept with the site: nothing is streamed from another service, and no visitor's browser contacts one.
 
 - `films.items` in `content/site.json` lists them: an `id`, a title, a running time, and a line about the film.
-- Each film is two files in `content/films/`: `<id>.mp4` and a poster frame, `<id>.jpg`.
+- Each film is two files in `content/films/`: `<id>.mp4` and a poster frame, `<id>.jpg`. A narrated film has a third, `<id>.vtt`, its spoken words; the player offers it as a captions track, off until the viewer turns it on, since the film's own titles are drawn in the picture.
 - The films show this site's own tools, and `scripts/film/` makes them. See [How the films are made](#how-the-films-are-made).
 
 Walkthroughs made for an employer are that employer's property. They aren't in this repository and not on the site.
@@ -359,7 +363,9 @@ python3 scripts/film/film.py http://localhost:8765 style-check render          #
 python3 scripts/film/film.py http://localhost:8765 style-check render 03-findings   # that scene again, then the film
 ```
 
-Look at the sheet before a render: it comes from the same page and the same clock. To publish a film, copy it and a poster frame to `content/films/`, and list it under `films.items` in `content/site.json`.
+Look at the sheet before a render: it comes from the same page and the same clock. A render copies the film to `content/films/`, with its captions when it has narration; give it a poster frame there, and list it under `films.items` in `content/site.json` with its running time.
+
+A film with a script in `lib/narration.cjs` is narrated: each scene's recording starts 0.4 s into the scene, and a scene that needs more time than it declares holds its last picture until the words are done. The film's captions are its narration, one cue per spoken scene.
 
 The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 

@@ -37,28 +37,71 @@ def narration(script_id):
     return out
 
 
+def onsets(path):
+    """Where speech starts in a recording, and where it resumes after each pause, in seconds; and where it ends."""
+    r = subprocess.run(["ffmpeg", "-v", "info", "-i", str(path), "-af", "silencedetect=noise=-40dB:d=0.2", "-f", "null", "-"], capture_output=True, text=True).stderr
+    starts = [float(x) for x in re.findall(r"silence_start: (-?[\d.]+)", r)]
+    ends = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", r)]
+    length = seconds(path)
+    out = ([] if starts and starts[0] <= 0.05 else [0.0]) + [e for e in ends if e < length - 0.15]
+    last = max([s for s in starts if s > (out[-1] if out else 0)] or [length])
+    return out, last
+
+
+def timing(seg):
+    """For one narration segment: when each phrase of its words is said, in seconds from the segment's start.
+    A sentence starts at the pause in the recording nearest to where its share of the words puts it; inside a
+    sentence, time follows the characters. Without a recording, the characters alone."""
+    text = seg["text"]
+    spans = [(m.start(), m.end()) for m in re.finditer(r"\S[^.!?]*(?:[.!?]+|$)", text)]
+    if seg["file"]: found, end = onsets(seg["file"])
+    else: found, end = [0.0], seg["seconds"]
+    first = found[0] if found else 0.0
+    starts = []
+    for k, (a, b) in enumerate(spans):
+        guess = first + (end - first) * a / len(text)
+        near = min(found, key=lambda o: abs(o - guess)) if found else guess
+        starts.append(first if k == 0 else (near if abs(near - guess) < 1.2 else guess))
+    def when(phrase):
+        i = text.index(phrase)
+        k = max(j for j, (a, b) in enumerate(spans) if a <= i)
+        a, b = spans[k]; ta = starts[k]; tb = starts[k + 1] if k + 1 < len(spans) else end
+        return ta + (tb - ta) * (i - a) / max(1, b - a)
+    return when
+
+
 # The two samples: which demo app, and what happens during each narration segment. An action gets the page, the
-# pointer helper and the segment's start time, and returns the elements it selected (for highlight boxes).
+# pointer helper and at(phrase, after): the moment the narrator starts saying that phrase of the segment, plus a
+# delay, so that each control is used as it is named. It returns the elements it selected (for highlight boxes).
 def reports_steps():
     return [
-        ("intro", lambda p, m, t0: None),
-        ("open", lambda p, m, t0: [m.click("#open", at=t0 + 2.6)]),
-        ("recipients", lambda p, m, t0: [m.type_into("#rcpt", ["sales-leads@meridian.example", "finance@meridian.example"], at=t0 + 1.8)]),
-        ("repeat", lambda p, m, t0: [m.pick("#rep", "Weekly", at=t0 + 1.2), m.pick("#day", "Monday", at=t0 + 2.6), m.pick("#time", "08:00", at=t0 + 4.0)]),
-        ("format", lambda p, m, t0: [m.pick("#fmt", "PDF", at=t0 + 1.6), m.click("#preview", at=t0 + 6.4)]),
-        ("save", lambda p, m, t0: [m.click("#save", at=t0 + 0.9)]),
-        ("done", lambda p, m, t0: [m.hover("#rows .btn", at=t0 + 4.0)]),
+        ("intro", lambda p, m, at: None),
+        ("open", lambda p, m, at: [m.click("#open", at=at("Schedule", 0.3), leaves=True)]),
+        ("recipients", lambda p, m, at: [m.type_into("#rcpt", ["sales-leads@meridian.example", "finance@meridian.example"], at=at("type each email address", 0.2))]),
+        ("repeat", lambda p, m, at: [m.pick("#rep", "Weekly", at=at("how often", 0.3)), m.pick("#day", "Monday", at=at("the day", 0.2)), m.pick("#time", "08:00", at=at("and the time", 0.3))]),
+        ("format", lambda p, m, at: [m.pick("#fmt", "PDF", at=at("PDF for a report", 0.2)), m.click("#preview", at=at("select Preview", 0.5))]),
+        ("save", lambda p, m, at: [m.click("#save", at=at("Save schedule", 0.3), leaves=True)]),
+        ("done", lambda p, m, at: [m.hover("#rows .btn", at=at("with Edit and Pause", 0.2))]),
     ]
 
 
+# In the console demo the readings are written in the form already; the recording blanks them first, and types each
+# one as the narrator names it.
+CONSOLE_FIELDS = "[data-view=reading] .in"
 def console_steps():
+    def enter(p, m, at):
+        start = at("the discharge pressure") - 0.6
+        for n, (phrase, value) in enumerate([("the discharge pressure", "4.3"), ("the bearing temperature", "58"), ("the vibration", "2.9"), ("whether the seal leaks", "None visible")]):
+            m.fill(CONSOLE_FIELDS, n, value, at=at(phrase, 0.3))
+        m.zoom_on("[data-view=reading] form", start, m.at() + 1.0)
+        return [m.click("#save", at=at("Save readings", 0.3), leaves=True)]
     return [
-        ("intro", lambda p, m, t0: None),
-        ("open", lambda p, m, t0: [m.click("#record", at=t0 + 4.2)]),
-        ("enter", lambda p, m, t0: [m.hover("#f-pressure", at=t0 + 1.5), m.click("#save", at=t0 + 8.8)]),
-        ("check", lambda p, m, t0: [m.hover("#check", at=t0 + 1.8)]),
-        ("close", lambda p, m, t0: [m.click("#closewo", at=t0 + 1.4)]),
-        ("outro", lambda p, m, t0: None),
+        ("intro", lambda p, m, at: None),
+        ("open", lambda p, m, at: [m.click("#record", at=at("Record readings", 0.3), leaves=True)]),
+        ("enter", enter),
+        ("check", lambda p, m, at: [m.hover("#check", at=at("All four are inside it", 0.2))]),
+        ("close", lambda p, m, at: [m.click("#closewo", at=at("Close work order", 0.35), leaves=True)]),
+        ("outro", lambda p, m, at: None),
     ]
 
 
@@ -70,6 +113,7 @@ SAMPLES = {
     "inspection-walkthrough": {"demo": "console", "steps": console_steps, "title": "Monthly inspection of feed pump B", "scenario": "a-industrial",
                                "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · fictional procedure", "outro": "Inspection recorded\nThe written procedure, the step guide and the DITA output are in the same package.",
                                "lower": "Harbor Pump Station · fictional demo", "blur": "#key",
+                               "prepare": "document.head.insertAdjacentHTML('beforeend', '<style>.in:empty::after{content:\\'\\\\00a0\\'}</style>'); document.querySelectorAll('" + CONSOLE_FIELDS + "').forEach((e) => { e.textContent = ''; e.classList.remove('f'); })",
                                "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions."},
 }
 
@@ -92,10 +136,21 @@ class Mouse:
             self.page.wait_for_timeout(int(dur * 1000 / steps))
     def hover(self, sel, at):
         self.wait_until(at - 1.0); b = self.box(sel); self.move(b["x"] + b["w"] * 0.55, b["y"] + b["h"] * 0.5); return None
-    def click(self, sel, at):
+    def click(self, sel, at, leaves=False):
+        """leaves: the click changes the screen, so the box and its number go as soon as it lands."""
         self.wait_until(at - 1.1); b = self.box(sel); self.move(b["x"] + b["w"] * 0.5, b["y"] + b["h"] * 0.5)
         self.wait_until(at - 0.05); self.page.mouse.down(); self.events.append({"t": self.at(), "x": self.x, "y": self.y, "click": True}); self.page.wait_for_timeout(90); self.page.mouse.up()
-        self.boxes.append({"t": self.at(), "sel": sel, **b}); self.page.wait_for_timeout(300); return b
+        self.boxes.append({"t": self.at(), "sel": sel, "leaves": leaves, **b}); self.page.wait_for_timeout(300); return b
+    def fill(self, sel, n, value, at):
+        """Types a value into the n-th field of a static form, as the pointer reaches it: no highlight box, the zoom shows it."""
+        b = self.page.evaluate("([s, n]) => { const r = document.querySelectorAll(s)[n].getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; }", [sel, n])
+        self.wait_until(at - 0.6); self.move(b["x"] + 30, b["y"] + b["h"] * 0.5, dur=0.5, steps=16)
+        self.wait_until(at); self.page.mouse.down(); self.events.append({"t": self.at(), "x": self.x, "y": self.y, "click": True}); self.page.wait_for_timeout(80); self.page.mouse.up()
+        self.page.evaluate("([s, n]) => document.querySelectorAll(s).forEach((e, i) => e.classList.toggle('f', i === n))", [sel, n])
+        for k in range(1, len(value) + 1):
+            self.page.evaluate("([s, n, v]) => { document.querySelectorAll(s)[n].textContent = v; }", [sel, n, value[:k]]); self.page.wait_for_timeout(70)
+    def zoom_on(self, sel, start, end):
+        b = self.box(sel); self.zooms.append({"start": start, "end": end, "x": b["x"] - 30, "y": b["y"] - 30, "w": b["w"] + 60, "h": b["h"] + 60})
     def pick(self, sel, value, at):
         # A native dropdown isn't captured by a recording, so the value is set as the pointer reaches the control.
         self.wait_until(at - 1.0); b = self.box(sel); self.move(b["x"] + b["w"] * 0.5, b["y"] + b["h"] * 0.5)
@@ -127,8 +182,10 @@ def make(sample_id):
         pg = ctx.new_page(); pg.goto(f"file://{DEMOS}/{s['demo']}.html", wait_until="load"); pg.wait_for_timeout(400)
         t0 = time.time(); m = Mouse(pg, t0); m.events.append({"t": 0, "x": m.x, "y": m.y})
         blurbox = m.box(s["blur"]) if s["blur"] else None
+        if s.get("prepare"): pg.evaluate(s["prepare"])
         for (sid, act), g, st in zip(steps, segs, starts):
-            m.wait_until(st); act(pg, m, st)
+            when = timing(g)
+            m.wait_until(st); act(pg, m, lambda phrase, after=0.0, st=st, when=when: st + when(phrase) + after)
         m.wait_until(total)
         dur = m.at()
         ctx.close(); b.close()
@@ -157,8 +214,9 @@ def make(sample_id):
     overlay("lower", starts[1] - 0.2, starts[1] + 3.4, text=s["lower"], size=24, layer=1)
     clicks = [e for e in m.events if e.get("click")]
     for i, bx in enumerate(m.boxes):
-        overlay("box", bx["t"] - 1.2, bx["t"] + 0.7, x=(bx["x"] - 6) / W, y=(bx["y"] - 6) / H, w=(bx["w"] + 12) / W, h=(bx["h"] + 12) / H, layer=2)
-        overlay("step", bx["t"] - 1.2, bx["t"] + 1.6, x=max(0.03, (bx["x"] - 26) / W), y=(bx["y"] - 10) / H, w=0, h=0, text=str(i + 1), size=34, layer=3)
+        gone = 0.25 if bx.get("leaves") else None
+        overlay("box", bx["t"] - 1.2, bx["t"] + (gone or 0.7), x=(bx["x"] - 6) / W, y=(bx["y"] - 6) / H, w=(bx["w"] + 12) / W, h=(bx["h"] + 12) / H, layer=2)
+        overlay("step", bx["t"] - 1.2, bx["t"] + (gone or 1.6), x=max(0.03, (bx["x"] - 26) / W), y=(bx["y"] - 10) / H, w=0, h=0, text=str(i + 1), size=34, layer=3)
     for z in m.zooms:
         overlay("zoom", z["start"], z["end"], x=max(0, z["x"]) / W, y=max(0, z["y"]) / H, w=min(W, z["w"]) / W, h=min(H, z["h"]) / H, layer=1)
     if s["blur"] and blurbox:

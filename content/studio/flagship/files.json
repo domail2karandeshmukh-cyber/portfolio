@@ -19,5 +19,6 @@
   "video/inspection-walkthrough.srt",
   "video/inspection-walkthrough.vtt",
   "video/inspection-walkthrough.mp4"
- ]
+ ],
+ "narrated": true
 }

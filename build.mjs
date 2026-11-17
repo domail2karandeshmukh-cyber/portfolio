@@ -111,13 +111,16 @@ await library.extra({ path: "/workbench", title: "Workbench", description: "Writ
 }
 await library.finish();
 console.log(`style: ${guide.figures.passing} of ${guide.figures.docs} documents pass (${guide.figures.rules} rules, ${guide.figures.coded} checked by code)`);
-// The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name.
+// The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name. A narrated
+// film also has its captions, content/films/<id>.vtt, which the player offers as a captions track.
 const reel = C.films?.items ?? [];
 await fs.mkdir(`${OUT}/films`, { recursive: true });
 for (const f of reel) {
   await fs.copyFile(`content/films/${f.id}.mp4`, `${OUT}/films/${f.id}.mp4`);
+  f.captions = existsSync(`content/films/${f.id}.vtt`);
+  if (f.captions) await fs.copyFile(`content/films/${f.id}.vtt`, `${OUT}/films/${f.id}.vtt`);
   await sharp(`content/films/${f.id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${OUT}/films/${f.id}.webp`);
-  console.log(`film: ${f.id} (${f.length}) ${f.title}`);
+  console.log(`film: ${f.id} (${f.length}) ${f.title}${f.captions ? ", with captions" : ""}`);
 }
 
 // The key figures: the ones in the content file, and one the build works out from the style check.
@@ -173,7 +176,7 @@ const parts = {
     .join("\n"),
   asks: C.faq.slice(0, 4).map((f) => `<button class="chip" type="button" data-april data-ask="${esc(f.q)}">${esc(f.q)}</button>`).join(""),
   theater: (() => {
-    const film = (f) => `data-film="/films/${f.id}.mp4" data-poster="/films/${f.id}.webp"`;
+    const film = (f) => `data-film="/films/${f.id}.mp4" data-poster="/films/${f.id}.webp"${f.captions ? ` data-captions="/films/${f.id}.vtt"` : ""}`;
     const first = reel[0];
     if (!first) return "";
     return `<div class="theater${reel.length > 1 ? "" : " solo"}" id="theater">

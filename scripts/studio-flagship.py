@@ -101,9 +101,10 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
     save(pg, "#vd-srt", OUT / "video/inspection-walkthrough.srt"); save(pg, "#vd-vtt", OUT / "video/inspection-walkthrough.vtt")
     pg.close()
     # The served copy (served_copy.py): the same frames, smaller; sound as AAC, which Safari plays, or none when silent.
-    served_copy(raw, OUT / "video/inspection-walkthrough.mp4")
+    narrated = served_copy(raw, OUT / "video/inspection-walkthrough.mp4")
     raw.unlink(); made.remove("video/inspection-walkthrough.studio.mp4"); keep(OUT / "video/inspection-walkthrough.mp4")
     b.close()
 
-json.dump({"made": made}, open(OUT / "files.json", "w"), indent=1)
+# "narrated": whether the video kept a sound track (the sample project has a recorded voiceover); the page says which.
+json.dump({"made": made, "narrated": narrated}, open(OUT / "files.json", "w"), indent=1)
 print(len(made), "files")

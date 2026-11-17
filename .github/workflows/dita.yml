@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["content/workbench/**", "content/scenarios/**", "lib/dita-sets.mjs", "src/doc.js", "scripts/dita-sample.mjs", "scripts/dita-html5.css"]
+    paths: ["content/workbench/**", "content/scenarios/**/*.md", "lib/dita-sets.mjs", "src/doc.js", "scripts/dita-sample.mjs", "scripts/dita-html5.css"]
 
 permissions:
   contents: write

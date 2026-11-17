@@ -2,76 +2,76 @@
  "id": "schedule-a-report",
  "title": "Schedule a report for automatic delivery",
  "scenario": "g-training",
- "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions.",
- "seconds": 62.41,
+ "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions, with a synthetic voiceover.",
+ "seconds": 61.15,
  "clicks": 8,
- "narrated": false,
+ "narrated": true,
  "overlays": 21,
  "captions": 13,
  "segments": [
   {
    "id": "intro",
    "start": 0.6,
-   "seconds": 9.4,
-   "recorded": false
+   "seconds": 8.359184,
+   "recorded": true
   },
   {
    "id": "open",
-   "start": 10.8,
-   "seconds": 5.4,
-   "recorded": false
+   "start": 9.76,
+   "seconds": 5.250612,
+   "recorded": true
   },
   {
    "id": "recipients",
-   "start": 17.0,
-   "seconds": 9.0,
-   "recorded": false
+   "start": 15.81,
+   "seconds": 9.090612,
+   "recorded": true
   },
   {
    "id": "repeat",
-   "start": 26.8,
-   "seconds": 7.07,
-   "recorded": false
+   "start": 25.7,
+   "seconds": 6.844082,
+   "recorded": true
   },
   {
    "id": "format",
-   "start": 34.67,
-   "seconds": 10.73,
-   "recorded": false
+   "start": 33.34,
+   "seconds": 10.840816,
+   "recorded": true
   },
   {
    "id": "save",
-   "start": 46.2,
-   "seconds": 1.8,
-   "recorded": false
+   "start": 44.99,
+   "seconds": 2.037551,
+   "recorded": true
   },
   {
    "id": "done",
-   "start": 48.8,
-   "seconds": 9.2,
-   "recorded": false
+   "start": 47.82,
+   "seconds": 8.907755,
+   "recorded": true
   }
  ],
  "exported": {
   "studio": {
-   "seconds": 62.66,
+   "seconds": 61.4,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "opus"
   },
   "served": {
-   "seconds": 62.43,
+   "seconds": 61.44,
    "video": "h264",
    "width": 1280,
    "height": 720,
-   "audio": null
+   "audio": "aac"
   },
-  "timeline": 62.41,
-  "chromeSeconds": 62.661896,
-  "meanVolumeDb": null,
-  "status": "Exported schedule-a-report.mp4: 8.8 MB, 62.7 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
-  "ok": true,
+  "timeline": 61.15,
+  "chromeSeconds": 61.401792,
+  "meanVolumeDb": -18.3,
+  "status": "Exported schedule-a-report.mp4: 9.7 MB, 61.4 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
+  "ok": "aac",
   "errors": []
  }
 }

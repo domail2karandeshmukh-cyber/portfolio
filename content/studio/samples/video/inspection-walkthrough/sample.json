@@ -2,70 +2,70 @@
  "id": "inspection-walkthrough",
  "title": "Monthly inspection of feed pump B",
  "scenario": "a-industrial",
- "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions.",
- "seconds": 61.27,
- "clicks": 3,
- "narrated": false,
- "overlays": 12,
+ "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions, with a synthetic voiceover.",
+ "seconds": 58.9,
+ "clicks": 7,
+ "narrated": true,
+ "overlays": 13,
  "captions": 13,
  "segments": [
   {
    "id": "intro",
    "start": 0.6,
-   "seconds": 9.8,
-   "recorded": false
+   "seconds": 8.594286,
+   "recorded": true
   },
   {
    "id": "open",
-   "start": 11.2,
-   "seconds": 7.2,
-   "recorded": false
+   "start": 9.99,
+   "seconds": 7.706122,
+   "recorded": true
   },
   {
    "id": "enter",
-   "start": 19.2,
-   "seconds": 12.47,
-   "recorded": false
+   "start": 18.5,
+   "seconds": 12.042449,
+   "recorded": true
   },
   {
    "id": "check",
-   "start": 32.47,
-   "seconds": 7.2,
-   "recorded": false
+   "start": 31.34,
+   "seconds": 7.079184,
+   "recorded": true
   },
   {
    "id": "close",
-   "start": 40.47,
-   "seconds": 8.4,
-   "recorded": false
+   "start": 39.22,
+   "seconds": 8.045714,
+   "recorded": true
   },
   {
    "id": "outro",
-   "start": 49.67,
-   "seconds": 7.2,
-   "recorded": false
+   "start": 48.07,
+   "seconds": 6.426122,
+   "recorded": true
   }
  ],
  "exported": {
   "studio": {
-   "seconds": 61.52,
+   "seconds": 59.09,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "opus"
   },
   "served": {
-   "seconds": 61.27,
+   "seconds": 59.13,
    "video": "h264",
    "width": 1280,
    "height": 720,
-   "audio": null
+   "audio": "aac"
   },
-  "timeline": 61.27,
-  "chromeSeconds": 61.519958,
-  "meanVolumeDb": null,
-  "status": "Exported inspection-walkthrough.mp4: 4.8 MB, 61.5 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
-  "ok": true,
+  "timeline": 58.9,
+  "chromeSeconds": 59.091167,
+  "meanVolumeDb": -18.1,
+  "status": "Exported inspection-walkthrough.mp4: 6.0 MB, 59.1 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
+  "ok": "aac",
   "errors": []
  }
 }

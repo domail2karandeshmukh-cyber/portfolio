@@ -8,14 +8,14 @@
    "title": "Preventive maintenance: monthly equipment inspection",
    "org": "Harbor Pump Station",
    "product": "the maintenance console",
-   "summary": "A technician inspects a feed pump every month, records four readings and closes the work order. The scenario shows an engineering procedure with prerequisites and cautions, an inspection record, annotated console screenshots, a revision-controlled procedure, and a recorded walkthrough with captions.",
+   "summary": "A technician inspects a feed pump every month, records four readings and closes the work order. The scenario shows an engineering procedure with prerequisites and cautions, an inspection record, annotated console screenshots, a revision-controlled procedure, and a narrated walkthrough with captions.",
    "skills": [
     "Engineering procedure",
     "Prerequisites and cautions",
     "Inspection record",
     "Annotated screenshots",
     "Revision control",
-    "Training walkthrough with captions"
+    "Narrated training walkthrough with captions"
    ],
    "docs": [
     {
@@ -349,12 +349,12 @@
    "title": "Using a new software feature",
    "org": "Beacon Reports",
    "product": "Beacon Reports, a reporting application",
-   "summary": "A short tutorial on scheduling a report for automatic delivery. The scenario shows annotated screenshots, a numbered procedural guide, a training video with pointer effects and captions, and a downloadable training package.",
+   "summary": "A short tutorial on scheduling a report for automatic delivery. The scenario shows annotated screenshots, a numbered procedural guide, a narrated training video with pointer effects and captions, and a downloadable training package.",
    "skills": [
     "Annotated screenshots",
     "Numbered procedural guide",
     "Cursor effects",
-    "Training video with captions",
+    "Narrated training video with captions",
     "Training package"
    ],
    "docs": [
