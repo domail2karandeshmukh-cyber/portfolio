@@ -6,7 +6,6 @@ version: 2.1
 status: Published
 vars:
   product: Acme Console
-  host: api.example.com
 ---
 # Read the inspection results from the {{product}} API
 
@@ -28,7 +27,7 @@ Developer guide. You send one request and get the readings of a work order as JS
 2. Send a request for the work order.
 
    ```bash
-   curl -H "Authorization: Bearer $ACME_TOKEN" https://{{host}}/v1/work-orders/WO-2291/readings
+   curl -H "Authorization: Bearer $ACME_TOKEN" https://api.example.com/v1/work-orders/WO-2291/readings
    ```
 
 3. Read the `readings` list in the response. Each reading has a `check`, a `value` and a `unit`.
