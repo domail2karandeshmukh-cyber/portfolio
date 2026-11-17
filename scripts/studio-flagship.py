@@ -8,6 +8,7 @@ Writes content/studio/flagship/. The build serves those files at /studio/flagshi
 """
 import json, os, pathlib, shutil, subprocess, sys, zipfile
 from playwright.sync_api import sync_playwright
+from served_copy import served_copy
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765").rstrip("/")
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -97,8 +98,8 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
     raw = save(pg, "#vd-export", OUT / "video/inspection-walkthrough.studio.mp4", timeout=300000)
     save(pg, "#vd-srt", OUT / "video/inspection-walkthrough.srt"); save(pg, "#vd-vtt", OUT / "video/inspection-walkthrough.vtt")
     pg.close()
-    # The served copy has its sound as AAC (Chrome on Linux records Opus, which Safari doesn't play in an MP4); the picture is untouched.
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(OUT / "video/inspection-walkthrough.mp4")], check=True)
+    # The served copy (served_copy.py): the same frames, smaller; sound as AAC, which Safari plays, or none when silent.
+    served_copy(raw, OUT / "video/inspection-walkthrough.mp4")
     raw.unlink(); made.remove("video/inspection-walkthrough.studio.mp4"); keep(OUT / "video/inspection-walkthrough.mp4")
     b.close()
 

@@ -54,23 +54,23 @@
  ],
  "exported": {
   "studio": {
-   "seconds": 62.6,
+   "seconds": 62.66,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "opus"
   },
   "served": {
-   "seconds": 62.64,
+   "seconds": 62.43,
    "video": "h264",
    "width": 1280,
    "height": 720,
-   "audio": "aac"
+   "audio": null
   },
   "timeline": 62.41,
-  "chromeSeconds": 62.600083,
-  "meanVolumeDb": -91.0,
-  "status": "Exported schedule-a-report.mp4: 8.7 MB, 62.6 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
+  "chromeSeconds": 62.661896,
+  "meanVolumeDb": null,
+  "status": "Exported schedule-a-report.mp4: 8.8 MB, 62.7 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
   "ok": true,
   "errors": []
  }

@@ -189,6 +189,7 @@ Every sample comes from one of eight fictional scenarios, each a different kind 
 - `src/studio/demos/` holds the fictional applications that screenshots and recordings are made from.
 - `scripts/studio-samples.py` makes the annotated screenshots and the step guides; `content/studio/samples/spec.json` says what each one marks.
 - `scripts/studio-video-sample.py` records the two video projects from the demo apps, and `scripts/studio-video-export.py` renders them in the Video Studio itself and checks the files with ffprobe.
+- `scripts/served_copy.py` makes the copy of a studio export that the site serves: the same frames and timing at x264's default quality (about half the size of Chrome's recording), the sound as AAC, and no sound track when the project is silent. The export script and the flagship script use it.
 - `scripts/studio-flagship.py` takes one procedure through every tool.
 - `lib/samples.mjs` builds the sample index each tool's start panel reads, and orders it so each tool opens on a different scenario.
 

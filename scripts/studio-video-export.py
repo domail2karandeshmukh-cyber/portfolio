@@ -5,13 +5,15 @@
 
 For each sample: the project is opened in /studio/video, exported (the studio plays the timeline in real time and
 records it), the captions are exported as SRT and WebVTT, and the result is checked with ffprobe: a video stream of
-1280 by 720, an audio stream when the project has narration, and a length that matches the timeline. The sound is
-then re-encoded to AAC for the copy the site serves, because Chrome on Linux records Opus, which Safari doesn't play
-in an MP4. A poster is taken from the file. sample.json records what was measured.
+1280 by 720, an audio stream when the project has narration, and a length that matches the timeline. The copy the site
+serves is made by served_copy.py: the same frames encoded again at x264's default quality (about half the size), the
+sound as AAC, which Safari plays (Chrome on Linux records Opus), and no sound track when the project is silent.
+A poster is taken from the file. sample.json records what was measured.
 Needs Python with Playwright, Google Chrome (CHROME) or Playwright's Chromium, and ffmpeg.
 """
 import json, os, pathlib, subprocess, sys
 from playwright.sync_api import sync_playwright
+from served_copy import served_copy
 
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765").rstrip("/")
 ONLY = sys.argv[2] if len(sys.argv) > 2 else ""
@@ -53,12 +55,12 @@ with sync_playwright() as p:
         pg.close()
         got = probe(raw)
         ok = got["video"] == "h264" and got["width"] == 1280 and got["height"] == 720 and abs(got["seconds"] - timeline) < 1.0 and (got["audio"] or not info.get("narrated")) and not errors
-        # The served copy: the same picture, with the sound as AAC.
+        # The served copy: the same frames, smaller; the sound as AAC, or no sound track when the project is silent.
         final = d / f"{sid}.mp4"
-        if got["audio"]: subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(final)], check=True)
-        else: subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-c:v", "copy", "-movflags", "+faststart", str(final)], check=True)
+        served_copy(raw, final)
         raw.unlink()
         served = probe(final)
+        ok = ok and served["video"] == "h264" and abs(served["seconds"] - timeline) < 1.0 and (served["audio"] or not info.get("narrated"))
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", str(min(served["seconds"] - 1, 14)), "-i", str(final), "-frames:v", "1", "-q:v", "3", str(d / "poster.jpg")], check=True)
         info["exported"] = {"studio": got, "served": served, "timeline": round(timeline, 2), "chromeSeconds": chrome_seconds, "meanVolumeDb": loudness(final) if served["audio"] else None, "status": status, "ok": ok, "errors": errors}
         (d / "sample.json").write_text(json.dumps(info, indent=1))
