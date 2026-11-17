@@ -221,6 +221,7 @@
   {"to": "top", "say": "Hello, I'm April. Karan turns what engineers know into documentation people can follow. You can try that on a message of your own, right here. First, let me show you around in one minute."},
   {"to": "writing", "say": "Start with the writing. Every document opens on this site: help-center samples, and the documentation of the security tools he led."},
   {"to": "workbench", "say": "This is the workbench. Write a document here, and it checks every sentence against his style guide, then publishes it as Markdown, HTML, or DITA."},
+  {"to": "studio", "say": "Next to it is the Documentation Studio: six more tools that run in your browser. Mark up a screenshot, build a step guide, cut a training video, publish to DITA, run a help center, and track who approved what. Each one opens with samples from eight fictional scenarios."},
   {"to": "projects", "say": "These are those tools. All three are live, and each one links to the documentation behind it."},
   {"to": "video", "say": "Some procedures are faster to watch than to read. These short films show the tools on this site, and each one was filmed by a script."},
   {"to": "experience", "say": "Behind this is more than five years of documentation work, and more than a thousand guides and articles across three roles."},

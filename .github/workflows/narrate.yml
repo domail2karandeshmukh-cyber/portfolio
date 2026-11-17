@@ -1,0 +1,37 @@
+name: Record the narration
+
+# The narration of the videos (lib/narration.cjs) is spoken by the site's own speech service, in the narrator's voice,
+# and kept with the site. Run this after a script changes and the change is live.
+on:
+  workflow_dispatch:
+    inputs:
+      all:
+        description: Record every segment again (after a change of voice)
+        type: boolean
+        default: false
+      script:
+        description: One script only (its id in lib/narration.cjs), or empty for all
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Record the segments
+        run: node scripts/record-narration.mjs https://karandeshmukh.dev ${{ inputs.all && '--all' || '' }} ${{ inputs.script }}
+      - name: Commit the recordings
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A content/narration
+          git diff --cached --quiet || git commit -m "Record the narration"
+          git push
