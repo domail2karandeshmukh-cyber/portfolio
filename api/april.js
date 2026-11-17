@@ -152,21 +152,17 @@ function after(rest) {
   return text.replace(/["'{}]/g, "").replace(/\s*:\s*/g, ":").trim();
 }
 
-// Her voice. One speaker, always: every model on these lists speaks in her voice. When none of them answers she stays
-// silent and her words stay on the screen. Another speaker's voice is never used in her place: a visitor who hears
-// two voices hears a fault.
-// - A recording (her greeting, a stop of her tour) is made once, so it goes to the most natural model first. That model
-//   accepts only a few requests a minute, which is why her fixed lines are recorded ahead of time and kept with the site.
-// - An answer is spoken while a visitor waits, and several visitors may be waiting. It goes to the quick model first,
-//   so that one answer sounds like the next.
-// Set APRIL_VOICE to change the voice, and APRIL_VOICE_MODEL to put another model first on both lists.
+// Her voice. One speaker, always: every model on this list speaks in her voice, from the most natural to the quickest,
+// and the first one that answers speaks. When none of them answers she stays silent and her words stay on the screen.
+// Another speaker's voice is never used in her place: a visitor who hears two voices hears a fault.
+// - Each model accepts five requests a minute from this Vercel team. Her fixed lines (her greeting, the stops of her
+//   tour) are therefore recorded ahead of time by the first model and kept with the site: they never wait for a model.
+// - An answer is spoken by the first model too, so that she sounds the same in an answer as in her recordings. When
+//   that model is busy, the next one speaks in the same voice, and the busy one is left alone for two minutes.
+// Set APRIL_VOICE to change the voice, and APRIL_VOICE_MODEL to put another model first.
 const HER_VOICE = process.env.APRIL_VOICE || "EXAVITQu4vr4xnSDxMaL";
-const first = (models) => [process.env.APRIL_VOICE_MODEL, ...models].filter((m, i, all) => m && all.indexOf(m) === i);
-const FAMILY = {
-  recorded: first(["elevenlabs/eleven-v4", "elevenlabs/eleven-v4-turbo", "elevenlabs/eleven-flash-v2.5"]),
-  live: first(["elevenlabs/eleven-v4-turbo", "elevenlabs/eleven-flash-v2.5", "elevenlabs/eleven-v4"]),
-};
-const isBest = (model) => model === FAMILY.recorded[0];
+const FAMILY = [process.env.APRIL_VOICE_MODEL, "elevenlabs/eleven-v4", "elevenlabs/eleven-v4-turbo", "elevenlabs/eleven-flash-v2.5"].filter((m, i, all) => m && all.indexOf(m) === i);
+const isBest = (model) => model === FAMILY[0];
 // Voices to listen to before choosing one: /api/april?say=tour1&voice=<name>. All of them are women's voices.
 const CANDIDATES = { sarah: "EXAVITQu4vr4xnSDxMaL", jessica: "cgSgspJ2msm6clMCkdW9", alice: "Xb7hH8MSUJpSbSDYk0k2", matilda: "XrExE9yKIg1WjnnlVkGX", lily: "pFZP5JQG7iQjIQuC4Bku", laura: "FGY2WhTYpPnrIDTdsKH5" };
 const resting = {};          // a model that has just failed, and the time it may be tried again
@@ -182,7 +178,7 @@ function forSpeech(text) {
 async function speak(token, text, lang, tried = [], kind = "live", only = null) {
   const clean = forSpeech(text);
   if (!clean) return null;
-  let list = FAMILY[kind === "live" ? "live" : "recorded"].map((model) => ({ model, voice: HER_VOICE }));
+  let list = FAMILY.map((model) => ({ model, voice: HER_VOICE }));
   if (only) list = (only.model ? [{ model: only.model, voice: HER_VOICE }] : list).map((v) => ({ model: v.model, voice: only.voice || v.voice }));
   // While a visitor waits, a model that has just failed is tried last instead of first.
   else if (kind === "live") { const now = Date.now(); list = list.filter((v) => !(resting[v.model] > now)).concat(list.filter((v) => resting[v.model] > now)); }
@@ -330,7 +326,8 @@ module.exports = async (req, res) => {
         res.setHeader("x-accel-buffering", "no");
         res.write(JSON.stringify(reply) + "\n");
       }
-      if (aloud && spoken < SPOKEN_ANSWERS_A_DAY) {
+      // The answer that starts her tour is not spoken: the tour opens with her own recorded line.
+      if (aloud && spoken < SPOKEN_ANSWERS_A_DAY && !(out.action && out.action.type === "tour")) {
         const sound = await speak(token, answer, lang, [], "live");
         if (sound) {
           spoken++;

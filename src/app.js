@@ -515,7 +515,8 @@
       .catch(function () {});
   }
   function say(audio) {
-    if (voiceOn && audio) playBytes(bytes(audio)).catch(function () {});
+    if (voiceOn && audio) playBytes(bytes(audio)).catch(function () { speaking(false); });
+    else speaking(false);
   }
   // Every control that mutes her shows the same state: the button in her panel, and the one in the tour's bar.
   var voiceButtons = [];
@@ -697,11 +698,15 @@
       text = String(text || "").trim();
       if (!text) return;
       hush();
+      // Her voice for this answer arrives a few seconds after her words. It is played only if nothing newer has
+      // happened by then: another question, her tour, a click on mute, or her panel closed.
+      var mine = turn;
       add("u", esc(text));
       asked[text] = 1;
-      var w = add("a wait", esc(I.thinking)), done = false;
+      var w = add("a wait", esc(I.thinking)), done = false, spoke = false, silent = false;
       speaking(true);
       function fail() { if (!done) { done = true; finish(w, text, { answer: offline(text) }); } }
+      function over() { if (!spoke && mine === turn) speaking(false); fail(); }
       // A question about Karan or about her is answered from her notes. A question about what a document says takes passages with it.
       var personal = /\b(he|his|him|karan|karan's|you|your|yourself|april)\b/i.test(text) || FAQ.some(function (f) { return f.q.toLowerCase() === text.toLowerCase(); });
       Promise.race([personal ? [] : passages(text), new Promise(function (ok) { setTimeout(function () { ok([]); }, 900); })]).then(function (found) {
@@ -709,10 +714,17 @@
       }).then(function (r) {
         if (!r.ok) throw 0;
         return lines(r, function (d) {
-          if (d.answer && !done) { done = true; finish(w, text, d); }
-          if (d.audio && done) say(d.audio);
+          if (d.answer && !done) {
+            done = true;
+            finish(w, text, d);
+            // Her tour starts with her own recorded line, so the answer that starts it is not spoken.
+            silent = !!(d.action && d.action.type === "tour");
+            // Until her voice starts, her orb keeps beating: it is on its way.
+            if (voiceOn && !silent && mine === turn) speaking(true);
+          }
+          if (d.audio && done && !silent && mine === turn) { spoke = true; say(d.audio); }
         });
-      }).then(fail, fail);
+      }).then(over, over);
     }
     function fresh() {
       hush();

@@ -201,7 +201,7 @@ April answers questions about my work from the notes in `content/site.json`, in 
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
 - `MODELS` in `api/april.js` lists the chat models in the order they're tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
-- The voice is a text-to-speech model. April has one speaker. `FAMILY` in `api/april.js` lists the models that speak in her voice, and the first one that answers speaks. A recording goes to the most natural model first. An answer goes to the quick model first, so that one answer sounds like the next. When no model answers, her words stay on the screen. No other voice speaks for her: not another model's, and not the browser's.
+- The voice is a text-to-speech model. April has one speaker. `FAMILY` in `api/april.js` lists the models that speak in her voice, from the most natural to the quickest, and the first one that answers speaks. The first model made her recordings and speaks her answers, so she sounds the same in both. Each model accepts five requests a minute from this Vercel team. When the first one is busy, the next one speaks in the same voice. When no model answers, her words stay on the screen. No other voice speaks for her: not another model's, and not the browser's.
 - To put another model first, set `APRIL_VOICE_MODEL` in the Vercel project. To change the voice, set `APRIL_VOICE`, then record her lines again.
 - To choose a voice by ear, open `/voices`. The page plays the first line of the tour in six women's voices, in each language. It isn't linked from the site.
 - Her voice is on until a visitor mutes it. The button in her panel and the one in the tour's bar show the same state, and the browser remembers the choice.
@@ -237,6 +237,8 @@ A question about me, or about April, is answered from her notes alone.
 
 - The suggested questions stay under the chat. After each answer, the ones on its subject come first and the ones already asked go last.
 - The chat is kept in the tab's session storage, so it's still there after a visit to a document that April offered. The button with the round arrow starts a new chat.
+- Her voice for an answer arrives a few seconds after her words. Until it starts, her orb beats. If something newer happens first, that voice isn't played: another question, her tour, a click on mute, or her panel closed.
+- The answer that starts her tour isn't spoken. The tour opens with her own recorded line.
 
 ### What April can do on the page
 
