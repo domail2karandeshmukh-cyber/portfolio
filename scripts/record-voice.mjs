@@ -6,7 +6,8 @@
 //
 // The site's own service speaks each line. A recording is kept only when the best speech model made it and when the
 // site spoke the words this copy of the repository holds, so deploy a change to a line before recording it.
-// Recordings of words that no line says any more are removed. Needs Node.js 22.
+// The best model accepts only a few requests a minute, so the script takes its time: about a quarter of an hour
+// for every line in every language. Recordings of words that no line says any more are removed. Needs Node.js 22.
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -37,18 +38,25 @@ for (const [lang, lines] of Object.entries(Voice.LINES)) {
         break;
       } else if (r.headers.get("x-voice-best") !== "1") {
         why = `spoken by ${r.headers.get("x-voice-model")}, a stand-in for the best model`;
+        await wait(20000);
       } else {
         const sound = Buffer.from(await r.arrayBuffer());
         if (sound.length < 4000 || !(sound[0] === 0xff || sound.subarray(0, 3).toString("latin1") === "ID3")) { why = `not an MP3 file (${sound.length} bytes)`; break; }
-        await fs.writeFile(target, sound);
-        console.log(`${lang}/${id}: ${kb(sound.length)}, ${r.headers.get("x-voice-model")}`);
-        made++; bytes += sound.length; done = true;
-        break;
+        // Speech takes 900 to 1,400 bytes for each character of its words. A recording far outside that was cut short
+        // or holds something else, and is asked for again.
+        const each = sound.length / text.length;
+        if (each > 450 && each < 3000) {
+          await fs.writeFile(target, sound);
+          console.log(`${lang}/${id}: ${kb(sound.length)}, ${r.headers.get("x-voice-model")}`);
+          made++; bytes += sound.length; done = true;
+          break;
+        }
+        why = `${kb(sound.length)} is not the length of these words`;
       }
       await wait(attempt * 6000);
     }
     if (!done) { failed++; console.error(`${lang}/${id}: NOT RECORDED, ${why}`); }
-    await wait(400);
+    await wait(14000);                 // the best model is asked four times a minute at most
   }
   for (const f of await fs.readdir(dir)) if (f.endsWith(".mp3") && !current.has(f)) { await fs.rm(`${dir}/${f}`); removed++; console.log(`${lang}: removed ${f}, which no line says any more`); }
 }

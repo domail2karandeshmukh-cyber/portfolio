@@ -4,7 +4,8 @@
     python3 scripts/check-live.py https://karandeshmukh.dev    another address for the portfolio (a preview, a local build)
 
 A page passes when it loads, shows text, and reports no script error and no missing file of its own.
-On the portfolio the script also opens April and asks one question, starts the tour, and fetches her first recording.
+On the portfolio the script also opens April and listens: she says her greeting from its recording, answers one
+question in words and aloud, and starts her tour from a recording. Every recording of every language is fetched.
 Needs Python with Playwright and a Chromium (python3 -m playwright install chromium), or Google Chrome with CHROME set.
 """
 import json, os, pathlib, sys
@@ -44,13 +45,30 @@ with sync_playwright() as p:
                 note(False, f"{url} on a {name}: {str(e)[:140]}")
             page.close()
 
-    # April, on the live portfolio: an answer from her service, her first recording, and the first stop of her tour.
+    # April, on the live portfolio. The page is watched for every sound it starts, with the browser's usual rule
+    # that a page makes sound only after a click.
     page = browser.new_context(viewport={"width": 1366, "height": 850}).new_page()
-    errors = []
+    page.add_init_script("""(() => { window.__sounds = [];
+      const start = AudioBufferSourceNode.prototype.start;
+      AudioBufferSourceNode.prototype.start = function () { window.__sounds.push(Math.round(this.buffer.duration * 10) / 10); return start.apply(this, arguments); }; })()""")
+    errors, asked, spoke = [], [], []
     page.on("pageerror", lambda e: errors.append(str(e)[:140]))
+    page.on("request", lambda r: asked.append(r.url) if "/api/april?say=" in r.url else None)
+    def heard(r):
+        # Her answer comes as lines: her words, then her voice and the name of the model that spoke.
+        if "/api/april" in r.url and r.request.method == "POST":
+            try: spoke.extend(json.loads(l).get("voice", "") for l in r.text().splitlines() if '"audio"' in l)
+            except Exception: pass
+    page.on("response", heard)
+    sounds = lambda: page.evaluate("window.__sounds")
     page.goto(home + "/", wait_until="load", timeout=45000)
     page.wait_for_timeout(1500)
+    clips = page.evaluate("JSON.parse(document.getElementById('voice').textContent)")
+    note(len(clips) >= 9, f"her fixed lines have recordings kept with the site: {len(clips)} of 9")
     page.click(".dock")
+    page.wait_for_timeout(3000)
+    note(len(sounds()) == 1 and sounds()[0] > 3 and not asked, f"she says her greeting when her panel opens, from its recording: {sounds()} s" + (f", asked of her service: {asked[:2]}" if asked else ""))
+    note(page.get_attribute("#speak", "aria-pressed") == "true", "her voice is on by default, and the button says so: " + page.inner_text("#speak"))
     page.fill("#q", "What is OSNMA, in one sentence?")
     page.press("#q", "Enter")
     try:
@@ -59,18 +77,34 @@ with sync_playwright() as p:
         offline = page.evaluate("JSON.parse(document.getElementById('i18n').textContent).offline")
         note(len(answer) > 30 and not answer.startswith(offline[:30]), f"April answers a question about a document: {answer[:150]!r}")
         note(page.evaluate("document.querySelectorAll('#sugg .chip').length") >= 6 and page.is_visible("#sugg"), "her suggested questions are still there after an answer")
+        try:
+            page.wait_for_function("window.__sounds.length >= 2", timeout=25000)
+            note(True, f"she says her answer aloud: {sounds()[-1]} s, spoken by {', '.join(spoke) or 'a model the page did not name'}")
+        except Exception:
+            note(False, "she did not say her answer aloud within 25 seconds")
     except Exception as e:
         note(False, f"April did not answer: {str(e)[:120]}")
-    clips = page.evaluate("JSON.parse(document.getElementById('voice').textContent)")
-    note(len(clips) >= 9, f"her fixed lines have recordings kept with the site: {len(clips)} of 9")
-    if clips.get("tour1"):
-        r = page.request.get(f"{home}/voice/en/{clips['tour1']}")
-        note(r.status == 200 and "audio" in r.headers.get("content-type", "") and len(r.body()) > 20000, f"the first recording of her tour is served: HTTP {r.status}, {len(r.body())} bytes")
+    before = len(sounds())
     page.click("#april-x")
     page.click("[data-tour]")
-    page.wait_for_timeout(2500)
+    page.wait_for_timeout(3000)
     note(page.is_visible("#tour") and page.inner_text("#tour-n").startswith("1 /") and len(page.inner_text("#tour-say")) > 30, "her tour starts: " + page.inner_text("#tour-n"))
+    note(len(sounds()) == before + 1 and sounds()[-1] > 5 and not asked, f"the first stop of her tour is spoken from its recording: {sounds()[before:]} s")
+    page.keyboard.press("Escape")
     note(not errors, f"no script error on the portfolio while April worked: {errors[:2]}")
+
+    # Every recording, in every language: the file is there, it is audio, and it is not a stub.
+    for lang, path in [(l["code"], l["path"]) for l in site["locales"]]:
+        try:
+            page.goto(home + path, wait_until="load", timeout=45000)
+            names = page.evaluate("JSON.parse(document.getElementById('voice').textContent)")
+            bad = []
+            for line, name in names.items():
+                r = page.request.get(f"{home}/voice/{lang}/{name}")
+                if not (r.status == 200 and "audio" in r.headers.get("content-type", "") and len(r.body()) > 20000): bad.append(f"{line}: HTTP {r.status}, {len(r.body())} bytes")
+            note(len(names) >= 9 and not bad, f"{lang}: {len(names) - len(bad)} of {len(names)} recordings are served" + (f"; not served: {bad[:3]}" if bad else ""))
+        except Exception as e:
+            note(False, f"{lang}: the recordings could not be checked: {str(e)[:120]}")
     browser.close()
 
 print(f"{len(failed)} problem(s)" if failed else "everything opens")

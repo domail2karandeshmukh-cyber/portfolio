@@ -423,8 +423,8 @@
   /* ---------- April ---------- */
   var panel = $("#april"), log = $("#log"), q = $("#q"), orb = $("#orb"), dock = $(".dock"), sugg = $("#sugg"), speakBtn = $("#speak");
   var hist = [], opener = null, greeted = false, voiceOn = store("april-voice") !== "0";      // her voice is on until a visitor mutes it
-  var ctx = null, node = null, meter = null, level = 0, tourOff = function () {}, tourSay = function () {};
-  // While she thinks, or speaks in the browser's own voice, her orb beats. With a recorded voice it moves to the sound.
+  var ctx = null, node = null, meter = null, level = 0, turn = 0, tourOff = function () {}, tourSay = function () {};
+  // While she thinks, her orb beats. While she speaks, it moves to the sound of her voice.
   function speaking(on, heard) {
     $$(".orb").forEach(function (o) { o.classList.toggle("talk", on && !heard); o.classList.toggle("live", !!(on && heard)); });
     var big = $(".orb-stage");
@@ -451,6 +451,7 @@
     return true;
   }
   function unlock() {
+    session();
     try {
       var AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
@@ -458,7 +459,25 @@
       if (ctx.state === "suspended") ctx.resume();
     } catch (e) {}
   }
+  /* An iPhone with its ring switch set to silent plays no sound from a page, unless the page says that the sound is
+     speech or music. The page says so while her voice is on, and takes it back when she is muted or the microphone
+     listens. Only Safari has this setting. */
+  function session(type) {
+    try { if (navigator.audioSession) navigator.audioSession.type = type || (voiceOn ? "playback" : "auto"); } catch (e) {}
+  }
+  // A browser lets a page make sound only after a click or a key press. This waits a moment for that permission.
+  function awake() {
+    return new Promise(function (ok) {
+      var tries = 0;
+      (function look() {
+        if (ctx && ctx.state === "running") return ok(true);
+        if (++tries > 8) return ok(false);
+        setTimeout(look, 100);
+      })();
+    });
+  }
   function hush() {
+    turn++;
     try { if (node) { node.onended = null; node.stop(); } } catch (e) {}
     node = null;
     speaking(false);
@@ -489,8 +508,10 @@
   var CLIPS = read("voice", {});
   function clipUrl(name) { return CLIPS[name] ? "/voice/" + LANG + "/" + CLIPS[name] : "/api/april?say=" + name + "&lang=" + LANG + "&v=8"; }
   function line(name) {
-    fetch(clipUrl(name)).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); })
-      .then(function (buf) { if (voiceOn) return playBytes(buf); })
+    var mine = turn, still = function () { return voiceOn && mine === turn; };
+    Promise.all([fetch(clipUrl(name)).then(function (r) { if (!r.ok) throw 0; return r.arrayBuffer(); }), awake()])
+      // She doesn't start a line after a visitor has asked something, muted her, or closed her panel.
+      .then(function (got) { if (got[1] && still()) return playBytes(got[0], null, still); })
       .catch(function () {});
   }
   function say(audio) {
@@ -507,6 +528,7 @@
       if (text) text.textContent = label; else b.setAttribute("aria-label", label);
     });
     if (!on) hush();
+    session();
   }
   /* What the library says about a question: the three sections that match it best. They go with the question,
      so that she can answer from the documents themselves and link to the section she used. */
@@ -623,9 +645,12 @@
         return true;
       } catch (e) { return false; }
     }
-    function greet() {
-      var h = new Date().getHours();
-      add("a", esc((h < 12 ? I.morning : h < 18 ? I.afternoon : I.evening) + " " + I.intro));
+    // Her greeting. She says it aloud once in a visit, when her panel first opens and her voice is on.
+    function greet(aloud) {
+      add("a", esc(I.hello));
+      if (!aloud || !voiceOn) return;
+      try { if (sessionStorage.getItem("april-hello")) return; sessionStorage.setItem("april-hello", "1"); } catch (e) {}
+      line("hello");
     }
     // The suggested questions stay under the chat. After an answer, the ones on its subject come first and the ones already asked go last.
     function order(text, answer) {
@@ -708,7 +733,7 @@
       if (!greeted) {
         greeted = true;
         if (restore()) { $$(".msg.wait", log).forEach(function (m) { m.remove(); }); order(); log.scrollTop = log.scrollHeight; }
-        else greet();
+        else greet(!pre);
       }
       if (pre) ask(pre); else q.focus();
     }
@@ -751,8 +776,10 @@
         var r = new SR();
         r.lang = { en: "en-US", fr: "fr-FR", de: "de-DE", es: "es-ES", hi: "hi-IN" }[LANG] || "en-US";
         mic.classList.add("on");
+        hush();
+        session("auto");               // while the microphone listens, the browser chooses how sound is handled
         r.onresult = function (e) { ask(e.results[0][0].transcript); };
-        r.onend = r.onerror = function () { mic.classList.remove("on"); };
+        r.onend = r.onerror = function () { mic.classList.remove("on"); session(); };
         r.start();
       });
     }

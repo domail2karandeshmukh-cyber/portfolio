@@ -201,10 +201,13 @@ April answers questions about my work from the notes in `content/site.json`, in 
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
 - `MODELS` in `api/april.js` lists the chat models in the order they're tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
-- The voice is a text-to-speech model. April has one speaker. `FAMILY` in `api/april.js` lists the models that speak in her voice, from the most natural to the quickest, and the first one that answers speaks. When none answers, her words stay on the screen. No other voice speaks for her: not another model's, and not the browser's.
+- The voice is a text-to-speech model. April has one speaker. `FAMILY` in `api/april.js` lists the models that speak in her voice, and the first one that answers speaks. A recording goes to the most natural model first. An answer goes to the quick model first, so that one answer sounds like the next. When no model answers, her words stay on the screen. No other voice speaks for her: not another model's, and not the browser's.
 - To put another model first, set `APRIL_VOICE_MODEL` in the Vercel project. To change the voice, set `APRIL_VOICE`, then record her lines again.
 - To choose a voice by ear, open `/voices`. The page plays the first line of the tour in six women's voices, in each language. It isn't linked from the site.
 - Her voice is on until a visitor mutes it. The button in her panel and the one in the tour's bar show the same state, and the browser remembers the choice.
+- When her panel first opens, she says her greeting aloud: the same words that are on the screen. She says it once in a visit. A question stops her at once.
+- A browser lets a page make sound only after a click or a key press, so she never speaks before a visitor has opened her panel or started her tour.
+- An iPhone with its ring switch set to silent plays no sound from a page of this kind. While her voice is on, the page tells Safari that the sound is speech (`navigator.audioSession`), and Safari plays it.
 - Her words reach the page before her voice. The page asks for lines: her answer comes on the first line and is shown at once, and the sound follows on the second line when it's ready.
 - To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke, how long it took, and the ones that failed. On a preview deployment, add `&model=<id>` to try one speech model.
 - The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Her fixed lines are recordings kept with the site. See [April's recorded lines](#aprils-recorded-lines).
@@ -217,7 +220,7 @@ April's greeting and the stops of her tour are recordings, so every visitor hear
 
 - `lib/voice-lines.cjs` lists the lines in every language of the site. Her service, the build, and the recorder all read that list.
 - A recording is a file in `content/voice/<language>/`, named after its line and a fingerprint of the line's words. The build publishes a recording only while its words are the words of the line. A line without one is spoken by her service.
-- The workflow **Record April's voice** runs `scripts/record-voice.mjs`. The site itself speaks each line, and the script keeps a recording only when the best model made it. Run the workflow after a line changes and the change is live.
+- The workflow **Record April's voice** runs `scripts/record-voice.mjs`. The site itself speaks each line, and the script keeps a recording only when the best model made it and its length fits its words. That model accepts only a few requests a minute, so the workflow takes about a quarter of an hour for every line in every language. Run it after a line changes and the change is live.
 
 ```bash
 node scripts/record-voice.mjs https://karandeshmukh.dev          # the lines that have no recording yet
@@ -296,7 +299,7 @@ The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 |---|---|
 | `node scripts/selftest.mjs` | The style checker and the document model. See [The style guide](#the-style-guide). |
 | `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
-| `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. The script also asks April one question and starts her tour. |
+| `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. The script also opens April and listens: her greeting, one answer in words and aloud, and the first stop of her tour. It fetches every recording in every language. |
 
 The workflow **Check the site** builds the site and runs all three. It runs on demand and every Monday morning, and GitHub sends an email when it fails. Run it after a release, once the release is live.
 
