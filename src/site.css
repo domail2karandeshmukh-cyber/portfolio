@@ -2,6 +2,9 @@
 @font-face{font-family:"Hanken";src:url("/fonts/hanken.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Hyperlegible Mono";src:url("/fonts/ahm.woff2") format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
 @font-face{font-family:"Deva";src:url("/fonts/devanagari.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
+/* On pages in other languages, the one Devanagari word shown is the name of the Hindi page in the language links: a 5 KB subset draws it, so those pages don't fetch the whole font. */
+@font-face{font-family:"DevaName";src:url("/fonts/devanagari-name.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0926,U+0928,U+0939,U+093F,U+0940,U+094D}
+html:not([lang=hi]) :is(.lang-menu,.foot-langs) a[lang=hi]{font-family:"Hanken","DevaName",var(--sans)}
 
 /* The editor's desk: white paper, black ink, one highlighter. Yellow marks what matters and nothing else. */
 :root{

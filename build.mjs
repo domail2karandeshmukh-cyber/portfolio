@@ -24,7 +24,9 @@ await fs.rm(OUT, { recursive: true, force: true });
 await fs.mkdir(`${OUT}/img`, { recursive: true });
 await fs.mkdir(`${OUT}/fonts`, { recursive: true });
 
-// Fonts, self-hosted. The Devanagari file is fetched by a browser only on the Hindi page.
+// Fonts, self-hosted. The Devanagari file is fetched by a browser only on the Hindi page. On the other pages, the name
+// हिन्दी in the language links is drawn by src/fonts/devanagari-name.woff2, a 5 KB subset of the same font made with
+//   pyftsubset <the Devanagari file below> --text="हिन्दी" --layout-features='*' --flavor=woff2
 const FONTS = [
   ["@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2", "newsreader.woff2"],
   ["@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2", "hanken.woff2"],
@@ -32,6 +34,7 @@ const FONTS = [
   ["@fontsource-variable/noto-sans-devanagari/files/noto-sans-devanagari-devanagari-wght-normal.woff2", "devanagari.woff2"],
 ];
 for (const [from, to] of FONTS) await fs.copyFile(`node_modules/${from}`, `${OUT}/fonts/${to}`);
+await fs.copyFile("src/fonts/devanagari-name.woff2", `${OUT}/fonts/devanagari-name.woff2`);
 
 // Project screenshots: crop to 16:10 and write two WebP sizes
 for (const [id, im] of Object.entries(C.images)) {

@@ -31,6 +31,8 @@ The site is an editor's desk: white paper, black ink, and one highlighter.
 - **Anything that is a document looks like one.** Document cards, the excerpt, and the reading pages are sheets on a grey desk. Everything else is plain type on the page.
 - **The engineer's words are set in the mono face, the published ones in the serif.** The build also sets typographic apostrophes in running text and leaves the raw message and code as typed.
 
+The fonts are self-hosted. The Devanagari font (118 KB) is fetched only by the Hindi pages; on the others, the name हिन्दी in the language links is drawn by `src/fonts/devanagari-name.woff2`, a 5 KB subset of the same font (the command that makes it is in `build.mjs`).
+
 ### The headline that corrects itself
 
 The headline opens as a weaker sentence and is corrected in front of the reader: three words are struck with the red pen and replaced, then the highlighter comes down.
