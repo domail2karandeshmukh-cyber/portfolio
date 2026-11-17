@@ -16,6 +16,7 @@ One content file, `content/site.json`, feeds everything. `build.mjs` and the mod
 | The social preview image (`public/og.png`) | `lib/og.mjs` draws it with the site fonts |
 | April, the site assistant | `api/april.js` reads the same content file for its notes |
 | The rewrite desk | `api/rewrite.js` drafts a visitor's message by the brief in `content/desk/brief.md` |
+| The 30-second film of the site | `scripts/film/film.py` films the built home page, frame by frame |
 
 `src/page.html` is the shell of every library page. `src/partials/` holds the parts both shells share. `src/site.css` and `src/app.js` serve every page.
 
@@ -26,6 +27,17 @@ The site is an editor's desk: white paper, black ink and one highlighter.
 - **Yellow marks what matters, and nothing else.** A highlighted phrase is `<mark class="hl">` in the page text. Its stroke is drawn when the words come into view. Use it for one phrase in a section at most.
 - **Anything that is a document looks like one.** Document cards, the excerpt and the reading pages are sheets on a grey desk. Everything else is plain type on the page.
 - **The engineer's words are set in the mono face, the published ones in the serif.** The build also sets typographic apostrophes in running text and leaves the raw message and code as typed.
+
+### The headline that corrects itself
+
+The headline opens as a weaker sentence and is corrected in front of the reader: three words are struck with the red pen and replaced, then the highlighter comes down.
+
+A corrected word is `<span class="ed e1" data-was="type">turn</span>`. The element holds the word that stays. `data-was` holds the word it replaces. `e1`, `e2` and `e3` set the order of the corrections.
+
+- **The sentence that stays is the page's text.** It is what a search engine reads, and what a visitor sees without scripts or with reduced motion.
+- **The struck words are drawn, never read aloud.** Their text alternative is empty, and the script removes them when the correction is over. A screen reader is given the final sentence from the first moment.
+- **Each language corrects words of its own.** In `content/i18n/<language>.json` the headline keeps its three `ed` elements, with the `data-was` words written for that language. The corrections don't have to fall on the same words as in English.
+- **Nothing on the page moves.** Each new word holds its place from the start, and the old word is drawn over it. A `data-was` word much longer than its replacement would run into the next word, so keep the pair close in length.
 
 ### The rewrite at the top of the home page
 
@@ -135,11 +147,58 @@ After you change English text, run the build. It writes every piece of the Engli
 April answers questions about my work from the notes in `content/site.json`, in the visitor's language, in writing or out loud. She also gives a one-minute spoken tour of the home page.
 
 - The chat model and the voice both run through the Vercel AI Gateway. On Vercel the function signs in with the project's OIDC token. Elsewhere, set `AI_GATEWAY_API_KEY`.
+- `MODELS` in `api/april.js` lists the chat models in the order they are tried. The first to answer stays in use. To put another one first, set `APRIL_MODEL` in the Vercel project.
 - The voice is a text-to-speech model. `api/april.js` tries each entry in `VOICES` in order. To use another voice, set `APRIL_VOICE_MODEL` and `APRIL_VOICE` in the Vercel project.
 - If no voice model answers, the browser's own speech voice reads the answer instead.
 - To check the voice on a deployment, open `/api/april?say=hello&probe=1`. The reply names the model that spoke and lists the ones that failed.
 - The one-minute tour is a list of stops under `tour` in `content/site.json`: the section to scroll to, and the line April says there. Each line is recorded the first time a visitor needs it, then served from the CDN. Without a recorded voice, the browser's voice reads the line, or the caption stands alone.
+- While April speaks, her orb moves to her voice. The script measures the loudness of the sound that is playing and sets it on the page as `--lvl`, a number from 0 to 1. The stylesheet turns that number into the orb's size and glow.
 - Speech is billed by the character. As a guard against abuse, each running copy of the function accepts 8 questions a minute from one visitor, and 400 questions and 80 spoken answers a day in total.
+
+### What April can do on the page
+
+April doesn't only answer. Asked to show a document, play a video or try the rewrite desk, she does it.
+
+The model answers with two things: what to say, and one action code. `action()` in `api/april.js` checks the code against lists built from `content/site.json`, and sends the page an action only when the code names something that exists. An address never comes from the model: it comes from the content file.
+
+| Code | What the page does |
+|---|---|
+| `go:writing`, `go:projects`, `go:video`, `go:experience`, `go:contact`, `go:rewrite` | Scrolls to that part of the home page |
+| `doc:<id>` | Offers a link to that document, under the answer |
+| `video:<title>` | Plays the video whose title matches |
+| `tour` | Starts the one-minute tour |
+| `desk:hotfix`, `desk:export`, `desk:laptops` | Runs that sample on the rewrite desk |
+| `cv`, `linkedin` | Offers the CV, or a link to message me |
+| `lang:<code>` | Offers the page in that language |
+
+On a phone the panel covers the page, so it closes before the page moves, and the answer stays on screen as a caption. From a library page, April offers a link to the right part of the home page instead.
+
+To add an action, add its code to the list in the system prompt, check it in `action()`, and carry it out in `act()` in `src/app.js`. To check April on a deployment, open `/api/april?q=<a question>`. The reply shows the answer, the model that gave it, and the action.
+
+## The film
+
+`scripts/film/` makes a 30-second film of the site for a post: the headline, then one sample on the rewrite desk from message to draft.
+
+The film is not a screen recording. `film.py` opens the built home page in Chrome, in its phone layout, and takes one picture per frame. Before the page's own scripts run, `clock.js` replaces the page's clock: timers, animations, transitions and scrolling move only when the film says so, by exactly 1/30 s per frame. A slow screenshot can't make the film stutter, and two renders of the same site give the same film.
+
+| File | What it holds |
+|---|---|
+| `scripts/film/scenario.py` | The scenes: where the camera goes, the captions, the press on a sample, the last card |
+| `scripts/film/clock.js` | The clock, and the look of the caption bar, the finger and the last card |
+| `scripts/film/film.py` | Runs the scenes, encodes each to its own file, and joins them |
+
+The page does its own work in the film: the corrections, the markup and the draft are the site's code. The numbers in the captions are read off the page.
+
+```bash
+npm run build && python3 -m http.server 8765 --directory public &
+python3 scripts/film/film.py http://localhost:8765 sheet 0.5       # a small frame every 0.5 s, on contact sheets
+python3 scripts/film/film.py http://localhost:8765 stills 2.1,12   # full-size frames at those seconds
+python3 scripts/film/film.py http://localhost:8765 render          # the film: .cache/film/karandeshmukh-dev.mp4
+```
+
+Look at the sheet before a render: it comes from the same page and the same clock. After a change to one scene, name it (`render 03-markup`) and only that scene is filmed again.
+
+The film is 1080 by 1350 pixels, the 4:5 frame that a phone feed shows largest. The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 
 ## Build
 
