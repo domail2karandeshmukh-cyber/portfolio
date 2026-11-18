@@ -39,7 +39,7 @@
 <procedure>
 <preliminaryRqmts>
 <reqCondGroup><reqCondDm><reqCond>Stop the rig and disconnect the bench power supply.</reqCond><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="131" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent></dmRef></reqCondDm></reqCondGroup>
-<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001" applicRefId="app-pre-m01"><name>Screwdriver, cross-head, size 2</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001" applicRefId="app-pre-m01"><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>
 <reqSafety><safetyRqmts><warning><warningAndCautionPara>Disconnect the bench power supply before you touch the fan assembly. The fan blades can turn and cause injury to your fingers.</warningAndCautionPara></warning></safetyRqmts></reqSafety>

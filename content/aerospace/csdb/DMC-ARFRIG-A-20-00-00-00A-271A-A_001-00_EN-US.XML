@@ -32,8 +32,8 @@
 <preliminaryRqmts>
 <reqCondGroup><reqCondNoRef><reqCond>The fan assembly is installed.</reqCond></reqCondNoRef></reqCondGroup>
 <reqSupportEquips><supportEquipDescrGroup>
-<supportEquipDescr id="seq-0001"><name>Multimeter, DC voltage</name><reqQuantity>1</reqQuantity></supportEquipDescr>
-<supportEquipDescr id="seq-0002"><name>Screwdriver, flat, 2 mm</name><reqQuantity>1</reqQuantity></supportEquipDescr>
+<supportEquipDescr id="seq-0001"><name>Multimeter, DC voltage</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-04</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>
+<supportEquipDescr id="seq-0002"><name>Screwdriver, flat, 2 mm</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-05</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>
 </supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>

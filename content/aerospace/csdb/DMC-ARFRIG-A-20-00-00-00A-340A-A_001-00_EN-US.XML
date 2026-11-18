@@ -28,7 +28,7 @@
 <procedure>
 <preliminaryRqmts>
 <reqCondGroup><reqCondNoRef><reqCond>The fan assembly is installed and the access panel is closed.</reqCond></reqCondNoRef></reqCondGroup>
-<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-01</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>
 <reqSafety><safetyRqmts><warning><warningAndCautionPara>Keep the access panel closed when the fan operates. The fan blades can turn and cause injury to your fingers.</warningAndCautionPara></warning></safetyRqmts></reqSafety>

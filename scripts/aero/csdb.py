@@ -307,8 +307,8 @@ def brex():
 <structureObjectRuleGroup>
 {chr(10).join(rules)}
 </structureObjectRuleGroup>
-<snsRules><snsDescr>{sns}</snsDescr></snsRules>
 <notationRuleList><notationRule><notationName allowedNotationFlag="1">svg</notationName><objectUse>Illustrations are SVG.</objectUse></notationRule></notationRuleList>
+<snsRules><snsDescr>{sns}</snsDescr></snsRules>
 </contextRules>
 </brex>
 </content>"""
@@ -402,7 +402,7 @@ def description(issue):
 
 def operation():
     support = """<reqSupportEquips><supportEquipDescrGroup>
-<supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><reqQuantity>1</reqQuantity></supportEquipDescr>
+<supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-01</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>
 </supportEquipDescrGroup></reqSupportEquips>"""
     start = steps([
         "Make sure that the access panel is closed.",
@@ -447,7 +447,7 @@ def remove(issue):
     fixing = ([{"t": f"Remove the four screws (2) and the four washers (3). Refer to {iref('fig-0001', 'irtt01')}.", "a": ' applicRefId="app-pre-m01"' + ch("modify")},
                {"t": f"Open the two latches (4). Refer to {iref('fig-0002', 'irtt01')}.", "a": ' applicRefId="app-post-m01"' + ch("add")}]
               if two else [f"Remove the four screws (2) and the four washers (3). Refer to {iref('fig-0001', 'irtt01')}."])
-    tool = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Screwdriver, cross-head, size 2</name><reqQuantity>1</reqQuantity></supportEquipDescr>")
+    tool = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>")
     body = steps([
         {"t": "Open the access panel.", "pre": ""},
         "Disconnect the connector (11) from the fan assembly (1).",
@@ -496,8 +496,8 @@ def install(issue):
             {"t": "Make sure that each latch is locked.", "a": ' applicRefId="app-post-m01"' + ch("add"),
              "pre": "<note><notePara>A locked latch is flat against the bracket.</notePara></note>"},
         ]
-    tools = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Screwdriver, cross-head, size 2</name><reqQuantity>1</reqQuantity></supportEquipDescr>"
-             + '<supportEquipDescr id="seq-0002"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Torque screwdriver, 1 N.m to 5 N.m</name><reqQuantity>1</reqQuantity></supportEquipDescr>")
+    tools = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>"
+             + '<supportEquipDescr id="seq-0002"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Torque screwdriver, 1 N.m to 5 N.m</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-03</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>")
     body = steps([
         "Put the fan assembly (1) in its position on the frame.",
     ] + fixing + [
@@ -594,8 +594,8 @@ def adjust():
 <preliminaryRqmts>
 <reqCondGroup><reqCondNoRef><reqCond>The fan assembly is installed.</reqCond></reqCondNoRef></reqCondGroup>
 <reqSupportEquips><supportEquipDescrGroup>
-<supportEquipDescr id="seq-0001"><name>Multimeter, DC voltage</name><reqQuantity>1</reqQuantity></supportEquipDescr>
-<supportEquipDescr id="seq-0002"><name>Screwdriver, flat, 2 mm</name><reqQuantity>1</reqQuantity></supportEquipDescr>
+<supportEquipDescr id="seq-0001"><name>Multimeter, DC voltage</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-04</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>
+<supportEquipDescr id="seq-0002"><name>Screwdriver, flat, 2 mm</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-05</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>
 </supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>
@@ -634,7 +634,7 @@ def function_test():
 <procedure>
 <preliminaryRqmts>
 <reqCondGroup><reqCondNoRef><reqCond>The fan assembly is installed and the access panel is closed.</reqCond></reqCondNoRef></reqCondGroup>
-<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-01</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>
 <reqSafety><safetyRqmts>{WARN_POWER.replace("Disconnect the bench power supply before you touch the fan assembly.", "Keep the access panel closed when the fan operates.")}</safetyRqmts></reqSafety>
@@ -677,7 +677,7 @@ def fault():
 <isolationProcedure>
 <preliminaryRqmts>
 <reqCondGroup><reqCondNoRef><reqCond>The fan does not run when the power switch S1 is ON.</reqCond></reqCondNoRef></reqCondGroup>
-<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-01</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>
 <reqSafety><safetyRqmts>{WARN_POWER}</safetyRqmts></reqSafety>
@@ -725,17 +725,17 @@ def ipd(issue):
             continue
         by_item.setdefault(p[0], []).append(p)
     for it, group in by_item.items():
-        isns = []
-        added = group[0][7] and two
-        for (_, isn, ind, qty, pn, descr, app, _a) in group:
+        for k, (_, isn, ind, qty, pn, descr, app, _a) in enumerate(group):
+            # Alternative parts of one item (the two access panels) are item variants A and B, each with its applicability.
+            variant = f' itemVariant="{chr(65 + k)}"' if len(group) > 1 else ""
             a = f' applicRefId="{app}"' if app else ""
-            isns.append(f'<itemSeqNumber itemSeqNumberValue="{isn}"{a}>'
-                        f"<quantityPerNextHigherAssy>{qty}</quantityPerNextHigherAssy>"
-                        f'<partRef manufacturerCodeValue="{ISSUER}" partNumberValue="{pn}"/>'
-                        f"<partSegment><itemIdentData><descrForPart>{esc(descr)}</descrForPart></itemIdentData></partSegment>"
-                        "</itemSeqNumber>")
-        attrs = ch("add") if added else ""
-        csn.append(f'<catalogSeqNumber figureNumber="01" item="{it}" indenture="{group[0][2]}"{attrs}>{"".join(isns)}</catalogSeqNumber>')
+            added = ch("add") if (group[0][7] and two) else ""
+            csn.append(f'<catalogSeqNumber figureNumber="01" item="{it}"{variant} indenture="{ind}"{a}{added}>'
+                       f'<itemSeqNumber itemSeqNumberValue="00A">'
+                       f"<quantityPerNextHigherAssy>{qty}</quantityPerNextHigherAssy>"
+                       f'<partRef manufacturerCodeValue="{ISSUER}" partNumberValue="{pn}"/>'
+                       f"<partSegment><itemIdentData><descrForPart>{esc(descr)}</descrForPart></itemIdentData></partSegment>"
+                       "</itemSeqNumber></catalogSeqNumber>")
     applic = APPLIC_M01.replace("</referencedApplicGroup>", APPLIC_VARIANT + "\n</referencedApplicGroup>")
     content = f"""<content>
 {applic}

@@ -31,7 +31,7 @@
 <procedure>
 <preliminaryRqmts>
 <reqCondGroup><reqCondDm><reqCond>The fan assembly is removed.</reqCond><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="520" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent></dmRef></reqCondDm></reqCondGroup>
-<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Screwdriver, cross-head, size 2</name><reqQuantity>1</reqQuantity></supportEquipDescr><supportEquipDescr id="seq-0002"><name>Torque screwdriver, 1 N.m to 5 N.m</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr><supportEquipDescr id="seq-0002"><name>Torque screwdriver, 1 N.m to 5 N.m</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-03</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
 <reqSupplies><noSupplies/></reqSupplies>
 <reqSpares><noSpares/></reqSpares>
 <reqSafety><safetyRqmts><warning><warningAndCautionPara>Disconnect the bench power supply before you touch the fan assembly. The fan blades can turn and cause injury to your fingers.</warningAndCautionPara></warning></safetyRqmts></reqSafety>
