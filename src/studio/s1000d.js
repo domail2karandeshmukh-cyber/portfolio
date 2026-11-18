@@ -7,13 +7,30 @@ var S1K = (function () {
   "use strict";
   var T = typeof window !== "undefined" && window.Kit ? Kit.t : function (s, v) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? v[k] : m; }); };
   var esc = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+  /** Generated text: the words a publication adds around a module's content (WARNING, Procedure, Table 2, Step 3).
+      It is part of the publication, so it is in the module's language, English here, whatever language the
+      interface is in. Only the interface around the publication is translated. */
+  var G = function (s, v) { return String(s).replace(/\{(\w+)\}/g, function (m, k) { return v && v[k] != null ? v[k] : m; }); };
+  /* The interface may be in French, German, Spanish or Hindi; the modules are in English (their <language> says en-US).
+     Module text shown inside the interface carries its language, so that a screen reader reads it as English
+     (WCAG 3.1.2). Nothing is marked on an English page. */
+  var PAGE = typeof document !== "undefined" ? (document.documentElement.lang || "en") : "en";
+  function langOf(id) { return id && id.lang ? id.lang + (id.country ? "-" + id.country : "") : "en-US"; }
+  function differs(lang) { return lang.slice(0, 2).toLowerCase() !== PAGE.slice(0, 2).toLowerCase(); }
+  /** Escaped module text, marked with its language when the page is in another. */
+  function inLang(s, id) { var l = langOf(id); return differs(l) ? '<span lang="' + esc(l) + '">' + esc(s) + "</span>" : esc(s); }
+  /** A lang attribute for an element that holds a module's content, or nothing when the page is in the same language. */
+  function langAttr(id) { var l = langOf(id); return differs(l) ? ' lang="' + esc(l) + '"' : ""; }
+  /** A link to another studio page in the language of this one: the translated pages live under /fr, /de, /es and /hi. */
+  function pageHref(path) { var m = typeof location !== "undefined" && /^\/([a-z]{2})\/studio(\/|$)/.exec(location.pathname); return m ? "/" + m[1] + path : path; }
   var MAX = 2 * 1024 * 1024, BASE = (typeof window !== "undefined" && window.S1K_BASE) || "/studio/aerospace/csdb/";
   var ISSUE = "S1000D Issue 6", SCHEMA = "http://www.s1000d.org/S1000D_6/xml_schema_flat/";
   var NAMES = { "022": "Business rules exchange", "00W": "Applicability cross-reference table", "00Q": "Conditions cross-reference table", "00P": "Product cross-reference table",
     "040": "Description", "131": "Normal operation procedure", "271": "Adjust", "310": "Visual examination", "340": "Function test", "421": "Fault isolation procedure",
     "520": "Remove procedure", "720": "Install procedure", "941": "Illustrated parts data" };
-  /** What each schema is called in the interface. */
-  var KINDS = { descript: "Descriptive", proced: "Procedural", fault: "Fault isolation", ipd: "Illustrated parts data", brex: "BREX", appliccrossreftable: "ACT", condcrossreftable: "CCT", prdcrossreftable: "PCT", pm: "Publication module" };
+  var K = function (s) { return s; };     // marks English that is stored as data and translated where it is shown
+  /** What each schema is called in the interface (translated where it is shown; the abbreviations stay as they are). */
+  var KINDS = { descript: K("Descriptive"), proced: K("Procedural"), fault: K("Fault isolation"), ipd: K("Illustrated parts data"), brex: "BREX", appliccrossreftable: "ACT", condcrossreftable: "CCT", prdcrossreftable: "PCT", pm: K("Publication module") };
 
   /* ---------- Safe parsing ---------- */
   var DECL = /<!(ENTITY|NOTATION|ELEMENT|ATTLIST)\b[^>]*>/g;
@@ -323,15 +340,15 @@ var S1K = (function () {
     if (!content) return "";
     Array.prototype.forEach.call(doc.querySelectorAll("[id]"), function (e) { ids[e.getAttribute("id")] = e; });
     // Numbers for figures, tables and steps, so that internal references can name them.
-    Array.prototype.forEach.call(content.getElementsByTagName("figure"), function (f) { if (f.getAttribute("id")) label[f.getAttribute("id")] = T("Figure {n}", { n: ++nums.figure }); else ++nums.figure; });
-    Array.prototype.forEach.call(content.getElementsByTagName("table"), function (t) { if (t.getAttribute("id")) label[t.getAttribute("id")] = T("Table {n}", { n: ++nums.table }); else ++nums.table; });
+    Array.prototype.forEach.call(content.getElementsByTagName("figure"), function (f) { if (f.getAttribute("id")) label[f.getAttribute("id")] = G("Figure {n}", { n: ++nums.figure }); else ++nums.figure; });
+    Array.prototype.forEach.call(content.getElementsByTagName("table"), function (t) { if (t.getAttribute("id")) label[t.getAttribute("id")] = G("Table {n}", { n: ++nums.table }); else ++nums.table; });
     function stepNums(parent, prefix) {
       var n = 0;
-      Array.prototype.forEach.call(parent.children, function (c) { if (c.nodeName === "proceduralStep") { n++; var num = prefix ? prefix + "." + n : String(n); c._num = num; if (c.getAttribute("id")) label[c.getAttribute("id")] = T("Step {n}", { n: num }); stepNums(c, num); } });
+      Array.prototype.forEach.call(parent.children, function (c) { if (c.nodeName === "proceduralStep") { n++; var num = prefix ? prefix + "." + n : String(n); c._num = num; if (c.getAttribute("id")) label[c.getAttribute("id")] = G("Step {n}", { n: num }); stepNums(c, num); } });
     }
     var main = $1(content, "mainProcedure"); if (main) stepNums(main, "");
     var iso = $1(content, "isolationMainProcedure");
-    if (iso) { var k = 0; Array.prototype.forEach.call(iso.children, function (c) { if (c.nodeName === "isolationStep" || c.nodeName === "isolationProcedureEnd") { c._num = ++k; label[c.getAttribute("id")] = T("Step {n}", { n: k }); } }); }
+    if (iso) { var k = 0; Array.prototype.forEach.call(iso.children, function (c) { if (c.nodeName === "isolationStep" || c.nodeName === "isolationProcedureEnd") { c._num = ++k; label[c.getAttribute("id")] = G("Step {n}", { n: k }); } }); }
     function hidden(el) {
       var ref = el.getAttribute && el.getAttribute("applicRefId");
       return !!(ref && opts.product && applies(ids[ref], opts.product) === false);
@@ -374,7 +391,7 @@ var S1K = (function () {
     function para(p) { return hidden(p) ? "" : '<p class="' + chg(p).trim() + '">' + applicTag(p) + inline(p) + "</p>"; }
     function caution(n) {
       var kind = n.nodeName;
-      return hidden(n) ? "" : '<div class="s1k-' + kind + chg(n) + '" role="note"><b>' + (kind === "warning" ? T("WARNING") : kind === "caution" ? T("CAUTION") : T("NOTE")) + "</b>" +
+      return hidden(n) ? "" : '<div class="s1k-' + kind + chg(n) + '" role="note"><b>' + (kind === "warning" ? G("WARNING") : kind === "caution" ? G("CAUTION") : G("NOTE")) + "</b>" +
         Array.prototype.map.call(n.children, function (x) { return "<p>" + inline(x) + "</p>"; }).join("") + "</div>";
     }
     function figure(f) {
@@ -390,7 +407,7 @@ var S1K = (function () {
     }
     function table(t) {
       if (hidden(t)) return "";
-      var id = t.getAttribute("id"), html = '<div class="s1k-tbl' + chg(t) + '" id="s1k-' + esc(id || "") + '" role="region" tabindex="0" aria-label="' + esc(label[id] || T("Table")) + '"><table>';
+      var id = t.getAttribute("id"), html = '<div class="s1k-tbl' + chg(t) + '" id="s1k-' + esc(id || "") + '" role="region" tabindex="0" aria-label="' + esc(label[id] || G("Table")) + '"><table>';
       html += "<caption>" + esc(label[id] || "") + " " + esc(text($1(t, "title"))) + "</caption>";
       Array.prototype.forEach.call(t.querySelectorAll("tgroup > thead, tgroup > tbody"), function (sec) {
         var head = sec.nodeName === "thead";
@@ -443,21 +460,21 @@ var S1K = (function () {
       var cond = $1(pr, "reqCondGroup");
       if (cond) {
         var items = Array.prototype.map.call(cond.children, function (c) {
-          if (c.nodeName === "noConds") return "<li>" + T("None") + "</li>";
-          return "<li>" + esc(text($1(c, "reqCond"))) + ($1(c, "dmRef") ? " " + T("Refer to {ref}.", { ref: dmLink($1(c, "dmRef")) }) : "") + "</li>";
+          if (c.nodeName === "noConds") return "<li>" + G("None") + "</li>";
+          return "<li>" + esc(text($1(c, "reqCond"))) + ($1(c, "dmRef") ? " " + G("Refer to {ref}.", { ref: dmLink($1(c, "dmRef")) }) : "") + "</li>";
         }).join("");
-        html += "<h4>" + T("Required conditions") + "</h4><ul>" + items + "</ul>";
+        html += "<h4>" + G("Required conditions") + "</h4><ul>" + items + "</ul>";
       }
-      [["reqSupportEquips", "supportEquipDescr", T("Support equipment")], ["reqSupplies", "supplyDescr", T("Supplies")], ["reqSpares", "spareDescr", T("Spares")]].forEach(function (g) {
+      [["reqSupportEquips", "supportEquipDescr", G("Support equipment")], ["reqSupplies", "supplyDescr", G("Supplies")], ["reqSpares", "spareDescr", G("Spares")]].forEach(function (g) {
         var sec = $1(pr, g[0]); if (!sec) return;
         var rows = Array.prototype.filter.call(sec.getElementsByTagName(g[1]), function (x) { return !hidden(x); });
         html += "<h4>" + esc(g[2]) + "</h4>";
-        if (!rows.length) { html += "<p>" + T("None") + "</p>"; return; }
-        html += '<div class="s1k-tbl" role="region" tabindex="0" aria-label="' + esc(g[2]) + '"><table><thead><tr><th scope="col">' + T("Name") + '</th><th scope="col">' + T("Identification") + '</th><th scope="col">' + T("Quantity") + "</th></tr></thead><tbody>" +
+        if (!rows.length) { html += "<p>" + G("None") + "</p>"; return; }
+        html += '<div class="s1k-tbl" role="region" tabindex="0" aria-label="' + esc(g[2]) + '"><table><thead><tr><th scope="col">' + G("Name") + '</th><th scope="col">' + G("Identification") + '</th><th scope="col">' + G("Quantity") + "</th></tr></thead><tbody>" +
           rows.map(function (x) { return '<tr id="s1k-' + esc(x.getAttribute("id") || "") + '"><td>' + esc(text($1(x, "name"))) + applicTag(x) + "</td><td><code>" + esc(text($1(x, "partNumber"))) + "</code></td><td>" + esc(text($1(x, "reqQuantity"))) + "</td></tr>"; }).join("") + "</tbody></table></div>";
       });
       var safe = $1(pr, "reqSafety");
-      if (safe) html += "<h4>" + T("Safety conditions") + "</h4>" + ($1(safe, "noSafety") ? "<p>" + T("None") + "</p>" : blocks($1(safe, "safetyRqmts") || safe));
+      if (safe) html += "<h4>" + G("Safety conditions") + "</h4>" + ($1(safe, "noSafety") ? "<p>" + G("None") + "</p>" : blocks($1(safe, "safetyRqmts") || safe));
       return html + "</section>";
     }
     var kind = Array.prototype.filter.call(content.children, function (c) { return c.nodeName !== "referencedApplicGroup" && c.nodeName !== "refs"; })[0];
@@ -465,51 +482,51 @@ var S1K = (function () {
     var html = "";
     if (kind.nodeName === "description") html = blocks(kind);
     else if (kind.nodeName === "procedure") {
-      html = prelim($1(kind, "preliminaryRqmts"), T("Preliminary requirements"));
-      html += '<section class="s1k-main"><h3>' + T("Procedure") + "</h3>" + Array.prototype.map.call(main.children, function (c) { return c.nodeName === "figure" ? figure(c) : ""; }).join("") +
+      html = prelim($1(kind, "preliminaryRqmts"), G("Preliminary requirements"));
+      html += '<section class="s1k-main"><h3>' + G("Procedure") + "</h3>" + Array.prototype.map.call(main.children, function (c) { return c.nodeName === "figure" ? figure(c) : ""; }).join("") +
         '<ol class="s1k-steps">' + Array.prototype.map.call(main.children, function (c) { return c.nodeName === "proceduralStep" ? step(c) : ""; }).join("") + "</ol></section>";
       var close = $1(kind, "closeRqmts");
-      if (close) html += '<section class="s1k-prelim"><h3>' + T("Requirements after job completion") + "</h3><ul>" + Array.prototype.map.call($1(close, "reqCondGroup").children, function (c) { return "<li>" + (c.nodeName === "noConds" ? T("None") : esc(text($1(c, "reqCond")))) + "</li>"; }).join("") + "</ul></section>";
+      if (close) html += '<section class="s1k-prelim"><h3>' + G("Requirements after job completion") + "</h3><ul>" + Array.prototype.map.call($1(close, "reqCondGroup").children, function (c) { return "<li>" + (c.nodeName === "noConds" ? G("None") : esc(text($1(c, "reqCond")))) + "</li>"; }).join("") + "</ul></section>";
     } else if (kind.nodeName === "faultIsolation") {
       var ip = $1(kind, "isolationProcedure");
-      html = prelim($1(ip, "preliminaryRqmts"), T("Preliminary requirements"));
+      html = prelim($1(ip, "preliminaryRqmts"), G("Preliminary requirements"));
       html += Array.prototype.map.call(iso.children, function (c) { return c.nodeName === "figure" ? figure(c) : ""; }).join("");
-      html += '<section class="s1k-fault' + (opts.interactive ? " s1k-interactive" : "") + '"><h3>' + T("Fault isolation") + "</h3><ol class=\"s1k-isol\">" + Array.prototype.map.call(iso.children, function (c) {
+      html += '<section class="s1k-fault' + (opts.interactive ? " s1k-interactive" : "") + '"><h3>' + G("Fault isolation") + "</h3><ol class=\"s1k-isol\">" + Array.prototype.map.call(iso.children, function (c) {
         if (c.nodeName === "isolationStep") {
           var yes = $1(c, "yesAnswer"), no = $1(c, "noAnswer");
           return '<li class="s1k-is" id="s1k-' + esc(c.getAttribute("id")) + '" data-step="' + esc(c.getAttribute("id")) + '"><span class="s1k-num">' + c._num + "</span><div>" +
             Array.prototype.map.call(c.getElementsByTagName("action"), function (a) { return "<p>" + inline(a) + "</p>"; }).join("") +
             '<p class="s1k-q">' + esc(text($1(c, "isolationStepQuestion"))) + "</p>" +
-            '<p class="s1k-ans"><a class="s1k-yes" href="#s1k-' + esc(yes.getAttribute("nextActionRefId")) + '" data-next="' + esc(yes.getAttribute("nextActionRefId")) + '">' + T("Yes: go to {step}", { step: label[yes.getAttribute("nextActionRefId")] || "" }) + "</a>" +
-            '<a class="s1k-no" href="#s1k-' + esc(no.getAttribute("nextActionRefId")) + '" data-next="' + esc(no.getAttribute("nextActionRefId")) + '">' + T("No: go to {step}", { step: label[no.getAttribute("nextActionRefId")] || "" }) + "</a></p></div></li>";
+            '<p class="s1k-ans"><a class="s1k-yes" href="#s1k-' + esc(yes.getAttribute("nextActionRefId")) + '" data-next="' + esc(yes.getAttribute("nextActionRefId")) + '">' + G("Yes: go to {step}", { step: label[yes.getAttribute("nextActionRefId")] || "" }) + "</a>" +
+            '<a class="s1k-no" href="#s1k-' + esc(no.getAttribute("nextActionRefId")) + '" data-next="' + esc(no.getAttribute("nextActionRefId")) + '">' + G("No: go to {step}", { step: label[no.getAttribute("nextActionRefId")] || "" }) + "</a></p></div></li>";
         }
-        if (c.nodeName === "isolationProcedureEnd") return '<li class="s1k-end" id="s1k-' + esc(c.getAttribute("id")) + '" data-step="' + esc(c.getAttribute("id")) + '"><span class="s1k-num">' + c._num + "</span><div><p><b>" + T("End of the procedure.") + "</b></p>" + Array.prototype.map.call(c.getElementsByTagName("action"), function (a) { return "<p>" + inline(a) + "</p>"; }).join("") + "</div></li>";
+        if (c.nodeName === "isolationProcedureEnd") return '<li class="s1k-end" id="s1k-' + esc(c.getAttribute("id")) + '" data-step="' + esc(c.getAttribute("id")) + '"><span class="s1k-num">' + c._num + "</span><div><p><b>" + G("End of the procedure.") + "</b></p>" + Array.prototype.map.call(c.getElementsByTagName("action"), function (a) { return "<p>" + inline(a) + "</p>"; }).join("") + "</div></li>";
         return "";
       }).join("") + "</ol></section>";
     } else if (kind.nodeName === "illustratedPartsCatalog") {
       html = Array.prototype.map.call(kind.children, function (c) { return c.nodeName === "figure" ? figure(c) : ""; }).join("") + partsTable(kind, ids, opts);
     } else if (kind.nodeName === "applicCrossRefTable") {
-      html = "<h3>" + T("Product attributes") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + T("Product attributes") + '"><table><thead><tr><th scope="col">' + T("Identifier") + '</th><th scope="col">' + T("Name") + '</th><th scope="col">' + T("Description") + '</th><th scope="col">' + T("Values") + "</th></tr></thead><tbody>" +
-        Array.prototype.map.call(kind.getElementsByTagName("productAttribute"), function (a) { var v = values(a); return "<tr><td><code>" + esc(a.getAttribute("id")) + "</code></td><td>" + esc(text($1(a, "name"))) + "</td><td>" + esc(text($1(a, "descr"))) + "</td><td>" + esc(v.values.join(", ") || (v.pattern ? T("pattern {p}", { p: v.pattern }) : "")) + "</td></tr>"; }).join("") + "</tbody></table></div>";
+      html = "<h3>" + G("Product attributes") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + G("Product attributes") + '"><table><thead><tr><th scope="col">' + G("Identifier") + '</th><th scope="col">' + G("Name") + '</th><th scope="col">' + G("Description") + '</th><th scope="col">' + G("Values") + "</th></tr></thead><tbody>" +
+        Array.prototype.map.call(kind.getElementsByTagName("productAttribute"), function (a) { var v = values(a); return "<tr><td><code>" + esc(a.getAttribute("id")) + "</code></td><td>" + esc(text($1(a, "name"))) + "</td><td>" + esc(text($1(a, "descr"))) + "</td><td>" + esc(v.values.join(", ") || (v.pattern ? G("pattern {p}", { p: v.pattern }) : "")) + "</td></tr>"; }).join("") + "</tbody></table></div>";
     } else if (kind.nodeName === "condCrossRefTable") {
-      html = "<h3>" + T("Conditions") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + T("Conditions") + '"><table><thead><tr><th scope="col">' + T("Identifier") + '</th><th scope="col">' + T("Name") + '</th><th scope="col">' + T("Description") + '</th><th scope="col">' + T("Values") + "</th></tr></thead><tbody>" +
+      html = "<h3>" + G("Conditions") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + G("Conditions") + '"><table><thead><tr><th scope="col">' + G("Identifier") + '</th><th scope="col">' + G("Name") + '</th><th scope="col">' + G("Description") + '</th><th scope="col">' + G("Values") + "</th></tr></thead><tbody>" +
         Array.prototype.map.call(kind.getElementsByTagName("cond"), function (c) { var t = doc.querySelector('condType[id="' + c.getAttribute("condTypeRefId") + '"]'); return "<tr><td><code>" + esc(c.getAttribute("id")) + "</code></td><td>" + esc(text($1(c, "name"))) + "</td><td>" + esc(text($1(c, "descr"))) + "</td><td>" + esc(t ? values(t).values.join(", ") : "") + "</td></tr>"; }).join("") + "</tbody></table></div>";
     } else if (kind.nodeName === "productCrossRefTable") {
       var cols = {};
       Array.prototype.forEach.call(kind.getElementsByTagName("assign"), function (a) { cols[a.getAttribute("applicPropertyIdent")] = 1; });
       cols = Object.keys(cols);
-      html = "<h3>" + T("Products") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + T("Products") + '"><table><thead><tr><th scope="col">' + T("Product") + "</th>" + cols.map(function (c) { return '<th scope="col"><code>' + esc(c) + "</code></th>"; }).join("") + "</tr></thead><tbody>" +
+      html = "<h3>" + G("Products") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + G("Products") + '"><table><thead><tr><th scope="col">' + G("Product") + "</th>" + cols.map(function (c) { return '<th scope="col"><code>' + esc(c) + "</code></th>"; }).join("") + "</tr></thead><tbody>" +
         Array.prototype.map.call(kind.getElementsByTagName("product"), function (p) { return "<tr><td><code>" + esc(p.getAttribute("id")) + "</code></td>" + cols.map(function (c) { var a = p.querySelector('assign[applicPropertyIdent="' + c + '"]'); return "<td>" + esc(a ? a.getAttribute("applicPropertyValue") : "") + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
     } else if (kind.nodeName === "brex") {
       html = blocks($1(kind, "commonInfo") || doc.createElement("x"));
-      html += "<h3>" + T("Structure object rules") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + T("Structure object rules") + '"><table><thead><tr><th scope="col">' + T("Object path (XPath)") + '</th><th scope="col">' + T("Flag") + '</th><th scope="col">' + T("Rule") + '</th><th scope="col">' + T("Allowed values") + "</th></tr></thead><tbody>" +
-        Array.prototype.map.call(kind.getElementsByTagName("structureObjectRule"), function (r) { var op = $1(r, "objectPath"), f = op.getAttribute("allowedObjectFlag"); return "<tr><td><code>" + esc(op.textContent.trim()) + "</code></td><td>" + esc(f === "0" ? T("must not exist") : f === "1" ? T("must exist") : T("may exist")) + "</td><td>" + esc(text($1(r, "objectUse"))) + "</td><td>" + esc(Array.prototype.map.call(r.getElementsByTagName("objectValue"), function (v) { return v.getAttribute("valueAllowed"); }).join(", ")) + "</td></tr>"; }).join("") + "</tbody></table></div>";
-      html += "<h3>" + T("Standard numbering system") + "</h3><ul>" + Array.prototype.map.call(kind.querySelectorAll("snsSystem"), function (s) { return "<li><code>" + esc(text($1(s, "snsCode"))) + "</code> " + esc(text($1(s, "snsTitle"))) + "</li>"; }).join("") + "</ul>";
+      html += "<h3>" + G("Structure object rules") + '</h3><div class="s1k-tbl" role="region" tabindex="0" aria-label="' + G("Structure object rules") + '"><table><thead><tr><th scope="col">' + G("Object path (XPath)") + '</th><th scope="col">' + G("Flag") + '</th><th scope="col">' + G("Rule") + '</th><th scope="col">' + G("Allowed values") + "</th></tr></thead><tbody>" +
+        Array.prototype.map.call(kind.getElementsByTagName("structureObjectRule"), function (r) { var op = $1(r, "objectPath"), f = op.getAttribute("allowedObjectFlag"); return "<tr><td><code>" + esc(op.textContent.trim()) + "</code></td><td>" + esc(f === "0" ? G("must not exist") : f === "1" ? G("must exist") : G("may exist")) + "</td><td>" + esc(text($1(r, "objectUse"))) + "</td><td>" + esc(Array.prototype.map.call(r.getElementsByTagName("objectValue"), function (v) { return v.getAttribute("valueAllowed"); }).join(", ")) + "</td></tr>"; }).join("") + "</tbody></table></div>";
+      html += "<h3>" + G("Standard numbering system") + "</h3><ul>" + Array.prototype.map.call(kind.querySelectorAll("snsSystem"), function (s) { return "<li><code>" + esc(text($1(s, "snsCode"))) + "</code> " + esc(text($1(s, "snsTitle"))) + "</li>"; }).join("") + "</ul>";
     } else if (root.nodeName === "pm") {
       html = '<ol class="s1k-toc">' + Array.prototype.map.call(content.children, function e(pe) {
         if (pe.nodeName !== "pmEntry") return "";
         return "<li><b>" + esc(text($1(pe, "pmEntryTitle"))) + "</b><ul>" + Array.prototype.map.call(pe.children, function (c) {
-          if (c.nodeName === "dmRef") { var i = $1(c, "issueInfo"); return "<li>" + dmLink(c) + (i ? ' <span class="s1k-iss">' + T("issue {n}", { n: i.getAttribute("issueNumber") }) + "</span>" : "") + "</li>"; }
+          if (c.nodeName === "dmRef") { var i = $1(c, "issueInfo"); return "<li>" + dmLink(c) + (i ? ' <span class="s1k-iss">' + G("issue {n}", { n: i.getAttribute("issueNumber") }) + "</span>" : "") + "</li>"; }
           if (c.nodeName === "pmEntry") return e(c);
           return "";
         }).join("") + "</ul></li>";
@@ -525,25 +542,25 @@ var S1K = (function () {
       var isn = $1(c, "itemSeqNumber"), pr = $1(isn, "partRef"), app = c.getAttribute("applicRefId");
       return { item: c.getAttribute("item"), variant: c.getAttribute("itemVariant") || "", indenture: +c.getAttribute("indenture") || 1, qty: text($1(isn, "quantityPerNextHigherAssy")),
         pn: pr ? pr.getAttribute("partNumberValue") : "", mfr: pr ? pr.getAttribute("manufacturerCodeValue") : "", descr: text($1(isn, "descrForPart")),
-        applicRef: app || "", applic: app && ids[app] ? text($1(ids[app], "displayText")) : T("All"), applicEl: app ? ids[app] : null, change: c.getAttribute("changeType") || "", el: c };
+        applicRef: app || "", applic: app && ids[app] ? text($1(ids[app], "displayText")) : G("All"), applicEl: app ? ids[app] : null, change: c.getAttribute("changeType") || "", el: c };
     });
   }
   function partsTable(ipc, ids, opts) {
     var rows = parts(ipc.ownerDocument).filter(function (p) { return !(opts.product && p.applicEl && applies(p.applicEl, opts.product) === false); });
-    return '<div class="s1k-tbl" role="region" tabindex="0" aria-label="' + T("Parts list") + '"><table class="s1k-parts"><thead><tr><th scope="col">' + T("Item") + '</th><th scope="col">' + T("Part number") + '</th><th scope="col">' + T("Description") + '</th><th scope="col">' + T("Qty") + '</th><th scope="col">' + T("Applicability") + "</th></tr></thead><tbody>" +
+    return '<div class="s1k-tbl" role="region" tabindex="0" aria-label="' + G("Parts list") + '"><table class="s1k-parts"><thead><tr><th scope="col">' + G("Item") + '</th><th scope="col">' + G("Part number") + '</th><th scope="col">' + G("Description") + '</th><th scope="col">' + G("Qty") + '</th><th scope="col">' + G("Applicability") + "</th></tr></thead><tbody>" +
       rows.map(function (p) { return '<tr data-item="' + esc(p.item) + '" class="' + (opts.changes && p.change ? "s1k-chg s1k-chg-" + esc(p.change) : "") + '"><td>' + esc(String(+p.item) + p.variant) + "</td><td><code>" + esc(p.pn) + "</code></td><td" + (p.indenture > 1 ? ' class="s1k-ind"' : "") + ">" + (p.indenture > 1 ? "· " : "") + esc(p.descr) + "</td><td>" + esc(p.qty) + "</td><td>" + esc(p.applic) + "</td></tr>"; }).join("") + "</tbody></table></div>";
   }
   /** The identification block shown above a module. */
   function header(id) {
     var row = function (k, v) { return v ? "<div><dt>" + esc(k) + "</dt><dd>" + v + "</dd></div>" : ""; };
-    return '<header class="s1k-head"><p class="s1k-kicker">' + esc(id.type) + " · " + esc(ISSUE) + "</p><h2>" + esc(id.title) + '</h2><dl class="s1k-meta">' +
+    return '<header class="s1k-head"><p class="s1k-kicker">' + esc(T(id.type)) + " · " + esc(ISSUE) + "</p><h2" + langAttr(id) + ">" + esc(id.title) + '</h2><dl class="s1k-meta">' +
       row(T("Code"), "<code>" + esc(id.code) + "</code>") + row(T("Issue"), esc(id.issue + "-" + id.inWork) + " · " + esc(id.issueType === "changed" ? T("changed") : id.issueType === "new" ? T("new") : id.issueType)) +
-      row(T("Issue date"), esc(id.date)) + row(T("Applicability"), esc(id.applic)) + row(T("Quality assurance"), esc(id.qa)) + row(T("Security"), esc(id.security === "01" ? T("01, unclassified") : id.security)) +
-      (id.rfu.length ? row(T("Reason for update"), esc(id.rfu.map(function (r) { return r.text; }).join(" "))) : "") + "</dl>" +
-      (id.distribution ? '<p class="s1k-restrict">' + esc(id.distribution) + "</p>" : "") + "</header>";
+      row(T("Issue date"), esc(id.date)) + row(T("Applicability"), inLang(id.applic, id)) + row(T("Quality assurance"), esc(id.qa)) + row(T("Security"), esc(id.security === "01" ? T("01, unclassified") : id.security)) +
+      (id.rfu.length ? row(T("Reason for update"), inLang(id.rfu.map(function (r) { return r.text; }).join(" "), id)) : "") + "</dl>" +
+      (id.distribution ? '<p class="s1k-restrict"' + langAttr(id) + ">" + esc(id.distribution) + "</p>" : "") + "</header>";
   }
 
   return { parse: parse, doctypeProblem: doctypeProblem, ident: ident, refs: refs, entities: entities, load: load, icnUrl: icnUrl, icnText: icnText, applies: applies, validate: validate,
-    brexCheck: brexCheck, schemaCheck: schemaCheck, render: render, header: header, parts: parts, dmCodeText: dmCodeText, esc: esc, text: text, NAMES: NAMES, KINDS: KINDS, ISSUE: ISSUE, BASE: BASE };
+    brexCheck: brexCheck, schemaCheck: schemaCheck, render: render, header: header, parts: parts, langOf: langOf, inLang: inLang, langAttr: langAttr, pageHref: pageHref, dmCodeText: dmCodeText, esc: esc, text: text, NAMES: NAMES, KINDS: KINDS, ISSUE: ISSUE, BASE: BASE };
 })();
 if (typeof module !== "undefined") module.exports = S1K;

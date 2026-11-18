@@ -201,6 +201,7 @@ if (typeof module !== "undefined") module.exports = STE;
     paint(text);
   }
   var LEVEL = { error: T("Error"), warning: T("Warning"), info: T("Suggestion") };
+  var QL = /^en\b/.test(document.documentElement.lang || "en") ? "" : ' lang="en"';   // quotes of the checked text are English
   function ruleTitle(f) { return f.house ? f.title : T((STE.RULES[f.rule] || {}).title || f.rule); }
   function paint(text) {
     // the text, with each finding marked and numbered
@@ -210,10 +211,11 @@ if (typeof module !== "undefined") module.exports = STE;
       html += esc(text.slice(pos, f.start)) + '<mark class="ste-m ste-' + f.level + '" data-i="' + i + '" title="' + esc(ruleTitle(f)) + '">' + esc(text.slice(f.start, f.end)) + "<sup>" + (i + 1) + "</sup></mark>";
       pos = f.end;
     });
-    $("#ste-marked").innerHTML = html + esc(text.slice(pos)) || '<span class="kb-hint">' + esc(T("Type or paste text to check it.")) + "</span>";
+    // the text is English; the hint shown when it is empty is the interface's
+    $("#ste-marked").innerHTML = html + esc(text.slice(pos)) || '<span class="kb-hint" lang="' + esc(document.documentElement.lang || "en") + '">' + esc(T("Type or paste text to check it.")) + "</span>";
     $("#ste-list").innerHTML = findings.map(function (f, i) {
       var ref = f.house ? T("House style: {rule}", { rule: f.title }) : T("ASD-STE100 Issue 9, rule {n}", { n: f.rule }).replace("rule P-1", "project rule P-1");
-      return '<li class="ste-f ste-' + f.level + '" data-i="' + i + '"><p><span class="ae-chip ae-' + (f.level === "error" ? "fail" : f.level === "warning" ? "warn" : "skip") + '">' + esc(LEVEL[f.level] || f.level) + "</span> <b>" + (i + 1) + ". " + esc(ruleTitle(f)) + '</b> <small class="ste-ref">' + esc(ref) + "</small></p><p>" + (f.quote ? "<q>" + esc(f.quote.length > 90 ? f.quote.slice(0, 90) + "…" : f.quote) + "</q> " : "") + esc(f.message) + "</p>" +
+      return '<li class="ste-f ste-' + f.level + '" data-i="' + i + '"><p><span class="ae-chip ae-' + (f.level === "error" ? "fail" : f.level === "warning" ? "warn" : "skip") + '">' + esc(LEVEL[f.level] || f.level) + "</span> <b>" + (i + 1) + ". " + esc(ruleTitle(f)) + '</b> <small class="ste-ref">' + esc(ref) + "</small></p><p>" + (f.quote ? "<q" + QL + ">" + esc(f.quote.length > 90 ? f.quote.slice(0, 90) + "…" : f.quote) + "</q> " : "") + esc(f.message) + "</p>" +
         (f.fix ? '<p><button class="btn line sm" type="button" data-fix="' + i + '">' + esc(T("Apply: \"{a}\" to \"{b}\"", { a: f.fix.find, b: f.fix.replace })) + "</button></p>" : "") + "</li>";
     }).join("") || '<li class="ste-f">' + esc(T("No findings for the rules this mode checks. That is not a statement of compliance: the rules below that need a person still apply.")) + "</li>";
     var count = { error: 0, warning: 0, info: 0 }, by = {};

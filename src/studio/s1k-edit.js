@@ -67,6 +67,8 @@
     var set = function (sel, v) { var e = $(sel); if (document.activeElement !== e) e.value = v; };
     set("#se-issue", id.issue); set("#se-inwork", id.inWork); set("#se-date", id.date); set("#se-type", id.issueType); set("#se-tech", id.techName); set("#se-info", id.infoName); set("#se-applic", id.applic); set("#se-sec", id.security);
     set("#se-qa", id.qaCode === "unverified" ? "unverified" : (/\((\w+)\)/.exec(id.qa) || [0, "tabtop"])[1]);
+    // what is typed in these fields is the module's text, in the module's language
+    ["#se-tech", "#se-info", "#se-applic", "#se-xml"].forEach(function (sel) { $(sel).setAttribute("lang", S1K.langOf(id)); });
   }
   function xesc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
   /** Replaces one attribute of the first element of a name in the text. */
@@ -171,7 +173,7 @@
     var host = $("#se-preview");
     if (host.hidden) return;
     if (!report || !report.doc || !report.ident) { host.innerHTML = '<p class="kb-hint">' + esc(T("The preview needs well-formed XML of a data module or publication module.")) + "</p>"; return; }
-    try { host.innerHTML = S1K.header(report.ident) + '<div class="s1k-body">' + S1K.render(report.doc, { db: db, changes: true, href: function (code) { var t = db.latest(code); return t ? "/studio/s1000d?open=" + encodeURIComponent(t.file) : "#"; } }) + "</div>"; }
+    try { host.innerHTML = S1K.header(report.ident) + '<div class="s1k-body"' + S1K.langAttr(report.ident) + ">" + S1K.render(report.doc, { db: db, changes: true, href: function (code) { var t = db.latest(code); return t ? S1K.pageHref("/studio/s1000d?open=" + encodeURIComponent(t.file)) : "#"; } }) + "</div>"; }
     catch (e) { host.innerHTML = '<p class="kb-hint">' + esc(T("This part of the module can't be previewed: {msg}", { msg: e.message })) + "</p>"; }
   }
   function tab(which) {

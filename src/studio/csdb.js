@@ -33,12 +33,12 @@
     var list = filtered();
     $("#cd-count").textContent = T("{n} of {all}", { n: list.length, all: db.items.length });
     $("#cd-rows").innerHTML = list.map(function (x) {
-      return '<tr data-file="' + esc(x.file) + '"' + (current && current.file === x.file ? ' class="on" aria-current="true"' : "") + '><td><button type="button" class="cd-open"><code>' + esc(x.id.code) + "</code></button></td><td>" + esc(x.id.title) + "</td><td>" + esc(T(x.id.type)) + "</td><td>" + esc(x.id.issue + "-" + x.id.inWork) + "</td><td>" + esc(x.id.date) + "</td><td>" + status(x.id) + "</td><td>" + ciChip(x.file) + "</td></tr>";
+      return '<tr data-file="' + esc(x.file) + '"' + (current && current.file === x.file ? ' class="on" aria-current="true"' : "") + '><td><button type="button" class="cd-open"><code>' + esc(x.id.code) + "</code></button></td><td" + S1K.langAttr(x.id) + ">" + esc(x.id.title) + "</td><td>" + esc(T(x.id.type)) + "</td><td>" + esc(x.id.issue + "-" + x.id.inWork) + "</td><td>" + esc(x.id.date) + "</td><td>" + status(x.id) + "</td><td>" + ciChip(x.file) + "</td></tr>";
     }).join("") || '<tr><td colspan="7">' + esc(T("No module matches.")) + "</td></tr>";
     var saved = {};
     try { saved = JSON.parse(localStorage.getItem("s1k-work") || "{}"); } catch (e) { saved = {}; }
     var names = Object.keys(saved);
-    $("#cd-work").innerHTML = names.length ? '<h3 class="ae-h3">' + esc(T("Saved in this browser")) + "</h3><ul>" + names.map(function (n) { return '<li><a href="/studio/s1000d?open=' + encodeURIComponent("saved:" + n) + '"><code>' + esc(n) + "</code></a> <small>" + esc(T("saved {when}", { when: saved[n].at.slice(0, 16).replace("T", " ") })) + "</small></li>"; }).join("") + "</ul>" : "";
+    $("#cd-work").innerHTML = names.length ? '<h3 class="ae-h3">' + esc(T("Saved in this browser")) + "</h3><ul>" + names.map(function (n) { return '<li><a href="' + esc(S1K.pageHref("/studio/s1000d?open=" + encodeURIComponent("saved:" + n))) + '"><code>' + esc(n) + "</code></a> <small>" + esc(T("saved {when}", { when: saved[n].at.slice(0, 16).replace("T", " ") })) + "</small></li>"; }).join("") + "</ul>" : "";
   }
 
   /* ---------- One module ---------- */
@@ -82,12 +82,12 @@
     var pubs = by.filter(function (o) { return o.id.kind === "pm"; });
     var check = S1K.validate(x.text, db, x.file), ci = ciOf(x.file);
     var dl = function (k, v) { return v ? "<div><dt>" + esc(k) + "</dt><dd>" + v + "</dd></div>" : ""; };
-    var link = function (o) { return '<a href="#" data-file="' + esc(o.file) + '"><code>' + esc(o.id.code) + "</code></a> " + esc(o.id.title) + ' <span class="s1k-iss">' + esc(T("issue {n}", { n: o.id.issue })) + "</span>"; };
+    var link = function (o) { return '<a href="#" data-file="' + esc(o.file) + '"><code>' + esc(o.id.code) + "</code></a> " + S1K.inLang(o.id.title, o.id) + ' <span class="s1k-iss">' + esc(T("issue {n}", { n: o.id.issue })) + "</span>"; };
     var html = '<dl class="s1k-meta">' + dl(T("Code"), "<code>" + esc(id.code) + "</code>") + dl(T("File"), "<code>" + esc(x.file) + "</code>") + dl(T("Type"), esc(T(id.type)) + (id.schema ? " · <code>" + esc(id.schema) + ".xsd</code>" : "")) +
-      dl(T("Issue"), esc(id.issue + "-" + id.inWork) + " · " + esc(T(id.issueType))) + dl(T("Issue date"), esc(id.date)) + dl(T("Quality assurance"), esc(id.qa)) + dl(T("Applicability"), esc(id.applic)) +
-      dl(T("Responsible partner"), esc(id.owner)) + dl(T("Security"), esc(id.security === "01" ? T("01, unclassified") : id.security)) + (id.rfu.length ? dl(T("Reason for update"), esc(id.rfu.map(function (r) { return r.text; }).join(" "))) : "") + "</dl>";
-    html += '<p class="ann-btns"><a class="btn ink sm" href="' + esc(S1K.BASE + x.file) + '" download>' + esc(T("Download the XML")) + '</a><a class="btn line sm" href="/studio/s1000d?open=' + encodeURIComponent(x.file) + '">' + esc(T("Open in the S1000D editor")) + "</a>" +
-      (id.kind === "dm" && !/^(022|00W|00Q|00P)$/.test(id.infoCode) ? '<a class="btn line sm" href="/studio/ietm?dm=' + encodeURIComponent(id.code) + '">' + esc(T("Read it in the IETM")) + "</a>" : "") + "</p>";
+      dl(T("Issue"), esc(id.issue + "-" + id.inWork) + " · " + esc(T(id.issueType))) + dl(T("Issue date"), esc(id.date)) + dl(T("Quality assurance"), esc(id.qa)) + dl(T("Applicability"), S1K.inLang(id.applic, id)) +
+      dl(T("Responsible partner"), esc(id.owner)) + dl(T("Security"), esc(id.security === "01" ? T("01, unclassified") : id.security)) + (id.rfu.length ? dl(T("Reason for update"), S1K.inLang(id.rfu.map(function (r) { return r.text; }).join(" "), id)) : "") + "</dl>";
+    html += '<p class="ann-btns"><a class="btn ink sm" href="' + esc(S1K.BASE + x.file) + '" download>' + esc(T("Download the XML")) + '</a><a class="btn line sm" href="' + esc(S1K.pageHref("/studio/s1000d?open=" + encodeURIComponent(x.file))) + '">' + esc(T("Open in the S1000D editor")) + "</a>" +
+      (id.kind === "dm" && !/^(022|00W|00Q|00P)$/.test(id.infoCode) ? '<a class="btn line sm" href="' + esc(S1K.pageHref("/studio/ietm?dm=" + encodeURIComponent(id.code))) + '">' + esc(T("Read it in the IETM")) + "</a>" : "") + "</p>";
     // relationships
     var out = R.dm.filter(function (r) { return !r.brex && !r.act; }).map(function (r) { var t = db.get(r.code, r.issue) || db.latest(r.code); return t ? "<li>" + link(t) + "</li>" : "<li><code>" + esc(r.code) + "</code> " + esc(T("(not in the CSDB)")) + "</li>"; });
     html += '<h3 class="ae-h3">' + esc(T("Relationships")) + '</h3><div class="cd-rel"><div><h4>' + esc(T("Refers to")) + "</h4><ul>" + (out.join("") || "<li>" + esc(T("No other module")) + "</li>") + "</ul></div>" +
@@ -100,12 +100,13 @@
       check.layers.map(function (l) { return '<li class="ae-' + l.status + '">' + esc(l.name) + ": " + esc(l.findings[0] ? l.findings[0].message : "") + (l.findings.length > 1 ? " " + esc(T("(+{n} more)", { n: l.findings.length - 1 })) : "") + "</li>"; }).join("") + "</ul>";
     // history
     if (issues.length > 1) {
-      html += '<h3 class="ae-h3">' + esc(T("History")) + "</h3><ol class=\"cd-hist\">" + issues.map(function (o) { return "<li>" + link(o) + " · " + esc(o.id.date) + (o.id.rfu.length ? "<br><small>" + esc(o.id.rfu[0].text) + "</small>" : "") + "</li>"; }).join("") + "</ol>";
+      html += '<h3 class="ae-h3">' + esc(T("History")) + "</h3><ol class=\"cd-hist\">" + issues.map(function (o) { return "<li>" + link(o) + " · " + esc(o.id.date) + (o.id.rfu.length ? "<br><small" + S1K.langAttr(o.id) + ">" + esc(o.id.rfu[0].text) + "</small>" : "") + "</li>"; }).join("") + "</ol>";
       var prev = issues[issues.indexOf(x) - 1] || issues[0], next = prev === x ? issues[1] : x, d = diff(prev.text, next.text);
       html += '<h4>' + esc(T("Issue {a} compared with issue {b}: {add} lines added, {del} removed", { a: prev.id.issue, b: next.id.issue, add: d.added, del: d.removed })) + '</h4><div class="cd-diffbox" role="region" tabindex="0" aria-label="' + esc(T("Changes between issues")) + '">' + d.html + "</div>";
     }
     html += '<details class="cd-src"><summary>' + esc(T("XML source ({n} lines)", { n: x.text.split("\n").length })) + '</summary><div class="cd-xmlbox" role="region" tabindex="0" aria-label="' + esc(T("XML source")) + '">' + pretty(x.text) + "</div></details>";
     $("#cd-d-h").textContent = id.title;
+    var hl = S1K.langAttr(id); if (hl) $("#cd-d-h").setAttribute("lang", S1K.langOf(id)); else $("#cd-d-h").removeAttribute("lang");
     $("#cd-body").innerHTML = html;
     history.replaceState(null, "", "?file=" + encodeURIComponent(x.file));
     if (focus) $("#cd-detail").focus();
@@ -121,13 +122,13 @@
     icns = Object.keys(icns).sort();
     var W = 1000, rowH = 44, top = 40, H = top + Math.max(dms.length, icns.length + 1, rules.length + pms.length + 2) * rowH + 20;
     var pos = {}, svg = "", boxes = "";
-    function box(key, x, y, w, label, sub, cls, href) {
+    function box(key, x, y, w, label, sub, cls, href, id) {
       pos[key] = { x: x, y: y, w: w };
-      boxes += '<a href="' + esc(href) + '"' + (href.charAt(0) === "#" ? ' data-file="' + esc(href.slice(1)) + '"' : "") + '><g class="cg ' + cls + '"><rect x="' + x + '" y="' + (y - 16) + '" width="' + w + '" height="32" rx="5"/><text x="' + (x + 8) + '" y="' + (y - 2) + '">' + esc(label) + '</text><text class="cg-sub" x="' + (x + 8) + '" y="' + (y + 11) + '">' + esc(sub) + "</text></g></a>";
+      boxes += '<a href="' + esc(href) + '"' + (href.charAt(0) === "#" ? ' data-file="' + esc(href.slice(1)) + '"' : "") + '><g class="cg ' + cls + '"><rect x="' + x + '" y="' + (y - 16) + '" width="' + w + '" height="32" rx="5"/><text x="' + (x + 8) + '" y="' + (y - 2) + '"' + (id ? S1K.langAttr(id) : "") + ">" + esc(label) + '</text><text class="cg-sub" x="' + (x + 8) + '" y="' + (y + 11) + '">' + esc(sub) + "</text></g></a>";
     }
-    pms.forEach(function (x, i) { box(x.id.code, 10, top + 20 + i * 70, 210, x.id.pmTitle.replace("ARF-1 training rig - ", ""), x.id.code.replace("PMC-", ""), "cg-pm", "#" + x.file); });
-    rules.forEach(function (x, i) { box(x.id.code, 10, top + 220 + i * rowH, 210, x.id.infoName, x.id.code.replace(/^DMC-ARFRIG-A-/, ""), "cg-rule", "#" + x.file); });
-    dms.forEach(function (x, i) { box(x.id.code, 330, top + i * rowH, 300, x.id.title, x.id.code.replace(/^DMC-ARFRIG-A-/, "") + " · " + T("issue {n}", { n: x.id.issue }), "cg-dm", "#" + x.file); });
+    pms.forEach(function (x, i) { box(x.id.code, 10, top + 20 + i * 70, 210, x.id.pmTitle.replace("ARF-1 training rig - ", ""), x.id.code.replace("PMC-", ""), "cg-pm", "#" + x.file, x.id); });
+    rules.forEach(function (x, i) { box(x.id.code, 10, top + 220 + i * rowH, 210, x.id.infoName, x.id.code.replace(/^DMC-ARFRIG-A-/, ""), "cg-rule", "#" + x.file, x.id); });
+    dms.forEach(function (x, i) { box(x.id.code, 330, top + i * rowH, 300, x.id.title, x.id.code.replace(/^DMC-ARFRIG-A-/, "") + " · " + T("issue {n}", { n: x.id.issue }), "cg-dm", "#" + x.file, x.id); });
     icns.forEach(function (n, i) { box(n, 740, top + i * rowH, 250, n.replace("ICN-0DEMO-", ""), T("illustration"), "cg-icn", S1K.icnUrl(n)); });
     var curve = function (a, b, cls) { var x1 = a.x + a.w, y1 = a.y, x2 = b.x, y2 = b.y, mx = (x1 + x2) / 2; return '<path class="' + cls + '" d="M' + x1 + "," + y1 + " C" + mx + "," + y1 + " " + mx + "," + y2 + " " + x2 + "," + y2 + '"/>'; };
     pms.forEach(function (p) { S1K.refs(p.doc).dm.forEach(function (r) { if (!r.brex && !r.act && pos[r.code]) svg += curve(pos[p.id.code], pos[r.code], "cl-pm"); }); });

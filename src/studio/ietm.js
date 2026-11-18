@@ -27,11 +27,11 @@
     return out;
   }
   function toc() {
-    $("#ie-toc").innerHTML = '<p class="ie-pubtitle">' + esc(pm.id.pmTitle) + "<br><small><code>" + esc(pm.id.code) + "</code> · " + esc(T("issue {n}", { n: pm.id.issue })) + " · " + esc(pm.id.date) + "</small></p>" +
+    $("#ie-toc").innerHTML = '<p class="ie-pubtitle">' + S1K.inLang(pm.id.pmTitle, pm.id) + "<br><small><code>" + esc(pm.id.code) + "</code> · " + esc(T("issue {n}", { n: pm.id.issue })) + " · " + esc(pm.id.date) + "</small></p>" +
       entries.map(function (e) {
-        return '<details open class="ie-entry"><summary>' + esc(e.title) + "</summary><ul>" + e.items.map(function (it) {
+        return '<details open class="ie-entry"><summary>' + S1K.inLang(e.title, pm.id) + "</summary><ul>" + e.items.map(function (it) {
           var x = it.item;
-          return "<li>" + (x ? '<a href="?dm=' + encodeURIComponent(it.code) + '" data-file="' + esc(x.file) + '"' + (cur && cur.file === x.file ? ' aria-current="page"' : "") + ">" + esc(x.id.title) + "</a>" : esc(it.code) + " " + esc(T("(missing)"))) + "</li>";
+          return "<li>" + (x ? '<a href="?dm=' + encodeURIComponent(it.code) + '" data-file="' + esc(x.file) + '"' + (cur && cur.file === x.file ? ' aria-current="page"' : "") + S1K.langAttr(x.id) + ">" + esc(x.id.title) + "</a>" : esc(it.code) + " " + esc(T("(missing)"))) + "</li>";
         }).join("") + "</ul></details>";
       }).join("");
   }
@@ -43,9 +43,9 @@
     var main = $("#ie-main");
     var note = !inPublication(x.file) ? '<p class="ie-outside">' + esc(T("This module is not in the publication you are reading. It opened because a cross-reference points to it.")) + "</p>" : "";
     var tools = (fault ? '<p class="ann-btns ie-modes"><button type="button" class="btn sm ink" data-mode="steps">' + esc(T("Step by step")) + '</button><button type="button" class="btn sm line" data-mode="all">' + esc(T("The whole procedure")) + "</button></p>" : "") +
-      (ipd ? '<p class="ann-btns"><a class="btn line sm" href="/studio/ipc">' + esc(T("Open it in the parts catalogue")) + "</a></p>" : "");
+      (ipd && !offline ? '<p class="ann-btns"><a class="btn line sm" href="' + esc(S1K.pageHref("/studio/ipc")) + '">' + esc(T("Open it in the parts catalogue")) + "</a></p>" : "");
     var render = function (inline) {
-      main.innerHTML = note + S1K.header(id) + tools + '<div class="s1k-body">' + S1K.render(x.doc, { db: db, product: product, changes: $("#ie-changes").checked, interactive: fault, inline: inline, href: function (code) { return "?dm=" + encodeURIComponent(code); } }) + "</div>";
+      main.innerHTML = note + S1K.header(id) + tools + '<div class="s1k-body"' + S1K.langAttr(id) + ">" + S1K.render(x.doc, { db: db, product: product, changes: $("#ie-changes").checked, interactive: fault, inline: inline, href: function (code) { return "?dm=" + encodeURIComponent(code); } }) + "</div>";
       if (fault) stepMode(true);
       if (ipd) hotspots();
       if (opts.q) mark(opts.q);
@@ -87,7 +87,9 @@
     if (!svg) return;
     svg.removeAttribute("width"); svg.removeAttribute("height");
     svg.setAttribute("role", "group");
-    Array.prototype.forEach.call(svg.querySelectorAll(".part"), function (g) { g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", T("Item {n}", { n: +g.dataset.item })); });
+    // the controls are the viewer's, so they speak the interface's language inside the English module
+    var ui = document.documentElement.lang;
+    Array.prototype.forEach.call(svg.querySelectorAll(".part"), function (g) { g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", T("Item {n}", { n: +g.dataset.item })); if (S1K.langAttr(cur.id)) g.setAttribute("lang", ui); });
     Array.prototype.forEach.call(document.querySelectorAll("#ie-main tr[data-item]"), function (tr) { tr.tabIndex = 0; });
   }
   function pick(item) {
@@ -128,7 +130,7 @@
   /** Puts the whole publication, filtered for the chosen product, where the print stylesheet shows it. */
   function renderAll() {
     var area = $("#ie-printarea"), html = '<header class="ie-ptitle"><h1>' + esc(pm.id.pmTitle) + "</h1><p><code>" + esc(pm.id.code) + "</code> · " + esc(T("issue {n}", { n: pm.id.issue })) + " · " + esc(pm.id.date) + (product ? " · " + esc(product.label) : "") + "</p><p>" + esc(pm.id.distribution) + "</p></header>";
-    entries.forEach(function (e) { e.items.forEach(function (it) { if (it.item) html += '<section class="ie-psec">' + S1K.header(it.item.id) + '<div class="s1k-body">' + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; }); });
+    entries.forEach(function (e) { e.items.forEach(function (it) { if (it.item) html += '<section class="ie-psec">' + S1K.header(it.item.id) + '<div class="s1k-body"' + S1K.langAttr(it.item.id) + ">" + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; }); });
     area.innerHTML = html;
     document.body.classList.add("ie-printing-all");
   }

@@ -27,6 +27,8 @@
       svg.removeAttribute("width"); svg.removeAttribute("height");
       // a picture with controls inside is a group, not an image
       svg.setAttribute("role", "group");
+      // the drawing's title and description are the module's, in its language
+      if (S1K.langAttr(ipd.id)) Array.prototype.forEach.call(svg.querySelectorAll(":scope > title, :scope > desc"), function (e) { e.setAttribute("lang", S1K.langOf(ipd.id)); });
       // every hotspot of the module makes its SVG group a control
       Array.prototype.forEach.call(ipd.doc.querySelectorAll("hotspot"), function (h) {
         var el = svg.querySelector("#" + CSS.escape(h.getAttribute("applicationStructureIdent")));
@@ -51,7 +53,7 @@
     $("#ip-count").textContent = T("{n} rows", { n: shown.length });
     $("#ip-rows").innerHTML = shown.map(function (p) {
       var cls = [p.item === selected ? "on" : "", fits(p) ? "" : "na", p.change ? "s1k-chg s1k-chg-" + p.change : ""].join(" ").trim();
-      return '<tr data-item="' + esc(p.item) + '" class="' + cls + '" tabindex="0" aria-selected="' + (p.item === selected) + '"><td>' + esc(String(+p.item) + p.variant) + "</td><td><code>" + esc(p.pn) + "</code></td><td" + (p.indenture > 1 ? ' class="s1k-ind"' : "") + ">" + (p.indenture > 1 ? "· " : "") + esc(p.descr) + "</td><td>" + esc(p.qty) + "</td><td>" + esc(p.applic) + (fits(p) ? "" : ' <small>' + esc(T("(not on this product)")) + "</small>") + "</td></tr>";
+      return '<tr data-item="' + esc(p.item) + '" class="' + cls + '" tabindex="0" aria-selected="' + (p.item === selected) + '"><td>' + esc(String(+p.item) + p.variant) + "</td><td><code>" + esc(p.pn) + "</code></td><td" + (p.indenture > 1 ? ' class="s1k-ind"' : "") + ">" + (p.indenture > 1 ? "· " : "") + S1K.inLang(p.descr, ipd.id) + "</td><td>" + esc(p.qty) + "</td><td>" + S1K.inLang(p.applic, ipd.id) + (fits(p) ? "" : ' <small>' + esc(T("(not on this product)")) + "</small>") + "</td></tr>";
     }).join("");
     var svg = $("#ip-svg svg");
     if (svg) {
@@ -68,9 +70,9 @@
     if (!list.length) { $("#ip-detail").innerHTML = '<p class="kb-hint">' + esc(T("Select a part to see its details and the procedures that use it.")) + "</p>"; return; }
     var procs = procedures(selected);
     $("#ip-detail").innerHTML = "<h3>" + esc(T("Item {n}", { n: +selected })) + "</h3>" + list.map(function (p) {
-      return '<dl class="s1k-meta"><div><dt>' + esc(T("Part number")) + "</dt><dd><code>" + esc(p.pn) + "</code> " + esc(T("(fictional)")) + "</dd></div><div><dt>" + esc(T("Description")) + "</dt><dd>" + esc(p.descr) + "</dd></div><div><dt>" + esc(T("Manufacturer code")) + "</dt><dd><code>" + esc(p.mfr) + "</code> " + esc(T("(invented, not a CAGE code)")) + "</dd></div><div><dt>" + esc(T("Quantity per assembly")) + "</dt><dd>" + esc(p.qty) + "</dd></div><div><dt>" + esc(T("Applicability")) + "</dt><dd>" + esc(p.applic) + "</dd></div>" +
+      return '<dl class="s1k-meta"><div><dt>' + esc(T("Part number")) + "</dt><dd><code>" + esc(p.pn) + "</code> " + esc(T("(fictional)")) + "</dd></div><div><dt>" + esc(T("Description")) + "</dt><dd>" + S1K.inLang(p.descr, ipd.id) + "</dd></div><div><dt>" + esc(T("Manufacturer code")) + "</dt><dd><code>" + esc(p.mfr) + "</code> " + esc(T("(invented, not a CAGE code)")) + "</dd></div><div><dt>" + esc(T("Quantity per assembly")) + "</dt><dd>" + esc(p.qty) + "</dd></div><div><dt>" + esc(T("Applicability")) + "</dt><dd>" + S1K.inLang(p.applic, ipd.id) + "</dd></div>" +
         (p.change ? "<div><dt>" + esc(T("Change")) + "</dt><dd>" + esc(p.change === "add" ? T("Added in this issue (EC-ARF-01)") : p.change) + "</dd></div>" : "") + "</dl>";
-    }).join("") + "<h4>" + esc(T("Procedures that use it")) + "</h4><ul>" + (procs.map(function (x) { return '<li><a href="/studio/ietm?dm=' + encodeURIComponent(x.id.code) + '">' + esc(x.id.title) + "</a> <code>" + esc(x.id.code.replace("DMC-", "")) + "</code></li>"; }).join("") || "<li>" + esc(T("None in this CSDB")) + "</li>") + "</ul>";
+    }).join("") + "<h4>" + esc(T("Procedures that use it")) + "</h4><ul>" + (procs.map(function (x) { return '<li><a href="' + esc(S1K.pageHref("/studio/ietm?dm=" + encodeURIComponent(x.id.code))) + '"' + S1K.langAttr(x.id) + ">" + esc(x.id.title) + "</a> <code>" + esc(x.id.code.replace("DMC-", "")) + "</code></li>"; }).join("") || "<li>" + esc(T("None in this CSDB")) + "</li>") + "</ul>";
   }
   function choose(item, from) {
     selected = selected === item && from === "svg" ? "" : item;
