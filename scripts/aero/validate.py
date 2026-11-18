@@ -113,13 +113,17 @@ def fetch_schemas(names, folder):
         for loc in re.findall(rb'<xs:(?:include|import)[^>]*schemaLocation="([^"]+)"', data):
             loc = loc.decode()
             todo.append(loc if loc.startswith("http") else url.rsplit("/", 1)[0] + "/" + loc)
+        # The parser has no network: a schema that includes or imports by URL gets a working copy that names the local file.
+        local = re.sub(rb'schemaLocation="https?://[^"]*/([^"/]+)"', rb'schemaLocation="\1"', data)
+        if local != data:
+            open(path + ".local", "wb").write(local)
     xml_xsd = os.path.join(folder, "xml.xsd")
     if not os.path.exists(xml_xsd):
         req = urllib.request.Request("https://www.w3.org/2001/xml.xsd", headers={"User-Agent": "karandeshmukh.dev CSDB check"})
         with urllib.request.urlopen(req, timeout=60) as r:
             open(xml_xsd, "wb").write(r.read())
     data = open(xml_xsd, "rb").read()
-    done["xml.xsd"] = {"url": "https://www.w3.org/2001/xml.xsd", "sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data)}
+    done.setdefault("xml.xsd", {"url": "https://www.w3.org/2001/xml.xsd", "sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data)})
     for n, v in sorted(done.items()):
         print(f"schema {n}: {v['bytes']} bytes, sha256 {v['sha256'][:16]}..., from {v['url']}", flush=True)
     return done
@@ -134,7 +138,8 @@ def schema_for(folder, cache, loc):
     import (of the W3C's xml.xsd, fetched with it) added in memory, because libxml2 needs it; the file is unchanged."""
     name = loc.rsplit("/", 1)[1]
     if name not in cache:
-        doc = etree.parse(os.path.join(folder, name))
+        path = os.path.join(folder, name)
+        doc = etree.parse(path + ".local" if os.path.exists(path + ".local") else path, base_url=path)
         root = doc.getroot()
         uses_xml = bool(root.xpath('//@ref[starts-with(., "xml:")]'))
         imported = root.xpath("xs:import[@namespace=$ns]", namespaces={"xs": XS}, ns=XML_NS)
