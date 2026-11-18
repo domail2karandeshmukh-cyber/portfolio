@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/studio/aero.css">
+<div class="st-head ie-head">
+ <div>
+  <h1>Interactive electronic technical publication</h1>
+  <p>The maintenance and operator publications of the fictional ARF-1 training rig, read from their S1000D publication modules. Choose a product to see only what applies to it, follow cross-references, search the text, step through the fault isolation one question at a time, and print a module or the whole publication.</p>
+ </div>
+</div>
+<p class="fl-warn" role="note"><strong>Fictional demonstration.</strong> A viewer built for this portfolio to show what an IETM does. It claims no IETM class and no conformance to the S1000D functionality matrix, and the publications are not approved maintenance data.</p>
+<div class="st-bar ie-bar" role="toolbar" aria-label="Publication, product and view">
+ <label class="ae-pick">Publication <select id="ie-pub"></select></label>
+ <label class="ae-pick">Product <select id="ie-product"><option value="">All products</option></select></label>
+ <label class="vd-chk"><input type="checkbox" id="ie-changes" checked> Mark changes</label>
+ <label class="ae-pick ie-search">Search <input id="ie-q" type="search" placeholder="Words in the publication"></label>
+ <span class="sep" aria-hidden="true"></span>
+ <button class="btn line sm" type="button" id="ie-print">Print this module</button>
+ <button class="btn line sm" type="button" id="ie-printall">Print the publication</button>
+ <a class="btn line sm" href="/studio/aerospace/downloads/arf1-ietm.zip" download>Download the IETM package (ZIP)</a>
+</div>
+<p class="st-status" id="ie-status" role="status" aria-live="polite"></p>
+<div class="ie" id="ie-app">
+ <nav class="ie-nav" aria-label="Contents of the publication">
+  <button class="btn line sm ie-navbtn" type="button" id="ie-navbtn" aria-expanded="false" aria-controls="ie-toc">Contents</button>
+  <div id="ie-toc" class="ie-toc"></div>
+  <div id="ie-hits" class="ie-hits" hidden></div>
+ </nav>
+ <article class="ie-main s1k" id="ie-main" tabindex="-1" aria-label="Data module"></article>
+</div>
+<div id="ie-printarea" class="ie-printarea s1k" aria-hidden="true"></div>

@@ -403,6 +403,7 @@ def main(argv):
         "schemas": schema_info or ("checked" if schemas else "not checked (no --schemas)"),
         "defaultBrex": "DMC-S1000D-H-04-10-0301-00A-022A-D (applied)" if default_brex is not None else "not applied (no --default-brex)",
         "files": len(files), "errors": errors, "warnings": warnings,
+        "sha256": {f: hashlib.sha256(open(os.path.join(CSDB, f), "rb").read()).hexdigest() for f in files},
         "results": results,
     }
     for f, r in results.items():

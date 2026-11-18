@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/studio/aero.css">
+<div class="st-head">
+ <div>
+  <h1>Common source database</h1>
+  <p>Every module of the fictional ARF-1 training rig in one place: data modules, publication modules, the BREX, the applicability tables and the illustrations. Search and filter them, see which publications use a module and what it refers to, compare two issues, read the XML, and download it.</p>
+ </div>
+</div>
+<p class="fl-warn" role="note"><strong>A demonstration, not a certified CSDB.</strong> It reads S1000D Issue 6 XML that validates against the official schemas, and keeps no confidential data: the rig and everything about it is invented. Edits you save in the S1000D editor stay in this browser.</p>
+<div class="st-bar" role="toolbar" aria-label="Search and filter">
+ <label class="ae-pick">Search <input id="cd-q" type="search" placeholder="Code, title or text"></label>
+ <label class="ae-pick">Type <select id="cd-type"><option value="">All types</option></select></label>
+ <label class="ae-pick">System <select id="cd-sns"><option value="">All systems</option></select></label>
+ <label class="vd-chk"><input type="checkbox" id="cd-latest" checked> Latest issues only</label>
+ <span class="sep" aria-hidden="true"></span>
+ <a class="btn line sm" href="/studio/aerospace/downloads/arf1-csdb.zip" download>Download the CSDB (ZIP)</a>
+</div>
+<p class="st-status" id="cd-status" role="status" aria-live="polite"></p>
+<div class="cd" id="cd-app">
+ <section class="dt-card cd-list" aria-labelledby="cd-list-h">
+  <h2 class="ae-h" id="cd-list-h">Inventory <small id="cd-count"></small></h2>
+  <div class="s1k-tbl" role="region" tabindex="0" aria-label="CSDB inventory"><table class="cd-table"><thead><tr><th scope="col">Code</th><th scope="col">Title</th><th scope="col">Type</th><th scope="col">Issue</th><th scope="col">Date</th><th scope="col">Status</th><th scope="col">Checks</th></tr></thead><tbody id="cd-rows"></tbody></table></div>
+  <div id="cd-work"></div>
+ </section>
+ <section class="dt-card cd-detail" id="cd-detail" aria-labelledby="cd-d-h" tabindex="-1">
+  <h2 class="ae-h" id="cd-d-h">Choose a module</h2>
+  <div id="cd-body"><p class="kb-hint">Select a row to see its identification, relationships, history and XML.</p></div>
+ </section>
+</div>
+<section class="dt-card cd-graph" aria-labelledby="cd-g-h">
+ <h2 class="ae-h" id="cd-g-h">How the publications, modules and illustrations connect</h2>
+ <p>Each line is a reference in the XML: a publication module lists data modules, and data modules refer to illustrations and to each other. The description is in both publications: one module, written once, used twice.</p>
+ <div id="cd-graph" class="cd-svg"></div>
+</section>

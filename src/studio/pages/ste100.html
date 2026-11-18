@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="/studio/aero.css">
+<div class="st-head">
+ <div>
+  <h1>Simplified Technical English checker</h1>
+  <p>Check procedural or descriptive text against original rules modelled on the public summary of ASD-STE100 Issue 9, or against the site's house style. Each finding is marked in the text, with the rule, an explanation and a suggestion. Apply the suggestions to a corrected copy, then compare the two.</p>
+ </div>
+</div>
+<p class="fl-warn" role="note"><strong>Not a compliance check.</strong> ASD-STE100 is a standard of ASD, free on request from asd-ste100.org. This checker doesn't reproduce its dictionary: it uses an original project word list, so a word it accepts may still not be approved. No tool can certify that a text complies with the standard, and this one doesn't say so. Translations of controlled English are not STE.</p>
+<div id="ste-app" class="ste" data-mode="procedural">
+ <div class="st-bar" role="toolbar" aria-label="Writing mode and samples">
+  <fieldset class="ste-modes"><legend class="vh">Writing mode</legend>
+   <label><input type="radio" name="ste-mode" value="procedural" checked> ASD-STE100 rules: procedural writing</label>
+   <label><input type="radio" name="ste-mode" value="descriptive"> ASD-STE100 rules: descriptive writing</label>
+   <label><input type="radio" name="ste-mode" value="house"> House style (Microsoft-inspired)</label>
+  </fieldset>
+  <span class="sep" aria-hidden="true"></span>
+  <label class="ae-pick">Sample <select id="ste-sample"><option value="">Choose a sample</option><option value="proc">A procedure that needs work</option><option value="arf">ARF-1: remove the fan assembly (steps from the data module)</option><option value="descr">A description that needs work</option><option value="house">House style: a sentence that needs work</option></select></label>
+  <button class="btn line sm" type="button" id="ste-download">Download the findings</button>
+ </div>
+ <p class="st-status" id="ste-status" role="status" aria-live="polite"></p>
+ <div class="ste-grid">
+  <section class="dt-card" aria-labelledby="ste-in-h">
+   <h2 class="ae-h" id="ste-in-h">Your text</h2>
+   <label class="vh" for="ste-in">Text to check</label>
+   <textarea id="ste-in" rows="12" spellcheck="true"></textarea>
+   <p class="ae-hint">One instruction on each line. Start a safety instruction with WARNING: or CAUTION:, and a note with NOTE:.</p>
+   <h2 class="ae-h">Findings in the text</h2>
+   <div class="ste-marked" id="ste-marked" aria-live="polite"></div>
+  </section>
+  <section class="dt-card" aria-labelledby="ste-f-h">
+   <h2 class="ae-h" id="ste-f-h">Findings</h2>
+   <p class="ae-sum" id="ste-sum"></p>
+   <ol class="ste-list" id="ste-list"></ol>
+  </section>
+ </div>
+ <section class="dt-card ste-out" aria-labelledby="ste-fix-h">
+  <h2 class="ae-h" id="ste-fix-h">Corrected text</h2>
+  <p class="ae-hint">Suggestions you apply land here. Edit it freely: it is checked against your original below.</p>
+  <label class="vh" for="ste-fixed">Corrected text</label>
+  <textarea id="ste-fixed" rows="8" spellcheck="true"></textarea>
+  <p class="ann-btns"><button class="btn line sm" type="button" id="ste-copy">Start again from my text</button> <span id="ste-delta" class="ae-hint"></span></p>
+  <h3 class="ae-h3">Before and after</h3>
+  <div class="s1k-tbl" role="region" tabindex="0" aria-label="Before and after, sentence by sentence"><table class="ste-cmp"><thead><tr><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody id="ste-compare"></tbody></table></div>
+ </section>
+ <section class="dt-card" aria-labelledby="ste-r-h">
+  <h2 class="ae-h" id="ste-r-h">What this checker covers</h2>
+  <p>Rule numbers refer to Part 1 of ASD-STE100 Issue 9 (January 2025), as public summaries list them. The wording of each rule is in the standard; the explanations here are this project's own.</p>
+  <div class="s1k-tbl" role="region" tabindex="0" aria-label="Rules and how they are checked"><table><thead><tr><th scope="col">Rule</th><th scope="col">Subject</th><th scope="col">How it is checked</th><th scope="col">Notes</th></tr></thead><tbody id="ste-rules"></tbody></table></div>
+ </section>
+</div>

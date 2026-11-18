@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="/studio/aero.css">
+<div class="st-head">
+ <div>
+  <h1>S1000D editor and validator</h1>
+  <p>Open a data module from the CSDB of the fictional ARF-1 training rig, or start a new one. Edit its identification in a form or the whole module as XML, preview it, and check it layer by layer: well-formed XML, the official S1000D Issue 6 schema, identification, references, applicability and the project BREX. Download the XML when it passes.</p>
+ </div>
+</div>
+<p class="fl-warn" role="note"><strong>Fictional demonstration.</strong> The rig, its codes, part numbers and values are invented. A module that passes every check here is still not approved maintenance data: technical accuracy and approval need a qualified person.</p>
+<div class="st-bar" role="toolbar" aria-label="Open a module">
+ <label class="ae-pick">Open from the CSDB <select id="se-open"><option value="">Loading the CSDB…</option></select></label>
+ <span class="sep" aria-hidden="true"></span>
+ <button class="btn line sm" type="button" data-new="descript">New descriptive</button>
+ <button class="btn line sm" type="button" data-new="proced">New procedural</button>
+ <button class="btn line sm" type="button" data-new="ipd">New parts data</button>
+ <label class="btn line sm" for="se-file">Open an XML file</label><input class="st-file" id="se-file" type="file" accept=".xml,.XML,application/xml,text/xml">
+ <span class="sep" aria-hidden="true"></span>
+ <button class="btn line sm" type="button" id="se-save">Save in this browser</button>
+ <button class="btn ink sm" type="button" id="se-download">Download the XML</button>
+</div>
+<p class="st-status" id="se-status" role="status" aria-live="polite"></p>
+<div class="ae-edit" id="se-app">
+ <div class="ae-col">
+  <section class="dt-card ae-form" aria-labelledby="se-form-h">
+   <h2 class="ae-h" id="se-form-h">Identification and status</h2>
+   <p class="ae-code" id="se-code" aria-live="polite"></p>
+   <fieldset class="ae-dmc" id="se-dmc"><legend>Data module code</legend>
+    <label>Model<input data-a="modelIdentCode" maxlength="14" spellcheck="false"></label>
+    <label>System difference<input data-a="systemDiffCode" maxlength="4" spellcheck="false"></label>
+    <label>System<input data-a="systemCode" maxlength="3" spellcheck="false"></label>
+    <label>Subsystem<input data-a="subSystemCode" maxlength="1" spellcheck="false"></label>
+    <label>Sub-subsystem<input data-a="subSubSystemCode" maxlength="1" spellcheck="false"></label>
+    <label>Assembly<input data-a="assyCode" maxlength="4" spellcheck="false"></label>
+    <label>Disassembly<input data-a="disassyCode" maxlength="2" spellcheck="false"></label>
+    <label>Variant<input data-a="disassyCodeVariant" maxlength="3" spellcheck="false"></label>
+    <label>Information code<input data-a="infoCode" maxlength="3" spellcheck="false"></label>
+    <label>Variant<input data-a="infoCodeVariant" maxlength="1" spellcheck="false"></label>
+    <label>Item location<select data-a="itemLocationCode"><option>A</option><option>B</option><option>C</option><option>D</option><option>T</option></select></label>
+   </fieldset>
+   <div class="gd-two"><label>Issue number<input id="se-issue" maxlength="3" inputmode="numeric"></label><label>In work<input id="se-inwork" maxlength="2" inputmode="numeric"></label></div>
+   <div class="gd-two"><label>Issue date<input id="se-date" type="date"></label>
+    <label>Issue type<select id="se-type"><option value="new">new</option><option value="changed">changed</option><option value="revised">revised</option><option value="status">status</option><option value="rinstate-changed">rinstate-changed</option><option value="rinstate-revised">rinstate-revised</option><option value="rinstate-status">rinstate-status</option><option value="deleted">deleted</option></select></label></div>
+   <label>Technical name<input id="se-tech"></label>
+   <label>Information name<input id="se-info"></label>
+   <label>Applicability (display text)<input id="se-applic"></label>
+   <div class="gd-two"><label>Security classification<select id="se-sec"><option value="01">01 Unclassified</option><option value="02">02</option><option value="03">03</option></select></label>
+    <label>Quality assurance<select id="se-qa"><option value="unverified">Unverified</option><option value="tabtop">First verification: table-top</option><option value="onobject">First verification: on object</option><option value="ttandoo">First verification: both</option></select></label></div>
+  </section>
+  <section class="dt-card ae-src" aria-labelledby="se-xml-h">
+   <h2 class="ae-h" id="se-xml-h">XML source</h2>
+   <div class="ae-editor"><pre class="ae-gutter" id="se-gutter" aria-hidden="true"></pre><textarea id="se-xml" spellcheck="false" autocomplete="off" aria-label="XML source of the module" wrap="off"></textarea></div>
+   <p class="ae-hint">The form edits the XML in place, so comments, formatting and the DOCTYPE stay as you wrote them. Checks run as you type.</p>
+  </section>
+ </div>
+ <div class="ae-col">
+  <div class="ae-tabs" role="tablist" aria-label="Checks and preview">
+   <button role="tab" type="button" id="se-tab-checks" aria-controls="se-checks" aria-selected="true">Checks</button>
+   <button role="tab" type="button" id="se-tab-preview" aria-controls="se-preview" aria-selected="false" tabindex="-1">Preview</button>
+  </div>
+  <section class="dt-card ae-checks" id="se-checks" role="tabpanel" aria-labelledby="se-tab-checks">
+   <p class="ae-sum" id="se-sum"></p>
+   <ol class="ae-layers" id="se-layers"></ol>
+   <div class="ae-schema">
+    <h3>The official S1000D Issue 6 schema</h3>
+    <p id="se-schema-note">The official schemas aren't copied to this site, so this check runs on the site's server: it sends the XML you are editing to the validation function, which fetches the schema from www.s1000d.org, validates, and keeps nothing.</p>
+    <p class="ann-btns"><button class="btn line sm" type="button" id="se-schema">Check against the official schema</button></p>
+    <div id="se-schema-out" aria-live="polite"></div>
+   </div>
+  </section>
+  <section class="dt-card ae-preview s1k" id="se-preview" role="tabpanel" aria-labelledby="se-tab-preview" hidden></section>
+ </div>
+</div>

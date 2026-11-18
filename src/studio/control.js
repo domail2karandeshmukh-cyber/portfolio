@@ -13,7 +13,7 @@
   /** The control fields by name, as the interface says them inside a sentence. */
   var FIELDS = { id: K("document ID"), title: K("title"), version: K("version"), author: K("author"), owner: K("owner"), reviewer: K("reviewer") };
   /** The kinds of document the checks know, as the interface names them. */
-  var KINDS = { "how-to": K("how-to"), maintenance: K("maintenance"), troubleshooting: K("troubleshooting"), reference: K("reference"), concept: K("concept"), faq: K("FAQ"), "release-notes": K("release notes") };
+  var KINDS = { "how-to": K("how-to"), maintenance: K("maintenance"), troubleshooting: K("troubleshooting"), reference: K("reference"), concept: K("concept"), faq: K("FAQ"), "release-notes": K("release notes"), "change record": K("change record") };
   function fieldName(k) { return T(FIELDS[k] || k); }
   /** The sections a document of each type has to have. Headings are matched without case. */
   var REQUIRED = {
@@ -21,6 +21,7 @@
     maintenance: ["Before you start", "Tools and materials", "Steps", "Acceptance criteria", "Check that it worked"],
     troubleshooting: ["Why it happens", "Fix it"],
     reference: [], concept: [], faq: [], "release-notes": [],
+    "change record": ["Reason for change", "Affected data", "Effectivity", "Verification", "Approval"],
   };
   var D = null;          // {source, meta:{...}, safety, checks:{}, reviews:[], revisions:[], log:[]}
 
