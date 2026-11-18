@@ -113,6 +113,15 @@ def fetch_schemas(names, folder):
         for loc in re.findall(rb'<xs:(?:include|import)[^>]*schemaLocation="([^"]+)"', data):
             loc = loc.decode()
             todo.append(loc if loc.startswith("http") else url.rsplit("/", 1)[0] + "/" + loc)
+    xml_xsd = os.path.join(folder, "xml.xsd")
+    if not os.path.exists(xml_xsd):
+        req = urllib.request.Request("https://www.w3.org/2001/xml.xsd", headers={"User-Agent": "karandeshmukh.dev CSDB check"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            open(xml_xsd, "wb").write(r.read())
+    data = open(xml_xsd, "rb").read()
+    done["xml.xsd"] = {"url": "https://www.w3.org/2001/xml.xsd", "sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data)}
+    for n, v in sorted(done.items()):
+        print(f"schema {n}: {v['bytes']} bytes, sha256 {v['sha256'][:16]}..., from {v['url']}", flush=True)
     return done
 
 
