@@ -390,9 +390,12 @@ def main(argv):
             results[f] += check_brex(t, brex)
         if default_brex is not None:
             results[f] += check_brex(t, default_brex, "default-brex", "S1000D default BREX: ")
-        for layer in ("refs", "applic", "brex") + (("default-brex",) if default_brex is not None else ()):
+        # A BREX module is checked against the default BREX, not against itself: its project-BREX layer is left empty.
+        own = ("brex",) if t.getroot().find("content/brex") is None else ()
+        for layer in ("ident", "refs", "applic") + own + (("default-brex",) if default_brex is not None else ()):
             if not any(x["layer"] == layer and x["level"] in ("error", "warning") for x in results[f]):
-                results[f].append(finding("pass", layer, {"refs": "Every reference resolves.", "applic": "Every applicability assertion uses a defined property and value.",
+                results[f].append(finding("pass", layer, {"ident": "File name, code, issue, language, date and issue type agree.",
+                                                          "refs": "Every reference resolves.", "applic": "Every applicability assertion uses a defined property and value.",
                                                           "brex": "No project business rule is broken.",
                                                           "default-brex": "No rule of the S1000D Issue 6 default BREX is broken."}[layer]))
         results[f].append(finding("human", "review", "Technical accuracy and formal approval need a qualified person. No program checks them."))
