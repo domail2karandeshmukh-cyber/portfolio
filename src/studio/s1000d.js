@@ -478,7 +478,7 @@ var S1K = (function () {
         html += "<h4>" + esc(g[2]) + "</h4>";
         if (!rows.length) { html += "<p>" + G("None") + "</p>"; return; }
         html += '<div class="s1k-tbl" role="region" tabindex="0" aria-label="' + esc(g[2]) + '"><table><thead><tr><th scope="col">' + G("Name") + '</th><th scope="col">' + G("Identification") + '</th><th scope="col">' + G("Quantity") + "</th></tr></thead><tbody>" +
-          rows.map(function (x) { return '<tr id="s1k-' + esc(x.getAttribute("id") || "") + '"><td>' + esc(text($1(x, "name"))) + applicTag(x) + "</td><td><code>" + esc(text($1(x, "partNumber"))) + "</code></td><td>" + esc(text($1(x, "reqQuantity"))) + "</td></tr>"; }).join("") + "</tbody></table></div>";
+          rows.map(function (x) { return '<tr id="s1k-' + esc(x.getAttribute("id") || "") + '"' + (chg(x) ? ' class="' + chg(x).trim() + '"' : "") + "><td>" + esc(text($1(x, "name"))) + applicTag(x) + "</td><td><code>" + esc(text($1(x, "partNumber"))) + "</code></td><td>" + esc(text($1(x, "reqQuantity"))) + "</td></tr>"; }).join("") + "</tbody></table></div>";
       });
       var safe = $1(pr, "reqSafety");
       if (safe) html += "<h4>" + G("Safety conditions") + "</h4>" + ($1(safe, "noSafety") ? "<p>" + G("None") + "</p>" : blocks($1(safe, "safetyRqmts") || safe));
