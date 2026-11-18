@@ -120,13 +120,19 @@
   }
   /* ---------- Print ---------- */
   function printAll() {
+    renderAll();
+    window.print();
+    setTimeout(function () { document.body.classList.remove("ie-printing-all"); $("#ie-printarea").innerHTML = ""; }, 500);
+  }
+  /** Puts the whole publication, filtered for the chosen product, where the print stylesheet shows it. */
+  function renderAll() {
     var area = $("#ie-printarea"), html = '<header class="ie-ptitle"><h1>' + esc(pm.id.pmTitle) + "</h1><p><code>" + esc(pm.id.code) + "</code> · " + esc(T("issue {n}", { n: pm.id.issue })) + " · " + esc(pm.id.date) + (product ? " · " + esc(product.label) : "") + "</p><p>" + esc(pm.id.distribution) + "</p></header>";
     entries.forEach(function (e) { e.items.forEach(function (it) { if (it.item) html += '<section class="ie-psec">' + S1K.header(it.item.id) + '<div class="s1k-body">' + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; }); });
     area.innerHTML = html;
     document.body.classList.add("ie-printing-all");
-    window.print();
-    setTimeout(function () { document.body.classList.remove("ie-printing-all"); area.innerHTML = ""; }, 500);
   }
+  // For scripts/aero/publish.py, which prints the publications to PDF with the same rendering.
+  window.IETM = { renderAll: function () { renderAll(); return pm.id.code; }, show: function (code) { var x = db.latest(code); if (x) show(x); return !!x; } };
 
   function choosePub(code) {
     pm = db.latest(code);
