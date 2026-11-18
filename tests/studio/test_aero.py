@@ -290,7 +290,7 @@ with sync_playwright() as p:
     pg.click(".ae-rail .ae-dot[data-i='7']"); pg.wait_for_timeout(200)
     check("the rail jumps to step 8, IETM and IPC", pg.is_visible("#step-8") and pg.get_attribute(".ae-rail .ae-dot[data-i='7']", "aria-current") == "step")
     pg.evaluate("document.querySelector('#film video').muted = true")
-    pg.click("#step-8 .ae-seek"); pg.wait_for_timeout(1200)
+    pg.click("#step-8 .ae-seek"); pg.wait_for_timeout(2500)
     t = pg.evaluate("document.querySelector('#film video').currentTime")
     check("Watch it in the film plays the IETM part of the film", 54.8 <= t <= 58, t)
     pg.evaluate("document.querySelector('#film video').pause()")
@@ -310,7 +310,8 @@ with sync_playwright() as p:
     from pypdf import PdfReader
     rd = PdfReader(io.BytesIO(pdf)); first = rd.pages[0].extract_text() + rd.pages[1].extract_text()
     check("the maintenance PDF opens with a title page, highlights and the list of effective data modules", "Unverified" in first and "Highlights of issue 002" in first and "List of effective data modules" in first, first[:200])
-    check("the maintenance PDF has bookmarks, tags and a title that says it is fictional", len(rd.outline) > 5 and "/StructTreeRoot" in rd.trailer["/Root"] and "fictional" in (rd.metadata.title or ""), rd.metadata.title)
+    def marks(o): return sum(marks(x) if isinstance(x, list) else 1 for x in o)
+    check("the maintenance PDF has bookmarks, tags and a title that says it is fictional", marks(rd.outline) > 20 and "/StructTreeRoot" in rd.trailer["/Root"] and "fictional" in (rd.metadata.title or ""), rd.metadata.title)
     blank = [i + 1 for i, pgx in enumerate(rd.pages) if len(_re.sub(r"\s+|Fictional demonstration.*?Page \d+ of \d+", "", pgx.extract_text())) < 15]
     check("no blank page in the maintenance PDF", not blank, blank)
 

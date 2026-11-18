@@ -159,7 +159,7 @@ a:hover .cg rect,a:focus .cg rect{stroke:#1d4ed8;stroke-width:2}
 .ip-svg.zoomed{max-height:72vh;cursor:grab}.ip-svg.dragging{cursor:grabbing;user-select:none}
 .ip-pichead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.4rem .8rem;margin:0 0 .6rem}
 .ip-pichead .ae-h{margin:0}
-.ip-zoom{display:flex;align-items:center;gap:.35rem;margin:0}
+.ip-zoom{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:0}
 .ip-zoom output{font:600 .8rem var(--sans);min-width:3.2em;text-align:center;color:var(--ink2)}
 .ip-svg [data-item],.ie-main [data-item]{cursor:pointer}
 .ip-svg [data-item]:focus{outline:none}

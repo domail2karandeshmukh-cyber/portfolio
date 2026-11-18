@@ -36,6 +36,7 @@ STYLE = """
 .film-ring.on{opacity:1}
 #film-fade{position:fixed;inset:0;z-index:9989;pointer-events:none;transition:opacity .45s ease-out}
 #main{transition:transform .9s cubic-bezier(.4,0,.2,1)}
+.ae-start-top .ae-film{display:none}
 """
 
 
@@ -128,17 +129,18 @@ def clear(f, selector):
 # ---------- The scenes ----------
 
 def overview(f):
-    # Narration: the rig (about 6 s), then its CSDB (about 8.5 s), over the drawing of how the CSDB fits together.
+    # Narration: the rig (about 6 s), then its CSDB (about 8.5 s): the guided path of nine steps, then the drawing of
+    # how the CSDB fits together. The page's own player is left out of the picture: a film inside the film confuses.
     f.run(0.6)
     f.caption('<b class="n">1</b>One fictional rig, documented as <mark>an S1000D Issue 6 CSDB</mark>.')
     f.run(2.6)
     f.js("() => __film.close(true)")
-    f.glide(f.top("h2.st-h2", "The tools") - 24, 1200)
-    f.run(3.0)
+    f.glide(f.top(".ae-tour") - 24, 1200)
+    f.run(4.2)
     f.glide(f.top("h2.st-h2", "One rig, one CSDB") - 24, 1300)
     f.run(1.6)
     ring(f, ".ae-diagram", 8)
-    f.run(8.0)
+    f.run(6.8)
 
 
 def csdb(f):

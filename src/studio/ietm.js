@@ -169,6 +169,10 @@
     var html = frontMatter(list);
     list.forEach(function (it, k) { html += '<section class="ie-psec" id="ie-sec-' + k + '">' + S1K.header(it.item.id) + '<div class="s1k-body"' + S1K.langAttr(it.item.id) + ">" + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; });
     area.innerHTML = html;
+    // In the whole publication each module numbers its own tables, so a table's region is named with its module too.
+    Array.prototype.forEach.call(area.querySelectorAll(".ie-psec"), function (sec, k) {
+      Array.prototype.forEach.call(sec.querySelectorAll('.s1k-tbl[role="region"]'), function (r) { r.setAttribute("aria-label", r.getAttribute("aria-label") + ", " + list[k].item.id.title); });
+    });
     document.body.classList.add("ie-printing-all");
   }
   // For scripts/aero/publish.py, which prints the publications to PDF with the same rendering.

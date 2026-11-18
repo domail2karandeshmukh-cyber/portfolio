@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-18T17:22:40Z",
+ "checked": "2026-11-18T20:12:37Z",
  "issue": "S1000D Issue 6",
  "libxml2": "2.14.6",
  "schemas": {
@@ -72,36 +72,48 @@
  "schemaRun": true,
  "defaultBrexRun": true,
  "defaultBrex": "DMC-S1000D-H-04-10-0301-00A-022A-D (applied)",
- "localChecked": "2026-11-18T17:23:32Z",
+ "localChecked": "2026-11-18T20:12:23Z",
  "errors": 0,
  "warnings": 0,
  "sha256": {
-  "DMC-ARFRIG-A-00-00-00-00A-00PA-D_001-00_EN-US.XML": "c49f98133763bb05f42ffaaf91fd63e0d47336a63dd50cd6c9c34de8d8feb485",
-  "DMC-ARFRIG-A-00-00-00-00A-00QA-D_001-00_EN-US.XML": "3a68f55c537b50f46f881e3ca21cf354227c5d1d6233aadc54dac092b6157662",
-  "DMC-ARFRIG-A-00-00-00-00A-00WA-D_001-00_EN-US.XML": "c94d75f24a0f702c50aa7b732df27d954e15c4435fef788cd014569f4ea60bef",
-  "DMC-ARFRIG-A-00-00-00-00A-022A-D_001-00_EN-US.XML": "4fb665ebed401991019ed07f42df2e7d8bc0c854b057b252b5806a3d3869fda3",
-  "DMC-ARFRIG-A-00-00-00-00A-040A-D_001-00_EN-US.XML": "b81fcfbf3d77f884aefda92225dee24a22cf94e80477f3b9d8c842c1db254c54",
-  "DMC-ARFRIG-A-00-00-00-00A-040A-D_002-00_EN-US.XML": "2e738ffdedf478e4a0004ea1ac5217bf2d2640e09c3abc7ba8e0539b5d84fdf4",
-  "DMC-ARFRIG-A-00-00-00-00A-131A-A_001-00_EN-US.XML": "9f57e25f0f0172f3823ae2c3dccbb9fb29e65a1f7d3a67921fb0da76e2d82ea1",
-  "DMC-ARFRIG-A-00-00-00-00A-941A-D_001-00_EN-US.XML": "8674ffea4a76c0dc0cb095a11ea20d6cbf2a71f61626ed688d2b8b89519414d1",
-  "DMC-ARFRIG-A-00-00-00-00A-941A-D_002-00_EN-US.XML": "3ba20f24f0cb1f02f5122b65e56f6d032937b11c8e89fd74dae93bd43efe0711",
-  "DMC-ARFRIG-A-20-00-00-00A-271A-A_001-00_EN-US.XML": "0f650f8329db2205202122a711572dd94c46860569fa1c06dd6a4695667c7339",
-  "DMC-ARFRIG-A-20-00-00-00A-340A-A_001-00_EN-US.XML": "013fb7618c85114cb8721743953d76bf4f8da3bbe7c6c2397d56bdf5f70d90cd",
-  "DMC-ARFRIG-A-20-00-00-00A-421A-A_001-00_EN-US.XML": "1941e349569b4d2d3240dabc1ec6d70bfaa60ca37ff94e4ce67c7bb87f3d9a16",
-  "DMC-ARFRIG-A-20-00-00-00A-520A-A_001-00_EN-US.XML": "3aaaf9b481a95e3582e57db6bc6b197c128a14b99ca0415e8747be7aff9fbbe2",
-  "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML": "ba6a7eea1a3d85af28002b6aca76e0ae652bfef88bb6c01b97b1af023d109cee",
-  "DMC-ARFRIG-A-20-00-00-00A-720A-A_001-00_EN-US.XML": "28c08cbb9bae832202858ca0ee47829bd681cc17052fd23f5b7468ee3021cd73",
-  "DMC-ARFRIG-A-20-00-00-00A-720A-A_002-00_EN-US.XML": "23d43305e6d634a8f7c9034345fee30bff66ca1b1b2eea5a4338e873a011e59f",
-  "DMC-ARFRIG-A-30-00-00-00A-310A-A_001-00_EN-US.XML": "ff38ba81d3f7a29aec1252e06ba4141464c547d62aea7fff82bf83efa9262627",
-  "PMC-ARFRIG-0DEMO-00001-00_001-00_EN-US.XML": "bf170dfcdc9a80eeec204ea4358956a1d7a6a8123644b405cf63570c2f972ebb",
-  "PMC-ARFRIG-0DEMO-00001-00_002-00_EN-US.XML": "585f096f3636a7514efb45418ebfb127d431d8c2c757a7a3e0d67ffcab55cfac",
-  "PMC-ARFRIG-0DEMO-00002-00_001-00_EN-US.XML": "42b68efbb3fc06c4c37f14b92b9b21eda5aa18c6f776a8eb811ebe5e967ab380",
-  "PMC-ARFRIG-0DEMO-00002-00_002-00_EN-US.XML": "6bcb25f393ee345d45583b69cc1d2011571f8f9e4241177b4c61cab010468b1e"
+  "DMC-ARFRIG-A-00-00-00-00A-00PA-D_001-00_EN-US.XML": "8e9119e8cffc89bbca79e5c88aa52a60269083c81861091cff13d7356982ad41",
+  "DMC-ARFRIG-A-00-00-00-00A-00PA-D_002-00_EN-US.XML": "73b15c374af41e3e737fdf94d80064a452d51554919a460f1dfc9008aabd8638",
+  "DMC-ARFRIG-A-00-00-00-00A-00QA-D_001-00_EN-US.XML": "1fecf24f9d2c9a88b8d9d990634ff3d1ee5ae7781bbbab75d653a2cf46c5bef9",
+  "DMC-ARFRIG-A-00-00-00-00A-00WA-D_001-00_EN-US.XML": "7482326cc3608d43802b35d68d35bbcd7e92d579e7b46402259a30c21d13a23a",
+  "DMC-ARFRIG-A-00-00-00-00A-00WA-D_002-00_EN-US.XML": "0724bf5685d0b845fd535539a535a225d4d351ea9a8e712171dcd6dd457a1396",
+  "DMC-ARFRIG-A-00-00-00-00A-022A-D_001-00_EN-US.XML": "56ab690a233f5b07361f45650511125cd69898e189e966e1227c6806dd40f5b0",
+  "DMC-ARFRIG-A-00-00-00-00A-040A-D_001-00_EN-US.XML": "bbbdec0b6476554b44605ee52dfc19af914b2c99ccd81720b352040254e16f56",
+  "DMC-ARFRIG-A-00-00-00-00A-040A-D_002-00_EN-US.XML": "f23348e705dc16721f7e1f7e402e2e12cb4c11072d983012b594f94455f6ab66",
+  "DMC-ARFRIG-A-00-00-00-00A-131A-A_001-00_EN-US.XML": "8b3ef8dffe50eefb26d0c2622f8dd5462206e234f65ae4bf96bb0ba8baad2742",
+  "DMC-ARFRIG-A-00-00-00-00A-941A-D_001-00_EN-US.XML": "f6ce80ebd2319745e509fd784a9c76c5fa5b5fde833c29e65c306d812741a8b6",
+  "DMC-ARFRIG-A-00-00-00-00A-941A-D_002-00_EN-US.XML": "adf7d777d99ce6c43ef1d692df00080d5415745c62d4f370cfda7ca439bfa5b2",
+  "DMC-ARFRIG-A-20-00-00-00A-271A-A_001-00_EN-US.XML": "ca40172c86b79d9a80eaa5a187f62bb7897538f966a5fc498190b698fe81757c",
+  "DMC-ARFRIG-A-20-00-00-00A-340A-A_001-00_EN-US.XML": "48530136607b61b5368dd32e2918dc5ba2dabf822974f7f73e13f4eda1f71736",
+  "DMC-ARFRIG-A-20-00-00-00A-421A-A_001-00_EN-US.XML": "b9c4524af67c1dde4d32f5c7c398d8333cc7d37d4d04e5aa6ceb655370437f44",
+  "DMC-ARFRIG-A-20-00-00-00A-520A-A_001-00_EN-US.XML": "d7445418cf3e5605d4a43189e68e478009553535c768f18dfa6129965bbcacd4",
+  "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML": "6b55b4b9db5efea43acf2e5dcb140181ba693322d6d210997f6e39e5bb99aa9f",
+  "DMC-ARFRIG-A-20-00-00-00A-720A-A_001-00_EN-US.XML": "6d056bd6e72cb793a03b0a5ee06c6bc1da5b9c96b1071bc03b51e6cd09e7ce1a",
+  "DMC-ARFRIG-A-20-00-00-00A-720A-A_002-00_EN-US.XML": "0880485219dbe6e83557daeb9cdac984ae324d42f54e780f2f28bddd034a9e47",
+  "DMC-ARFRIG-A-30-00-00-00A-310A-A_001-00_EN-US.XML": "bf945939f3c70d56ec14bf1528c5deb665ed5a2d9c46edcc63f7ef4c28ee0b9b",
+  "PMC-ARFRIG-0DEMO-00001-00_001-00_EN-US.XML": "9db8f39713340d712a36efbe54434efb470a23eaedfba9aa159229aa69ccf331",
+  "PMC-ARFRIG-0DEMO-00001-00_002-00_EN-US.XML": "1a29d02c9ea310dde6c7da53af7558c4fca42ab2e718e8a88eb09eb12a6becb7",
+  "PMC-ARFRIG-0DEMO-00002-00_001-00_EN-US.XML": "a0b6f858e52542b4c8e741056264927aa647c24a72f316487f8763c39a883435",
+  "PMC-ARFRIG-0DEMO-00002-00_002-00_EN-US.XML": "93c6a6759a938e1a99dd513fc7225299a0b98dac16a9eb3cc9ed55c983ed0eb1"
  },
  "results": {
   "DMC-ARFRIG-A-00-00-00-00A-00PA-D_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-00PA-D_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -110,6 +122,7 @@
   "DMC-ARFRIG-A-00-00-00-00A-00QA-D_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -118,6 +131,16 @@
   "DMC-ARFRIG-A-00-00-00-00A-00WA-D_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-00WA-D_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -126,14 +149,15 @@
   "DMC-ARFRIG-A-00-00-00-00A-022A-D_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
-   "brex": "pass",
    "default-brex": "pass"
   },
   "DMC-ARFRIG-A-00-00-00-00A-040A-D_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -142,6 +166,7 @@
   "DMC-ARFRIG-A-00-00-00-00A-040A-D_002-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -150,6 +175,7 @@
   "DMC-ARFRIG-A-00-00-00-00A-131A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -158,6 +184,7 @@
   "DMC-ARFRIG-A-00-00-00-00A-941A-D_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -166,6 +193,7 @@
   "DMC-ARFRIG-A-00-00-00-00A-941A-D_002-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -174,6 +202,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-271A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -182,6 +211,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-340A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -190,6 +220,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-421A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -198,6 +229,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-520A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -206,6 +238,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -214,6 +247,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-720A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -222,6 +256,7 @@
   "DMC-ARFRIG-A-20-00-00-00A-720A-A_002-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -230,6 +265,7 @@
   "DMC-ARFRIG-A-30-00-00-00A-310A-A_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -238,6 +274,7 @@
   "PMC-ARFRIG-0DEMO-00001-00_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -246,6 +283,7 @@
   "PMC-ARFRIG-0DEMO-00001-00_002-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -254,6 +292,7 @@
   "PMC-ARFRIG-0DEMO-00002-00_001-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
@@ -262,6 +301,7 @@
   "PMC-ARFRIG-0DEMO-00002-00_002-00_EN-US.XML": {
    "wellformed": "pass",
    "schema": "pass",
+   "ident": "pass",
    "refs": "pass",
    "applic": "pass",
    "brex": "pass",
