@@ -30,10 +30,9 @@
 <header class="nav stuck">
  <div class="wrap nav-in">
   <a class="brand" href="/">Karan Deshmukh</a>
-  <nav aria-label="Site">
-   <a href="/docs">Library</a><a href="/style">Style guide</a><a href="/workbench" aria-current="page">Workbench</a><a href="/studio">Studio</a>{{pmenu}}<a href="/#contact">Contact</a>
-  </nav>
+  {{sitenav}}
   <div class="nav-act">
+   {{mnav}}
    <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
   </div>
  </div>
@@ -156,5 +155,6 @@
 <script src="/style.js"></script>
 <script src="/studio/kit.js"></script>
 <script src="/workbench.js"></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

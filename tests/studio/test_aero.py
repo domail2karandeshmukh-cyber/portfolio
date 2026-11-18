@@ -223,7 +223,7 @@ with sync_playwright() as p:
     m.close()
 
     # ---------- downloads, and the offline IETM
-    pg.goto(BASE + "/studio/aerospace", wait_until="networkidle")
+    pg.goto(BASE + "/studio/aerospace#all-downloads", wait_until="networkidle")
     links = pg.eval_on_selector_all(".ae-dl a", "as => as.map(a => a.getAttribute('href'))")
     okd = []
     for h in links:
@@ -281,8 +281,24 @@ with sync_playwright() as p:
     check("a link opens the change record in Document Control", "EC-ARF-01" in pg2.inner_text("main"), pg2.inner_text("#dc-status") if pg2.locator("#dc-status").count() else "")
     pg2.close()
 
+    # ---------- Version 10: the overview in sections. One section shows at a time; the old links open the section that holds them.
+    pg.goto(BASE + "/studio/aerospace", wait_until="networkidle"); pg.wait_for_timeout(400)
+    shown = lambda: pg.evaluate("Array.from(document.querySelectorAll('.ae-panel')).filter(p => !p.hidden).map(p => p.id)")
+    check("the overview opens on its first section, with a menu of ten", shown() == ["overview"] and pg.locator(".ae-secnav a[data-panel]").count() == 10, shown())
+    pg.click(".ae-secnav a[data-panel='illustrations']"); pg.wait_for_timeout(300)
+    figs = pg.evaluate("Array.from(document.querySelectorAll('#illustrations .ae-gallery img')).map(i => i.complete && i.naturalWidth > 0)")
+    check("the menu opens the illustrations: seven drawings, every one loaded", shown() == ["illustrations"] and len(figs) == 7 and all(figs) and pg.url.endswith("#illustrations"), figs)
+    old_links = {}
+    for h, want in (("#change", "engineering-change"), ("#downloads", "all-downloads"), ("#step-3", "guided"), ("#film", "guided"), ("#standards", "standards")):
+        pg.goto(BASE + "/studio/aerospace" + h, wait_until="networkidle"); pg.wait_for_timeout(250); old_links[h] = shown()
+    check("old links open the section that holds them", all(old_links[h] == [w] for h, w in (("#change", "engineering-change"), ("#downloads", "all-downloads"), ("#step-3", "guided"), ("#film", "guided"), ("#standards", "standards"))), old_links)
+    srt = urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-walkthrough.srt").read().decode()
+    check("the captions are also offered as SRT, numbered, with commas before the milliseconds", srt.startswith("1\n00:00:00,") and " --> " in srt, srt[:60])
+    pg.goto(BASE + "/studio/aerospace#video", wait_until="networkidle"); pg.wait_for_timeout(250)
+    check("the video section has the transcript", shown() == ["video"] and len(pg.inner_text("#video .ae-transcript")) > 400)
+
     # ---------- the overview: the guided path, the evidence, and a link for each step
-    pg.goto(BASE + "/studio/aerospace", wait_until="networkidle"); pg.wait_for_timeout(600)
+    pg.goto(BASE + "/studio/aerospace#guided", wait_until="networkidle"); pg.wait_for_timeout(600)
     vis = pg.evaluate("Array.from(document.querySelectorAll('.ae-step')).filter(s => !s.hidden).map(s => s.id)")
     check("the guided path has nine steps and shows one at a time", pg.locator(".ae-step").count() == 9 and vis == ["step-1"], vis)
     pg.click(".ae-nav [data-go='1']"); pg.wait_for_timeout(200)

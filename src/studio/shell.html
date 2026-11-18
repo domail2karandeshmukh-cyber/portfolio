@@ -29,11 +29,10 @@
 <header class="nav stuck">
  <div class="wrap nav-in">
   <a class="brand" href="/" translate="no">Karan Deshmukh</a>
-  <nav aria-label="Site">
-   <a href="/docs">Library</a><a href="/workbench">Workbench</a><a href="/studio"{{studiocurrent}}>Studio</a>{{pmenu}}<a href="/#contact">Contact</a>
-  </nav>
+  {{sitenav}}
   <div class="nav-act">
    {{lang}}
+   {{mnav}}
    <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
   </div>
  </div>
@@ -50,5 +49,6 @@
 </footer>
 <noscript><p class="wrap st-nojs">The studio needs JavaScript.</p></noscript>
 {{scripts}}
+<script src="/nav.js" defer></script>
 </body>
 </html>

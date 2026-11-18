@@ -1,6 +1,8 @@
 // Builds karandeshmukh.dev from content/site.json:
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
+import { siteNav } from "./lib/nav.mjs";
+import { buildHubs } from "./lib/hubs.mjs";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -74,7 +76,8 @@ const liveSites = [
 const pmenu = (all) => `<details class="pm"><summary>Projects</summary><div class="pm-menu">${liveSites
   .map((p) => `<a href="${p.href}" target="_blank" rel="noopener"><b translate="no">${esc(p.name)}</b><small>${esc(p.label)}</small></a>`)
   .join("")}<a class="pm-all" href="${all}">All projects</a></div></details>`;
-const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects") };
+const navEn = siteNav({ cv: S.cv, projects: pmenu("/#projects") });
+const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
 const library = await buildLibrary({ C, OUT, source, common });
 // The style guide: its rules, and what the check found in each document of the library.
 const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/main/src/style.js` });
@@ -92,7 +95,7 @@ for (const t of C.workbench.templates) {
 }
 const bench = await template("src/workbench.html");
 await fs.mkdir(`${OUT}/workbench`, { recursive: true });
-await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
+await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, sitenav: navEn.desktop, mnav: navEn.phone, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
 await library.extra({ path: "/workbench", title: "Workbench", description: "Write a document, check it against the style guide as you type, and publish it for each reader as Markdown, HTML or DITA.", only: "search",
   kind: "Tool", shelf: "Library", text: [{ id: "", title: "", text: "Write a document in Markdown, check it against the style guide as you type, and publish it for more than one reader as Markdown, as HTML for a help center, or as DITA. It runs in your browser." }] });
 // The Documentation Studio's fictional scenarios join the search, labelled as demonstrations, so that a search for
@@ -277,6 +280,7 @@ for (const loc of locales) {
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
     voice: json(recorded[loc.code] || {}),
     pmenu: pmenu("#projects"),
+    ...(() => { const n = siteNav({ cv: S.cv, projects: pmenu("#projects"), home: true, lang: loc.code }); return { sitenav: n.desktop, mnav: n.phone }; })(),
     livelinks: liveSites.map((p) => `<a href="${p.href}" target="_blank" rel="noopener" translate="no">${esc(p.name)}</a>`).join(""),
   };
   for (const d of C.docs) tokens[`doc:${d.id}`] = byId[d.id].url;
@@ -312,14 +316,14 @@ for (const loc of locales) {
 }
 
 // doc.js and style.js are the document model and the style checker. The build uses them, and so does the workbench in a browser.
-for (const f of ["site.css", "app.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+for (const f of ["site.css", "app.js", "nav.js", "hubs.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
 const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
-const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls];
+const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
+const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`
@@ -327,6 +331,10 @@ await fs.writeFile(
 
 await socialCard({ S, OUT });
 await cv({ C, OUT });
+
+// The industry pages, the downloads center and the videos page: written last, when every file they list exists.
+await buildHubs({ C, OUT, library: { byId: library.byId, aeroDownloads: studio.aeroDownloads }, extra: library.extra });
+await library.finish();
 
 // What was built
 const files = await Promise.all((await fs.readdir(OUT, { recursive: true, withFileTypes: true })).filter((f) => f.isFile()).map(async (f) => [path.join(f.parentPath, f.name), (await fs.stat(path.join(f.parentPath, f.name))).size]));
