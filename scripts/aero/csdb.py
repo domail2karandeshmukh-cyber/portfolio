@@ -303,12 +303,12 @@ def brex():
 <brex>
 <commonInfo><para>Project business rules for the fictional ARF-1 training rig. These rules add to the S1000D Issue 6 default BREX
 (DMC-S1000D-H-04-10-0301-00A-022A-D), which is not copied here.</para></commonInfo>
+<snsRules><snsDescr>{sns}</snsDescr></snsRules>
 <contextRules>
 <structureObjectRuleGroup>
 {chr(10).join(rules)}
 </structureObjectRuleGroup>
 <notationRuleList><notationRule><notationName allowedNotationFlag="1">svg</notationName><objectUse>Illustrations are SVG.</objectUse></notationRule></notationRuleList>
-<snsRules><snsDescr>{sns}</snsDescr></snsRules>
 </contextRules>
 </brex>
 </content>"""
