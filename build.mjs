@@ -3,6 +3,7 @@
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
 import { siteNav } from "./lib/nav.mjs";
 import { buildHubs } from "./lib/hubs.mjs";
+import { buildStandards } from "./lib/standards.mjs";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -323,7 +324,7 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`
@@ -334,6 +335,7 @@ await cv({ C, OUT });
 
 // The industry pages, the downloads center and the videos page: written last, when every file they list exists.
 await buildHubs({ C, OUT, library: { byId: library.byId, aeroDownloads: studio.aeroDownloads }, extra: library.extra });
+const standardUrls = await buildStandards({ extra: library.extra });
 await library.finish();
 
 // What was built
