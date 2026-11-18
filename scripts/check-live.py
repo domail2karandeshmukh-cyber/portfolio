@@ -15,7 +15,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 site = json.loads((ROOT / "content/site.json").read_text(encoding="utf-8"))
 home = (sys.argv[1] if len(sys.argv) > 1 else site["site"]["url"]).rstrip("/")
 pages = [(home + p, 600) for p in ["/", "/fr", "/docs", "/style", "/workbench", "/samples/core42-portal", "/docs/trustnav/how-it-works", "/recruiters",
-                                  "/studio", "/studio/screenshots", "/studio/guides", "/studio/video", "/studio/kb", "/studio/control", "/studio/dita", "/studio/flagship"]]
+                                  "/studio", "/studio/screenshots", "/studio/guides", "/studio/video", "/studio/kb", "/studio/control", "/studio/dita", "/studio/flagship",
+                                  "/studio/aerospace", "/studio/s1000d", "/studio/ste100", "/studio/csdb", "/studio/ipc", "/studio/ietm", "/fr/studio/ietm"]]
 pages += [(p["live"], 300) for p in site["projects"] if p.get("live")]
 pages += [(h, 300) for m in site["more"] for _, h in m["links"] if h.startswith("http")]
 failed = []
@@ -45,6 +46,15 @@ with sync_playwright() as p:
             except Exception as e:
                 note(False, f"{url} on a {name}: {str(e)[:140]}")
             page.close()
+
+    # The S1000D editor's schema check, on the server: a module of the site's CSDB passes against the official schema
+    # fetched from s1000d.org, and the same module with an element the schema doesn't allow fails.
+    try:
+        r = browser.new_context().request.get(home + "/api/s1000d?selftest=1", timeout=60000)
+        body = r.json() if r.status == 200 else {}
+        note(r.status == 200 and body.get("ok") is True, f"the official-schema check works on the server: the published module {'passes' if body.get('published', {}).get('valid') else 'does not pass'}, the altered one {'fails' if body.get('altered', {}).get('valid') is False else 'does not fail'} (HTTP {r.status})")
+    except Exception as e:
+        note(False, f"the official-schema check could not be reached: {str(e)[:120]}")
 
     # April, on the live portfolio. The page is watched for every sound it starts, with the browser's usual rule
     # that a page makes sound only after a click.

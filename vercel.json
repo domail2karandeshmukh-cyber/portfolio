@@ -6,7 +6,7 @@
   "functions": {
     "api/april.js": { "maxDuration": 30 },
     "api/rewrite.js": { "maxDuration": 30, "includeFiles": "content/desk/**" },
-    "api/s1000d.js": { "maxDuration": 30 }
+    "api/s1000d.js": { "maxDuration": 30, "includeFiles": "content/aerospace/csdb/DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML" }
   },
   "redirects": [
     { "source": "/rewrite", "destination": "/#rewrite", "permanent": false },

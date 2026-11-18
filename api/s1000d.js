@@ -79,12 +79,52 @@ function limited(req) {
   return false;
 }
 
+/** Checks one module's text. Returns [HTTP status, body]. */
+async function check(text) {
+  const bad = doctypeProblem(text);
+  if (bad) return [200, { ok: true, valid: false, layer: "wellformed", errors: [{ message: bad }] }];
+  const loc = /xsi:noNamespaceSchemaLocation\s*=\s*"([^"]+)"/.exec(text);
+  const name = loc && loc[1].startsWith(SCHEMA) ? loc[1].slice(SCHEMA.length).replace(/\.xsd$/, "") : null;
+  if (!name || !NAMES.has(name)) return [200, { ok: true, valid: false, layer: "schema", errors: [{ message: `The root element must name an official S1000D Issue 6 schema in xsi:noNamespaceSchemaLocation, for example ${SCHEMA}descript.xsd.` }] }];
+  let v;
+  try { v = await validator(name); }
+  catch (e) { return [503, { ok: false, error: `The official schema could not be fetched from www.s1000d.org right now (${String(e.message).slice(0, 120)}). The other checks in the page still work.` }]; }
+  let doc;
+  try {
+    doc = lib.XmlDocument.fromString(text, { option: lib.ParseOption.XML_PARSE_NONET | lib.ParseOption.XML_PARSE_NO_XXE });
+  } catch (e) {
+    return [200, { ok: true, valid: false, layer: "wellformed", errors: (e.details || [{ message: e.message }]).slice(0, 50).map((d) => ({ message: d.message, line: d.line, col: d.col })) }];
+  }
+  try {
+    v.validate(doc);
+    return [200, { ok: true, valid: true, schema: name + ".xsd", url: SCHEMA + name + ".xsd", sha256: (fetched.get(name + ".xsd") || {}).sha256, validator: "libxml2 (libxml2-wasm)" }];
+  } catch (e) {
+    return [200, { ok: true, valid: false, layer: "schema", schema: name + ".xsd", url: SCHEMA + name + ".xsd", errors: (e.details || [{ message: e.message }]).slice(0, 50).map((d) => ({ message: String(d.message).trim(), line: d.line, col: d.col })) }];
+  } finally {
+    doc.dispose();
+  }
+}
+
+// A check of the check, for scripts/check-live.py and a reviewer: one module of the site's own fictional CSDB, as
+// published, must pass, and the same module with an element the schema doesn't allow must fail. Nothing is sent in.
+const SELFTEST = "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML";
+
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   const send = (code, body) => { res.statusCode = code; res.end(JSON.stringify(body)); };
   const origin = req.headers.origin;
   if (origin && !HOME.test(origin)) return send(403, { ok: false, error: "Requests from other sites are not accepted." });
+  if (req.method === "GET" && /[?&]selftest=1(&|$)/.test(req.url || "")) {
+    if (limited(req)) return send(429, { ok: false, error: "Too many checks for now. Try again in a minute." });
+    let good;
+    try { good = require("fs").readFileSync(require("path").join(__dirname, "..", "content", "aerospace", "csdb", SELFTEST), "utf8"); }
+    catch (e) { return send(500, { ok: false, error: "The sample module is missing from this deployment." }); }
+    const [a, pass] = await check(good);
+    if (a !== 200) return send(a, pass);
+    const [, fail] = await check(good.replace("<dmTitle>", "<dmTitle><notAnS1000DElement/>"));
+    return send(200, { ok: pass.valid === true && fail.valid === false, file: SELFTEST, published: pass, altered: { change: "an element the schema doesn't allow, added to dmTitle", ...fail } });
+  }
   if (req.method === "GET") return send(200, { ok: true, issue: "S1000D Issue 6", schemaBase: SCHEMA, loaded: [...fetched.entries()].map(([name, f]) => ({ name, ...f })) });
   if (req.method !== "POST") return send(405, { ok: false, error: "Send the XML with POST." });
   if (limited(req)) return send(429, { ok: false, error: "Too many checks for now. Try again in a minute." });
@@ -95,26 +135,6 @@ module.exports = async (req, res) => {
     for await (const c of req) { size += c.length; if (size > MAX) return send(413, { ok: false, error: "The XML is larger than 512 KB." }); chunks.push(c); }
     text = Buffer.concat(chunks).toString("utf8");
   } catch { return send(400, { ok: false, error: "The XML could not be read." }); }
-  const bad = doctypeProblem(text);
-  if (bad) return send(200, { ok: true, valid: false, layer: "wellformed", errors: [{ message: bad }] });
-  const loc = /xsi:noNamespaceSchemaLocation\s*=\s*"([^"]+)"/.exec(text);
-  const name = loc && loc[1].startsWith(SCHEMA) ? loc[1].slice(SCHEMA.length).replace(/\.xsd$/, "") : null;
-  if (!name || !NAMES.has(name)) return send(200, { ok: true, valid: false, layer: "schema", errors: [{ message: `The root element must name an official S1000D Issue 6 schema in xsi:noNamespaceSchemaLocation, for example ${SCHEMA}descript.xsd.` }] });
-  let v;
-  try { v = await validator(name); }
-  catch (e) { return send(503, { ok: false, error: `The official schema could not be fetched from www.s1000d.org right now (${String(e.message).slice(0, 120)}). The other checks in the page still work.` }); }
-  let doc;
-  try {
-    doc = lib.XmlDocument.fromString(text, { option: lib.ParseOption.XML_PARSE_NONET | lib.ParseOption.XML_PARSE_NO_XXE });
-  } catch (e) {
-    return send(200, { ok: true, valid: false, layer: "wellformed", errors: (e.details || [{ message: e.message }]).slice(0, 50).map((d) => ({ message: d.message, line: d.line, col: d.col })) });
-  }
-  try {
-    v.validate(doc);
-    return send(200, { ok: true, valid: true, schema: name + ".xsd", url: SCHEMA + name + ".xsd", sha256: (fetched.get(name + ".xsd") || {}).sha256, validator: "libxml2 (libxml2-wasm)" });
-  } catch (e) {
-    return send(200, { ok: true, valid: false, layer: "schema", schema: name + ".xsd", url: SCHEMA + name + ".xsd", errors: (e.details || [{ message: e.message }]).slice(0, 50).map((d) => ({ message: String(d.message).trim(), line: d.line, col: d.col })) });
-  } finally {
-    doc.dispose();
-  }
+  const [code, body] = await check(text);
+  return send(code, body);
 };
