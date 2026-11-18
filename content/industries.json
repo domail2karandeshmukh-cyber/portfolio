@@ -8,8 +8,8 @@
       "basis": "Professional work: IT and SaaS documentation, listed under Experience. Project documentation: applications I built and documented myself. The demonstration scenarios in the Studio use example companies, and each page says so.",
       "start": [
         { "doc": "core42", "why": "A complete procedure for first-time users of a real cloud portal: prerequisites, numbered steps, annotated screenshots and the expected result." },
-        { "doc": "ns-release", "why": "Release notes for a working application: what changed, for whom, and what to do about it." },
-        { "title": "Workbench", "url": "/workbench", "kind": "Tool", "why": "Write a document, check it against the style guide as you type, and export Markdown, HTML and DITA." }
+        { "doc": "studio-shots-guide", "why": "A user guide for a working tool, illustrated with screenshots of the tool itself, marked up to the house standard." },
+        { "doc": "ns-release", "why": "Release notes for a working application: what changed, for whom, and what to do about it." }
       ],
       "projects": [
         { "doc": "ns-readme" }, { "doc": "ns-release" },
@@ -21,6 +21,7 @@
         { "title": "Release notes, version 2.4", "url": "/studio/scenarios/f-release", "kind": "Demonstration scenario", "text": "Release notes, a migration guide and a version history." },
         { "title": "A feature tutorial", "url": "/studio/scenarios/g-training", "kind": "Demonstration scenario", "text": "A task tutorial with a narrated training video and a step guide." },
         { "title": "A cloud developer guide", "url": "/studio/scenarios/c-cloud", "kind": "Demonstration scenario", "text": "Concepts, a deployment procedure, a configuration reference and troubleshooting." },
+        { "title": "Workbench", "url": "/workbench", "kind": "Tool", "text": "Write a document, check it against the style guide as you type, and export Markdown, HTML and DITA." },
         { "title": "Knowledge base", "url": "/studio/kb", "kind": "Tool", "text": "Categories, sections, articles, search and an export." }
       ],
       "standards": [
@@ -86,23 +87,23 @@
     },
     {
       "id": "ai-data-science",
-      "preview": { "from": "content/thumbs/kc1-readme.webp", "src": "/thumbs/kc1-readme.webp", "w": 720, "h": 617 },
+      "preview": { "from": "content/thumbs/kc1-model-card.webp", "src": "/thumbs/kc1-model-card.webp", "w": 720, "h": 620 },
       "intro": "Documentation for machine-learning work: what a model is for, the data it learned from, how it was evaluated, and how to reproduce it.",
       "basis": "Projects: academic and personal work from my MSc in cybersecurity and data science, with measured results. April, the assistant on this site, is a live AI application I built.",
       "start": [
-        { "doc": "kc1-readme", "why": "Software-defect prediction on NASA's KC1 dataset: the models, the decision threshold and the measured results." },
+        { "doc": "kc1-model-card", "why": "A model card for a served classifier: its intended use, its data, every candidate's results, the threshold trade-off and its limits, from the project's recorded runs." },
         { "doc": "cg-paper", "why": "A six-page paper measuring where a signature stops proving that an AI model is safe." },
         { "doc": "tn-report", "why": "A technical report with precision, recall and false-alarm rates measured on recorded attacks." }
       ],
       "projects": [
-        { "doc": "kc1-build" }, { "doc": "cg-report" }, { "doc": "tn-how" },
+        { "doc": "kc1-dataset-card" }, { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "cg-report" }, { "doc": "tn-how" },
         { "title": "April, the assistant on this site", "url": "/#april-band", "kind": "Live application", "text": "Answers questions about my work from the same content file the site is built from, and can open what she names." }
       ],
       "demos": [
         { "title": "The rewrite desk", "url": "/#rewrite", "kind": "Live tool", "text": "A model drafts a document from a chat message; the style guide checks the draft." }
       ],
       "standards": [
-        ["Model cards and dataset cards", "What a model is for, its data, its evaluation and its limits, in a fixed order.", "/standards/editorial"],
+        ["Model cards and dataset cards", "What a model is for, its data, its evaluation and its limits, in a fixed order.", "/docs/kc1/model-card"],
         ["Reproducibility", "Pinned versions, a container build and the exact commands, so a reader gets the same numbers.", "/docs/kc1/build-guide"]
       ],
       "films": ["rewrite-desk"],

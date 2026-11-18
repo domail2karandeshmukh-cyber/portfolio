@@ -1,6 +1,7 @@
 {
   "_": "Facets of the library (/docs): who each document is written for, and the standards and frameworks it applies or explains. lib/library.mjs reads it; the field of a document comes from content/industries.json, the format from the document itself, and the version from its front matter. A standard is listed only where the document names it. Audiences and fields of the Studio scenarios' documents follow their scenario, with the exceptions under \"kinds\".",
   "audiences": [
+    "Technical writers",
     "Developers",
     "Data scientists",
     "Security teams",
@@ -137,6 +138,31 @@
     "workspace-faqs": {
       "audience": [
         "End users"
+      ],
+      "standards": []
+    },
+    "kc1-model-card": {
+      "audience": [
+        "Data scientists",
+        "Developers",
+        "Technical reviewers"
+      ],
+      "standards": [
+        "Model cards (Mitchell and others, 2019)"
+      ]
+    },
+    "kc1-dataset-card": {
+      "audience": [
+        "Data scientists",
+        "Technical reviewers"
+      ],
+      "standards": [
+        "Datasheets for datasets (Gebru and others, 2018)"
+      ]
+    },
+    "studio-shots-guide": {
+      "audience": [
+        "Technical writers"
       ],
       "standards": []
     }
