@@ -139,7 +139,7 @@
         svg += '<path class="cl-dm" d="M' + (s.x + s.w) + "," + s.y + " C" + (s.x + s.w + 40) + "," + s.y + " " + (t.x + t.w + 40) + "," + t.y + " " + (t.x + t.w) + "," + t.y + '"/>';
       });
     });
-    $("#cd-graph").innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-labelledby="cd-g-t"><title id="cd-g-t">' + esc(T("Publications on the left refer to data modules in the middle; data modules refer to illustrations on the right, and to each other (dotted).")) + "</title>" +
+    $("#cd-graph").innerHTML = '<svg viewBox="0 0 ' + W + " " + H + '" role="group" aria-labelledby="cd-g-t"><title id="cd-g-t">' + esc(T("Publications on the left refer to data modules in the middle; data modules refer to illustrations on the right, and to each other (dotted).")) + "</title>" +
       '<text class="cg-h" x="10" y="18">' + esc(T("Publication modules")) + '</text><text class="cg-h" x="330" y="18">' + esc(T("Data modules (latest issues)")) + '</text><text class="cg-h" x="740" y="18">' + esc(T("Illustrations")) + '</text><text class="cg-h" x="10" y="' + (top + 196) + '">' + esc(T("Rules and applicability")) + "</text>" + svg + boxes + "</svg>";
   }
 

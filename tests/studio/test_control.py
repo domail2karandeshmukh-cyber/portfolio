@@ -29,7 +29,7 @@ with sync_playwright() as p:
     pg.on("dialog", lambda d: errs.append("a browser dialog opened: " + d.message) or d.dismiss())
     pg.goto(BASE + "/studio/control", wait_until="load"); pg.wait_for_timeout(600)
     D = lambda: pg.evaluate("studioControl.get()")
-    check("the start panel offers four documents of different kinds", pg.locator("#dc-start .st-card").count() == 4)
+    check("the start panel offers five documents of different kinds, the aerospace change record among them", pg.locator("#dc-start .st-card").count() == 5 and "EC-ARF-01" in pg.inner_text("#dc-start"))
     open_sample(pg, "maintenance-procedure")
     check("the sample opens as a draft with its ID and version", D()["meta"]["status"] == "Draft" and D()["meta"]["id"] == "MP-PS104-01" and D()["meta"]["version"] == "0.3", D()["meta"])
     check("a maintenance procedure is marked safety-related, so it needs three reviews", D()["safety"] and pg.locator("#dc-reviews li").count() == 3)

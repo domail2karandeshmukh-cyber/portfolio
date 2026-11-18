@@ -86,6 +86,7 @@
     var svg = document.querySelector("#ie-main .s1k-svg svg");
     if (!svg) return;
     svg.removeAttribute("width"); svg.removeAttribute("height");
+    svg.setAttribute("role", "group");
     Array.prototype.forEach.call(svg.querySelectorAll(".part"), function (g) { g.setAttribute("tabindex", "0"); g.setAttribute("role", "button"); g.setAttribute("aria-label", T("Item {n}", { n: +g.dataset.item })); });
     Array.prototype.forEach.call(document.querySelectorAll("#ie-main tr[data-item]"), function (tr) { tr.tabIndex = 0; });
   }

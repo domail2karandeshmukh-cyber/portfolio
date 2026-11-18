@@ -25,6 +25,8 @@
       $("#ip-svg").innerHTML = text.replace(/<\?xml[^>]*\?>/, "");
       var svg = $("#ip-svg svg");
       svg.removeAttribute("width"); svg.removeAttribute("height");
+      // a picture with controls inside is a group, not an image
+      svg.setAttribute("role", "group");
       // every hotspot of the module makes its SVG group a control
       Array.prototype.forEach.call(ipd.doc.querySelectorAll("hotspot"), function (h) {
         var el = svg.querySelector("#" + CSS.escape(h.getAttribute("applicationStructureIdent")));
