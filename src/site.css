@@ -737,6 +737,12 @@ html.mnav-open{overflow:hidden}
 .vid-tr summary{cursor:pointer;font-weight:600}
 @media (max-width:880px){.ix-start,.ix-grid{grid-template-columns:minmax(0,1fr)}.ix-film{grid-template-columns:minmax(0,1fr)}.dl-table code{display:none}}
 
+/* Numbered figures in documents (lib/md.mjs) */
+.article figure.fig-img{margin:1.3em 0}
+.article figure.fig-img .fig{margin-bottom:0}
+.article figcaption{font-size:.88rem;line-height:1.45;color:var(--mute);margin:.55em 0 0;max-width:68ch}
+.article figure.diagram figcaption{padding:0 .2rem;text-align:left}
+
 /* Moving between pages: the header stays put and the page changes under it */
 @view-transition{navigation:auto}
 .nav{view-transition-name:site-nav}

@@ -43,7 +43,7 @@ with sync_playwright() as p:
     check("the English hub offers the other four languages", pg.locator(".lang-menu a").count() == 5 and pg.locator("link[hreflang]").count() == 6)
     for lang, w in WORDS.items():
         pg.goto(f"{BASE}/{lang}/studio", wait_until="load"); pg.wait_for_timeout(300)
-        check(f"{lang}: the hub is in its language, with its own address", pg.evaluate("document.documentElement.lang") == lang and pg.evaluate("document.querySelector('link[rel=canonical]').href").endswith(f"/{lang}/studio") and w["library"] in pg.inner_text("nav[aria-label]"))
+        check(f"{lang}: the hub is in its language, with its own address", pg.evaluate("document.documentElement.lang") == lang and pg.evaluate("document.querySelector('link[rel=canonical]').href").endswith(f"/{lang}/studio") and w["library"] in pg.evaluate("document.querySelector('nav.gnav').textContent"))
         hrefs = pg.evaluate("Array.from(document.querySelectorAll('.st-work h3 a')).map(a => a.getAttribute('href'))")
         check(f"{lang}: the tool links stay in the language; the workbench, the flagship and the aerospace overview (English pages) stay where they are", all(h in ("/workbench", "/studio/flagship", "/studio/aerospace") or h.startswith(f"/{lang}/studio") for h in hrefs), hrefs)
         scen = pg.evaluate("Array.from(document.querySelectorAll('.st-scen a')).map(a => a.getAttribute('href'))")

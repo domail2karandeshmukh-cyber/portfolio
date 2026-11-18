@@ -345,3 +345,8 @@
 .vd-addrow>span{flex:0 0 68px;font-size:.78rem;font-weight:600;color:var(--mute)}
 .vd-addsec h2{margin-bottom:8px}
 .vd-empty{color:#9a9a93}
+
+/* Version 10: documents shown inside Studio pages (the scenarios) keep wide code and wide tables in their own
+   scrolling box on a phone, instead of widening the page. */
+.st-main article pre{overflow-x:auto;max-width:100%}
+.st-main article table{display:block;max-width:100%;overflow-x:auto}

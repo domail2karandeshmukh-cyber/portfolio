@@ -1,0 +1,131 @@
+# The PDF theme for the DITA samples (DITA Open Toolkit 4, com.elovirta.pdf). standards/publishing.md says why:
+# A4, Hanken Grotesk embedded, the publication's title in the header, the page number in the footer, black type
+# with one blue for links, and notes as tinted blocks that stay on one page.
+extends: default
+page:
+  size: A4
+  mirror-margins: false
+  top: 22mm
+  bottom: 22mm
+  inside: 20mm
+  outside: 20mm
+pdf2:
+  font:
+    sans: 'Hanken Grotesk'
+    serif: 'Hanken Grotesk'
+    monospaced: 'Hyperlegible Mono'
+header:
+  font-family: Hanken Grotesk
+  font-weight: normal
+  color: '#696C73'
+  font-size: 8.5pt
+  odd:
+    content: '{title}'
+    text-align: end
+  even:
+    content: '{title}'
+    text-align: start
+footer:
+  font-family: Hanken Grotesk
+  color: '#696C73'
+  font-size: 8.5pt
+  odd:
+    content: 'Page {folio}'
+    font-weight: normal
+    text-align: end
+  even:
+    content: 'Page {folio}'
+    font-weight: normal
+    text-align: end
+style:
+  body:
+    font-family: Hanken Grotesk
+    font-size: 10.5pt
+    line-height: 1.45
+    color: '#0B0B0C'
+    start-indent: 0pt
+  shortdesc:
+    font-size: 11pt
+    color: '#3B3D42'
+  h1:
+    font-family: Hanken Grotesk
+    font-size: 20pt
+    font-weight: bold
+    color: '#0B0B0C'
+    space-before: 0pt
+    space-after: 10pt
+    border-after: solid 1.5pt '#0B0B0C'
+    padding-after: 6pt
+    title-numbering: false
+  h2:
+    font-family: Hanken Grotesk
+    font-size: 14pt
+    font-weight: bold
+    color: '#0B0B0C'
+    space-before: 16pt
+    space-after: 6pt
+    title-numbering: false
+  h3:
+    font-family: Hanken Grotesk
+    font-size: 12pt
+    font-weight: bold
+    color: '#0B0B0C'
+    space-before: 12pt
+    space-after: 4pt
+    title-numbering: false
+  h4:
+    font-family: Hanken Grotesk
+    font-size: 10.5pt
+    font-weight: bold
+    space-before: 10pt
+    title-numbering: false
+  section-title:
+    font-family: Hanken Grotesk
+    font-size: 11pt
+    font-weight: bold
+    color: '#0B0B0C'
+  codeblock:
+    font-family: Hyperlegible Mono
+    font-size: 8.5pt
+    background-color: '#F3F3F0'
+    border: solid 0.5pt '#DDDDD9'
+    padding: 6pt
+    keep-together.within-page: always
+  codeph:
+    font-family: Hyperlegible Mono
+  link:
+    color: '#1D4ED8'
+  note:
+    background-color: '#F3F3F0'
+    border-start: solid 3pt '#3B3D42'
+    padding-start: 8pt
+    padding-end: 8pt
+    keep-together.within-page: always
+    caution:
+      background-color: '#FFF4D6'
+      border-start: solid 3pt '#9A5B00'
+    warning:
+      background-color: '#FBE3E1'
+      border-start: solid 3pt '#CE2F20'
+    danger:
+      background-color: '#FBE3E1'
+      border-start: solid 3pt '#CE2F20'
+  table:
+    caption:
+      font-size: 9pt
+      font-weight: bold
+  fig:
+    caption:
+      font-size: 9pt
+      font-style: normal
+  cover:
+    title:
+      font-family: Hanken Grotesk
+      font-size: 30pt
+      font-weight: bold
+      line-height: 1.15
+      color: '#0B0B0C'
+      text-align: start
+      space-before: 70mm
+      border-after: solid 2pt '#0B0B0C'
+      padding-after: 10pt

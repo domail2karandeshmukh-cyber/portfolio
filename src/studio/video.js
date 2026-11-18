@@ -117,7 +117,9 @@
   }
 
   /* ---------- Drawing one frame ---------- */
-  var COLORS = { title: "#0B0B0C", step: "#E5251B", arrow: "#E5251B", box: "#E5251B", callout: "#E5251B", warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
+  // The house annotation green and its dark keyline (standards/screenshots.md), at the video scale of 1.5.
+  var HOUSE = "#6CE975", EDGE = "#0E5A2B";
+  var COLORS = { title: "#0B0B0C", step: HOUSE, arrow: HOUSE, box: HOUSE, callout: HOUSE, warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
   var TYPES = { title: T("Title"), step: T("Step number"), arrow: T("Arrow"), box: T("Highlight box"), callout: T("Callout"), warning: T("Warning"), instruction: T("Instruction"), done: T("Confirmation"), zoom: T("Zoom region"), blur: T("Blur region"), intro: T("Intro slide"), outro: T("Closing slide"), lower: T("Lower-third label") };
   var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1 };          // drawn in the picture, so they zoom with it
   function font(px, w) { return (w || 600) + " " + Math.round(px) + "px 'Hanken', Arial, sans-serif"; }
@@ -137,16 +139,24 @@
   function drawWorld(o, t) {
     var a = fade(o, t); if (a <= 0) return;
     var x = o.x * W, y = o.y * H, w = o.w * W, h = o.h * H, c = o.color || COLORS[o.type];
-    ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = ctx.fillStyle = c; ctx.lineWidth = 6; ctx.lineCap = ctx.lineJoin = "round";
-    if (o.type === "box") { ctx.strokeRect(x, y, w, h); }
+    var house = String(c).toLowerCase() === HOUSE.toLowerCase();
+    ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = ctx.fillStyle = c; ctx.lineWidth = house ? 4 : 6; ctx.lineCap = ctx.lineJoin = "round";
+    if (o.type === "box") {
+      // The house box: 4 px of green with a 2 px dark keyline outside it and 5 px corners; it never covers the control.
+      if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 2; roundRect(x - 3, y - 3, w + 6, h + 6, 8); ctx.stroke(); ctx.restore(); roundRect(x, y, w, h, 5); ctx.stroke(); }
+      else ctx.strokeRect(x, y, w, h);
+    }
     else if (o.type === "arrow") {
-      var x2 = x + w, y2 = y + h, ang = Math.atan2(y2 - y, x2 - x), s = 26;
-      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2 - 14 * Math.cos(ang), y2 - 14 * Math.sin(ang)); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - s * Math.cos(ang - 0.45), y2 - s * Math.sin(ang - 0.45)); ctx.lineTo(x2 - s * Math.cos(ang + 0.45), y2 - s * Math.sin(ang + 0.45)); ctx.closePath(); ctx.fill();
+      var x2 = x + w, y2 = y + h, ang = Math.atan2(y2 - y, x2 - x), s = house ? 24 : 26, cut = house ? 14 : 14;
+      if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2 - cut * Math.cos(ang), y2 - cut * Math.sin(ang)); ctx.stroke(); ctx.restore(); }
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2 - cut * Math.cos(ang), y2 - cut * Math.sin(ang)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - s * Math.cos(ang - 0.45), y2 - s * Math.sin(ang - 0.45)); ctx.lineTo(x2 - s * Math.cos(ang + 0.45), y2 - s * Math.sin(ang + 0.45)); ctx.closePath();
+      if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 4; ctx.stroke(); ctx.restore(); }
+      ctx.fill();
     } else if (o.type === "step") {
-      var r = (o.size || 36) / 2 * 1.2;
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = "#fff"; ctx.stroke();
-      ctx.fillStyle = "#fff"; ctx.font = font(r * 1.15, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(o.text || "1"), x, y + 1);
+      var r = (o.size || (house ? 30 : 36)) / 2 * (house ? 1 : 1.2);
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = house ? 2 : 4; ctx.strokeStyle = house ? EDGE : "#fff"; ctx.stroke();
+      ctx.fillStyle = house ? "#0B2E16" : "#fff"; ctx.font = font(r * 1.15, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(o.text || "1"), x, y + 1);
     } else if (o.type === "callout") {
       var px = o.size || 26, lines = wrap(o.text, Math.max(120, w), px), bw = 0;
       ctx.font = font(px); lines.forEach(function (l) { bw = Math.max(bw, ctx.measureText(l).width); });
@@ -213,12 +223,14 @@
       if (d >= -0.12 && d < 0.15) pressed = Math.max(pressed, 1 - Math.abs(d) / 0.15);
       if (P.cursor.ripple && d >= 0 && d < 0.7) {
         var ex = (e.x - cam.x) * cam.z, ey = (e.y - cam.y) * cam.z;
-        ctx.save(); ctx.strokeStyle = "rgba(229,37,27," + (1 - d / 0.7) + ")"; ctx.lineWidth = 5 * s; ctx.beginPath(); ctx.arc(ex, ey, (14 + d * 90) * s, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+        // The click ring, in the house green over a dark keyline, gone in 0.7 seconds.
+        ctx.save(); ctx.lineWidth = 6 * s; ctx.strokeStyle = "rgba(14,90,43," + (1 - d / 0.7) + ")"; ctx.beginPath(); ctx.arc(ex, ey, (14 + d * 60) * s, 0, Math.PI * 2); ctx.stroke();
+        ctx.lineWidth = 3 * s; ctx.strokeStyle = "rgba(108,233,117," + (1 - d / 0.7) + ")"; ctx.stroke(); ctx.restore();
       }
       if (P.cursor.numbers && d >= 0 && d < 2.2) {
         var nx = (e.x - cam.x) * cam.z + 30 * s, ny = (e.y - cam.y) * cam.z - 30 * s;
-        ctx.save(); ctx.globalAlpha = Math.min(1, (2.2 - d) / 0.3); ctx.fillStyle = "#E5251B"; ctx.beginPath(); ctx.arc(nx, ny, 17 * s, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "#fff"; ctx.font = font(19 * s, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(e.n), nx, ny + 1); ctx.restore();
+        ctx.save(); ctx.globalAlpha = Math.min(1, (2.2 - d) / 0.3); ctx.fillStyle = HOUSE; ctx.beginPath(); ctx.arc(nx, ny, 17 * s, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 2 * s; ctx.strokeStyle = EDGE; ctx.stroke();
+        ctx.fillStyle = "#0B2E16"; ctx.font = font(19 * s, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(e.n), nx, ny + 1); ctx.restore();
       }
     });
     if (P.cursor.halo) { ctx.save(); ctx.fillStyle = "rgba(255,223,43,.45)"; ctx.beginPath(); ctx.arc(x, y, (28 - pressed * 8) * s, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }

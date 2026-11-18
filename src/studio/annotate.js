@@ -16,7 +16,13 @@
   A.NAMES = { arrow: T("Arrow"), line: T("Line"), rect: T("Rectangle"), ellipse: T("Ellipse"), callout: T("Numbered callout"), text: T("Text"), highlight: T("Highlight"), spotlight: T("Spotlight"), blur: T("Blur"), pixelate: T("Pixelate"), redact: T("Redaction") };
   /** The same names as they read inside a sentence of the history: Added arrow. */
   A.NOUNS = { arrow: T("arrow"), line: T("line"), rect: T("rectangle"), ellipse: T("ellipse"), callout: T("numbered callout"), text: T("text"), highlight: T("highlight"), spotlight: T("spotlight"), blur: T("blur"), pixelate: T("pixelation"), redact: T("redaction") };
-  A.COLORS = ["#E5251B", "#0B0B0C", "#1D4ED8", "#0D9A57", "#FFDF2B", "#FFFFFF"];
+  /* The house style (standards/screenshots.md): a bright green, #6CE975, measured from my published guides, with a 1 px dark
+     keyline (#0E5A2B) so the mark stands out on white and on dark interfaces; numbers in dark type on the green. Red, blue
+     and amber stay for meaning. */
+  A.HOUSE = { color: "#6CE975", edge: "#0E5A2B" };
+  A.COLORS = ["#6CE975", "#E5251B", "#0B0B0C", "#1D4ED8", "#FFDF2B", "#FFFFFF"];
+  /** The house stroke for an image: 2 px for a capture at screen density, 4 px for a high-density (2x) capture. */
+  A.houseStroke = function (W) { return W > 1800 ? 4 : 2; };
 
   function num(v, lo, hi, d) { v = Number(v); return isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d; }
   /** A mark from a project file, checked field by field. Anything unknown is dropped. */
@@ -24,6 +30,8 @@
     if (!m || A.TYPES.indexOf(m.type) < 0) return null;
     var big = Math.max(W, H) * 2, out = { id: String(m.id || A.id()).slice(0, 40), type: m.type, color: /^#[0-9a-fA-F]{6}$/.test(m.color) ? m.color : "#E5251B",
       stroke: num(m.stroke, 1, 40, 6), hidden: !!m.hidden, x: num(m.x, -big, big, 0), y: num(m.y, -big, big, 0) };
+    if (/^#[0-9a-fA-F]{6}$/.test(m.edge)) out.edge = m.edge;
+    if (m.type === "rect" && m.radius != null) out.radius = num(m.radius, 0, 60, 0);
     if (BOX[m.type]) { out.w = num(m.w, 1, big, 10); out.h = num(m.h, 1, big, 10); out.amount = num(m.amount, 2, 60, 14); }
     if (LINE[m.type]) { out.x2 = num(m.x2, -big, big, out.x + 50); out.y2 = num(m.y2, -big, big, out.y); }
     if (m.type === "callout") { out.n = Math.round(num(m.n, 1, 999, 1)); out.size = num(m.size, 12, 200, 34); }
@@ -45,23 +53,37 @@
     var pad = m.box ? m.size * 0.35 : 0;
     return { x: m.x - pad, y: m.y - pad, w: w + pad * 2, h: lines.length * m.size * 1.25 + pad * 2 };
   };
+  /** The arrowhead's side: in the house style six times the stroke (12 px long for a 2 px arrow), otherwise as before. */
+  function headSize(m) { return m.edge ? Math.max(8, m.stroke * 6) : Math.max(14, m.stroke * 3.6); }
+  function edgeWidth(m) { return Math.max(1, m.stroke / 2); }
   function arrowHead(ctx, m) {
-    var a = Math.atan2(m.y2 - m.y, m.x2 - m.x), s = Math.max(14, m.stroke * 3.6);
+    var a = Math.atan2(m.y2 - m.y, m.x2 - m.x), s = headSize(m);
     ctx.beginPath();
     ctx.moveTo(m.x2, m.y2);
     ctx.lineTo(m.x2 - s * Math.cos(a - 0.45), m.y2 - s * Math.sin(a - 0.45));
     ctx.lineTo(m.x2 - s * Math.cos(a + 0.45), m.y2 - s * Math.sin(a + 0.45));
-    ctx.closePath(); ctx.fill();
+    ctx.closePath();
+    if (m.edge) { ctx.save(); ctx.strokeStyle = m.edge; ctx.lineWidth = edgeWidth(m) * 2; ctx.lineJoin = "round"; ctx.stroke(); ctx.restore(); }
+    ctx.fill();
     return s;
   }
+  function rounded(ctx, x, y, w, h, r) { ctx.beginPath(); if (r > 0 && ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
   /** Draws one mark. base is the image under the marks: blur and pixelation are taken from it, never from other marks. */
   A.draw = function (ctx, m, base, W, H) {
     if (m.hidden) return;
     ctx.save();
     ctx.strokeStyle = ctx.fillStyle = m.color; ctx.lineWidth = m.stroke; ctx.lineCap = "round"; ctx.lineJoin = "round";
     var b = BOX[m.type] ? boxOf(m) : null;
-    if (m.type === "rect") ctx.strokeRect(b.x, b.y, b.w, b.h);
-    else if (m.type === "ellipse") { ctx.beginPath(); ctx.ellipse(b.x + b.w / 2, b.y + b.h / 2, b.w / 2, b.h / 2, 0, 0, Math.PI * 2); ctx.stroke(); }
+    if (m.type === "rect") {
+      var rr = m.radius || 0;
+      if (m.edge) { var k = edgeWidth(m), o = m.stroke / 2 + k / 2; ctx.save(); ctx.strokeStyle = m.edge; ctx.lineWidth = k; rounded(ctx, b.x - o, b.y - o, b.w + 2 * o, b.h + 2 * o, rr ? rr + o : 0); ctx.stroke(); ctx.restore(); }
+      rounded(ctx, b.x, b.y, b.w, b.h, rr); ctx.stroke();
+    }
+    else if (m.type === "ellipse") {
+      ctx.beginPath(); ctx.ellipse(b.x + b.w / 2, b.y + b.h / 2, b.w / 2, b.h / 2, 0, 0, Math.PI * 2);
+      if (m.edge) { ctx.save(); ctx.strokeStyle = m.edge; ctx.lineWidth = m.stroke + 2 * edgeWidth(m); ctx.stroke(); ctx.restore(); }
+      ctx.stroke();
+    }
     else if (m.type === "highlight") { ctx.globalCompositeOperation = "multiply"; ctx.globalAlpha = 0.55; ctx.fillRect(b.x, b.y, b.w, b.h); }
     else if (m.type === "spotlight") {
       ctx.fillStyle = "rgba(11,11,12,.58)"; ctx.beginPath(); ctx.rect(0, 0, W, H);
@@ -78,15 +100,18 @@
       ctx.imageSmoothingEnabled = false; ctx.drawImage(t, 0, 0, sw, sh, b.x, b.y, sw * n, sh * n);
     } else if (m.type === "redact") { ctx.fillStyle = "#000"; ctx.fillRect(b.x, b.y, b.w, b.h); }
     else if (LINE[m.type]) {
-      var cut = 0;
-      if (m.type === "arrow") cut = arrowHead(ctx, m) * 0.6;
+      var cut = m.type === "arrow" ? headSize(m) * 0.6 : 0;
       var a = Math.atan2(m.y2 - m.y, m.x2 - m.x);
+      // The keyline goes under the shaft and round the head, then the green on top.
+      if (m.edge) { ctx.save(); ctx.strokeStyle = m.edge; ctx.lineWidth = m.stroke + 2 * edgeWidth(m); ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x2 - cut * Math.cos(a), m.y2 - cut * Math.sin(a)); ctx.stroke(); ctx.restore(); }
       ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x2 - cut * Math.cos(a), m.y2 - cut * Math.sin(a)); ctx.stroke();
+      if (m.type === "arrow") arrowHead(ctx, m);
     } else if (m.type === "callout") {
       var r = m.size / 2;
       ctx.beginPath(); ctx.arc(m.x, m.y, r, 0, Math.PI * 2); ctx.fill();
-      ctx.lineWidth = Math.max(2, r * 0.12); ctx.strokeStyle = "#fff"; ctx.stroke();
-      ctx.fillStyle = light(m.color) ? "#0B0B0C" : "#fff"; ctx.font = "700 " + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + "px 'Hanken', Arial, sans-serif";
+      if (m.edge) { ctx.lineWidth = Math.max(1, r / 12); ctx.strokeStyle = m.edge; } else { ctx.lineWidth = Math.max(2, r * 0.12); ctx.strokeStyle = "#fff"; }
+      ctx.stroke();
+      ctx.fillStyle = m.edge ? "#0B2E16" : light(m.color) ? "#0B0B0C" : "#fff"; ctx.font = "700 " + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + "px 'Hanken', Arial, sans-serif";
       ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(m.n), m.x, m.y + r * 0.05);
     } else if (m.type === "text") {
       var lines = textLines(ctx, m), bb = A.bounds(ctx, m);
@@ -114,18 +139,23 @@
     state.items.forEach(function (m) {
       if (m.hidden || /^(blur|pixelate|spotlight)$/.test(m.type)) return;
       var s = ' stroke="' + m.color + '" stroke-width="' + m.stroke + '" stroke-linecap="round" stroke-linejoin="round" fill="none"', b = BOX[m.type] ? boxOf(m) : null;
-      if (m.type === "rect") out.push('<rect x="' + b.x + '" y="' + b.y + '" width="' + b.w + '" height="' + b.h + '"' + s + "/>");
+      if (m.type === "rect") {
+        var rr = m.radius || 0, k = Math.max(1, m.stroke / 2), o = m.stroke / 2 + k / 2;
+        if (m.edge) out.push('<rect x="' + (b.x - o) + '" y="' + (b.y - o) + '" width="' + (b.w + 2 * o) + '" height="' + (b.h + 2 * o) + '"' + (rr ? ' rx="' + (rr + o) + '"' : "") + ' stroke="' + m.edge + '" stroke-width="' + k + '" fill="none"/>');
+        out.push('<rect x="' + b.x + '" y="' + b.y + '" width="' + b.w + '" height="' + b.h + '"' + (rr ? ' rx="' + rr + '"' : "") + s + "/>");
+      }
       if (m.type === "ellipse") out.push('<ellipse cx="' + (b.x + b.w / 2) + '" cy="' + (b.y + b.h / 2) + '" rx="' + b.w / 2 + '" ry="' + b.h / 2 + '"' + s + "/>");
       if (m.type === "highlight") out.push('<rect x="' + b.x + '" y="' + b.y + '" width="' + b.w + '" height="' + b.h + '" fill="' + m.color + '" opacity=".55" style="mix-blend-mode:multiply"/>');
       if (LINE[m.type]) {
-        var a = Math.atan2(m.y2 - m.y, m.x2 - m.x), hs = Math.max(14, m.stroke * 3.6), cut = m.type === "arrow" ? hs * 0.6 : 0;
+        var a = Math.atan2(m.y2 - m.y, m.x2 - m.x), hs = headSize(m), cut = m.type === "arrow" ? hs * 0.6 : 0;
+        if (m.edge) out.push('<line x1="' + m.x + '" y1="' + m.y + '" x2="' + (m.x2 - cut * Math.cos(a)) + '" y2="' + (m.y2 - cut * Math.sin(a)) + '" stroke="' + m.edge + '" stroke-width="' + (m.stroke + 2 * Math.max(1, m.stroke / 2)) + '" stroke-linecap="round"/>');
         out.push('<line x1="' + m.x + '" y1="' + m.y + '" x2="' + (m.x2 - cut * Math.cos(a)) + '" y2="' + (m.y2 - cut * Math.sin(a)) + '"' + s + "/>");
-        if (m.type === "arrow") out.push('<polygon fill="' + m.color + '" points="' + [m.x2, m.y2, m.x2 - hs * Math.cos(a - 0.45), m.y2 - hs * Math.sin(a - 0.45), m.x2 - hs * Math.cos(a + 0.45), m.y2 - hs * Math.sin(a + 0.45)].map(function (v) { return Math.round(v * 10) / 10; }).join(" ") + '"/>');
+        if (m.type === "arrow") out.push('<polygon fill="' + m.color + '"' + (m.edge ? ' stroke="' + m.edge + '" stroke-width="' + 2 * Math.max(1, m.stroke / 2) + '" stroke-linejoin="round" paint-order="stroke"' : "") + ' points="'  + [m.x2, m.y2, m.x2 - hs * Math.cos(a - 0.45), m.y2 - hs * Math.sin(a - 0.45), m.x2 - hs * Math.cos(a + 0.45), m.y2 - hs * Math.sin(a + 0.45)].map(function (v) { return Math.round(v * 10) / 10; }).join(" ") + '"/>');
       }
       if (m.type === "callout") {
         var r = m.size / 2;
-        out.push('<circle cx="' + m.x + '" cy="' + m.y + '" r="' + r + '" fill="' + m.color + '" stroke="#fff" stroke-width="' + Math.max(2, r * 0.12) + '"/>');
-        out.push('<text x="' + m.x + '" y="' + m.y + '" dy=".36em" text-anchor="middle" font-family="Hanken, Arial, sans-serif" font-weight="700" font-size="' + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + '" fill="' + (light(m.color) ? "#0B0B0C" : "#fff") + '">' + m.n + "</text>");
+        out.push('<circle cx="' + m.x + '" cy="' + m.y + '" r="' + r + '" fill="' + m.color + '" stroke="' + (m.edge || "#fff") + '" stroke-width="' + (m.edge ? Math.max(1, r / 12) : Math.max(2, r * 0.12)) + '"/>');
+        out.push('<text x="' + m.x + '" y="' + m.y + '" dy=".36em" text-anchor="middle" font-family="Hanken, Arial, sans-serif" font-weight="700" font-size="' + Math.round(r * (m.n > 9 ? 0.95 : 1.15)) + '" fill="' + (m.edge ? "#0B2E16" : light(m.color) ? "#0B0B0C" : "#fff") + '">' + m.n + "</text>");
       }
       if (m.type === "text") {
         var lines = String(m.text || "").split("\n");
@@ -220,7 +250,7 @@
    */
   A.editor = function (host, opts) {
     opts = opts || {};
-    var st = { name: "screenshot", base: null, items: [] }, tool = "arrow", color = "#E5251B", stroke = 6, sel = null, zoom = 1, drag = null, crop = null;
+    var st = { name: "screenshot", base: null, items: [] }, tool = "arrow", color = A.HOUSE.color, stroke = 2, sel = null, zoom = 1, drag = null, crop = null;
     var past = [], future = [];
     host.classList.add("ann");
     host.innerHTML =
@@ -231,7 +261,7 @@
       '<aside class="ann-side">' +
       ' <section class="ann-props" aria-label="' + T("Properties") + '"><h2>' + T("Style") + "</h2>" +
       '  <div class="ann-swatches" role="radiogroup" aria-label="' + T("Color") + '">' + A.COLORS.map(function (c) { return '<button type="button" role="radio" aria-checked="false" class="ann-sw" data-color="' + c + '" style="--c:' + c + '" aria-label="' + T("Color {hex}", { hex: c }) + '"></button>'; }).join("") + '<input type="color" class="ann-color" aria-label="' + T("Another color") + '" value="#E5251B"></div>' +
-      '  <label class="ann-row">' + T("Stroke") + ' <input type="range" class="ann-stroke" min="1" max="30" value="6"><output class="ann-stroke-v">6</output></label>' +
+      '  <label class="ann-row">' + T("Stroke") + ' <input type="range" class="ann-stroke" min="1" max="30" value="2"><output class="ann-stroke-v">2</output></label>' +
       '  <div class="ann-sel" hidden><h2 class="ann-sel-name">' + T("Selected") + "</h2>" +
       '   <label class="ann-row ann-f-text" hidden>' + T("Text") + ' <textarea class="ann-text" rows="2" maxlength="500"></textarea></label>' +
       '   <label class="ann-row ann-f-size" hidden>' + T("Size") + ' <input type="number" class="ann-size" min="8" max="300"></label>' +
@@ -350,7 +380,8 @@
         return;
       }
       if (tool === "callout" || tool === "text") {
-        var nm = A.clean({ id: A.id(), type: tool, x: p.x, y: p.y, color: color, stroke: stroke, n: nextNumber(), size: tool === "text" ? Math.max(18, Math.round(st.base.width / 45)) : Math.max(28, Math.round(st.base.width / 36)), text: T("Type your text"), box: true }, st.base.width, st.base.height);
+        var house = color.toLowerCase() === A.HOUSE.color.toLowerCase();
+        var nm = A.clean({ id: A.id(), type: tool, x: p.x, y: p.y, color: color, stroke: stroke, edge: house ? A.HOUSE.edge : "", n: nextNumber(), size: tool === "text" ? Math.max(18, Math.round(st.base.width / 45)) : house ? Math.max(20, stroke * 12) : Math.max(28, Math.round(st.base.width / 36)), text: T("Type your text"), box: true }, st.base.width, st.base.height);
         st.items.push(nm); sel = nm.id; commit(T("Added {mark}", { mark: A.NOUNS[tool] }));
         if (tool === "text") { var ta = $(".ann-text"); ta.focus(); ta.select(); }
         return;
@@ -372,7 +403,8 @@
         if (drag.k === "p1") { h.x = p.x; h.y = p.y; } if (drag.k === "p2") { h.x2 = p.x; h.y2 = p.y; }
         paint(); return;
       }
-      var f = drag.from, base = { id: A.id(), type: tool, color: tool === "highlight" && color === "#E5251B" ? "#FFDF2B" : color, stroke: stroke, x: f.x, y: f.y, amount: tool === "pixelate" ? 14 : 10 };
+      var house = color.toLowerCase() === A.HOUSE.color.toLowerCase() && tool !== "highlight";
+      var f = drag.from, base = { id: A.id(), type: tool, color: tool === "highlight" && (color === "#E5251B" || color === A.HOUSE.color) ? "#FFDF2B" : color, stroke: stroke, edge: house ? A.HOUSE.edge : "", radius: tool === "rect" && house ? Math.round(stroke * 1.5) : undefined, x: f.x, y: f.y, amount: tool === "pixelate" ? 14 : 10 };
       if (LINE[tool]) { base.x2 = p.x; base.y2 = p.y; } else { base.w = p.x - f.x; base.h = p.y - f.y; }
       drag.preview = tool === "redact" ? { type: "redact", x: base.x, y: base.y, w: base.w, h: base.h, color: "#000", stroke: 1 } : A.clean(base, st.base.width, st.base.height);
       if (drag.preview && BOX[tool]) { var nb = boxOf(base); drag.preview.x = nb.x; drag.preview.y = nb.y; drag.preview.w = Math.max(1, nb.w); drag.preview.h = Math.max(1, nb.h); }
@@ -430,7 +462,7 @@
     function setColor(c) {
       color = c; $(".ann-color").value = c;
       $$(".ann-sw").forEach(function (b) { b.setAttribute("aria-checked", b.dataset.color.toLowerCase() === c.toLowerCase()); });
-      var m = sel && find(sel); if (m && m.type !== "redact") { m.color = c; commit(T("Changed color")); }
+      var m = sel && find(sel); if (m && m.type !== "redact") { m.color = c; if (c.toLowerCase() === A.HOUSE.color.toLowerCase() && m.type !== "highlight") m.edge = A.HOUSE.edge; else delete m.edge; commit(T("Changed color")); }
     }
     $$(".ann-sw").forEach(function (b) { b.addEventListener("click", function () { setColor(b.dataset.color); }); });
     $(".ann-color").addEventListener("change", function () { setColor(this.value); });
@@ -507,6 +539,8 @@
 
     function load(img, name) {
       st = { name: name || "screenshot", base: img.tagName === "CANVAS" ? img : Kit.canvasOf(img), items: [] };
+      // The house stroke for this picture: 2 px at screen density, 4 px for a high-density capture.
+      stroke = A.houseStroke(st.base.width); var sl = $(".ann-stroke"); if (sl) { sl.value = stroke; $(".ann-stroke-v").textContent = stroke; }
       sel = null; crop = null; past = []; future = [];
       $(".ann-empty").hidden = true; cv.hidden = false; host.classList.add("has-image");
       requestAnimationFrame(function () { fit(); paint(); });

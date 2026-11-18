@@ -17,10 +17,12 @@
 // Studio checks XML with DOMParser, which doesn't load external entities or DTDs at all.
 import fs from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import { spawnSync, execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { SETS } from "../lib/dita-sets.mjs";
+import { pdfArgs } from "./dita-pdf/args.mjs";
 // libxml2 2.11 and later stop reading the OASIS DTDs at their entity-amplification limit unless it is raised.
 const XMLLINT_LIMITS = (() => { try { const h = spawnSync("xmllint", ["--help"], { encoding: "utf8" }); return ["--huge"].concat(/--max-ampl/.test((h.stdout || "") + (h.stderr || "")) ? ["--max-ampl", "1000"] : []); } catch { return ["--huge"]; } })();
 const require = createRequire(import.meta.url);
@@ -51,7 +53,8 @@ for (const [id, set] of Object.entries(SETS)) {
   const css = [`--args.cssroot=${path.dirname(fileURLToPath(import.meta.url))}`, "--args.css=dita-html5.css", "--args.copycss=yes"];
   execFileSync(dita, [`--input=${input}`, "--format=html5", `--output=${OUT}/html5`, ...filters, ...css], { stdio: "inherit" });
   const pdfFilter = fs.existsSync(`${SRC}/filters/admin.ditaval`) ? [`--filter=${SRC}/filters/admin.ditaval`] : [];
-  execFileSync(dita, [`--input=${input}`, "--format=pdf", `--output=${OUT}/pdf`, ...pdfFilter], { stdio: "inherit" });
+  const theme = pdfArgs();
+  execFileSync(dita, [`--input=${input}`, "--format=pdf", `--output=${OUT}/pdf`, ...pdfFilter, ...theme], { stdio: "inherit" });
   fs.renameSync(`${OUT}/pdf/${id}.pdf`, `${OUT}/${id}.pdf`);
   fs.rmSync(`${OUT}/pdf`, { recursive: true, force: true });
   const version = execFileSync(dita, ["--version"]).toString().trim().replace(/^DITA-OT version /, "");

@@ -74,7 +74,9 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
     for f in (OUT / "dita/src").rglob("*.dita*"):
         subprocess.run(["xmllint", "--noout", "--valid", "--nonet", str(f)], check=True, env=env); keep(f)
     m = next((OUT / "dita/src").glob("*.ditamap"))
-    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=pdf", f"--output={OUT}/dita/pdf"], check=True, capture_output=True)
+    # The PDF in the house style: the theme and embedded fonts of scripts/dita-pdf (standards/publishing.md).
+    theme = json.loads(subprocess.run(["node", str(ROOT / "scripts/dita-pdf/args.mjs")], check=True, capture_output=True, text=True).stdout)
+    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=pdf", f"--output={OUT}/dita/pdf", *theme], check=True, capture_output=True)
     subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=html5", f"--output={OUT}/dita/html5", f"--args.cssroot={ROOT / 'scripts'}", "--args.css=dita-html5.css", "--args.copycss=yes"], check=True, capture_output=True)
     pdf = next((OUT / "dita/pdf").glob("*.pdf")); pdf.rename(OUT / "procedure/MP-PS104-01.pdf"); shutil.rmtree(OUT / "dita/pdf"); keep(OUT / "procedure/MP-PS104-01.pdf")
     for f in (OUT / "dita/html5").rglob("*.html"): keep(f)

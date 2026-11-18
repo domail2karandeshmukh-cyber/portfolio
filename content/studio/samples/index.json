@@ -17,78 +17,78 @@
    "id": "identity-new-user",
    "scenario": "b-enterprise-it",
    "title": "Enterprise IT: a new user form",
-   "blurb": "Numbered callouts in the order the fields are filled, personal data redacted, and an arrow with a label for the one field not to touch.",
+   "blurb": "Numbered callouts in the order the fields are filled, and personal data covered with solid boxes.",
    "project": "screenshots/identity-new-user/project.screenshot.json",
    "before": "screenshots/identity-new-user/before.png",
    "after": "screenshots/identity-new-user/after.png",
    "preview": "screenshots/identity-new-user/preview.jpg",
    "width": 1280,
    "height": 800,
-   "marks": 10
+   "marks": 8
   },
   {
    "id": "ledgerly-users",
    "scenario": "e-support",
    "title": "SaaS account administration",
-   "blurb": "A spotlight on the number that matters, a highlighted row, a pixelated address, and a text label.",
+   "blurb": "The Invite button numbered, the invited user highlighted, the administrators boxed, and a service address covered with a solid box.",
    "project": "screenshots/ledgerly-users/project.screenshot.json",
    "before": "screenshots/ledgerly-users/before.png",
    "after": "screenshots/ledgerly-users/after.png",
    "preview": "screenshots/ledgerly-users/preview.jpg",
    "width": 1280,
    "height": 800,
-   "marks": 6
+   "marks": 4
   },
   {
    "id": "support-unlock",
    "scenario": "e-support",
    "title": "Support troubleshooting: a locked account",
-   "blurb": "Green for what to check first, red for the actions, and a blurred column of network addresses.",
+   "blurb": "The verification check and both actions boxed, the lock highlighted, and a column of network addresses covered.",
    "project": "screenshots/support-unlock/project.screenshot.json",
    "before": "screenshots/support-unlock/before.png",
    "after": "screenshots/support-unlock/after.png",
    "preview": "screenshots/support-unlock/preview.jpg",
    "width": 1280,
    "height": 800,
-   "marks": 7
+   "marks": 5
   },
   {
    "id": "console-work-order",
    "scenario": "a-industrial",
    "title": "Engineering console: a work order",
-   "blurb": "A service key redacted, the button to select boxed and numbered, and an arrow that says where to start.",
+   "blurb": "A service key covered with a solid box, and the button to select boxed: one action, so no number.",
    "project": "screenshots/console-work-order/project.screenshot.json",
    "before": "screenshots/console-work-order/before.png",
    "after": "screenshots/console-work-order/after.png",
    "preview": "screenshots/console-work-order/preview.jpg",
    "width": 1280,
    "height": 800,
-   "marks": 5
+   "marks": 2
   },
   {
    "id": "soc-alert",
    "scenario": "d-security",
    "title": "Security monitoring: a Wazuh alert",
-   "blurb": "The fields that decide the triage boxed in yellow on a dark console, and the decision written next to the action.",
+   "blurb": "The fields that decide the triage boxed and numbered on a dark console, in the house green that reads on dark and light screens.",
    "project": "screenshots/soc-alert/project.screenshot.json",
    "before": "screenshots/soc-alert/before.png",
    "after": "screenshots/soc-alert/after.png",
    "preview": "screenshots/soc-alert/preview.jpg",
    "width": 1280,
    "height": 800,
-   "marks": 9
+   "marks": 8
   },
   {
    "id": "soc-alert-detail",
    "scenario": "d-security",
    "title": "Security monitoring: cropped alert detail",
-   "blurb": "The alert JSON cropped and enlarged, with the two decisive lines highlighted.",
+   "blurb": "The alert JSON cropped and enlarged, with the three lines the triage depends on boxed in green, which reads on a dark console.",
    "project": "screenshots/soc-alert-detail/project.screenshot.json",
    "before": "screenshots/soc-alert-detail/before.png",
    "after": "screenshots/soc-alert-detail/after.png",
    "preview": "screenshots/soc-alert-detail/preview.jpg",
    "width": 466,
-   "height": 584.640625,
+   "height": 632.640625,
    "marks": 3
   },
   {

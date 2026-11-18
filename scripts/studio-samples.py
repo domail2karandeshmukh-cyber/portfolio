@@ -21,6 +21,7 @@ SAMPLES = ROOT / "content/studio/samples"
 DEMOS = ROOT / "src/studio/demos"
 spec = json.loads((SAMPLES / "spec.json").read_text(encoding="utf8"))
 W, H = 1280, 800
+HOUSE, EDGE = "#6CE975", "#0E5A2B"
 index = json.loads((SAMPLES / "index.json").read_text(encoding="utf8")) if (SAMPLES / "index.json").exists() else {}
 
 
@@ -92,22 +93,25 @@ with sync_playwright() as p:
             ox, oy = clip["x"], clip["y"]
         items, redactions = [], []
         for m in f["marks"]:
-            t = m["type"]; pad = m.get("pad", 0); color = m.get("color", "#E5251B")
+            # The house style (standards/screenshots.md): green with a dark keyline, 2 px strokes at this density,
+            # 4 px of space round the control, 3 px corners, 24 px callouts.
+            t = m["type"]; pad = m.get("pad", 4 if t == "rect" else 0); color = m.get("color", HOUSE); edge = EDGE if color == HOUSE else ""
             if "at" in m:
                 bb = box(m["at"], m.get("all", False))
                 x, y, w, h = bb["x"] - pad - ox, bb["y"] - pad - oy, bb["w"] + 2 * pad, bb["h"] + 2 * pad
                 if t == "redact": redactions.append({"x": x, "y": y, "w": w, "h": h}); continue
                 if t in ("rect", "highlight", "spotlight", "blur", "pixelate", "ellipse"):
-                    items.append({"type": t, "x": x, "y": y, "w": w, "h": h, "color": color, "stroke": 6 if t == "rect" else 4, "amount": 18}); continue
+                    items.append({"type": t, "x": x, "y": y, "w": w, "h": h, "color": color, "edge": edge if t in ("rect", "ellipse") else "", "radius": 3 if t == "rect" else None, "stroke": 2 if t in ("rect", "ellipse") else 4, "amount": 18}); continue
                 if t == "callout":
-                    side = m.get("side", "left"); cx, cy = x + w / 2, y + h / 2; s = 36
-                    pos = {"left": (x - 26, cy), "right": (x + w + 26, cy), "above": (cx, y - 26), "below": (cx, y + h + 26), "inleft": (x + 24, cy), "inright": (x + w - 24, cy)}[side]
-                    items.append({"type": "callout", "x": round(pos[0]), "y": round(pos[1]), "n": m.get("n", 1), "size": s, "color": color, "stroke": 6}); continue
+                    side = m.get("side", "left"); cx, cy = x + w / 2, y + h / 2; s = 24; g = 4 + 2 + 4 + s / 2   # the control's space, the stroke, a gap, then the circle
+                    pos = {"left": (x - g, cy), "right": (x + w + g, cy), "above": (cx, y - g), "below": (cx, y + h + g), "inleft": (x + s / 2 + 6, cy), "inright": (x + w - s / 2 - 6, cy)}[side]
+                    items.append({"type": "callout", "x": round(pos[0]), "y": round(pos[1]), "n": m.get("n", 1), "size": s, "color": color, "edge": edge, "stroke": 2}); continue
                 raise SystemExit(f"frame {name}: mark type {t} needs 'to' or isn't known")
             bb = box(m["to"]); side = m.get("side", "right")
-            end = {"left": (bb["x"] - 6, bb["y"] + bb["h"] / 2), "right": (bb["x"] + bb["w"] + 6, bb["y"] + bb["h"] / 2), "top": (bb["x"] + bb["w"] / 2, bb["y"] - 6), "bottom": (bb["x"] + bb["w"] / 2, bb["y"] + bb["h"] + 6), "below": (bb["x"], bb["y"] + bb["h"]), "topright": (bb["x"] + bb["w"] - 12, bb["y"] - 6)}[side]
+            # The arrow stops 4 px short of the rectangle drawn round the control (4 px of space, then the stroke).
+            end = {"left": (bb["x"] - 10, bb["y"] + bb["h"] / 2), "right": (bb["x"] + bb["w"] + 10, bb["y"] + bb["h"] / 2), "top": (bb["x"] + bb["w"] / 2, bb["y"] - 10), "bottom": (bb["x"] + bb["w"] / 2, bb["y"] + bb["h"] + 10), "below": (bb["x"], bb["y"] + bb["h"]), "topright": (bb["x"] + bb["w"] - 12, bb["y"] - 10)}[side]
             ex, ey = end[0] - ox, end[1] - oy; dx, dy = m.get("from", [120, -60])
-            if t == "arrow": items.append({"type": "arrow", "x": round(ex + dx), "y": round(ey + dy), "x2": round(ex), "y2": round(ey), "color": color, "stroke": 6})
+            if t == "arrow": items.append({"type": "arrow", "x": round(ex + dx), "y": round(ey + dy), "x2": round(ex), "y2": round(ey), "color": color, "edge": edge, "stroke": 2})
             elif t == "text": items.append({"type": "text", "x": round(ex + dx), "y": round(ey + dy), "text": m["text"], "size": m.get("size", 26), "box": True, "color": color, "stroke": 6})
         png = demo.screenshot(clip=clip) if clip else demo.screenshot()
         size = (clip["width"], clip["height"]) if clip else (W, H)

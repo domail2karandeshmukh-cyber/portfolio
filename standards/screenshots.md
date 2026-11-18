@@ -34,7 +34,7 @@ All values are page pixels for an image shown at its natural size. For a capture
 | Annotation green: strokes, arrows, callout fill | #6CE975 | 13.6:1 on black, 9.5:1 on dark gray (#1F2937) |
 | Keyline: a 1 px edge outside every green stroke | #0E5A2B | 8.4:1 on white, 5.4:1 against the green |
 | Number in a callout | #0B2E16 on #6CE975 | 9.6:1 |
-| Redaction box | #1F2937, fully opaque | Not applicable |
+| Redaction box | #000000, fully opaque | Not applicable |
 
 The keyline is the one change to the look of the original guides. Bright green alone has a contrast ratio of 1.55:1 on a white interface, below the 3:1 that WCAG 2.2 asks of graphics a reader needs (success criterion 1.4.11). With the dark edge, the annotation stands out on white and on dark interfaces alike, and it still reads as the same green.
 
