@@ -20,7 +20,7 @@
 <originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
 <applic><displayText><simplePara>All</simplePara></displayText></applic>
 <brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
-<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<qualityAssurance><unverified/></qualityAssurance>
 </dmStatus>
 </identAndStatusSection>
 <content>
@@ -44,7 +44,6 @@
 <enumeration applicPropertyValues="Classroom|Workshop"/>
 </productAttribute>
 </productAttributeList>
-<condCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00Q" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></condCrossRefTableRef>
 <productCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00P" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></productCrossRefTableRef>
 </applicCrossRefTable>
 </content>

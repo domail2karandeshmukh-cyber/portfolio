@@ -7,10 +7,13 @@ approved maintenance data, and nothing is taken from a real manual.
 
     python3 -I scripts/aero/csdb.py
 
-Issue 001 of each module is the first release (2 November 2026). Engineering change EC-ARF-01
-(Modification M01: two quick-release latches replace the four fan mounting screws) made issue 002 of the
-description, the remove and install procedures, the illustrated parts data and both publications
-(16 November 2026). Both issues are kept, so the CSDB shows the history.
+Issue 001 of each module is the first release (2 November 2026), and knows nothing of Modification M01.
+Engineering change EC-ARF-01 (Modification M01: two quick-release latches replace the four fan mounting screws,
+16 November 2026) added the conditions cross-reference table that defines M01, and made issue 002 of the ACT
+(which now refers to it), the PCT (which records M01 for each serial number), the description, the remove and
+install procedures, the illustrated parts data and both publications. Both issues are kept, so the CSDB shows
+the history, and each publication issue is a baseline: it names the exact issue of every module it contains.
+No module records a verification: nobody qualified has checked this fictional content, so each is unverified.
 """
 import os
 import sys
@@ -96,7 +99,7 @@ def doctype(root, icns):
     return f'<!DOCTYPE {root} [\n<!NOTATION svg SYSTEM "svg">{ents}\n]>'
 
 
-def dmodule(c, issue, content, *, date=D1, icns=(), applic="All", qa="tabtop", changed=False, rfu=None, remarks=None):
+def dmodule(c, issue, content, *, date=D1, icns=(), applic="All", qa=None, changed=False, rfu=None, remarks=None):
     """A data module: identification and status, then the content as given."""
     ic = c["ic"]
     tech, info = TITLES[ic]
@@ -162,14 +165,19 @@ WARN_POWER = ("<warning><warningAndCautionPara>Disconnect the bench power supply
 
 
 def steps(items, start=1):
-    """Procedural steps from (text, extra) pairs; extra is XML put before the paragraph, or attributes."""
+    """Procedural steps from (text, extra) pairs; extra is XML put before the paragraph, or attributes.
+    A step keeps its id from issue to issue: a step added by a later issue gives its own ("id"), the next number
+    not used before, so the steps around it keep theirs."""
     out, n = [], start
     for it in items:
         if isinstance(it, str):
             it = {"t": it}
-        attrs = f' id="stp-{n:04d}"' + it.get("a", "")
+        if "id" in it:
+            sid = it["id"]
+        else:
+            sid, n = f"stp-{n:04d}", n + 1
+        attrs = f' id="{sid}"' + it.get("a", "")
         out.append(f"<proceduralStep{attrs}>{it.get('pre', '')}<para>{it['t']}</para>{it.get('post', '')}</proceduralStep>")
-        n += 1
     return "\n".join(out)
 
 
@@ -194,7 +202,10 @@ ICN = {
 # ---------------------------------------------------------------- The applicability tables and the BREX
 
 
-def act():
+def act(issue):
+    """The ACT. Issue 002 (EC-ARF-01) refers to the new CCT, where condition M01 is defined."""
+    two = issue == "002"
+    cct_ref = f"<condCrossRefTableRef>{dmref(CCT)}</condCrossRefTableRef>" if two else ""
     content = f"""<content>
 <applicCrossRefTable>
 <productAttributeList>
@@ -216,14 +227,18 @@ def act():
 <enumeration applicPropertyValues="Classroom|Workshop"/>
 </productAttribute>
 </productAttributeList>
-<condCrossRefTableRef>{dmref(CCT)}</condCrossRefTableRef>
+{cct_ref}
 <productCrossRefTableRef>{dmref(PCT)}</productCrossRefTableRef>
 </applicCrossRefTable>
 </content>"""
+    if two:
+        return dmodule(ACT, "002", content, date=D2, changed=True,
+                       rfu="EC-ARF-01: the ACT now refers to the conditions cross-reference table, which defines Modification M01.")
     return dmodule(ACT, "001", content)
 
 
 def cct():
+    """The CCT is new with EC-ARF-01: before the change, the rig had no conditions."""
     content = """<content>
 <condCrossRefTable>
 <condTypeList>
@@ -241,22 +256,29 @@ def cct():
 </condList>
 </condCrossRefTable>
 </content>"""
-    return dmodule(CCT, "001", content)
+    return dmodule(CCT, "001", content, date=D2,
+                   remarks="Made by engineering change EC-ARF-01 to define Modification M01. The rig had no conditions before.")
 
 
 PRODUCTS = [("001", "Classroom", "pre"), ("002", "Classroom", "post"), ("003", "Workshop", "post")]
 
 
-def pct():
+def pct(issue):
+    """The PCT: each serial number of the rig and its attributes. Issue 002 (EC-ARF-01) records whether M01 is incorporated."""
+    two = issue == "002"
     rows = []
     for sn, variant, m01 in PRODUCTS:
+        mod = f'\n<assign applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValue="{m01}"/>' if two else ""
         rows.append(f"""<product id="prd-sn{sn}">
 <assign applicPropertyIdent="model" applicPropertyType="prodattr" applicPropertyValue="ARF-1"/>
 <assign applicPropertyIdent="serialNumber" applicPropertyType="prodattr" applicPropertyValue="{sn}"/>
-<assign applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValue="{variant}"/>
-<assign applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValue="{m01}"/>
+<assign applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValue="{variant}"/>{mod}
 </product>""")
-    return dmodule(PCT, "001", "<content>\n<productCrossRefTable>\n" + "\n".join(rows) + "\n</productCrossRefTable>\n</content>")
+    content = "<content>\n<productCrossRefTable>\n" + "\n".join(rows) + "\n</productCrossRefTable>\n</content>"
+    if two:
+        return dmodule(PCT, "002", content, date=D2, changed=True,
+                       rfu="EC-ARF-01: each serial number now records Modification M01: not incorporated (pre) on 001, incorporated (post) on 002 and 003.")
+    return dmodule(PCT, "001", content)
 
 
 BREX_RULES = [
@@ -281,7 +303,8 @@ BREX_RULES = [
     ("0", "//warning[not(ancestor::reqSafety) and not(parent::proceduralStep)]", "Warnings are in the safety requirements or at the start of the step they apply to.", []),
     ("0", "//figure[not(title)]", "Every figure has a title.", []),
     ("0", "//*[@applicRefId][not(@applicRefId = //applic/@id)]", "Every applicability reference points to an annotation in this module.", []),
-    ("0", "//assert[@applicPropertyType='condition'][not(@applicPropertyIdent='M01')]", "M01 is the only condition defined in the CCT.", []),
+    ("0", "//assert[@applicPropertyType='condition'][@applicPropertyValues != 'pre' and @applicPropertyValues != 'post']",
+     "A modification is a condition with the value pre (not incorporated) or post (incorporated).", []),
     ("0", "//assert[@applicPropertyType='prodattr'][not(@applicPropertyIdent='model' or @applicPropertyIdent='serialNumber' or @applicPropertyIdent='variant')]",
      "Product attributes are model, serialNumber and variant, as defined in the ACT.", []),
     ("0", "//graphic[not(starts-with(@infoEntityIdent, 'ICN-0DEMO-'))]", "Illustrations use the project ICN prefix ICN-0DEMO-.", []),
@@ -330,6 +353,8 @@ def description(issue):
            f'<para applicRefId="app-post-m01"{ch("add")}>After Modification M01, two quick-release latches attach the fan assembly to the frame. You do not need tools to open the latches.</para>'
            "<para>A connector connects the fan assembly to the control box.</para>")
     latch_row = (f'<row{ch("add")}><entry><para>Latch operation (after Modification M01)</para></entry><entry><para>By hand, no tools</para></entry></row>' if two else "")
+    torque_row = (f'<row{ch("modify")}><entry><para>Torque, fan mounting screws (before Modification M01)</para></entry><entry><para>2.5 N.m</para></entry></row>' if two else
+                  "<row><entry><para>Torque, fan mounting screws</para></entry><entry><para>2.5 N.m</para></entry></row>")
     content = f"""<content>
 {APPLIC_M01 if two else ""}
 <description>
@@ -383,7 +408,7 @@ def description(issue):
 <tbody>
 <row><entry><para>Supply voltage</para></entry><entry><para>24 V DC, from an external bench power supply</para></entry></row>
 <row><entry><para>Fan speed signal at TP1 and TP2, speed control at MAX</para></entry><entry><para>10.0 V DC, tolerance 0.2 V</para></entry></row>
-<row><entry><para>Torque, fan mounting screws (before Modification M01)</para></entry><entry><para>2.5 N.m</para></entry></row>
+{torque_row}
 <row><entry><para>Mass of the fan assembly</para></entry><entry><para>2.4 kg</para></entry></row>
 {latch_row}
 </tbody>
@@ -441,13 +466,13 @@ def operation():
 
 def remove(issue):
     two = issue == "002"
-    figs = (figure("fig-0001", "Fan assembly - removal and installation (before Modification M01)", ICN["fan-screws"], attrs=' applicRefId="app-pre-m01"')
+    figs = (figure("fig-0001", "Fan assembly - removal and installation (before Modification M01)", ICN["fan-screws"], attrs=f' applicRefId="app-pre-m01"{ch("modify")}')
             + figure("fig-0002", "Fan assembly - removal and installation (after Modification M01)", ICN["fan-latches"], attrs=f' applicRefId="app-post-m01"{ch("add")}')
             if two else figure("fig-0001", "Fan assembly - removal and installation", ICN["fan-screws"]))
     fixing = ([{"t": f"Remove the four screws (2) and the four washers (3). Refer to {iref('fig-0001', 'irtt01')}.", "a": ' applicRefId="app-pre-m01"' + ch("modify")},
-               {"t": f"Open the two latches (4). Refer to {iref('fig-0002', 'irtt01')}.", "a": ' applicRefId="app-post-m01"' + ch("add")}]
+               {"t": f"Open the two latches (4). Refer to {iref('fig-0002', 'irtt01')}.", "a": ' applicRefId="app-post-m01"' + ch("add"), "id": "stp-0007"}]
               if two else [f"Remove the four screws (2) and the four washers (3). Refer to {iref('fig-0001', 'irtt01')}."])
-    tool = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>")
+    tool = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' + ch("modify") if two else "") + "><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>")
     body = steps([
         {"t": "Open the access panel.", "pre": ""},
         "Disconnect the connector (11) from the fan assembly (1).",
@@ -482,7 +507,7 @@ def remove(issue):
 
 def install(issue):
     two = issue == "002"
-    figs = (figure("fig-0001", "Fan assembly - removal and installation (before Modification M01)", ICN["fan-screws"], attrs=' applicRefId="app-pre-m01"')
+    figs = (figure("fig-0001", "Fan assembly - removal and installation (before Modification M01)", ICN["fan-screws"], attrs=f' applicRefId="app-pre-m01"{ch("modify")}')
             + figure("fig-0002", "Fan assembly - removal and installation (after Modification M01)", ICN["fan-latches"], attrs=f' applicRefId="app-post-m01"{ch("add")}')
             if two else figure("fig-0001", "Fan assembly - removal and installation", ICN["fan-screws"]))
     pre = ' applicRefId="app-pre-m01"' + ch("modify") if two else ""
@@ -492,12 +517,13 @@ def install(issue):
     ]
     if two:
         fixing += [
-            {"t": f"Close the two latches (4). Refer to {iref('fig-0002', 'irtt01')}.", "a": ' applicRefId="app-post-m01"' + ch("add")},
-            {"t": "Make sure that each latch is locked.", "a": ' applicRefId="app-post-m01"' + ch("add"),
+            {"t": f"Close the two latches (4). Refer to {iref('fig-0002', 'irtt01')}.", "a": ' applicRefId="app-post-m01"' + ch("add"), "id": "stp-0007"},
+            {"t": "Make sure that each latch is locked.", "a": ' applicRefId="app-post-m01"' + ch("add"), "id": "stp-0008",
              "pre": "<note><notePara>A locked latch is flat against the bracket.</notePara></note>"},
         ]
-    tools = ('<supportEquipDescr id="seq-0001"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>"
-             + '<supportEquipDescr id="seq-0002"' + (' applicRefId="app-pre-m01"' if two else "") + "><name>Torque screwdriver, 1 N.m to 5 N.m</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-03</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>")
+    mark = ' applicRefId="app-pre-m01"' + ch("modify") if two else ""
+    tools = ('<supportEquipDescr id="seq-0001"' + mark + "><name>Screwdriver, cross-head, size 2</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-02</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>"
+             + '<supportEquipDescr id="seq-0002"' + mark + "><name>Torque screwdriver, 1 N.m to 5 N.m</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-GSE-03</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></supportEquipDescr>")
     body = steps([
         "Put the fan assembly (1) in its position on the frame.",
     ] + fixing + [
@@ -621,11 +647,12 @@ def function_test():
 </tbody></tgroup></table>"""
     body = steps([
         f"Start the rig. Refer to {dmref(OPER, title=TITLES['131'])}.",
+        f"If the fan does not run, do the fault isolation procedure. Refer to {dmref(FAULT, title=TITLES['421'])}.",
         {"t": f"Set the speed control R1 to MIN. Make sure that the results agree with {iref('tab-0001', 'irtt02')}.", "post": table},
         "Set the speed control R1 to MAX.",
         "Make sure that the pointer of the airflow indicator is in the green band.",
         "Listen to the fan assembly for 30 seconds.",
-        {"t": f"If you hear a noise from the fan bearing, do the fault isolation procedure. Refer to {dmref(FAULT, title=TITLES['421'])}.",
+        {"t": f"If you hear a noise from the fan bearing, replace the fan assembly. Refer to {dmref(REMOVE, title=TITLES['520'])} and {dmref(INSTALL, title=TITLES['720'])}.",
          "pre": "<note><notePara>A smooth, even sound is normal.</notePara></note>"},
         {"t": f"If the pointer is not in the green band, adjust the fan speed. Refer to {dmref(ADJUST, title=TITLES['271'])}."},
         "Stop the rig.",
@@ -662,11 +689,11 @@ def fault():
         step("stp-0002", "Look at the circuit breaker CB1.", "Is the button of CB1 out?", "end-0001", "end-0002"),
         step("stp-0003", "Turn the speed control R1 to MAX.", "Does the fan run?", "end-0003", "stp-0004"),
         step("stp-0004", "Look at the FAN FAULT lamp DS2.", "Does DS2 come on?", "stp-0005", "end-0004"),
-        step("stp-0005", "Set the power switch S1 to OFF. Disconnect the connector (11) from the fan assembly. Examine the pins of the connector.",
+        step("stp-0005", "Set the power switch S1 to OFF. Disconnect the bench power supply. Disconnect the fan harness connector from the fan assembly. Examine the pins of the connector.",
              "Are all pins straight and clean?", "end-0005", "end-0006"),
         end("end-0001", "Push the button of CB1 to reset it. If CB1 opens again, replace the control box. Then do this procedure again."),
         end("end-0002", "Make sure that the bench power supply is set to 24 V DC and is on. If it is, replace the control box."),
-        end("end-0003", f"The fan runs. Do the function test to confirm the repair. Refer to {dmref(TEST, title=TITLES['340'])}."),
+        end("end-0003", f"The fan runs at MAX. Do the function test of the fan assembly. Refer to {dmref(TEST, title=TITLES['340'])}."),
         end("end-0004", "Replace the control box. Then do the function test of the fan assembly."),
         end("end-0005", f"Replace the fan assembly. Refer to {dmref(REMOVE, title=TITLES['520'])} and {dmref(INSTALL, title=TITLES['720'])}."),
         end("end-0006", "Clean or straighten the pins. If a pin is broken, replace the connector. Then do this procedure again."),
@@ -691,7 +718,7 @@ def fault():
 </faultIsolationProcedure>
 </faultIsolation>
 </content>"""
-    return dmodule(FAULT, "001", content, icns=[ICN["control"]], qa=None)
+    return dmodule(FAULT, "001", content, icns=[ICN["control"]])
 
 # ---------------------------------------------------------------- Illustrated parts data
 
@@ -728,15 +755,19 @@ def ipd(issue):
         for k, (_, isn, ind, qty, pn, descr, app, _a) in enumerate(group):
             # Alternative parts of one item (the two access panels) are item variants A and B, each with its applicability.
             variant = f' itemVariant="{chr(65 + k)}"' if len(group) > 1 else ""
+            m01 = app and "m01" in app
+            if m01 and not two:
+                app = None  # issue 001 came before Modification M01: the screws and washers simply apply
             a = f' applicRefId="{app}"' if app else ""
-            added = ch("add") if (group[0][7] and two) else ""
+            added = ch("add") if (group[0][7] and two) else ch("modify") if (m01 and two) else ""
             csn.append(f'<catalogSeqNumber figureNumber="01" item="{it}"{variant} indenture="{ind}"{a}{added}>'
                        f'<itemSeqNumber itemSeqNumberValue="00A">'
                        f"<quantityPerNextHigherAssy>{qty}</quantityPerNextHigherAssy>"
                        f'<partRef manufacturerCodeValue="{ISSUER}" partNumberValue="{pn}"/>'
                        f"<partSegment><itemIdentData><descrForPart>{esc(descr)}</descrForPart></itemIdentData></partSegment>"
                        "</itemSeqNumber></catalogSeqNumber>")
-    applic = APPLIC_M01.replace("</referencedApplicGroup>", APPLIC_VARIANT + "\n</referencedApplicGroup>")
+    applic = (APPLIC_M01.replace("</referencedApplicGroup>", APPLIC_VARIANT + "\n</referencedApplicGroup>") if two
+              else "<referencedApplicGroup>\n" + APPLIC_VARIANT + "\n</referencedApplicGroup>")
     content = f"""<content>
 {applic}
 <illustratedPartsCatalog>
@@ -780,7 +811,7 @@ def pm(number, issue, title, entries, date):
 <applicCrossRefTableRef>{dmref(ACT)}</applicCrossRefTableRef>
 <applic><displayText><simplePara>ARF-1 training rig, serial numbers 001 to 003</simplePara></displayText></applic>
 <brexDmRef>{dmref(BREX)}</brexDmRef>
-<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<qualityAssurance><unverified/></qualityAssurance>
 {rfu}
 </pmStatus>
 </identAndStatusSection>
@@ -814,7 +845,7 @@ def operator_pm(issue):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    made = [brex(), act(), cct(), pct(), description("001"), description("002"), operation(), remove("001"), remove("002"),
+    made = [brex(), act("001"), act("002"), cct(), pct("001"), pct("002"), description("001"), description("002"), operation(), remove("001"), remove("002"),
             install("001"), install("002"), filter_exam(), adjust(), function_test(), fault(), ipd("001"), ipd("002"),
             maintenance_pm("001"), maintenance_pm("002"), operator_pm("001"), operator_pm("002")]
     keep = {name for name, _ in made}

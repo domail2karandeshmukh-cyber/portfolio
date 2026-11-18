@@ -20,7 +20,7 @@
 <applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
 <applic><displayText><simplePara>ARF-1 training rig, serial numbers 001 to 003</simplePara></displayText></applic>
 <brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
-<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<qualityAssurance><unverified/></qualityAssurance>
 <reasonForUpdate id="rfu-0001" updateHighlight="1" updateReasonType="urt02"><simplePara>EC-ARF-01: the publication now contains the issues of the data modules changed by Modification M01.</simplePara></reasonForUpdate>
 </pmStatus>
 </identAndStatusSection>

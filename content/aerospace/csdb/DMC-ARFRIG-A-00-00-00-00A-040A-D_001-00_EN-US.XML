@@ -24,7 +24,7 @@
 <applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
 <applic><displayText><simplePara>All</simplePara></displayText></applic>
 <brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
-<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<qualityAssurance><unverified/></qualityAssurance>
 </dmStatus>
 </identAndStatusSection>
 <content>
@@ -79,7 +79,7 @@
 <tbody>
 <row><entry><para>Supply voltage</para></entry><entry><para>24 V DC, from an external bench power supply</para></entry></row>
 <row><entry><para>Fan speed signal at TP1 and TP2, speed control at MAX</para></entry><entry><para>10.0 V DC, tolerance 0.2 V</para></entry></row>
-<row><entry><para>Torque, fan mounting screws (before Modification M01)</para></entry><entry><para>2.5 N.m</para></entry></row>
+<row><entry><para>Torque, fan mounting screws</para></entry><entry><para>2.5 N.m</para></entry></row>
 <row><entry><para>Mass of the fan assembly</para></entry><entry><para>2.4 kg</para></entry></row>
 </tbody>
 </tgroup>

@@ -20,7 +20,7 @@
 <originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
 <applic><displayText><simplePara>All</simplePara></displayText></applic>
 <brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
-<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<qualityAssurance><unverified/></qualityAssurance>
 </dmStatus>
 </identAndStatusSection>
 <content>
@@ -29,19 +29,16 @@
 <assign applicPropertyIdent="model" applicPropertyType="prodattr" applicPropertyValue="ARF-1"/>
 <assign applicPropertyIdent="serialNumber" applicPropertyType="prodattr" applicPropertyValue="001"/>
 <assign applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValue="Classroom"/>
-<assign applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValue="pre"/>
 </product>
 <product id="prd-sn002">
 <assign applicPropertyIdent="model" applicPropertyType="prodattr" applicPropertyValue="ARF-1"/>
 <assign applicPropertyIdent="serialNumber" applicPropertyType="prodattr" applicPropertyValue="002"/>
 <assign applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValue="Classroom"/>
-<assign applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValue="post"/>
 </product>
 <product id="prd-sn003">
 <assign applicPropertyIdent="model" applicPropertyType="prodattr" applicPropertyValue="ARF-1"/>
 <assign applicPropertyIdent="serialNumber" applicPropertyType="prodattr" applicPropertyValue="003"/>
 <assign applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValue="Workshop"/>
-<assign applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValue="post"/>
 </product>
 </productCrossRefTable>
 </content>

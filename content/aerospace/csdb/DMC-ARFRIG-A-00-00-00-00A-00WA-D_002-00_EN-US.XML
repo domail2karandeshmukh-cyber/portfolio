@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/appliccrossreftable.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="002" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="16"/>
+<dmTitle><techName>ARF-1 training rig</techName><infoName>Applicability cross-reference table</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="changed">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><unverified/></qualityAssurance>
+<reasonForUpdate id="rfu-0001" updateHighlight="1" updateReasonType="urt02"><simplePara>EC-ARF-01: the ACT now refers to the conditions cross-reference table, which defines Modification M01.</simplePara></reasonForUpdate>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<applicCrossRefTable>
+<productAttributeList>
+<productAttribute id="model">
+<name>Model</name>
+<displayName>Model</displayName>
+<descr>The model of the training rig.</descr>
+<enumeration applicPropertyValues="ARF-1"/>
+</productAttribute>
+<productAttribute id="serialNumber" valuePattern="[0-9]{3}">
+<name>Serial number</name>
+<displayName>Serial number</displayName>
+<descr>The serial number on the identification plate of the frame.</descr>
+</productAttribute>
+<productAttribute id="variant">
+<name>Variant</name>
+<displayName>Variant</displayName>
+<descr>The build of the rig. The classroom variant has a transparent access panel. The workshop variant has a metal access panel.</descr>
+<enumeration applicPropertyValues="Classroom|Workshop"/>
+</productAttribute>
+</productAttributeList>
+<condCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00Q" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></condCrossRefTableRef>
+<productCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00P" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></productCrossRefTableRef>
+</applicCrossRefTable>
+</content>
+</dmodule>

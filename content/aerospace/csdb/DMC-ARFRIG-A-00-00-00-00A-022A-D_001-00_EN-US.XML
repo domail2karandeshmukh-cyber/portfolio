@@ -20,7 +20,7 @@
 <originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
 <applic><displayText><simplePara>All</simplePara></displayText></applic>
 <brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="S1000D" systemDiffCode="H" systemCode="04" subSystemCode="1" subSubSystemCode="0" assyCode="0301" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
-<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<qualityAssurance><unverified/></qualityAssurance>
 </dmStatus>
 </identAndStatusSection>
 <content>
@@ -43,7 +43,7 @@
 <structureObjectRule><objectPath allowedObjectFlag="0">//warning[not(ancestor::reqSafety) and not(parent::proceduralStep)]</objectPath><objectUse>Warnings are in the safety requirements or at the start of the step they apply to.</objectUse></structureObjectRule>
 <structureObjectRule><objectPath allowedObjectFlag="0">//figure[not(title)]</objectPath><objectUse>Every figure has a title.</objectUse></structureObjectRule>
 <structureObjectRule><objectPath allowedObjectFlag="0">//*[@applicRefId][not(@applicRefId = //applic/@id)]</objectPath><objectUse>Every applicability reference points to an annotation in this module.</objectUse></structureObjectRule>
-<structureObjectRule><objectPath allowedObjectFlag="0">//assert[@applicPropertyType='condition'][not(@applicPropertyIdent='M01')]</objectPath><objectUse>M01 is the only condition defined in the CCT.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//assert[@applicPropertyType='condition'][@applicPropertyValues != 'pre' and @applicPropertyValues != 'post']</objectPath><objectUse>A modification is a condition with the value pre (not incorporated) or post (incorporated).</objectUse></structureObjectRule>
 <structureObjectRule><objectPath allowedObjectFlag="0">//assert[@applicPropertyType='prodattr'][not(@applicPropertyIdent='model' or @applicPropertyIdent='serialNumber' or @applicPropertyIdent='variant')]</objectPath><objectUse>Product attributes are model, serialNumber and variant, as defined in the ACT.</objectUse></structureObjectRule>
 <structureObjectRule><objectPath allowedObjectFlag="0">//graphic[not(starts-with(@infoEntityIdent, 'ICN-0DEMO-'))]</objectPath><objectUse>Illustrations use the project ICN prefix ICN-0DEMO-.</objectUse></structureObjectRule>
 </structureObjectRuleGroup>
