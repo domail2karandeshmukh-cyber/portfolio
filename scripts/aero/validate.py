@@ -116,10 +116,25 @@ def fetch_schemas(names, folder):
     return done
 
 
+XML_NS = "http://www.w3.org/XML/1998/namespace"
+XS = "http://www.w3.org/2001/XMLSchema"
+
+
 def schema_for(folder, cache, loc):
+    """The compiled schema. A schema that uses xml:space or xml:lang without importing the XML namespace gets the
+    import (of the W3C's xml.xsd, fetched with it) added in memory, because libxml2 needs it; the file is unchanged."""
     name = loc.rsplit("/", 1)[1]
     if name not in cache:
-        cache[name] = etree.XMLSchema(etree.parse(os.path.join(folder, name)))
+        doc = etree.parse(os.path.join(folder, name))
+        root = doc.getroot()
+        uses_xml = bool(root.xpath('//@ref[starts-with(., "xml:")]'))
+        imported = root.xpath("xs:import[@namespace=$ns]", namespaces={"xs": XS}, ns=XML_NS)
+        if uses_xml and not any(i.get("schemaLocation") for i in imported):
+            for i in imported:
+                root.remove(i)
+            imp = etree.Element(f"{{{XS}}}import", namespace=XML_NS, schemaLocation=os.path.join(folder, "xml.xsd"))
+            root.insert(0, imp)
+        cache[name] = etree.XMLSchema(doc)
     return cache[name]
 
 # ---------------------------------------------------------------- The checks
