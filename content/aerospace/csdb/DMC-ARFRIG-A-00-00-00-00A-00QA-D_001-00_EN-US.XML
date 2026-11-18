@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/condcrossreftable.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00Q" infoCodeVariant="A" itemLocationCode="D"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>ARF-1 training rig</techName><infoName>Conditions cross-reference table</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<condCrossRefTable>
+<condTypeList>
+<condType id="cdt-mod">
+<name>Modification status</name>
+<descr>Whether a modification is incorporated in the rig.</descr>
+<enumeration applicPropertyValues="pre|post"/>
+</condType>
+</condTypeList>
+<condList>
+<cond id="M01" condTypeRefId="cdt-mod">
+<name>Modification M01</name>
+<descr>Two quick-release latches replace the four fan mounting screws. Introduced by engineering change EC-ARF-01.</descr>
+</cond>
+</condList>
+</condCrossRefTable>
+</content>
+</dmodule>

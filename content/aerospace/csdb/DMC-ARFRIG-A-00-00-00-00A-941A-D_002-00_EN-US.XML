@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule [
+<!NOTATION svg SYSTEM "svg">
+<!ENTITY ICN-0DEMO-ARF0004-002-01 SYSTEM "ICN-0DEMO-ARF0004-002-01.SVG" NDATA svg>
+]>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/ipd.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="941" infoCodeVariant="A" itemLocationCode="D"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="002" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="16"/>
+<dmTitle><techName>Training rig</techName><infoName>Illustrated parts data</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="changed">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+<reasonForUpdate id="rfu-0001" updateHighlight="1" updateReasonType="urt02"><simplePara>EC-ARF-01: Modification M01. Items 004 and 005 are added. Items 002 and 003 apply before Modification M01 only.</simplePara></reasonForUpdate>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<referencedApplicGroup>
+<applic id="app-pre-m01"><displayText><simplePara>Before Modification M01</simplePara></displayText>
+<assert applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValues="pre"/></applic>
+<applic id="app-post-m01"><displayText><simplePara>After Modification M01</simplePara></displayText>
+<assert applicPropertyIdent="M01" applicPropertyType="condition" applicPropertyValues="post"/></applic>
+<applic id="app-classroom"><displayText><simplePara>Classroom variant</simplePara></displayText>
+<assert applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValues="Classroom"/></applic>
+<applic id="app-workshop"><displayText><simplePara>Workshop variant</simplePara></displayText>
+<assert applicPropertyIdent="variant" applicPropertyType="prodattr" applicPropertyValues="Workshop"/></applic>
+</referencedApplicGroup>
+<illustratedPartsCatalog>
+<figure id="fig-0001"><title>Training rig</title><graphic infoEntityIdent="ICN-0DEMO-ARF0004-002-01"><hotspot id="hot-001" hotspotType="callout" applicationStructureIdent="item-001" applicationStructureName="Fan assembly"/><hotspot id="hot-002" hotspotType="callout" applicationStructureIdent="item-002" applicationStructureName="Screw, fan mounting"/><hotspot id="hot-003" hotspotType="callout" applicationStructureIdent="item-003" applicationStructureName="Washer, flat"/><hotspot id="hot-004" hotspotType="callout" applicationStructureIdent="item-004" applicationStructureName="Latch, quick-release"/><hotspot id="hot-005" hotspotType="callout" applicationStructureIdent="item-005" applicationStructureName="Bracket, latch"/><hotspot id="hot-006" hotspotType="callout" applicationStructureIdent="item-006" applicationStructureName="Filter housing"/><hotspot id="hot-007" hotspotType="callout" applicationStructureIdent="item-007" applicationStructureName="Filter element"/><hotspot id="hot-008" hotspotType="callout" applicationStructureIdent="item-008" applicationStructureName="Clamp, filter housing cover"/><hotspot id="hot-009" hotspotType="callout" applicationStructureIdent="item-009" applicationStructureName="Indicator, differential pressure"/><hotspot id="hot-010" hotspotType="callout" applicationStructureIdent="item-010" applicationStructureName="Control box"/><hotspot id="hot-011" hotspotType="callout" applicationStructureIdent="item-011" applicationStructureName="Connector, fan harness"/><hotspot id="hot-012" hotspotType="callout" applicationStructureIdent="item-012" applicationStructureName="Access panel, metal"/></graphic></figure>
+<catalogSeqNumber figureNumber="01" item="001" indenture="1"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-2000"/><partSegment><itemIdentData><descrForPart>Fan assembly</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="002" indenture="1"><itemSeqNumber itemSeqNumberValue="00A" applicRefId="app-pre-m01"><quantityPerNextHigherAssy>4</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-9101"/><partSegment><itemIdentData><descrForPart>Screw, fan mounting</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="003" indenture="1"><itemSeqNumber itemSeqNumberValue="00A" applicRefId="app-pre-m01"><quantityPerNextHigherAssy>4</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-9102"/><partSegment><itemIdentData><descrForPart>Washer, flat</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="004" indenture="1" changeType="add" changeMark="1" reasonForUpdateRefIds="rfu-0001"><itemSeqNumber itemSeqNumberValue="00A" applicRefId="app-post-m01"><quantityPerNextHigherAssy>2</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-9201"/><partSegment><itemIdentData><descrForPart>Latch, quick-release</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="005" indenture="1" changeType="add" changeMark="1" reasonForUpdateRefIds="rfu-0001"><itemSeqNumber itemSeqNumberValue="00A" applicRefId="app-post-m01"><quantityPerNextHigherAssy>2</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-9202"/><partSegment><itemIdentData><descrForPart>Bracket, latch</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="006" indenture="1"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-3000"/><partSegment><itemIdentData><descrForPart>Filter housing</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="007" indenture="2"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-3100"/><partSegment><itemIdentData><descrForPart>Filter element</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="008" indenture="2"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-3200"/><partSegment><itemIdentData><descrForPart>Clamp, filter housing cover</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="009" indenture="2"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-3300"/><partSegment><itemIdentData><descrForPart>Indicator, differential pressure</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="010" indenture="1"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-4000"/><partSegment><itemIdentData><descrForPart>Control box</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="011" indenture="1"><itemSeqNumber itemSeqNumberValue="00A"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-4100"/><partSegment><itemIdentData><descrForPart>Connector, fan harness</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+<catalogSeqNumber figureNumber="01" item="012" indenture="1"><itemSeqNumber itemSeqNumberValue="00A" applicRefId="app-classroom"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-1100"/><partSegment><itemIdentData><descrForPart>Access panel, transparent</descrForPart></itemIdentData></partSegment></itemSeqNumber><itemSeqNumber itemSeqNumberValue="00B" applicRefId="app-workshop"><quantityPerNextHigherAssy>1</quantityPerNextHigherAssy><partRef manufacturerCodeValue="0DEMO" partNumberValue="ARF-1101"/><partSegment><itemIdentData><descrForPart>Access panel, metal</descrForPart></itemIdentData></partSegment></itemSeqNumber></catalogSeqNumber>
+</illustratedPartsCatalog>
+</content>
+</dmodule>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule [
+<!NOTATION svg SYSTEM "svg">
+<!ENTITY ICN-0DEMO-ARF0003-001-01 SYSTEM "ICN-0DEMO-ARF0003-001-01.SVG" NDATA svg>
+]>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/proced.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="30" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="310" infoCodeVariant="A" itemLocationCode="A"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>Air filter</techName><infoName>Visual examination</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<procedure>
+<preliminaryRqmts>
+<reqCondGroup><reqCondDm><reqCond>Stop the rig and disconnect the bench power supply.</reqCond><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="131" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent></dmRef></reqCondDm></reqCondGroup>
+<reqSupportEquips><noSupportEquips/></reqSupportEquips>
+<reqSupplies><noSupplies/></reqSupplies>
+<reqSpares><spareDescrGroup><spareDescr id="spa-0001"><name>Filter element</name><identNumber><manufacturerCode>0DEMO</manufacturerCode><partAndSerialNumber><partNumber>ARF-3100</partNumber></partAndSerialNumber></identNumber><reqQuantity>1</reqQuantity></spareDescr></spareDescrGroup></reqSpares>
+<reqSafety><noSafety/></reqSafety>
+</preliminaryRqmts>
+<mainProcedure>
+<figure id="fig-0001"><title>Air filter - examination</title><graphic infoEntityIdent="ICN-0DEMO-ARF0003-001-01"></graphic></figure>
+<proceduralStep id="stp-0001"><para>Look at the differential pressure indicator (9). Refer to <internalRef internalRefId="fig-0001" internalRefTargetType="irtt01"/>.</para></proceduralStep>
+<proceduralStep id="stp-0002"><note><notePara>The red band shows that the filter element is blocked.</notePara></note><para>If the indicator shows a red band, record the result.</para></proceduralStep>
+<proceduralStep id="stp-0003"><para>Release the clamp (8).</para></proceduralStep>
+<proceduralStep id="stp-0004"><para>Remove the cover of the filter housing (6).</para></proceduralStep>
+<proceduralStep id="stp-0005"><para>Remove the filter element (7).</para></proceduralStep>
+<proceduralStep id="stp-0006"><para>Examine the filter element (7) for damage and contamination. Refer to <internalRef internalRefId="tab-0001" internalRefTargetType="irtt02"/>.</para><table id="tab-0001"><title>Filter element - results of the examination</title>
+<tgroup cols="2"><colspec colname="col1"/><colspec colname="col2"/>
+<thead><row><entry><para>Condition of the filter element</para></entry><entry><para>Action</para></entry></row></thead>
+<tbody>
+<row><entry><para>Clean. No damage.</para></entry><entry><para>Install the filter element again.</para></entry></row>
+<row><entry><para>Dust on the upstream surface only</para></entry><entry><para>Install the filter element again. Record the condition.</para></entry></row>
+<row><entry><para>Torn, wet or with dust on the downstream surface</para></entry><entry><para>Install a new filter element (7).</para></entry></row>
+</tbody></tgroup></table></proceduralStep>
+<proceduralStep id="stp-0007"><para>Install the filter element (7) in the filter housing (6).</para></proceduralStep>
+<proceduralStep id="stp-0008"><para>Install the cover of the filter housing (6).</para></proceduralStep>
+<proceduralStep id="stp-0009"><para>Engage the clamp (8).</para></proceduralStep>
+<proceduralStep id="stp-0010"><para>Push the reset button of the differential pressure indicator (9).</para></proceduralStep>
+<proceduralStep id="stp-0011"><para>Make sure that the indicator shows a green band.</para></proceduralStep>
+</mainProcedure>
+<closeRqmts><reqCondGroup><noConds/></reqCondGroup></closeRqmts>
+</procedure>
+</content>
+</dmodule>

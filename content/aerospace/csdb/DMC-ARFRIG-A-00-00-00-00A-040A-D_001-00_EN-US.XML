@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule [
+<!NOTATION svg SYSTEM "svg">
+<!ENTITY ICN-0DEMO-ARF0001-001-01 SYSTEM "ICN-0DEMO-ARF0001-001-01.SVG" NDATA svg>
+]>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/descript.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="040" infoCodeVariant="A" itemLocationCode="D"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>Training rig</techName><infoName>Description</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<description>
+<levelledPara id="par-0001">
+<title>General</title>
+<para>The ARF-1 training rig is a bench-mounted device for maintenance training. It has an air recirculation fan, an air filter and a control box.</para>
+<para>Students use the rig to practise removal, installation, examination, adjustment and fault isolation tasks. The rig does not represent a specific aircraft.</para>
+</levelledPara>
+<levelledPara id="par-0002">
+<title>Main components</title>
+<para>Refer to <internalRef internalRefId="fig-0001" internalRefTargetType="irtt01"/> for the location of the components.</para>
+<figure id="fig-0001"><title>Training rig - general view</title><graphic infoEntityIdent="ICN-0DEMO-ARF0001-001-01"></graphic></figure>
+<para>The rig has these main components:<randomList>
+<listItem><para>The frame and the access panel</para></listItem>
+<listItem><para>The fan assembly</para></listItem>
+<listItem><para>The air filter</para></listItem>
+<listItem><para>The airflow indicator</para></listItem>
+<listItem><para>The control box</para></listItem>
+</randomList></para>
+</levelledPara>
+<levelledPara id="par-0003">
+<title>Fan assembly</title>
+<para>The fan assembly pulls air through the air filter. Then it pushes the air through the outlet duct and the airflow indicator.</para>
+<para>Four screws and four washers attach the fan assembly to the frame. A connector connects the fan assembly to the control box.</para>
+</levelledPara>
+<levelledPara id="par-0004">
+<title>Air filter</title>
+<para>The filter element is in the filter housing. A clamp holds the cover of the filter housing.</para>
+<para>A differential pressure indicator is on the filter housing. When the filter element is blocked, the indicator shows a red band.</para>
+</levelledPara>
+<levelledPara id="par-0005">
+<title>Control box</title>
+<para>The control box supplies electrical power to the fan assembly. It has these controls and indicators:<randomList>
+<listItem><para>Power switch S1</para></listItem>
+<listItem><para>Circuit breaker CB1</para></listItem>
+<listItem><para>Speed control R1</para></listItem>
+<listItem><para>POWER lamp DS1 (green)</para></listItem>
+<listItem><para>FAN FAULT lamp DS2 (amber)</para></listItem>
+<listItem><para>Test points TP1 and TP2</para></listItem>
+</randomList></para>
+<para>An adjustment potentiometer R2 inside the control box sets the maximum fan speed.</para>
+</levelledPara>
+<levelledPara id="par-0006">
+<title>Technical data</title>
+<para>The values in <internalRef internalRefId="tab-0001" internalRefTargetType="irtt02"/> are training values for this fictional rig. Do not use them for other equipment.</para>
+<table id="tab-0001">
+<title>Training rig - technical data</title>
+<tgroup cols="2">
+<colspec colname="col1"/><colspec colname="col2"/>
+<thead><row><entry><para>Item</para></entry><entry><para>Value</para></entry></row></thead>
+<tbody>
+<row><entry><para>Supply voltage</para></entry><entry><para>24 V DC, from an external bench power supply</para></entry></row>
+<row><entry><para>Fan speed signal at TP1 and TP2, speed control at MAX</para></entry><entry><para>10.0 V DC, tolerance 0.2 V</para></entry></row>
+<row><entry><para>Torque, fan mounting screws (before Modification M01)</para></entry><entry><para>2.5 N.m</para></entry></row>
+<row><entry><para>Mass of the fan assembly</para></entry><entry><para>2.4 kg</para></entry></row>
+</tbody>
+</tgroup>
+</table>
+</levelledPara>
+</description>
+</content>
+</dmodule>

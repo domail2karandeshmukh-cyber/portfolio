@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule [
+<!NOTATION svg SYSTEM "svg">
+<!ENTITY ICN-0DEMO-ARF0006-001-01 SYSTEM "ICN-0DEMO-ARF0006-001-01.SVG" NDATA svg>
+]>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/fault.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="421" infoCodeVariant="A" itemLocationCode="A"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>Fan does not run</techName><infoName>Fault isolation procedure</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><unverified/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<faultIsolation>
+<faultIsolationProcedure>
+<isolationProcedure>
+<preliminaryRqmts>
+<reqCondGroup><reqCondNoRef><reqCond>The fan does not run when the power switch S1 is ON.</reqCond></reqCondNoRef></reqCondGroup>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupplies><noSupplies/></reqSupplies>
+<reqSpares><noSpares/></reqSpares>
+<reqSafety><safetyRqmts><warning><warningAndCautionPara>Disconnect the bench power supply before you touch the fan assembly. The fan blades can turn and cause injury to your fingers.</warningAndCautionPara></warning></safetyRqmts></reqSafety>
+</preliminaryRqmts>
+<isolationMainProcedure>
+<figure id="fig-0001"><title>Control box - controls and indicators</title><graphic infoEntityIdent="ICN-0DEMO-ARF0006-001-01"></graphic></figure>
+<isolationStep id="stp-0001"><action>Connect the bench power supply. Set the power switch S1 to ON. Refer to <internalRef internalRefId="fig-0001" internalRefTargetType="irtt01"/>.</action><isolationStepQuestion>Does the POWER lamp DS1 come on?</isolationStepQuestion><isolationStepAnswer><yesNoAnswer><yesAnswer nextActionRefId="stp-0003"/><noAnswer nextActionRefId="stp-0002"/></yesNoAnswer></isolationStepAnswer></isolationStep>
+<isolationStep id="stp-0002"><action>Look at the circuit breaker CB1.</action><isolationStepQuestion>Is the button of CB1 out?</isolationStepQuestion><isolationStepAnswer><yesNoAnswer><yesAnswer nextActionRefId="end-0001"/><noAnswer nextActionRefId="end-0002"/></yesNoAnswer></isolationStepAnswer></isolationStep>
+<isolationStep id="stp-0003"><action>Turn the speed control R1 to MAX.</action><isolationStepQuestion>Does the fan run?</isolationStepQuestion><isolationStepAnswer><yesNoAnswer><yesAnswer nextActionRefId="end-0003"/><noAnswer nextActionRefId="stp-0004"/></yesNoAnswer></isolationStepAnswer></isolationStep>
+<isolationStep id="stp-0004"><action>Look at the FAN FAULT lamp DS2.</action><isolationStepQuestion>Does DS2 come on?</isolationStepQuestion><isolationStepAnswer><yesNoAnswer><yesAnswer nextActionRefId="stp-0005"/><noAnswer nextActionRefId="end-0004"/></yesNoAnswer></isolationStepAnswer></isolationStep>
+<isolationStep id="stp-0005"><action>Set the power switch S1 to OFF. Disconnect the connector (11) from the fan assembly. Examine the pins of the connector.</action><isolationStepQuestion>Are all pins straight and clean?</isolationStepQuestion><isolationStepAnswer><yesNoAnswer><yesAnswer nextActionRefId="end-0005"/><noAnswer nextActionRefId="end-0006"/></yesNoAnswer></isolationStepAnswer></isolationStep>
+<isolationProcedureEnd id="end-0001"><action>Push the button of CB1 to reset it. If CB1 opens again, replace the control box. Then do this procedure again.</action></isolationProcedureEnd>
+<isolationProcedureEnd id="end-0002"><action>Make sure that the bench power supply is set to 24 V DC and is on. If it is, replace the control box.</action></isolationProcedureEnd>
+<isolationProcedureEnd id="end-0003"><action>The fan runs. Do the function test to confirm the repair. Refer to <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="340" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Fan assembly</techName><infoName>Function test</infoName></dmTitle></dmRefAddressItems></dmRef>.</action></isolationProcedureEnd>
+<isolationProcedureEnd id="end-0004"><action>Replace the control box. Then do the function test of the fan assembly.</action></isolationProcedureEnd>
+<isolationProcedureEnd id="end-0005"><action>Replace the fan assembly. Refer to <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="520" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Fan assembly</techName><infoName>Remove procedure</infoName></dmTitle></dmRefAddressItems></dmRef> and <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="720" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Fan assembly</techName><infoName>Install procedure</infoName></dmTitle></dmRefAddressItems></dmRef>.</action></isolationProcedureEnd>
+<isolationProcedureEnd id="end-0006"><action>Clean or straighten the pins. If a pin is broken, replace the connector. Then do this procedure again.</action></isolationProcedureEnd>
+</isolationMainProcedure>
+<closeRqmts><reqCondGroup><noConds/></reqCondGroup></closeRqmts>
+</isolationProcedure>
+</faultIsolationProcedure>
+</faultIsolation>
+</content>
+</dmodule>

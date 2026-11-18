@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/brex.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>ARF-1 training rig</techName><infoName>Business rules exchange</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="S1000D" systemDiffCode="H" systemCode="04" subSystemCode="1" subSubSystemCode="0" assyCode="0301" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<brex>
+<commonInfo><para>Project business rules for the fictional ARF-1 training rig. These rules add to the S1000D Issue 6 default BREX
+(DMC-S1000D-H-04-10-0301-00A-022A-D), which is not copied here.</para></commonInfo>
+<contextRules>
+<structureObjectRuleGroup>
+<structureObjectRule><objectPath allowedObjectFlag="2">//@securityClassification</objectPath><objectUse>Only unclassified data (01) is allowed in this project.</objectUse><objectValue valueForm="single" valueAllowed="01">Unclassified</objectValue></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="2">//dmCode/@modelIdentCode|//pmCode/@modelIdentCode</objectPath><objectUse>The model identification code of the project is ARFRIG.</objectUse><objectValue valueForm="single" valueAllowed="ARFRIG">ARF-1 training rig</objectValue></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="2">//dmIdent/dmCode/@infoCode</objectPath><objectUse>The project uses these information codes only.</objectUse><objectValue valueForm="single" valueAllowed="022">BREX</objectValue><objectValue valueForm="single" valueAllowed="00W">ACT</objectValue><objectValue valueForm="single" valueAllowed="00Q">CCT</objectValue><objectValue valueForm="single" valueAllowed="00P">PCT</objectValue><objectValue valueForm="single" valueAllowed="040">Description</objectValue><objectValue valueForm="single" valueAllowed="131">Normal operation procedure</objectValue><objectValue valueForm="single" valueAllowed="271">Adjust</objectValue><objectValue valueForm="single" valueAllowed="310">Visual examination</objectValue><objectValue valueForm="single" valueAllowed="340">Function test</objectValue><objectValue valueForm="single" valueAllowed="421">Fault isolation procedure</objectValue><objectValue valueForm="single" valueAllowed="520">Remove procedure</objectValue><objectValue valueForm="single" valueAllowed="720">Install procedure</objectValue><objectValue valueForm="single" valueAllowed="941">Illustrated parts data</objectValue></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="2">//@emphasisType</objectPath><objectUse>Bold (em01) is the only emphasis in this project.</objectUse><objectValue valueForm="single" valueAllowed="em01">Bold</objectValue></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="2">//@updateReasonType</objectPath><objectUse>A reason for update is editorial, technical or about applicability.</objectUse><objectValue valueForm="single" valueAllowed="urt01">Editorial change</objectValue><objectValue valueForm="single" valueAllowed="urt02">Technical change</objectValue><objectValue valueForm="single" valueAllowed="urt04">Applicability change</objectValue></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//dmStatus[not(dataRestrictions/restrictionInstructions/dataDistribution)]</objectPath><objectUse>Every data module carries the demonstration statement in dataDistribution.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//dmStatus[not(applicCrossRefTableRef)][not(ancestor::dmodule/content/brex or ancestor::dmodule/content/applicCrossRefTable or ancestor::dmodule/content/condCrossRefTable or ancestor::dmodule/content/productCrossRefTable)]</objectPath><objectUse>Every data module except the BREX and the applicability tables refers to the project ACT.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//brexDmRef/dmRef/dmRefIdent/dmCode[not(@modelIdentCode='ARFRIG' and @infoCode='022')][not(ancestor::dmodule/content/brex)]</objectPath><objectUse>Data modules refer to the project BREX, not to the default BREX.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//proceduralStep[count(ancestor::proceduralStep) &gt; 2]</objectPath><objectUse>Procedural steps go no deeper than three levels.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//proceduralStep/para[string-length(normalize-space(.)) &gt; 180]</objectPath><objectUse>A step paragraph has one short instruction. Split long steps.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//warning[not(ancestor::reqSafety) and not(parent::proceduralStep)]</objectPath><objectUse>Warnings are in the safety requirements or at the start of the step they apply to.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//figure[not(title)]</objectPath><objectUse>Every figure has a title.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//*[@applicRefId][not(@applicRefId = //applic/@id)]</objectPath><objectUse>Every applicability reference points to an annotation in this module.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//assert[@applicPropertyType='condition'][not(@applicPropertyIdent='M01')]</objectPath><objectUse>M01 is the only condition defined in the CCT.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//assert[@applicPropertyType='prodattr'][not(@applicPropertyIdent='model' or @applicPropertyIdent='serialNumber' or @applicPropertyIdent='variant')]</objectPath><objectUse>Product attributes are model, serialNumber and variant, as defined in the ACT.</objectUse></structureObjectRule>
+<structureObjectRule><objectPath allowedObjectFlag="0">//graphic[not(starts-with(@infoEntityIdent, 'ICN-0DEMO-'))]</objectPath><objectUse>Illustrations use the project ICN prefix ICN-0DEMO-.</objectUse></structureObjectRule>
+</structureObjectRuleGroup>
+<snsRules><snsDescr><snsSystem><snsCode>00</snsCode><snsTitle>General</snsTitle><snsSubSystem><snsCode>0</snsCode><snsTitle>General</snsTitle><snsSubSubSystem><snsCode>0</snsCode><snsTitle>General</snsTitle><snsAssy><snsCode>00</snsCode><snsTitle>General</snsTitle></snsAssy></snsSubSubSystem></snsSubSystem></snsSystem><snsSystem><snsCode>10</snsCode><snsTitle>Frame and access panel</snsTitle><snsSubSystem><snsCode>0</snsCode><snsTitle>Frame and access panel</snsTitle><snsSubSubSystem><snsCode>0</snsCode><snsTitle>Frame and access panel</snsTitle><snsAssy><snsCode>00</snsCode><snsTitle>Frame and access panel</snsTitle></snsAssy></snsSubSubSystem></snsSubSystem></snsSystem><snsSystem><snsCode>20</snsCode><snsTitle>Fan assembly</snsTitle><snsSubSystem><snsCode>0</snsCode><snsTitle>Fan assembly</snsTitle><snsSubSubSystem><snsCode>0</snsCode><snsTitle>Fan assembly</snsTitle><snsAssy><snsCode>00</snsCode><snsTitle>Fan assembly</snsTitle></snsAssy></snsSubSubSystem></snsSubSystem></snsSystem><snsSystem><snsCode>30</snsCode><snsTitle>Air filter</snsTitle><snsSubSystem><snsCode>0</snsCode><snsTitle>Air filter</snsTitle><snsSubSubSystem><snsCode>0</snsCode><snsTitle>Air filter</snsTitle><snsAssy><snsCode>00</snsCode><snsTitle>Air filter</snsTitle></snsAssy></snsSubSubSystem></snsSubSystem></snsSystem><snsSystem><snsCode>40</snsCode><snsTitle>Control box</snsTitle><snsSubSystem><snsCode>0</snsCode><snsTitle>Control box</snsTitle><snsSubSubSystem><snsCode>0</snsCode><snsTitle>Control box</snsTitle><snsAssy><snsCode>00</snsCode><snsTitle>Control box</snsTitle></snsAssy></snsSubSubSystem></snsSubSystem></snsSystem></snsDescr></snsRules>
+<notationRuleList><notationRule><notationName allowedNotationFlag="1">svg</notationName><objectUse>Illustrations are SVG.</objectUse></notationRule></notationRuleList>
+</contextRules>
+</brex>
+</content>
+</dmodule>

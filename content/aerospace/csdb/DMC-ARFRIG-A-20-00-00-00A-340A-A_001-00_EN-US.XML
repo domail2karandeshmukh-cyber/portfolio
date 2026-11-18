@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/proced.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="340" infoCodeVariant="A" itemLocationCode="A"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>Fan assembly</techName><infoName>Function test</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<procedure>
+<preliminaryRqmts>
+<reqCondGroup><reqCondNoRef><reqCond>The fan assembly is installed and the access panel is closed.</reqCond></reqCondNoRef></reqCondGroup>
+<reqSupportEquips><supportEquipDescrGroup><supportEquipDescr id="seq-0001"><name>Bench power supply, 24 V DC</name><reqQuantity>1</reqQuantity></supportEquipDescr></supportEquipDescrGroup></reqSupportEquips>
+<reqSupplies><noSupplies/></reqSupplies>
+<reqSpares><noSpares/></reqSpares>
+<reqSafety><safetyRqmts><warning><warningAndCautionPara>Keep the access panel closed when the fan operates. The fan blades can turn and cause injury to your fingers.</warningAndCautionPara></warning></safetyRqmts></reqSafety>
+</preliminaryRqmts>
+<mainProcedure>
+<proceduralStep id="stp-0001"><para>Start the rig. Refer to <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="131" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Training rig</techName><infoName>Normal operation procedure</infoName></dmTitle></dmRefAddressItems></dmRef>.</para></proceduralStep>
+<proceduralStep id="stp-0002"><para>Set the speed control R1 to MIN. Make sure that the results agree with <internalRef internalRefId="tab-0001" internalRefTargetType="irtt02"/>.</para><table id="tab-0001"><title>Fan assembly - function test results</title>
+<tgroup cols="3"><colspec colname="col1"/><colspec colname="col2"/><colspec colname="col3"/>
+<thead><row><entry><para>Speed control R1</para></entry><entry><para>Airflow indicator</para></entry><entry><para>FAN FAULT lamp DS2</para></entry></row></thead>
+<tbody>
+<row><entry><para>MIN</para></entry><entry><para>Pointer in the white band</para></entry><entry><para>Off</para></entry></row>
+<row><entry><para>MAX</para></entry><entry><para>Pointer in the green band</para></entry><entry><para>Off</para></entry></row>
+</tbody></tgroup></table></proceduralStep>
+<proceduralStep id="stp-0003"><para>Set the speed control R1 to MAX.</para></proceduralStep>
+<proceduralStep id="stp-0004"><para>Make sure that the pointer of the airflow indicator is in the green band.</para></proceduralStep>
+<proceduralStep id="stp-0005"><para>Listen to the fan assembly for 30 seconds.</para></proceduralStep>
+<proceduralStep id="stp-0006"><note><notePara>A smooth, even sound is normal.</notePara></note><para>If you hear a noise from the fan bearing, do the fault isolation procedure. Refer to <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="421" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Fan does not run</techName><infoName>Fault isolation procedure</infoName></dmTitle></dmRefAddressItems></dmRef>.</para></proceduralStep>
+<proceduralStep id="stp-0007"><para>If the pointer is not in the green band, adjust the fan speed. Refer to <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="271" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Fan speed</techName><infoName>Adjust</infoName></dmTitle></dmRefAddressItems></dmRef>.</para></proceduralStep>
+<proceduralStep id="stp-0008"><para>Stop the rig.</para></proceduralStep>
+</mainProcedure>
+<closeRqmts><reqCondGroup><noConds/></reqCondGroup></closeRqmts>
+</procedure>
+</content>
+</dmodule>

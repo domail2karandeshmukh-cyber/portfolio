@@ -1,0 +1,31 @@
+name: Check the S1000D CSDB
+# Validates the fictional ARF-1 CSDB (content/aerospace/csdb) layer by layer: well-formed, the official S1000D
+# Issue 6 schemas, identification, references, applicability and the project BREX. The schemas are downloaded
+# from www.s1000d.org on every run and used here only: they are not cached, committed or published, because a
+# permission to redistribute them was not verified. The report (results only) is kept as an artifact.
+on:
+  push:
+    branches: [main, v9]
+    paths: ["content/aerospace/**", "scripts/aero/**", ".github/workflows/s1000d.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "lxml>=5,<7"
+      - name: Validate against the official schemas and the project rules
+        run: python3 -I scripts/aero/validate.py --schemas "$RUNNER_TEMP/s1000d-6" --fetch --report validation.json
+      - name: Keep the report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1000d-validation
+          path: validation.json
+          retention-days: 30

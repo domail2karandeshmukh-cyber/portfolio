@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dmodule [
+<!NOTATION svg SYSTEM "svg">
+<!ENTITY ICN-0DEMO-ARF0006-001-01 SYSTEM "ICN-0DEMO-ARF0006-001-01.SVG" NDATA svg>
+]>
+<dmodule xmlns:dc="http://www.purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.s1000d.org/S1000D_6/xml_schema_flat/proced.xsd">
+<identAndStatusSection>
+<dmAddress>
+<dmIdent>
+<dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="20" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="271" infoCodeVariant="A" itemLocationCode="A"/>
+<language languageIsoCode="en" countryIsoCode="US"/>
+<issueInfo issueNumber="001" inWork="00"/>
+</dmIdent>
+<dmAddressItems>
+<issueDate year="2026" month="11" day="02"/>
+<dmTitle><techName>Fan speed</techName><infoName>Adjust</infoName></dmTitle>
+</dmAddressItems>
+</dmAddress>
+<dmStatus issueType="new">
+<security securityClassification="01"/>
+<dataRestrictions><restrictionInstructions><dataDistribution>Demonstration data for a fictional training rig. Not approved maintenance data. Do not use on real equipment.</dataDistribution></restrictionInstructions><restrictionInfo><copyright><copyrightPara>Original demonstration content written by Karan Deshmukh for a portfolio, 2026. The rig, part numbers, values and codes are invented.</copyrightPara></copyright></restrictionInfo></dataRestrictions>
+<responsiblePartnerCompany><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></responsiblePartnerCompany>
+<originator><enterpriseName>Documentation Studio demonstration team (fictional)</enterpriseName></originator>
+<applicCrossRefTableRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="00W" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></applicCrossRefTableRef>
+<applic><displayText><simplePara>All</simplePara></displayText></applic>
+<brexDmRef><dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="022" infoCodeVariant="A" itemLocationCode="D"/></dmRefIdent></dmRef></brexDmRef>
+<qualityAssurance><firstVerification verificationType="tabtop"/></qualityAssurance>
+</dmStatus>
+</identAndStatusSection>
+<content>
+<procedure>
+<preliminaryRqmts>
+<reqCondGroup><reqCondNoRef><reqCond>The fan assembly is installed.</reqCond></reqCondNoRef></reqCondGroup>
+<reqSupportEquips><supportEquipDescrGroup>
+<supportEquipDescr id="seq-0001"><name>Multimeter, DC voltage</name><reqQuantity>1</reqQuantity></supportEquipDescr>
+<supportEquipDescr id="seq-0002"><name>Screwdriver, flat, 2 mm</name><reqQuantity>1</reqQuantity></supportEquipDescr>
+</supportEquipDescrGroup></reqSupportEquips>
+<reqSupplies><noSupplies/></reqSupplies>
+<reqSpares><noSpares/></reqSpares>
+<reqSafety><safetyRqmts><caution><warningAndCautionPara>Do not touch the components on the circuit board. Electrostatic discharge can cause damage to the components.</warningAndCautionPara></caution></safetyRqmts></reqSafety>
+</preliminaryRqmts>
+<mainProcedure>
+<figure id="fig-0001"><title>Control box - test points and adjustment potentiometer</title><graphic infoEntityIdent="ICN-0DEMO-ARF0006-001-01"></graphic></figure>
+<proceduralStep id="stp-0001"><para>Remove the four screws of the control box cover.</para></proceduralStep>
+<proceduralStep id="stp-0002"><para>Remove the control box cover.</para></proceduralStep>
+<proceduralStep id="stp-0003"><para>Connect the multimeter <internalRef internalRefId="seq-0001" internalRefTargetType="irtt05"/> to the test points TP1 (+) and TP2 (-). Refer to <internalRef internalRefId="fig-0001" internalRefTargetType="irtt01"/>.</para></proceduralStep>
+<proceduralStep id="stp-0004"><para>Start the rig. Refer to <dmRef><dmRefIdent><dmCode modelIdentCode="ARFRIG" systemDiffCode="A" systemCode="00" subSystemCode="0" subSubSystemCode="0" assyCode="00" disassyCode="00" disassyCodeVariant="A" infoCode="131" infoCodeVariant="A" itemLocationCode="A"/></dmRefIdent><dmRefAddressItems><dmTitle><techName>Training rig</techName><infoName>Normal operation procedure</infoName></dmTitle></dmRefAddressItems></dmRef>.</para></proceduralStep>
+<proceduralStep id="stp-0005"><para>Set the speed control R1 to MAX.</para></proceduralStep>
+<proceduralStep id="stp-0006"><caution><warningAndCautionPara>Do not touch the components on the circuit board. Electrostatic discharge can cause damage to the components.</warningAndCautionPara></caution><para>Turn the adjustment potentiometer R2 until the multimeter shows 10.0 V DC, tolerance 0.2 V.</para></proceduralStep>
+<proceduralStep id="stp-0007"><para>Make sure that the pointer of the airflow indicator is in the green band.</para></proceduralStep>
+<proceduralStep id="stp-0008"><para>Stop the rig.</para></proceduralStep>
+<proceduralStep id="stp-0009"><para>Disconnect the multimeter.</para></proceduralStep>
+<proceduralStep id="stp-0010"><para>Install the control box cover with the four screws.</para></proceduralStep>
+</mainProcedure>
+<closeRqmts><reqCondGroup><noConds/></reqCondGroup></closeRqmts>
+</procedure>
+</content>
+</dmodule>
