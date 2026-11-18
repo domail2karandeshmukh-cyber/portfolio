@@ -910,7 +910,6 @@
   "F. Product documentation": "F. प्रोडक्ट डॉक्यूमेंटेशन",
   "Maintenance procedure, 281 words, with its document-control fields in the front matter.": "मेंटेनेंस प्रक्रिया, 281 शब्द, फ़्रंट मैटर में डॉक्यूमेंट कंट्रोल फ़ील्ड के साथ।",
   "Maintenance procedure": "मेंटेनेंस प्रक्रिया",
-  "Engineering change record, 461 words, with its document-control fields in the front matter.": "इंजीनियरिंग परिवर्तन रिकॉर्ड, 461 शब्द, फ़्रंट मैटर में अपने दस्तावेज़-नियंत्रण फ़ील्ड के साथ।",
   "Aerospace: ARF-1 training rig": "एयरोस्पेस: ARF-1 प्रशिक्षण रिग",
   "Engineering change record": "इंजीनियरिंग परिवर्तन रिकॉर्ड",
   "Choose a document set": "दस्तावेज़ सेट चुनें",
@@ -1174,7 +1173,18 @@
   "Sample loaded. Edit it, or paste your own text.": "उदाहरण लोड हुआ। इसे संपादित करें, या अपना पाठ पेस्ट करें।",
   "The corrected text starts again from your text.": "सुधारा गया पाठ फिर से आपके पाठ से शुरू होता है।",
   "Writing check ({mode}), karandeshmukh.dev/studio/ste100": "लेखन जाँच ({mode}), karandeshmukh.dev/studio/ste100",
-  "Not a compliance statement: rules marked partial or needing a person still need review.": "अनुपालन का कथन नहीं: आंशिक चिह्नित या व्यक्ति की ज़रूरत वाले नियमों की अब भी समीक्षा चाहिए।"
+  "Not a compliance statement: rules marked partial or needing a person still need review.": "अनुपालन का कथन नहीं: आंशिक चिह्नित या व्यक्ति की ज़रूरत वाले नियमों की अब भी समीक्षा चाहिए।",
+  "A comma between a starting condition and the instruction": "शुरुआती शर्त और निर्देश के बीच अल्पविराम",
+  "Found when an instruction starts with \"if\", \"when\", \"before\", \"after\", \"while\" or \"until\" and has no comma.": "तब पाया जाता है जब कोई निर्देश \"if\", \"when\", \"before\", \"after\", \"while\" या \"until\" से शुरू होता है और उसमें अल्पविराम नहीं होता।",
+  "Project rule: the condition before the instruction": "प्रोजेक्ट नियम: निर्देश से पहले शर्त",
+  "A rule of this project, not of the standard. Found when \"if\" or \"when\" comes after the instruction.": "इस प्रोजेक्ट का नियम, मानक का नहीं। तब पाया जाता है जब \"if\" या \"when\" निर्देश के बाद आता है।",
+  "The instruction starts with a condition. Put a comma between the condition and the instruction.": "निर्देश एक शर्त से शुरू होता है। शर्त और निर्देश के बीच अल्पविराम लगाएँ।",
+  "Project rule {n}, not a rule of ASD-STE100": "प्रोजेक्ट नियम {n}, ASD-STE100 का नियम नहीं",
+  "{title} is already open.": "{title} पहले से खुला है।",
+  "Open {title}?": "{title} खोलें?",
+  "It replaces the document open now. Export its audit history first if you need it.": "यह अभी खुले दस्तावेज़ की जगह ले लेगा। ज़रूरत हो तो पहले उसका ऑडिट इतिहास निर्यात करें।",
+  "Zoom in to see small parts, then drag or scroll the picture.": "छोटे पुर्ज़े देखने के लिए ज़ूम इन करें, फिर चित्र को खींचें या स्क्रॉल करें।",
+  "Engineering change record, 568 words, with its document-control fields in the front matter.": "इंजीनियरिंग परिवर्तन रिकॉर्ड, 568 शब्द, फ़्रंट मैटर में अपने दस्तावेज़-नियंत्रण फ़ील्ड के साथ।"
  },
  "keep": [
   "A",

@@ -184,6 +184,21 @@
   function save() { clearTimeout(t0); if (D) Kit.store.put("control", D).catch(function () {}); }
   try { $("#dc-me").value = localStorage.getItem("dc:me") || ""; } catch (e) {}
   $("#dc-me").addEventListener("change", function () { try { localStorage.setItem("dc:me", this.value); } catch (e) {} });
-  Kit.store.get("control").then(function (s) { if (s && s.source) { D = s; say(T("Reopened your document from this browser.")); } }).catch(function () {}).then(paint);
+  // A link can open one sample directly (?sample=EC-ARF-01 from the aerospace overview). A document already open in
+  // this browser is replaced only if the visitor agrees.
+  function openLinked(id) {
+    return Kit.samples().then(function (all) {
+      var s = (all.control || []).filter(function (x) { return x.id === id; })[0];
+      if (!s) return;
+      if (D && D.meta && D.meta.id === s.docId) return say(T("{title} is already open.", { title: T(s.title) }));
+      var go = function () { return Kit.fetchText(s.url).then(function (t) { start(t, T("{title} (fictional sample: {kind})", { title: T(s.title), kind: T(s.kind) })); sw.close(); }); };
+      if (!D) return go();
+      return Kit.confirm(T("Open {title}?", { title: T(s.title) }), T("It replaces the document open now. Export its audit history first if you need it.")).then(function (yes) { if (yes) return go(); });
+    }).catch(function (e) { say(e.message, true); });
+  }
+  Kit.store.get("control").then(function (s) { if (s && s.source) { D = s; say(T("Reopened your document from this browser.")); } }).catch(function () {}).then(paint).then(function () {
+    var id = new URLSearchParams(location.search).get("sample");
+    if (id) openLinked(id);
+  });
   window.studioControl = { get: function () { return D; }, checks: checks };
 })();

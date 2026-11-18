@@ -16,9 +16,11 @@
 <p class="st-status" id="ip-status" role="status" aria-live="polite"></p>
 <div class="ip" id="ip-app">
  <section class="dt-card ip-pic" aria-labelledby="ip-pic-h">
-  <h2 class="ae-h" id="ip-pic-h">Figure 1 <small id="ip-icn"></small></h2>
-  <div id="ip-svg" class="ip-svg"></div>
+  <div class="ip-pichead"><h2 class="ae-h" id="ip-pic-h">Figure 1 <small id="ip-icn"></small></h2>
+  <p class="ip-zoom" role="group" aria-label="Zoom"><button type="button" class="btn line sm" data-zoom="-1">Zoom out</button><output id="ip-zv" aria-live="polite">100%</output><button type="button" class="btn line sm" data-zoom="1">Zoom in</button><button type="button" class="btn line sm" data-zoom="0">Fit</button></p></div>
+  <div id="ip-svg" class="ip-svg" tabindex="-1"></div>
   <p class="ae-hint">Select a part or its number in the picture. With a keyboard, press Tab to reach the parts, then Enter.</p>
+  <p class="ae-hint">Zoom in to see small parts, then drag or scroll the picture.</p>
  </section>
  <section class="dt-card ip-list" aria-labelledby="ip-list-h">
   <h2 class="ae-h" id="ip-list-h">Parts list <small id="ip-count"></small></h2>

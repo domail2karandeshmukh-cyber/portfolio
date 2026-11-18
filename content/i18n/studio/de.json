@@ -910,7 +910,6 @@
   "F. Product documentation": "F. Produktdokumentation",
   "Maintenance procedure, 281 words, with its document-control fields in the front matter.": "Wartungsanleitung, 281 Wörter, mit ihren Feldern der Dokumentenlenkung im Front Matter.",
   "Maintenance procedure": "Wartungsanleitung",
-  "Engineering change record, 461 words, with its document-control fields in the front matter.": "Technischer Änderungsnachweis, 461 Wörter, mit seinen Dokumentlenkungsfeldern im Vorspann.",
   "Aerospace: ARF-1 training rig": "Luftfahrt: Schulungsstand ARF-1",
   "Engineering change record": "Technischer Änderungsnachweis",
   "Choose a document set": "Einen Dokumentensatz wählen",
@@ -1174,7 +1173,18 @@
   "Sample loaded. Edit it, or paste your own text.": "Beispiel geladen. Bearbeiten Sie es oder fügen Sie Ihren eigenen Text ein.",
   "The corrected text starts again from your text.": "Der korrigierte Text beginnt wieder mit Ihrem Text.",
   "Writing check ({mode}), karandeshmukh.dev/studio/ste100": "Schreibprüfung ({mode}), karandeshmukh.dev/studio/ste100",
-  "Not a compliance statement: rules marked partial or needing a person still need review.": "Keine Konformitätserklärung: Als teilweise markierte Regeln oder solche, die eine Person brauchen, müssen noch geprüft werden."
+  "Not a compliance statement: rules marked partial or needing a person still need review.": "Keine Konformitätserklärung: Als teilweise markierte Regeln oder solche, die eine Person brauchen, müssen noch geprüft werden.",
+  "A comma between a starting condition and the instruction": "Ein Komma zwischen einer einleitenden Bedingung und der Anweisung",
+  "Found when an instruction starts with \"if\", \"when\", \"before\", \"after\", \"while\" or \"until\" and has no comma.": "Gefunden, wenn eine Anweisung mit „if“, „when“, „before“, „after“, „while“ oder „until“ beginnt und kein Komma hat.",
+  "Project rule: the condition before the instruction": "Projektregel: die Bedingung vor der Anweisung",
+  "A rule of this project, not of the standard. Found when \"if\" or \"when\" comes after the instruction.": "Eine Regel dieses Projekts, nicht der Norm. Gefunden, wenn „if“ oder „when“ nach der Anweisung steht.",
+  "The instruction starts with a condition. Put a comma between the condition and the instruction.": "Die Anweisung beginnt mit einer Bedingung. Setzen Sie ein Komma zwischen Bedingung und Anweisung.",
+  "Project rule {n}, not a rule of ASD-STE100": "Projektregel {n}, keine Regel von ASD-STE100",
+  "{title} is already open.": "{title} ist bereits geöffnet.",
+  "Open {title}?": "{title} öffnen?",
+  "It replaces the document open now. Export its audit history first if you need it.": "Es ersetzt das jetzt geöffnete Dokument. Exportieren Sie vorher dessen Prüfprotokoll, falls Sie es brauchen.",
+  "Zoom in to see small parts, then drag or scroll the picture.": "Vergrößern Sie, um kleine Teile zu sehen, und ziehen oder scrollen Sie dann das Bild.",
+  "Engineering change record, 568 words, with its document-control fields in the front matter.": "Technischer Änderungsnachweis, 568 Wörter, mit seinen Dokumentlenkungsfeldern im Vorspann."
  },
  "keep": [
   "A",

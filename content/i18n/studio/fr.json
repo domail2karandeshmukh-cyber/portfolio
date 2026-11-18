@@ -910,7 +910,6 @@
   "F. Product documentation": "F. Documentation produit",
   "Maintenance procedure, 281 words, with its document-control fields in the front matter.": "Procédure de maintenance, 281 mots, avec ses champs de contrôle documentaire dans l'en-tête.",
   "Maintenance procedure": "Procédure de maintenance",
-  "Engineering change record, 461 words, with its document-control fields in the front matter.": "Fiche de modification technique, 461 mots, avec ses champs de contrôle documentaire dans l’en-tête.",
   "Aerospace: ARF-1 training rig": "Aéronautique : banc d’entraînement ARF-1",
   "Engineering change record": "Fiche de modification technique",
   "Choose a document set": "Choisir un jeu de documents",
@@ -1174,7 +1173,18 @@
   "Sample loaded. Edit it, or paste your own text.": "Exemple chargé. Modifiez-le, ou collez votre propre texte.",
   "The corrected text starts again from your text.": "Le texte corrigé repart de votre texte.",
   "Writing check ({mode}), karandeshmukh.dev/studio/ste100": "Vérification de rédaction ({mode}), karandeshmukh.dev/studio/ste100",
-  "Not a compliance statement: rules marked partial or needing a person still need review.": "Pas une déclaration de conformité : les règles marquées partielles ou demandant une personne doivent encore être relues."
+  "Not a compliance statement: rules marked partial or needing a person still need review.": "Pas une déclaration de conformité : les règles marquées partielles ou demandant une personne doivent encore être relues.",
+  "A comma between a starting condition and the instruction": "Une virgule entre une condition initiale et l’instruction",
+  "Found when an instruction starts with \"if\", \"when\", \"before\", \"after\", \"while\" or \"until\" and has no comma.": "Signalé quand une instruction commence par « if », « when », « before », « after », « while » ou « until » sans virgule.",
+  "Project rule: the condition before the instruction": "Règle du projet : la condition avant l’instruction",
+  "A rule of this project, not of the standard. Found when \"if\" or \"when\" comes after the instruction.": "Règle de ce projet, pas de la norme. Signalé quand « if » ou « when » vient après l’instruction.",
+  "The instruction starts with a condition. Put a comma between the condition and the instruction.": "L’instruction commence par une condition. Mettez une virgule entre la condition et l’instruction.",
+  "Project rule {n}, not a rule of ASD-STE100": "Règle de projet {n}, pas une règle de l’ASD-STE100",
+  "{title} is already open.": "{title} est déjà ouvert.",
+  "Open {title}?": "Ouvrir {title} ?",
+  "It replaces the document open now. Export its audit history first if you need it.": "Il remplace le document ouvert. Exportez d’abord son historique d’audit si vous en avez besoin.",
+  "Zoom in to see small parts, then drag or scroll the picture.": "Zoomez pour voir les petites pièces, puis faites glisser ou défiler l’image.",
+  "Engineering change record, 568 words, with its document-control fields in the front matter.": "Fiche de modification technique, 568 mots, avec ses champs de contrôle documentaire dans l’en-tête."
  },
  "keep": [
   "A",

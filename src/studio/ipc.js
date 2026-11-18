@@ -81,6 +81,37 @@
     if (from === "row") { var g = document.querySelector('#ip-svg .part[data-item="' + item + '"]'); if (g && g.scrollIntoView) g.scrollIntoView({ block: "nearest" }); }
     say(selected ? T("Item {n} selected.", { n: +selected }) : T("No part selected."));
   }
+  /* ---------- Zoom and pan: the picture grows inside its frame, which scrolls; a drag on the picture moves it ---------- */
+  var ZOOMS = [1, 1.5, 2, 3, 4], zi = 0;
+  function zoom(step) {
+    var box = $("#ip-svg"), cx = (box.scrollLeft + box.clientWidth / 2) / box.scrollWidth, cy = (box.scrollTop + box.clientHeight / 2) / box.scrollHeight;
+    zi = step === 0 ? 0 : Math.max(0, Math.min(ZOOMS.length - 1, zi + step));
+    box.style.setProperty("--z", ZOOMS[zi]);
+    box.classList.toggle("zoomed", zi > 0);
+    $("#ip-zv").textContent = Math.round(ZOOMS[zi] * 100) + "%";
+    document.querySelector('[data-zoom="-1"]').disabled = zi === 0;
+    document.querySelector('[data-zoom="1"]').disabled = zi === ZOOMS.length - 1;
+    box.scrollLeft = cx * box.scrollWidth - box.clientWidth / 2;
+    box.scrollTop = cy * box.scrollHeight - box.clientHeight / 2;
+  }
+  document.querySelector(".ip-zoom").addEventListener("click", function (e) { var b = e.target.closest("[data-zoom]"); if (b) zoom(+b.dataset.zoom); });
+  (function drag() {
+    var box = $("#ip-svg"), from = null, moved = false;
+    box.addEventListener("pointerdown", function (e) { if (zi === 0 || e.pointerType === "touch" || e.button !== 0) return; from = { x: e.clientX, y: e.clientY, l: box.scrollLeft, t: box.scrollTop }; moved = false; });
+    box.addEventListener("pointermove", function (e) {
+      if (!from) return;
+      var dx = e.clientX - from.x, dy = e.clientY - from.y;
+      if (!moved && Math.abs(dx) + Math.abs(dy) < 5) return;
+      moved = true; box.classList.add("dragging");
+      box.scrollLeft = from.l - dx; box.scrollTop = from.t - dy;
+    });
+    var end = function () { from = null; setTimeout(function () { box.classList.remove("dragging"); }, 0); };
+    box.addEventListener("pointerup", end); box.addEventListener("pointerleave", end);
+    // a drag is not a click on the part under the pointer
+    box.addEventListener("click", function (e) { if (box.classList.contains("dragging")) { e.stopPropagation(); e.preventDefault(); } }, true);
+  })();
+  zoom(0);
+
   S1K.load().then(function (d) {
     db = d;
     var issues = db.byCode[CODE] || [];

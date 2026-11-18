@@ -43,7 +43,7 @@
     var main = $("#ie-main");
     var note = !inPublication(x.file) ? '<p class="ie-outside">' + esc(T("This module is not in the publication you are reading. It opened because a cross-reference points to it.")) + "</p>" : "";
     var tools = (fault ? '<p class="ann-btns ie-modes"><button type="button" class="btn sm ink" data-mode="steps">' + esc(T("Step by step")) + '</button><button type="button" class="btn sm line" data-mode="all">' + esc(T("The whole procedure")) + "</button></p>" : "") +
-      (ipd && !offline ? '<p class="ann-btns"><a class="btn line sm" href="' + esc(S1K.pageHref("/studio/ipc")) + '">' + esc(T("Open it in the parts catalogue")) + "</a></p>" : "");
+      (ipd && !offline ? '<p class="ann-btns ie-noprint"><a class="btn line sm" href="' + esc(S1K.pageHref("/studio/ipc")) + '">' + esc(T("Open it in the parts catalogue")) + "</a></p>" : "");
     var render = function (inline) {
       main.innerHTML = note + S1K.header(id) + tools + '<div class="s1k-body"' + S1K.langAttr(id) + ">" + S1K.render(x.doc, { db: db, product: product, changes: $("#ie-changes").checked, interactive: fault, inline: inline, href: function (code) { return "?dm=" + encodeURIComponent(code); } }) + "</div>";
       if (fault) stepMode(true);
@@ -127,10 +127,47 @@
     window.print();
     setTimeout(function () { document.body.classList.remove("ie-printing-all"); $("#ie-printarea").innerHTML = ""; }, 500);
   }
+  /** The front matter of a printed publication, made from its publication module: a title page, the highlights of
+      this issue against the one before, the list of effective data modules and the contents. Written in the
+      publication's language (English), whatever the language of the viewer. */
+  function frontMatter(list) {
+    var id = pm.id, issues = db.byCode[id.code] || [], at = issues.indexOf(pm), prev = at > 0 ? issues[at - 1] : null, before = {};
+    if (prev) walk(prev.doc).forEach(function (e) { e.items.forEach(function (it) { before[it.code] = it.issue; }); });
+    var flag = function (it) { return !(it.code in before) ? "N" : before[it.code] !== it.issue ? "C" : ""; };
+    var changed = list.filter(function (it) { return flag(it); });
+    var row = function (cells) { return "<tr>" + cells.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>"; };
+    var head = function (cells) { return "<thead><tr>" + cells.map(function (c) { return '<th scope="col">' + c + "</th>"; }).join("") + "</tr></thead>"; };
+    var html = '<section class="ie-front"' + S1K.langAttr(id) + '><div class="ie-tp"><p class="ie-tp-k">S1000D Issue 6 publication</p><h1>' + esc(id.pmTitle) + "</h1>" +
+      '<dl class="ie-tp-meta">' +
+      "<div><dt>Publication module code</dt><dd><code>" + esc(id.code) + "</code></dd></div>" +
+      "<div><dt>Issue</dt><dd>" + esc(id.issue + "-" + id.inWork + ", " + id.date + (id.issueType ? " (" + id.issueType + ")" : "")) + "</dd></div>" +
+      "<div><dt>Applicability</dt><dd>" + esc(id.applic) + (product ? "<br>Printed for " + esc(product.label) + ": what does not apply to it is left out." : "") + "</dd></div>" +
+      "<div><dt>Verification</dt><dd>" + esc(id.qaCode === "unverified" ? "Unverified. No qualified person has verified this content." : id.qa) + "</dd></div>" +
+      "<div><dt>Security classification</dt><dd>" + esc(id.security) + (id.security === "01" ? ", unclassified" : "") + "</dd></div>" +
+      "<div><dt>Responsible partner company</dt><dd>" + esc(id.owner) + "</dd></div></dl>" +
+      '<p class="ie-tp-warn"><b>Fictional demonstration.</b> ' + esc(id.distribution) + " Written by Karan Deshmukh as an independent portfolio piece: not work for an employer, a customer or a defence programme.</p></div>";
+    if (prev && changed.length) {
+      html += '<h2 id="ie-hl">Highlights of issue ' + esc(id.issue) + "</h2>" + (id.rfu.length ? "<p>" + esc(id.rfu.map(function (r) { return r.text; }).join(" ")) + "</p>" : "") +
+        '<table class="ie-fm">' + head(["Data module", "Code", "Issue", "Reason for update"]) + "<tbody>" + changed.map(function (it) {
+          var x = it.item;
+          return row([esc(x.id.title), "<code>" + esc(it.code) + "</code>", '<span class="ie-nw">' + esc((before[it.code] ? before[it.code] + " → " : "") + it.issue) + "</span>", esc(x.id.rfu.map(function (r) { return r.text; }).join(" ") || "-")]);
+        }).join("") + "</tbody></table>";
+    }
+    html += '<h2 id="ie-loedm">List of effective data modules</h2><table class="ie-fm">' + head(["Code", "Title", "Issue", "Date", "Change"]) + "<tbody>" + list.map(function (it) {
+      var x = it.item;
+      return row(['<code class="ie-nw">' + esc(it.code) + "</code>", esc(x.id.title), esc(it.issue || x.id.issue), '<span class="ie-nw">' + esc(x.id.date) + "</span>", esc(flag(it))]);
+    }).join("") + '</tbody></table><p class="ie-fm-key">N: new in this issue of the publication. ' + (prev ? "C: a new issue of the data module since publication issue " + esc(prev.id.issue) + "." : "Issue " + esc(id.issue) + " is the first issue of the publication.") + "</p>" +
+      '<h2 id="ie-contents">Contents</h2><ol class="ie-fm-toc">' + entries.map(function (e) {
+        return "<li>" + esc(e.title) + "<ul>" + e.items.filter(function (it) { return it.item; }).map(function (it) { return '<li><a href="#ie-sec-' + list.indexOf(it) + '">' + esc(it.item.id.title) + "</a></li>"; }).join("") + "</ul></li>";
+      }).join("") + "</ol></section>";
+    return html;
+  }
   /** Puts the whole publication, filtered for the chosen product, where the print stylesheet shows it. */
   function renderAll() {
-    var area = $("#ie-printarea"), html = '<header class="ie-ptitle"><h1>' + esc(pm.id.pmTitle) + "</h1><p><code>" + esc(pm.id.code) + "</code> · " + esc(T("issue {n}", { n: pm.id.issue })) + " · " + esc(pm.id.date) + (product ? " · " + esc(product.label) : "") + "</p><p>" + esc(pm.id.distribution) + "</p></header>";
-    entries.forEach(function (e) { e.items.forEach(function (it) { if (it.item) html += '<section class="ie-psec">' + S1K.header(it.item.id) + '<div class="s1k-body"' + S1K.langAttr(it.item.id) + ">" + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; }); });
+    var area = $("#ie-printarea"), list = [];
+    entries.forEach(function (e) { e.items.forEach(function (it) { if (it.item) list.push(it); }); });
+    var html = frontMatter(list);
+    list.forEach(function (it, k) { html += '<section class="ie-psec" id="ie-sec-' + k + '">' + S1K.header(it.item.id) + '<div class="s1k-body"' + S1K.langAttr(it.item.id) + ">" + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; });
     area.innerHTML = html;
     document.body.classList.add("ie-printing-all");
   }

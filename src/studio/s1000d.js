@@ -368,7 +368,13 @@ var S1K = (function () {
         if (n.nodeType !== 1) return;
         var nm = n.nodeName;
         if (nm === "emphasis") out += "<b>" + inline(n) + "</b>";
-        else if (nm === "internalRef") { var id = n.getAttribute("internalRefId"); out += '<a class="s1k-iref" href="#s1k-' + esc(id) + '">' + esc(label[id] || (ids[id] && ids[id].nodeName === "supportEquipDescr" ? text($1(ids[id], "name")) : id)) + "</a>"; }
+        else if (nm === "internalRef") {
+          // A reference to a tool, a supply or a spare in the requirements shows its part number, in brackets, after the
+          // words that already name it: "Connect the multimeter (ARF-GSE-04) to ...".
+          var id = n.getAttribute("internalRefId"), t = ids[id], kit = t && /^(supportEquipDescr|supplyDescr|spareDescr)$/.test(t.nodeName);
+          if (kit) out += '(<a class="s1k-iref" href="#s1k-' + esc(id) + '">' + esc(text($1(t, "partNumber")) || text($1(t, "name"))) + "</a>)";
+          else out += '<a class="s1k-iref" href="#s1k-' + esc(id) + '">' + esc(label[id] || id) + "</a>";
+        }
         else if (nm === "dmRef") out += dmLink(n);
         else if (nm === "randomList" || nm === "sequentialList") out += list(n);
         else if (nm === "subScript") out += "<sub>" + inline(n) + "</sub>";
@@ -379,9 +385,10 @@ var S1K = (function () {
     }
     function dmLink(n) {
       var c = $1(n, "dmRefIdent > dmCode"); if (!c) return "";
-      var code = dmCodeText(c), title = text($1(n, "dmRefAddressItems > dmTitle")), target = opts.db ? opts.db.latest(code) : null;
+      var code = dmCodeText(c), dt = $1(n, "dmRefAddressItems > dmTitle"), target = opts.db ? opts.db.latest(code) : null;
+      // the title as a reader sees it: technical name - information name
+      var title = dt ? [text($1(dt, "techName")), text($1(dt, "infoName"))].filter(Boolean).join(" - ") : "";
       if (!title && target) title = target.id.title;
-      title = title.replace(/^(.*?) (.*)$/, "$1 $2");
       return '<a class="s1k-dmref" href="' + (opts.href ? esc(opts.href(code)) : "#") + '" data-code="' + esc(code) + '">' + esc(title || code) + "</a> <code class=\"s1k-code\">" + esc(code.replace(/^DMC-/, "")) + "</code>";
     }
     function list(n) {

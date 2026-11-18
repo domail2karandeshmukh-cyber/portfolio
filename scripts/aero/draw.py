@@ -264,8 +264,8 @@ def general():
     body = base(v) + filter_housing(v) + clamp(v, 150) + indicator(v, 220) + fan(v) + flange_holes(v) + cable(v) + connector(v) + duct(v) + flow_indicator(v) + control_box(v)
     calls = [
         callout(v, (40, 160, 214), (110, 150), "Air filter"),
-        callout(v, (100, 150, 244), (230, 24), "Differential pressure indicator"),
-        callout(v, (275, 85, 162), (330, 40), "Fan assembly"),
+        callout(v, (100, 150, 244), (205, 22), "Differential pressure indicator"),
+        callout(v, (275, 85, 162), (440, 30), "Fan assembly"),
         callout(v, (426, 150, 241), (600, 70), "Airflow indicator"),
         callout(v, (470, 150, 190), (650, 130), "Outlet duct"),
         callout(v, (600, 236, 152), (720, 300), "Control box"),
@@ -346,10 +346,11 @@ def parts(issue):
         return f'<g class="part" id="item-{item}" data-item="{item}">{inner}</g>'
     holes = ((200, 80), (350, 80), (200, 220), (350, 220))
     body = base(v)
-    body += g("006", box(v, 70, 120, 12, 60, 60, 88) + cylinder(v, (30, 150, 160), 60, 140, "x", rings=(20, 120)), (130, 150, 205), (230, 40))
+    # The leader of item 6 ends on the front of the housing and its number sits in clear space, away from the clamp ring.
+    body += g("006", box(v, 70, 120, 12, 60, 60, 88) + cylinder(v, (30, 150, 160), 60, 140, "x", rings=(20, 120)), (80, 210, 140), (150, 200))
     body += explode(v, (-170, 150, 160), (30, 150, 160))
     body += g("007", filter_element(v, -170), (-120, 150, 210), (40, 100))
-    body += g("008", clamp(v, -40), (-35, 150, 97), (120, 175))
+    body += g("008", clamp(v, -40), (-35, 150, 97), (100, 160))
     body += explode(v, (100, 150, 220), (100, 150, 262))
     body += g("009", cylinder(v, (100, 150, 262), 12, 16, "z") + cylinder(v, (100, 150, 278), 7, 8, "z"), (100, 150, 286), (250, 18))
     if post:
@@ -368,7 +369,8 @@ def parts(issue):
     body += g("010", control_box(v, 40), (640, 235, 152), (750, 330))
     body += g("012", panel(v, 110), (300, 440, 20), (330, 528))
     body += "".join(calls)
-    note = "Item 12: transparent panel (classroom variant) or metal panel (workshop variant)."
+    note = ("Items 2, 3: before Modification M01. Items 4, 5: after M01. Item 12: transparent (classroom) or metal (workshop) panel." if post
+            else "Item 12: transparent panel (classroom variant) or metal panel (workshop variant).")
     desc = ("Exploded view of the fictional training rig for the parts list. Item numbers: 1 fan assembly, 2 screws, 3 washers, "
             + ("4 latches, 5 latch brackets, " if post else "") + "6 filter housing, 7 filter element, 8 clamp, 9 differential pressure indicator, 10 control box, 11 connector, 12 access panel.")
     return svg(ICN["ipd-2" if post else "ipd-1"], "Training rig - parts catalogue view" + (" (issue 2, with Modification M01 parts)" if post else ""), desc, body, note)

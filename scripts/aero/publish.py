@@ -43,8 +43,12 @@ async def main():
             await page.wait_for_function("window.IETM")
             await page.evaluate("IETM.renderAll()")
             await page.wait_for_timeout(800)
+            # The PDF's title is the publication's, with its code, issue and the fact that it is fictional.
+            await page.evaluate("""() => { const h = document.querySelector('#ie-printarea h1').textContent, c = document.querySelector('#ie-printarea .ie-tp-meta code').textContent;
+              document.title = h + ' (' + c + ') - fictional demonstration, not maintenance data'; }""")
             await page.emulate_media(media="print")
-            await page.pdf(path=os.path.join(OUT, name + ".pdf"), format="A4", print_background=True, margin={"top": "14mm", "bottom": "16mm", "left": "12mm", "right": "12mm"}, display_header_footer=True, header_template="<span></span>", footer_template=FOOT)
+            # tagged: a structured, accessible PDF; outline: bookmarks from the headings
+            await page.pdf(path=os.path.join(OUT, name + ".pdf"), format="A4", print_background=True, margin={"top": "14mm", "bottom": "16mm", "left": "12mm", "right": "12mm"}, display_header_footer=True, header_template="<span></span>", footer_template=FOOT, tagged=True, outline=True)
             await page.emulate_media(media="screen")
             inner = await page.evaluate("document.getElementById('ie-printarea').innerHTML")
             title = await page.evaluate("document.querySelector('#ie-printarea h1').textContent")
@@ -52,8 +56,9 @@ async def main():
             print("publish:", name, ".pdf and .html")
         await page.goto(f"{BASE}/studio/ietm?dm=DMC-ARFRIG-A-00-00-00-00A-941A-D", wait_until="networkidle")
         await page.wait_for_selector("#ie-main .s1k-svg svg")
+        await page.evaluate("() => { document.title = 'ARF-1 training rig - Illustrated parts catalogue (DMC-ARFRIG-A-00-00-00-00A-941A-D) - fictional demonstration, not maintenance data'; }")
         await page.emulate_media(media="print")
-        await page.pdf(path=os.path.join(OUT, "arf1-ipc.pdf"), format="A4", print_background=True, margin={"top": "14mm", "bottom": "16mm", "left": "12mm", "right": "12mm"}, display_header_footer=True, header_template="<span></span>", footer_template=FOOT)
+        await page.pdf(path=os.path.join(OUT, "arf1-ipc.pdf"), format="A4", print_background=True, margin={"top": "14mm", "bottom": "16mm", "left": "12mm", "right": "12mm"}, display_header_footer=True, header_template="<span></span>", footer_template=FOOT, tagged=True, outline=True)
         print("publish: arf1-ipc.pdf")
         await b.close()
         if errors:

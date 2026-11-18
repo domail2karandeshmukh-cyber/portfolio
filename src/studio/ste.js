@@ -42,7 +42,7 @@ var STE = (function () {
     "5.1": { title: K("Procedural sentences: 20 words at most"), how: "implemented", note: K("Hyphenated words and text in parentheses count as one word.") },
     "5.2": { title: K("One instruction in each sentence"), how: "partial", note: K("Two project verbs joined by \"and\" or \"then\".") },
     "5.3": { title: K("Instructions in the imperative"), how: "partial", note: K("The instruction must start with a verb from the project verb list, after any condition.") },
-    "5.4": { title: K("Condition before the instruction"), how: "partial", note: K("An instruction with \"if\" or \"when\" in the middle.") },
+    "5.4": { title: K("A comma between a starting condition and the instruction"), how: "partial", note: K("Found when an instruction starts with \"if\", \"when\", \"before\", \"after\", \"while\" or \"until\" and has no comma.") },
     "5.5": { title: K("Notes give information, not instructions"), how: "partial", note: "" },
     "6.3": { title: K("Descriptive sentences: 25 words at most"), how: "implemented", note: "" },
     "6.6": { title: K("Six sentences in a paragraph at most"), how: "implemented", note: "" },
@@ -51,6 +51,7 @@ var STE = (function () {
     "8.1": { title: K("No semicolons"), how: "implemented", note: "" },
     "GR-6": { title: K("No Latin abbreviations"), how: "implemented", note: "" },
     "P-1": { title: K("Project rule: a space between a value and its unit"), how: "implemented", note: K("A rule of this project, not of the standard.") },
+    "P-2": { title: K("Project rule: the condition before the instruction"), how: "partial", note: K("A rule of this project, not of the standard. Found when \"if\" or \"when\" comes after the instruction.") },
   };
   /** What a program can't decide, said so. */
   var PEOPLE = [
@@ -87,11 +88,23 @@ var STE = (function () {
     }
     return paras;
   }
+  var AUX = /^(is|are|was|were|be|been|being|to|not|the|a|an|this|that|these|those|of|for|with|and|or|it)$/i;
   function first(sentence, label) {
     var s = sentence.replace(/^(WARNING|CAUTION|NOTE)\s*:\s*/i, "");
     var cond = /^(If|When|Before|After|While|Until)\b[^,]*,\s*/i.exec(s);
-    var rest = cond ? s.slice(cond[0].length) : s;
-    return { label: label || (/^(WARNING|CAUTION|NOTE)\s*:/i.exec(sentence) || [0, ""])[1].toUpperCase(), opens: /^(WARNING|CAUTION|NOTE)\s*:/i.test(sentence), cond: !!cond, word: ((/^[A-Za-z]+/.exec(rest) || [""])[0]).toLowerCase(), rest: rest };
+    // A starting condition without its comma (rule 5.4): the instruction starts at the first project verb that follows.
+    var bare = !cond && /^(If|When|Before|After|While|Until)\b/i.test(s), split = -1;
+    if (bare) {
+      var re = /\s+([A-Za-z]+)/g, m, prev = "";
+      re.lastIndex = s.search(/\s/);
+      while (re.lastIndex > 0 && (m = re.exec(s))) {
+        if (VERBS.indexOf(m[1].toLowerCase()) > -1 && !AUX.test(prev)) { split = m.index + m[0].length - m[1].length; break; }
+        prev = m[1];
+      }
+    }
+    var rest = cond ? s.slice(cond[0].length) : split > -1 ? s.slice(split) : s;
+    return { label: label || (/^(WARNING|CAUTION|NOTE)\s*:/i.exec(sentence) || [0, ""])[1].toUpperCase(), opens: /^(WARNING|CAUTION|NOTE)\s*:/i.test(sentence), cond: !!cond || bare, bare: bare, split: split, offset: sentence.length - s.length,
+      word: bare && split < 0 ? "" : ((/^[A-Za-z]+/.exec(rest) || [""])[0]).toLowerCase(), rest: rest };
   }
 
   /** Checks text. mode: "procedural" or "descriptive". Returns findings with offsets into the text. */
@@ -105,11 +118,15 @@ var STE = (function () {
         var w = words(s.text), f = first(s.text, s.label), max = proc && f.label !== "NOTE" ? 20 : 25;
         if (w.length > max) add(proc && f.label !== "NOTE" ? "5.1" : "6.3", "error", s.start, s.text.length, T("{n} words. Write {max} words at most.", { n: w.length, max: max }));
         if (proc && !f.label) {
+          if (f.bare) {
+            var head = f.split > -1 ? s.text.slice(0, f.offset + f.split).replace(/\s+$/, "") : "";
+            add("5.4", "warning", s.start, head.length || s.text.length, T("The instruction starts with a condition. Put a comma between the condition and the instruction."), head ? { find: head, replace: head + "," } : null);
+          }
           if (f.word && VERBS.indexOf(f.word) < 0) add("5.3", "warning", s.start + s.text.indexOf(f.rest), Math.max(f.word.length, 1), T("An instruction starts with a verb, in the imperative. \"{w}\" is not in the project verb list.", { w: f.word }));
           var two = new RegExp("\\b(and|then)\\s+(" + VERBS.join("|") + ")\\b", "i").exec(f.rest);
           if (two && f.word && VERBS.indexOf(f.word) > -1) add("5.2", "warning", s.start + s.text.indexOf(two[0]), two[0].length, T("Two instructions in one sentence. Write one instruction in each sentence, unless the actions occur at the same time."));
           var cond = /\s(if|when)\s/i.exec(f.rest);
-          if (cond && VERBS.indexOf(f.word) > -1) add("5.4", "warning", s.start + s.text.indexOf(f.rest) + cond.index + 1, cond[1].length, T("Put the condition first: \"If …, {verb} …\".", { verb: f.word }));
+          if (cond && VERBS.indexOf(f.word) > -1) add("P-2", "warning", s.start + s.text.indexOf(f.rest) + cond.index + 1, cond[1].length, T("Put the condition first: \"If …, {verb} …\".", { verb: f.word }));
           var art = new RegExp("^(" + VERBS.join("|") + ")\\s+([a-z]+)", "i").exec(f.rest);
           if (art && NOUNS.indexOf(art[2].toLowerCase()) > -1) add("4.5", "warning", s.start + s.text.indexOf(f.rest) + art[1].length + 1, art[2].length, T("Use an article or a demonstrative before the noun: \"{verb} the {noun}\".", { verb: art[1], noun: art[2] }), { find: art[0], replace: art[1] + " the " + art[2] });
         }
@@ -173,7 +190,7 @@ if (typeof module !== "undefined") module.exports = STE;
   var T = Kit.t, esc = Kit.esc, $ = function (s) { return document.querySelector(s); };
   var input = $("#ste-in"), fixed = $("#ste-fixed"), timer = 0, findings = [], mode = "procedural";
   var SAMPLES = {
-    proc: { mode: "procedural", text: "1. Before you begin, the power must be disconnected from the rig by the technician.\n2. Remove cover and disconnect the connector from the fan assembly; then remove the four screws.\n3. Ensure that the fan is not turning, and check the blades for damage prior to removal.\n4. Torque the screws to 2.5Nm if the latches aren't installed.\nNOTE: Make sure that the latch is locked.\nWARNING: The fan blades are sharp." },
+    proc: { mode: "procedural", text: "1. Before you begin, the power must be disconnected from the rig by the technician.\n2. Remove cover and disconnect the connector from the fan assembly; then remove the four screws.\n3. Ensure that the fan is not turning, and check the blades for damage prior to removal.\n4. Torque the screws to 2.5Nm if the latches aren't installed.\n5. When the screws are tight install the cover.\nNOTE: Make sure that the latch is locked.\nWARNING: The fan blades are sharp." },
     arf: { mode: "procedural", text: "1. Open the access panel.\n2. Disconnect the connector (11) from the fan assembly (1).\n3. Hold the fan assembly (1).\n4. Remove the four screws (2) and the four washers (3).\n5. Remove the fan assembly (1) from the frame.\n6. Put the fan assembly on a clean bench surface.\nWARNING: Disconnect the bench power supply before you touch the fan assembly. The fan blades can turn and cause injury to your fingers." },
     descr: { mode: "descriptive", text: "The fan assembly, which is utilised to pull air through the filter element and then push it through the outlet duct and the airflow indicator, is attached to the frame by four screws that were installed at the factory. It's connected to the control box. The filter housing cover clamp release lever is on the left. The colour of the indicator band changes when the filter is blocked; this tells the student to change it." },
     house: { mode: "house", text: "Click on Save to begin. The settings are utilized by the system in order to make sure that everything works, which is why you should consider restarting it." },
@@ -214,7 +231,7 @@ if (typeof module !== "undefined") module.exports = STE;
     // the text is English; the hint shown when it is empty is the interface's
     $("#ste-marked").innerHTML = html + esc(text.slice(pos)) || '<span class="kb-hint" lang="' + esc(document.documentElement.lang || "en") + '">' + esc(T("Type or paste text to check it.")) + "</span>";
     $("#ste-list").innerHTML = findings.map(function (f, i) {
-      var ref = f.house ? T("House style: {rule}", { rule: f.title }) : T("ASD-STE100 Issue 9, rule {n}", { n: f.rule }).replace("rule P-1", "project rule P-1");
+      var ref = f.house ? T("House style: {rule}", { rule: f.title }) : /^P-/.test(f.rule) ? T("Project rule {n}, not a rule of ASD-STE100", { n: f.rule }) : T("ASD-STE100 Issue 9, rule {n}", { n: f.rule });
       return '<li class="ste-f ste-' + f.level + '" data-i="' + i + '"><p><span class="ae-chip ae-' + (f.level === "error" ? "fail" : f.level === "warning" ? "warn" : "skip") + '">' + esc(LEVEL[f.level] || f.level) + "</span> <b>" + (i + 1) + ". " + esc(ruleTitle(f)) + '</b> <small class="ste-ref">' + esc(ref) + "</small></p><p>" + (f.quote ? "<q" + QL + ">" + esc(f.quote.length > 90 ? f.quote.slice(0, 90) + "…" : f.quote) + "</q> " : "") + esc(f.message) + "</p>" +
         (f.fix ? '<p><button class="btn line sm" type="button" data-fix="' + i + '">' + esc(T("Apply: \"{a}\" to \"{b}\"", { a: f.fix.find, b: f.fix.replace })) + "</button></p>" : "") + "</li>";
     }).join("") || '<li class="ste-f">' + esc(T("No findings for the rules this mode checks. That is not a statement of compliance: the rules below that need a person still apply.")) + "</li>";

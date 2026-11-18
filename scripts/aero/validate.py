@@ -379,12 +379,14 @@ def main(argv):
             else:
                 for e in xsd.error_log:
                     results[f].append(finding("error", "schema", e.message, e.line))
-    brex = next((t.getroot() for t in trees.values() if t.getroot().find("content/brex") is not None), None)
+    # The project BREX is its latest issue; a BREX module itself is checked against the default BREX only.
+    brexes = [t.getroot() for f, t in sorted(trees.items()) if t.getroot().find("content/brex") is not None]
+    brex = brexes[-1] if brexes else None
     props = load_applic(trees)
     for f, t in trees.items():
         results[f] += check_refs(t, inventory, os.path.join(CSDB, f), idents.get(f))
         results[f] += check_applic(t, props)
-        if brex is not None and t.getroot() is not brex:
+        if brex is not None and t.getroot().find("content/brex") is None:
             results[f] += check_brex(t, brex)
         if default_brex is not None:
             results[f] += check_brex(t, default_brex, "default-brex", "S1000D default BREX: ")

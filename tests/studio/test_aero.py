@@ -3,6 +3,9 @@
 # suggestions, before and after), the CSDB (filters, relationships, history), the IPC (picture and list both ways,
 # product filter), the IETM (applicability by serial number, fault isolation step by step, search, cross-references,
 # printing), the downloads, the offline IETM package opened from a file, and the change record in Document Control.
+# Version 9.1 adds the CSDB's history (issue 001 knows nothing of M01, step IDs stay put, every change is marked,
+# nothing claims a verification), the printed front matter, the guided path on the overview, zoom in the parts
+# catalogue, the STE comma rule 5.4, and a link that opens the change record in Document Control.
 import os as _os, pathlib as _pl, sys as _sys, tempfile as _tf
 ROOT = str(_pl.Path(__file__).resolve().parents[2])
 BASE = (_sys.argv[1] if len(_sys.argv) > 1 else "http://localhost:8765").rstrip("/")
@@ -24,6 +27,27 @@ def status_of(pg, name):
     return None, ""
 def set_xml(pg, text):
     pg.fill("#se-xml", text); pg.wait_for_timeout(700)
+
+# ---------- the CSDB as files: its history holds together
+import re as _re, glob as _glob
+CSDB = _os.path.join(ROOT, "content", "aerospace", "csdb")
+X = {f.rsplit("/", 1)[1]: open(f, encoding="utf-8").read() for f in sorted(_glob.glob(CSDB + "/*.XML"))}
+early = [f for f, x in X.items() if "_001-00_" in f and "M01" in x and "issueDate year=\"2026\" month=\"11\" day=\"02\"" in x]
+check("no module released on 2 November mentions Modification M01, which came on 16 November", not early, early)
+cct = [x for f, x in X.items() if "-00QA-" in f]
+check("the conditions table that defines M01 is new with the change, dated 16 November", len(cct) == 1 and 'day="16"' in cct[0] and 'id="M01"' in cct[0])
+pct2 = [x for f, x in X.items() if "-00PA-D_002" in f]
+check("issue 002 of the product table records M01 for each serial number", len(pct2) == 1 and pct2[0].count('applicPropertyIdent="M01"') == 3)
+check("no module claims a verification: every one is unverified", all("<unverified/>" in x and "firstVerification" not in x for x in X.values()), [f for f, x in X.items() if "<unverified/>" not in x])
+def stepmap(x):
+    return {m.group(1): _re.sub(r"<[^>]+>", "", m.group(2)) for m in _re.finditer(r'<proceduralStep id="(stp-\d+)"[^>]*>(?:<note>.*?</note>)?<para>(.*?)</para>', x)}
+for code in ("520A-A", "720A-A"):
+    one, two = stepmap(X[f"DMC-ARFRIG-A-20-00-00-00A-{code}_001-00_EN-US.XML"]), stepmap(X[f"DMC-ARFRIG-A-20-00-00-00A-{code}_002-00_EN-US.XML"])
+    check(f"{code}: a step keeps its ID from issue 001 to issue 002", all(two.get(i) == t for i, t in one.items()), {i: (t[:30], two.get(i, "")[:30]) for i, t in one.items() if two.get(i) != t})
+    x2 = X[f"DMC-ARFRIG-A-20-00-00-00A-{code}_002-00_EN-US.XML"]
+    unmarked = [m.group(0)[:80] for m in _re.finditer(r"<(figure|supportEquipDescr|proceduralStep)\b[^>]*applicRefId=\"app-[^\"]*m01\"[^>]*>", x2) if "changeMark" not in m.group(0)]
+    check(f"{code}: everything issue 002 gave an M01 applicability carries a change mark", not unmarked, unmarked)
+check("the function test sends a bearing noise to replacement, not to the fan-does-not-run procedure", "noise from the fan bearing, replace the fan assembly" in X["DMC-ARFRIG-A-20-00-00-00A-340A-A_001-00_EN-US.XML"])
 
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path=CHROME, args=["--no-sandbox"])
@@ -124,7 +148,7 @@ with sync_playwright() as p:
     pg.goto(BASE + "/studio/csdb", wait_until="networkidle"); pg.wait_for_timeout(800)
     check("the inventory lists the latest issues: 13 data modules and 2 publication modules", pg.locator("#cd-rows tr").count() == 15, pg.locator("#cd-rows tr").count())
     pg.uncheck("#cd-latest"); pg.wait_for_timeout(200)
-    check("with every issue, 21 modules", pg.locator("#cd-rows tr").count() == 21)
+    check("with every issue, 23 modules", pg.locator("#cd-rows tr").count() == 23, pg.locator("#cd-rows tr").count())
     pg.fill("#cd-q", "latch"); pg.wait_for_timeout(300)
     n = pg.locator("#cd-rows tr").count()
     check("search finds the modules that mention the latches", 4 <= n <= 9, n)
@@ -239,7 +263,7 @@ with sync_playwright() as p:
         check("the page says in words what the film shows", pg.locator(".ae-shows li").count() == 6)
     cz = zipfile.ZipFile(io.BytesIO(urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-csdb.zip").read()))
     names = cz.namelist()
-    check("the CSDB ZIP holds 21 modules, 7 illustrations and a README, and no S1000D schema", sum(n.endswith(".XML") for n in names) == 21 and sum(n.endswith(".SVG") for n in names) == 7 and not any(n.endswith(".xsd") for n in names), len(names))
+    check("the CSDB ZIP holds 23 modules, 7 illustrations and a README, and no S1000D schema", sum(n.endswith(".XML") for n in names) == 23 and sum(n.endswith(".SVG") for n in names) == 7 and not any(n.endswith(".xsd") for n in names), len(names))
 
     # ---------- the change record in Document Control
     pg.goto(BASE + "/studio/control", wait_until="networkidle"); pg.wait_for_timeout(700)
@@ -251,6 +275,62 @@ with sync_playwright() as p:
         pg.click(f"#dc-start .st-card[data-start='{i}']"); pg.wait_for_timeout(1200)
         c = pg.inner_text("#dc-checks")
         check("its required sections for a change record are all there", "Required sections for a change record" in c and "missing" not in c, c[:300])
+    pg2 = ctx.new_page(); pg2.on("pageerror", lambda e: errs.append(str(e)))
+    pg2.goto(BASE + "/studio/control?sample=EC-ARF-01", wait_until="networkidle"); pg2.wait_for_timeout(1500)
+    if pg2.is_visible(".st-ask[open] button[value=ok]"): pg2.click(".st-ask[open] button[value=ok]"); pg2.wait_for_timeout(1200)
+    check("a link opens the change record in Document Control", "EC-ARF-01" in pg2.inner_text("main"), pg2.inner_text("#dc-status") if pg2.locator("#dc-status").count() else "")
+    pg2.close()
+
+    # ---------- the overview: the guided path, the evidence, and a link for each step
+    pg.goto(BASE + "/studio/aerospace", wait_until="networkidle"); pg.wait_for_timeout(600)
+    vis = pg.evaluate("Array.from(document.querySelectorAll('.ae-step')).filter(s => !s.hidden).map(s => s.id)")
+    check("the guided path has nine steps and shows one at a time", pg.locator(".ae-step").count() == 9 and vis == ["step-1"], vis)
+    pg.click(".ae-nav [data-go='1']"); pg.wait_for_timeout(200)
+    check("Next step shows step 2", pg.evaluate("Array.from(document.querySelectorAll('.ae-step')).filter(s => !s.hidden).map(s => s.id)") == ["step-2"] and "Step 2 of 9" in pg.inner_text(".ae-tour-n"))
+    pg.click(".ae-rail .ae-dot[data-i='7']"); pg.wait_for_timeout(200)
+    check("the rail jumps to step 8, IETM and IPC", pg.is_visible("#step-8") and pg.get_attribute(".ae-rail .ae-dot[data-i='7']", "aria-current") == "step")
+    pg.evaluate("document.querySelector('#film video').muted = true")
+    pg.click("#step-8 .ae-seek"); pg.wait_for_timeout(1200)
+    t = pg.evaluate("document.querySelector('#film video').currentTime")
+    check("Watch it in the film plays the IETM part of the film", 54.8 <= t <= 58, t)
+    pg.evaluate("document.querySelector('#film video').pause()")
+    hrefs = pg.evaluate("Array.from(document.querySelectorAll('.ae-step .ae-acts a:not(.ae-seek), .ae-ev a')).map(a => a.getAttribute('href'))")
+    dead = []
+    for h in hrefs:
+        if h.startswith("#"):
+            if not pg.locator(h).count(): dead.append(h)
+            continue
+        try: urllib.request.urlopen(BASE + h).read(64)
+        except Exception as e: dead.append((h, str(e)[:40]))
+    check("every link in the guided path and the evidence box opens", hrefs and not dead, dead or len(hrefs))
+    for path, want in (("/studio/aerospace/downloads/arf1-revision-record.html", "Configuration baselines"), ("/studio/aerospace/downloads/arf1-evidence-summary.html", "What remains")):
+        body = urllib.request.urlopen(BASE + path).read().decode()
+        check(f"{path.rsplit('/', 1)[1]} has its section: {want}", want in body and "fictional" in body.lower())
+    pdf = urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-maintenance-publication.pdf").read()
+    from pypdf import PdfReader
+    rd = PdfReader(io.BytesIO(pdf)); first = rd.pages[0].extract_text() + rd.pages[1].extract_text()
+    check("the maintenance PDF opens with a title page, highlights and the list of effective data modules", "Unverified" in first and "Highlights of issue 002" in first and "List of effective data modules" in first, first[:200])
+    check("the maintenance PDF has bookmarks, tags and a title that says it is fictional", len(rd.outline) > 5 and "/StructTreeRoot" in rd.trailer["/Root"] and "fictional" in (rd.metadata.title or ""), rd.metadata.title)
+    blank = [i + 1 for i, pgx in enumerate(rd.pages) if len(_re.sub(r"\s+|Fictional demonstration.*?Page \d+ of \d+", "", pgx.extract_text())) < 15]
+    check("no blank page in the maintenance PDF", not blank, blank)
+
+    # ---------- the parts catalogue zooms, and item 6 is on the picture
+    pg.goto(BASE + "/studio/ipc", wait_until="networkidle"); pg.wait_for_timeout(900)
+    w1 = pg.evaluate("document.querySelector('#ip-svg svg').getBoundingClientRect().width")
+    pg.click(".ip-zoom [data-zoom='1']"); pg.click(".ip-zoom [data-zoom='1']"); pg.wait_for_timeout(200)
+    w2 = pg.evaluate("document.querySelector('#ip-svg svg').getBoundingClientRect().width")
+    check("Zoom in twice makes the picture twice as wide, inside its frame", 1.9 < w2 / w1 < 2.1 and pg.inner_text("#ip-zv") == "200%", (w1, w2))
+    pg.click(".ip-zoom [data-zoom='0']"); pg.wait_for_timeout(200)
+    check("Fit puts it back", abs(pg.evaluate("document.querySelector('#ip-svg svg').getBoundingClientRect().width") - w1) < 2)
+    pg.click("#ip-svg .callout[data-item='006'] text"); pg.wait_for_timeout(300)
+    check("callout 6 selects the filter housing", "ARF-3000" in pg.inner_text("#ip-detail"), pg.inner_text("#ip-detail")[:120])
+
+    # ---------- STE rule 5.4: a comma after a condition that starts an instruction
+    pg.goto(BASE + "/studio/ste100", wait_until="networkidle"); pg.wait_for_timeout(700)
+    pg.fill("#ste-in", "1. When the screws are tight install the cover.\n2. Install the cover if the screws are tight."); pg.wait_for_timeout(600)
+    lst = pg.inner_text("#ste-list")
+    check("5.4 asks for the comma after a starting condition, with a fix", "rule 5.4" in lst and "When the screws are tight," in lst, lst[:300])
+    check("a condition after the instruction is a project rule, not ASD-STE100 5.4", "Project rule P-2" in lst, lst[:300])
     check("no script errors", not errs, errs[:5])
     b.close()
 print(f"{ok} passed, {bad} failed")
