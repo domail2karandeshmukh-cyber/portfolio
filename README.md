@@ -238,7 +238,9 @@ What is not redistributed: the official S1000D schemas and the default BREX. A p
 
 What the pages don't claim: passing every check is not certification, compliance with S1000D, or approval. The IETM claims no IETM class or S1000D functionality matrix. The change record's reviewers are labels typed into a local demonstration, not verified identities.
 
-`tests/studio/test_aero.py` drives the five pages in a browser (70 checks).
+The walkthrough on the overview is filmed from the pages themselves by `scripts/film/films/aerospace.py` (see [How the films are made](#how-the-films-are-made)) and kept as `content/aerospace/out/arf1-walkthrough.mp4`. Its narration, script `aerospace` in `lib/narration.cjs`, is recorded only when Karan approves the cost of the voice service. Until then the film is silent, with its captions drawn in the picture; the page and the downloads say it has no voiceover, and a list in words says what it shows. Once the segments are recorded, render the film again: each scene stretches to its narration, and the captions file is written from the words.
+
+`tests/studio/test_aero.py` drives the five pages in a browser, and checks the walkthrough's file and playback.
 
 ## Films
 

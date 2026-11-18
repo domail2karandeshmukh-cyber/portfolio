@@ -211,12 +211,22 @@ def join(module, out, voice, scene_lengths):
     else:
         os.replace(silent, final)
     print(f"The film: {final} ({final.stat().st_size / 1e6:.1f} MB), {total:.1f} s, narration on {len(spoken)} of {len(names)} scenes")
-    # The site's copy.
-    dest = ROOT / "content/films"
-    dest.mkdir(exist_ok=True)
-    (dest / f"{module.NAME}.mp4").write_bytes(final.read_bytes())
-    if (out / f"{module.NAME}.vtt").exists(): (dest / f"{module.NAME}.vtt").write_text((out / f"{module.NAME}.vtt").read_text(encoding="utf8"), encoding="utf8")
-    print(f"Copied to {dest / module.NAME}.mp4")
+    # The site's copy: content/films/<film>, or where the film says (DEST = (folder, name)). Captions go with it only
+    # when this render was narrated: a silent render removes captions left from an earlier narrated one.
+    folder, name = getattr(module, "DEST", ("content/films", module.NAME))
+    dest = ROOT / folder
+    dest.mkdir(parents=True, exist_ok=True)
+    if getattr(module, "SERVED_COPY", False):
+        # A long film with much movement: the site serves it at x264's default quality (scripts/served_copy.py).
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from served_copy import served_copy
+        served_copy(final, dest / f"{name}.mp4")
+    else:
+        (dest / f"{name}.mp4").write_bytes(final.read_bytes())
+    vtt = out / f"{module.NAME}.vtt"
+    if spoken: (dest / f"{name}.vtt").write_text(vtt.read_text(encoding="utf8"), encoding="utf8")
+    elif (dest / f"{name}.vtt").exists(): (dest / f"{name}.vtt").unlink()
+    print(f"Copied to {dest / name}.mp4" + (" with its captions" if spoken else ", silent"))
 
 
 def sheets(files, every, out, frame):

@@ -215,6 +215,28 @@ with sync_playwright() as p:
     off.goto("file://" + _os.path.join(d, "arf1-ietm", "index.html") + "?dm=DMC-ARFRIG-A-00-00-00-00A-941A-D"); off.wait_for_timeout(1200)
     check("offline, the parts data draws its picture inline", off.locator("#ie-main .s1k-svg svg").count() == 1, oerr)
     off.close()
+    # ---------- the walkthrough film: a real MP4 that plays, and called narrated only if it has a voice and captions
+    if _os.path.exists(_os.path.join(ROOT, "content/aerospace/out/arf1-walkthrough.mp4")):
+        import subprocess
+        mp4 = _os.path.join(OUT, "walkthrough.mp4")
+        open(mp4, "wb").write(urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-walkthrough.mp4").read())
+        probe = json.loads(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type,codec_name,width,height:format=duration", "-of", "json", mp4], capture_output=True, text=True).stdout)
+        kinds = [x["codec_type"] for x in probe["streams"]]; video = [x for x in probe["streams"] if x["codec_type"] == "video"]
+        seconds = float(probe["format"]["duration"])
+        check("the walkthrough is an H.264 MP4 at 1920 by 1080, longer than 45 seconds", video and video[0]["codec_name"] == "h264" and (video[0]["width"], video[0]["height"]) == (1920, 1080) and seconds > 45, (kinds, seconds))
+        voiced = "audio" in kinds
+        vtt = pg.evaluate("Array.from(document.querySelectorAll('.ae-film track')).map(t => t.getAttribute('src'))")
+        words = pg.inner_text(".ae-film figcaption") + " " + " ".join(pg.eval_on_selector_all(".ae-dl a", "as => as.map(a => a.textContent)"))
+        if voiced:
+            check("a walkthrough with a voice has its captions in the player", len(vtt) == 1 and urllib.request.urlopen(BASE + vtt[0]).read().startswith(b"WEBVTT"), vtt)
+        else:
+            check("a walkthrough without a voice is never called narrated, and says it has no voiceover", "narrated" not in words.lower() and "no voiceover" in words and not vtt, words[:200])
+        pg.evaluate("document.querySelector('.ae-film video').muted = true")
+        pg.evaluate("document.querySelector('.ae-film video').play()"); pg.wait_for_timeout(2500)
+        t = pg.evaluate("document.querySelector('.ae-film video').currentTime")
+        check("the walkthrough plays in the page", t > 1, t)
+        pg.evaluate("document.querySelector('.ae-film video').pause()")
+        check("the page says in words what the film shows", pg.locator(".ae-shows li").count() == 6)
     cz = zipfile.ZipFile(io.BytesIO(urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-csdb.zip").read()))
     names = cz.namelist()
     check("the CSDB ZIP holds 21 modules, 7 illustrations and a README, and no S1000D schema", sum(n.endswith(".XML") for n in names) == 21 and sum(n.endswith(".SVG") for n in names) == 7 and not any(n.endswith(".xsd") for n in names), len(names))

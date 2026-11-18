@@ -203,6 +203,7 @@ mark.ie-hit{background:var(--hl)}
 .ae-sources{font-size:.88rem}
 .ae-film{max-width:900px}
 .ae-film video{width:100%;height:auto;border-radius:10px;background:#000}
+.ae-shows{margin-top:.5rem}.ae-shows summary{cursor:pointer;font-weight:600}.ae-shows ol{margin:.4rem 0 0;padding-left:1.3rem}
 
 @media (max-width:900px){
  .ae-edit,.ste-grid,.cd,.ip{grid-template-columns:minmax(0,1fr)}

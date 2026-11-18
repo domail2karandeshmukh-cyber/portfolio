@@ -221,7 +221,9 @@
     var el = held.el;
     if (held.style == null) el.removeAttribute("style"); else el.setAttribute("style", held.style);
     held = null;
-    el.click();
+    // A part of a drawing (SVG) has no click(): it gets the event a click sends.
+    if (typeof el.click === "function") el.click();
+    else el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
     return true;
   }
   function end(html) {
