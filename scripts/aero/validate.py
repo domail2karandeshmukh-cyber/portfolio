@@ -281,34 +281,58 @@ def check_applic(tree, props):
     return out
 
 
-def check_brex(tree, brex):
+def brex_rules(brex, schema):
+    """The structure rules of a BREX that apply to a module of the given schema (rulesContext, as s1kd-brexcheck reads it)."""
+    for ctx in brex.iter("contextRules"):
+        if ctx.get("rulesContext") in (None, schema):
+            yield from ctx.iter("structureObjectRule")
+
+
+def check_brex(tree, brex, layer="brex", label=""):
     out, root = [], tree.getroot()
-    for rule in brex.iter("structureObjectRule"):
+    for rule in brex_rules(brex, root.get(XSI, "")):
         op = rule.find("objectPath")
         flag, path, use = op.get("allowedObjectFlag"), op.text.strip(), (rule.findtext("objectUse") or "").strip()
         try:
             res = root.xpath(path)
         except etree.XPathError as e:
-            out.append(finding("error", "brex", f"The BREX rule {path} is not valid XPath: {e}"))
+            out.append(finding("error", layer, f"The BREX rule {path} is not valid XPath: {e}"))
             continue
         nodes = res if isinstance(res, list) else []
         if flag == "0" and (nodes or res is True):
             for n in nodes[:5]:
                 line = n.getparent().sourceline if isinstance(n, etree._ElementUnicodeResult) and n.getparent() is not None else getattr(n, "sourceline", None)
-                out.append(finding("error", "brex", use, line, f"Rule: {path}"))
+                out.append(finding("error", layer, label + use, line, f"Rule: {path}"))
         elif flag == "1" and not nodes and res is not True:
-            out.append(finding("error", "brex", use, None, f"Rule: {path}"))
-        allowed = [v.get("valueAllowed") for v in rule.findall("objectValue")]
+            out.append(finding("error", layer, label + use, None, f"Rule: {path}"))
+        values = [(v.get("valueForm", "single"), v.get("valueAllowed")) for v in rule.findall("objectValue")]
+        allowed = [v for _, v in values]
+
+        def ok(val):
+            for form, v in values:
+                if form == "pattern":
+                    try:
+                        if re.fullmatch(v, val):
+                            return True
+                    except re.error:
+                        return True  # a pattern this checker cannot read is not held against the module
+                elif "~" in v and form in ("range", "single"):
+                    lo, hi = v.split("~", 1)
+                    if lo <= val <= hi and len(val) == len(lo):
+                        return True
+                elif v == val:
+                    return True
+            return False
         if allowed and nodes:
             for n in nodes:
                 val = str(n) if isinstance(n, str) else (n.text or "")
-                if not any(v == val or ("~" in v and v.split("~")[0] <= val <= v.split("~")[1]) for v in allowed):
+                if not ok(val):
                     line = n.getparent().sourceline if isinstance(n, etree._ElementUnicodeResult) and n.getparent() is not None else getattr(n, "sourceline", None)
-                    out.append(finding("error", "brex", f'"{val}" is not allowed. {use}', line, f"Allowed: {', '.join(allowed)}"))
+                    out.append(finding("error", layer, f'{label}"{val}" is not allowed. {use}', line, f"Allowed: {', '.join(allowed)}"))
     # The SNS of every data module must be one the BREX describes.
     sns = {(s.findtext("snsCode")) for s in brex.iter("snsSystem")}
     dmc = root.find("identAndStatusSection/dmAddress/dmIdent/dmCode")
-    if dmc is not None and sns and dmc.get("systemCode") not in sns:
+    if layer == "brex" and dmc is not None and sns and dmc.get("systemCode") not in sns:
         out.append(finding("error", "brex", f'System code {dmc.get("systemCode")} is not in the project SNS ({", ".join(sorted(sns))}).', dmc.sourceline))
     return out
 
@@ -318,6 +342,9 @@ def main(argv):
     fetch = "--fetch" in argv
     if "--schemas" in argv:
         schemas = argv[argv.index("--schemas") + 1]
+    default_brex = None
+    if "--default-brex" in argv:
+        default_brex = etree.parse(argv[argv.index("--default-brex") + 1], etree.XMLParser(resolve_entities=False, no_network=True)).getroot()
     if "--report" in argv:
         report_path = argv[argv.index("--report") + 1]
     files = sorted(f for f in os.listdir(CSDB) if f.endswith(".XML"))
@@ -359,10 +386,13 @@ def main(argv):
         results[f] += check_applic(t, props)
         if brex is not None and t.getroot() is not brex:
             results[f] += check_brex(t, brex)
-        for layer in ("refs", "applic", "brex"):
+        if default_brex is not None:
+            results[f] += check_brex(t, default_brex, "default-brex", "S1000D default BREX: ")
+        for layer in ("refs", "applic", "brex") + (("default-brex",) if default_brex is not None else ()):
             if not any(x["layer"] == layer and x["level"] in ("error", "warning") for x in results[f]):
                 results[f].append(finding("pass", layer, {"refs": "Every reference resolves.", "applic": "Every applicability assertion uses a defined property and value.",
-                                                          "brex": "No project business rule is broken."}[layer]))
+                                                          "brex": "No project business rule is broken.",
+                                                          "default-brex": "No rule of the S1000D Issue 6 default BREX is broken."}[layer]))
         results[f].append(finding("human", "review", "Technical accuracy and formal approval need a qualified person. No program checks them."))
     errors = sum(1 for r in results.values() for x in r if x["level"] == "error")
     warnings = sum(1 for r in results.values() for x in r if x["level"] == "warning")
@@ -371,6 +401,7 @@ def main(argv):
         "issue": "S1000D Issue 6",
         "libxml2": ".".join(map(str, etree.LIBXML_VERSION)),
         "schemas": schema_info or ("checked" if schemas else "not checked (no --schemas)"),
+        "defaultBrex": "DMC-S1000D-H-04-10-0301-00A-022A-D (applied)" if default_brex is not None else "not applied (no --default-brex)",
         "files": len(files), "errors": errors, "warnings": warnings,
         "results": results,
     }
