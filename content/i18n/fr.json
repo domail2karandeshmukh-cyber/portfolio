@@ -380,6 +380,21 @@
   "Work": "Parcours",
   "Workbench": "Atelier",
   "Write, check against the style guide, export": "Rédiger, vérifier selon le guide de style, exporter",
-  "Writing, screenshots, illustration, publishing, video": "Rédaction, captures, illustration, publication, vidéo"
+  "Writing, screenshots, illustration, publishing, video": "Rédaction, captures, illustration, publication, vidéo",
+  "Tool": "Outil",
+  "Everything for this field": "Tout pour ce secteur",
+  "Demonstration scenario": "Scénario de démonstration",
+  "Explainer": "Article explicatif",
+  "Reference": "Référence",
+  "Report": "Rapport",
+  "Guided demonstration": "Démonstration guidée",
+  "The workflow in three minutes": "Le processus en trois minutes",
+  "Maintenance publication": "Publication de maintenance",
+  "Validation report": "Rapport de validation",
+  "Demonstration package": "Dossier de démonstration",
+  "One procedure through every tool": "Une procédure à travers tous les outils",
+  "Employee onboarding and access provisioning": "Intégration des nouveaux employés et attribution des accès",
+  "Investigating a simulated Wazuh security alert": "Analyser une alerte de sécurité Wazuh simulée",
+  "Preventive maintenance: monthly equipment inspection": "Maintenance préventive : inspection mensuelle d'un équipement"
  }
 }

@@ -1,10 +1,11 @@
 {
-  "_": "The six industry pages (/industries/<id>). Each names what a recruiter in that field reads first, the real project documentation, the working demonstrations, the conventions followed, the films and the files. lib/hubs.mjs builds them. An item is a library card (\"doc\": id), or has its own title, address and text. Say where the work comes from: professional work is on the CV; projects are academic or personal; Studio scenarios are invented, and the pages say so.",
+  "_": "The six industry pages (/industries/<id>). Each names what a recruiter in that field reads first, the real project documentation, the working demonstrations, the conventions followed, the films and the files. lib/hubs.mjs builds them, and the field explorer on the home page (its \"preview\" is the picture shown there). An item is a library card (\"doc\": id), or has its own title, address and text. Say where the work comes from: professional work is on the CV; projects are academic or personal; Studio scenarios use example companies, and the pages say so.",
   "industries": [
     {
       "id": "software",
+      "preview": { "from": "content/thumbs/core42.webp", "src": "/thumbs/core42.webp", "w": 720, "h": 617 },
       "intro": "Help-center articles, release notes, developer and API guides, and training for software products. I write them to the Microsoft Writing Style Guide, with Google's developer documentation style guide as the second reference.",
-      "basis": "Professional work: IT and SaaS documentation, listed under Experience. Project documentation: applications I built and documented myself. The Studio scenarios use invented companies, and their pages say so.",
+      "basis": "Professional work: IT and SaaS documentation, listed under Experience. Project documentation: applications I built and documented myself. The demonstration scenarios in the Studio use example companies, and each page says so.",
       "start": [
         { "doc": "core42", "why": "A complete procedure for first-time users of a real cloud portal: prerequisites, numbered steps, annotated screenshots and the expected result." },
         { "doc": "ns-release", "why": "Release notes for a working application: what changed, for whom, and what to do about it." },
@@ -16,10 +17,10 @@
         { "title": "ReleasePilot AI", "url": "https://releasepilot.karandeshmukh.dev", "kind": "Live application", "text": "A release and compliance planner for mobile apps, from an MSc project-management assignment.", "external": true }
       ],
       "demos": [
-        { "title": "Help center for a SaaS product", "url": "/studio/scenarios/e-support", "kind": "Scenario (invented company)", "text": "Sign-in and access articles, an FAQ, a troubleshooting guide and an annotated screenshot set." },
-        { "title": "Release notes, version 2.4", "url": "/studio/scenarios/f-release", "kind": "Scenario (invented company)", "text": "Release notes, a migration guide and a version history." },
-        { "title": "A feature tutorial", "url": "/studio/scenarios/g-training", "kind": "Scenario (invented company)", "text": "A task tutorial with a narrated training video and a step guide." },
-        { "title": "A cloud developer guide", "url": "/studio/scenarios/c-cloud", "kind": "Scenario (invented company)", "text": "Concepts, a deployment procedure, a configuration reference and troubleshooting." },
+        { "title": "Help center for a SaaS product", "url": "/studio/scenarios/e-support", "kind": "Demonstration scenario", "text": "Sign-in and access articles, an FAQ, a troubleshooting guide and an annotated screenshot set." },
+        { "title": "Release notes, version 2.4", "url": "/studio/scenarios/f-release", "kind": "Demonstration scenario", "text": "Release notes, a migration guide and a version history." },
+        { "title": "A feature tutorial", "url": "/studio/scenarios/g-training", "kind": "Demonstration scenario", "text": "A task tutorial with a narrated training video and a step guide." },
+        { "title": "A cloud developer guide", "url": "/studio/scenarios/c-cloud", "kind": "Demonstration scenario", "text": "Concepts, a deployment procedure, a configuration reference and troubleshooting." },
         { "title": "Knowledge base", "url": "/studio/kb", "kind": "Tool", "text": "Categories, sections, articles, search and an export." }
       ],
       "standards": [
@@ -33,17 +34,18 @@
     },
     {
       "id": "enterprise-it",
+      "preview": { "from": "content/thumbs/workspace-faqs.webp", "src": "/thumbs/workspace-faqs.webp", "w": 720, "h": 617 },
       "intro": "Access and onboarding procedures, IT knowledge-base articles, FAQs and policies, for employees and for the service desk that supports them.",
-      "basis": "Professional work: IT documentation, listed under Experience. The onboarding scenario uses an invented company, and its page says so.",
+      "basis": "Professional work: IT documentation, listed under Experience. The onboarding scenario uses an example company, and its page says so.",
       "start": [
         { "doc": "core42", "why": "How a new user gets into a cloud portal, step by step, with each screen annotated." },
         { "doc": "workspace-faqs", "why": "Nine short FAQ sets for end users of Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat." },
-        { "title": "Employee onboarding and access provisioning", "url": "/studio/scenarios/b-enterprise-it", "kind": "Scenario (invented company)", "why": "A service-desk procedure, the roles and approvals behind it, and a step guide with screenshots." }
+        { "title": "Employee onboarding and access provisioning", "url": "/studio/scenarios/b-enterprise-it", "kind": "Demonstration scenario", "why": "A service-desk procedure, the roles and approvals behind it, and a step guide with screenshots." }
       ],
       "projects": [],
       "demos": [
-        { "title": "Step guide: create a new employee's account", "url": "/studio/samples/guides/it-onboarding/guide.pdf", "kind": "PDF (invented company)", "text": "Five steps, each with an annotated screenshot of the identity console." },
-        { "title": "Step guide: unlock a customer's account", "url": "/studio/samples/guides/support-unlock/guide.pdf", "kind": "PDF (invented company)", "text": "A support-desk procedure with a caution about identity checks." },
+        { "title": "Step guide: create a new employee's account", "url": "/studio/samples/guides/it-onboarding/guide.pdf", "kind": "PDF, demonstration scenario", "text": "Five steps, each with an annotated screenshot of the identity console." },
+        { "title": "Step guide: unlock a customer's account", "url": "/studio/samples/guides/support-unlock/guide.pdf", "kind": "PDF, demonstration scenario", "text": "A support-desk procedure with a caution about identity checks." },
         { "title": "Document control", "url": "/studio/control", "kind": "Tool", "text": "Draft, review, approval and publication, with an audit trail." },
         { "title": "Knowledge base", "url": "/studio/kb", "kind": "Tool", "text": "A help-center structure that runs in the browser, with search and an export." }
       ],
@@ -57,12 +59,13 @@
     },
     {
       "id": "cybersecurity",
+      "preview": { "from": "content/thumbs/cg-threat.webp", "src": "/thumbs/cg-threat.webp", "w": 720, "h": 617 },
       "intro": "Threat models, security architecture, alert runbooks and integrity reports. Most of it documents security tools I built in 2026 during my MSc in cybersecurity and data science.",
-      "basis": "Projects: academic team projects that I led, and their documentation, which I wrote. Professional work: security-related IT documentation, listed under Experience. The alert scenario simulates a Wazuh alert for an invented utility.",
+      "basis": "Projects: academic team projects that I led, and their documentation, which I wrote. Professional work: security-related IT documentation, listed under Experience. The alert scenario simulates a Wazuh alert for an example utility company.",
       "start": [
         { "doc": "cg-threat", "why": "An asset-centric STRIDE threat model in which every threat maps to a check in the code." },
         { "doc": "tn-how", "why": "From one satellite-receiver observation to the operator's screen: how jamming and spoofing are detected and explained." },
-        { "title": "Investigating a simulated Wazuh alert", "url": "/studio/scenarios/d-security", "kind": "Scenario (invented company)", "why": "A runbook for an SSH brute-force alert, what the alert means with its MITRE ATT&CK technique, and the escalation reference." }
+        { "title": "Investigating a simulated Wazuh security alert", "url": "/studio/scenarios/d-security", "kind": "Demonstration scenario", "why": "A runbook for an SSH brute-force alert, what the alert means with its MITRE ATT&CK technique, and the escalation reference." }
       ],
       "projects": [
         { "doc": "cg-arch" }, { "doc": "cg-report" }, { "doc": "cg-paper" }, { "doc": "tn-report" }, { "doc": "tn-code" }, { "doc": "tn-demo" }, { "doc": "tn-glossary" },
@@ -70,7 +73,7 @@
         { "title": "TrustNav", "url": "https://trustnav.karandeshmukh.dev", "kind": "Live application", "text": "Live trust monitoring for satellite positions: detection, explanation and response to jamming, spoofing and forgery.", "external": true }
       ],
       "demos": [
-        { "title": "Investigating a simulated Wazuh alert", "url": "/studio/scenarios/d-security", "kind": "Scenario (invented company)", "text": "Runbook, concept and escalation reference, with an annotated alert screenshot." },
+        { "title": "Investigating a simulated Wazuh security alert", "url": "/studio/scenarios/d-security", "kind": "Demonstration scenario", "text": "Runbook, concept and escalation reference, with an annotated alert screenshot." },
         { "title": "NOVATECH Sentinel", "url": "https://sentinel.karandeshmukh.dev", "kind": "Live application", "text": "A risk-governance platform: key risk indicators, approvals and early warnings.", "external": true }
       ],
       "standards": [
@@ -83,6 +86,7 @@
     },
     {
       "id": "ai-data-science",
+      "preview": { "from": "content/thumbs/kc1-readme.webp", "src": "/thumbs/kc1-readme.webp", "w": 720, "h": 617 },
       "intro": "Documentation for machine-learning work: what a model is for, the data it learned from, how it was evaluated, and how to reproduce it.",
       "basis": "Projects: academic and personal work from my MSc in cybersecurity and data science, with measured results. April, the assistant on this site, is a live AI application I built.",
       "start": [
@@ -106,7 +110,8 @@
     },
     {
       "id": "aerospace",
-      "intro": "S1000D data modules and publications, a common source database, an illustrated parts catalogue, an interactive publication and Simplified Technical English, demonstrated on one invented training rig.",
+      "preview": { "from": "content/aerospace/csdb/ICN-0DEMO-ARF0004-002-01.SVG", "src": "/studio/aerospace/illustrations/icn-0demo-arf0004-002-01.svg", "w": 800, "h": 560 },
+      "intro": "S1000D data modules and publications, a common source database, an illustrated parts catalogue, an interactive publication and Simplified Technical English, demonstrated on one training rig designed for this portfolio. It isn't an aircraft component.",
       "basis": "Education: BSc in Aircraft Maintenance Engineering (2021). The aerospace studio is an independent demonstration that I built in 2026; it is not professional S1000D experience, and nothing in it is approved maintenance data.",
       "start": [
         { "title": "The workflow in three minutes", "url": "/studio/aerospace#guided", "kind": "Guided demonstration", "why": "Nine steps from an engineering change to a revised publication, each opening the tool where it happens." },
@@ -134,17 +139,18 @@
     },
     {
       "id": "industrial-engineering",
+      "preview": { "from": "content/thumbs/mp-ps104.webp", "src": "/thumbs/mp-ps104.webp", "w": 720, "h": 620 },
       "intro": "Maintenance and inspection procedures, calibration instructions, inspection records and engineering change, for the people who do the work on the shop floor.",
-      "basis": "Professional work: technical documentation at Magna International, listed under Experience. The pump-station scenario and the maintenance package use an invented site, and their pages say so.",
+      "basis": "Professional work: technical documentation at Magna International, listed under Experience. The pump-station scenario and the maintenance package use an example site, and their pages say so.",
       "start": [
         { "title": "Engineering and maintenance documentation", "url": "/#engineering", "kind": "Experience", "why": "The documentation I wrote in manufacturing, and the fields where the same discipline applies." },
-        { "title": "One procedure through every tool", "url": "/studio/flagship", "kind": "Package (invented site)", "why": "A monthly pump inspection as a procedure, a step guide, a training video, a DITA publication and a controlled record." },
-        { "title": "Preventive maintenance: monthly equipment inspection", "url": "/studio/scenarios/a-industrial", "kind": "Scenario (invented site)", "why": "The procedure, its inspection record, a calibration instruction and a test report." }
+        { "title": "One procedure through every tool", "url": "/studio/flagship", "kind": "Demonstration package", "why": "A monthly pump inspection as a procedure, a step guide, a training video, a DITA publication and a controlled record." },
+        { "title": "Preventive maintenance: monthly equipment inspection", "url": "/studio/scenarios/a-industrial", "kind": "Demonstration scenario", "why": "The procedure, its inspection record, a calibration instruction and a test report." }
       ],
       "projects": [],
       "demos": [
-        { "title": "Feed pump B: inspection and calibration", "url": "/studio/dita/industrial-equipment/industrial-equipment.pdf", "kind": "DITA publication (invented site)", "text": "Published with DITA Open Toolkit from validated DITA topics." },
-        { "title": "Step guide: record the readings", "url": "/studio/samples/guides/engineering-inspection/guide.pdf", "kind": "PDF (invented site)", "text": "The inspection, one annotated screen at a time." },
+        { "title": "Feed pump B: inspection and calibration", "url": "/studio/dita/industrial-equipment/industrial-equipment.pdf", "kind": "DITA publication, demonstration scenario", "text": "Published with DITA Open Toolkit from validated DITA topics." },
+        { "title": "Step guide: record the readings", "url": "/studio/samples/guides/engineering-inspection/guide.pdf", "kind": "PDF, demonstration scenario", "text": "The inspection, one annotated screen at a time." },
         { "title": "Document control", "url": "/studio/control", "kind": "Tool", "text": "Technical, editorial and safety approvals kept apart, with revisions." }
       ],
       "standards": [

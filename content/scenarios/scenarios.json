@@ -385,7 +385,7 @@
    "title": "Multi-topic product documentation in DITA",
    "org": "",
    "product": "DITA 1.3 and DITA Open Toolkit",
-   "note": "The documents come from scenarios A to G, whose organizations, products, people and addresses are invented. DITA 1.3 and DITA Open Toolkit are real: the projects were validated and published with them.",
+   "note": "The documents come from scenarios A to G, whose organizations, products, people and addresses are examples created for this portfolio. DITA 1.3 and DITA Open Toolkit are real: the projects were validated and published with them.",
    "summary": "Five DITA projects made from the scenarios' documents: concepts, tasks, references and troubleshooting topics under a map with keys, a relationship table and DITAVAL filters for each group of readers, validated against the OASIS DTDs and published to HTML5 and PDF.",
    "skills": [
     "DITA concepts",

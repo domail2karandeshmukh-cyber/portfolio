@@ -2,7 +2,7 @@
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
 import { siteNav } from "./lib/nav.mjs";
-import { buildHubs } from "./lib/hubs.mjs";
+import { buildHubs, fieldExplorer } from "./lib/hubs.mjs";
 import { buildStandards } from "./lib/standards.mjs";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -110,7 +110,7 @@ await library.extra({ path: "/workbench", title: "Workbench", description: "Writ
       const src = await fs.readFile(d.path, "utf8"), view = Doc.resolve(Doc.parse(src), Doc.GENERAL);
       text.push({ id: d.path.split("/").pop().replace(/\.md$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-"), title: view.title || d.kind, text: Doc.text ? src.replace(/^---[\s\S]*?---\n/, "").replace(/[#*`>|_]/g, " ").replace(/\s+/g, " ").trim() : src });
     }
-    if (text.length) await library.extra({ path: `/studio/scenarios/${sc.id}`, title: `${sc.title} (fictional demonstration)`, only: "search", kind: "Fictional demonstration", shelf: `Scenario ${sc.letter}: ${sc.field}`, text });
+    if (text.length) await library.extra({ path: `/studio/scenarios/${sc.id}`, title: `${sc.title} (demonstration scenario)`, only: "search", kind: "Demonstration scenario", shelf: `Scenario ${sc.letter}: ${sc.field}`, text });
   }
 }
 await library.finish();
@@ -154,8 +154,14 @@ const engineering = `
   <p class="eng-note">${esc(E.grounding)} ${esc(E.applies)}</p>
   <p class="eng-note"><a href="#experience">Read about my roles</a></p>`;
 
+// The field explorer, and the pictures it shows that aren't already on the site.
+for (const ind of JSON.parse(await fs.readFile("content/industries.json", "utf8")).industries) {
+  const pv = ind.preview;
+  if (pv && pv.src.startsWith("/thumbs/") && !existsSync(`${OUT}${pv.src}`)) await fs.copyFile(pv.from, `${OUT}${pv.src}`);
+}
 const parts = {
   engineering,
+  fields: fieldExplorer({ byId, C }),
   stats: figures.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
   // Three sheets on the desk. The first one is where to start.
   featured: C.featured.map((id, i) => docCard({ ...byId[id], start: i === 0 }, T)).join("\n"),
@@ -317,7 +323,7 @@ for (const loc of locales) {
 }
 
 // doc.js and style.js are the document model and the style checker. The build uses them, and so does the workbench in a browser.
-for (const f of ["site.css", "app.js", "nav.js", "hubs.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+for (const f of ["site.css", "app.js", "nav.js", "hubs.js", "fields.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
 const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));

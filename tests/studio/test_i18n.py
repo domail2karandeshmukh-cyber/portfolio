@@ -44,11 +44,11 @@ with sync_playwright() as p:
     for lang, w in WORDS.items():
         pg.goto(f"{BASE}/{lang}/studio", wait_until="load"); pg.wait_for_timeout(300)
         check(f"{lang}: the hub is in its language, with its own address", pg.evaluate("document.documentElement.lang") == lang and pg.evaluate("document.querySelector('link[rel=canonical]').href").endswith(f"/{lang}/studio") and w["library"] in pg.evaluate("document.querySelector('nav.gnav').textContent"))
-        hrefs = pg.evaluate("Array.from(document.querySelectorAll('.st-work h3 a')).map(a => a.getAttribute('href'))")
+        hrefs = pg.evaluate("Array.from(document.querySelectorAll('.sx-start h3 a, .sx-i[data-type=tool] .sx-t a')).map(a => a.getAttribute('href'))")
         check(f"{lang}: the tool links stay in the language; the workbench, the flagship and the aerospace overview (English pages) stay where they are", all(h in ("/workbench", "/studio/flagship", "/studio/aerospace") or h.startswith(f"/{lang}/studio") for h in hrefs), hrefs)
         scen = pg.evaluate("Array.from(document.querySelectorAll('.st-scen a')).map(a => a.getAttribute('href'))")
         check(f"{lang}: scenario pages, in English, are linked as they are", all(h.startswith("/studio/scenarios/") for h in scen) and len(scen) == 8)
-        check(f"{lang}: sample titles, which are English documents, are marked as not to translate", pg.locator(".st-thumbs small[translate=no]").count() >= 10)
+        check(f"{lang}: sample titles, which are English documents, are marked as not to translate", pg.locator(".sx-t a[translate=no]").count() >= 10)
         for t in TOOLS:
             pg.goto(f"{BASE}/{lang}/studio/{t}", wait_until="load"); pg.wait_for_timeout(400)
             check(f"{lang}/{t}: the page has the language's dictionary for its scripts", pg.evaluate("document.documentElement.lang") == lang and pg.evaluate("!!window.__studioT && Object.keys(window.__studioT).length > 40"), pg.evaluate("window.__studioT && Object.keys(window.__studioT).length"))
