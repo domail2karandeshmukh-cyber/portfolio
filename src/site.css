@@ -938,3 +938,9 @@ html[lang=hi] .fx-t{line-height:1.4}
  .rw-tabs button{padding:.55em .8em;font-size:.84rem;min-width:0}
  .rw-tabs button::before{display:none}
 }
+/* The library's facets (lib/library.mjs, app.js). */
+.lib-refine{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 16px;margin:14px 0 6px}
+.lib-refine label{display:flex;flex-direction:column;gap:4px;font-size:.84rem;font-weight:600;color:var(--ink2)}
+.lib-refine select{font:500 .95rem var(--sans);padding:.5em .6em;border:1.5px solid var(--rule2);border-radius:8px;background:#fff;color:var(--ink);min-width:11em;max-width:100%}
+.lib-n{font-size:.9rem;color:var(--mute);padding-bottom:.55em}
+@media (max-width:600px){.lib-refine label{flex:1 1 44%}.lib-refine select{min-width:0;width:100%}}

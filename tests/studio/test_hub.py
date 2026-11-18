@@ -71,6 +71,19 @@ with sync_playwright() as p:
     pg.keyboard.press("End"); pg.wait_for_timeout(100)
     check("home: End goes to the last field, and its panel names its documents", pg.evaluate("document.activeElement.id") == "fx-t-industrial-engineering" and pg.locator("#fx-industrial-engineering .fx-list li").count() == 3)
     check("home: each panel is labelled by its tab", pg.evaluate("[...document.querySelectorAll('.fx-p')].every(p => p.getAttribute('role') === 'tabpanel' && document.getElementById(p.getAttribute('aria-labelledby')))"))
+    # the library's facets
+    LIB = "[...document.querySelectorAll('.lib-group:not([hidden]) [data-docs] > li, .lib-group:not([hidden]) .demo-rows > li')].filter(li => !li.hidden && !li.closest('[hidden]'))"
+    pg.goto(BASE + "/docs?standard=stride", wait_until="load"); pg.wait_for_timeout(300)
+    v = pg.evaluate(LIB + ".map(li => (li.querySelector('h3, .row-title') || li).textContent.trim())")
+    check("library: a link can open it on a standard (STRIDE: the threat model and the final report)", sorted(v) == ["AI-ChainGuard final report", "Threat model"], v)
+    pg.select_option(".lib-refine select[name=standard]", ""); pg.select_option(".lib-refine select[name=audience]", "security-teams"); pg.wait_for_timeout(100)
+    check("library: written for security teams, with the count and the address", pg.evaluate(LIB + ".length") >= 4 and "audience=security-teams" in pg.evaluate("location.search") and "documents" in pg.text_content(".lib-n"))
+    pg.select_option(".lib-refine select[name=field]", "industrial-engineering"); pg.wait_for_timeout(100)
+    check("library: two facets that match nothing show nothing, and Clear brings everything back", pg.evaluate(LIB + ".length") == 0)
+    pg.click("[data-refine-clear]"); pg.wait_for_timeout(100)
+    check("library: cleared", pg.evaluate(LIB + ".length") >= 35 and pg.evaluate("location.search") == "")
+    pg.goto(BASE + "/industries/cybersecurity", wait_until="load")
+    check("industry page: links to its documents in the library", pg.locator("a[href='/docs?field=cybersecurity']").count() == 1)
     check("no script errors", not errs, errs)
     # phones
     m = b.new_page(viewport={"width": 320, "height": 760})
