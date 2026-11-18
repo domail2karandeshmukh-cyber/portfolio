@@ -22,7 +22,8 @@ def served_copy(raw, final):
     """Writes the served copy of raw to final. Returns True when the copy keeps a sound track."""
     loudest = max_volume(raw)
     sound = loudest is not None and loudest > -90
-    audio = ["-map", "0:a:0", "-c:a", "aac", "-b:a", "128k"] if sound else ["-an"]
+    # loudnorm hands on its sound at 192 kHz; players everywhere expect 48 kHz
+    audio = ["-map", "0:a:0", "-c:a", "aac", "-b:a", "128k", "-ar", "48000"] if sound else ["-an"]
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-map", "0:v:0", *audio,
                     "-c:v", "libx264", "-preset", "slow", "-crf", "23", "-tune", "stillimage", "-pix_fmt", "yuv420p",
                     "-fps_mode", "passthrough", "-movflags", "+faststart", str(final)], check=True)

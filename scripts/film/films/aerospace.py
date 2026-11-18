@@ -5,8 +5,8 @@ checker's findings, the IETM's fault isolation and the parts catalogue all run a
 the captions with their step numbers, the pointer, a ring around what a caption names, one zoom, the fades between
 pages and the last card. The ARF-1 rig and all its data are fictional.
 
-The narration (lib/narration.cjs, script "aerospace") is recorded only when Karan approves the cost of the voice
-service. Until then the film is silent, its captions are drawn in the picture, and nothing calls it narrated.
+The narration is lib/narration.cjs, script "aerospace", recorded by the workflow "Record the narration" (approved by
+Karan on 18 November 2026). Each scene is timed to its segment: the actions fall on the sentence that names them.
 """
 import re, time
 
@@ -128,14 +128,17 @@ def clear(f, selector):
 # ---------- The scenes ----------
 
 def overview(f):
+    # Narration: the rig (about 6 s), then its CSDB (about 8.5 s), over the drawing of how the CSDB fits together.
     f.run(0.6)
     f.caption('<b class="n">1</b>One fictional rig, documented as <mark>an S1000D Issue 6 CSDB</mark>.')
-    f.run(2.2)
+    f.run(2.6)
     f.js("() => __film.close(true)")
-    f.glide(f.top("h2.st-h2", "One rig, one CSDB") - 24, 1500)
+    f.glide(f.top("h2.st-h2", "The tools") - 24, 1200)
+    f.run(3.0)
+    f.glide(f.top("h2.st-h2", "One rig, one CSDB") - 24, 1300)
     f.run(1.6)
     ring(f, ".ae-diagram", 8)
-    f.run(2.8)
+    f.run(8.0)
 
 
 def csdb(f):
@@ -143,18 +146,18 @@ def csdb(f):
           '<b class="n">2</b>The CSDB: what each module refers to, and <mark>what uses it</mark>.')
     f.js("() => __film.close(true)")
     f.run(0.4)
-    f.glide(f.top("#cd-app") - 12, 1100)
-    f.run(1.0)
+    f.glide(f.top("#cd-app") - 12, 1000)
+    f.run(2.0)
     f.pan("#cd-detail", inner(f, "#cd-detail", ".cd-rel") - 46, 1100)
-    f.run(1.4)
+    f.run(1.2)
     ring(f, ".cd-rel")
-    f.run(1.8)
+    f.run(2.6)
     unring(f)
     f.caption('<b class="n">2</b>Issue 002 against 001: <mark>what the change altered</mark>.')
     f.pan("#cd-detail", inner(f, "#cd-detail", ".cd-diffbox") - 40, 1200)
-    f.run(1.6)
+    f.run(1.4)
     zoom(f, ".cd-diffbox", 1.3)
-    f.run(2.6)
+    f.run(3.4)
 
 
 def editor(f):
@@ -163,7 +166,7 @@ def editor(f):
     f.js("() => __film.close(true)")
     f.run(0.4)
     f.glide(f.top("#se-app") - 16, 1100)
-    f.run(1.6)
+    f.run(4.2)
     f.tap("#se-issue", 0.4)
     clear(f, "#se-issue")
     f.run(0.2)
@@ -171,7 +174,7 @@ def editor(f):
     f.run(f.type("#se-issue", "02", 160))
     f.run(0.6)
     ring(f, "#se-layers > li.ae-fail")
-    f.run(2.6)
+    f.run(3.2)
     unring(f)
     clear(f, "#se-issue")
     f.caption('<b class="n">3</b>The third digit back, and <mark>every layer passes</mark> again.')
@@ -179,7 +182,7 @@ def editor(f):
     rest(f)
     f.run(0.5)
     ring(f, "#se-sum")
-    f.run(2.2)
+    f.run(3.6)
     unring(f)
 
 
@@ -199,10 +202,11 @@ def ste(f):
     f.run(1.6)
     f.tap("#ste-list [data-fix]", 0.45)
     rest(f)
-    f.run(0.6)
+    f.run(1.0)
+    # While the narration says the word list is original, the table of what the checker checks, and what it leaves to a person.
     f.caption('<b class="n">4</b>Its own word list: <mark>a check, not a certificate</mark>.')
-    f.glide(f.top("#ste-fixed") - 120, 1100)
-    f.run(2.6)
+    f.glide(f.top("#ste-r-h") - 20, 1300)
+    f.run(5.8)
 
 
 def ietm(f):
@@ -256,10 +260,10 @@ def card(f):
 
 # Lengths in frames of 1/30 s, as each scene spends them.
 SCENES = [
-    ("01-overview", 216 / 30, overview),
-    ("02-csdb", 276 / 30, csdb),
-    ("03-editor", 291 / 30, editor),
-    ("04-ste", 293 / 30, ste),
+    ("01-overview", 474 / 30, overview),
+    ("02-csdb", 342 / 30, csdb),
+    ("03-editor", 429 / 30, editor),
+    ("04-ste", 401 / 30, ste),
     ("05-ietm", 310 / 30, ietm),
     ("06-ipc", 266 / 30, ipc),
     ("07-card", 138 / 30, card),

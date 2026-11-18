@@ -197,7 +197,7 @@ def join(module, out, voice, scene_lengths):
         args = [FFMPEG, "-y", "-loglevel", "error", "-i", str(silent)]
         for n, v in spoken: args += ["-i", str(v["file"])]
         chain = "".join(f"[{i + 1}]adelay={int((starts[n] + LEAD) * 1000)}|{int((starts[n] + LEAD) * 1000)}[a{i}];" for i, (n, v) in enumerate(spoken))
-        mix = "".join(f"[a{i}]" for i in range(len(spoken))) + f"amix=inputs={len(spoken)}:normalize=0:dropout_transition=0,apad=whole_dur={total:.3f},loudnorm=I=-16:TP=-1.5:LRA=11[out]"
+        mix = "".join(f"[a{i}]" for i in range(len(spoken))) + f"amix=inputs={len(spoken)}:normalize=0:dropout_transition=0,apad=whole_dur={total:.3f},loudnorm=I=-16:TP=-1.5:LRA=11,aresample=48000[out]"
         args += ["-filter_complex", chain + mix, "-map", "0:v", "-map", "[out]", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}", "-movflags", "+faststart", str(part)]
         subprocess.run(args, check=True)
         os.replace(part, final); silent.unlink()

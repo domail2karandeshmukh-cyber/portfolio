@@ -1,0 +1,29 @@
+WEBVTT
+
+1
+00:00:00.400 --> 00:00:15.694
+These aerospace documentation demonstrations are built around one fictional training rig. Its documentation is an S1000D Issue 6 common source database: data modules, publication modules and illustrations.
+
+2
+00:00:16.200 --> 00:00:27.106
+The common source database lists every module. For each one, it shows what refers to it, which publications use it, and what changed from one issue to the next.
+
+3
+00:00:27.600 --> 00:00:41.379
+In the editor, the form and the XML stay in step, and the checks run as you type. A two-digit issue number fails the identification check. Put the third digit back, and every layer passes again.
+
+4
+00:00:41.900 --> 00:00:54.713
+The Simplified Technical English checker marks each finding in the text, names its rule, and suggests a fix. Its word list is an original one, so it can't certify that a text complies.
+
+5
+00:00:55.267 --> 00:01:04.005
+The interactive publication shows only what applies to the serial number you choose, and fault isolation asks one question at a time.
+
+6
+00:01:05.600 --> 00:01:12.091
+In the parts catalogue, select a part in the exploded view, and its row in the parts list follows.
+
+7
+00:01:14.467 --> 00:01:24.171
+Everything here is fictional, and none of it is maintenance data. Try it at karandeshmukh dot dev slash studio slash aerospace.
