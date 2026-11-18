@@ -1,0 +1,271 @@
+{
+ "checked": "2026-11-18T17:22:40Z",
+ "issue": "S1000D Issue 6",
+ "libxml2": "2.14.6",
+ "schemas": {
+  "proced.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/proced.xsd",
+   "sha256": "3568660fc3ac334c69a4932b0a3f6b89fcaae11f393bc0cd6afbcc9f14aacb87",
+   "bytes": 349941
+  },
+  "rdf.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/rdf.xsd",
+   "sha256": "166bf3dc8d955ef18ce6cc987dcc42c72397bd3217407dca4aa3eea6242c83c5",
+   "bytes": 2140
+  },
+  "dc.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/dc.xsd",
+   "sha256": "4998af190bf0186a39dabb151573861c1aff0f73572bfce8f1898ccac9a75d95",
+   "bytes": 3259
+  },
+  "xlink.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/xlink.xsd",
+   "sha256": "59fdd5678ed891baded02578320452216cd8d668c15d9372a559e1fe1836a693",
+   "bytes": 5584
+  },
+  "xml.xsd": {
+   "url": "http://www.w3.org/2001/xml.xsd",
+   "sha256": "61960fb3131e38022caad5360e2f33a3382578ab3c80cd58bd74320ede61b20c",
+   "bytes": 8836
+  },
+  "prdcrossreftable.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/prdcrossreftable.xsd",
+   "sha256": "cfd83d108d79c52c860df47d8cd176c3ece7aa98718e9eefd3920fe404dc4d84",
+   "bytes": 223514
+  },
+  "pm.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/pm.xsd",
+   "sha256": "5d6f1a11271fb209122059b99c30ef7e52be5aeab3cf1d9ca2cefc7aa74667ec",
+   "bytes": 246316
+  },
+  "ipd.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/ipd.xsd",
+   "sha256": "7b9b8ad0e03f7305576cf7b13b511769e6b7e9a2d75ad6c9ac749b8cb26af500",
+   "bytes": 319509
+  },
+  "fault.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/fault.xsd",
+   "sha256": "c9bee1810724cef43d639368cb33a21ef552630f9e002cb901fc487f34023547",
+   "bytes": 386283
+  },
+  "descript.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/descript.xsd",
+   "sha256": "ffa2d2ff12df52f047ffd9713d3d6586bf65422a9d99abab835cce7a5562b297",
+   "bytes": 278144
+  },
+  "condcrossreftable.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/condcrossreftable.xsd",
+   "sha256": "f1936254bf22d9e56946f85ce0dddf2326542359201bbda51e3e99ae32c8b037",
+   "bytes": 230613
+  },
+  "brex.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/brex.xsd",
+   "sha256": "7ef32a728f2c872f2ad599a281ec4cb039810a22d920c28c6fe1443d10afbff8",
+   "bytes": 278657
+  },
+  "appliccrossreftable.xsd": {
+   "url": "http://www.s1000d.org/S1000D_6/xml_schema_flat/appliccrossreftable.xsd",
+   "sha256": "9eacc5adc28e6dbe1e75e809d3e23909685b7edbe7e6ba0f84bbf1aa8c8b105f",
+   "bytes": 228945
+  }
+ },
+ "schemaRun": true,
+ "defaultBrexRun": true,
+ "defaultBrex": "DMC-S1000D-H-04-10-0301-00A-022A-D (applied)",
+ "localChecked": "2026-11-18T17:23:32Z",
+ "errors": 0,
+ "warnings": 0,
+ "sha256": {
+  "DMC-ARFRIG-A-00-00-00-00A-00PA-D_001-00_EN-US.XML": "c49f98133763bb05f42ffaaf91fd63e0d47336a63dd50cd6c9c34de8d8feb485",
+  "DMC-ARFRIG-A-00-00-00-00A-00QA-D_001-00_EN-US.XML": "3a68f55c537b50f46f881e3ca21cf354227c5d1d6233aadc54dac092b6157662",
+  "DMC-ARFRIG-A-00-00-00-00A-00WA-D_001-00_EN-US.XML": "c94d75f24a0f702c50aa7b732df27d954e15c4435fef788cd014569f4ea60bef",
+  "DMC-ARFRIG-A-00-00-00-00A-022A-D_001-00_EN-US.XML": "4fb665ebed401991019ed07f42df2e7d8bc0c854b057b252b5806a3d3869fda3",
+  "DMC-ARFRIG-A-00-00-00-00A-040A-D_001-00_EN-US.XML": "b81fcfbf3d77f884aefda92225dee24a22cf94e80477f3b9d8c842c1db254c54",
+  "DMC-ARFRIG-A-00-00-00-00A-040A-D_002-00_EN-US.XML": "2e738ffdedf478e4a0004ea1ac5217bf2d2640e09c3abc7ba8e0539b5d84fdf4",
+  "DMC-ARFRIG-A-00-00-00-00A-131A-A_001-00_EN-US.XML": "9f57e25f0f0172f3823ae2c3dccbb9fb29e65a1f7d3a67921fb0da76e2d82ea1",
+  "DMC-ARFRIG-A-00-00-00-00A-941A-D_001-00_EN-US.XML": "8674ffea4a76c0dc0cb095a11ea20d6cbf2a71f61626ed688d2b8b89519414d1",
+  "DMC-ARFRIG-A-00-00-00-00A-941A-D_002-00_EN-US.XML": "3ba20f24f0cb1f02f5122b65e56f6d032937b11c8e89fd74dae93bd43efe0711",
+  "DMC-ARFRIG-A-20-00-00-00A-271A-A_001-00_EN-US.XML": "0f650f8329db2205202122a711572dd94c46860569fa1c06dd6a4695667c7339",
+  "DMC-ARFRIG-A-20-00-00-00A-340A-A_001-00_EN-US.XML": "013fb7618c85114cb8721743953d76bf4f8da3bbe7c6c2397d56bdf5f70d90cd",
+  "DMC-ARFRIG-A-20-00-00-00A-421A-A_001-00_EN-US.XML": "1941e349569b4d2d3240dabc1ec6d70bfaa60ca37ff94e4ce67c7bb87f3d9a16",
+  "DMC-ARFRIG-A-20-00-00-00A-520A-A_001-00_EN-US.XML": "3aaaf9b481a95e3582e57db6bc6b197c128a14b99ca0415e8747be7aff9fbbe2",
+  "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML": "ba6a7eea1a3d85af28002b6aca76e0ae652bfef88bb6c01b97b1af023d109cee",
+  "DMC-ARFRIG-A-20-00-00-00A-720A-A_001-00_EN-US.XML": "28c08cbb9bae832202858ca0ee47829bd681cc17052fd23f5b7468ee3021cd73",
+  "DMC-ARFRIG-A-20-00-00-00A-720A-A_002-00_EN-US.XML": "23d43305e6d634a8f7c9034345fee30bff66ca1b1b2eea5a4338e873a011e59f",
+  "DMC-ARFRIG-A-30-00-00-00A-310A-A_001-00_EN-US.XML": "ff38ba81d3f7a29aec1252e06ba4141464c547d62aea7fff82bf83efa9262627",
+  "PMC-ARFRIG-0DEMO-00001-00_001-00_EN-US.XML": "bf170dfcdc9a80eeec204ea4358956a1d7a6a8123644b405cf63570c2f972ebb",
+  "PMC-ARFRIG-0DEMO-00001-00_002-00_EN-US.XML": "585f096f3636a7514efb45418ebfb127d431d8c2c757a7a3e0d67ffcab55cfac",
+  "PMC-ARFRIG-0DEMO-00002-00_001-00_EN-US.XML": "42b68efbb3fc06c4c37f14b92b9b21eda5aa18c6f776a8eb811ebe5e967ab380",
+  "PMC-ARFRIG-0DEMO-00002-00_002-00_EN-US.XML": "6bcb25f393ee345d45583b69cc1d2011571f8f9e4241177b4c61cab010468b1e"
+ },
+ "results": {
+  "DMC-ARFRIG-A-00-00-00-00A-00PA-D_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-00QA-D_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-00WA-D_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-022A-D_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-040A-D_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-040A-D_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-131A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-941A-D_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-00-00-00-00A-941A-D_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-271A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-340A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-421A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-520A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-720A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-20-00-00-00A-720A-A_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "DMC-ARFRIG-A-30-00-00-00A-310A-A_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "PMC-ARFRIG-0DEMO-00001-00_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "PMC-ARFRIG-0DEMO-00001-00_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "PMC-ARFRIG-0DEMO-00002-00_001-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  },
+  "PMC-ARFRIG-0DEMO-00002-00_002-00_EN-US.XML": {
+   "wellformed": "pass",
+   "schema": "pass",
+   "refs": "pass",
+   "applic": "pass",
+   "brex": "pass",
+   "default-brex": "pass"
+  }
+ }
+}
