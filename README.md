@@ -169,7 +169,7 @@ python3 scripts/shoot-pages.py http://localhost:8765
 
 ## The Documentation Studio
 
-`/studio` holds six tools that run in the browser, like the workbench. Nothing a visitor adds is uploaded: images, recordings, and projects stay in the browser (IndexedDB) until the visitor downloads them.
+`/studio` holds eleven tools that run in the browser, like the workbench: the six below, and five for aerospace technical publications (see [Aerospace technical publications](#aerospace-technical-publications)). Nothing a visitor adds is uploaded, with one exception that the page states: the S1000D editor's official-schema check, which runs on the site's server when the visitor asks for it. Images, recordings, and projects stay in the browser (IndexedDB) until the visitor downloads them.
 
 | Address | What it makes |
 |---|---|
@@ -181,6 +181,7 @@ python3 scripts/shoot-pages.py http://localhost:8765
 | `/studio/dita` | DITA 1.3 projects from the scenarios' document sets, the workbench templates, or Markdown files: a map with keys, a relationship table, and DITAVAL filters |
 | `/studio/flagship` | A fictional preventive-maintenance package made with the tools above. Its procedures are samples, not approved instructions. |
 | `/studio/scenarios/<id>` | One of the eight fictional scenarios: its documents, rendered, and the samples the tools made from it |
+| `/studio/aerospace` | S1000D, ASD-STE100, a CSDB, an IPC and an IETM, on a fictional training rig. See [Aerospace technical publications](#aerospace-technical-publications). |
 
 `lib/studio.mjs` builds the pages from `src/studio/`.
 
@@ -212,6 +213,32 @@ The screenshot editor, the step guides, and the video editor have undo and redo 
 The HTML5 is DITA-OT's own, with one custom stylesheet passed the documented way (`args.css`): `scripts/dita-html5.css` gives the links in the table of contents and in related links a target 24 pixels high (WCAG 2.2, success criterion 2.5.8). The flagship's DITA output is published with it too.
 
 The script raises xmllint's entity-amplification limit, because libxml2 stops reading the OASIS DTDs without it. It does so only for those DTDs and for files it wrote itself. Nothing a visitor adds is parsed that way: the browser's DITA Studio takes Markdown, and checks the XML it makes with DOMParser, which loads no DTD.
+
+## Aerospace technical publications
+
+`/studio/aerospace` is a section of the studio, separate from the rest of the site's work: independent demonstrations of S1000D Issue 6, ASD-STE100, a common source database (CSDB), an illustrated parts catalogue (IPC) and an interactive electronic technical publication (IETM). They share one fictional project, the ARF-1 training rig. The rig, its codes, part numbers, manufacturer code (`0DEMO`), values and reviewers are invented; nothing comes from an OEM, a real publication or a restricted dictionary, and nothing on the pages is maintenance data. The home page, the CV and the employment history don't mention these pages.
+
+| Address | What it does |
+|---|---|
+| `/studio/aerospace` | The overview: how DITA, S1000D, ASD-STE100, a CSDB, an IETM, an IPC and integrated logistic support relate, the project, the validation report, and the downloads. English only. |
+| `/studio/s1000d` | Edit a data module in a form or as XML, preview it, and check it in layers: well-formed XML, the official schema (on request, on the server), identification, references, applicability, and the project BREX. |
+| `/studio/ste100` | Check procedural or descriptive writing against original rules modelled on ASD-STE100 Issue 9, or against the house style. |
+| `/studio/csdb` | Search and filter the CSDB: each module's relationships, issue history, a comparison of two issues, its checks, and its XML. |
+| `/studio/ipc` | The parts list of the illustrated parts data beside its exploded view; each selects the other. |
+| `/studio/ietm` | The maintenance and operator publications, read from their publication modules: a product filter, search, cross-references, fault isolation a question at a time, and print. |
+
+- `content/aerospace/csdb/` is the CSDB: 21 XML modules and 7 SVG illustrations. `scripts/aero/csdb.py` writes the XML and `scripts/aero/draw.py` draws the illustrations. Edit the scripts, not the files.
+- `scripts/aero/validate.py` checks every file: well-formed XML parsed without DTDs or entity expansion, the identification, references, applicability against the ACT, CCT and PCT, the project BREX, and with `--schemas DIR --fetch` the official schemas. With `--default-brex PATH` it also applies the S1000D default BREX (`DMC-S1000D-H-04-10-0301-00A-022A-D`).
+- The workflow **Check the S1000D CSDB** runs the schema check on GitHub: it fetches the Issue 6 schemas from s1000d.org into the runner's temporary folder, checks every file with libxml2, and prints the report in the log. `scripts/aero/report.py` merges that report and the local one into `content/aerospace/validation.json`, after checking that both report the same files (SHA-256).
+- `api/s1000d.js` is the editor's official-schema check: it fetches the schemas from s1000d.org when first needed, keeps them in memory, checks the XML it is sent with libxml2 (`libxml2-wasm`, MIT), and keeps nothing. It refuses a DOCTYPE that declares anything other than notations and unparsed entities, and does not load external DTDs.
+- `scripts/aero/publish.py` prints the publications to PDF from the IETM (`content/aerospace/out/`), and `lib/aero.mjs` builds the overview and the downloads.
+- `content/aerospace/SOURCES.md` records the sources, the issues used, and the licences.
+
+What is not redistributed: the official S1000D schemas and the default BREX. A permission to redistribute them was not verified, so they are fetched where the checking runs and never committed, served, or put in a download. The STE checker doesn't reproduce the ASD-STE100 dictionary: it uses an original project word list, and cites rules by their numbers in Issue 9.
+
+What the pages don't claim: passing every check is not certification, compliance with S1000D, or approval. The IETM claims no IETM class or S1000D functionality matrix. The change record's reviewers are labels typed into a local demonstration, not verified identities.
+
+`tests/studio/test_aero.py` drives the five pages in a browser (70 checks).
 
 ## Films
 
@@ -258,6 +285,7 @@ The studio's interface is translated too, at `/fr/studio`, `/de/studio`, `/es/st
 - `content/i18n/studio/<language>.json` holds the studio's own words. The home page's dictionary is the base, so the navigation reads the same.
 - The build translates each page's text, and puts the words its scripts use in `window.__studioT`. In the scripts, `T("...")` translates a message, with `{name}` for a value, and `K("...")` marks English that is kept as data and translated where it's shown.
 - The build writes the list to translate to `.cache/studio-units.json`, and what each language still lacks to `.cache/studio-missing-<language>.json`.
+- The aerospace tools translate their interface, not the publications. S1000D modules are in English, and the words a publication adds around its content (WARNING, Procedure, Table 2) follow the module's language, so `src/studio/s1000d.js` writes them with `G()` rather than `T()`. Module text shown in a translated interface is marked `lang="en-US"`, and the STE checker's text spell-checks in English and is kept out of page translation. Translations of controlled English are not STE, so the checker's samples are never translated. The overview, `/studio/aerospace`, is English only.
 
 ## April
 

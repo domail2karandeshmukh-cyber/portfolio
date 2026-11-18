@@ -5,7 +5,8 @@
   "trailingSlash": false,
   "functions": {
     "api/april.js": { "maxDuration": 30 },
-    "api/rewrite.js": { "maxDuration": 30, "includeFiles": "content/desk/**" }
+    "api/rewrite.js": { "maxDuration": 30, "includeFiles": "content/desk/**" },
+    "api/s1000d.js": { "maxDuration": 30 }
   },
   "redirects": [
     { "source": "/rewrite", "destination": "/#rewrite", "permanent": false },
