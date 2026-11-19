@@ -4,7 +4,7 @@ id: KC1-API-001
 owner: Karan Deshmukh
 author: Karan Deshmukh
 version: 1.1
-status: Ready to publish with API 1.0.1
+status: Published
 date: 2026-11-19
 ---
 # KC1 prediction API reference

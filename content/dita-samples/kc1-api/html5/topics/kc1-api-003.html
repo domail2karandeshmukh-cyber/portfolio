@@ -29,10 +29,11 @@
 <p class="p">The body isn't a JSON object, often because the client sent a form. Send JSON, and set the header <code class="ph codeph">Content-Type: application/json</code>. With curl, use <code class="ph codeph">-H "Content-Type: application/json" -d @module.json</code>.</p>
 </section>
 </section>
-<section class="section remedy"><h2 class="title sectiontitle">Error 500 for a very large number</h2>
+<section class="section remedy"><h2 class="title sectiontitle">422 and "Input should be a finite number"</h2>
 <section class="section steps-informal">
-<p class="p">A value too large for a 64-bit float, such as <code class="ph codeph">1e999</code>, makes the API fail with <code class="ph codeph">500 Internal Server Error</code> instead of refusing the request with a 422. The value becomes infinity when the API reads it. The API then refuses it, but it can't write infinity into the JSON of the error message, and the error message itself fails.</p>
-<p class="p">Check that every value is a finite number before you send it. It's a known issue in version 1.0.0. A fix is in review in <a class="xref" href="https://github.com/domail2karandeshmukh-cyber/group6-kc1-defect-prediction/pull/2" target="_blank" rel="external noopener">pull request 2</a>. Its version 1.0.1 writes infinity as text in the error message and answers 422. A test covers <code class="ph codeph">1e999</code>, <code class="ph codeph">-1e999</code> and <code class="ph codeph">NaN</code>.</p>
+<p class="p">A value is too large to be a finite number, such as <code class="ph codeph">1e999</code>, or it's <code class="ph codeph">NaN</code>. The API reads <code class="ph codeph">1e999</code> as infinity and refuses it.</p>
+<pre class="pre codeblock language-json"><code>{"type": "finite_number", "loc": ["body", "loc"], "msg": "Input should be a finite number", "input": "inf"}</code></pre>
+<p class="p">Send finite numbers. Before version 1.0.1, the API answered <code class="ph codeph">500 Internal Server Error</code> to such a value instead of a 422.</p>
 </section>
 </section>
 <section class="section remedy"><h2 class="title sectiontitle">Error 405 for the wrong method</h2>

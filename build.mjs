@@ -338,7 +338,8 @@ await library.extra({ path: "/message-to-document", title: "Case study: from a m
   kind: "Case study", shelf: "Case studies", text: [{ id: "case", title: "From a message to a published procedure", text: "Case study: an engineer's message about resetting MFA, analysed for requirements, risks and missing information, edited into a procedure, checked and published as HTML, PDF, DITA and Markdown." }] });
 // The KC1 API's machine-readable description and the recorded exchanges that its documents quote.
 await fs.mkdir(`${OUT}/docs/kc1/api`, { recursive: true });
-for (const f of ["openapi.json", "exchanges.json"]) await fs.copyFile(`content/projects/kc1/api/${f}`, `${OUT}/docs/kc1/api/${f}`);
+// The current files are those of the API as it is now (1.0.1); the versioned ones are what each revision was recorded with.
+for (const f of ["openapi.json", "exchanges.json", "openapi-1.0.0.json", "exchanges-1.0.0.json", "openapi-1.0.1.json", "exchanges-1.0.1.json"]) await fs.copyFile(`content/projects/kc1/api/${f}`, `${OUT}/docs/kc1/api/${f}`);
 await fs.mkdir(`${OUT}/case-study`, { recursive: true });
 await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 
@@ -350,6 +351,7 @@ await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
     trail: [["Portfolio", "/"], ["Signature case study"]], body: lc.body,
     kind: "Case study", shelf: "Case studies", text: [{ id: "lifecycle", title: "The documentation of a real API, from requirement to revision", text: "Signature case study: the KC1 prediction API documented from recorded requests, published with DITA Open Toolkit, then revised after an engineering change, with the impact analysis." }] });
   await fs.mkdir(`${OUT}/case-study/lifecycle/revision-1.1`, { recursive: true });
+  await fs.mkdir(`${OUT}/case-study/lifecycle/revision-1.0`, { recursive: true });
   for (const [name, text] of Object.entries(lc.files)) await fs.writeFile(`${OUT}/case-study/lifecycle/${name}`, text);
   for (const f of ["kc1-swagger-walkthrough.mp4", "kc1-swagger-walkthrough.vtt", "kc1-swagger-walkthrough.jpg"]) await fs.copyFile(`content/case-study/lifecycle/${f}`, `${OUT}/case-study/lifecycle/${f}`);
 }

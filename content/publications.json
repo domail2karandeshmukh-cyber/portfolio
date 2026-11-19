@@ -38,7 +38,7 @@
    "field": "api-documentation",
    "basis": "Karan's project, recorded against the running API",
    "about": "A reference, a quick start and a troubleshooting guide for the project's prediction API, with the OpenAPI description it serves. Every request and response in them was recorded from the API.",
-   "revision": "Version 1.0 for API 1.0.0, published 19 November 2026; revision 1.1 ready for API 1.0.1",
+   "revision": "Reference and troubleshooting at revision 1.1, quick start at 1.0, for API 1.0.1; published 19 November 2026",
    "read": "/docs/kc1/api-reference",
    "pdf": "/studio/dita/kc1-api/kc1-api.pdf",
    "files": [

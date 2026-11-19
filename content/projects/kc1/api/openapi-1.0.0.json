@@ -1,0 +1,249 @@
+{
+ "openapi": "3.1.0",
+ "info": {
+  "title": "Group 6 KC1 Software Defect Prediction API",
+  "description": "REST API serving the MLflow-tracked Group 6 KC1 defect prediction model.",
+  "version": "1.0.0"
+ },
+ "paths": {
+  "/": {
+   "get": {
+    "summary": "Root",
+    "operationId": "root__get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/health": {
+   "get": {
+    "summary": "Health",
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     }
+    }
+   }
+  },
+  "/predict": {
+   "post": {
+    "summary": "Predict",
+    "operationId": "predict_predict_post",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/KC1Input"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "description": "Successful Response",
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      }
+     },
+     "422": {
+      "description": "Validation Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "type": "array",
+      "title": "Detail"
+     }
+    },
+    "type": "object",
+    "title": "HTTPValidationError"
+   },
+   "KC1Input": {
+    "properties": {
+     "loc": {
+      "type": "number",
+      "title": "Loc"
+     },
+     "v(g)": {
+      "type": "number",
+      "title": "V(G)"
+     },
+     "ev(g)": {
+      "type": "number",
+      "title": "Ev(G)"
+     },
+     "iv(g)": {
+      "type": "number",
+      "title": "Iv(G)"
+     },
+     "n": {
+      "type": "number",
+      "title": "N"
+     },
+     "v": {
+      "type": "number",
+      "title": "V"
+     },
+     "l": {
+      "type": "number",
+      "title": "L"
+     },
+     "d": {
+      "type": "number",
+      "title": "D"
+     },
+     "i": {
+      "type": "number",
+      "title": "I"
+     },
+     "e": {
+      "type": "number",
+      "title": "E"
+     },
+     "b": {
+      "type": "number",
+      "title": "B"
+     },
+     "t": {
+      "type": "number",
+      "title": "T"
+     },
+     "lOCode": {
+      "type": "number",
+      "title": "Locode"
+     },
+     "lOComment": {
+      "type": "number",
+      "title": "Locomment"
+     },
+     "lOBlank": {
+      "type": "number",
+      "title": "Loblank"
+     },
+     "locCodeAndComment": {
+      "type": "number",
+      "title": "Loccodeandcomment"
+     },
+     "uniq_Op": {
+      "type": "number",
+      "title": "Uniq Op"
+     },
+     "uniq_Opnd": {
+      "type": "number",
+      "title": "Uniq Opnd"
+     },
+     "total_Op": {
+      "type": "number",
+      "title": "Total Op"
+     },
+     "total_Opnd": {
+      "type": "number",
+      "title": "Total Opnd"
+     },
+     "branchCount": {
+      "type": "number",
+      "title": "Branchcount"
+     }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "required": [
+     "loc",
+     "v(g)",
+     "ev(g)",
+     "iv(g)",
+     "n",
+     "v",
+     "l",
+     "d",
+     "i",
+     "e",
+     "b",
+     "t",
+     "lOCode",
+     "lOComment",
+     "lOBlank",
+     "locCodeAndComment",
+     "uniq_Op",
+     "uniq_Opnd",
+     "total_Op",
+     "total_Opnd",
+     "branchCount"
+    ],
+    "title": "KC1Input"
+   },
+   "ValidationError": {
+    "properties": {
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "type": "array",
+      "title": "Location"
+     },
+     "msg": {
+      "type": "string",
+      "title": "Message"
+     },
+     "type": {
+      "type": "string",
+      "title": "Error Type"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "ctx": {
+      "type": "object",
+      "title": "Context"
+     }
+    },
+    "type": "object",
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError"
+   }
+  }
+ }
+}

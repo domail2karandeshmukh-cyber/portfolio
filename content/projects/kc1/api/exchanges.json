@@ -33,7 +33,7 @@
    "branchCount"
   ],
   "openapi": "3.1.0",
-  "api_version": "1.0.0",
+  "api_version": "1.0.1",
   "routes": [
    [
     "/",
@@ -588,9 +588,21 @@
     }
    },
    "response": {
-    "status": 500,
-    "content_type": "text/plain; charset=utf-8",
-    "body": "Internal Server Error"
+    "status": 422,
+    "content_type": "application/json",
+    "body": {
+     "detail": [
+      {
+       "type": "finite_number",
+       "loc": [
+        "body",
+        "loc"
+       ],
+       "msg": "Input should be a finite number",
+       "input": "inf"
+      }
+     ]
+    }
    }
   },
   {

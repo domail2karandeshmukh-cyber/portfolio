@@ -3,7 +3,7 @@ type: reference
 id: KC1-API-001
 owner: Karan Deshmukh
 author: Karan Deshmukh
-version: 1.0
+version: 1.1
 status: Published
 date: 2026-11-19
 ---
@@ -18,7 +18,7 @@ FastAPI's test client recorded every request and response on this page on 19 Nov
 | Item | Value |
 |---|---|
 | Base URL | `http://127.0.0.1:8000`, when you start the API with the project's Docker Compose file. The Compose file publishes the port on this computer only. |
-| API version | 1.0.0 |
+| API version | 1.0.1 |
 | Format | JSON in and JSON out. Send `Content-Type: application/json`. |
 | Authentication | None. The API has no sign-in and no keys. Keep it on `127.0.0.1`, as the Compose file does, or put an authenticating gateway in front of it. |
 | Permissions | None. |
@@ -140,10 +140,9 @@ A flagged module, recorded the same way, comes back as `{"prediction": 1, "label
 
 | Status | When | Body |
 |---|---|---|
-| `422 Unprocessable Content` | A field is missing, a field isn't one of the 21, a value isn't a number, or the body isn't a JSON object. | `detail`: one entry for each problem, with its `type`, its location `loc`, a message `msg` and the `input` that caused it. |
+| `422 Unprocessable Content` | A field is missing, a field isn't one of the 21, a value isn't a number or isn't finite, or the body isn't a JSON object. | `detail`: one entry for each problem, with its `type`, its location `loc`, a message `msg` and the `input` that caused it. |
 | `404 Not Found` | The path doesn't exist, such as `/predictions`. | `{"detail": "Not Found"}` |
 | `405 Method Not Allowed` | The path exists but takes another method, such as `GET /predict`. | `{"detail": "Method Not Allowed"}` |
-| `500 Internal Server Error` | A number too large for a 64-bit float, such as `1e999`. This is a known fault: see [Troubleshoot the KC1 API](/docs/kc1/api-troubleshooting). | `Internal Server Error`, as plain text |
 
 A request that sends only `loc` gets one entry for each of the 20 missing fields. Here is the first one.
 

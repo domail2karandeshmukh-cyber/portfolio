@@ -3,7 +3,7 @@
  "info": {
   "title": "Group 6 KC1 Software Defect Prediction API",
   "description": "REST API serving the MLflow-tracked Group 6 KC1 defect prediction model.",
-  "version": "1.0.0"
+  "version": "1.0.1"
  },
  "paths": {
   "/": {

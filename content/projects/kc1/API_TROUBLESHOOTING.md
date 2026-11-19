@@ -3,7 +3,7 @@ type: troubleshooting
 id: KC1-API-003
 owner: Karan Deshmukh
 author: Karan Deshmukh
-version: 1.0
+version: 1.1
 status: Published
 date: 2026-11-19
 ---
@@ -39,11 +39,15 @@ A value is text instead of a number, such as `"loc": "many"`. Send numbers witho
 
 The body isn't a JSON object, often because the client sent a form. Send JSON, and set the header `Content-Type: application/json`. With curl, use `-H "Content-Type: application/json" -d @module.json`.
 
-## Error 500 for a very large number
+## 422 and "Input should be a finite number"
 
-A value too large for a 64-bit float, such as `1e999`, makes the API fail with `500 Internal Server Error` instead of refusing the request with a 422. The value becomes infinity when the API reads it. The API then refuses it, but it can't write infinity into the JSON of the error message, and the error message itself fails.
+A value is too large to be a finite number, such as `1e999`, or it's `NaN`. The API reads `1e999` as infinity and refuses it.
 
-Check that every value is a finite number before you send it. It's a known issue in version 1.0.0. A fix is in review in [pull request 2](https://github.com/domail2karandeshmukh-cyber/group6-kc1-defect-prediction/pull/2). Its version 1.0.1 writes infinity as text in the error message and answers 422. A test covers `1e999`, `-1e999` and `NaN`.
+```json
+{"type": "finite_number", "loc": ["body", "loc"], "msg": "Input should be a finite number", "input": "inf"}
+```
+
+Send finite numbers. Before version 1.0.1, the API answered `500 Internal Server Error` to such a value instead of a 422.
 
 ## Error 405 for the wrong method
 

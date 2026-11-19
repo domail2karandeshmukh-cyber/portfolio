@@ -29,10 +29,11 @@
 <p>The body isn't a JSON object, often because the client sent a form. Send JSON, and set the header <codeph>Content-Type: application/json</codeph>. With curl, use <codeph>-H "Content-Type: application/json" -d @module.json</codeph>.</p>
 </steps-informal>
 </remedy>
-<remedy><title>Error 500 for a very large number</title>
+<remedy><title>422 and "Input should be a finite number"</title>
 <steps-informal>
-<p>A value too large for a 64-bit float, such as <codeph>1e999</codeph>, makes the API fail with <codeph>500 Internal Server Error</codeph> instead of refusing the request with a 422. The value becomes infinity when the API reads it. The API then refuses it, but it can't write infinity into the JSON of the error message, and the error message itself fails.</p>
-<p>Check that every value is a finite number before you send it. It's a known issue in version 1.0.0. A fix is in review in <xref href="https://github.com/domail2karandeshmukh-cyber/group6-kc1-defect-prediction/pull/2" format="html" scope="external">pull request 2</xref>. Its version 1.0.1 writes infinity as text in the error message and answers 422. A test covers <codeph>1e999</codeph>, <codeph>-1e999</codeph> and <codeph>NaN</codeph>.</p>
+<p>A value is too large to be a finite number, such as <codeph>1e999</codeph>, or it's <codeph>NaN</codeph>. The API reads <codeph>1e999</codeph> as infinity and refuses it.</p>
+<codeblock outputclass="language-json">{"type": "finite_number", "loc": ["body", "loc"], "msg": "Input should be a finite number", "input": "inf"}</codeblock>
+<p>Send finite numbers. Before version 1.0.1, the API answered <codeph>500 Internal Server Error</codeph> to such a value instead of a 422.</p>
 </steps-informal>
 </remedy>
 <remedy><title>Error 405 for the wrong method</title>
