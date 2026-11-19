@@ -1,5 +1,5 @@
 {
-  "_": "The six industry pages (/industries/<id>). Each names what a recruiter in that field reads first, the real project documentation, the working demonstrations, the conventions followed, the films and the files. lib/hubs.mjs builds them, and the field explorer on the home page (its \"preview\" is the picture shown there). An item is a library card (\"doc\": id), or has its own title, address and text. Say where the work comes from: professional work is on the CV; projects are academic or personal; Studio scenarios use example companies, and the pages say so.",
+  "_": "The seven industry pages (/industries/<id>). Each names what a recruiter in that field reads first, the real project documentation, the working demonstrations, the conventions followed, the films and the files. lib/hubs.mjs builds them, and the field explorer on the home page (its \"preview\" is the picture shown there). An item is a library card (\"doc\": id), or has its own title, address and text. Say where the work comes from: professional work is on the CV; projects are academic or personal; Studio scenarios use example companies, and the pages say so.",
   "industries": [
     {
       "id": "software",
@@ -32,6 +32,30 @@
       ],
       "films": ["style-check", "one-source", "library", "schedule-a-report"],
       "files": ["/studio/dita/saas-product-help/saas-product-help.pdf", "/studio/dita/release-documentation/release-documentation.pdf", "/studio/samples/guides/software-feature/guide.pdf", "/studio/samples/guides/support-unlock/guide.pdf"]
+    },
+    {
+      "id": "api-documentation",
+      "preview": { "from": "content/thumbs/kc1-api-reference.webp", "src": "/thumbs/kc1-api-reference.webp", "w": 720, "h": 617 },
+      "intro": "Documentation for developers who call an API: what each endpoint takes and returns, how to get a first response, and what each error means, checked against the API itself.",
+      "basis": "Projects: the KC1 prediction API from my MSc project, documented from requests and responses recorded against the trained model. The developer documentation set in DITA describes an invented product, as a demonstration.",
+      "start": [
+        { "doc": "kc1-api-reference", "why": "A complete reference for a working API: base URL, version, authentication, every field, every error and code examples, with each response recorded from the API." },
+        { "doc": "kc1-api-quickstart", "why": "From a fresh copy of the project to a first prediction in six steps, with the answer to expect after each one." },
+        { "doc": "kc1-api-troubleshooting", "why": "Each error the API returns and how to fix the request, including a fault that the recording found." }
+      ],
+      "projects": [
+        { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "kc1-model-card" }
+      ],
+      "demos": [
+        { "title": "Developer documentation, in DITA", "url": "/studio/dita/developer-documentation/html5/index.html", "kind": "Demonstration", "text": "A concept, a deployment task, a troubleshooting topic and a configuration reference for an invented webhook relay, published by DITA Open Toolkit." },
+        { "title": "Developer guide template", "url": "/workbench", "kind": "Tool", "text": "The workbench's developer guide: write against the style guide, and export Markdown, HTML or DITA." }
+      ],
+      "standards": [
+        ["OpenAPI 3.1", "The API's own machine-readable description, as it serves it at /openapi.json.", "/docs/kc1/api/openapi.json"],
+        ["Recorded examples", "Every request and response in the reference comes from the API, kept in one file a reader can check.", "/docs/kc1/api/exchanges.json"]
+      ],
+      "films": [],
+      "files": ["/studio/dita/developer-documentation/developer-documentation.pdf"]
     },
     {
       "id": "enterprise-it",

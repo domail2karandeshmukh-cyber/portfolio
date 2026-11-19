@@ -1325,7 +1325,10 @@
   "The documentation of my own projects is in the <a href=\"/docs\">library</a>, and my professional work is described under <a href=\"/#experience\">Experience</a>.": "La documentación de mis propios proyectos está en la <a href=\"/docs\">biblioteca</a>, y mi trabajo profesional se describe en <a href=\"/#experience\">Experiencia</a>.",
   "{n} of {m} shown": "{n} de {m} mostrados",
   "All {m} shown": "Se muestran los {m}",
-  "Angers, France": "Angers, Francia"
+  "Angers, France": "Angers, Francia",
+  "Help centers, release notes, user guides": "Centros de ayuda, notas de versión, guías de usuario",
+  "API documentation": "Documentación de API",
+  "References, quick starts, OpenAPI and error guides": "Referencias, inicios rápidos, OpenAPI y guías de errores"
  },
  "keep": [
   "A",

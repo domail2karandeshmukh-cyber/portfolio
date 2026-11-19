@@ -1076,3 +1076,20 @@ html[lang=hi] .fx-t{line-height:1.4}
  .cs-trace .rw-doc{padding:20px 18px}
 }
 @media print{.cs-steps,.cs-acts{display:none}}
+
+/* The recruiter page: one disclosure for each field. */
+.rec-fields{border-top:1.5px solid var(--ink)}
+.rec-field{border-bottom:1px solid var(--rule2)}
+.rec-field summary{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:14px 0;cursor:pointer;list-style:none}
+.rec-field summary::-webkit-details-marker{display:none}
+.rec-field summary::after{content:"+";font:600 1.3rem/1 var(--sans);color:var(--ink)}
+.rec-field[open] summary::after{content:"−"}
+.rec-field summary b{font-size:1.05rem;color:var(--ink)}
+.rec-field summary span{color:var(--ink2);font-size:.95rem}
+.rec-field summary:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px}
+.rec-field h3{font:700 .95rem/1.3 var(--sans);margin:1.1em 0 .35em}
+.rec-field ul{margin:0;padding-left:1.2em}
+.rec-field li{margin:.3em 0}
+.rec-basis{margin:0;color:var(--ink2)}
+.rec-go{margin:1em 0 18px;font-weight:600}
+@media (max-width:600px){.rec-field summary{grid-template-columns:minmax(0,1fr) auto}.rec-field summary span{grid-column:1}}

@@ -1,11 +1,11 @@
 // Builds karandeshmukh.dev from content/site.json:
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
-import { siteNav } from "./lib/nav.mjs";
+import { siteNav, INDUSTRIES } from "./lib/nav.mjs";
 import { buildHubs, fieldExplorer } from "./lib/hubs.mjs";
 import { buildStandards } from "./lib/standards.mjs";
 import fs from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { execSync } from "node:child_process";
@@ -230,12 +230,34 @@ const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github
 {
   const R = C.recruiters, sample = (x) => byId[x.id];
   const role = (e) => `<li><p class="when">${esc(e.dates)}</p><h3>${esc(e.role)}, <span translate="no">${esc(e.org)}</span></h3><p>${esc(e.points[0])}.</p></li>`;
+  // Each field from content/industries.json, the same data as /industries/<id>: what the work rests on, three
+  // documents, the conventions, the files and the films. Native disclosure, so it works without a script.
+  const byField = () => {
+    const data = JSON.parse(readFileSync("content/industries.json", "utf8")).industries;
+    const names = Object.fromEntries(INDUSTRIES.map((i) => [i.id, i]));
+    const films = Object.fromEntries(C.films.items.map((f) => [f.id, f.title]));
+    const fileName = (u) => u.split("/").pop().replace(/\.\w+$/, "").replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+    return data.map((ind) => {
+      const m = names[ind.id], docs = ind.start.slice(0, 3).map((x) => (x.doc ? { t: byId[x.doc].title, u: byId[x.doc].url } : { t: x.title, u: x.url }));
+      return `<details class="rec-field"><summary><b>${esc(m.name)}</b><span>${esc(m.blurb)}</span></summary>
+<p class="rec-basis">${esc(ind.basis)}</p>
+<h3>Read first</h3><ul>${docs.map((d) => `<li><a href="${esc(d.u)}">${esc(d.t)}</a></li>`).join("")}</ul>
+<h3>Conventions</h3><ul>${ind.standards.map(([n]) => `<li>${esc(n)}</li>`).join("")}</ul>
+${ind.files.length ? `<h3>Download</h3><ul>${ind.files.map((u) => `<li><a href="${esc(u)}" download>${esc(fileName(u))}</a> (${esc(u.split(".").pop().toUpperCase())})</li>`).join("")}</ul>` : ""}
+${ind.films.length ? `<h3>Watch</h3><ul>${ind.films.filter((id) => films[id]).map((id) => `<li><a href="/videos#${id}">${esc(films[id])}</a></li>`).join("")}</ul>` : ""}
+<p class="rec-go"><a href="/industries/${ind.id}">Everything in this field</a></p>
+</details>`;
+    }).join("");
+  };
   const body = `<article class="rec">
 <h1>${esc(S.name)}</h1>
 <p class="rec-role">${esc(S.role)}</p>
 <p class="rec-lead">${esc(R.intro)}</p>
 <p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="mailto:${S.email}">Email Karan</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
 <ul class="rec-figs">${R.figures.map(([n, l]) => `<li><b>${esc(n)}</b><span>${esc(l)}</span></li>`).join("")}</ul>
+<h2>Your field, in one minute</h2>
+<p>Open a field for what my experience in it rests on, three documents to read first, the conventions I follow, and what you can download or watch.</p>
+<div class="rec-fields">${byField()}</div>
 <h2>Experience</h2>
 <ol class="rec-roles">${C.experience.map(role).join("")}</ol>
 <p class="rec-more"><a href="/#engineering">Engineering and maintenance documentation at Magna</a><a href="/#experience">Every role in full</a></p>
@@ -300,6 +322,9 @@ await library.extra({ path: "/message-to-document", title: "Case study: from a m
   description: "An engineer's chat message taken to a published procedure in six stages: analysis, editing, the document, quality checks, and HTML, PDF, DITA and Markdown outputs.",
   trail: [["Portfolio", "/"], ["Case study"]], body: caseStudyPage(cs, { S }),
   kind: "Case study", shelf: "Case studies", text: [{ id: "case", title: "From a message to a published procedure", text: "Case study: an engineer's message about resetting MFA, analysed for requirements, risks and missing information, edited into a procedure, checked and published as HTML, PDF, DITA and Markdown." }] });
+// The KC1 API's machine-readable description and the recorded exchanges that its documents quote.
+await fs.mkdir(`${OUT}/docs/kc1/api`, { recursive: true });
+for (const f of ["openapi.json", "exchanges.json"]) await fs.copyFile(`content/projects/kc1/api/${f}`, `${OUT}/docs/kc1/api/${f}`);
 await fs.mkdir(`${OUT}/case-study`, { recursive: true });
 await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 
@@ -378,7 +403,7 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

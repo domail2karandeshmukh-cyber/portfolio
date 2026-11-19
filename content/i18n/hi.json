@@ -420,6 +420,10 @@
   "What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.": "लिखने से पहले मैं क्या जाँचता हूँ: काम किस पर निर्भर है, क्या गलत हो सकता है, और संदेश क्या छोड़ देता है।",
   "What it passes before release. The build runs these checks on every change.": "रिलीज़ से पहले इसे क्या पास करना होता है। बिल्ड हर बदलाव पर ये जाँचें दोबारा चलाता है।",
   "One source, four outputs.": "एक स्रोत, चार आउटपुट।",
-  "A demonstration: the message and the answers were written for this portfolio. <a class=\"rw-case\" href=\"/message-to-document\">See the whole case study</a>.": "एक प्रदर्शन: संदेश और उत्तर इस पोर्टफ़ोलियो के लिए लिखे गए थे। <a class=\"rw-case\" href=\"/message-to-document\">पूरी केस स्टडी देखें</a>।"
+  "A demonstration: the message and the answers were written for this portfolio. <a class=\"rw-case\" href=\"/message-to-document\">See the whole case study</a>.": "एक प्रदर्शन: संदेश और उत्तर इस पोर्टफ़ोलियो के लिए लिखे गए थे। <a class=\"rw-case\" href=\"/message-to-document\">पूरी केस स्टडी देखें</a>।",
+  "Troubleshooting": "समस्या निवारण",
+  "Help centers, release notes, user guides": "सहायता केंद्र, रिलीज़ नोट्स, उपयोगकर्ता गाइड",
+  "API documentation": "API दस्तावेज़ीकरण",
+  "References, quick starts, OpenAPI and error guides": "संदर्भ, क्विक स्टार्ट, OpenAPI और त्रुटि गाइड"
  }
 }

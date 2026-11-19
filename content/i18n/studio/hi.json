@@ -1325,7 +1325,10 @@
   "The documentation of my own projects is in the <a href=\"/docs\">library</a>, and my professional work is described under <a href=\"/#experience\">Experience</a>.": "मेरे अपने प्रोजेक्ट का डॉक्यूमेंटेशन <a href=\"/docs\">लाइब्रेरी</a> में है, और मेरे पेशेवर काम का विवरण <a href=\"/#experience\">अनुभव</a> में है।",
   "{n} of {m} shown": "{m} में से {n} दिख रहे हैं",
   "All {m} shown": "सभी {m} दिख रहे हैं",
-  "Angers, France": "Angers, फ्रांस"
+  "Angers, France": "Angers, फ्रांस",
+  "Help centers, release notes, user guides": "सहायता केंद्र, रिलीज़ नोट्स, उपयोगकर्ता गाइड",
+  "API documentation": "API दस्तावेज़ीकरण",
+  "References, quick starts, OpenAPI and error guides": "संदर्भ, क्विक स्टार्ट, OpenAPI और त्रुटि गाइड"
  },
  "keep": [
   "A",
