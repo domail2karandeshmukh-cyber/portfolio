@@ -59,3 +59,47 @@
   fit();
   if (wide.addEventListener) wide.addEventListener("change", fit); else wide.addListener(fit);
 })();
+
+// Version 10.1: the lifecycle's phase rail (/documentation-lifecycle). It marks the phase being read (aria-current), fills
+// its bar with the reader's progress from the first phase to the end of the last, and on a narrow screen keeps the
+// current phase in view inside the rail.
+(function () {
+  var rail = document.querySelector(".lc-rail");
+  if (!rail) return;
+  var list = rail.querySelector("ol"), bar = rail.querySelector(".lc-bar i"), links = [].slice.call(rail.querySelectorAll("a"));
+  var phases = links.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)"), cur = -1, queued = false;
+  function update() {
+    queued = false;
+    var line = rail.getBoundingClientRect().bottom + 44, first = phases[0].getBoundingClientRect(), last = phases[phases.length - 1].getBoundingClientRect();
+    var p = Math.min(1, Math.max(0, (line - first.top) / Math.max(1, last.bottom - innerHeight - first.top + line)));
+    var k = 0;
+    phases.forEach(function (ph, i) { if (ph.getBoundingClientRect().top <= line) k = i; });
+    if (p >= 0.999) k = phases.length - 1;
+    bar.style.transform = "scaleX(" + p.toFixed(4) + ")";
+    if (k === cur) return;
+    if (links[cur]) links[cur].removeAttribute("aria-current");
+    links[k].setAttribute("aria-current", "step");
+    cur = k;
+    if (list.scrollWidth > list.clientWidth + 1) {
+      var a = links[k];
+      list.scrollTo({ left: a.offsetLeft - (list.clientWidth - a.offsetWidth) / 2, behavior: still.matches ? "auto" : "smooth" });
+    }
+  }
+  function soon() { if (!queued) { queued = true; requestAnimationFrame(update); } }
+  addEventListener("scroll", soon, { passive: true });
+  addEventListener("resize", soon);
+  update();
+})();
+
+// Version 10.1: a document's contents (lib/library.mjs) stay open beside the page on a wide screen, and fold under one
+// button on a phone, where choosing a section folds them again.
+(function () {
+  var dd = document.querySelector(".toc-dd");
+  if (!dd || !window.matchMedia) return;
+  var narrow = window.matchMedia("(max-width: 880px)");
+  function fit() { dd.open = !narrow.matches; }
+  fit();
+  if (narrow.addEventListener) narrow.addEventListener("change", fit); else narrow.addListener(fit);
+  dd.addEventListener("click", function (e) { if (narrow.matches && e.target.closest("a")) dd.open = false; });
+})();

@@ -394,7 +394,9 @@
    "Studio tools". The current page is marked as in the library: a yellow bar and bold. */
 .st-side{font-size:.92rem}
 .st-side ul{list-style:none;margin:0;padding:0}
-.st-side a{display:block;padding:6px 12px;border-left:3px solid var(--rule);color:var(--ink2);text-decoration:none;line-height:1.35}
+.st-side a{display:flex;align-items:center;gap:9px;padding:6px 12px;border-left:3px solid var(--rule);color:var(--ink2);text-decoration:none;line-height:1.35}
+.st-side a .ic{flex:none;color:var(--mute)}
+.st-side a[aria-current] .ic,.st-side a:hover .ic{color:var(--ink)}
 .st-side a:hover{color:var(--ink);border-left-color:var(--rule2)}
 .st-side a[aria-current]{color:var(--ink);font-weight:700;border-left-color:var(--ink);background:var(--hl)}
 .st-side summary{cursor:pointer;font-weight:700;color:var(--ink);padding:14px 0 6px;list-style:none;display:flex;align-items:center;gap:8px}
@@ -416,4 +418,6 @@
  .st-side-all>summary{display:none}
  .st-side-all[open]{padding-bottom:0;border-bottom:0}
 }
+/* Version 10.1: in the folded menu of a narrow screen, every tool is a 44-pixel target. */
+@media (max-width:1199px){.st-side a{min-height:44px;padding-top:4px;padding-bottom:4px}.st-side summary{min-height:44px}}
 @media print{.st-side,.st-pager{display:none}}

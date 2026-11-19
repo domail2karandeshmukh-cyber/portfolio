@@ -1210,19 +1210,37 @@
       pre.appendChild(b);
     });
     /* A screenshot or a diagram opens over the page; with a modifier key a link behaves as usual. */
+    // Version 10.1: the enlarged picture is a modal dialog with a visible Close button and its description as a caption.
+    // Focus stays on Close while it is open, the page behind doesn't scroll, and Escape, Close or a click outside the
+    // picture returns the reader to where they were.
     var enlarge = function (from, content, label) {
-      var box = document.createElement("div");
+      var box = document.createElement("div"), fig = document.createElement("figure"), shut = document.createElement("button");
       box.className = "lb";
       box.setAttribute("role", "dialog");
+      box.setAttribute("aria-modal", "true");
       box.setAttribute("aria-label", label);
-      box.tabIndex = -1;
-      box.appendChild(content);
-      function close() { box.remove(); removeEventListener("keydown", key); from.focus(); }
-      function key(ev) { if (ev.key === "Escape") close(); }
-      box.addEventListener("click", close);
-      addEventListener("keydown", key);
+      shut.type = "button";
+      shut.className = "lb-x";
+      shut.textContent = I.close || "Close";
+      fig.appendChild(content);
+      if (label && label !== "Image" && label !== "Diagram") {
+        var cap = document.createElement("figcaption");
+        cap.textContent = label;
+        fig.appendChild(cap);
+      }
+      box.appendChild(shut);
+      box.appendChild(fig);
+      var html = document.documentElement, was = html.style.overflow;
+      function close() { box.remove(); html.style.overflow = was; removeEventListener("keydown", key, true); from.focus(); }
+      function key(ev) {
+        if (ev.key === "Escape") { ev.preventDefault(); close(); }
+        else if (ev.key === "Tab") { ev.preventDefault(); shut.focus(); }
+      }
+      box.addEventListener("click", function (ev) { if (ev.target === box || ev.target === shut) close(); });
+      addEventListener("keydown", key, true);
+      html.style.overflow = "hidden";
       document.body.appendChild(box);
-      box.focus();
+      shut.focus();
     };
     article.addEventListener("click", function (e) {
       var a = e.target.closest("a.fig"), d = e.target.closest(".diagram");
@@ -1258,6 +1276,9 @@
         es.forEach(function (e) {
           if (!e.isIntersecting) return;
           here.forEach(function (a) { a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id); });
+          // On a phone, the folded contents say which section is being read.
+          var said = $(".toc-dd>summary span"), on = $(".toc-dd .toc a.on");
+          if (said && on) said.textContent = on.textContent;
         });
       }, { rootMargin: "-18% 0px -72% 0px" });
       $$("h2[id]", article).forEach(function (h) { ho.observe(h); });
