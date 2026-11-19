@@ -1,135 +1,135 @@
 1
-00:00:00,500 --> 00:00:04,779
+00:00:00,500 --> 00:00:03,980
 When a user loses the phone that holds
 their authenticator,
 
 2
-00:00:04,779 --> 00:00:09,131
+00:00:03,980 --> 00:00:08,393
 reset their one-time password: delete the
 old authenticator,
 
 3
-00:00:09,131 --> 00:00:11,742
+00:00:08,393 --> 00:00:10,954
 then make the user set up a new one.
 
 4
-00:00:11,742 --> 00:00:13,450
+00:00:10,954 --> 00:00:14,136
 This is Keycloak 26.8.2.
 
 5
-00:00:14,633 --> 00:00:19,544
+00:00:15,333 --> 00:00:19,393
 Before you start, confirm that the request
 comes from the user,
 
 6
-00:00:19,544 --> 00:00:23,598
+00:00:19,393 --> 00:00:22,666
 through a contact you had before the phone
 was lost.
 
 7
-00:00:23,598 --> 00:00:30,033
+00:00:22,666 --> 00:00:27,435
 Then sign in to the admin console with an
 account that can manage the realm’s users.
 
 8
-00:00:31,233 --> 00:00:34,864
+00:00:28,900 --> 00:00:32,147
 Check that the user’s realm is the current
 realm.
 
 9
-00:00:34,864 --> 00:00:39,293
+00:00:32,147 --> 00:00:36,371
 Select Users, search for the user, and
 select their username.
 
 10
-00:00:48,333 --> 00:00:50,393
+00:00:45,633 --> 00:00:47,894
 Select the Credentials tab.
 
 11
-00:00:50,393 --> 00:00:53,444
+00:00:47,894 --> 00:00:51,309
 The row of type OTP is the authenticator,
 
 12
-00:00:53,444 --> 00:00:56,793
+00:00:51,309 --> 00:00:54,632
 and its label names the device: Alex’s
 phone.
 
 13
-00:00:58,000 --> 00:01:01,160
+00:00:56,067 --> 00:00:59,071
 Open the row’s menu, and select Delete.
 
 14
-00:01:04,933 --> 00:01:06,528
+00:01:03,000 --> 00:01:04,933
 Confirm with Delete.
 
 15
-00:01:06,528 --> 00:01:08,503
+00:01:04,933 --> 00:01:06,709
 Only the password is left.
 
 16
-00:01:10,433 --> 00:01:11,802
+00:01:08,500 --> 00:01:09,979
 Don’t stop here.
 
 17
-00:01:11,802 --> 00:01:18,530
+00:01:09,979 --> 00:01:15,238
 The default sign-in flow asks for a code
 only from a user who has an authenticator,
 
 18
-00:01:18,530 --> 00:01:24,203
+00:01:15,238 --> 00:01:19,598
 so until the next step, this user can sign
 in with the password alone.
 
 19
-00:01:25,400 --> 00:01:27,021
+00:01:21,000 --> 00:01:23,210
 Select the Details tab.
 
 20
-00:01:27,021 --> 00:01:30,262
+00:01:23,210 --> 00:01:27,618
 In Required user actions, choose Configure
 OTP.
 
 21
-00:01:30,262 --> 00:01:31,410
+00:01:27,618 --> 00:01:29,281
 Then select Save.
 
 22
-00:01:39,500 --> 00:01:42,720
+00:01:35,100 --> 00:01:37,923
 At the next sign-in, after the password,
 
 23
-00:01:42,720 --> 00:01:46,744
+00:01:37,923 --> 00:01:41,378
 Keycloak asks the user to set up an
 authenticator.
 
 24
-00:01:46,744 --> 00:01:52,940
+00:01:41,378 --> 00:01:46,369
 They scan the QR code with the app on
 their new phone, type the code it shows,
 
 25
-00:01:52,940 --> 00:01:55,720
+00:01:46,369 --> 00:01:48,742
 name the device, and select Submit.
 
 26
-00:02:03,567 --> 00:02:06,771
+00:01:58,967 --> 00:02:02,152
 To check, open the Credentials tab again.
 
 27
-00:02:06,771 --> 00:02:11,349
+00:02:02,152 --> 00:02:06,815
 The new OTP row has the new device’s name
 and today’s date.
 
 28
-00:02:11,349 --> 00:02:14,477
+00:02:06,815 --> 00:02:09,057
 And the admin events record the deletion.
 
 29
-00:02:21,467 --> 00:02:27,593
+00:02:16,867 --> 00:02:21,851
 The written guide has every step, and what
 to do when a code is rejected.
 
 30
-00:02:27,593 --> 00:02:31,567
+00:02:21,851 --> 00:02:24,829
 Find it in the library at
 karandeshmukh.dev.
