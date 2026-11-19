@@ -2,6 +2,9 @@
 # A4, Hanken Grotesk embedded, the publication's title in the header, the page number in the footer, black type
 # with one blue for links, and notes as tinted blocks that stay on one page.
 extends: default
+# A publication is a bookmap (bookmap.mjs): each document is a numbered chapter, and its pages are numbered within it
+# (1-1, 1-2, 2-1), as maintenance and operating manuals number theirs. The front matter keeps roman numbers.
+page-number: chapter-page
 page:
   size: A4
   mirror-margins: false
@@ -30,11 +33,11 @@ footer:
   color: '#696C73'
   font-size: 8.5pt
   odd:
-    content: 'Page {folio}'
+    content: '{folio}'
     font-weight: normal
     text-align: end
   even:
-    content: 'Page {folio}'
+    content: '{folio}'
     font-weight: normal
     text-align: end
 style:
@@ -56,7 +59,7 @@ style:
     space-after: 10pt
     border-after: solid 1.5pt '#0B0B0C'
     padding-after: 6pt
-    title-numbering: false
+    title-numbering: true
   h2:
     font-family: Hanken Grotesk
     font-size: 14pt
@@ -129,3 +132,12 @@ style:
       space-before: 70mm
       border-after: solid 2pt '#0B0B0C'
       padding-after: 10pt
+    # The lines under the title: the publication's identifier, who it is for and when it was issued (bookmap.mjs).
+    titlealt:
+      font-family: Hanken Grotesk
+      font-size: 11pt
+      font-weight: normal
+      line-height: 1.4
+      color: '#3B3D42'
+      text-align: start
+      space-before: 6pt

@@ -1,0 +1,32 @@
+1
+00:00:00,400 --> 00:00:04,791
+Every document in the library says whether
+it passes my style check,
+
+2
+00:00:04,841 --> 00:00:05,951
+right at the top.
+
+3
+00:00:06,467 --> 00:00:10,141
+The contents list keeps your place as you
+read.
+
+4
+00:00:10,191 --> 00:00:12,331
+Diagrams open at full size.
+
+5
+00:00:12,833 --> 00:00:16,372
+This one shows how the security tool fits
+together.
+
+6
+00:00:16,867 --> 00:00:22,156
+Search finds the section, not just the
+document, across the whole library.
+
+7
+00:00:22,667 --> 00:00:26,938
+Read the documents at
+karandeshmukh.dev/docs.

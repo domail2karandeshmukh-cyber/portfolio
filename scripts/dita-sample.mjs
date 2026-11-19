@@ -23,6 +23,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SETS } from "../lib/dita-sets.mjs";
 import { pdfArgs } from "./dita-pdf/args.mjs";
+import { writeBookmap } from "./dita-pdf/bookmap.mjs";
 // libxml2 2.11 and later stop reading the OASIS DTDs at their entity-amplification limit unless it is raised.
 const XMLLINT_LIMITS = (() => { try { const h = spawnSync("xmllint", ["--help"], { encoding: "utf8" }); return ["--huge"].concat(/--max-ampl/.test((h.stdout || "") + (h.stderr || "")) ? ["--max-ampl", "1000"] : []); } catch { return ["--huge"]; } })();
 const require = createRequire(import.meta.url);
@@ -44,7 +45,20 @@ for (const [id, set] of Object.entries(SETS)) {
   console.log(`dita ${id}: wrote ${project.topics.length} topics (${project.topics.map((t) => t.kind).join(", ")}) to ${SRC}`);
   if (!publish) continue;
 
-  const files = project.files.filter((f) => /\.(dita|ditamap)$/.test(f.name)).map((f) => `${SRC}/${f.name}`);
+  // The PDF's bookmap (scripts/dita-pdf/bookmap.mjs): title page, document information and contents, from the documents' own front matter.
+  const scenarios = JSON.parse(fs.readFileSync("content/scenarios/scenarios.json", "utf8")).scenarios;
+  const sc = scenarios.find((x) => x.id === set.scenario) || {};
+  const org = sc.org || (set.scenario === "h-publishing" ? "" : "");
+  const today = new Date().toISOString().slice(0, 10);
+  const info = {
+    publication: `Publication ${id.toUpperCase()}, ${docs.length} document${docs.length > 1 ? "s" : ""}`,
+    library: org ? `${org}, an example company` : "Documentation Studio: a demonstration publication",
+    notice: `A demonstration publication for Karan Deshmukh's portfolio.${org ? ` ${org} is an example company, and` : " The companies,"} every person, address and figure in it ${org ? "is an example" : "people, addresses and figures in it are examples"}: these documents aren't operating instructions or vendor documentation.`,
+    author: "Karan Deshmukh", date: today,
+    docs: docs.map((d) => { const r = Doc.resolve(d, Doc.GENERAL); return { title: r.title, id: d.meta.id, version: d.meta.version != null ? String(d.meta.version) : "", status: d.meta.status || "", date: d.meta.date || "", owner: d.meta.owner || "", reviewer: d.meta.reviewer || "" }; }),
+  };
+  const bookmap = writeBookmap(SRC, `${id}.ditamap`, info);
+  const files = project.files.filter((f) => /\.(dita|ditamap)$/.test(f.name)).map((f) => `${SRC}/${f.name}`).concat([bookmap, `${SRC}/topics/document-information.dita`]);
   for (const f of files) execFileSync("xmllint", [...XMLLINT_LIMITS, "--noout", "--valid", "--nonet", f], { env: { ...process.env, XML_CATALOG_FILES: `${home}/catalog-dita.xml` }, stdio: "inherit" });
   console.log(`dita ${id}: ${files.length} files are valid DITA 1.3 (OASIS DTDs from ${path.basename(home)})`);
   const dita = path.join(home, "bin", "dita"), input = `${SRC}/${id}.ditamap`;
@@ -54,8 +68,8 @@ for (const [id, set] of Object.entries(SETS)) {
   execFileSync(dita, [`--input=${input}`, "--format=html5", `--output=${OUT}/html5`, ...filters, ...css], { stdio: "inherit" });
   const pdfFilter = fs.existsSync(`${SRC}/filters/admin.ditaval`) ? [`--filter=${SRC}/filters/admin.ditaval`] : [];
   const theme = pdfArgs();
-  execFileSync(dita, [`--input=${input}`, "--format=pdf", `--output=${OUT}/pdf`, ...pdfFilter, ...theme], { stdio: "inherit" });
-  fs.renameSync(`${OUT}/pdf/${id}.pdf`, `${OUT}/${id}.pdf`);
+  execFileSync(dita, [`--input=${bookmap}`, "--format=pdf", `--output=${OUT}/pdf`, ...pdfFilter, ...theme], { stdio: "inherit" });
+  fs.renameSync(`${OUT}/pdf/${id}-pdf.pdf`, `${OUT}/${id}.pdf`);
   fs.rmSync(`${OUT}/pdf`, { recursive: true, force: true });
   const version = execFileSync(dita, ["--version"]).toString().trim().replace(/^DITA-OT version /, "");
   const audiences = project.files.filter((f) => /^filters\/.*\.ditaval$/.test(f.name)).map((f) => path.basename(f.name, ".ditaval")).filter((a) => a !== "general");

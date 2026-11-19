@@ -19,7 +19,7 @@
   var MEDIA = {};                       // id -> {kind, name, blob, url, el, duration, w, h, cursor: [{t,x,y,click}]}
   var P = blank(), sel = null, playhead = 0, playing = false;
   function blank() {
-    return { version: 1, name: "training-video", clips: [], overlays: [], captions: [], markers: [], narration: null, clipVolume: 1, burnCaptions: true,
+    return { version: 1, name: "training-video", clips: [], overlays: [], captions: [], markers: [], narration: null, clipVolume: 1, burnCaptions: false,
       cursor: { show: true, size: 1, halo: true, ripple: true, spotlight: false, numbers: false, follow: false, factor: 1.6 } };
   }
   var uid = function (p) { return (p || "x") + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); };
@@ -119,9 +119,10 @@
   /* ---------- Drawing one frame ---------- */
   // The house annotation green and its dark keyline (standards/screenshots.md), at the video scale of 1.5.
   var HOUSE = "#6CE975", EDGE = "#0E5A2B";
-  var COLORS = { title: "#0B0B0C", step: HOUSE, arrow: HOUSE, box: HOUSE, callout: HOUSE, warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
-  var TYPES = { title: T("Title"), step: T("Step number"), arrow: T("Arrow"), box: T("Highlight box"), callout: T("Callout"), warning: T("Warning"), instruction: T("Instruction"), done: T("Confirmation"), zoom: T("Zoom region"), blur: T("Blur region"), intro: T("Intro slide"), outro: T("Closing slide"), lower: T("Lower-third label") };
-  var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1 };          // drawn in the picture, so they zoom with it
+  var COLORS = { title: "#0B0B0C", step: HOUSE, arrow: HOUSE, box: HOUSE, callout: HOUSE, warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", redact: "#0B0B0C", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
+  var TYPES = { title: T("Title"), step: T("Step number"), arrow: T("Arrow"), box: T("Highlight box"), callout: T("Callout"), warning: T("Warning"), instruction: T("Instruction"), done: T("Confirmation"), zoom: T("Zoom region"), blur: T("Blur region"), redact: T("Redaction"), intro: T("Intro slide"), outro: T("Closing slide"), lower: T("Lower-third label") };
+  // Drawn in the picture, so they zoom with it. A redaction is a solid box: a blur can be reversed, a solid box can't.
+  var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1, redact: 1 };
   function font(px, w) { return (w || 600) + " " + Math.round(px) + "px 'Hanken', Arial, sans-serif"; }
   function fade(o, t) { var f = o.type === "intro" || o.type === "outro" ? 0.5 : 0.25; return Math.min(1, o.start <= 0 ? 1 : (t - o.start) / f, (o.end - t) / f); }   // a slide that opens the video is there from the first frame
   function wrap(text, max, px) {
@@ -137,11 +138,12 @@
     try { ctx.drawImage(el, (W - dw) / 2, (H - dh) / 2, dw, dh); } catch (e) { /* not ready yet */ }
   }
   function drawWorld(o, t) {
-    var a = fade(o, t); if (a <= 0) return;
+    var a = o.type === "redact" ? 1 : fade(o, t); if (a <= 0) return;      // a redaction never fades: it covers every frame of its span
     var x = o.x * W, y = o.y * H, w = o.w * W, h = o.h * H, c = o.color || COLORS[o.type];
     var house = String(c).toLowerCase() === HOUSE.toLowerCase();
     ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = ctx.fillStyle = c; ctx.lineWidth = house ? 4 : 6; ctx.lineCap = ctx.lineJoin = "round";
-    if (o.type === "box") {
+    if (o.type === "redact") { ctx.globalAlpha = 1; ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+    else if (o.type === "box") {
       // The house box: 4 px of green with a 2 px dark keyline outside it and 5 px corners; it never covers the control.
       if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 2; roundRect(x - 3, y - 3, w + 6, h + 6, 8); ctx.stroke(); ctx.restore(); roundRect(x, y, w, h, 5); ctx.stroke(); }
       else ctx.strokeRect(x, y, w, h);
@@ -465,7 +467,7 @@
         '<button type="button" class="btn line sm" data-act="left"' + (i ? "" : " disabled") + ">" + T("Move earlier") + '</button><button type="button" class="btn line sm" data-act="right"' + (i < P.clips.length - 1 ? "" : " disabled") + ">" + T("Move later") + '</button><button type="button" class="btn line sm" data-act="del">' + T("Delete clip") + "</button></p>";
     } else if (sel.kind === "overlay") {
       var o = find(P.overlays, sel.id); if (!o) { sel = null; return props(); }
-      h = "<h3>" + TYPES[o.type] + "</h3>" + (/zoom|blur|arrow|box/.test(o.type) ? "" : field(o.type === "intro" || o.type === "outro" ? T("Text (first line is the title)") : T("Text"), "text", o.text, "textarea")) +
+      h = "<h3>" + TYPES[o.type] + "</h3>" + (/zoom|blur|redact|arrow|box/.test(o.type) ? "" : field(o.type === "intro" || o.type === "outro" ? T("Text (first line is the title)") : T("Text"), "text", o.text, "textarea")) +
         '<div class="vd-two">' + field(T("Start (s)"), "start", o.start.toFixed(2)) + field(T("End (s)"), "end", o.end.toFixed(2)) + "</div>" +
         (o.type === "intro" || o.type === "outro" || o.type === "lower" ? "" : '<div class="vd-two">' + field(T("X (%)"), "x", Math.round(o.x * 100), "number", ' step="1"') + field(T("Y (%)"), "y", Math.round(o.y * 100), "number", ' step="1"') + "</div>") +
         (/zoom|blur|box|arrow|callout/.test(o.type) ? '<div class="vd-two">' + field(T("Width (%)"), "w", Math.round(o.w * 100), "number", ' step="1"') + field(T("Height (%)"), "h", Math.round(o.h * 100), "number", ' step="1"') + "</div>" : "") +

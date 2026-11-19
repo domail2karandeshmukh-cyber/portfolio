@@ -77,7 +77,10 @@ with sync_playwright() as p:
     with pg.expect_download() as dl: pg.click("#vd-vtt")
     vtt = f"{OUT}/video.vtt"; dl.value.save_as(vtt); v = open(vtt).read()
     check("the WebVTT file is valid in form", v.startswith(f"WEBVTT\n\n1\n00:00:00.{int(round(first['start'] * 1000)):03d} --> "), v[:60])
-    # export
+    # export, with the captions burned in this time: the sample keeps them as a track, and burning is an option
+    check("the sample keeps its captions as a track: Burn captions is off", not pg.is_checked("#vd-burn"))
+    pg.check("#vd-burn"); pg.wait_for_timeout(100)
+    check("Burn captions turns on in the project", pg.evaluate("studioVideo.project().burnCaptions") is True)
     with pg.expect_download(timeout=180000) as dl: pg.click("#vd-export")
     st = pg.inner_text("#vd-status")
     vid = f"{OUT}/{dl.value.suggested_filename}"; dl.value.save_as(vid)
@@ -99,19 +102,23 @@ with sync_playwright() as p:
     f2 = frame_at(vid, 3.0, f"{OUT}/f-caption.png")
     dark = sum(1 for x in range(300, 980, 4) for y in range(560, 680, 3) if sum(f2.getpixel((x, y))) < 200)
     check("the burned-in caption is in the file", dark > 300, dark)
-    # the key: blurred in the file where the footage shows it
-    blur = [o2 for o2 in P()["overlays"] if o2["type"] == "blur"][0]
-    bx, by, bw, bh = int(blur["x"] * 1280), int(blur["y"] * 720), int(blur["w"] * 1280), int(blur["h"] * 720)
-    tk = min(blur["end"] - 1.0, 13.0)
+    # the key: covered by a solid box in the file where the footage shows it (a blur can be reversed; a solid box can't)
+    red_ = [o2 for o2 in P()["overlays"] if o2["type"] == "redact"][0]
+    bx, by, bw, bh = int(red_["x"] * 1280), int(red_["y"] * 720), int(red_["w"] * 1280), int(red_["h"] * 720)
+    tk = min(red_["end"] - 1.0, 13.0)
     fk, rk = frame_at(vid, tk, f"{OUT}/f-key.png"), frame_at(FOOTAGE, tk, f"{OUT}/f-key-raw.png")
     row = lambda im: [sum(im.getpixel((x, by + bh // 2))) for x in range(bx + 6, bx + bw - 6, 2)]
-    check("the blur region hides the access key in the file", statistics.pstdev(row(fk)) < statistics.pstdev(row(rk)) * 0.5, (statistics.pstdev(row(fk)), statistics.pstdev(row(rk))))
+    check("the redaction covers the access key in the file with a solid box", max(row(fk)) < 90 and statistics.pstdev(row(rk)) > 20, (max(row(fk)), statistics.pstdev(row(rk))))
+    # The intro slide covers the picture at first; the moment the footage shows, the key is already covered.
+    shown_at = max([o2["end"] for o2 in P()["overlays"] if o2["type"] == "intro"] + [red_["start"]]) + 0.05
+    check("the key is covered from the first frame in which the footage shows", pg.evaluate("(a) => studioVideo.show(a[1]).then(() => { const o = a[0], c = document.querySelector('#vd-canvas'), x = c.getContext('2d'); const d = x.getImageData(Math.round((o.x + o.w / 2) * c.width), Math.round((o.y + o.h / 2) * c.height), 1, 1).data; return d[0] + d[1] + d[2]; })", [red_, shown_at]) < 90)
     cur = pg.evaluate("Object.values(studioVideo.media()).find(m => m.kind === 'video').cursor.filter(e => e.click).map(e => e.t)")
     c1 = cur[0]
     f3, r3 = frame_at(vid, c1 + 0.15, f"{OUT}/f-click.png"), frame_at(FOOTAGE, c1 + 0.15, f"{OUT}/f-raw.png")
     count = lambda im, f: sum(1 for x in range(0, 1280, 3) for y in range(0, 720, 3) if f(im.getpixel((x, y))))
-    red, red0 = count(f3, lambda c: c[0] > 200 and c[1] < 90 and c[2] < 90), count(r3, lambda c: c[0] > 200 and c[1] < 90 and c[2] < 90)
-    check("at the first click the file shows the ripple, the box and the step number (red the footage doesn't have)", red > red0 + 150, (red, red0))
+    hg = lambda c: c[1] > 190 and c[0] < 150 and c[2] < 160      # the house green, #6CE975
+    red, red0 = count(f3, hg), count(r3, hg)
+    check("at the first click the file shows the box and the step number in the house green, which the footage doesn't have", red > red0 + 150, (red, red0))
     # The halo: the export draws each frame with the same function as the preview, so the preview is drawn at the click
     # with the halo off and on, and the two compared. (Over a blue button a yellow halo at 45 % isn't "yellow" in the file.)
     halo = pg.evaluate("""(t) => studioVideo.show(t).then(() => { const P = studioVideo.project(), c = document.querySelector('#vd-canvas'), x = c.getContext('2d');

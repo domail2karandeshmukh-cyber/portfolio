@@ -123,6 +123,8 @@ for (const f of reel) {
   await fs.copyFile(`content/films/${f.id}.mp4`, `${OUT}/films/${f.id}.mp4`);
   f.captions = existsSync(`content/films/${f.id}.vtt`);
   if (f.captions) await fs.copyFile(`content/films/${f.id}.vtt`, `${OUT}/films/${f.id}.vtt`);
+  // The same captions as SubRip, for players and editors (LinkedIn among them) that take SRT.
+  if (existsSync(`content/films/${f.id}.srt`)) await fs.copyFile(`content/films/${f.id}.srt`, `${OUT}/films/${f.id}.srt`);
   await sharp(`content/films/${f.id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${OUT}/films/${f.id}.webp`);
   console.log(`film: ${f.id} (${f.length}) ${f.title}${f.captions ? ", with captions" : ""}`);
 }

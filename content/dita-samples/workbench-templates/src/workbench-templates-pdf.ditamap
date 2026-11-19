@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="workbench-templates-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>Documentation Studio: a demonstration publication</booklibrary>
+<mainbooktitle>Acme Console help (fictional sample)</mainbooktitle>
+<booktitlealt>Publication WORKBENCH-TEMPLATES, 12 documents</booktitlealt>
+<booktitlealt>Documentation Studio: a demonstration publication</booktitlealt>
+<booktitlealt>Issued 2026-11-18. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-18"/></critdates>
+</bookmeta>
+<frontmatter>
+<keydef keys="product"><topicmeta><keywords><keyword>Acme Console</keyword></keywords></topicmeta></keydef>
+<keydef keys="version"><topicmeta><keywords><keyword>4.2</keyword></keywords></topicmeta></keydef>
+<keydef keys="rig"><topicmeta><keywords><keyword>test rig TR-2</keyword></keywords></topicmeta></keydef>
+<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<keydef keys="service"><topicmeta><keywords><keyword>the readings service</keyword></keywords></topicmeta></keydef>
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+<booklists><toc/></booklists>
+</frontmatter>
+<chapter href="topics/reset-mfa-for-a-locked-out-user.dita" type="task"/>
+<chapter href="topics/a-report-shows-access-is-denied.dita" type="troubleshooting"/>
+<chapter href="topics/workspace-roles.dita" type="reference"/>
+<chapter href="topics/acme-console-4-2-release-notes.dita" type="concept"/>
+<chapter href="topics/shared-drives-questions-and-answers.dita" type="concept"/>
+<chapter href="topics/how-single-sign-on-works.dita" type="concept"/>
+<chapter href="topics/sop-it-021.dita" type="task"/>
+<chapter href="topics/ep-tr2-004.dita" type="task"/>
+<chapter href="topics/mp-ps104-01.dita" type="task"/>
+<chapter href="topics/tr-2026-07.dita" type="concept"/>
+<chapter href="topics/dg-api-002.dita" type="task"/>
+<chapter href="topics/rb-read-003.dita" type="task"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/reset-mfa-for-a-locked-out-user.dita" type="task"/><topicref href="topics/sop-it-021.dita" type="task"/><topicref href="topics/ep-tr2-004.dita" type="task"/><topicref href="topics/mp-ps104-01.dita" type="task"/><topicref href="topics/dg-api-002.dita" type="task"/><topicref href="topics/rb-read-003.dita" type="task"/></relcell><relcell><topicref href="topics/a-report-shows-access-is-denied.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/workspace-roles.dita" type="reference"/></relcell></relrow>
+</reltable>
+</bookmap>

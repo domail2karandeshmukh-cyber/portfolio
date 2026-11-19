@@ -27,4 +27,8 @@ def served_copy(raw, final):
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(raw), "-map", "0:v:0", *audio,
                     "-c:v", "libx264", "-preset", "slow", "-crf", "23", "-tune", "stillimage", "-pix_fmt", "yuv420p",
                     "-fps_mode", "passthrough", "-movflags", "+faststart", str(final)], check=True)
+    # The sound at the house level (standards/video.md): -16 LUFS, a true peak no higher than -1 dBTP.
+    if sound:
+        from loudness import level
+        level(str(final))
     return sound

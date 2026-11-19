@@ -74,9 +74,22 @@ for (const f of Doc.toDitaPackage(d).files) { const to=path.join(out,"dita/src",
     for f in (OUT / "dita/src").rglob("*.dita*"):
         subprocess.run(["xmllint", "--noout", "--valid", "--nonet", str(f)], check=True, env=env); keep(f)
     m = next((OUT / "dita/src").glob("*.ditamap"))
+    # The PDF is published from a bookmap (scripts/dita-pdf/bookmap.mjs): a title page with the document's ID and
+    # revision, and a page of document information, from the procedure's own front matter.
+    meta = json.loads(subprocess.run(["node", "-e", "const Doc=require(process.argv[1]),fs=require('fs');const d=Doc.parse(fs.readFileSync(process.argv[2],'utf8'));console.log(JSON.stringify({meta:d.meta,title:Doc.resolve(d,Doc.GENERAL).title}))", str(ROOT / "src/doc.js"), str(OUT / "procedure/MP-PS104-01.md")], check=True, capture_output=True, text=True).stdout)
+    mm = meta["meta"]
+    info = {"publication": f"Maintenance procedure {mm.get('id', '')}, version {mm.get('version', '')}", "library": "Harbor Pump Station, an example company",
+            "notice": "A demonstration publication for Karan Deshmukh's portfolio. Harbor Pump Station is an example company, and the pump, the console and the procedure were created for this portfolio: this isn't an operating instruction for real equipment.",
+            "author": "Karan Deshmukh", "date": str(mm.get("date", "")),
+            "docs": [{"title": meta["title"], "id": mm.get("id", ""), "version": str(mm.get("version", "")), "status": mm.get("status", ""), "date": str(mm.get("date", "")), "owner": mm.get("owner", ""), "reviewer": mm.get("reviewer", "")}]}
+    (OUT / "dita/info.json").write_text(json.dumps(info), encoding="utf8")
+    book = subprocess.run(["node", str(ROOT / "scripts/dita-pdf/bookmap.mjs"), str(OUT / "dita/src"), m.name, str(OUT / "dita/info.json")], check=True, capture_output=True, text=True).stdout.strip()
+    (OUT / "dita/info.json").unlink()
+    for f in [pathlib.Path(book), OUT / "dita/src/topics/document-information.dita"]:
+        subprocess.run(["xmllint", "--noout", "--valid", "--nonet", str(f)], check=True, env=env); keep(f)
     # The PDF in the house style: the theme and embedded fonts of scripts/dita-pdf (standards/publishing.md).
     theme = json.loads(subprocess.run(["node", str(ROOT / "scripts/dita-pdf/args.mjs")], check=True, capture_output=True, text=True).stdout)
-    subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=pdf", f"--output={OUT}/dita/pdf", *theme], check=True, capture_output=True)
+    subprocess.run([f"{DITA}/bin/dita", f"--input={book}", "--format=pdf", f"--output={OUT}/dita/pdf", *theme], check=True, capture_output=True)
     subprocess.run([f"{DITA}/bin/dita", f"--input={m}", "--format=html5", f"--output={OUT}/dita/html5", f"--args.cssroot={ROOT / 'scripts'}", "--args.css=dita-html5.css", "--args.copycss=yes"], check=True, capture_output=True)
     pdf = next((OUT / "dita/pdf").glob("*.pdf")); pdf.rename(OUT / "procedure/MP-PS104-01.pdf"); shutil.rmtree(OUT / "dita/pdf"); keep(OUT / "procedure/MP-PS104-01.pdf")
     for f in (OUT / "dita/html5").rglob("*.html"): keep(f)

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="industrial-equipment-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>Harbor Pump Station, an example company</booklibrary>
+<mainbooktitle>Feed pump B: inspection and calibration</mainbooktitle>
+<booktitlealt>Publication INDUSTRIAL-EQUIPMENT, 4 documents</booktitlealt>
+<booktitlealt>Harbor Pump Station, an example company</booktitlealt>
+<booktitlealt>Issued 2026-11-18. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-18"/></critdates>
+</bookmeta>
+<frontmatter>
+<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<keydef keys="tag"><topicmeta><keywords><keyword>PS-104</keyword></keywords></topicmeta></keydef>
+<keydef keys="rig"><topicmeta><keywords><keyword>test rig TR-2</keyword></keywords></topicmeta></keydef>
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+<booklists><toc/></booklists>
+</frontmatter>
+<chapter href="topics/mp-ps104-01.dita" type="task"/>
+<chapter href="topics/mr-ps104-01.dita" type="reference"/>
+<chapter href="topics/ep-tr2-004.dita" type="task"/>
+<chapter href="topics/tr-2026-07.dita" type="concept"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/mp-ps104-01.dita" type="task"/><topicref href="topics/ep-tr2-004.dita" type="task"/></relcell><relcell><topicref href="topics/mr-ps104-01.dita" type="reference"/></relcell></relrow>
+</reltable>
+</bookmap>

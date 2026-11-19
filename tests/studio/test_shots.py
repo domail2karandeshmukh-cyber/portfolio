@@ -81,7 +81,7 @@ with sync_playwright() as p:
     top = sum(1 for x in range(250, 1250) for y in range(296, 306) if green(im.getpixel((x, y))))
     keyline = sum(1 for x in range(250, 1250) for y in range(292, 306) if edge(im.getpixel((x, y))))
     check("the rectangle is in the PNG, in the house green with its keyline", top > 800 and keyline > 500, f"{top} green and {keyline} keyline pixels on its top edge")
-    cr = im.getpixel((230 - 12, 520))
+    cr = im.getpixel((230 - 8, 520))       # inside the 24 px circle, clear of its keyline and of the number
     check("callout 1 is in the PNG, in the house green", green(cr), cr)
     blk = [im.getpixel((x, y)) for x in range(446, 638, 3) for y in range(555, 580, 3)]
     check("the redacted key is solid black in the PNG", all(c == (0, 0, 0) for c in blk), set(blk) - {(0, 0, 0)})

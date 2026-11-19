@@ -13,6 +13,8 @@ PAGE = "/"
 FRAME = (432, 540, 2.5)   # 1080 x 1350: the 4:5 frame, which a phone feed shows largest
 NARRATION = 'rewrite-desk'          # the script in lib/narration.cjs; a scene's segment has the scene's name
 SEGMENTS = {}
+# Captions are a track the viewer turns on (WebVTT and SRT, standards/video.md), so none is drawn in the picture.
+BURN_CAPTIONS = False
 TOUCH = True
 
 

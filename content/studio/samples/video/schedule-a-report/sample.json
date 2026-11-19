@@ -3,7 +3,7 @@
  "title": "Schedule a report for automatic delivery",
  "scenario": "g-training",
  "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions, with a synthetic voiceover.",
- "seconds": 61.15,
+ "seconds": 61.14,
  "clicks": 8,
  "narrated": true,
  "overlays": 21,
@@ -54,23 +54,23 @@
  ],
  "exported": {
   "studio": {
-   "seconds": 61.4,
+   "seconds": 61.34,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "opus"
   },
   "served": {
-   "seconds": 61.44,
+   "seconds": 61.39,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "aac"
   },
-  "timeline": 61.15,
-  "chromeSeconds": 61.401792,
-  "meanVolumeDb": -18.3,
-  "status": "Exported schedule-a-report.mp4: 9.7 MB, 61.4 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
+  "timeline": 61.14,
+  "chromeSeconds": 61.339854,
+  "meanVolumeDb": -20.0,
+  "status": "Exported schedule-a-report.mp4: 9.4 MB, 61.3 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
   "ok": "aac",
   "errors": []
  }

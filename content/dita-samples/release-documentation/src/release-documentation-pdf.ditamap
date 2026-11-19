@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="release-documentation-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>Fieldbook, an example company</booklibrary>
+<mainbooktitle>Fieldbook 2.4 release documentation</mainbooktitle>
+<booktitlealt>Publication RELEASE-DOCUMENTATION, 3 documents</booktitlealt>
+<booktitlealt>Fieldbook, an example company</booktitlealt>
+<booktitlealt>Issued 2026-11-18. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-18"/></critdates>
+</bookmeta>
+<frontmatter>
+<keydef keys="product"><topicmeta><keywords><keyword>Fieldbook</keyword></keywords></topicmeta></keydef>
+<keydef keys="version"><topicmeta><keywords><keyword>2.4</keyword></keywords></topicmeta></keydef>
+<keydef keys="previous"><topicmeta><keywords><keyword>2.3</keyword></keywords></topicmeta></keydef>
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+<booklists><toc/></booklists>
+</frontmatter>
+<chapter href="topics/rn-fb-2-4.dita" type="concept"/>
+<chapter href="topics/rn-fb-2-4-mg.dita" type="task"/>
+<chapter href="topics/rn-fb-hist.dita" type="reference"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/rn-fb-2-4-mg.dita" type="task"/></relcell><relcell><topicref href="topics/rn-fb-hist.dita" type="reference"/></relcell></relrow>
+</reltable>
+</bookmap>

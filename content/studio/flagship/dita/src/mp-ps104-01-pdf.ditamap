@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="mp-ps104-01-map-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>Harbor Pump Station, an example company</booklibrary>
+<mainbooktitle>Monthly inspection of feed pump B</mainbooktitle>
+<booktitlealt>Maintenance procedure MP-PS104-01, version 1.0</booktitlealt>
+<booktitlealt>Harbor Pump Station, an example company</booktitlealt>
+<booktitlealt>Issued 2026-11-19. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-19"/></critdates>
+</bookmeta>
+<frontmatter>
+<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+
+</frontmatter>
+<chapter href="topics/mp-ps104-01.dita" type="task"/>
+
+</bookmap>
