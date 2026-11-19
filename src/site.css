@@ -299,7 +299,7 @@ html[lang=hi] .sig{line-height:1.3}
 .rw-try label{display:block;margin-bottom:.6em;font:500 1.5rem/1.14 var(--serif);letter-spacing:-.02em;text-wrap:balance}
 .rw-try textarea{display:block;width:100%;min-height:5.4em;max-height:22em;resize:vertical;padding:13px 15px;border:0;border-radius:10px;background:var(--desk);color:var(--ink);font:400 .95rem/1.62 var(--mono)}
 .rw-try textarea::placeholder{color:var(--mute);opacity:1}
-.rw-try textarea:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:10px}
+.rw-try textarea:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:10px}
 .try-row{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 20px;align-items:start;margin-top:14px}
 .try-samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0;padding-top:.12em;font-size:.9rem;color:var(--mute)}
 .try-samples .chip{background:#fff}
@@ -816,8 +816,11 @@ html.mnav-open{overflow:hidden}
 }
 
 /* Industry pages, downloads and videos (lib/hubs.mjs) */
-.ix h1{font-size:clamp(2.4rem,5vw,4rem)}
-.ix>h2{font-size:clamp(1.5rem,2.6vw,2rem);margin:2.1em 0 .7em}
+/* An industry page opens with its icon beside its name, on the desk tone like the tiles that lead to it. */
+.ix h1{font-size:var(--fs-h1)}
+.ix-head{display:flex;align-items:center;gap:var(--s4)}
+.ix-head .field-i{width:56px;height:56px;border-radius:14px;background:var(--hl)}
+.ix>h2{font-size:var(--fs-h2);margin:2em 0 .7em}
 .ix-basis{max-width:46em;margin:1.3em 0 0;padding:.85em 1.05em;border-left:3px solid var(--ink);background:var(--desk);font-size:.98rem}
 .ix-kind{margin:0 0 .3em;font-size:.82rem;font-weight:600;color:var(--mute)}
 .ix-start{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -836,14 +839,12 @@ html.mnav-open{overflow:hidden}
 .ix-files li{padding:.6em 0;border-bottom:1px solid var(--rule)}
 .ix-files small{color:var(--mute);margin-left:.4em}
 .ix-chips{display:flex;flex-wrap:wrap;gap:8px}
-.ix-chips a{border:1.5px solid var(--rule2);border-radius:999px;padding:.45em .95em;text-decoration:none;color:var(--ink)}
+.ix-chips a{display:inline-flex;align-items:center;gap:8px;min-height:44px;border:1px solid var(--rule2);border-radius:999px;padding:0 1em 0 .8em;text-decoration:none;color:var(--ink)}
 .ix-chips a:hover{border-color:var(--ink);background:var(--hl)}
-.ix-grid{list-style:none;margin:2.2em 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.ix-grid li{padding:20px 22px;border:1.5px solid var(--ink);border-radius:14px;background:#fff}
-.ix-grid h2{font-size:1.55rem;margin:0 0 .45em}
-.ix-grid h2 a{text-decoration:none}
-.ix-grid h2 a:hover{background:var(--hl)}
-.ix-count{color:var(--mute);font-size:.9rem;margin:.7em 0 0}
+.ix-grid{list-style:none;margin:var(--s6) 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:var(--s3)}
+.ix-grid h2{font:600 1.15rem/1.3 var(--sans);letter-spacing:0;margin:2px 0 0}
+.ix-grid .field-t>span{display:block;font-size:var(--fs-small);color:var(--ink2);margin-top:4px}
+.ix-grid .field-t .ix-count{color:var(--mute);font-size:var(--fs-meta);margin-top:8px}
 .dl-filter{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:1.6em 0 1em}
 .dl-filter label{display:grid;gap:4px;font-size:.88rem;font-weight:600}
 .dl-filter select,.dl-filter input{font:inherit;font-weight:400;padding:.5em .7em;border:1.5px solid var(--rule2);border-radius:8px;background:#fff;min-width:170px;max-width:100%}
@@ -910,9 +911,11 @@ html.mnav-open{overflow:hidden}
  .work-a .btn{min-height:40px;padding:0 .95em;font-size:.9rem}
  /* The fields: two to a row, by icon and name. */
  .fields-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2)}
- .field{flex-direction:column;gap:var(--s2);padding:var(--s3)}
- .field-t span{display:none}
- .field-t b{font-size:.9375rem;margin:0}
+ .fields-grid .field{flex-direction:column;gap:var(--s2);padding:var(--s3)}
+ .fields-grid .field-t span{display:none}
+ .fields-grid .field-t b{font-size:.9375rem;margin:0;hyphens:manual;overflow-wrap:anywhere}
+ .fields-grid .field-t{min-width:0;max-width:100%}
+ .ix-grid .field{padding:var(--s3) var(--s4) var(--s3) var(--s3)}
  .hero .btns .btn{flex:1 1 auto}
  /* On a phone only the current stage is named under its number; the others keep their names for screen readers. */
  .rw-tabs button{font-size:.8rem;gap:6px}
@@ -971,21 +974,21 @@ html.mnav-open{overflow:hidden}
 .rec-lead{font-size:1.2rem;line-height:1.55;color:var(--ink2);max-width:38em}
 .rec-act{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 8px}
 .rec h2{font:500 1.7rem/1.15 var(--serif);margin:2.2em 0 .7em;padding-top:.8em;border-top:2px solid var(--ink)}
-.rec-figs{list-style:none;padding:0;margin:34px 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;background:var(--hl);padding:24px}
-.rec-figs b{display:block;font:500 2.4rem/1 var(--serif);letter-spacing:-.03em}
-.rec-figs span{display:block;margin-top:.5em;font-size:.95rem;line-height:1.35;font-weight:500}
+.rec-facts{margin:var(--s6) 0 0}
 .rec-roles,.rec-docs{list-style:none;padding:0;margin:0}
 .rec-roles li,.rec-docs li{padding:16px 0;border-bottom:1px solid var(--rule2)}
 .rec-roles h3,.rec-docs h3{font:700 1.08rem/1.3 var(--sans);margin:.2em 0 .4em}
 .rec-roles p,.rec-docs p{margin:.3em 0;color:var(--ink2);line-height:1.55}
+.rec-roles .org{color:var(--mute);font-size:var(--fs-small)}
+.rec-roles ul{margin:.5em 0 0;padding-left:1.1em;color:var(--ink2);line-height:1.55}
+.rec-roles ul li{margin:.35em 0;padding:0;border:0}
 .rec .when{font-size:.9rem;color:var(--mute);margin:0}
 .rec-docs h3 a{color:var(--ink)}
 .rec-more{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:14px}
 .rec-more a,.rec-tools a{color:var(--ink);font-weight:600}
 .rec-tools,.rec-edu{padding-left:1.1em;line-height:1.6;color:var(--ink2)}
 .rec-tools li,.rec-edu li{margin:.35em 0}
-@media (max-width:720px){.rec-figs{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media print{.nav,.foot,.rec-act{display:none}.rec-figs{background:none;border:1px solid #000}}
+@media print{.nav,.foot,.rec-act{display:none}}
 
 /* The library grouped by kind */
 .lib-tabs{display:flex;gap:8px;margin:18px 0 12px}
@@ -1074,7 +1077,7 @@ html.mnav-open{overflow:hidden}
 .cs-key mark{background:var(--hl);padding:0 .2em}
 .cs-key s{text-decoration-color:var(--red);text-decoration-thickness:2px}
 .cs-trace mark[role="button"]{cursor:pointer}
-.cs-trace mark[role="button"]:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px}
+.cs-trace mark[role="button"]:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .cs-trace .on{outline:2.5px solid var(--ink);outline-offset:2px;background:var(--hl)!important;color:var(--ink)}
 .cs-decisions{margin:0;padding-left:1.4em;max-width:46em}
 .cs-decisions li{margin:.7em 0;line-height:1.55;color:var(--ink2)}
@@ -1110,13 +1113,16 @@ html.mnav-open{overflow:hidden}
 /* The recruiter page: one disclosure for each field. */
 .rec-fields{border-top:1.5px solid var(--ink)}
 .rec-field{border-bottom:1px solid var(--rule2)}
-.rec-field summary{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:14px 0;cursor:pointer;list-style:none}
+.rec-field summary{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:12px 0;cursor:pointer;list-style:none}
+.rec-field summary .field-i{width:44px;height:44px}
+.rec-field summary:hover .field-i,.rec-field[open] summary .field-i{background:var(--hl)}
+.rf-t{display:flex;flex-direction:column;gap:2px}
 .rec-field summary::-webkit-details-marker{display:none}
 .rec-field summary::after{content:"+";font:600 1.3rem/1 var(--sans);color:var(--ink)}
 .rec-field[open] summary::after{content:"−"}
 .rec-field summary b{font-size:1.05rem;color:var(--ink)}
-.rec-field summary span{color:var(--ink2);font-size:.95rem}
-.rec-field summary:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px}
+.rec-field summary .rf-t>span{color:var(--ink2);font-size:.95rem}
+.rec-field summary:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .rec-field h3{font:700 .95rem/1.3 var(--sans);margin:1.1em 0 .35em}
 .rec-field ul{margin:0;padding-left:1.2em}
 .rec-field li{margin:.3em 0}

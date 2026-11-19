@@ -18,15 +18,20 @@ with sync_playwright() as p:
     pg = ctx.new_page(); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto(base + "/", wait_until="networkidle")
+    # The card plays once, when a visitor reaches it.
+    pg.locator("#rewrite .rw-stage").scroll_into_view_if_needed()
     pg.wait_for_function("document.querySelector('#rewrite').dataset.state === '4'", timeout=20000)
-    check(True, "the hero plays from the message to the procedure on its own")
-    check(pg.locator("#rewrite .rw-tabs button").count() == 6, "the hero has six stages")
+    check(True, "the card plays from the message to the procedure once it is in view")
+    check(pg.locator("#rewrite .rw-tabs button").count() == 6, "the card has six stages")
     for s, sel in [(2, ".rw-ana"), (5, ".rw-qa"), (6, ".rw-pub")]:
         pg.click(f'#rewrite .rw-tabs button[data-s="{s}"]'); pg.wait_for_timeout(700)
         check(pg.locator(f"#rewrite {sel}").is_visible(), f"stage {s} shows its panel")
     hrefs = pg.eval_on_selector_all("#rewrite .rw-pub a", "as => as.map(a => a.getAttribute('href'))")
     check(len(hrefs) == 5 and all(pg.request.get(base + h).ok for h in hrefs), "every output in stage 6 can be opened", hrefs)
     # A visitor's own message, from a sample whose draft is on file: stages 2, 5 and 6 don't apply to it.
+    check(pg.is_hidden("#try") and pg.get_attribute("#rewrite .rw-own", "aria-expanded") == "false", "the tray for a visitor's own message stays folded until it is asked for")
+    pg.click("#rewrite .rw-own"); pg.wait_for_timeout(400)
+    check(pg.is_visible("#try") and pg.get_attribute("#rewrite .rw-own", "aria-expanded") == "true" and pg.evaluate("document.activeElement.id") == "try-text", "Try your own message opens the tray and puts the cursor in it")
     pg.click("#try [data-sample='hotfix']")
     pg.wait_for_function("document.querySelector('#rewrite').dataset.src === 'yours' && document.querySelector('#rewrite').dataset.state === '4' && !document.querySelector('#rewrite').dataset.phase", timeout=30000)
     vis = pg.eval_on_selector_all("#rewrite .rw-tabs button", "bs => bs.map(b => getComputedStyle(b).display !== 'none')")

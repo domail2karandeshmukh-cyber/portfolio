@@ -262,7 +262,7 @@ const rev = `<p class="rev">Version ${release}${commit ? `, built from commit <a
 // The page for recruiters: who I am, the figures, the employers, three documents to read, and how to reach me, on one screen or two.
 {
   const R = C.recruiters, sample = (x) => byId[x.id];
-  const role = (e) => `<li><p class="when">${esc(e.dates)}</p><h3>${esc(e.role)}, <span translate="no">${esc(e.org)}</span></h3><p>${esc(e.points[0])}.</p></li>`;
+  const role = (e) => `<li><p class="when">${esc(e.dates)}</p><h3>${esc(e.role)}, <span translate="no">${esc(e.org)}</span></h3><p class="org">${e.note ? esc(e.note) + ", " : ""}${esc(e.place)}</p><ul>${e.points.slice(0, e.web).map((x) => `<li>${esc(x)}.</li>`).join("")}</ul></li>`;
   // Each field from content/industries.json, the same data as /industries/<id>: what the work rests on, three
   // documents, the conventions, the files and the films. Native disclosure, so it works without a script.
   const byField = () => {
@@ -272,7 +272,7 @@ const rev = `<p class="rev">Version ${release}${commit ? `, built from commit <a
     const fileName = (u) => u.split("/").pop().replace(/\.\w+$/, "").replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
     return data.map((ind) => {
       const m = names[ind.id], docs = ind.start.slice(0, 3).map((x) => (x.doc ? { t: byId[x.doc].title, u: byId[x.doc].url } : { t: x.title, u: x.url }));
-      return `<details class="rec-field"><summary><b>${esc(m.name)}</b><span>${esc(m.blurb)}</span></summary>
+      return `<details class="rec-field"><summary><span class="field-i">${icon(FIELD_ICON[ind.id], { size: 22 })}</span><span class="rf-t"><b>${esc(m.name)}</b><span>${esc(m.blurb)}</span></span></summary>
 <p class="rec-basis">${esc(ind.basis)}</p>
 <h3>Read first</h3><ul>${docs.map((d) => `<li><a href="${esc(d.u)}">${esc(d.t)}</a></li>`).join("")}</ul>
 <h3>Conventions</h3><ul>${ind.standards.map(([n]) => `<li>${esc(n)}</li>`).join("")}</ul>
@@ -287,13 +287,13 @@ ${ind.films.length ? `<h3>Watch</h3><ul>${ind.films.filter((id) => films[id]).ma
 <p class="rec-role">${esc(S.role)}</p>
 <p class="rec-lead">${esc(R.intro)}</p>
 <p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="mailto:${S.email}">Email Karan</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
-<ul class="rec-figs">${R.figures.map(([n, l]) => `<li><b>${esc(n)}</b><span>${esc(l)}</span></li>`).join("")}</ul>
+<ul class="facts rec-facts">${R.figures.map(([n, l]) => `<li><b>${esc(n)}</b> ${esc(l)}</li>`).join("")}</ul>
 <h2>Your field, in one minute</h2>
 <p>Open a field for what my experience in it rests on, three documents to read first, the conventions I follow, and what you can download or watch.</p>
 <div class="rec-fields">${byField()}</div>
-<h2>Experience</h2>
+<h2 id="experience">Experience</h2>
 <ol class="rec-roles">${C.experience.map(role).join("")}</ol>
-<p class="rec-more"><a href="/#engineering">Engineering and maintenance documentation at Magna</a><a href="/#experience">Every role in full</a></p>
+<p class="rec-more"><a href="#engineering">Engineering and maintenance documentation at Magna</a><a href="${S.cv}" download>The CV, every role in full (PDF)</a></p>
 <h2>Three documents to read</h2>
 <ol class="rec-docs">${R.samples.map((x) => `<li><p class="when">${esc(x.skill)}</p><h3><a href="${sample(x).url}">${esc(sample(x).title)}</a></h3><p><b>The reader's problem.</b> ${esc(x.problem)}</p><p><b>What it shows.</b> ${esc(x.shows)}</p></li>`).join("")}</ol>
 <h2>Tools I built to show how I work</h2>
@@ -305,6 +305,10 @@ ${ind.films.length ? `<h3>Watch</h3><ul>${ind.films.filter((id) => films[id]).ma
 <li><a href="/#rewrite">Rewrite desk</a>: an engineer's chat message turned into a how-to, with every fact checked.</li>
 <li><a href="/docs">Library</a>: every document on this site, with search.</li>
 </ul>
+<section class="rec-eng">${engineering}</section>
+<h2 id="toolchain">Toolchain</h2>
+<dl class="tools">${C.tools.map((t) => `<div><dt>${esc(t.group)}</dt><dd>${t.items.map((x) => `<span>${esc(x)}</span>`).join("")}</dd></div>`).join("")}</dl>
+<p class="tools-also">Also: ${esc(C.foundations)}.</p>
 <h2>Availability and contact</h2>
 <p>${esc(S.availability)} Based in ${esc(S.location)}.</p>
 <p>Email <a href="mailto:${S.email}" translate="no">${esc(S.email)}</a>, or <a href="${S.links.linkedin}" target="_blank" rel="noopener">connect on LinkedIn</a>. <a href="/contact">Every way to reach me</a>.</p>
