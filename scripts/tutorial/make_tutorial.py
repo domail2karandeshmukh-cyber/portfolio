@@ -62,6 +62,14 @@ CUES = {
 }
 
 
+def spoken(s):
+    """Roughly how long a piece of text takes to say, in characters: a version such as 26.8.2 is read as "twenty-six
+    point eight point two", and a short acronym such as OTP letter by letter."""
+    s = re.sub(r"\d+(?:\.\d+)+", lambda m: " point ".join("x" * (5 if len(g) == 1 else 10 if len(g) == 2 else 16) for g in m.group(0).split(".")), s)
+    s = re.sub(r"\b[A-Z]{2,4}\b", lambda m: "xxx " * len(m.group(0)), s)
+    return len(s)
+
+
 def seconds(path):
     return float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)], capture_output=True, text=True).stdout or 0)
 
@@ -82,15 +90,15 @@ def voice(scene):
         last = max([s for s in starts if s > found[-1]] or [length]) if found else length
     else:
         length = round(len(text.split()) / 2.45 + 0.3, 2); found, last = [0.0], length
-    first = found[0]; total = len(text)
-    # A sentence starts at the pause nearest to where its share of the characters puts it.
+    first = found[0]; total = spoken(text)
+    # A sentence starts at the pause nearest to where its share of the spoken text puts it.
     sent = []
     for a, b in spans:
-        guess = first + (last - first) * a / total
+        guess = first + (last - first) * spoken(text[:a]) / total
         near = min(found, key=lambda f: abs(f - guess)) if found else guess
         sent.append(near if abs(near - guess) < 0.9 else guess)
     for i in range(1, len(sent)): sent[i] = max(sent[i], sent[i - 1] + 0.3)
-    return {"text": text, "file": path, "seconds": length, "spans": spans, "starts": sent, "end": last}
+    return {"text": text, "file": path, "seconds": length, "spans": spans, "starts": sent, "end": last, "pauses": found if path else []}
 
 
 def when(v, phrase):
@@ -217,10 +225,15 @@ def cues(text, start, v, top=False):
                 while len(ws) > 2: fixed.append(" ".join(ws[:2])); ws = ws[2:]
                 fixed.append(" ".join(ws))
             parts = fixed
-        n = sum(len(p_) for p_ in parts); t = s0
-        for p_ in parts:
-            d = (s1 - s0) * len(p_) / n
-            out.append((t, t + d, "\n".join(lines(p_.split())), top)); t += d
+        # Each part starts where its share of the spoken sentence puts it, or at a pause in the recording near that.
+        n = sum(spoken(p_) for p_ in parts); at = [s0]
+        for p_ in parts[:-1]:
+            guess = at[-1] + (s1 - s0) * spoken(p_) / n
+            near = min((start + f for f in v.get("pauses", [])), key=lambda f: abs(f - guess), default=guess)
+            at.append(near if abs(near - guess) < 0.6 and at[-1] + 0.5 < near < s1 - 0.5 else guess)
+        at.append(s1)
+        for i, p_ in enumerate(parts):
+            out.append((at[i], at[i + 1], "\n".join(lines(p_.split())), top))
     return out
 
 
