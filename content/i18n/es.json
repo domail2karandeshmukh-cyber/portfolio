@@ -410,6 +410,16 @@
   "Email Karan": "Escribir a Karan",
   "Connect on LinkedIn": "Conectar en LinkedIn",
   "Every way to reach me": "Todas las formas de contactarme",
-  "Angers, France": "Angers, Francia"
+  "Angers, France": "Angers, Francia",
+  "Stages of the case study": "Etapas del caso práctico",
+  "Input": "Origen",
+  "Analysis": "Análisis",
+  "Edit": "Edición",
+  "Quality": "Calidad",
+  "Publish": "Publicación",
+  "What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.": "Lo que compruebo antes de escribir: de qué depende la tarea, qué puede salir mal y qué deja fuera el mensaje.",
+  "What it passes before release. The build runs these checks on every change.": "Lo que debe superar antes de publicarse. La compilación repite estas comprobaciones con cada cambio.",
+  "One source, four outputs.": "Una fuente, cuatro formatos.",
+  "A demonstration: the message and the answers were written for this portfolio. <a class=\"rw-case\" href=\"/message-to-document\">See the whole case study</a>.": "Una demostración: el mensaje y las respuestas se escribieron para este portafolio. <a class=\"rw-case\" href=\"/message-to-document\">Ver el caso práctico completo</a>."
  }
 }

@@ -38,7 +38,7 @@ for (const [id, set] of Object.entries(SETS)) {
   if (only && only !== id) continue;
   const OUT = `content/dita-samples/${id}`, SRC = `${OUT}/src`;
   const docs = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8")));
-  const project = Doc.toDitaProject(docs, { title: set.map, id, author: "Karan Deshmukh", status: "Sample: fictional" });
+  const project = Doc.toDitaProject(docs, { title: set.map, id, author: "Karan Deshmukh", status: set.status || "Sample: fictional" });
   if (project.problems.length) throw new Error(`${id}: ${project.problems.join("\n")}`);
   fs.rmSync(SRC, { recursive: true, force: true });
   for (const f of project.files) { fs.mkdirSync(path.dirname(`${SRC}/${f.name}`), { recursive: true }); fs.writeFileSync(`${SRC}/${f.name}`, f.data); }
@@ -52,8 +52,8 @@ for (const [id, set] of Object.entries(SETS)) {
   const today = new Date().toISOString().slice(0, 10);
   const info = {
     publication: `Publication ${id.toUpperCase()}, ${docs.length} document${docs.length > 1 ? "s" : ""}`,
-    library: org ? `${org}, an example company` : "Documentation Studio: a demonstration publication",
-    notice: org
+    library: set.library || (org ? `${org}, an example company` : "Documentation Studio: a demonstration publication"),
+    notice: set.notice ? set.notice : org
       ? `A demonstration publication for Karan Deshmukh's portfolio. ${org} is an example company, and every person, address and figure in it is an example: these documents aren't operating instructions or vendor documentation.`
       : "A demonstration publication for Karan Deshmukh's portfolio. The companies, people, addresses and figures in it are examples: these documents aren't operating instructions or vendor documentation.",
     author: "Karan Deshmukh", date: today,

@@ -17,6 +17,7 @@ import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
 import { buildStudio } from "./lib/studio.mjs";
+import { caseStudy, heroStage, caseStudyPage } from "./lib/casestudy.mjs";
 
 const C = JSON.parse(await fs.readFile("content/site.json", "utf8"));
 const S = C.site, T = C.types, OUT = "public";
@@ -293,6 +294,15 @@ const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github
     trail: [["Portfolio", "/"], ["Contact"]], body });
 }
 
+// The case study: the hero's six stages on the home page, and every stage in full at /message-to-document.
+const cs = await caseStudy();
+await library.extra({ path: "/message-to-document", title: "Case study: from a message to a published procedure",
+  description: "An engineer's chat message taken to a published procedure in six stages: analysis, editing, the document, quality checks, and HTML, PDF, DITA and Markdown outputs.",
+  trail: [["Portfolio", "/"], ["Case study"]], body: caseStudyPage(cs, { S }),
+  kind: "Case study", shelf: "Case studies", text: [{ id: "case", title: "From a message to a published procedure", text: "Case study: an engineer's message about resetting MFA, analysed for requirements, risks and missing information, edited into a procedure, checked and published as HTML, PDF, DITA and Markdown." }] });
+await fs.mkdir(`${OUT}/case-study`, { recursive: true });
+await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
+
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
 await fs.mkdir(`${OUT}/voices`, { recursive: true });
 await fs.copyFile("src/voices.html", `${OUT}/voices/index.html`);
@@ -323,6 +333,7 @@ for (const loc of locales) {
     brief: `${S.links.github}/${S.repo}/blob/main/content/desk/brief.md`,
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
     voice: json(recorded[loc.code] || {}),
+    rwstage: heroStage(cs),
     pmenu: pmenu("#projects"),
     ...(() => { const n = siteNav({ cv: S.cv, projects: pmenu("#projects"), home: true, lang: loc.code }); return { sitenav: n.desktop, mnav: n.phone }; })(),
     livelinks: liveSites.map((p) => `<a href="${p.href}" target="_blank" rel="noopener" translate="no">${esc(p.name)}</a>`).join(""),
@@ -367,7 +378,7 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

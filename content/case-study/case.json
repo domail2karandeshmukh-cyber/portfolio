@@ -1,0 +1,64 @@
+{
+ "note": "The message-to-document case study (lib/casestudy.mjs): the message, what its analysis finds, the questions and their answers, the editorial decisions, and where each fact of the message lands in reset-mfa.md. The message and the answers were written for this portfolio.",
+ "message": {
+  "from": "On-call engineer, 02:14",
+  "channel": "Service desk chat",
+  "parts": [["n", "ok"], " for ", ["f", "who", "locked out users"], ": go to the ", ["f", "console", "admin console"], ", ", ["f", "find", "find the user"], ", ", ["n", "hit"], " ", ["f", "reset", "reset mfa"], " (", ["f", "not", "NOT reset password"], ", that ", ["f", "why", "doesn't clear their old phone"], ["n", "!!"], "). they get an ", ["f", "email", "email to enroll again"], ". ", ["n", "oh and"], " ", ["f", "verify", "make sure it's actually them"], " first, ", ["f", "hr", "call the number in the HR system"], ", ", ["f", "ticket", "don't trust the one in the ticket"], ". ", ["f", "log", "check the log"], " after. ", ["f", "contr", "contractors are a different process"], ", ", ["f", "iam", "ask IAM"]],
+  "aside": [["n", "can someone please write this down properly. third time this month i've explained it"]]
+ },
+ "facts": [
+  { "f": "who", "find": "locked-out user" },
+  { "f": "verify", "find": "Confirm that the request is genuine." },
+  { "f": "hr", "find": "Call the user on the number in the HR system" },
+  { "f": "ticket", "find": "not the number in the ticket" },
+  { "f": "contr", "find": "Contractor accounts follow a different process" },
+  { "f": "iam", "find": "reassign those tickets to the IAM team" },
+  { "f": "console", "find": "In the admin console" },
+  { "f": "find", "find": "find the user and open their profile" },
+  { "f": "reset", "find": "<b>Reset MFA</b>" },
+  { "f": "not", "find": "Don't select <b>Reset password</b>." },
+  { "f": "why", "find": "It leaves the old phone enrolled." },
+  { "f": "email", "find": "open the enrollment email and enroll the new phone" },
+  { "f": "log", "find": "the user's sign-in log shows a new MFA enrollment" }
+ ],
+ "analysis": [
+  { "k": "req", "label": "Requirement", "quote": "reset mfa", "text": "Clear the user's MFA, so that they can enroll a new phone." },
+  { "k": "pre", "label": "Precondition", "quote": "make sure it's actually them first", "text": "The caller is confirmed as the user before anything changes." },
+  { "k": "risk", "label": "Risk", "quote": "NOT reset password", "text": "The button that looks right leaves the old phone enrolled." },
+  { "k": "dep", "label": "Dependency", "quote": "ask IAM", "text": "Contractor accounts belong to the IAM team, not to the service desk." },
+  { "k": "gap", "label": "Missing", "quote": "check the log", "text": "Which log, and what it shows when the reset worked." },
+  { "k": "amb", "label": "Ambiguous", "quote": "locked out users", "text": "Locked out by a lost phone, or by a forgotten password?" }
+ ],
+ "questions": [
+  { "q": "Locked out how: by a lost or replaced phone only, or by a forgotten password too?", "a": "Only a lost or replaced phone. A forgotten password has its own procedure.", "home": true },
+  { "q": "Which log shows that the reset worked, and what does it show?", "a": "The user's sign-in log in the admin console: a new MFA enrollment, dated today.", "home": true },
+  { "q": "How does a contractor's request reach the IAM team?", "a": "Reassign the ticket to the IAM team.", "home": true },
+  { "q": "What if the enrollment email doesn't reach the user?", "a": "Reassign the ticket to the IAM team as well. They have other ways to confirm a user." }
+ ],
+ "decisions": [
+  { "t": "The title names the task and who it's for.", "why": "A reader searching for “MFA” or “locked out” finds it, and knows from the title whether it's theirs." },
+  { "t": "The identity check comes before the first step.", "why": "In the message it came near the end, with “first” as its only signal. A reader who follows the order would reset first and check after." },
+  { "t": "“NOT reset password” becomes a caution on the step it concerns.", "why": "The warning sits where the wrong button is, and keeps the message's reason: the old phone stays enrolled." },
+  { "t": "Contractors become a scope rule before the steps.", "why": "Nobody starts a procedure that doesn't cover their account, and the rule says where those tickets go (answer 3)." },
+  { "t": "“check the log after” becomes a result the reader can verify.", "why": "It names the log and what it shows (answer 2). A check that says only “check the log” can't fail." },
+  { "t": "The noise goes.", "why": "The greeting, the emphasis and the complaint carry no instruction. “Third time this month” is the reason to write the document, not a part of it." }
+ ],
+ "sources": [
+  { "s": "Select Reset MFA, not Reset password.", "from": "Message", "status": "Fact" },
+  { "s": "Reset password leaves the old phone enrolled.", "from": "Message", "status": "Fact" },
+  { "s": "The user gets an enrollment email.", "from": "Message", "status": "Fact" },
+  { "s": "Call the number in the HR system, not the number in the ticket.", "from": "Message", "status": "Fact" },
+  { "s": "The procedure is for a lost or replaced phone.", "from": "Answer 1", "status": "Confirmed" },
+  { "s": "The sign-in log shows a new MFA enrollment, dated today.", "from": "Answer 2", "status": "Confirmed" },
+  { "s": "Contractor tickets, and users the email doesn't reach, go to the IAM team.", "from": "Message, answers 3 and 4", "status": "Confirmed" },
+  { "s": "It takes about five minutes.", "from": "The first draft", "status": "Removed: the message gives no time, and nobody has measured it" }
+ ],
+ "terms": [
+  { "term": "MFA", "rule": "Spelled out once, as “multi-factor authentication (MFA)”, then MFA." },
+  { "term": "enroll, enrollment", "rule": "The one verb for adding a phone, as the message has it. Not “register”.", "avoid": "regist" },
+  { "term": "phone", "rule": "The message's word for the second factor. Not “device”, which could be a laptop.", "avoid": "device" },
+  { "term": "admin console", "rule": "As the message names it, in lowercase, because it names a kind of console, not a product." },
+  { "term": "Select", "rule": "For a button. Not “click” or “hit”, which assume a mouse.", "avoid": "click|hit " }
+ ],
+ "review": "The identity team checks steps 1 to 3, the caution and the result against the admin console. It hasn't happened: this is a demonstration, and no team has reviewed it."
+}
