@@ -55,11 +55,18 @@ Severity: **High** means a reader sees a defect or a claim that isn't true. **Me
 | 25 | Tables and code that scroll sideways on a phone couldn't be reached with the keyboard (10 pages). | High | Fixed | They join the tab order while they scroll. axe-core on those pages: 0 WCAG problems. `263765b` |
 | 26 | DITA Open Toolkit's HTML5 contents page has no main landmark. | Low | Accepted | DITA-OT's own template; a best-practice note, not a WCAG failure. |
 
+## Found while checking the preview
+
+| # | Finding | Severity | Status | Fix and evidence |
+|---|---|---|---|---|
+| 27 | The build turned five links to pages of the site into GitHub addresses that don't exist. They were in the three documents kept in this repository: the KC1 model and dataset cards, and the Screenshot Studio guide. The link check counted them as links to another site, so its internal count stayed clean. | High | Fixed | In this repository's own documents, a link that starts with "/" stays a link to the site. In other repositories, the build reads it from the repository's root, as GitHub does. The five links lead to their pages. |
+| 28 | "Source on GitHub" links to files that are new in Version 10 pointed at `main`, where the files don't exist until the merge. On the preview, 10 links answered 404: the house standards, the two cards and the guide. | Medium | Fixed | Links to the site's own files use the branch that Vercel builds (`VERCEL_GIT_COMMIT_REF`): a preview links to its branch, and production to `main`. Link check: 186 pages, 13,792 internal links, all lead somewhere; every GitHub link answers. |
+
 ## Open, and for Karan to decide
 
 | # | Finding | Severity | Status |
 |---|---|---|---|
-| 27 | Two help-center samples come from employer work: "Access the Core42 AI Cloud Portal" and the Google Workspace FAQs. The repository holds no record that publishing them was authorized. | High | **For Karan.** Left as they are. If authorization is uncertain, they can be taken off the public site and kept as style references only. |
-| 28 | Firefox and WebKit couldn't be installed here (their download server is blocked), so every browser test ran in Chromium only. | Medium | Open |
-| 29 | The recorded narration of the Studio's two sample videos still says "fictional", and no person has listened to any narration to check the captions against it. | Medium | Open. New narration costs money and needs approval. |
-| 30 | The project reports, the paper and the CV are untagged PDFs. The reports and the paper come from the project repositories; the CV is protected and wasn't changed. | Low | Open |
+| 29 | Two help-center samples come from employer work: "Access the Core42 AI Cloud Portal" and the Google Workspace FAQs. The repository holds no record that publishing them was authorized. | High | **For Karan.** Left as they are. If authorization is uncertain, they can be taken off the public site and kept as style references only. |
+| 30 | Firefox and WebKit couldn't be installed here (their download server is blocked), so every browser test ran in Chromium only. | Medium | Open |
+| 31 | The recorded narration of the Studio's two sample videos still says "fictional", and no person has listened to any narration to check the captions against it. | Medium | Open. New narration costs money and needs approval. |
+| 32 | The project reports, the paper and the CV are untagged PDFs. The reports and the paper come from the project repositories; the CV is protected and wasn't changed. | Low | Open |

@@ -10,7 +10,7 @@ import path from "node:path";
 import { createRequire } from "node:module";
 import { execSync } from "node:child_process";
 import sharp from "sharp";
-import { esc, host, sources, template } from "./lib/util.mjs";
+import { esc, host, sources, template, siteRef } from "./lib/util.mjs";
 import { buildLibrary, docCard } from "./lib/library.mjs";
 import { styleGuide } from "./lib/styleguide.mjs";
 import { translate, typeset, units } from "./lib/i18n.mjs";
@@ -81,7 +81,7 @@ const navEn = siteNav({ cv: S.cv, projects: pmenu("/#projects") });
 const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
 const library = await buildLibrary({ C, OUT, source, common });
 // The style guide: its rules, and what the check found in each document of the library.
-const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/main/src/style.js` });
+const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/${siteRef}/src/style.js` });
 await library.extra({ path: "/style", title: "Style guide", description: `The ${guide.figures.rules} rules my documents follow, based on the Microsoft Writing Style Guide. Code checks ${guide.figures.coded} of them on every build.`,
   trail: [["Portfolio", "/"], ["Library", "/docs"], ["Style guide"]], body: guide.body, kind: "Style guide", shelf: "Library", text: guide.text });
 
@@ -284,7 +284,8 @@ for (const loc of locales) {
     jsonld: JSON.stringify(jsonld),
     // April's tour: the section each stop scrolls to, and the line she says there.
     stops: C.tour.map((t) => t.to).join(","),
-    // The brief the drafting model follows is kept with the site's source, where anyone can read it.
+    // The brief the drafting model follows is kept with the site's source, where anyone can read it. It links to main, the
+    // same on every build, because the translations of this sentence include the link.
     brief: `${S.links.github}/${S.repo}/blob/main/content/desk/brief.md`,
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
     voice: json(recorded[loc.code] || {}),
