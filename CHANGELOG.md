@@ -2,7 +2,7 @@
 
 What changed on karandeshmukh.dev, release by release. The audit registers in `audit/` hold the findings behind each change, with their evidence.
 
-## 10.1 (in progress, on the branch `v10.1`; not released)
+## 10.1 (released 19 November 2026)
 
 The first screen, contact, and documentation of real work.
 
