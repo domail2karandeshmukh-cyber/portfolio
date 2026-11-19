@@ -118,6 +118,7 @@
       "basis": "Projects: academic and personal work from my MSc in cybersecurity and data science, with measured results. April, the assistant on this site, is a live AI application I built.",
       "start": [
         { "doc": "kc1-model-card", "why": "A model card for a served classifier: its intended use, its data, every candidate's results, the threshold trade-off and its limits, from the project's recorded runs." },
+        { "doc": "kc1-mlflow-compare", "why": "A task guide for a real product, MLflow 3.18.0, on the project's own training runs: find the four candidates, compare them and see why one was kept." },
         { "doc": "cg-paper", "why": "A six-page paper measuring where a signature stops proving that an AI model is safe." },
         { "doc": "tn-report", "why": "A technical report with precision, recall and false-alarm rates measured on recorded attacks." }
       ],
