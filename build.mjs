@@ -224,7 +224,9 @@ const hreflang = locales.length < 2 ? "" : locales.map((l) => `<link rel="altern
 
 // The commit this build was made from, linked in the footer.
 const commit = process.env.VERCEL_GIT_COMMIT_SHA || (() => { try { return execSync("git rev-parse HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return ""; } })();
-const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>.</p>` : "";
+// The release, from package.json, and the commit the build came from.
+const release = JSON.parse(await fs.readFile("package.json", "utf8")).version.replace(/\.0$/, "");
+const rev = `<p class="rev">Version ${release}${commit ? `, built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>` : ""}.</p>`;
 
 // The page for recruiters: who I am, the figures, the employers, three documents to read, and how to reach me, on one screen or two.
 {

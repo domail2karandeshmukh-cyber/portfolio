@@ -53,6 +53,10 @@
   [
    "^(\\d+) rules, based on the Microsoft Writing Style Guide\\. Code checks (\\d+) of them here, and in every document of the library on each build\\.$",
    "$1 नियम, Microsoft Writing Style Guide पर आधारित। कोड इनमें से $2 की जाँच यहाँ करता है, और हर बिल्ड पर लाइब्रेरी के हर दस्तावेज़ में भी।"
+  ],
+  [
+   "^Version ([0-9.]+), built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "संस्करण $1, कमिट $2 से बनाया गया।"
   ]
  ],
  "units": {

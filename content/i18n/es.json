@@ -52,6 +52,10 @@
   [
    "^(\\d+) rules, based on the Microsoft Writing Style Guide\\. Code checks (\\d+) of them here, and in every document of the library on each build\\.$",
    "$1 reglas, basadas en la Microsoft Writing Style Guide. El código comprueba $2 de ellas aquí, y en cada documento de la biblioteca en cada compilación."
+  ],
+  [
+   "^Version ([0-9.]+), built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "Versión $1, generada a partir del commit $2."
   ]
  ],
  "units": {
