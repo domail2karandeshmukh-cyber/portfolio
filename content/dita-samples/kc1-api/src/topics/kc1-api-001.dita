@@ -89,7 +89,7 @@ if (!response.ok) throw new Error(`KC1 API: ${response.status}`);
 const { label, defect_probability } = await response.json();</codeblock>
 </section>
 <section><title>How a prediction is made</title>
-<fig><image href="img/diagram-545309ed403a.png" placement="break" width="150mm"><alt>Diagram</alt></image></fig>
+<fig><image href="img/diagram-545309ed403a.png" placement="break" width="150mm"><alt>Sequence diagram between Client, API (FastAPI), Validation (Pydantic), and Model (scikit-learn). 1. Client to API (FastAPI): POST /predict with 21 metrics. 2. API (FastAPI) to Validation (Pydantic): Check the body. If a field is missing, extra or not a number: 3. Validation (Pydantic) to API (FastAPI): Errors. 4. API (FastAPI) to Client: 422 with one entry per problem. Otherwise, if the body is valid: 5. Validation (Pydantic) to API (FastAPI): 21 finite numbers. 6. API (FastAPI) to Model (scikit-learn): One row, in the training column order. 7. Model (scikit-learn) to API (FastAPI): Probability that the module is defective. 8. API (FastAPI) to itself: Compare it with the threshold, 0.50. 9. API (FastAPI) to Client: 200 with prediction, label, probability, threshold, model.</alt></image></fig>
 </section>
 <section><title>Related documents</title>
 <ul><li><xref href="kc1-api-002.dita">Get your first prediction from the KC1 API</xref>, to run the API and call it.</li><li><xref href="kc1-api-003.dita">Troubleshoot the KC1 API</xref>, for every error on this page.</li><li><xref href="https://karandeshmukh.dev/docs/kc1/model-card" format="html" scope="external">Model card</xref>, for what the model can and can’t be used for.</li></ul>

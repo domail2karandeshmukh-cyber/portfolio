@@ -33,6 +33,32 @@ const Doc = require("../src/doc.js");
 
 const publish = process.argv.includes("--publish");
 const only = process.argv.slice(2).filter((a) => !a.startsWith("--"))[0];
+// Version 10.1: a diagram's alternative text says what the diagram says, for a reader who can't see it: a sequence
+// diagram lists who takes part and every message in order, with its conditions. Other kinds name their kind.
+function describeDiagram(code) {
+  const lines = code.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
+  const kind = (lines[0] || "").split(/\s/)[0];
+  const list = (a) => (a.length < 3 ? a.join(" and ") : `${a.slice(0, -1).join(", ")}, and ${a[a.length - 1]}`);
+  const clean = (t) => t.replace(/[[\]]/g, "").replace(/<br\s*\/?>/gi, " ").replace(/\s+/g, " ").trim();
+  const lower = (t) => t.replace(/^\p{Lu}(?!\p{Lu})/u, (c) => c.toLowerCase());
+  if (kind !== "sequenceDiagram") return `Diagram (${kind || "Mermaid"})`;
+  const names = {}, order = [];
+  for (const l of lines) { const m = /^(?:participant|actor)\s+(\S+)(?:\s+as\s+(.+))?$/.exec(l); if (m) { names[m[1]] = clean(m[2] || m[1]); order.push(m[1]); } }
+  const name = (id) => names[id] || id;
+  const numbered = lines.includes("autonumber");
+  const out = [`Sequence diagram between ${list(order.map(name))}.`];
+  let k = 0;
+  for (const l of lines.slice(1)) {
+    let m;
+    if ((m = /^([^\s:-]+)\s*--?(?:>>|>|x|\))[+-]?\s*([^\s:]+)\s*:\s*(.+)$/.exec(l))) {
+      k++;
+      out.push(`${numbered ? `${k}. ` : ""}${name(m[1])} to ${m[1] === m[2] ? "itself" : name(m[2])}: ${clean(m[3]).replace(/\.?$/, ".")}`);
+    } else if ((m = /^(alt|opt|loop|par|critical|break)\s+(.+)$/.exec(l))) out.push(`${m[1] === "loop" ? "Repeated while" : "If"} ${lower(clean(m[2]))}:`);
+    else if ((m = /^else\s+(.+)$/.exec(l))) out.push(`Otherwise, if ${lower(clean(m[1]))}:`);
+  }
+  return out.join(" ");
+}
+
 const home = process.env.DITA_HOME;
 if (publish && !home) throw new Error("Set DITA_HOME to a DITA Open Toolkit folder.");
 
@@ -52,7 +78,7 @@ for (const [id, set] of Object.entries(SETS)) {
       // FOP's SVG renderer can't read Mermaid's CSS and draws nothing, so the PNG that scripts/diagram_png.py made in Chrome is used when there is one.
       const png = fs.existsSync(`content/diagrams/${key}.png`), ext = png ? "png" : "svg";
       diagrams[`img/diagram-${key}.${ext}`] = `content/diagrams/${key}.${ext}`;
-      return `![Diagram](img/diagram-${key}.${ext})`;
+      return `![${describeDiagram(code)}](img/diagram-${key}.${ext})`;
     })
     .replace(/\]\((\/[^)\s#]+)(#[^)\s]*)?\)/g, (m, to, hash) => {
       const target = url[to.replace(/\/$/, "")];
