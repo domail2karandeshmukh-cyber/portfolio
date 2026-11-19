@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>{{title}} | Karan Deshmukh</title>
 <meta name="description" content="{{description}}">
 <link rel="canonical" href="{{url}}{{path}}">
@@ -33,7 +33,7 @@
   <div class="nav-act">
    {{lang}}
    {{mnav}}
-   <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
+   <!--#include cv-btn-->
   </div>
  </div>
 </header>
@@ -49,9 +49,11 @@
 </main>
 <footer class="foot">
  <div class="wrap">
-  <p>{{privacy}}</p>
-  <p><a href="/">Karan Deshmukh, technical documentation specialist</a></p>
-  <!--#include foot-contact-->
+  <!--#include foot-main-->
+  <div class="foot-base">
+   <p class="foot-note">{{privacy}}</p>
+   <!--#include foot-legal-->
+  </div>
  </div>
 </footer>
 <noscript><p class="wrap st-nojs">The studio needs JavaScript.</p></noscript>

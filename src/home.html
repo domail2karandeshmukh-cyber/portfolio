@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Karan Deshmukh | Technical Documentation Specialist</title>
-<meta name="description" content="Technical documentation specialist with 5+ years across industrial engineering, enterprise IT and cybersecurity, most recently at MongoDB and Magna International. Writing samples, a documentation workbench, and live projects.">
+<meta name="description" content="Technical documentation specialist with 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International. Writing samples, real product documentation, live projects, and CV.">
 <link rel="canonical" href="{{canonical}}">
 <!--@hreflang-->
 <meta property="og:type" content="website">
@@ -32,256 +32,200 @@
   <a class="brand" href="#top" translate="no">Karan Deshmukh</a>
   {{sitenav}}
   <div class="nav-act">
-   <button class="icon-btn" type="button" data-search aria-label="Search the documentation"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg><kbd aria-hidden="true">/</kbd></button>
+   <!--#include search-btn-->
    <!--@lang-->
+   <!--#include april-btn-->
    {{mnav}}
-   <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
+   <!--#include cv-btn-->
   </div>
  </div>
 </header>
-<!--#include dock-->
 
 <main id="main">
 
 <section class="hero" id="top">
- <div class="wrap">
-  <p class="hero-id">Karan Deshmukh, technical documentation specialist</p>
-  <h1><span>Complex technology.</span> <span>Clear documentation.</span></h1>
-  <div class="hero-grid">
-   <div class="hero-copy">
-    <p class="lead">With 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International, I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.</p>
-    <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
-    <div class="btns">
-     <a class="btn paper" href="#writing">Explore my work</a>
-     <a class="btn line" href="{{cv}}" download>Download CV</a>
-    </div>
-    <nav class="hero-more" aria-label="More ways in"><a href="/recruiters">Recruiter overview</a><a href="/industries">Explore industries</a><a href="/videos">Watch demonstrations</a><a href="#contact">Contact me</a></nav>
-   </div>
-
-   <div class="rw" id="rewrite" data-state="1" data-src="example">
-    <div class="rw-top">
-     <div class="rw-tabs" role="group" aria-label="Stages of the case study">
-      <button type="button" data-s="1" aria-pressed="true"><span>Input</span></button>
-      <button type="button" data-s="2" aria-pressed="false"><span>Analysis</span></button>
-      <button type="button" data-s="3" aria-pressed="false"><span>Edit</span></button>
-      <button type="button" data-s="4" aria-pressed="false"><span>Document</span></button>
-      <button type="button" data-s="5" aria-pressed="false"><span>Quality</span></button>
-      <button type="button" data-s="6" aria-pressed="false"><span>Publish</span></button>
-     </div>
-     <button class="rw-own" type="button" hidden>Try your own message</button>
-    </div>
-    <figure class="rw-fig">
-    <div class="rw-stage" lang="en" translate="no">
-{{rwstage}}
-    </div>
-    <figcaption>
-     <span class="rw-ex">
-      <span class="rw-cap" data-s="1">What engineering sent. Every fact is in there, in the order it came to mind.</span>
-      <span class="rw-cap" data-s="2">What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.</span>
-      <span class="rw-cap" data-s="3">What I keep. The facts stay and the noise goes.</span>
-      <span class="rw-cap" data-s="4">What I publish. The same facts, in the order the reader needs them, with a way to check the result.</span>
-      <span class="rw-cap" data-s="5">What it passes before release. The build runs these checks on every change.</span>
-      <span class="rw-cap" data-s="6">One source, four outputs.</span>
-      <span>A demonstration: the message and the answers were written for this portfolio. <a class="rw-case" href="/message-to-document">See the whole case study</a>.</span>
-      <button class="rw-again" type="button">Play it again</button>
-     </span>
-     <span class="rw-you" aria-live="polite" hidden>
-      <span class="rw-wait">Reading the message for its facts...</span>
-      <span class="rw-cap" data-s="1">The message, as it was sent.</span>
-      <span class="rw-cap" data-s="3">The message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
-      <span class="rw-cap" data-s="4">A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.</span>
-      <span class="rw-stats" id="rw-stats"></span>
-      <span class="rw-cta">Does your team write messages like this one? <a href="{{linkedin}}" target="_blank" rel="noopener">Message me on LinkedIn</a>.</span>
-     </span>
-    </figcaption>
-    </figure>
-    <div class="rw-acts" hidden>
-     <button class="btn line sm" type="button" id="rw-copy">Copy as Markdown</button>
-     <button class="btn line sm" type="button" id="rw-open">Open in the workbench</button>
-     <button class="btn text sm" type="button" id="rw-back">Back to my example</button>
-    </div>
-    <form class="rw-try" id="try" hidden>
-     <label for="try-text">Now try it on a message from your own team.</label>
-     <textarea id="try-text" name="text" rows="3" maxlength="1400" placeholder="Paste a chat message, a ticket comment or meeting notes."></textarea>
-     <div class="try-row">
-      <button class="btn ink sm" type="submit">Mark it up</button>
-      <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from a chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
-     </div>
-     <p class="try-note">An AI model drafts it by <a href="{{brief}}" target="_blank" rel="noopener">this brief</a>. This site doesn't keep your text. Leave out anything confidential all the same.</p>
-     <p class="try-msg" id="try-msg" role="status"></p>
-    </form>
-   </div>
-  </div>
- </div>
-</section>
-
-<section class="proof" aria-label="Key figures">
- <ul class="wrap" style="--n:{{figures}}"><!--@stats--></ul>
-</section>
-
-<section class="fields" id="fields" aria-labelledby="fields-h">
- <div class="wrap"><!--@fields--></div>
-</section>
-
-<section class="sec desk" id="writing">
- <div class="wrap">
-  <div class="sec-head">
-   <h2>Writing samples</h2>
-   <p>My work for MongoDB and Magna is internal, so what you can read here is of two kinds: help-center samples, and the documentation of the security tools I led during my MSc. <mark class="hl">Every document opens on this site.</mark> The project documentation is kept in GitHub as docs-as-code, drafted with AI assistance, and reviewed by me. A program checks each document against <a href="/style">my style guide</a> on every build.</p>
-  </div>
-
-  <ul class="docs feature"><!--@featured--></ul>
-
-  <div class="excerpt">
-   <article class="sheet">
-    <div lang="en" translate="no">
-    <p class="doc-type" style="--tc:#6A58E6">Explainer, excerpt from How TrustNav works</p>
-    <p class="doc-title">Step 2: Turn the observation into features</p>
-    <p><span data-n="1">One raw reading is hard to judge on its own.</span><sup class="pin">1</sup> <span data-n="2">A position of 47.46, -0.55 says nothing.</span><sup class="pin">2</sup> What matters is <b>how it compares with the last few seconds and with the expected route</b>.</p>
-    <div class="tbl"><table>
-     <thead><tr><th>Feature</th><th>Meaning</th><th><span data-n="3">Why it matters</span><sup class="pin">3</sup></th></tr></thead>
-     <tbody>
-      <tr><td><code>distance_m</code></td><td>How far the fix moved since last second</td><td><sup class="pin m-only">3</sup><span data-n="3">A spoofer can make this huge</span></td></tr>
-      <tr><td><code>route_deviation_m</code></td><td>Distance from the assigned route</td><td><span data-n="3">Catches slow drift</span></td></tr>
-      <tr><td><code>sensor_speed_mismatch_mps</code></td><td>GNSS speed vs inertial speed</td><td><span data-n="3">Two independent sources disagreeing</span></td></tr>
-     </tbody>
-    </table></div>
-    </div>
-    <p class="last"><a href="{{doc:tn-how}}">Read the full document</a></p>
-   </article>
-   <div>
-    <h3>What the writing is doing</h3>
-    <ol class="notes">
-     <li>It opens with the reader's problem, before any code or file name.</li>
-     <li>One concrete value makes an abstract point easy to picture.</li>
-     <li>Every row says why it matters, which most reference tables leave out.</li>
-    </ol>
-   </div>
-  </div>
-
-  <div class="lib-bar">
-   <h3>Every document, by kind</h3>
-   <button class="finder" type="button" data-search><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg><span>Search the documents</span><kbd aria-hidden="true">/</kbd></button>
-  </div>
-  <dl class="index"><!--@index--></dl>
-  <p class="lib-foot"><a class="btn paper sm" href="/docs">Open the whole library</a></p>
- </div>
-</section>
-
-<section class="sec" id="engineering">
- <div class="wrap"><!--@engineering-->
- </div>
-</section>
-
-<section class="sec" id="workbench">
- <div class="wrap">
-  <div class="sec-head">
-   <h2>The workbench and the Documentation Studio</h2>
-   <p>Write a document here the way I write mine. The workbench checks each sentence against <a href="/style">my style guide</a> as you type, shows the page as each group of readers gets it, and publishes it as Markdown, HTML, or DITA. <mark class="hl">It runs in your browser, and nothing you type leaves it.</mark></p>
-  </div>
-  <article class="sys bench-show">
-   <a class="shot" href="/workbench"><span class="chrome" aria-hidden="true"><i></i><i></i><i></i><b translate="no">karandeshmukh.dev/workbench</b></span><img src="/img/workbench-800.webp" srcset="/img/workbench-800.webp 800w, /img/workbench-1600.webp 1600w" sizes="(max-width: 880px) 100vw, 680px" width="1600" height="1000" loading="lazy" decoding="async" alt="The workbench. On the left, a draft in Markdown with its problems underlined. On the right, the style check lists each one with a fix."></a>
-   <div>
-    <dl class="points">
-     <div><dt>The style guide, as a program</dt><dd>{{rules}} rules, based on the Microsoft Writing Style Guide. Code checks {{coded}} of them here, and in every document of the library on each build.</dd></div>
-     <div><dt>One source, several readers</dt><dd>Keep a block for administrators only, set a product name once, and publish each version from the same text.</dd></div>
-     <div><dt>Three outputs</dt><dd>Markdown for a repository, plain HTML for a help center's editor, and DITA for a structured authoring tool.</dd></div>
-     <div id="studio"><dt>The Documentation Studio</dt><dd>Screenshots with permanent redaction, numbered step guides, training videos with captions and narration, DITA projects that DITA Open Toolkit publishes, a help center, and document control. Each tool makes files you can open anywhere.</dd></div>
-    </dl>
-    <div class="btns"><a class="btn ink sm" href="/workbench">Open the workbench</a><a class="btn inkline sm" href="/studio">Explore the Documentation Studio</a><a class="btn inkline sm" href="/style">Read the style guide</a></div>
-   </div>
-  </article>
- </div>
-</section>
-
-<section class="sec" id="projects">
- <div class="wrap">
-  <div class="sec-head">
-   <h2>Security tools I led and documented</h2>
-   <p>Three working tools, each built around a real problem. All are live, and each links to the documentation behind it. They began as projects in my MSc at ESAIP.</p>
-  </div>
-  <!--@systems-->
-  <h3 class="sub">Also built</h3>
-  <ul class="more"><!--@more--></ul>
- </div>
-</section>
-
-<div class="night">
-<section class="sec" id="april-band">
- <div class="wrap band-in">
-  <div class="orb-stage" aria-hidden="true"><span class="ring"></span><span class="ring"></span><span class="orb lg" id="orb-big"></span></div>
-  <div>
-   <h2>Short on time? Ask <b class="aw" translate="no">April</b></h2>
-   <p>April is the assistant I first built inside ReleasePilot AI. Here she answers questions about my work from the same content file that builds this page, in writing or out loud.</p>
-   <div class="chips"><!--@asks--></div>
+ <div class="wrap hero-in">
+  <div class="hero-copy">
+   <p class="hero-id">Technical documentation specialist</p>
+   <h1 class="sig">I <span class="ed e1" data-was="type">turn</span> what engineers <span class="ed e2" data-was="say">know</span> into <mark class="hl">docs people can <span class="ed e3" data-was="read">follow</span></mark>.</h1>
+   <p class="lead">More than five years of procedures, manuals, and troubleshooting guides in industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International.</p>
+   <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
    <div class="btns">
-    <button class="btn paper sm" type="button" data-april>Start a conversation</button>
-    <button class="btn line sm" type="button" data-tour><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span>Take the one-minute tour</span></button>
+    <a class="btn ink" href="#writing">Explore my work</a>
+    <a class="btn line" href="{{cv}}" download>{{i_download}}<span>Download CV</span></a>
    </div>
+   <p class="hero-more"><a href="/recruiters">Recruiter overview</a><a href="#contact">Contact me</a></p>
+  </div>
+  <!--@heropubs-->
+ </div>
+</section>
+
+<section class="sec" id="writing" aria-labelledby="writing-h">
+ <div class="wrap">
+  <div class="sec-head">
+   <h2 id="writing-h">Selected work</h2>
+   <p>Documentation you can read here or download: independent guides to open-source software, the documentation of my own projects, and structured publications.</p>
+  </div>
+  <ul class="works"><!--@featured--></ul>
+  <div class="lib-line">
+   <p>Every document is in the library, with search.</p>
+   <button class="finder" type="button" data-search>{{i_search}}<span>Search the documents</span><kbd aria-hidden="true">/</kbd></button>
+   <a class="btn text sm" href="/docs">Open the library</a>
   </div>
  </div>
 </section>
 
-<section class="sec" id="video">
+<section class="sec band" id="fields" aria-labelledby="fields-h">
  <div class="wrap">
   <div class="sec-head">
-   <h2>Video and visual documentation</h2>
-   <p>Some procedures are faster to watch than to read. I record, narrate, and edit screen walkthroughs, and cut short GIFs for single steps.</p>
-   <p>The walkthroughs I made for employers belong to them, so they stay off this page. Ask me, and I'll take you through that work. The films here show this site's own tools.</p>
+   <h2 id="fields-h">Find the work for your field</h2>
+   <p>Each field has the documents to read first, the conventions I follow, and the files and films to inspect.</p>
+  </div>
+  <ul class="fields-grid" id="engineering"><!--@fields--></ul>
+ </div>
+</section>
+
+<section class="sec" id="rewrite-sec" aria-labelledby="rewrite-h">
+ <div class="wrap">
+  <div class="sec-head">
+   <h2 id="rewrite-h">From a message to a procedure</h2>
+   <p>An engineer's chat message taken through the six stages a document passes before release. The message is a demonstration; the checks and the outputs are real.</p>
+  </div>
+  <div class="rw" id="rewrite" data-state="1" data-src="example">
+   <div class="rw-top">
+    <div class="rw-tabs" role="group" aria-label="Stages of the case study">
+     <button type="button" data-s="1" aria-pressed="true"><span>Input</span></button>
+     <button type="button" data-s="2" aria-pressed="false"><span>Analysis</span></button>
+     <button type="button" data-s="3" aria-pressed="false"><span>Edit</span></button>
+     <button type="button" data-s="4" aria-pressed="false"><span>Document</span></button>
+     <button type="button" data-s="5" aria-pressed="false"><span>Quality</span></button>
+     <button type="button" data-s="6" aria-pressed="false"><span>Publish</span></button>
+    </div>
+   </div>
+   <figure class="rw-fig">
+   <div class="rw-stage" lang="en" translate="no">
+{{rwstage}}
+   </div>
+   <figcaption>
+    <span class="rw-ex">
+     <span class="rw-cap" data-s="1">What engineering sent. Every fact is in there, in the order it came to mind.</span>
+     <span class="rw-cap" data-s="2">What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.</span>
+     <span class="rw-cap" data-s="3">What I keep. Yellow is a fact to keep; a red line is noise to cut.</span>
+     <span class="rw-cap" data-s="4">What I publish. The same facts, in the order the reader needs them, with a way to check the result.</span>
+     <span class="rw-cap" data-s="5">What it passes before release. The build runs these checks on every change.</span>
+     <span class="rw-cap" data-s="6">One source, four outputs.</span>
+     <button class="rw-again" type="button">Play it again</button>
+    </span>
+    <span class="rw-you" aria-live="polite" hidden>
+     <span class="rw-wait">Reading the message for its facts...</span>
+     <span class="rw-cap" data-s="1">The message, as it was sent.</span>
+     <span class="rw-cap" data-s="3">The message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
+     <span class="rw-cap" data-s="4">A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.</span>
+     <span class="rw-stats" id="rw-stats"></span>
+     <span class="rw-cta">Does your team write messages like this one? <a href="#contact">Let's talk</a>.</span>
+    </span>
+   </figcaption>
+   </figure>
+   <div class="rw-foot">
+    <a class="btn line sm" href="/message-to-document">See every stage in full</a>
+    <button class="btn text sm rw-own" type="button" hidden>Try your own message</button>
+   </div>
+   <div class="rw-acts" hidden>
+    <button class="btn line sm" type="button" id="rw-copy">Copy as Markdown</button>
+    <button class="btn line sm" type="button" id="rw-open">Open in the workbench</button>
+    <button class="btn text sm" type="button" id="rw-back">Back to my example</button>
+   </div>
+   <form class="rw-try" id="try" hidden>
+    <label for="try-text">Try it on a message from your own team.</label>
+    <textarea id="try-text" name="text" rows="3" maxlength="1400" placeholder="Paste a chat message, a ticket comment or meeting notes."></textarea>
+    <div class="try-row">
+     <button class="btn ink sm" type="submit">Mark it up</button>
+     <p class="try-samples"><span>Or start from a sample:</span><button type="button" class="chip sm" data-sample="hotfix">Hotfix steps from a chat</button><button type="button" class="chip sm" data-sample="export">A bug from a ticket</button><button type="button" class="chip sm" data-sample="laptops">A new rule from meeting notes</button></p>
+    </div>
+    <p class="try-note">An AI model drafts it by <a href="{{brief}}" target="_blank" rel="noopener">this brief</a>; a writer still has to check the facts with the engineer. This site doesn't keep your text, but leave out anything confidential.</p>
+    <p class="try-msg" id="try-msg" role="status"></p>
+   </form>
+  </div>
+ </div>
+</section>
+
+<section class="sec" id="workbench" aria-labelledby="tools-h">
+ <div class="wrap">
+  <div class="sec-head">
+   <h2 id="tools-h">Tools I built for the work</h2>
+   <p>They run in your browser, and nothing you type in them leaves it.</p>
+  </div>
+  <div class="tool-pair">
+   <a class="tool-card" href="/workbench">
+    <span class="tool-shot"><img src="/img/workbench-800.webp" srcset="/img/workbench-800.webp 800w, /img/workbench-1600.webp 1600w" sizes="(max-width: 760px) 100vw, 560px" width="1600" height="1000" loading="lazy" decoding="async" alt="The workbench: a draft in Markdown with its problems underlined, and the style check listing each one with a fix."></span>
+    <span class="tool-t">Workbench</span>
+    <span class="tool-d">Write a document and check every sentence against my style guide as you type: {{rules}} rules, {{coded}} checked by code. Publish it as Markdown, HTML, or DITA.</span>
+   </a>
+   <a class="tool-card" href="/studio" id="studio">
+    <span class="tool-shot"><!--@studioshot--></span>
+    <span class="tool-t">Documentation Studio</span>
+    <span class="tool-d">Screenshots with permanent redaction, numbered step guides, training videos with captions, DITA publishing, S1000D editing, a knowledge base, and document control.</span>
+   </a>
+  </div>
+ </div>
+</section>
+
+<section class="sec band" id="projects" aria-labelledby="projects-h">
+ <div class="wrap">
+  <div class="sec-head">
+   <h2 id="projects-h">Projects I led and documented</h2>
+   <p>Working tools from my MSc at ESAIP. Each one is live and links to its documentation.</p>
+  </div>
+  <div class="proj-list"><!--@systems--></div>
+  <h3 class="sub">Also built</h3>
+  <ul class="also"><!--@more--></ul>
+ </div>
+</section>
+
+<section class="sec" id="video" aria-labelledby="video-h">
+ <div class="wrap">
+  <div class="sec-head">
+   <h2 id="video-h">Films</h2>
+   <p>Real tasks, filmed in the browser, with captions and a transcript. My training videos for employers belong to them, so they stay off this site.</p>
   </div>
   <!--@theater-->
-  <p class="stack">Each film here was shot from the page itself by a script in this site's repository. For employers I work in Snagit, Final Cut Pro, and Google Vids.</p>
- </div>
-</section>
-</div>
-
-<section class="sec" id="toolchain">
- <div class="wrap">
-  <div class="sec-head">
-   <h2>Toolchain</h2>
-   <p>The tools I work with, grouped by the job they do.</p>
-  </div>
-  <dl class="tools"><!--@tools--></dl>
-  <p class="tools-also"><!--@toolsAlso--></p>
+  <p class="more-link"><a href="/videos">Every film, with transcripts and caption files</a></p>
  </div>
 </section>
 
-<section class="sec desk" id="experience">
+<section class="sec band" id="experience" aria-labelledby="experience-h">
  <div class="wrap">
   <div class="sec-head">
-   <h2>Experience</h2>
+   <h2 id="experience-h">Experience</h2>
    <p>Documentation and process work for teams in the US, Europe, and India.</p>
   </div>
   <div class="xp">
    <ol class="roles"><!--@roles--></ol>
    <aside class="xp-side">
-    <div class="sheet cvcard">
-     <p class="doc-type" style="--tc:#5A6283">PDF</p>
-     <p class="doc-title">Curriculum vitae</p>
-     <p>The full version of this page, ready to forward. In English.</p>
-     <a class="btn ink sm" href="{{cv}}" download>Download CV</a>
-    </div>
+    <ul class="facts"><!--@facts--></ul>
     <h3>Education</h3>
-    <ul><!--@education--></ul>
-    <h3>Training</h3>
-    <p><!--@training--></p>
-    <h3>Languages</h3>
-    <p><!--@languages--></p>
+    <ul class="edu"><!--@education--></ul>
+    <p class="xp-links"><a href="/recruiters">Recruiter overview</a><a href="{{cv}}" download>Download CV (PDF, two pages)</a></p>
    </aside>
   </div>
  </div>
 </section>
 
-<section class="contact" id="contact">
- <div class="wrap">
-  <h2>Have documentation that needs an owner?</h2>
-  <p>Email me, or send a message on LinkedIn. I'm based in {{location}}, and work remote or hybrid.</p>
-  <div class="btns">
-   <a class="btn paper" href="mailto:{{email}}">Email Karan</a>
-   <a class="btn line" href="{{linkedin}}" target="_blank" rel="noopener">Connect on LinkedIn</a>
-   <a class="btn line" href="{{cv}}" download>Download CV</a>
+<section class="contact" id="contact" aria-labelledby="contact-h">
+ <div class="wrap contact-in">
+  <div>
+   <h2 id="contact-h">Let's <mark class="hl">work together</mark></h2>
+   <p>Open to technical documentation opportunities, professional collaborations, and new challenges.</p>
   </div>
-  <p class="contact-more"><a href="mailto:{{email}}" translate="no">{{email}}</a><a href="/contact">Every way to reach me</a><a href="{{github}}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
+  <div class="contact-card">
+   <p class="contact-mail"><a href="mailto:{{email}}" translate="no">{{email}}</a><button class="copy-mail" type="button" data-copy="{{email}}">{{i_copy}}<span>Copy</span></button></p>
+   <div class="btns">
+    <a class="btn ink" href="mailto:{{email}}?subject=Technical%20documentation%20opportunity">{{i_mail}}<span>Discuss an opportunity</span></a>
+    <a class="btn line" href="{{linkedin}}" target="_blank" rel="noopener">{{i_linkedin}}<span>Connect on LinkedIn</span></a>
+    <a class="btn line" href="{{cv}}" download>{{i_download}}<span>Download CV</span></a>
+   </div>
+   <p class="contact-meta"><span>{{i_pin}}{{location}}, remote or hybrid</span><a href="/contact">More ways to reach me</a></p>
+  </div>
  </div>
 </section>
 
@@ -289,10 +233,12 @@
 
 <footer class="foot">
  <div class="wrap">
-  <p>How this site is made: one content file builds this page, the library, the PDF CV, and April's answers. Documents and screenshots are pulled from the project repositories when the site is built.</p>
-  <!--#include foot-contact-->
-  <p class="foot-langs" translate="no"><!--@langlinks--></p>
-  <!--@rev-->
+  <!--#include foot-main-->
+  <div class="foot-base">
+   <p class="foot-langs" translate="no"><!--@langlinks--></p>
+   <!--#include foot-legal-->
+   <!--@rev-->
+  </div>
  </div>
 </footer>
 
@@ -310,6 +256,5 @@
 <!--#include tools-->
 <script src="/app.js" defer></script>
 <script src="/nav.js" defer></script>
-<script src="/fields.js" defer></script>
 </body>
 </html>

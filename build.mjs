@@ -2,10 +2,11 @@
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
 import { siteNav, INDUSTRIES } from "./lib/nav.mjs";
-import { buildHubs, fieldExplorer } from "./lib/hubs.mjs";
+import { buildHubs, pdfPages } from "./lib/hubs.mjs";
+import { icon, FIELD_ICON } from "./lib/icons.mjs";
 import { buildStandards } from "./lib/standards.mjs";
 import fs from "node:fs/promises";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { execSync } from "node:child_process";
@@ -158,71 +159,89 @@ const link = (text, h, cls = "") => {
 };
 const PLAY = '<span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
 
-// Engineering and maintenance documentation: the Magna years, and where the same discipline applies.
+// Engineering and maintenance documentation: the Magna years, and where the same discipline applies. It is told on the
+// page for recruiters; the home page only points at the fields.
 const E = C.engineering;
 const engineering = `
-  <div class="sec-head">
-   <h2>${esc(E.title)}</h2>
-   <p>${esc(E.intro)}</p>
-  </div>
+  <h2 id="engineering">${esc(E.title)}</h2>
+  <p>${esc(E.intro)}</p>
   <dl class="tools eng">${E.items.map(([t, d]) => `<div><dt>${esc(t)}</dt><dd>${esc(d)}</dd></div>`).join("")}</dl>
-  <p class="eng-note">${esc(E.grounding)} ${esc(E.applies)}</p>
-  <p class="eng-note"><a href="#experience">Read about my roles</a></p>`;
+  <p class="eng-note">${esc(E.grounding)} ${esc(E.applies)}</p>`;
 
-// The field explorer, and the pictures it shows that aren't already on the site.
+// The pictures the industry pages show that aren't already on the site.
 for (const ind of JSON.parse(await fs.readFile("content/industries.json", "utf8")).industries) {
   const pv = ind.preview;
   if (pv && pv.src.startsWith("/thumbs/") && !existsSync(`${OUT}${pv.src}`)) await fs.copyFile(pv.from, `${OUT}${pv.src}`);
 }
+
+// The home page is a short tour of the evidence: each part shows a little and links to the page that has the rest.
+const PUB = JSON.parse(await fs.readFile("content/publications.json", "utf8"));
+const FIELD = Object.fromEntries(INDUSTRIES.map((i) => [i.id, i]));
+const IC = (n, o) => icon(n, o);
+// A publication's PDF on this computer: the site has it under public/ once the library is built, or in content/ where
+// the Studio and the aerospace publications keep theirs until they are copied.
+const localPdf = (u) => [path.join(OUT, u), u.replace(/^\/studio\/dita\//, "content/dita-samples/"), u.replace(/^\/studio\/aerospace\/downloads\//, "content/aerospace/out/")].find((f) => existsSync(f));
+const sizeText = (bytes) => (bytes >= 1048576 ? `${(bytes / 1048576).toFixed(1)} MB` : `${Math.round(bytes / 1024)} KB`);
+const works = () => PUB.home.map((id) => {
+  const st = PUB.sets.find((x) => x.id === id), f = localPdf(st.pdf), pages = f ? pdfPages(f) : null;
+  const field = FIELD[st.field]?.name ?? st.field, read = st.files[0];
+  return `<li class="work">
+<a class="work-page" href="${st.read}" tabindex="-1" aria-hidden="true"><img src="/thumbs/pub-${st.id}.webp" alt="" width="360" height="509" loading="lazy" decoding="async"></a>
+<div class="work-t">
+<p class="work-k"><span>${esc(field)}</span><span>${esc(st.kind)}</span></p>
+<h3 translate="no"><a href="${st.read}">${esc(st.title)}</a></h3>
+<p class="work-p">${esc(st.product)}</p>
+<p class="work-b">${esc(st.basis)}${st.standards ? `. ${esc(st.standards)}` : ""}.</p>
+<p class="work-a"><a class="btn line sm" href="${st.read}">${esc(read[0])}</a><a class="work-pdf" href="${st.pdf}" download>${IC("download", { size: 17 })}<span>PDF${pages ? `, ${pages} pages` : ""}${f ? `, ${sizeText(statSync(f).size)}` : ""}</span></a></p>
+</div>
+</li>`;
+}).join("\n");
+// Three of those pages, fanned out beside the headline on a wide screen: the first evidence a visitor sees.
+const heroPubs = () => `<div class="hero-pubs" aria-hidden="true">${PUB.home.slice(0, 3).map((id, i) => `<img class="hp hp${i + 1}" src="/thumbs/pub-${id}.webp" alt="" width="360" height="509" decoding="async"${i ? ' loading="lazy"' : ""}>`).join("")}</div>`;
+// The fields, each with its icon, and the Studio as the last tile.
+const fieldTiles = (() => {
+  const data = JSON.parse(readFileSync("content/industries.json", "utf8")).industries;
+  const count = (ind) => new Set(ind.start.map((x) => x.doc || x.url)).size;
+  const tile = (id, name, blurb, href, extra = "") => `<li><a class="field" href="${href}"><span class="field-i">${IC(FIELD_ICON[id], { size: 24 })}</span><span class="field-t"><b>${esc(name)}</b><span>${esc(blurb)}</span></span>${extra}</a></li>`;
+  return INDUSTRIES.map((i) => tile(i.id, i.name, i.blurb, `/industries/${i.id}`)).join("") + tile("studio", "Documentation Studio", "The tools behind the documents", "/studio");
+})();
 const parts = {
   engineering,
-  fields: fieldExplorer({ byId, C }),
-  stats: figures.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
-  // Three sheets on the desk. The first one is where to start.
-  featured: C.featured.map((id, i) => docCard({ ...byId[id], start: i === 0 }, T)).join("\n"),
-  // Every document as one line of titles under its kind: the breadth of the library at a glance.
-  index: Object.entries(T)
-    .filter(([k]) => listed.some((d) => d.type === k))
-    .map(([k, t]) => `<div><dt style="--tc:${t.color}">${esc(t.plural)}</dt><dd translate="no">${listed.filter((d) => d.type === k).map((d) => `<a href="${d.url}">${esc(d.title)}</a>`).join("")}</dd></div>`)
-    .join("\n"),
+  fields: fieldTiles,
+  featured: "",
+  heropubs: "",
+  studioshot: `<img src="/studio/samples/screenshots/kc-remove-otp/after.png" width="1280" height="800" loading="lazy" decoding="async" alt="A Keycloak screenshot annotated in the Screenshot Studio: the authenticator's row and its Delete action marked in green and numbered.">`,
   systems: C.projects
     .map(
-      (p) => `<article class="sys">
-<a class="shot" href="${p.live}" target="_blank" rel="noopener"><span class="chrome" aria-hidden="true"><i></i><i></i><i></i><b translate="no">${host(p.live)}</b></span><img src="/img/${p.id}-800.webp" srcset="/img/${p.id}-800.webp 800w, /img/${p.id}-1600.webp 1600w" sizes="(max-width: 880px) 100vw, 680px" width="1600" height="1000" loading="lazy" decoding="async" alt="${esc(C.images[p.id].alt)}"></a>
-<div><p class="live"><span class="dot" aria-hidden="true"></span><span>Live</span></p><h3 translate="no">${esc(p.name)}</h3><p class="role">${esc(p.role)}</p><p>${esc(p.summary)}</p>
-<p class="doclinks"><span>Documentation</span>${p.docs.map((i) => link(short[i], `doc:${i}`)).join("")}</p>
-<p class="stack" translate="no">${esc(p.stack)}</p>
-<div class="btns">${link(p.liveLabel, p.live, "btn line sm")}${link("Source on GitHub", p.repo, "btn text sm")}</div></div>
+      (p) => `<article class="proj">
+<a class="proj-shot" href="${p.live}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="/img/${p.id}-800.webp" srcset="/img/${p.id}-800.webp 800w, /img/${p.id}-1600.webp 1600w" sizes="(max-width: 760px) 100vw, 440px" width="1600" height="1000" loading="lazy" decoding="async" alt=""></a>
+<div class="proj-t"><h3 translate="no">${esc(p.name)}</h3><p class="role">${esc(p.role)}</p><p>${esc(p.short || p.summary)}</p>
+<p class="proj-a">${link(p.liveLabel, p.live, "btn line sm")}<span class="doclinks">${p.docs.map((i) => link(short[i], `doc:${i}`)).join("")}</span><a href="${p.repo}" target="_blank" rel="noopener">${IC("github", { size: 17 })}<span>Source</span></a></p></div>
 </article>`
     )
     .join("\n"),
   more: C.more
-    .map((m) => `<li><h4 translate="no">${esc(m.name)}</h4><p class="role">${esc(m.role)}</p><p>${esc(m.summary)}</p><p class="links">${m.links.map(([t, h]) => link(t, h)).join("")}</p></li>`)
+    .map((m) => `<li><b translate="no">${esc(m.name)}</b><span>${esc(m.role)}</span><span class="also-l">${m.links.map(([t, h]) => link(t, h)).join("")}</span></li>`)
     .join("\n"),
-  asks: C.faq.slice(0, 4).map((f) => `<button class="chip" type="button" data-april data-ask="${esc(f.q)}">${esc(f.q)}</button>`).join(""),
   theater: (() => {
-    const film = (f) => `data-film="/films/${f.id}.mp4" data-poster="/films/${f.id}.webp"${f.captions ? ` data-captions="/films/${f.id}.vtt"` : ""}`;
-    const first = reel[0];
-    if (!first) return "";
-    return `<div class="theater${reel.length > 1 ? "" : " solo"}" id="theater">
-<div class="stage"><button class="yt" type="button" ${film(first)} style="background-image:url(/films/${first.id}.webp)">${PLAY}<b translate="no">${esc(first.title)}</b><small translate="no">${esc(first.about)}</small></button></div>${
-      reel.length > 1
-        ? `\n<ol class="reel">${reel.map((f, i) => `<li><button type="button" ${film(f)} aria-pressed="${i === 0}"><img src="/films/${f.id}.webp" width="960" height="540" alt="" loading="lazy" decoding="async"><span><b translate="no">${esc(f.title)}</b><small translate="no">${esc(f.length)}</small></span></button></li>`).join("")}</ol>`
-        : ""
-    }
+    // The tutorial of a real task comes first; then the films of this site's own tools.
+    const kc = JSON.parse(readFileSync("content/videos/keycloak-reset-otp/video.json", "utf8")), sec = Math.round(kc.seconds);
+    const films = [
+      { id: "keycloak-reset-otp", title: kc.title, about: kc.about, length: `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`, src: "/videos/keycloak-reset-otp/keycloak-reset-otp.mp4", poster: "/videos/keycloak-reset-otp/keycloak-reset-otp.webp", vtt: "/videos/keycloak-reset-otp/keycloak-reset-otp.vtt" },
+      ...reel.map((f) => ({ ...f, src: `/films/${f.id}.mp4`, poster: `/films/${f.id}.webp`, vtt: f.captions ? `/films/${f.id}.vtt` : "" })),
+    ];
+    const film = (f) => `data-film="${f.src}" data-poster="${f.poster}"${f.vtt ? ` data-captions="${f.vtt}"` : ""}`;
+    const first = films[0];
+    return `<div class="theater" id="theater">
+<div class="stage"><button class="yt" type="button" ${film(first)} style="background-image:url(${first.poster})">${PLAY}<b translate="no">${esc(first.title)}</b><small translate="no">${esc(first.about)}</small></button></div>
+<ol class="reel">${films.map((f, i) => `<li><button type="button" ${film(f)} aria-pressed="${i === 0}"><img src="${f.poster}" width="960" height="540" alt="" loading="lazy" decoding="async"><span><b translate="no">${esc(f.title)}</b><small translate="no">${esc(f.length)}</small></span></button></li>`).join("")}</ol>
 </div>`;
   })(),
-  tools:
-    C.tools.map((t) => `<div><dt>${esc(t.group)}</dt><dd>${t.items.map((x) => `<span>${esc(x)}</span>`).join("")}</dd></div>`).join(""),
-  toolsAlso: `Also: ${esc(C.foundations)}.`,
   roles: C.experience
-    .map(
-      (e) => `<li><time>${esc(e.dates)}</time><div><h3>${esc(e.role)}</h3><p class="org"><b translate="no">${esc(e.org)}</b> <span>${e.note ? esc(e.note) + ", " : ""}${esc(e.place)}</span></p><ul>${e.points.slice(0, e.web).map((p) => `<li>${esc(p)}.</li>`).join("")}</ul></div></li>`
-    )
+    .map((e) => `<li><time>${esc(e.dates)}</time><div><h3>${esc(e.role)}</h3><p class="org"><b translate="no">${esc(e.org)}</b> <span>${e.note ? esc(e.note) + ", " : ""}${esc(e.place)}</span></p><p>${esc(e.points[0])}.</p></div></li>`)
     .join("\n"),
+  facts: C.recruiters.figures.map(([n, l]) => `<li><b>${esc(n)}</b> ${esc(l)}</li>`).join(""),
   education: C.education.map((e) => `<li><b>${esc(e.title)}</b><span>${esc(e.org)}, ${esc(e.dates)}</span></li>`).join(""),
-  training: esc(C.training.join(", ")) + ".",
-  languages: esc(C.languages.join(", ")) + ".",
 };
 
 // Languages: English is the source. A language is built when content/i18n/<code>.json exists.
@@ -297,37 +316,63 @@ ${ind.films.length ? `<h3>Watch</h3><ul>${ind.films.filter((id) => films[id]).ma
     trail: [["Portfolio", "/"], ["For recruiters"]], body });
 }
 
-// The contact page: the ways to reach me, by what the visitor is writing about. There is no form: an email goes from the
-// visitor's own mail program to my inbox, and this site never sees it.
+// The contact page: an invitation, the address with a copy button, the ways to reach me, availability, and a line for
+// feedback on the portfolio. Mail goes from the visitor's own mail program; the privacy page says what the site keeps.
 {
   const mail = (subject) => `mailto:${S.email}?subject=${encodeURIComponent(subject)}`;
-  const topics = [
-    ["Recruitment opportunity", "A technical documentation role: full-time, contract, part-time, freelance, internship or apprenticeship."],
-    ["Documentation collaboration", "Documentation for a product, a system or a project, written or reviewed with your engineers."],
-    ["Freelance enquiry", "A defined piece of work: a user guide, a knowledge base, a set of procedures, a migration."],
-    ["Project feedback", "A question or a remark about TrustNav, AI-ChainGuard, NOVATECH Sentinel, BizAssist AI, ReleasePilot AI or KC1."],
-    ["Portfolio or Studio support", "A page that doesn't load, a broken link, or a Studio tool that doesn't do what its page says."],
-    ["General enquiry", "Anything else."],
-  ];
-  const body = `<article class="rec contact-page">
-<h1>Contact</h1>
-<p class="rec-lead">Email reaches me directly. Choose what you're writing about, and your mail program opens a message with the subject filled in.</p>
-<ul class="topics">${topics.map(([t, d]) => `<li><a href="${mail(t)}"><b>${esc(t)}</b><span>${esc(d)}</span></a></li>`).join("")}</ul>
-<h2>Direct details</h2>
-<dl class="contact-dl">
-<div><dt>Email</dt><dd><a href="mailto:${S.email}" translate="no">${esc(S.email)}</a></dd></div>
-<div><dt>LinkedIn</dt><dd><a href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a></dd></div>
-<div><dt>Location</dt><dd>${esc(S.location)}. Remote or hybrid.</dd></div>
-<div><dt>CV</dt><dd><a href="${S.cv}" download>Download the CV</a> (PDF, two pages)</dd></div>
-</dl>
-<h2>Availability</h2>
-<p>${esc(S.availability)}</p>
-<h2>What happens to your message</h2>
-<p>This site has no contact form. Your message goes from your own mail program to my inbox, and the site never sees it or keeps it.</p>
-<p>April, the assistant on this site, is an AI model. She answers questions about my work, but she can't pass a message on to me.</p>
+  const I = (n) => icon(n, { size: 20 });
+  const body = `<article class="cpage">
+<header class="cp-head">
+<h1>Let's <mark class="hl">work together</mark></h1>
+<p class="cp-lead">Open to technical documentation opportunities, professional collaborations, and new challenges.</p>
+</header>
+<div class="cp-grid">
+<section class="cp-card cp-main" aria-labelledby="cp-mail-h">
+<h2 class="cp-h" id="cp-mail-h">Email</h2>
+<p class="contact-mail"><a href="mailto:${S.email}" translate="no">${esc(S.email)}</a><button class="copy-mail" type="button" data-copy="${esc(S.email)}">${icon("copy", { size: 17 })}<span>Copy</span></button></p>
+<div class="btns"><a class="btn ink" href="${mail("Technical documentation opportunity")}">${I("mail")}<span>Discuss an opportunity</span></a><a class="btn line" href="mailto:${S.email}">Email me</a></div>
+</section>
+<section class="cp-card" aria-labelledby="cp-more-h">
+<h2 class="cp-h" id="cp-more-h">Also</h2>
+<ul class="cp-list">
+<li><a href="${S.links.linkedin}" target="_blank" rel="noopener">${I("briefcase-business")}<span>Connect on LinkedIn</span></a></li>
+<li><a href="${S.cv}" download>${I("download")}<span>Download CV <small>(PDF, two pages)</small></span></a></li>
+<li><a href="${S.links.github}" target="_blank" rel="noopener">${I("github")}<span>GitHub</span></a></li>
+<li class="cp-place">${I("map-pin")}<span>${esc(S.location)}. Remote or hybrid.</span></li>
+</ul>
+</section>
+</div>
+<section class="cp-row" aria-labelledby="cp-av-h">
+<h2 class="cp-h" id="cp-av-h">Availability</h2>
+<p><span class="dot" aria-hidden="true"></span>${esc(S.availability)}</p>
+</section>
+<section class="cp-row" aria-labelledby="cp-fb-h">
+<h2 class="cp-h" id="cp-fb-h">Portfolio feedback</h2>
+<p>Report an issue, suggest an improvement or ask about the Documentation Studio.</p>
+<p><a class="btn line sm" href="${mail("Portfolio feedback")}">${icon("message-square-text", { size: 18 })}<span>Send feedback</span></a></p>
+</section>
 </article>`;
-  await library.extra({ path: "/contact", title: "Contact", description: `How to reach ${S.name}, technical documentation specialist in ${S.location}: email, LinkedIn and availability.`,
+  await library.extra({ path: "/contact", title: "Contact", description: `How to reach ${S.name}, technical documentation specialist in ${S.location}: email, LinkedIn, CV and availability.`,
     trail: [["Portfolio", "/"], ["Contact"]], body });
+}
+
+// Privacy: what the site keeps, what it sends and to whom, in a few lines.
+{
+  const body = `<article class="rec privacy">
+<h1>Privacy</h1>
+<p class="rec-lead">This site has no accounts, no cookies and no analytics. Here is what happens to what you type or send.</p>
+<h2>Email</h2>
+<p>A link to email me opens your own mail program. Your message goes from there to my inbox; this site never sees it.</p>
+<h2>April and the rewrite desk</h2>
+<p>A question to April, or a message you paste into the rewrite desk, is sent to an AI model through Vercel's AI Gateway to write the answer, and April's spoken answers are made by a speech service in the same way. This site doesn't keep your text. Leave out anything confidential all the same.</p>
+<h2>What stays in your browser</h2>
+<p>April's conversation, a draft in the workbench, and the work in a Studio tool are kept in your browser's storage on your device, so they are there when you come back. Clearing the site's data in your browser removes them.</p>
+<h2>Hosting</h2>
+<p>The site is hosted by Vercel, which processes technical data such as IP addresses to deliver its pages.</p>
+<p>Questions: <a href="mailto:${S.email}" translate="no">${esc(S.email)}</a>.</p>
+</article>`;
+  await library.extra({ path: "/privacy", title: "Privacy", description: `What karandeshmukh.dev keeps and sends: no accounts, cookies or analytics; what April and the rewrite desk send; what stays in your browser.`,
+    trail: [["Portfolio", "/"], ["Privacy"]], body });
 }
 
 // The case study: the hero's six stages on the home page, and every stage in full at /message-to-document.
@@ -369,6 +414,9 @@ const jsonld = {
   address: { "@type": "PostalAddress", addressLocality: "Angers", addressCountry: "FR" },
   sameAs: [S.links.linkedin, S.links.github],
 };
+parts.featured = works();
+parts.heropubs = heroPubs();
+const HI = { i_download: icon("download", { size: 18, stroke: 2 }), i_search: icon("search", { size: 18 }), i_copy: icon("copy", { size: 17 }), i_mail: icon("mail", { size: 18, stroke: 2 }), i_linkedin: icon("briefcase-business", { size: 18, stroke: 2 }), i_pin: icon("map-pin", { size: 17 }) };
 const home = await template("src/home.html");
 for (const loc of locales) {
   const tokens = {
@@ -387,6 +435,7 @@ for (const loc of locales) {
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
     voice: json(recorded[loc.code] || {}),
     rwstage: heroStage(cs),
+    ...HI,
     pmenu: pmenu("#projects"),
     ...(() => { const n = siteNav({ cv: S.cv, projects: pmenu("#projects"), home: true, lang: loc.code }); return { sitenav: n.desktop, mnav: n.phone }; })(),
     livelinks: liveSites.map((p) => `<a href="${p.href}" target="_blank" rel="noopener" translate="no">${esc(p.name)}</a>`).join(""),

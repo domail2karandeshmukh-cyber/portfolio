@@ -123,7 +123,7 @@
       ],
       "projects": [
         { "doc": "kc1-dataset-card" }, { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "cg-report" }, { "doc": "tn-how" },
-        { "title": "April, the assistant on this site", "url": "/#april-band", "kind": "Live application", "text": "Answers questions about my work from the same content file the site is built from, and can open what she names." }
+        { "title": "April, the assistant on this site", "url": "/#april", "kind": "Live application", "text": "Answers questions about my work from the same content file the site is built from, and can open what she names." }
       ],
       "demos": [
         { "title": "The rewrite desk", "url": "/#rewrite", "kind": "Live tool", "text": "A model drafts a document from a chat message; the style guide checks the draft." }

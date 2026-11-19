@@ -1,5 +1,5 @@
 {
- "note": "The publication sets on /downloads: documents that belong together, each shown by a page of its PDF (preview: the page number) made by scripts/pdf-covers.py. Page counts are read from the PDFs when the site is built.",
+ "note": "The publication sets on /downloads: documents that belong together, each shown by a page of its PDF (preview: the page number) made by scripts/pdf-covers.py. Page counts are read from the PDFs when the site is built. The home page shows the sets listed in \"home\", in that order.",
  "sets": [
   {
    "id": "keycloak-otp",
@@ -29,7 +29,9 @@
      "/videos#keycloak-reset-otp"
     ]
    ],
-   "preview": 4
+   "preview": 4,
+   "kind": "Administrator guides",
+   "standards": "DITA 1.3"
   },
   {
    "id": "kc1-api",
@@ -63,7 +65,9 @@
      "/documentation-lifecycle"
     ]
    ],
-   "preview": 4
+   "preview": 4,
+   "kind": "API reference, quick start, and troubleshooting",
+   "standards": "DITA 1.3 and OpenAPI 3.1"
   },
   {
    "id": "arf1",
@@ -97,7 +101,9 @@
      "/studio/aerospace/downloads/arf1-validation.html"
     ]
    ],
-   "preview": 1
+   "preview": 1,
+   "kind": "Maintenance and operator publications",
+   "standards": "S1000D Issue 6"
   },
   {
    "id": "ai-chainguard",
@@ -119,7 +125,8 @@
      "/docs/files/ai-chainguard-paper.pdf"
     ]
    ],
-   "preview": 1
+   "preview": 1,
+   "kind": "Final report and paper"
   },
   {
    "id": "trustnav",
@@ -141,7 +148,8 @@
      "/docs/files/trustnav-demo-guide.pdf"
     ]
    ],
-   "preview": 1
+   "preview": 1,
+   "kind": "Technical report and demonstration guide"
   },
   {
    "id": "message-to-document",
@@ -167,7 +175,9 @@
      "/studio/dita/message-to-document/message-to-document-dita.zip"
     ]
    ],
-   "preview": 3
+   "preview": 3,
+   "kind": "Case study and procedure",
+   "standards": "DITA 1.3"
   }
  ],
  "samples": [
@@ -177,5 +187,11 @@
   "release-documentation",
   "industrial-equipment",
   "workbench-templates"
+ ],
+ "home": [
+  "keycloak-otp",
+  "kc1-api",
+  "arf1",
+  "trustnav"
  ]
 }

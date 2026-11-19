@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Workbench | Karan Deshmukh</title>
 <meta name="description" content="Write a document in Markdown, check it against a style guide as you type, and publish it for more than one reader as Markdown, HTML or DITA. It runs in your browser, and nothing you type leaves it.">
 <link rel="canonical" href="{{url}}/workbench">
@@ -33,7 +33,7 @@
   {{sitenav}}
   <div class="nav-act">
    {{mnav}}
-   <a class="btn paper sm" href="{{cv}}" download><span class="wide">Download </span>CV</a>
+   <!--#include cv-btn-->
   </div>
  </div>
 </header>
@@ -145,9 +145,11 @@
 
 <footer class="foot">
  <div class="wrap">
-  <p>The products in the templates are invented. The workbench keeps your draft in this browser's storage and nowhere else.</p>
-  <p><a href="/">Karan Deshmukh, technical documentation specialist</a></p>
-  <!--#include foot-contact-->
+  <!--#include foot-main-->
+  <div class="foot-base">
+   <p class="foot-note">The products in the templates are invented. The workbench keeps your draft in this browser's storage and nowhere else.</p>
+   <!--#include foot-legal-->
+  </div>
  </div>
 </footer>
 

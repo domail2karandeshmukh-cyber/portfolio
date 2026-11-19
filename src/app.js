@@ -37,12 +37,27 @@
     strokes.forEach(function (m) { ho.observe(m); });
   }
 
-  /* On a phone the April button waits while the hero's two actions are on screen, so it never covers them
-     (the CSS for .dock-wait applies below 720 pixels only). */
-  var heroActs = $(".hero .btns");
-  if (heroActs && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (es) { document.body.classList.toggle("dock-wait", es[0].isIntersecting); }).observe(heroActs);
-  }
+  /* A button that copies the email address, and says so where the visitor is looking and to a screen reader. */
+  $$("[data-copy]").forEach(function (b) {
+    var label = b.querySelector("span"), was = label ? label.textContent : "";
+    b.addEventListener("click", function () {
+      var text = b.getAttribute("data-copy");
+      function done(ok) {
+        if (label) label.textContent = ok ? (I.copied || "Copied") : was;
+        b.classList.toggle("done", ok);
+        b.setAttribute("aria-live", "polite");
+        setTimeout(function () { if (label) label.textContent = was; b.classList.remove("done"); }, 2400);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { fallback(); });
+      else fallback();
+      function fallback() {
+        var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+        document.body.appendChild(t); t.select();
+        var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+        t.remove(); done(ok);
+      }
+    });
+  });
 
   /* The featured documents are dealt onto the desk when they come into view */
   var deck = $(".docs.feature");
@@ -300,10 +315,14 @@
       });
     }
     if (tray && ta && I.rwYours) {
-      tray.hidden = false;
+      // The tray stays folded until the visitor asks for it, so the example is all the home page shows.
       var own = $(".rw-own", rw);
       own.hidden = false;
+      own.setAttribute("aria-expanded", "false");
+      own.setAttribute("aria-controls", "try");
       own.addEventListener("click", function () {
+        tray.hidden = false;
+        own.setAttribute("aria-expanded", "true");
         tray.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
         ta.focus({ preventScroll: true });
       });
@@ -529,7 +548,7 @@
   });
 
   /* ---------- April ---------- */
-  var panel = $("#april"), log = $("#log"), q = $("#q"), orb = $("#orb"), dock = $(".dock"), sugg = $("#sugg"), speakBtn = $("#speak");
+  var panel = $("#april"), log = $("#log"), q = $("#q"), orb = $("#orb"), dock = $(".dock") || {}, sugg = $("#sugg"), speakBtn = $("#speak");
   var hist = [], opener = null, greeted = false, voiceOn = store("april-voice") !== "0";      // her voice is on until a visitor mutes it
   var ctx = null, node = null, meter = null, level = 0, turn = 0, tourOff = function () {}, tourSay = function () {};
   // While she thinks, her orb beats. While she speaks, it moves to the sound of her voice.
@@ -898,6 +917,8 @@
       if (opener && opener.focus) opener.focus({ preventScroll: true });
     }
     window.askApril = openPanel;
+    // A link to #april opens her, from any page that has her.
+    if (location.hash === "#april") setTimeout(function () { openPanel(); }, 0);
     $$("[data-april]").forEach(function (b) { b.addEventListener("click", function () { openPanel(b.dataset.ask || ""); }); });
     $("#april-x").addEventListener("click", function () { closePanel(); });
     addEventListener("keydown", function (e) { if (e.key === "Escape" && !panel.hidden && (!$("#pal") || $("#pal").hidden)) closePanel(); });
