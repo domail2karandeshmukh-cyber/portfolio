@@ -5,26 +5,26 @@
 <shortdesc>A six-week test on a fictional pump: three weeks before a repair and three weeks after it. Written for this portfolio: I invented the pump, the readings, and the people.</shortdesc>
 <conbody>
 <section><title>Summary</title>
-<p>The mechanical seal on feed pump B leaked in two of the three weekly inspections before the repair, and in none of the three after it. The repair replaced the seal and the shaft sleeve together. The leak came from the worn shaft sleeve, not from the seal: the old seal's faces were in good condition, and the sleeve had score marks under the seal's O-ring.</p>
+<p>The mechanical seal on feed pump B leaked in two of the three weekly inspections before the repair, and in none of the three after it. The repair replaced the seal and the shaft sleeve together. The leak came from the worn shaft sleeve, not from the seal: the old seal’s faces were in good condition, and the sleeve had score marks under the seal’s O-ring.</p>
 </section>
 <section><title>Objective</title>
 <p>Find the cause of the seal leak on feed pump B, and confirm that the repair stopped it.</p>
 </section>
 <section><title>Scope</title>
-<p>Feed pump B, tag PS-104, for six weeks in 2026. The other pumps of the same type weren't part of the test.</p>
+<p>Feed pump B, tag PS-104, for six weeks in 2026. The other pumps of the same type weren’t part of the test.</p>
 </section>
 <section><title>Method</title>
 <ol><li>Each week, the technician did the monthly inspection procedure MP-PS104-01 and recorded the discharge pressure, the bearing temperature, the vibration at the drive-end bearing housing, and any visible leak.</li><li>After the third inspection, the maintenance team replaced the seal and the shaft sleeve, and examined both old parts.</li><li>The technician did the same inspection for three more weeks.</li></ol>
 </section>
 <section><title>Results</title>
 <p>All readings come from the inspection records for weeks 1 to 6. The limits are the ones in procedure MP-PS104-01.</p>
-<simpletable><sthead><stentry>Week</stentry><stentry>Repair</stentry><stentry>Leak seen</stentry><stentry>Vibration (mm/s)</stentry><stentry>Bearing temperature (°C)</stentry><stentry>Discharge pressure (bar)</stentry></sthead><strow><stentry>1</stentry><stentry>Before</stentry><stentry>No</stentry><stentry>2.8</stentry><stentry>58</stentry><stentry>4.2</stentry></strow><strow><stentry>2</stentry><stentry>Before</stentry><stentry>Yes</stentry><stentry>3.6</stentry><stentry>61</stentry><stentry>4.1</stentry></strow><strow><stentry>3</stentry><stentry>Before</stentry><stentry>Yes</stentry><stentry>4.1</stentry><stentry>63</stentry><stentry>4.0</stentry></strow><strow><stentry>4</stentry><stentry>After</stentry><stentry>No</stentry><stentry>2.7</stentry><stentry>57</stentry><stentry>4.2</stentry></strow><strow><stentry>5</stentry><stentry>After</stentry><stentry>No</stentry><stentry>2.6</stentry><stentry>57</stentry><stentry>4.3</stentry></strow><strow><stentry>6</stentry><stentry>After</stentry><stentry>No</stentry><stentry>2.7</stentry><stentry>58</stentry><stentry>4.2</stentry></strow><strow><stentry>Limit</stentry><stentry></stentry><stentry>None visible</stentry><stentry>Below 4.5</stentry><stentry>Below 70</stentry><stentry>3.8 to 4.6</stentry></strow></simpletable>
+<simpletable frame="topbot"><sthead><stentry>Week</stentry><stentry>Repair</stentry><stentry>Leak seen</stentry><stentry>Vibration (mm/s)</stentry><stentry>Bearing temperature (°C)</stentry><stentry>Discharge pressure (bar)</stentry></sthead><strow><stentry>1</stentry><stentry>Before</stentry><stentry>No</stentry><stentry>2.8</stentry><stentry>58</stentry><stentry>4.2</stentry></strow><strow><stentry>2</stentry><stentry>Before</stentry><stentry>Yes</stentry><stentry>3.6</stentry><stentry>61</stentry><stentry>4.1</stentry></strow><strow><stentry>3</stentry><stentry>Before</stentry><stentry>Yes</stentry><stentry>4.1</stentry><stentry>63</stentry><stentry>4.0</stentry></strow><strow><stentry>4</stentry><stentry>After</stentry><stentry>No</stentry><stentry>2.7</stentry><stentry>57</stentry><stentry>4.2</stentry></strow><strow><stentry>5</stentry><stentry>After</stentry><stentry>No</stentry><stentry>2.6</stentry><stentry>57</stentry><stentry>4.3</stentry></strow><strow><stentry>6</stentry><stentry>After</stentry><stentry>No</stentry><stentry>2.7</stentry><stentry>58</stentry><stentry>4.2</stentry></strow><strow><stentry>Limit</stentry><stentry></stentry><stentry>None visible</stentry><stentry>Below 4.5</stentry><stentry>Below 70</stentry><stentry>3.8 to 4.6</stentry></strow></simpletable>
 <p>The examination of the old parts found:</p>
-<ul><li>The seal faces were flat and evenly worn, within the seal maker's limits.</li><li>The shaft sleeve had a scored band about 2 mm wide under the seal's O-ring.</li></ul>
+<ul><li>The seal faces were flat and evenly worn, within the seal maker’s limits.</li><li>The shaft sleeve had a scored band about 2 mm wide under the seal’s O-ring.</li></ul>
 </section>
 <section><title>Analysis</title>
 <p>The leak appeared in week 2 and continued in week 3 while every other reading stayed inside its limit. A scored sleeve lets liquid pass under the O-ring that seals the rotating seal face to the sleeve, so the seal leaks although its faces are good. A new seal on the old sleeve would have leaked again.</p>
-<p>Vibration rose from 2.8 to 4.1 mm/s in the same three weeks, close to the 4.5 mm/s limit. After the repair, it fell to between 2.6 and 2.7 mm/s. This test can't tell whether the vibration wore the sleeve or the worn sleeve raised the vibration.</p>
+<p>Vibration rose from 2.8 to 4.1 mm/s in the same three weeks, close to the 4.5 mm/s limit. After the repair, it fell to between 2.6 and 2.7 mm/s. This test can’t tell whether the vibration wore the sleeve or the worn sleeve raised the vibration.</p>
 </section>
 <section><title>Limitations</title>
 <ul><li>One pump, with three readings before the repair and three after it.</li><li>Weekly readings can miss a leak that comes and goes between inspections.</li><li>The technician measured vibration at one point, as an overall value, without a frequency analysis.</li></ul>
@@ -33,7 +33,7 @@
 <ol><li>A scored shaft sleeve caused the leak, not a worn seal.</li><li>Replacing the seal and the sleeve together stopped the leak for the three weeks after the repair.</li></ol>
 </section>
 <section><title>Recommendations</title>
-<ol><li>At the next overhaul of each pump of this type, replace the shaft sleeve with the seal.</li><li>Add a vibration trend to the monthly inspection. When the reading rises more than 1 mm/s above the pump's baseline, inspect the seal before the reading reaches the 4.5 mm/s limit.</li></ol>
+<ol><li>At the next overhaul of each pump of this type, replace the shaft sleeve with the seal.</li><li>Add a vibration trend to the monthly inspection. When the reading rises more than 1 mm/s above the pump’s baseline, inspect the seal before the reading reaches the 4.5 mm/s limit.</li></ol>
 </section>
 <section><title>References</title>
 <ul><li>Procedure MP-PS104-01, monthly inspection of feed pump B.</li><li>Inspection records MR-PS104-01 for weeks 1 to 6.</li></ul>

@@ -13,7 +13,7 @@ from playwright.async_api import async_playwright
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "content", "aerospace", "out")
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
-FOOT = ('<div style="font:8px Helvetica,Arial,sans-serif;width:100%;margin:0 12mm;display:flex;justify-content:space-between;color:#555">'
+FOOT = ('<div style="font:10px/1.3 Helvetica,Arial,sans-serif;width:100%;margin:0 12mm;display:flex;justify-content:space-between;color:#555">'
         '<span>Demonstration data on an invented rig (karandeshmukh.dev). Not approved maintenance data.</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>')
 CSS = open(os.path.join(ROOT, "src", "studio", "aero.css"), encoding="utf-8").read()
 

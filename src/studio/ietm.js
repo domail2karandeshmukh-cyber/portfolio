@@ -163,11 +163,33 @@
     return html;
   }
   /** Puts the whole publication, filtered for the chosen product, where the print stylesheet shows it. */
+  // Version 10.1: the publication's illustrations are fetched once, so that a printed publication carries them inline.
+  // Their labels then print in the page's face and at the print sizes of aero.css, and stay searchable in the PDF.
+  var svgs = {};
+  function prefetch() {
+    entries.forEach(function (e) { e.items.forEach(function (it) {
+      if (it.item) Array.prototype.forEach.call(it.item.doc.getElementsByTagName("graphic"), function (g) {
+        var icn = g.getAttribute("infoEntityIdent");
+        if (icn && !(icn in svgs)) { svgs[icn] = ""; S1K.icnText(icn).then(function (t) { svgs[icn] = t.replace(/<\?xml[^>]*\?>/, ""); }).catch(function () {}); }
+      });
+    }); });
+  }
+  // An illustration that appears in several modules keeps its accessible name: its IDs (its title and description)
+  // are made unique to the module that shows it. Not yet fetched, it prints as an image, as before.
+  function inlineFor(doc, k) {
+    var out = {}, pre = "ie" + k + "-";
+    Array.prototype.forEach.call(doc.getElementsByTagName("graphic"), function (g) {
+      var icn = g.getAttribute("infoEntityIdent");
+      if (svgs[icn]) out[icn] = svgs[icn].replace(/\b(id|aria-labelledby|aria-describedby)="([^"]*)"/g, function (m, a, v) { return a + '="' + v.split(/\s+/).filter(Boolean).map(function (x) { return pre + x; }).join(" ") + '"'; })
+        .replace(/url\(#([^)]+)\)/g, "url(#" + pre + "$1)").replace(/href="#([^"]+)"/g, 'href="#' + pre + '$1"');
+    });
+    return out;
+  }
   function renderAll() {
     var area = $("#ie-printarea"), list = [];
     entries.forEach(function (e) { e.items.forEach(function (it) { if (it.item) list.push(it); }); });
     var html = frontMatter(list);
-    list.forEach(function (it, k) { html += '<section class="ie-psec" id="ie-sec-' + k + '">' + S1K.header(it.item.id) + '<div class="s1k-body"' + S1K.langAttr(it.item.id) + ">" + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked }) + "</div></section>"; });
+    list.forEach(function (it, k) { html += '<section class="ie-psec" id="ie-sec-' + k + '">' + S1K.header(it.item.id) + '<div class="s1k-body"' + S1K.langAttr(it.item.id) + ">" + S1K.render(it.item.doc, { db: db, product: product, changes: $("#ie-changes").checked, inline: inlineFor(it.item.doc, k) }) + "</div></section>"; });
     area.innerHTML = html;
     // In the whole publication each module numbers its own tables, so a table's region is named with its module too.
     Array.prototype.forEach.call(area.querySelectorAll(".ie-psec"), function (sec, k) {
@@ -182,6 +204,7 @@
     pm = db.latest(code);
     entries = walk(pm.doc);
     toc();
+    prefetch();
   }
   function wire() {
     $("#ie-pub").addEventListener("change", function (e) { choosePub(e.target.value); var first = entries[0] && entries[0].items[0]; if (first && first.item) show(first.item); });

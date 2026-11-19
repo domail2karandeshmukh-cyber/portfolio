@@ -24,13 +24,15 @@ HTML and PDF come from the same source: Markdown, DITA, or S1000D XML. A correct
 
 Don't add pages to make a document look larger, and don't leave out an element its specification requires. A publication of one document has no contents list: its headings are its bookmarks.
 
-The DITA publications on this site are published from a bookmap (scripts/dita-pdf/bookmap.mjs): a title page with the publication's identifier, the organization, the issue date and the author; a page of document information with each document's ID, version, status and date; a contents list when there is more than one document; and each document as a numbered chapter.
+The DITA publications on this site are published from a bookmap (scripts/dita-pdf/bookmap.mjs): a title page with the publication's identifier, the organization, the issue date and the author; a page of document information with each document's ID, version, status and date; a contents list when there is more than one document; and each document as a chapter. A chapter is a document in its own right, so its title stands alone, with no "Chapter 1" in front of it in the text or in the contents. The theme turns the numbers off, and a small plug-in (scripts/dita-pdf/plugin) turns the word off, because the theme can't change DITA Open Toolkit's labels.
 
 ## Page layout
 
 - Paper: A4 by default, US Letter when the reader is in North America. One size within a document set.
 - Margins: 20 mm at the top and bottom, 18 mm at the sides; more on the binding side only for print that is bound.
 - Type: Hanken Grotesk for text and headings in software and IT documents, at 10.5 pt with 1.45 line spacing; a monospace face for code; the fonts embedded in the file.
+- Typography: a typographic apostrophe (’) and quotation marks (“ ”) in running text, never in code, a file name, a command or a label from the interface (scripts/dita-pdf/typeset.mjs). A table is ruled across, top and bottom, rather than boxed on every side. Inline code is a size smaller than the text around it.
+- Illustrations: their callouts and labels print at about 8 pt and 7 pt, in the text face, each inside its drawing and clear of the others (tests/studio/test_aero.py measures every one).
 - Header: the publication's title. Footer: the page number. The title page and the page of document information carry none; the contents list is numbered in roman numerals, and the chapters in arabic numerals that count on from the front matter. That is how DITA Open Toolkit numbers a bookmap with Apache FOP: restarting at 1 in each chapter needs folio prefixes (XSL 1.1), which FOP doesn't support. The S1000D publications number their pages "Page 3 of 27".
 - Headings stay with the text that follows them; a warning or a caution never breaks across pages; a table that runs onto a second page repeats its header row.
 - A step's command stays on the page with what follows it, so that no step ends a page with its code or its caution on the next one.
@@ -41,7 +43,7 @@ The DITA publications on this site are published from a bookmap (scripts/dita-pd
 
 ## PDF properties
 
-- Searchable text, not pictures of text.
+- Searchable text, not pictures of text, in which every word keeps its real letters. Apache FOP and Chromium give a ligature or a contextual alternate a private-use character, so "first" would be found, copied and read aloud as "rst": the PDF fonts have their ligatures turned off (scripts/dita-pdf/no-ligatures.py), the S1000D illustrations print without contextual alternates, and the tests look for private-use characters in every ARF-1 PDF.
 - Bookmarks that follow the headings.
 - Tagged, where the producer supports it, so a screen reader can follow the structure.
 - Title, author, and subject set in the document's properties.

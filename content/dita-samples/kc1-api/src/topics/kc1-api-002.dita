@@ -20,13 +20,13 @@
 <result>
 <p>The API answers with one prediction.</p>
 <codeblock outputclass="language-json">{"prediction": 0, "label": "Non-defective", "defect_probability": 0.3920490229417669, "threshold": 0.5, "model": "Logistic balanced"}</codeblock>
-<p>These outputs are real. On 19 November 2026, the project's trainer produced the output in step 2. FastAPI's test client recorded the answers in steps 4 and 6 by calling the API in the same process. The Docker commands come from the project's README, and that check didn't include them.</p>
+<p>These outputs are real. On 19 November 2026, the project’s trainer produced the output in step 2. FastAPI’s test client recorded the answers in steps 4 and 6 by calling the API in the same process. The Docker commands come from the project’s README, and that check didn’t include them.</p>
 </result>
 <postreq>
 <ul><li>Read the <xref href="kc1-api-001.dita">KC1 prediction API reference</xref> for every field and every error.</li><li>If a request fails, see <xref href="kc1-api-003.dita">Troubleshoot the KC1 API</xref>.</li></ul>
-<p><b>Try it from the API's own page</b></p>
-<p>The API serves an interactive page at <codeph>http://127.0.0.1:8000/docs</codeph>, made by Swagger UI from the API's OpenAPI description.</p>
-<ol><li>Open <codeph>http://127.0.0.1:8000/docs</codeph>, and select <b>POST /predict</b>.<fig><image href="img/swagger-s1-endpoints.png" placement="break" width="150mm"><alt>The API's documentation page, with POST /predict marked</alt></image></fig></li><li>Select <b>Try it out</b>, and paste the contents of <codeph>module.json</codeph> into the request body.<fig><image href="img/swagger-s2-request.png" placement="break" width="150mm"><alt>The request body with the module's metrics, marked</alt></image></fig></li><li>Select <b>Execute</b>. The page shows the status code, <codeph>200</codeph>, and the same response as step 6.<fig><image href="img/swagger-s3-response.png" placement="break" width="150mm"><alt>The server response, with the status code and the response body marked</alt></image></fig></li></ol>
+<p><b>Try it from the API’s own page</b></p>
+<p>The API serves an interactive page at <codeph>http://127.0.0.1:8000/docs</codeph>, made by Swagger UI from the API’s OpenAPI description.</p>
+<ol><li>Open <codeph>http://127.0.0.1:8000/docs</codeph>, and select <b>POST /predict</b>.<fig><image href="img/swagger-s1-endpoints.png" placement="break" width="150mm"><alt>The API’s documentation page, with POST /predict marked</alt></image></fig></li><li>Select <b>Try it out</b>, and paste the contents of <codeph>module.json</codeph> into the request body.<fig><image href="img/swagger-s2-request.png" placement="break" width="150mm"><alt>The request body with the module’s metrics, marked</alt></image></fig></li><li>Select <b>Execute</b>. The page shows the status code, <codeph>200</codeph>, and the same response as step 6.<fig><image href="img/swagger-s3-response.png" placement="break" width="150mm"><alt>The server response, with the status code and the response body marked</alt></image></fig></li></ol>
 </postreq>
 </taskbody>
 </task>

@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
 <title>Document information</title>
-<shortdesc>A demonstration publication for Karan Deshmukh's portfolio. Harbor Pump Station is an example company, and the pump, the console and the procedure were created for this portfolio: this isn't an operating instruction for real equipment.</shortdesc>
+<shortdesc>A demonstration publication for Karan Deshmukh’s portfolio. Harbor Pump Station is an example company, and the pump, the console and the procedure were created for this portfolio: this isn’t an operating instruction for real equipment.</shortdesc>
 <refbody>
-<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
+<simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4* 1.6*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
 <strow><stentry>Monthly inspection of feed pump B</stentry><stentry>MP-PS104-01</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
 </simpletable>

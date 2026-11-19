@@ -57,6 +57,10 @@ code{font-family:var(--mono);font-size:.86em}
 .s1k-lp .s1k-lp{margin-left:.4rem}
 .s1k-fig{margin:1rem 0;border:1px solid var(--rule);border-radius:8px;padding:.6rem;background:#fff}
 .s1k-fig img,.s1k-svg svg{display:block;width:100%;height:auto;max-width:800px;margin:0 auto}
+/* The illustrations name the house face "Hanken Grotesk", which the site loads as "Hanken", so their labels use the
+   page's own face. Contextual alternates stay off: in a PDF, Chrome gives those glyphs private-use characters, and
+   an ICN code or a part label has to stay searchable and readable aloud. */
+.s1k-svg svg text{font-family:"Hanken","Hanken Grotesk","Helvetica Neue",Arial,sans-serif;font-feature-settings:"calt" 0}
 .s1k-fig figcaption{font-size:.86rem;font-weight:600;margin-top:.4rem;text-align:center}
 .s1k-icn{display:block;text-align:right;font:400 .72rem var(--mono);color:var(--mute)}
 .s1k-tbl{overflow-x:auto;margin:.6rem 0 1rem}
@@ -77,7 +81,8 @@ code{font-family:var(--mono);font-size:.86em}
 .s1k-num{font:600 .86rem var(--mono);color:var(--ink2);padding-top:.12rem}
 .s1k-step h4{margin:0 0 .3rem}
 .s1k-applic{display:inline-block;font:600 .72rem var(--sans);color:var(--blue);border:1px solid #c6d2f5;background:#f2f5fd;border-radius:4px;padding:0 .4rem;margin:0 .4rem .2rem 0}
-.s1k-chg{position:relative;box-shadow:-6px 0 0 -3px #d97706}
+/* The change bar stands a little apart from the text it marks, as in a printed publication's margin. */
+.s1k-chg{position:relative;box-shadow:-9px 0 0 -3px #d97706}
 .s1k-chg-add{background:linear-gradient(90deg,#fff7e6,transparent 60%)}
 tr.s1k-chg{box-shadow:none}tr.s1k-chg>td:first-child{box-shadow:inset 3px 0 0 #d97706}
 .s1k-chg-delete{text-decoration:line-through;opacity:.6}
@@ -290,11 +295,18 @@ mark.ie-hit{background:var(--hl)}
 }
 @media print{
  html,body{background:#fff!important}
- /* Version 10.1: a procedure's figure is at most 92 mm high, so that it shares a page with the preliminary requirements
+ /* Version 10.1: a procedure's figure is at most 100 mm high, so that it shares a page with the preliminary requirements
     or with its other variant instead of leaving half a page empty. A parts catalogue's exploded view keeps 115 mm, for
     its item numbers. */
- .s1k-fig img,.s1k-svg svg{max-height:92mm;width:auto;max-width:100%}
+ .s1k-fig img,.s1k-svg svg{max-height:100mm;width:auto;max-width:100%}
  .s1k-fig:has(+ .s1k-tbl) img,.s1k-fig:has(+ .s1k-tbl) svg{max-height:115mm}
+ /* Version 10.1: printed, callouts and labels are a size larger than drawn (about 8 pt and 7 pt on the page), and
+    every one still sits inside its drawing, clear of the others (tests/studio/test_aero.py measures them). */
+ .s1k-svg svg text[font-size="14"]{font-size:16px}
+ .s1k-svg svg text[font-size="13"]{font-size:14px}
+ .s1k-svg svg text[font-size="12.5"]{font-size:13.5px}
+ .s1k-svg svg text[font-size="12"]{font-size:13px}
+ .s1k-svg svg text[font-size="11.5"]{font-size:12.5px}
  header.top,.site-head,nav.crumbs,.st-head,.fl-warn,.st-bar,.st-status,.ie-nav,.site-foot,footer,.ie-modes,.ie-trail,.skip{display:none!important}
  .ie{display:block}.ie-main{border:0;padding:0}
  .s1k-isol.ie-one li{display:grid!important}

@@ -5,7 +5,7 @@
 <shortdesc>Standard operating procedure for the IT service desk. Use it when an engineer needs administrator rights in <ph keyref="product">Acme Console</ph> for a fixed time. Fictional sample.</shortdesc>
 <taskbody>
 <prereq>
-<ul><li>The request names the engineer, the workspace, the reason, and the end date.</li><li>The engineer's manager has approved the request in the ticket.</li><li>Access lasts eight hours at most. For a longer time, send the request to the IAM team.</li></ul>
+<ul><li>The request names the engineer, the workspace, the reason, and the end date.</li><li>The engineer’s manager has approved the request in the ticket.</li><li>Access lasts eight hours at most. For a longer time, send the request to the IAM team.</li></ul>
 </prereq>
 <steps>
 <step><cmd>In <ph keyref="product">Acme Console</ph>, open <uicontrol>Access</uicontrol> &gt; <uicontrol>Temporary roles</uicontrol>.</cmd></step>

@@ -25,6 +25,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { SETS } from "../lib/dita-sets.mjs";
 import { pdfArgs } from "./dita-pdf/args.mjs";
 import { writeBookmap } from "./dita-pdf/bookmap.mjs";
+import { typeset as typesetDita } from "./dita-pdf/typeset.mjs";
 // libxml2 2.11 and later stop reading the OASIS DTDs at their entity-amplification limit unless it is raised.
 const XMLLINT_LIMITS = (() => { try { const h = spawnSync("xmllint", ["--help"], { encoding: "utf8" }); return ["--huge"].concat(/--max-ampl/.test((h.stdout || "") + (h.stderr || "")) ? ["--max-ampl", "1000"] : []); } catch { return ["--huge"]; } })();
 const require = createRequire(import.meta.url);
@@ -83,8 +84,13 @@ for (const [id, set] of Object.entries(SETS)) {
       const w = href.endsWith(".svg") ? +(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+)/.exec(file.toString("utf8")) || [0, 1000])[1] : file.readUInt32BE(16) / (/diagram-/.test(href) ? 2 : 1);
       return `<image href="${href}" placement="break" width="${Math.min(150, Math.round((w / 96) * 25.4))}mm">`;
     });
-    if (sized !== xmlText) fs.writeFileSync(file, sized);
+    // Print conventions the Markdown source leaves to the publisher (scripts/dita-pdf/typeset.mjs): typographic apostrophes
+    // in running text, and tables ruled across rather than boxed.
+    const typeset = typesetDita(sized);
+    if (typeset !== xmlText) fs.writeFileSync(file, typeset);
   }
+  // The map's own title and navigation titles follow the same conventions.
+  for (const m of fs.readdirSync(SRC).filter((f) => f.endsWith(".ditamap"))) { const t = fs.readFileSync(`${SRC}/${m}`, "utf8"), u = typesetDita(t); if (u !== t) fs.writeFileSync(`${SRC}/${m}`, u); }
   console.log(`dita ${id}: wrote ${project.topics.length} topics (${project.topics.map((t) => t.kind).join(", ")}) to ${SRC}`);
   if (!publish) continue;
 

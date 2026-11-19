@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
 <title>Document information</title>
-<shortdesc>A demonstration publication for Karan Deshmukh's portfolio. The companies, people, addresses and figures in it are examples: these documents aren't operating instructions or vendor documentation.</shortdesc>
+<shortdesc>A demonstration publication for Karan Deshmukh’s portfolio. The companies, people, addresses and figures in it are examples: these documents aren’t operating instructions or vendor documentation.</shortdesc>
 <refbody>
-<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
+<simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4* 1.6*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
 <strow><stentry>Roles and responsibilities for onboarding</stentry><stentry>IT-REF-032</stentry><stentry>1.3</stentry><stentry>Approved</stentry><stentry>2026-09-14</stentry></strow>
 <strow><stentry>Escalation matrix for security cases</stentry><stentry>SEC-REF-014</stentry><stentry>2.1</stentry><stentry>Approved</stentry><stentry>2026-10-01</stentry></strow>

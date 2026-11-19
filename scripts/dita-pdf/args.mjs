@@ -4,11 +4,33 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+const here = path.dirname(fileURLToPath(import.meta.url));
+const PLUGIN = "dev.karandeshmukh.pdf";
+
+// The house labels live in a small plug-in (plugin/dev.karandeshmukh.pdf): a chapter's title stands alone, with no
+// "Chapter 1" in front of it. The theme cannot change those labels, so the plug-in is copied into the toolkit and
+// integrated the first time, and again whenever it changes. The toolkit's own messages go to stderr, so the JSON that
+// this script prints stays clean.
+export function ensurePlugin(home = process.env.DITA_HOME) {
+  if (!home) return false;
+  const src = path.join(here, "plugin", PLUGIN), dest = path.join(home, "plugins", PLUGIN);
+  const files = fs.readdirSync(src, { recursive: true }).filter((f) => fs.statSync(path.join(src, f)).isFile());
+  const same = (f) => { try { return fs.readFileSync(path.join(src, f)).equals(fs.readFileSync(path.join(dest, f))); } catch { return false; } };
+  let integrated = false;
+  try { integrated = fs.readFileSync(path.join(home, "config", "plugins.xml"), "utf8").includes(`id="${PLUGIN}"`); } catch {}
+  if (integrated && files.every(same)) return false;
+  fs.cpSync(src, dest, { recursive: true });
+  execFileSync(path.join(home, "bin", process.platform === "win32" ? "dita.bat" : "dita"), ["install"], { stdio: ["ignore", 2, 2] });
+  return true;
+}
+
 export function pdfArgs() {
+  ensurePlugin();
   // The PDF uses the house theme and embeds the site's fonts (scripts/dita-pdf): A4, Hanken Grotesk, tagged for screen readers.
-  const here = path.dirname(fileURLToPath(import.meta.url)), fonts = path.join(here, "fonts");
+  const fonts = path.join(here, "fonts");
   const xconf = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "fop-")), "fop.xconf");
   const font = (file, triplets) => `<font kerning="yes" embed-url="${file}">${triplets.map(([n, st, w]) => `<font-triplet name="${n}" style="${st}" weight="${w}"/>`).join("")}</font>`;
   fs.writeFileSync(xconf, `<?xml version="1.0"?><fop version="1.0"><strict-validation>false</strict-validation><accessibility>true</accessibility><font-base>${pathToFileURL(fonts + path.sep).href}</font-base><renderers><renderer mime="application/pdf"><fonts>${[

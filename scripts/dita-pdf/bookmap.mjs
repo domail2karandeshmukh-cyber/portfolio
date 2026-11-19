@@ -9,6 +9,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { typeset } from "./typeset.mjs";
 
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -53,7 +54,7 @@ ${rows}
 </reference>
 `;
   fs.mkdirSync(path.join(src, "topics"), { recursive: true });
-  fs.writeFileSync(path.join(src, "topics/document-information.dita"), infoTopic);
+  fs.writeFileSync(path.join(src, "topics/document-information.dita"), typeset(infoTopic));
 
   const out = `${path.basename(mapFile, ".ditamap")}-pdf.ditamap`;
   const chapter = (r) => `<chapter href="${esc(r.href)}"${r.type ? ` type="${esc(r.type)}"` : ""}/>`;
@@ -80,7 +81,7 @@ ${refs.map(chapter).join("\n")}
 ${reltable}
 </bookmap>
 `;
-  fs.writeFileSync(path.join(src, out), book);
+  fs.writeFileSync(path.join(src, out), typeset(book));
   return path.join(src, out);
 }
 

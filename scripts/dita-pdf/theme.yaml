@@ -49,7 +49,9 @@ style:
     start-indent: 0pt
   shortdesc:
     font-size: 11pt
+    line-height: 1.45
     color: '#3B3D42'
+    space-after: 8pt
   h1:
     font-family: Hanken Grotesk
     font-size: 20pt
@@ -59,7 +61,8 @@ style:
     space-after: 10pt
     border-after: solid 1.5pt '#0B0B0C'
     padding-after: 6pt
-    title-numbering: true
+    # A document's title is its own: no "Chapter 1" in front of it. The contents still number each document's pages.
+    title-numbering: false
   h2:
     font-family: Hanken Grotesk
     font-size: 14pt
@@ -96,11 +99,14 @@ style:
     keep-together.within-page: always
   codeph:
     font-family: Hyperlegible Mono
+    font-size: 9.5pt
   # A step's command stays on the page with what follows it, so that no step ends a page with its code on the next one.
   cmd:
     keep-with-next.within-page: always
   link:
     color: '#1D4ED8'
+  toc-1:
+    prefix: false
   note:
     background-color: '#F3F3F0'
     border-start: solid 3pt '#3B3D42'

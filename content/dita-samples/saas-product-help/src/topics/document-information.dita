@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
 <title>Document information</title>
-<shortdesc>A demonstration publication for Karan Deshmukh's portfolio. Ledgerly is an example company, and every person, address and figure in it is an example: these documents aren't operating instructions or vendor documentation.</shortdesc>
+<shortdesc>A demonstration publication for Karan Deshmukh’s portfolio. Ledgerly is an example company, and every person, address and figure in it is an example: these documents aren’t operating instructions or vendor documentation.</shortdesc>
 <refbody>
-<simpletable relcolwidth="4* 1.4*">
+<simpletable frame="topbot" relcolwidth="4* 1.4*">
 <sthead><stentry>Document</stentry><stentry>Status</stentry></sthead>
 <strow><stentry>Fix sign-in problems</stentry><stentry>Published</stentry></strow>
 <strow><stentry>Reset your password</stentry><stentry>Published</stentry></strow>

@@ -12,14 +12,14 @@
 </context>
 <steps>
 <step><cmd>In the admin console, find the user and open their profile.</cmd></step>
-<step><cmd>Select <uicontrol>Reset MFA</uicontrol>.</cmd><info><note type="caution">Don't select <uicontrol>Reset password</uicontrol>. It leaves the old phone enrolled.</note></info></step>
+<step><cmd>Select <uicontrol>Reset MFA</uicontrol>.</cmd><info><note type="caution">Don’t select <uicontrol>Reset password</uicontrol>. It leaves the old phone enrolled.</note></info></step>
 <step><cmd>Ask the user to open the enrollment email and enroll the new phone.</cmd></step>
 </steps>
 <result>
-<p>The user signs in with the new phone. In the admin console, the user's sign-in log shows a new MFA enrollment, dated today.</p>
+<p>The user signs in with the new phone. In the admin console, the user’s sign-in log shows a new MFA enrollment, dated today.</p>
 </result>
 <postreq>
-<ul><li>Record the time of the enrollment in the ticket, and close it.</li><li>If the enrollment email doesn't reach the user, reassign the ticket to the IAM team.</li></ul>
+<ul><li>Record the time of the enrollment in the ticket, and close it.</li><li>If the enrollment email doesn’t reach the user, reassign the ticket to the IAM team.</li></ul>
 </postreq>
 </taskbody>
 </task>

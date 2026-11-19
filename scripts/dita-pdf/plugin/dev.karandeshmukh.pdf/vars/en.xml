@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Each chapter of a house publication is a document in its own right (a quick start, a reference, a troubleshooting
+     guide), so its title stands alone: no "Chapter 1" above it and no "Chapter 1:" in front of it in the contents.
+     The theme (scripts/dita-pdf/theme.yaml) turns the chapter numbers off; these turn the word off. -->
+<variables>
+  <variable id="Chapter with number"></variable>
+  <variable id="Table of Contents Chapter"></variable>
+</variables>
