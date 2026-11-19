@@ -26,7 +26,8 @@
   "Technical Writing: Software Documentation, Prompt Engineering for LLMs, MadCap Flare, Business Analysis, Snagit, Final Cut Pro.",
   "FAQ",
   "FAQs",
-  "Docs-as-code"
+  "Docs-as-code",
+  "LinkedIn"
  ],
  "patterns": [
   [
@@ -52,6 +53,10 @@
   [
    "^(\\d+) rules, based on the Microsoft Writing Style Guide\\. Code checks (\\d+) of them here, and in every document of the library on each build\\.$",
    "$1 नियम, Microsoft Writing Style Guide पर आधारित। कोड इनमें से $2 की जाँच यहाँ करता है, और हर बिल्ड पर लाइब्रेरी के हर दस्तावेज़ में भी।"
+  ],
+  [
+   "^Version ([0-9.]+), built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "संस्करण $1, कमिट $2 से बनाया गया।"
   ]
  ],
  "units": {
@@ -287,7 +292,7 @@
   "All projects": "सभी प्रोजेक्ट",
   "Karan Deshmukh | Technical Documentation Specialist": "Karan Deshmukh | टेक्निकल डॉक्यूमेंटेशन विशेषज्ञ",
   "Technical documentation specialist with 5+ years across industrial engineering, enterprise IT and cybersecurity, most recently at MongoDB and Magna International. Writing samples, a documentation workbench, and live projects.": "इंडस्ट्रियल इंजीनियरिंग, एंटरप्राइज़ IT और साइबर सुरक्षा में 5+ साल के अनुभव वाले टेक्निकल डॉक्यूमेंटेशन विशेषज्ञ, हाल ही में MongoDB और Magna International में। लेखन के नमूने, एक डॉक्यूमेंटेशन वर्कबेंच और लाइव प्रोजेक्ट।",
-  "Technical documentation specialist with 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International. I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.": "इंडस्ट्रियल इंजीनियरिंग, एंटरप्राइज़ IT और साइबर सुरक्षा में 5+ साल के अनुभव वाला टेक्निकल डॉक्यूमेंटेशन विशेषज्ञ, हाल ही में MongoDB और Magna International में। मैं जटिल तकनीकी जानकारी को स्पष्ट प्रक्रियाओं, मैनुअल, ट्रबलशूटिंग गाइड और संरचित दस्तावेज़ों में बदलता हूँ।",
+  "With 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International, I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.": "इंडस्ट्रियल इंजीनियरिंग, एंटरप्राइज़ IT और साइबर सुरक्षा में 5+ साल के अनुभव के साथ, हाल ही में MongoDB और Magna International में, मैं जटिल तकनीकी जानकारी को स्पष्ट प्रक्रियाओं, मैनुअल, ट्रबलशूटिंग गाइड और संरचित दस्तावेज़ों में बदलता हूँ।",
   "View writing samples": "लेखन के नमूने देखें",
   "Hiring? <a href=\"/recruiters\">Read the one-minute summary for recruiters</a>": "भर्ती कर रहे हैं? <a href=\"/recruiters\">रिक्रूटर्स के लिए एक मिनट का सारांश पढ़ें</a>",
   "Open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of my work authorization in France. Remote or hybrid. Based in Angers, France.": "टेक्निकल डॉक्यूमेंटेशन की भूमिकाओं के लिए उपलब्ध: फुल-टाइम, कॉन्ट्रैक्ट, पार्ट-टाइम, फ्रीलांस, इंटर्नशिप या अप्रेंटिसशिप, फ्रांस में मेरे कार्य-प्राधिकरण की शर्तों के अनुसार। रिमोट या हाइब्रिड। स्थान: Angers, फ्रांस।",
@@ -309,7 +314,7 @@
   "My first degree is a BSc in Aircraft Maintenance Engineering, a field where maintenance follows written procedures, inspections, and records. The same discipline applies wherever people install, run, and maintain equipment by following written procedures: industrial engineering, automotive, aerospace, manufacturing, renewable energy such as offshore wind, and technical operations.": "मेरी पहली डिग्री एयरक्राफ़्ट मेंटेनेंस इंजीनियरिंग में BSc है, एक ऐसा क्षेत्र जहाँ मेंटेनेंस लिखित प्रक्रियाओं, निरीक्षणों और रिकॉर्ड के अनुसार होता है। यही अनुशासन हर उस जगह लागू होता है जहाँ लिखित प्रक्रियाओं के अनुसार उपकरण लगाए, चलाए और रखरखाव किए जाते हैं: इंडस्ट्रियल इंजीनियरिंग, ऑटोमोटिव, एयरोस्पेस, मैन्युफ़ैक्चरिंग, ऑफ़शोर विंड जैसी नवीकरणीय ऊर्जा, और तकनीकी संचालन।",
   "Read about my roles": "मेरी भूमिकाओं के बारे में पढ़ें",
   "Knowledge-base articles, SOPs, runbooks, how-to guides, and troubleshooting guides, mostly for IT, security, and identity teams. Across his roles he has created, reviewed, and maintained more than 1,000 documents, over 500 of them at MongoDB. At Magna International he wrote product manuals, troubleshooting resources, and maintenance updates, prepared for localization into up to 29 languages.": "नॉलेज-बेस लेख, SOP, रनबुक, हाउ-टू गाइड और ट्रबलशूटिंग गाइड, ज़्यादातर IT, सुरक्षा और आइडेंटिटी टीमों के लिए। अपनी भूमिकाओं में उन्होंने 1,000 से ज़्यादा दस्तावेज़ बनाए, जाँचे और अपडेट रखे, जिनमें से 500 से ज़्यादा MongoDB में थे। Magna International में उन्होंने प्रोडक्ट मैनुअल, ट्रबलशूटिंग संसाधन और मेंटेनेंस अपडेट लिखे, जो अधिकतम 29 भाषाओं में लोकलाइज़ेशन के लिए तैयार किए गए।",
-  "Yes. Karan is open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of his work authorization in France. Remote or hybrid, from Angers. Message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/": "हाँ। Karan टेक्निकल डॉक्यूमेंटेशन की भूमिकाओं के लिए उपलब्ध हैं: फुल-टाइम, कॉन्ट्रैक्ट, पार्ट-टाइम, फ्रीलांस, इंटर्नशिप या अप्रेंटिसशिप, फ्रांस में उनके कार्य-प्राधिकरण की शर्तों के अनुसार। रिमोट या हाइब्रिड, Angers से। LinkedIn पर संदेश भेजें: https://www.linkedin.com/in/karan-deshmukh-a86986175/",
+  "Yes. Karan is open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of his work authorization in France. Remote or hybrid, from Angers. Email him at domail2karandeshmukh@gmail.com, or message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/": "हाँ। Karan टेक्निकल डॉक्यूमेंटेशन की भूमिकाओं के लिए उपलब्ध हैं: फुल-टाइम, कॉन्ट्रैक्ट, पार्ट-टाइम, फ्रीलांस, इंटर्नशिप या अप्रेंटिसशिप, फ्रांस में उनके कार्य-प्राधिकरण की शर्तों के अनुसार। रिमोट या हाइब्रिड, Angers से। domail2karandeshmukh@gmail.com पर ईमेल करें, या LinkedIn पर संदेश भेजें: https://www.linkedin.com/in/karan-deshmukh-a86986175/",
   "Studio": "स्टूडियो",
   "Explore the Documentation Studio": "डॉक्यूमेंटेशन स्टूडियो देखें",
   "The workbench and the Documentation Studio": "वर्कबेंच और डॉक्यूमेंटेशन स्टूडियो",
@@ -395,6 +400,38 @@
   "One procedure through every tool": "हर टूल से गुज़रती एक प्रक्रिया",
   "Employee onboarding and access provisioning": "कर्मचारी ऑनबोर्डिंग और एक्सेस देना",
   "Investigating a simulated Wazuh security alert": "Wazuh के एक नकली सुरक्षा अलर्ट की जाँच",
-  "Preventive maintenance: monthly equipment inspection": "निवारक रखरखाव: उपकरण का मासिक निरीक्षण"
+  "Preventive maintenance: monthly equipment inspection": "निवारक रखरखाव: उपकरण का मासिक निरीक्षण",
+  "Karan Deshmukh, technical documentation specialist": "Karan Deshmukh, टेक्निकल डॉक्यूमेंटेशन विशेषज्ञ",
+  "Complex technology.": "जटिल टेक्नोलॉजी।",
+  "Clear documentation.": "स्पष्ट डॉक्यूमेंटेशन।",
+  "Explore my work": "मेरा काम देखें",
+  "More ways in": "और रास्ते",
+  "Recruiter overview": "भर्ती करने वालों के लिए सारांश",
+  "Explore industries": "उद्योग देखें",
+  "Watch demonstrations": "डेमो देखें",
+  "Contact me": "मुझसे संपर्क करें",
+  "Email me, or send a message on LinkedIn. I'm based in Angers, France, and work remote or hybrid.": "मुझे ईमेल करें, या LinkedIn पर संदेश भेजें। मैं Angers, फ्रांस में रहता हूँ, और रिमोट या हाइब्रिड काम करता हूँ।",
+  "Email Karan": "Karan को ईमेल करें",
+  "Connect on LinkedIn": "LinkedIn पर जुड़ें",
+  "Every way to reach me": "मुझ तक पहुँचने के सभी तरीके",
+  "Angers, France": "Angers, फ्रांस",
+  "Stages of the case study": "केस स्टडी के चरण",
+  "Input": "स्रोत",
+  "Analysis": "विश्लेषण",
+  "Edit": "संपादन",
+  "Quality": "गुणवत्ता",
+  "Publish": "प्रकाशन",
+  "What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.": "लिखने से पहले मैं क्या जाँचता हूँ: काम किस पर निर्भर है, क्या गलत हो सकता है, और संदेश क्या छोड़ देता है।",
+  "What it passes before release. The build runs these checks on every change.": "रिलीज़ से पहले इसे क्या पास करना होता है। बिल्ड हर बदलाव पर ये जाँचें दोबारा चलाता है।",
+  "One source, four outputs.": "एक स्रोत, चार आउटपुट।",
+  "A demonstration: the message and the answers were written for this portfolio. <a class=\"rw-case\" href=\"/message-to-document\">See the whole case study</a>.": "एक प्रदर्शन: संदेश और उत्तर इस पोर्टफ़ोलियो के लिए लिखे गए थे। <a class=\"rw-case\" href=\"/message-to-document\">पूरी केस स्टडी देखें</a>।",
+  "Troubleshooting": "समस्या निवारण",
+  "Help centers, release notes, user guides": "सहायता केंद्र, रिलीज़ नोट्स, उपयोगकर्ता गाइड",
+  "API documentation": "API दस्तावेज़ीकरण",
+  "References, quick starts, OpenAPI and error guides": "संदर्भ, क्विक स्टार्ट, OpenAPI और त्रुटि गाइड",
+  "Has he documented a real product?": "क्या उन्होंने किसी असली उत्पाद का डॉक्यूमेंटेशन किया है?",
+  "Yes. Keycloak 26.8.2, an open-source identity server: three independent guides for administrators, written against a Keycloak server Karan ran himself, with every screen from it and every behaviour tested, and a tutorial film of one task. And the KC1 prediction API from his MSc team project: a reference, a quick start and a troubleshooting guide, with every request and response recorded from the API. Both are in the library, and as PDF on the Downloads page.": "हाँ। Keycloak 26.8.2, एक ओपन-सोर्स आइडेंटिटी सर्वर: एडमिनिस्ट्रेटर के लिए तीन स्वतंत्र गाइड, जो Karan ने खुद चलाए एक Keycloak सर्वर पर लिखीं, हर स्क्रीन उसी सर्वर से और हर व्यवहार परखा हुआ, साथ में एक काम का ट्यूटोरियल वीडियो। और उनके MSc टीम प्रोजेक्ट की KC1 प्रेडिक्शन API: एक रेफ़रेंस, एक क्विक स्टार्ट और एक ट्रबलशूटिंग गाइड, जिनमें हर रिक्वेस्ट और रिस्पॉन्स API से रिकॉर्ड किया गया। दोनों लाइब्रेरी में हैं, और डाउनलोड पेज पर PDF के रूप में।",
+  "How does he take a document from start to release?": "वे किसी दस्तावेज़ को शुरू से रिलीज़ तक कैसे ले जाते हैं?",
+  "The documentation lifecycle page follows three KC1 API documents through sixteen stages, each with its real output: the requirement, the sources, the recorded API, the structure, the writing, the screenshots and their marks, the diagram, the style check, the verification, DITA publishing, a short film, the release, then a real change to the API, the impact analysis and revision 1.1.": "डॉक्यूमेंटेशन लाइफ़साइकल पेज KC1 API के तीन दस्तावेज़ों को सोलह चरणों से गुज़रते दिखाता है, हर चरण अपने असली नतीजे के साथ: ज़रूरत, स्रोत, रिकॉर्ड की गई API, ढाँचा, लेखन, स्क्रीनशॉट और उनके निशान, डायग्राम, स्टाइल जाँच, सत्यापन, DITA प्रकाशन, एक छोटा वीडियो, रिलीज़, फिर API में एक असली बदलाव, उसका असर विश्लेषण और संशोधन 1.1।"
  }
 }

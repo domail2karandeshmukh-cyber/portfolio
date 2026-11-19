@@ -37,14 +37,21 @@
   </div>
  </div>
 </header>
-<main id="main" class="wrap st-main">
+<main id="main" class="wrap st-main st-sided">
+<div class="st-layout">
+{{sidebar}}
+<div class="st-body">
  <nav class="crumbs" aria-label="Breadcrumb">{{crumbs}}</nav>
 {{body}}
+{{toolpager}}
+</div>
+</div>
 </main>
 <footer class="foot">
  <div class="wrap">
   <p>{{privacy}}</p>
   <p><a href="/">Karan Deshmukh, technical documentation specialist</a></p>
+  <!--#include foot-contact-->
  </div>
 </footer>
 <noscript><p class="wrap st-nojs">The studio needs JavaScript.</p></noscript>

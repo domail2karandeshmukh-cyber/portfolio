@@ -45,70 +45,51 @@
 
 <section class="hero" id="top">
  <div class="wrap">
-  <h1>I <span class="ed e1" data-was="type">turn</span> what engineers <span class="ed e2" data-was="say">know</span> into <mark class="hl">docs people can <span class="ed e3" data-was="read">follow</span></mark></h1>
+  <p class="hero-id">Karan Deshmukh, technical documentation specialist</p>
+  <h1><span>Complex technology.</span> <span>Clear documentation.</span></h1>
   <div class="hero-grid">
    <div class="hero-copy">
-    <p class="lead">Technical documentation specialist with 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International. I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.</p>
-    <div class="btns">
-     <a class="btn paper" href="#writing">View writing samples</a>
-     <a class="btn line" href="/studio">Explore the Documentation Studio</a>
-     <button class="btn line" type="button" data-tour><span class="orb xs" aria-hidden="true"></span><span>Take the one-minute tour</span></button>
-     <a class="btn line nojs" href="{{cv}}" download>Download CV</a>
-    </div>
-    <p class="hire">Hiring? <a href="/recruiters">Read the one-minute summary for recruiters</a></p>
-    <p class="sites"><span>Live projects</span>{{livelinks}}</p>
+    <p class="lead">With 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International, I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.</p>
     <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
+    <div class="btns">
+     <a class="btn paper" href="#writing">Explore my work</a>
+     <a class="btn line" href="{{cv}}" download>Download CV</a>
+    </div>
+    <nav class="hero-more" aria-label="More ways in"><a href="/recruiters">Recruiter overview</a><a href="/industries">Explore industries</a><a href="/videos">Watch demonstrations</a><a href="#contact">Contact me</a></nav>
    </div>
 
    <div class="rw" id="rewrite" data-state="1" data-src="example">
     <div class="rw-top">
-     <div class="rw-tabs" role="group" aria-label="Choose a version">
-      <button type="button" data-s="1" aria-pressed="true">Message</button>
-      <button type="button" data-s="2" aria-pressed="false">Markup</button>
-      <button type="button" data-s="3" aria-pressed="false">Document</button>
+     <div class="rw-tabs" role="group" aria-label="Stages of the case study">
+      <button type="button" data-s="1" aria-pressed="true"><span>Input</span></button>
+      <button type="button" data-s="2" aria-pressed="false"><span>Analysis</span></button>
+      <button type="button" data-s="3" aria-pressed="false"><span>Edit</span></button>
+      <button type="button" data-s="4" aria-pressed="false"><span>Document</span></button>
+      <button type="button" data-s="5" aria-pressed="false"><span>Quality</span></button>
+      <button type="button" data-s="6" aria-pressed="false"><span>Publish</span></button>
      </div>
      <button class="rw-own" type="button" hidden>Try your own message</button>
     </div>
     <figure class="rw-fig">
     <div class="rw-stage" lang="en" translate="no">
-     <div class="rw-raw">
-      <p class="raw-head">On-call engineer, 02:14</p>
-      <p class="raw-msg"><s>ok</s> for <mark data-f="who">locked out users</mark>: go to the <mark data-f="console">admin console</mark>, <mark data-f="find">find the user</mark>, <s>hit</s> <mark data-f="reset">reset mfa</mark> (<mark data-f="not">NOT reset password</mark>, that <mark data-f="why">doesn't clear their old phone</mark><s>!!</s>). they get an <mark data-f="email">email to enroll again</mark>. <s>oh and</s> <mark data-f="verify">make sure it's actually them</mark> first, <mark data-f="hr">call the number in the HR system</mark>, <mark data-f="ticket">don't trust the one in the ticket</mark>. <mark data-f="log">check the log</mark> after. <mark data-f="contr">contractors are a different process</mark>, <mark data-f="iam">ask IAM</mark></p>
-      <p class="raw-msg"><s>can someone please write this down properly. third time this month i've explained it</s></p>
-     </div>
-     <article class="rw-doc sheet">
-      <p class="doc-type">How-to</p>
-      <p class="doc-title">Reset MFA for a <span data-f="who">locked-out user</span></p>
-      <p class="doc-meta">For the IT service desk. Takes about 5 minutes.</p>
-      <p class="doc-h">Before you start</p>
-      <ul>
-       <li><span data-f="verify">Confirm the request is genuine.</span> <span data-f="hr">Call the user on the number in the HR system</span>, <span data-f="ticket">not the number in the ticket</span>.</li>
-       <li><span data-f="contr">Contractor accounts follow a different process.</span> <span data-f="iam">Send those to the IAM team.</span></li>
-      </ul>
-      <p class="doc-h">Steps</p>
-      <ol>
-       <li>In the <span data-f="console">admin console</span>, <span data-f="find">open the user's profile</span>.</li>
-       <li>Select <b data-f="reset">Reset MFA</b>.
-        <p class="callout"><b>Caution:</b> <span data-f="not">Don't select <b>Reset password</b>.</span> <span data-f="why">It leaves the old device enrolled.</span></p></li>
-       <li>Ask the user to open the <span data-f="email">enrollment email</span> and register the new device.</li>
-      </ol>
-      <p class="doc-h">Check that it worked</p>
-      <p class="last"><span data-f="log">The system log</span> shows a new enrollment for the user.</p>
-     </article>
+{{rwstage}}
     </div>
     <figcaption>
      <span class="rw-ex">
       <span class="rw-cap" data-s="1">What engineering sent. Every fact is in there, in the order it came to mind.</span>
-      <span class="rw-cap" data-s="2">What I keep. The facts stay and the noise goes.</span>
-      <span class="rw-cap" data-s="3">What I publish. The same facts, in the order the reader needs them, with a way to check the result.</span>
-      <span>An illustrative example, not a client document.</span>
+      <span class="rw-cap" data-s="2">What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.</span>
+      <span class="rw-cap" data-s="3">What I keep. The facts stay and the noise goes.</span>
+      <span class="rw-cap" data-s="4">What I publish. The same facts, in the order the reader needs them, with a way to check the result.</span>
+      <span class="rw-cap" data-s="5">What it passes before release. The build runs these checks on every change.</span>
+      <span class="rw-cap" data-s="6">One source, four outputs.</span>
+      <span>A demonstration: the message and the answers were written for this portfolio. <a class="rw-case" href="/message-to-document">See the whole case study</a>.</span>
       <button class="rw-again" type="button">Play it again</button>
      </span>
      <span class="rw-you" aria-live="polite" hidden>
       <span class="rw-wait">Reading the message for its facts...</span>
       <span class="rw-cap" data-s="1">The message, as it was sent.</span>
-      <span class="rw-cap" data-s="2">The message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
-      <span class="rw-cap" data-s="3">A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.</span>
+      <span class="rw-cap" data-s="3">The message, marked up. Yellow is a fact to keep. A red line is noise to cut.</span>
+      <span class="rw-cap" data-s="4">A first draft, written by an AI model that follows my brief. Drafting is the quick part. Getting the questions answered is the job.</span>
       <span class="rw-stats" id="rw-stats"></span>
       <span class="rw-cta">Does your team write messages like this one? <a href="{{linkedin}}" target="_blank" rel="noopener">Message me on LinkedIn</a>.</span>
      </span>
@@ -294,12 +275,13 @@
 <section class="contact" id="contact">
  <div class="wrap">
   <h2>Have documentation that needs an owner?</h2>
-  <p>The fastest way to reach me is a LinkedIn message. I'm based in {{location}}, and work remote or hybrid.</p>
+  <p>Email me, or send a message on LinkedIn. I'm based in {{location}}, and work remote or hybrid.</p>
   <div class="btns">
-   <a class="btn paper" href="{{linkedin}}" target="_blank" rel="noopener">Message me on LinkedIn</a>
+   <a class="btn paper" href="mailto:{{email}}">Email Karan</a>
+   <a class="btn line" href="{{linkedin}}" target="_blank" rel="noopener">Connect on LinkedIn</a>
    <a class="btn line" href="{{cv}}" download>Download CV</a>
-   <a class="btn text" href="{{github}}" target="_blank" rel="noopener" translate="no">GitHub</a>
   </div>
+  <p class="contact-more"><a href="mailto:{{email}}" translate="no">{{email}}</a><a href="/contact">Every way to reach me</a><a href="{{github}}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
  </div>
 </section>
 
@@ -308,6 +290,7 @@
 <footer class="foot">
  <div class="wrap">
   <p>How this site is made: one content file builds this page, the library, the PDF CV, and April's answers. Documents and screenshots are pulled from the project repositories when the site is built.</p>
+  <!--#include foot-contact-->
   <p class="foot-langs" translate="no"><!--@langlinks--></p>
   <!--@rev-->
  </div>

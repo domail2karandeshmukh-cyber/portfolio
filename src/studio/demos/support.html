@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><title>Demo app: a fictional support console</title><meta name="robots" content="noindex"><meta name="viewport" content="width=1280"><meta charset="utf-8"><style>
 *{box-sizing:border-box}body{margin:0;font:14px/1.45 'Segoe UI',Arial,sans-serif;color:#24201c;background:#f7f4f0}
 .top{display:flex;align-items:center;gap:16px;height:52px;padding:0 20px;background:#3b2a1e;color:#fff}.top b{font-size:16px}.top input{margin-left:12px;width:360px;padding:7px 10px;border-radius:6px;border:0;font:inherit}.top .who{margin-left:auto;font-size:13px;opacity:.9}
-.demo{background:#ffd23f;color:#3b2a1e;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px}
+.demo{background:#fff4d6;color:#6b4a00;border:1px solid #e3c171;font-weight:600;font-size:11px;padding:2px 9px;border-radius:999px;white-space:nowrap}
 main{display:grid;grid-template-columns:300px 1fr;gap:18px;padding:18px 22px;height:748px}
 .card{background:#fff;border:1px solid #e2dad2;border-radius:8px;padding:16px}.card h2{font-size:13px;margin:0 0 10px;color:#7a6a5c;text-transform:uppercase;letter-spacing:.5px}
 .kv div{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #f1ece6;font-size:13px}.kv div:last-child{border:0}.kv span:last-child{font-weight:600;text-align:right}
@@ -14,7 +14,7 @@ table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;p
 .bad{color:#c62828;font-weight:600}.ok{color:#127a3e;font-weight:600}
 .note{margin-top:12px;font-size:13px;color:#5a4d42}
 </style></head><body>
-<header class="top"><b>Ledgerly Support</b><input value="amira@harbourlane.example" readonly aria-label="Customer email"><span class="demo">FICTIONAL DEMO</span><span class="who">Agent · Ticket #48213</span></header>
+<header class="top"><b>Ledgerly Support</b><input value="amira@harbourlane.example" readonly aria-label="Customer email"><span class="demo" title="An interface made for this portfolio. The product, the people and the data are invented.">Simulated interface</span><span class="who">Agent · Ticket #48213</span></header>
 <main><div><div class="card"><h2>Customer</h2><div class="kv"><div><span>Name</span><span>Amira Haddad</span></div><div><span>Company</span><span>Harbour Lane Bakery</span></div><div><span>Role</span><span>Administrator</span></div><div><span>Plan</span><span>Business</span></div><div><span>Email</span><span>amira@harbourlane.example</span></div><div><span>Phone on file</span><span>+31 6 1234 5678</span></div><div><span>Customer since</span><span>March 2024</span></div><div><span>Two-step verification</span><span>Authenticator app</span></div></div>
 <div class="verified" id="verified">Verified: code sent to the account email, read back at 09:31</div></div>
 <div class="card" style="margin-top:14px"><h2>Ticket #48213</h2><div class="kv"><div><span>Opened</span><span>Today, 09:26</span></div><div><span>Channel</span><span>Chat</span></div><div><span>Subject</span><span>Locked out before payroll</span></div><div><span>Priority</span><span>High</span></div></div></div></div>

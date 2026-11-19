@@ -418,7 +418,7 @@
     if (type === "warning") { o.x = 0.05; o.y = 0.06; o.text = T("Say what to check before going on"); }
     if (type === "callout") o.text = T("Explain this part of the screen");
     if (type === "step") { o.text = String(P.overlays.filter(function (x) { return x.type === "step"; }).length + 1); o.w = o.h = 0.04; }
-    if (type === "lower") o.text = T("Name of the application · fictional demo");
+    if (type === "lower") o.text = T("Name of the application · simulated interface");
     if (type === "intro") { o.text = T("Title of the video") + "\n" + T("What the viewer will be able to do."); if (!t) o.start = 0; }
     if (type === "outro") { o.text = T("You're done") + "\n" + T("What the viewer should now see on the screen."); o.end = +duration().toFixed(2); o.start = +Math.max(0, duration() - 3).toFixed(2); }
     if (type === "arrow") { o.w = 0.12; o.h = 0.12; }
@@ -709,7 +709,7 @@
   $("#vd-demo").addEventListener("click", function () {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder) return fail(new Error(T("This browser can't record the screen.")));
     var box = document.createElement("div"); box.className = "vd-demo";
-    box.innerHTML = '<iframe src="/studio/demo-console.html" title="' + esc(T("Demo app: a fictional maintenance console")) + '"></iframe><button class="btn ink sm" type="button">' + T("Stop recording") + "</button>";
+    box.innerHTML = '<iframe src="/studio/demo-console.html" title="' + esc(T("Simulated interface: a maintenance console")) + '"></iframe><button class="btn ink sm" type="button">' + T("Stop recording") + "</button>";
     document.body.appendChild(box);
     var ifr = box.querySelector("iframe"), events = [], t0 = 0, last = 0;
     function log(e, click) {
@@ -749,7 +749,7 @@
   }
   var start = Kit.start($("#vd-start"), {
     tool: "video", title: T("Open a video project"),
-    lead: T("Two training videos made in this studio from recordings of fictional applications: the pointer with its halo and click ripples, zoom that follows each click, highlight boxes and step numbers on the controls, and captions. Open one to play it, change it, and render it again. Or start from your own recording."),
+    lead: T("Two training videos made in this studio from recordings of simulated applications: the pointer with its halo and click ripples, zoom that follows each click, highlight boxes and step numbers on the controls, and captions. Open one to play it, change it, and render it again. Or start from your own recording."),
     open: function (s) {
       return (P.clips.length ? Kit.confirm(T("Replace the project on screen?"), T("{title} takes its place. Save the current project first if you want to keep it.", { title: T(s.title) }), { ok: T("Replace") }) : Promise.resolve(true)).then(function (yes) {
         if (!yes) return;

@@ -1,11 +1,11 @@
 // Builds karandeshmukh.dev from content/site.json:
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
-import { siteNav } from "./lib/nav.mjs";
+import { siteNav, INDUSTRIES } from "./lib/nav.mjs";
 import { buildHubs, fieldExplorer } from "./lib/hubs.mjs";
 import { buildStandards } from "./lib/standards.mjs";
 import fs from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { execSync } from "node:child_process";
@@ -17,6 +17,8 @@ import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
 import { buildStudio } from "./lib/studio.mjs";
+import { caseStudy, heroStage, caseStudyPage } from "./lib/casestudy.mjs";
+import { lifecyclePage } from "./lib/lifecycle.mjs";
 
 const C = JSON.parse(await fs.readFile("content/site.json", "utf8"));
 const S = C.site, T = C.types, OUT = "public";
@@ -30,14 +32,17 @@ await fs.mkdir(`${OUT}/fonts`, { recursive: true });
 // Fonts, self-hosted. The Devanagari file is fetched by a browser only on the Hindi page. On the other pages, the name
 // हिन्दी in the language links is drawn by src/fonts/devanagari-name.woff2, a 5 KB subset of the same font made with
 //   pyftsubset <the Devanagari file below> --text="हिन्दी" --layout-features='*' --flavor=woff2
+// Newsreader sets only headings, from 18 pixels up, at weights 400 to 600: src/fonts/newsreader.woff2 is the Latin
+// file of @fontsource-variable/newsreader cut to those ranges of its two axes, 68 KB instead of 131 KB, made with
+//   fontTools.varLib.instancer.instantiateVariableFont(<newsreader-latin-opsz-normal.woff2>, {"wght": (400, 600), "opsz": (18, 72)})
 const FONTS = [
-  ["@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2", "newsreader.woff2"],
   ["@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2", "hanken.woff2"],
   ["@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-wght-normal.woff2", "ahm.woff2"],
   ["@fontsource-variable/noto-sans-devanagari/files/noto-sans-devanagari-devanagari-wght-normal.woff2", "devanagari.woff2"],
 ];
 for (const [from, to] of FONTS) await fs.copyFile(`node_modules/${from}`, `${OUT}/fonts/${to}`);
 await fs.copyFile("src/fonts/devanagari-name.woff2", `${OUT}/fonts/devanagari-name.woff2`);
+await fs.copyFile("src/fonts/newsreader.woff2", `${OUT}/fonts/newsreader.woff2`);
 
 // Project screenshots: crop to 16:10 and write two WebP sizes
 for (const [id, im] of Object.entries(C.images)) {
@@ -78,7 +83,7 @@ const pmenu = (all) => `<details class="pm"><summary>Projects</summary><div clas
   .map((p) => `<a href="${p.href}" target="_blank" rel="noopener"><b translate="no">${esc(p.name)}</b><small>${esc(p.label)}</small></a>`)
   .join("")}<a class="pm-all" href="${all}">All projects</a></div></details>`;
 const navEn = siteNav({ cv: S.cv, projects: pmenu("/#projects") });
-const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
+const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, email: S.email, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
 const library = await buildLibrary({ C, OUT, source, common });
 // The style guide: its rules, and what the check found in each document of the library.
 const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/${siteRef}/src/style.js` });
@@ -117,6 +122,14 @@ await library.finish();
 console.log(`style: ${guide.figures.passing} of ${guide.figures.docs} documents pass (${guide.figures.rules} rules, ${guide.figures.coded} checked by code)`);
 // The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name. A narrated
 // film also has its captions, content/films/<id>.vtt, which the player offers as a captions track.
+// Tutorial films of real products (content/videos/<id>/, made by scripts/tutorial/): the film, its captions and a poster.
+if (existsSync("content/videos")) for (const id of (await fs.readdir("content/videos")).sort()) {
+  const from = `content/videos/${id}`, to = `${OUT}/videos/${id}`;
+  if (!existsSync(`${from}/video.json`)) continue;
+  await fs.mkdir(to, { recursive: true });
+  for (const ext of ["mp4", "vtt", "srt"]) if (existsSync(`${from}/${id}.${ext}`)) await fs.copyFile(`${from}/${id}.${ext}`, `${to}/${id}.${ext}`);
+  await sharp(`${from}/${id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${to}/${id}.webp`);
+}
 const reel = C.films?.items ?? [];
 await fs.mkdir(`${OUT}/films`, { recursive: true });
 for (const f of reel) {
@@ -223,18 +236,42 @@ const hreflang = locales.length < 2 ? "" : locales.map((l) => `<link rel="altern
 
 // The commit this build was made from, linked in the footer.
 const commit = process.env.VERCEL_GIT_COMMIT_SHA || (() => { try { return execSync("git rev-parse HEAD", { stdio: ["ignore", "pipe", "ignore"] }).toString().trim(); } catch (e) { return ""; } })();
-const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>.</p>` : "";
+// The release, from package.json, and the commit the build came from.
+const release = JSON.parse(await fs.readFile("package.json", "utf8")).version.replace(/\.0$/, "");
+const rev = `<p class="rev">Version ${release}${commit ? `, built from commit <a href="${S.links.github}/${S.repo}/commit/${commit}" target="_blank" rel="noopener" translate="no">${commit.slice(0, 7)}</a>` : ""}.</p>`;
 
 // The page for recruiters: who I am, the figures, the employers, three documents to read, and how to reach me, on one screen or two.
 {
   const R = C.recruiters, sample = (x) => byId[x.id];
   const role = (e) => `<li><p class="when">${esc(e.dates)}</p><h3>${esc(e.role)}, <span translate="no">${esc(e.org)}</span></h3><p>${esc(e.points[0])}.</p></li>`;
+  // Each field from content/industries.json, the same data as /industries/<id>: what the work rests on, three
+  // documents, the conventions, the files and the films. Native disclosure, so it works without a script.
+  const byField = () => {
+    const data = JSON.parse(readFileSync("content/industries.json", "utf8")).industries;
+    const names = Object.fromEntries(INDUSTRIES.map((i) => [i.id, i]));
+    const films = Object.fromEntries(C.films.items.map((f) => [f.id, f.title]));
+    const fileName = (u) => u.split("/").pop().replace(/\.\w+$/, "").replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+    return data.map((ind) => {
+      const m = names[ind.id], docs = ind.start.slice(0, 3).map((x) => (x.doc ? { t: byId[x.doc].title, u: byId[x.doc].url } : { t: x.title, u: x.url }));
+      return `<details class="rec-field"><summary><b>${esc(m.name)}</b><span>${esc(m.blurb)}</span></summary>
+<p class="rec-basis">${esc(ind.basis)}</p>
+<h3>Read first</h3><ul>${docs.map((d) => `<li><a href="${esc(d.u)}">${esc(d.t)}</a></li>`).join("")}</ul>
+<h3>Conventions</h3><ul>${ind.standards.map(([n]) => `<li>${esc(n)}</li>`).join("")}</ul>
+${ind.files.length ? `<h3>Download</h3><ul>${ind.files.map((u) => `<li><a href="${esc(u)}" download>${esc(fileName(u))}</a> (${esc(u.split(".").pop().toUpperCase())})</li>`).join("")}</ul>` : ""}
+${ind.films.length ? `<h3>Watch</h3><ul>${ind.films.filter((id) => films[id]).map((id) => `<li><a href="/videos#${id}">${esc(films[id])}</a></li>`).join("")}</ul>` : ""}
+<p class="rec-go"><a href="/industries/${ind.id}">Everything in this field</a></p>
+</details>`;
+    }).join("");
+  };
   const body = `<article class="rec">
 <h1>${esc(S.name)}</h1>
 <p class="rec-role">${esc(S.role)}</p>
 <p class="rec-lead">${esc(R.intro)}</p>
-<p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Message me on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
+<p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="mailto:${S.email}">Email Karan</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
 <ul class="rec-figs">${R.figures.map(([n, l]) => `<li><b>${esc(n)}</b><span>${esc(l)}</span></li>`).join("")}</ul>
+<h2>Your field, in one minute</h2>
+<p>Open a field for what my experience in it rests on, three documents to read first, the conventions I follow, and what you can download or watch.</p>
+<div class="rec-fields">${byField()}</div>
 <h2>Experience</h2>
 <ol class="rec-roles">${C.experience.map(role).join("")}</ol>
 <p class="rec-more"><a href="/#engineering">Engineering and maintenance documentation at Magna</a><a href="/#experience">Every role in full</a></p>
@@ -244,19 +281,79 @@ const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github
 <ul class="rec-tools">
 <li><a href="/workbench">Workbench</a>: write a document, check it against my style guide as you type, and publish it as Markdown, HTML, or DITA.</li>
 <li><a href="/studio">Documentation Studio</a>: screenshots with permanent redaction, numbered step guides, training videos with captions, DITA projects published with DITA Open Toolkit, a help center, and document control.</li>
-<li><a href="/studio/flagship">A maintenance procedure, start to finish</a>: one fictional procedure taken through every tool, with every file it produced.</li>
+<li><a href="/studio/flagship">A maintenance procedure, start to finish</a>: one demonstration procedure taken through every tool, with every file it produced.</li>
 <li><a href="/style">Style guide</a>: ${guide.figures.rules} rules, ${guide.figures.coded} of them checked by code on every build.</li>
 <li><a href="/#rewrite">Rewrite desk</a>: an engineer's chat message turned into a how-to, with every fact checked.</li>
 <li><a href="/docs">Library</a>: every document on this site, with search.</li>
 </ul>
-<h2>Availability</h2>
+<h2>Availability and contact</h2>
 <p>${esc(S.availability)} Based in ${esc(S.location)}.</p>
+<p>Email <a href="mailto:${S.email}" translate="no">${esc(S.email)}</a>, or <a href="${S.links.linkedin}" target="_blank" rel="noopener">connect on LinkedIn</a>. <a href="/contact">Every way to reach me</a>.</p>
 <p>Languages: ${esc(C.languages.join(", "))}.</p>
 <h2>Education</h2>
 <ul class="rec-edu">${C.education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}, ${esc(e.dates)}</li>`).join("")}</ul>
 </article>`;
-  await library.extra({ path: "/recruiters", title: `${S.name} | For recruiters`, description: `${S.role} with 5+ years across industrial engineering, enterprise IT, and cybersecurity. Experience, figures, three writing samples, and contact in one page.`,
+  await library.extra({ path: "/recruiters", title: "For recruiters", description: `${S.role} with 5+ years across industrial engineering, enterprise IT, and cybersecurity. Experience, figures, three writing samples, and contact in one page.`,
     trail: [["Portfolio", "/"], ["For recruiters"]], body });
+}
+
+// The contact page: the ways to reach me, by what the visitor is writing about. There is no form: an email goes from the
+// visitor's own mail program to my inbox, and this site never sees it.
+{
+  const mail = (subject) => `mailto:${S.email}?subject=${encodeURIComponent(subject)}`;
+  const topics = [
+    ["Recruitment opportunity", "A technical documentation role: full-time, contract, part-time, freelance, internship or apprenticeship."],
+    ["Documentation collaboration", "Documentation for a product, a system or a project, written or reviewed with your engineers."],
+    ["Freelance enquiry", "A defined piece of work: a user guide, a knowledge base, a set of procedures, a migration."],
+    ["Project feedback", "A question or a remark about TrustNav, AI-ChainGuard, NOVATECH Sentinel, BizAssist AI, ReleasePilot AI or KC1."],
+    ["Portfolio or Studio support", "A page that doesn't load, a broken link, or a Studio tool that doesn't do what its page says."],
+    ["General enquiry", "Anything else."],
+  ];
+  const body = `<article class="rec contact-page">
+<h1>Contact</h1>
+<p class="rec-lead">Email reaches me directly. Choose what you're writing about, and your mail program opens a message with the subject filled in.</p>
+<ul class="topics">${topics.map(([t, d]) => `<li><a href="${mail(t)}"><b>${esc(t)}</b><span>${esc(d)}</span></a></li>`).join("")}</ul>
+<h2>Direct details</h2>
+<dl class="contact-dl">
+<div><dt>Email</dt><dd><a href="mailto:${S.email}" translate="no">${esc(S.email)}</a></dd></div>
+<div><dt>LinkedIn</dt><dd><a href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a></dd></div>
+<div><dt>Location</dt><dd>${esc(S.location)}. Remote or hybrid.</dd></div>
+<div><dt>CV</dt><dd><a href="${S.cv}" download>Download the CV</a> (PDF, two pages)</dd></div>
+</dl>
+<h2>Availability</h2>
+<p>${esc(S.availability)}</p>
+<h2>What happens to your message</h2>
+<p>This site has no contact form. Your message goes from your own mail program to my inbox, and the site never sees it or keeps it.</p>
+<p>April, the assistant on this site, is an AI model. She answers questions about my work, but she can't pass a message on to me.</p>
+</article>`;
+  await library.extra({ path: "/contact", title: "Contact", description: `How to reach ${S.name}, technical documentation specialist in ${S.location}: email, LinkedIn and availability.`,
+    trail: [["Portfolio", "/"], ["Contact"]], body });
+}
+
+// The case study: the hero's six stages on the home page, and every stage in full at /message-to-document.
+const cs = await caseStudy();
+await library.extra({ path: "/message-to-document", title: "Case study: from a message to a published procedure",
+  description: "An engineer's chat message taken to a published procedure in six stages: analysis, editing, the document, quality checks, and HTML, PDF, DITA and Markdown outputs.",
+  trail: [["Portfolio", "/"], ["Case study"]], body: caseStudyPage(cs, { S }),
+  kind: "Case study", shelf: "Case studies", text: [{ id: "case", title: "From a message to a published procedure", text: "Case study: an engineer's message about resetting MFA, analysed for requirements, risks and missing information, edited into a procedure, checked and published as HTML, PDF, DITA and Markdown." }] });
+// The KC1 API's machine-readable description and the recorded exchanges that its documents quote.
+await fs.mkdir(`${OUT}/docs/kc1/api`, { recursive: true });
+// The current files are those of the API as it is now (1.0.1); the versioned ones are what each revision was recorded with.
+for (const f of ["openapi.json", "exchanges.json", "openapi-1.0.0.json", "exchanges-1.0.0.json", "openapi-1.0.1.json", "exchanges-1.0.1.json"]) await fs.copyFile(`content/projects/kc1/api/${f}`, `${OUT}/docs/kc1/api/${f}`);
+await fs.mkdir(`${OUT}/case-study`, { recursive: true });
+await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
+
+// The signature case study: the KC1 API's documentation through sixteen stages (lib/lifecycle.mjs).
+{
+  const lc = await lifecyclePage();
+  await library.extra({ path: "/documentation-lifecycle", title: "Signature case study: the documentation of a real API, from requirement to revision",
+    description: "The KC1 prediction API's documentation in sixteen stages: analysis, authoring, screenshots, publishing with DITA-OT, a video, an engineering change, its impact analysis and the revision.",
+    trail: [["Portfolio", "/"], ["Signature case study"]], body: lc.body,
+    kind: "Case study", shelf: "Case studies", text: [{ id: "lifecycle", title: "The documentation of a real API, from requirement to revision", text: "Signature case study: the KC1 prediction API documented from recorded requests, published with DITA Open Toolkit, then revised after an engineering change, with the impact analysis." }] });
+  await fs.mkdir(`${OUT}/case-study/lifecycle/revision-1.1`, { recursive: true });
+  await fs.mkdir(`${OUT}/case-study/lifecycle/revision-1.0`, { recursive: true });
+  for (const [name, text] of Object.entries(lc.files)) await fs.writeFile(`${OUT}/case-study/lifecycle/${name}`, text);
+  for (const f of ["kc1-swagger-walkthrough.mp4", "kc1-swagger-walkthrough.vtt", "kc1-swagger-walkthrough.jpg"]) await fs.copyFile(`content/case-study/lifecycle/${f}`, `${OUT}/case-study/lifecycle/${f}`);
 }
 
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
@@ -289,6 +386,7 @@ for (const loc of locales) {
     brief: `${S.links.github}/${S.repo}/blob/main/content/desk/brief.md`,
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
     voice: json(recorded[loc.code] || {}),
+    rwstage: heroStage(cs),
     pmenu: pmenu("#projects"),
     ...(() => { const n = siteNav({ cv: S.cv, projects: pmenu("#projects"), home: true, lang: loc.code }); return { sitenav: n.desktop, mnav: n.phone }; })(),
     livelinks: liveSites.map((p) => `<a href="${p.href}" target="_blank" rel="noopener" translate="no">${esc(p.name)}</a>`).join(""),
@@ -333,7 +431,7 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

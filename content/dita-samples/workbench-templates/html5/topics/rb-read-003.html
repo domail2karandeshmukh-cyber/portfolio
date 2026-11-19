@@ -4,14 +4,14 @@
 <h1 class="title topictitle1" id="ariaid-title1">Runbook: <span class="ph">the readings service</span> stops responding</h1>
 
 <div class="body taskbody"><p class="shortdesc">For the engineer on call. Follow it when the alert "Readings API not responding" fires. Fictional sample.</p>
-<section class="section prereq">
+<section class="section prereq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Before you begin</h2></div>
 <ul class="ul"><li class="li">You're on call, and you have access to the status page and the deployment tool.</li><li class="li">Tell the incident channel that you're working on the alert.</li></ul>
 </section>
-<section><ol class="ol steps"><li class="li step"><span class="ph cmd">Open the status page, and then check whether the database shows as healthy.</span></li><li class="li step"><span class="ph cmd">If the database is healthy, restart <span class="ph">the readings service</span> in the deployment tool.</span></li><li class="li step"><span class="ph cmd">Wait two minutes, and then check whether the alert clears.</span></li><li class="li step"><span class="ph cmd">If the alert stays, roll back to the last version that worked.</span></li><li class="li step"><span class="ph cmd">Post the time and the action you took in the incident channel.</span></li></ol></section>
-<section class="section result">
+<section><div class="tasklabel"><h2 class="sectiontitle tasklabel">Procedure</h2></div><ol class="ol steps"><li class="li step"><span class="ph cmd">Open the status page, and then check whether the database shows as healthy.</span></li><li class="li step"><span class="ph cmd">If the database is healthy, restart <span class="ph">the readings service</span> in the deployment tool.</span></li><li class="li step"><span class="ph cmd">Wait two minutes, and then check whether the alert clears.</span></li><li class="li step"><span class="ph cmd">If the alert stays, roll back to the last version that worked.</span></li><li class="li step"><span class="ph cmd">Post the time and the action you took in the incident channel.</span></li></ol></section>
+<section class="section result"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Results</h2></div>
 <p class="p">The alert clears, and a test request to the readings API gets the status 200.</p>
 </section>
-<section class="section postreq">
+<section class="section postreq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">What to do next</h2></div>
 <p class="p"><strong class="ph b">Escalate</strong></p>
 <p class="p">If the service still doesn't respond after the rollback, page the platform team lead. Give them the time the alert fired and every action you took.</p>
 </section>

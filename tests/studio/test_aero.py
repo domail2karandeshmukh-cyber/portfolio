@@ -321,14 +321,14 @@ with sync_playwright() as p:
     check("every link in the guided path and the evidence box opens", hrefs and not dead, dead or len(hrefs))
     for path, want in (("/studio/aerospace/downloads/arf1-revision-record.html", "Configuration baselines"), ("/studio/aerospace/downloads/arf1-evidence-summary.html", "What remains")):
         body = urllib.request.urlopen(BASE + path).read().decode()
-        check(f"{path.rsplit('/', 1)[1]} has its section: {want}", want in body and "fictional" in body.lower())
+        check(f"{path.rsplit('/', 1)[1]} has its section: {want}", want in body and "invented" in body.lower())
     pdf = urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-maintenance-publication.pdf").read()
     from pypdf import PdfReader
     rd = PdfReader(io.BytesIO(pdf)); first = rd.pages[0].extract_text() + rd.pages[1].extract_text()
     check("the maintenance PDF opens with a title page, highlights and the list of effective data modules", "Unverified" in first and "Highlights of issue 002" in first and "List of effective data modules" in first, first[:200])
     def marks(o): return sum(marks(x) if isinstance(x, list) else 1 for x in o)
-    check("the maintenance PDF has bookmarks, tags and a title that says it is fictional", marks(rd.outline) > 20 and "/StructTreeRoot" in rd.trailer["/Root"] and "fictional" in (rd.metadata.title or ""), rd.metadata.title)
-    blank = [i + 1 for i, pgx in enumerate(rd.pages) if len(_re.sub(r"\s+|Fictional demonstration.*?Page \d+ of \d+", "", pgx.extract_text())) < 15]
+    check("the maintenance PDF has bookmarks, tags and a title that says it is not maintenance data", marks(rd.outline) > 20 and "/StructTreeRoot" in rd.trailer["/Root"] and "not maintenance data" in (rd.metadata.title or ""), rd.metadata.title)
+    blank = [i + 1 for i, pgx in enumerate(rd.pages) if len(_re.sub(r"\s+|Demonstration data.*?Page \d+ of \d+", "", pgx.extract_text())) < 15]
     check("no blank page in the maintenance PDF", not blank, blank)
 
     # ---------- the parts catalogue zooms, and item 6 is on the picture

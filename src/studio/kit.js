@@ -244,7 +244,7 @@
    */
   Kit.start = function (host, opts) {
     var esc = Kit.esc;
-    host.innerHTML = '<div class="st-start"><div class="st-start-h"><h2>' + esc(opts.title || T("Start")) + "</h2><p>" + esc(opts.lead || T("Open a sample to see what the tool does, start from nothing, or open your own file. Samples are fictional.")) + '</p></div><ul class="st-cards" aria-label="' + esc(T("Samples")) + '"><li class="st-wait">' + esc(T("Loading the samples…")) + "</li></ul>" +
+    host.innerHTML = '<div class="st-start"><div class="st-start-h"><h2>' + esc(opts.title || T("Start")) + "</h2><p>" + esc(opts.lead || T("Open a sample to see what the tool does, start from nothing, or open your own file. A sample's product and data are invented unless the sample names a real product.")) + '</p></div><ul class="st-cards" aria-label="' + esc(T("Samples")) + '"><li class="st-wait">' + esc(T("Loading the samples…")) + "</li></ul>" +
       '<div class="st-start-acts">' + (opts.blank ? '<button type="button" class="btn ink sm" data-start="blank">' + esc(opts.blankLabel || T("Start blank")) + "</button>" : "") +
       (opts.files || []).map(function (f) { return '<label class="btn line sm" for="' + f.input + '">' + esc(f.label) + "</label>"; }).join("") + (opts.extra || "") + "</div>" + (opts.note ? '<p class="st-note">' + esc(opts.note) + "</p>" : "") + "</div>";
     var list = host.querySelector(".st-cards");

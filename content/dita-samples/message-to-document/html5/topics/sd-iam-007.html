@@ -1,0 +1,21 @@
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html lang="en"><head><meta charset="UTF-8"><meta name="copyright" content="(C) Copyright 2026"><meta name="generator" content="DITA-OT"><meta name="description" content="Let a user who lost or replaced their phone sign in again: clear their multi-factor authentication (MFA), so that they can enroll the new phone."><title>Reset MFA for a locked-out user</title><link rel="stylesheet" type="text/css" href="../commonltr.css"><link rel="stylesheet" type="text/css" href="../dita-html5.css"></head><body id="reset-mfa-for-a-locked-out-user"><main role="main"><article role="article" aria-labelledby="ariaid-title1">
+<h1 class="title topictitle1" id="ariaid-title1">Reset MFA for a locked-out user</h1>
+
+<div class="body taskbody"><p class="shortdesc">Let a user who lost or replaced their phone sign in again: clear their multi-factor authentication (MFA), so that they can enroll the new phone.</p>
+<section class="section prereq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Before you begin</h2></div>
+<ul class="ul"><li class="li">Confirm that the request is genuine. Call the user on the number in the HR system, not the number in the ticket.</li><li class="li">Check that the account belongs to an employee. Contractor accounts follow a different process: reassign those tickets to the IAM team.</li></ul>
+</section>
+<section class="section context"><div class="tasklabel"><h2 class="sectiontitle tasklabel">About this task</h2></div>
+<p class="p">For IT service desk analysts. A demonstration document, written for this portfolio from an example message.</p>
+</section>
+<section><div class="tasklabel"><h2 class="sectiontitle tasklabel">Procedure</h2></div><ol class="ol steps"><li class="li step stepexpand"><span class="ph cmd">In the admin console, find the user and open their profile.</span></li><li class="li step stepexpand"><span class="ph cmd">Select <span class="ph uicontrol">Reset MFA</span>.</span><div class="itemgroup info"><div class="note caution note_caution"><span class="note__title">CAUTION:</span> <div class="note__body">Don't select <span class="ph uicontrol">Reset password</span>. It leaves the old phone enrolled.</div></div></div></li><li class="li step stepexpand"><span class="ph cmd">Ask the user to open the enrollment email and enroll the new phone.</span></li></ol></section>
+<section class="section result"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Results</h2></div>
+<p class="p">The user signs in with the new phone. In the admin console, the user's sign-in log shows a new MFA enrollment, dated today.</p>
+</section>
+<section class="section postreq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">What to do next</h2></div>
+<ul class="ul"><li class="li">Record the time of the enrollment in the ticket, and close it.</li><li class="li">If the enrollment email doesn't reach the user, reassign the ticket to the IAM team.</li></ul>
+</section>
+</div>
+</article></main></body></html>

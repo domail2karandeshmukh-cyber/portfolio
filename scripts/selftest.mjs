@@ -52,6 +52,33 @@ for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) 
   const kind = /<(task|concept|reference|troubleshooting) id=/.exec(Doc.toDita(Doc.resolve(doc)))[1];
   console.log(`${name.padEnd(16)} ${String(sum.error + sum.warning).padStart(2)} to fix, ${String(sum.suggestion).padStart(2)} advice   DITA ${kind}${Doc.conditions(doc).length ? `   readers: ${Doc.conditions(doc).join(", ")}` : ""}`);
 }
+// The scenario documents: a value for every variable, in code too, and a DITA topic that is valid for every reader.
+for (const sc of fs.readdirSync("content/scenarios", { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name).sort()) {
+  for (const file of fs.readdirSync(`content/scenarios/${sc}`).filter((f) => f.endsWith(".md")).sort()) {
+    const label = `${sc}/${file}`, doc = Doc.parse(fs.readFileSync(`content/scenarios/${sc}/${file}`, "utf8"));
+    const view = Doc.resolve(doc), html = Doc.toHtml(view), dita = Doc.toDita(view), pkg = Doc.toDitaPackage(doc);
+    ok(!/\{\{/.test(html) && !/\{\{/.test(dita) && !/\{\{/.test(pkg.topic), `${label}: a variable is left without its value`);
+    if (catalog) for (const [what, xmlText] of [["topic", dita], ["package topic", pkg.topic]]) {
+      const out = path.join(tmp, `${sc}-${file}-${what.replace(/ /g, "-")}.dita`);
+      fs.writeFileSync(out, xmlText);
+      try { execFileSync("xmllint", [...XMLLINT_LIMITS, "--noout", "--valid", "--nonet", out], { env: { ...process.env, XML_CATALOG_FILES: catalog }, stdio: "pipe" }); checks++; }
+      catch (e) { failed++; console.log(`FAIL  ${label}: the DITA ${what} is not valid\n${String(e.stderr).split("\n").slice(0, 6).join("\n")}`); }
+    }
+  }
+}
+// A procedure written across several sections keeps its order: each section is a step, in the order it was written,
+// and its numbered list becomes the substeps. "Verify" with a list of its own is part of the procedure, not its result.
+{
+  const doc = Doc.parse(fs.readFileSync("content/scenarios/c-cloud/developer-guide-deploy.md", "utf8"));
+  const dita = Doc.toDita(Doc.resolve(doc)), cmds = [...dita.matchAll(/<step><cmd>(.*?)<\/cmd>/g)].map((m) => m[1]);
+  ok(cmds.join(" | ") === "Create the project | Write the configuration | Set the environment variables | Deploy | Verify", `the deploy guide's steps are out of order: ${cmds.join(" | ")}`);
+  ok((dita.match(/<substep>/g) || []).length === 9 && !/<result>[\s\S]*<ol>/.test(dita), "the deploy guide's numbered lists should be nine substeps, with none left in the result");
+  ok(/<codeblock[^>]*><ph keyref="cli">lattice<\/ph> auth login<\/codeblock>/.test(Doc.toDitaPackage(doc).topic), "a variable in a code block should become a key reference in the DITA project");
+  const sop = Doc.toDita(Doc.resolve(Doc.parse(fs.readFileSync("content/scenarios/b-enterprise-it/sop-onboarding.md", "utf8"))));
+  ok([...sop.matchAll(/<step><cmd>(.*?)<\/cmd>/g)].map((m) => m[1].slice(0, 6)).join(",") === "Day −5,Day −3,Day −1,Day 1:,Day 5:", "a heading that only holds the procedure (\"Procedure\") should leave its sections as the steps");
+  const howto = Doc.toDita(Doc.resolve(Doc.parse(fs.readFileSync("content/workbench/how-to.md", "utf8"))));
+  ok((howto.match(/<step>/g) || []).length === 3 && !/<substeps>/.test(howto), "a procedure written as one numbered list keeps its items as the steps");
+}
 // The guide follows itself: the name of every group, and the title and the reason of every rule, go through the check.
 const groups = [...new Set(Style.RULES.map((r) => r.group))];
 const own = Style.check(groups.map((g) => `### ${g}`).concat(Style.RULES.map((r) => `#### ${r.title}\n\n${r.why}`)).join("\n\n"), { off: ["heading-skip"] });

@@ -48,23 +48,23 @@
  ],
  "exported": {
   "studio": {
-   "seconds": 59.12,
+   "seconds": 59.13,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "opus"
   },
   "served": {
-   "seconds": 59.17,
+   "seconds": 59.18,
    "video": "h264",
    "width": 1280,
    "height": 720,
    "audio": "aac"
   },
   "timeline": 58.9,
-  "chromeSeconds": 59.120229,
+  "chromeSeconds": 59.130042,
   "meanVolumeDb": -19.8,
-  "status": "Exported inspection-walkthrough.mp4: 5.6 MB, 59.1 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
+  "status": "Exported inspection-walkthrough.mp4: 5.8 MB, 59.1 s, checked by playing it back. Picture and sound: H.264 and Opus. Some players, such as QuickTime, don't play Opus sound; Chrome on Windows or macOS makes AAC sound.",
   "ok": "aac",
   "errors": []
  }

@@ -1,0 +1,57 @@
+<!DOCTYPE html
+  SYSTEM "about:legacy-compat">
+<html lang="en"><head><meta charset="UTF-8"><meta name="copyright" content="(C) Copyright 2026"><meta name="generator" content="DITA-OT"><meta name="description" content="What each error from the KC1 prediction API means, and how to fix the request. The API itself gave every response quoted here, on 19 November 2026."><title>Troubleshoot the KC1 API</title><link rel="stylesheet" type="text/css" href="../commonltr.css"><link rel="stylesheet" type="text/css" href="../dita-html5.css"></head><body id="troubleshoot-the-kc1-api"><main role="main"><article role="article" aria-labelledby="ariaid-title1">
+<h1 class="title topictitle1" id="ariaid-title1">Troubleshoot the KC1 API</h1>
+
+<div class="body troublebody"><p class="shortdesc">What each error from the KC1 prediction API means, and how to fix the request. The API itself gave every response quoted here, on 19 November 2026.</p>
+<div class="bodydiv troubleSolution">
+<section class="section remedy"><h2 class="title sectiontitle">422 and "Field required"</h2>
+<section class="section steps-informal">
+<p class="p">The body leaves out one or more of the 21 metrics. The API lists each missing field in <code class="ph codeph">detail</code>, by its name in <code class="ph codeph">loc</code>.</p>
+<pre class="pre codeblock language-json"><code>{"type": "missing", "loc": ["body", "v(g)"], "msg": "Field required", "input": {"loc": 123}}</code></pre>
+<p class="p">Send all 21 fields, even when a value is 0. The <a class="xref" href="kc1-api-001.html" title="The KC1 API serves the project's defect-prediction model over HTTP. Send the 21 static code metrics of one software module, and it returns whether the model flags the module as defective, with the probability and the threshold behind the decision.">API reference</a> lists them.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">422 and "Extra inputs are not permitted"</h2>
+<section class="section steps-informal">
+<p class="p">The body has a field that isn't one of the 21, such as a module name.</p>
+<pre class="pre codeblock language-json"><code>{"type": "extra_forbidden", "loc": ["body", "module_name"], "msg": "Extra inputs are not permitted", "input": "billing.c"}</code></pre>
+<p class="p">Remove the field. The API refuses extra fields so that it never ignores a misspelled metric without telling you.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">422 and "Input should be a valid number"</h2>
+<section class="section steps-informal">
+<p class="p">A value is text instead of a number, such as <code class="ph codeph">"loc": "many"</code>. Send numbers without quotes: <code class="ph codeph">"loc": 25</code>.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">422 and "Input should be a valid dictionary"</h2>
+<section class="section steps-informal">
+<p class="p">The body isn't a JSON object, often because the client sent a form. Send JSON, and set the header <code class="ph codeph">Content-Type: application/json</code>. With curl, use <code class="ph codeph">-H "Content-Type: application/json" -d @module.json</code>.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">422 and "Input should be a finite number"</h2>
+<section class="section steps-informal">
+<p class="p">A value is too large to be a finite number, such as <code class="ph codeph">1e999</code>, or it's <code class="ph codeph">NaN</code>. The API reads <code class="ph codeph">1e999</code> as infinity and refuses it.</p>
+<pre class="pre codeblock language-json"><code>{"type": "finite_number", "loc": ["body", "loc"], "msg": "Input should be a finite number", "input": "inf"}</code></pre>
+<p class="p">Send finite numbers. Before version 1.0.1, the API answered <code class="ph codeph">500 Internal Server Error</code> to such a value instead of a 422.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">Error 405 for the wrong method</h2>
+<section class="section steps-informal">
+<p class="p"><code class="ph codeph">/predict</code> takes <code class="ph codeph">POST</code>. A browser that opens the address sends <code class="ph codeph">GET</code>. Use curl, a script, or Swagger UI at <code class="ph codeph">/docs</code>.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">The API doesn't start</h2>
+<section class="section steps-informal">
+<p class="p">The API stops at startup with <code class="ph codeph">FileNotFoundError</code> and a path that ends in <code class="ph codeph">deployment_config.json</code>. Nobody has trained the model yet, or <code class="ph codeph">ARTIFACT_DIR</code> points to another folder.</p>
+<p class="p">Train the model with <code class="ph codeph">docker compose --profile train run --rm trainer</code>, then start the API again with <code class="ph codeph">docker compose up -d</code>. Outside Docker, set <code class="ph codeph">ARTIFACT_DIR</code> to the folder that holds <code class="ph codeph">deployment_config.json</code> and <code class="ph codeph">kc1_defect_pipeline.joblib</code>.</p>
+</section>
+</section>
+<section class="section remedy"><h2 class="title sectiontitle">Connection refused</h2>
+<section class="section steps-informal">
+<p class="p">Nothing answers on port 8000. Check that the API container is running with <code class="ph codeph">docker compose ps</code>. The Compose file publishes the port on <code class="ph codeph">127.0.0.1</code> only, so another computer can't reach it, by design.</p>
+</section>
+</section>
+</div>
+</div>
+<nav role="navigation" class="related-links"><div class="linklist reltasks"><strong>Related tasks</strong><br><ul class="linklist"><li class="linklist"><a class="link" href="kc1-api-002.html" title="Train the KC1 model, start the prediction API, and send it the metrics of one software module.">Get your first prediction from the KC1 API</a></li></ul></div><div class="linklist relref"><strong>Related reference</strong><br><ul class="linklist"><li class="linklist"><a class="link" href="kc1-api-001.html" title="The KC1 API serves the project's defect-prediction model over HTTP. Send the 21 static code metrics of one software module, and it returns whether the model flags the module as defective, with the probability and the threshold behind the decision.">KC1 prediction API reference</a></li></ul></div></nav></article></main></body></html>

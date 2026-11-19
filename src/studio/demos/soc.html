@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><title>Demo app: a fictional security operations console</title><meta name="robots" content="noindex"><meta name="viewport" content="width=1280"><meta charset="utf-8"><style>
 *{box-sizing:border-box}body{margin:0;font:13px/1.45 'Segoe UI',Arial,sans-serif;color:#dfe6ee;background:#0f141a}
 .top{display:flex;align-items:center;gap:16px;height:50px;padding:0 18px;background:#161d26;border-bottom:1px solid #263241}.top b{font-size:15px;color:#fff}.top .who{margin-left:auto;font-size:12px;color:#9fb0c3}
-.demo{background:#ffd23f;color:#0f141a;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px}
+.demo{background:#fff4d6;color:#6b4a00;border:1px solid #e3c171;font-weight:600;font-size:11px;padding:2px 9px;border-radius:999px;white-space:nowrap}
 main{display:grid;grid-template-columns:470px 1fr;height:750px}
 .list{border-right:1px solid #263241;overflow:hidden}.list h2,.detail h2{font-size:12px;margin:0;padding:12px 16px;color:#9fb0c3;text-transform:uppercase;letter-spacing:.6px}
 .alert{display:grid;grid-template-columns:44px 1fr auto;gap:10px;padding:10px 16px;border-bottom:1px solid #1d2733;cursor:pointer}.alert.on{background:#1a2634;box-shadow:inset 3px 0 #ff4d4d}
@@ -14,7 +14,7 @@ pre{margin:0;background:#0a0e13;border:1px solid #263241;border-radius:6px;paddi
 .side .box{background:#161d26;border:1px solid #263241;border-radius:6px;padding:12px 14px;margin-bottom:12px}.box .detail h2{font-size:12px;margin:0 0 8px;padding:0;color:#9fb0c3;text-transform:uppercase;letter-spacing:.5px}.box div{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1d2733;font-size:12px}.box div:last-child{border:0}.box span:last-child{color:#fff;font-weight:600}
 .tl div{display:block;padding:4px 0;font-size:12px;color:#dfe6ee}.tl time{color:#9fb0c3;margin-right:8px;font-family:Consolas,monospace}
 </style></head><body>
-<header class="top"><b>SOC console</b><span style="color:#9fb0c3">Norrbyn Utilities · Wazuh alerts, simulated feed</span><span class="demo">FICTIONAL DEMO</span><span class="who">Analyst on shift · 03:16 UTC</span></header>
+<header class="top"><b>SOC console</b><span style="color:#9fb0c3">Norrbyn Utilities · Wazuh alerts, simulated feed</span><span class="demo" title="An interface made for this portfolio. The product, the people and the data are invented.">Simulated interface</span><span class="who">Analyst on shift · 03:16 UTC</span></header>
 <main><div class="list"><h2>Open alerts · 6</h2>
 <div class="alert on" id="alert-top"><span class="lvl l10">10</span><div><b>sshd: brute force trying to get access to the system</b><small>Rule 5763 · web-01 · from 203.0.113.45 · user deploy</small></div><span class="when">03:14</span></div>
 <div class="alert"><span class="lvl l7">7</span><div><b>Integrity checksum changed</b><small>Rule 550 · app-02 · /etc/ssh/sshd_config</small></div><span class="when">02:51</span></div>

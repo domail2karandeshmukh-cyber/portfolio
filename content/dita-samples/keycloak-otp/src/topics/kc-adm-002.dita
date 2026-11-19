@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE troubleshooting PUBLIC "-//OASIS//DTD DITA Troubleshooting//EN" "troubleshooting.dtd">
+<troubleshooting id="when-a-keycloak-user-can-t-sign-in-with-a-one-time-password" xml:lang="en">
+<title>When a Keycloak user can't sign in with a one-time password</title>
+<shortdesc>What a user sees when their one-time password (OTP) doesn't work in Keycloak 26.8.2, why it happens, and what an administrator does about it. I reproduced every cause here on a Keycloak 26.8.2 server running on my own computer. An independent guide, not official Keycloak documentation.</shortdesc>
+<troublebody>
+<condition>
+<ul><li>The user types the code from their authenticator app, and Keycloak answers <i>Invalid authenticator code.</i></li><li>The user has lost the phone with the authenticator, so they have no code to type.</li><li>After an administrator deleted the user's authenticator, the user signs in with the password alone, and Keycloak never asks for a code.</li></ul>
+</condition>
+<troubleSolution>
+<remedy><title>The code arrives too late, or the phone's clock is wrong</title>
+<steps-informal>
+<p>A code is valid for one period of the realm's OTP policy: 30 seconds by default. With the default look around window of 1, Keycloak also accepts the code of the period before and the period after. Keycloak refuses a code from two periods back with <i>Invalid authenticator code.</i></p>
+<fig><image href="img/10-wrong-code.png" placement="break" width="150mm"><alt>Mobile Authenticator Setup after a wrong code, with Invalid authenticator code. marked and the key hidden</alt></image></fig>
+<ol><li>Ask the user to type the code that the app shows now, before the timer in the app runs out.</li><li>If every code fails, ask the user to set the phone's date and time to update automatically. An authenticator computes each code from the time, so a phone that is a minute off produces codes Keycloak refuses.</li><li>If the clocks of many users drift, check the server's clock before you widen the look around window in the <xref href="kc-adm-003.dita">OTP policy</xref>. A wider window accepts older codes, for everyone.</li></ol>
+</steps-informal>
+</remedy>
+<remedy><title>The user lost the phone</title>
+<steps-informal>
+<p>The authenticator went with the phone, and Keycloak keeps no copy within the user's reach. Delete the user's OTP credential, and make them set up a new one: <xref href="kc-adm-001.dita">Reset a user's one-time password in Keycloak</xref>.</p>
+</steps-informal>
+</remedy>
+<remedy><title>Keycloak no longer asks for a code</title>
+<steps-informal>
+<p>An administrator deleted the user's OTP credential, and nothing asked the user to set up a new one. Keycloak's default sign-in flow runs its second-factor step only for a user who has a second factor configured, so a user without one signs in with the password alone.</p>
+<fig><image href="img/06-password-only.png" placement="break" width="150mm"><alt>The account console, reached with the password alone after the OTP credential was deleted</alt></image></fig>
+<p>On the user's <b>Details</b> tab, add <b>Configure OTP</b> to <b>Required user actions</b>, and select <b>Save</b>. At the next sign-in, Keycloak asks the user to set up an authenticator before they get in.</p>
+</steps-informal>
+</remedy>
+</troubleSolution>
+</troublebody>
+</troubleshooting>

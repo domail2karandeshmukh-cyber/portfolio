@@ -22,7 +22,7 @@
   /* The document sets: the scenarios' documents, grouped the way a writer would publish them. */
   var panel = Kit.start($("#dt-start"), {
     tool: "dita", title: T("Choose a document set"),
-    lead: T("Six sets of Markdown documents from the fictional scenarios. Choose one to load its documents, and then make the project: a map with keys for the variables, a typed topic for each document, DITAVAL filters for each group of readers, and a relationship table. The links open what DITA Open Toolkit published from the same set."),
+    lead: T("Six sets of Markdown documents from the simulated scenarios. Choose one to load its documents, and then make the project: a map with keys for the variables, a typed topic for each document, DITAVAL filters for each group of readers, and a relationship table. The links open what DITA Open Toolkit published from the same set."),
     open: function (s) {
       say(T("Loading {title}…", { title: T(s.title) }));
       return Promise.all(s.docs.map(Kit.fetchText)).then(function (sources) {

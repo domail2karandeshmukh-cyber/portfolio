@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="message-to-document" xml:lang="en">
+<title>Reset MFA for a locked-out user</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Demonstration"/>
+</topicmeta>
+<topicref href="topics/sd-iam-007.dita" type="task"/>
+</map>

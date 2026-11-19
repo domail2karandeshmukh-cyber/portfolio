@@ -37,10 +37,12 @@
     strokes.forEach(function (m) { ho.observe(m); });
   }
 
-  /* The headline's corrections are over in under three seconds. The struck words then leave the page for good,
-     so that no reader, and no screen reader, meets them again. */
-  var struck = $$(".ed[data-was]");
-  if (struck.length) setTimeout(function () { struck.forEach(function (e) { e.removeAttribute("data-was"); }); }, reduce ? 0 : 3200);
+  /* On a phone the April button waits while the hero's two actions are on screen, so it never covers them
+     (the CSS for .dock-wait applies below 720 pixels only). */
+  var heroActs = $(".hero .btns");
+  if (heroActs && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { document.body.classList.toggle("dock-wait", es[0].isIntersecting); }).observe(heroActs);
+  }
 
   /* The featured documents are dealt onto the desk when they come into view */
   var deck = $(".docs.feature");
@@ -54,8 +56,9 @@
     dio.observe(deck);
   }
 
-  /* The rewrite: an engineer's message, the markup, the published procedure.
-     A fact carries the same data-f in the message and in the document, so it can be followed from one to the other.
+  /* The case study in six stages: the message, its analysis, the markup, the procedure, its checks and its outputs
+     (lib/casestudy.mjs). A fact carries the same data-f in the message and in the document, so it can be followed
+     from one to the other.
      The same stage then takes a visitor's own message: /api/rewrite sends it back marked up, with a draft,
      the questions still open and a check of its names and numbers. Everything it sends is drawn as text. */
   var rw = $("#rewrite");
@@ -67,7 +70,8 @@
       $$("s", raw).forEach(function (m, i) { m.style.setProperty("--i", Math.min(i + 3, 16)); });
     }
     stagger();
-    function layer(s) { return s === 3 ? doc : raw; }
+    // The message is on show in stages 1 and 3, the document in stage 4. The facts fly only between those two.
+    function layer(s) { return s === 4 ? doc : s === 1 || s === 3 ? raw : null; }
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     // Each fact leaves its place in one version and lands on its place in the other.
     function fly(from, to) {
@@ -95,7 +99,7 @@
       var was = state, h0 = stage.offsetHeight;
       $$(".rw-fly", stage).forEach(function (c) { c.remove(); });
       $$(".lit", rw).forEach(function (e) { e.classList.remove("lit"); });
-      if (!quick && !reduce && stage.animate && (was === 3) !== (s === 3)) fly(layer(was), layer(s));
+      if (!quick && !reduce && stage.animate && layer(was) && layer(s) && layer(was) !== layer(s)) fly(layer(was), layer(s));
       state = s;
       rw.dataset.state = s;
       tabs.forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.s === s); });
@@ -112,14 +116,16 @@
       timers.forEach(clearTimeout);
       timers = [];
     }
-    // The whole edit, start to finish: the message, then the markup, then the document.
+    // The edit, start to finish: the message, what it leaves out, the markup, then the document.
+    // The checks and the outputs wait for the visitor: they are there to be read, not watched.
     function play() {
       stop();
       auto = true;
       var lead = state === 1 ? 0 : 1500;
       set(1);
       later(function () { if (auto) set(2); }, lead + 1300);
-      later(function () { if (auto) set(3); auto = false; }, lead + 1300 + 2900);
+      later(function () { if (auto) set(3); }, lead + 1300 + 3600);
+      later(function () { if (auto) set(4); auto = false; }, lead + 1300 + 3600 + 2900);
     }
     tabs.forEach(function (b) { b.addEventListener("click", function () { stop(); set(+b.dataset.s); }); });
     $(".rw-again", rw).addEventListener("click", play);
@@ -228,11 +234,11 @@
       stats.textContent = fill(I.rwStats, { f: r.stats.facts, n: r.stats.cut, q: r.questions.length, s: (Math.max(100, r.ms || 0) / 1000).toLocaleString(LANG, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) });
       copy.hidden = !navigator.clipboard;
       if (bench) bench.hidden = false;
-      if (reduce) return set(3, true, true);
+      if (reduce) return set(4, true, true);
       stop();
       auto = true;
-      later(function () { if (auto) set(2); }, 450);
-      later(function () { if (auto) set(3); auto = false; }, 450 + 2500 + Math.min(r.raw.length, 36) * 40);
+      later(function () { if (auto) set(3); }, 450);
+      later(function () { if (auto) set(4); auto = false; }, 450 + 2500 + Math.min(r.raw.length, 36) * 40);
     }
     // The example comes back, as it was.
     function back(why) {
@@ -247,7 +253,7 @@
       tabs.forEach(function (b) { b.disabled = false; });
       acts.hidden = true;
       last = null;
-      set(3, true, true);
+      set(4, true, true);
       note.textContent = why || "";
     }
     function load() {
@@ -343,7 +349,7 @@
     }
 
     // Without motion the page opens on the finished document. With it, the edit plays once when the stage is in view.
-    if (reduce || !("IntersectionObserver" in window)) { set(3, true); return; }
+    if (reduce || !("IntersectionObserver" in window)) { set(4, true); return; }
     // When the page opens on the stage, the headline is corrected first. The stage waits its turn.
     var opened = performance.now();
     var io = new IntersectionObserver(function (es) {
@@ -353,6 +359,38 @@
     }, { threshold: 0.55 });
     io.observe(stage);
   })();
+
+  /* The case study page: a fact of the message shows where it went in the procedure, by pointer or keyboard,
+     and the procedure opens in the workbench through this browser's storage. */
+  var trace = $(".cs-trace");
+  if (trace) (function () {
+    var held = null;
+    function light(f, on) { $$('[data-f="' + f + '"]', trace).forEach(function (e) { e.classList.toggle("on", on); }); }
+    $$(".cs-before mark[data-f]", trace).forEach(function (m) {
+      m.tabIndex = 0;
+      m.setAttribute("role", "button");
+      m.setAttribute("aria-pressed", "false");
+      m.addEventListener("mouseenter", function () { if (!held) light(m.dataset.f, true); });
+      m.addEventListener("mouseleave", function () { if (!held) light(m.dataset.f, false); });
+      function hold() {
+        var was = held;
+        if (held) { light(held.dataset.f, false); held.setAttribute("aria-pressed", "false"); held = null; }
+        if (was === m) return;
+        held = m;
+        m.setAttribute("aria-pressed", "true");
+        light(m.dataset.f, true);
+        var to = $('.cs-after [data-f="' + m.dataset.f + '"]', trace), r = to && to.getBoundingClientRect();
+        if (r && (r.top < 80 || r.bottom > innerHeight)) to.scrollIntoView({ block: "center", behavior: reduce ? "auto" : "smooth" });
+      }
+      m.addEventListener("click", hold);
+      m.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); hold(); } });
+    });
+  })();
+  var csBench = $("#cs-bench"), csMd = $("#cs-md");
+  if (csBench && csMd) csBench.addEventListener("click", function () {
+    try { localStorage.setItem("wb:incoming", csMd.textContent.replace(/<\\\//g, "</")); } catch (e) { return; }
+    location.href = "/workbench";
+  });
 
   /* Key figures count up when they come into view */
   if (!reduce && "IntersectionObserver" in window) $$("[data-count]").forEach(function (el) {
@@ -436,6 +474,16 @@
     });
   });
   if ($(".lib-tabs")) { try { var g0 = localStorage.getItem("lib:group"); if (g0 === "project") { grouping = g0; $$(".lib-tabs [data-group]").forEach(function (o) { o.setAttribute("aria-selected", o.dataset.group === g0); }); } } catch (e) {} showDocs(); }
+  /* A link to a shelf (/docs#kc1, from a document's breadcrumb) opens the grouping that holds it, then goes to it. */
+  function toShelf() {
+    var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id), g = t && t.closest(".lib-group");
+    if (!g || g.dataset.group === grouping) return;
+    grouping = g.dataset.group;
+    $$(".lib-tabs [data-group]").forEach(function (o) { o.setAttribute("aria-selected", o.dataset.group === grouping); });
+    showDocs();
+    t.scrollIntoView({ block: "start" });
+  }
+  if ($(".lib-tabs")) { toShelf(); window.addEventListener("hashchange", toShelf); }
 
   /* Header: mark the section in view */
   var links = $$('.home .nav nav a[href^="#"]');
@@ -602,7 +650,7 @@
       // Every section once, with the words it can be found by: its title, its document, and its project.
       var all = [];
       docs.forEach(function (d) {
-        if (/fictional/i.test(d.k || "")) return;       // the studio's fictional demonstrations are not sources about Karan's work
+        if (/demonstration scenario|fictional|simulated/i.test(d.k || "")) return;       // the studio's simulated scenarios are not sources about Karan's work
         (d.s || []).forEach(function (sec) { all.push({ d: d, sec: sec, glossary: /glossary/i.test(d.t + " " + d.u), title: (d.t + " " + (d.p || "") + " " + sec[1]).toLowerCase(), text: String(sec[2] || "").toLowerCase() }); });
       });
       return all;
@@ -1169,6 +1217,7 @@
         enlarge($(".diagram-open", d) || d, copy, "Diagram");
       }
     });
+    $$(".doc-print", article).forEach(function (b) { b.hidden = false; b.addEventListener("click", function () { window.print(); }); });
     $$("[data-pdf]", article).forEach(function (b) {
       if (innerWidth < 880) return;
       b.hidden = false;

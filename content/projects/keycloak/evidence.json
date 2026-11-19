@@ -1,0 +1,137 @@
+{
+ "note": "What the Keycloak 26.8.2 server recorded while the guides in this folder were checked, on 19 November 2026: a local test instance, the realm portfolio-demo, the test user alex.morgan. Read through its admin REST API. No password or key is recorded here.",
+ "keycloak": "26.8.2",
+ "steps": [
+  {
+   "step": "delete",
+   "alert": "The credentials has been deleted successfully.",
+   "dialog": "Delete credentials?\nAre you sure you want to delete these users credentials?\nDelete\nCancel"
+  },
+  {
+   "step": "signin-without-required-action",
+   "url": "/realms/portfolio-demo/account",
+   "page": "Account Management",
+   "otp_prompt": false
+  },
+  {
+   "step": "required-action",
+   "alert": "The user has been saved"
+  },
+  {
+   "step": "signin-with-required-action",
+   "page": "Mobile Authenticator Setup",
+   "otp_prompt": true
+  },
+  {
+   "step": "wrong-code",
+   "message": [
+    "Invalid authenticator code."
+   ]
+  },
+  {
+   "step": "enrolled",
+   "url": "/realms/portfolio-demo/account",
+   "title": "Account Management"
+  }
+ ],
+ "credentials": {
+  "before": [
+   {
+    "type": "password",
+    "userLabel": null
+   },
+   {
+    "type": "otp",
+    "userLabel": "Alex's phone"
+   }
+  ],
+  "after_delete": [
+   {
+    "type": "password",
+    "userLabel": null
+   }
+  ],
+  "after": [
+   {
+    "type": "password",
+    "userLabel": null
+   },
+   {
+    "type": "otp",
+    "userLabel": "Alex's new phone"
+   }
+  ]
+ },
+ "required_actions_after_save": [
+  "CONFIGURE_TOTP"
+ ],
+ "admin_events": [
+  {
+   "operation": "UPDATE",
+   "resource": "USER",
+   "path": "users/<user id>"
+  },
+  {
+   "operation": "ACTION",
+   "resource": "USER",
+   "path": "users/<user id>/credentials/c656839d-7859-4947-afd9-ca91b50d4be6"
+  }
+ ],
+ "otp_policy": {
+  "otpPolicyType": "totp",
+  "otpPolicyAlgorithm": "HmacSHA1",
+  "otpPolicyInitialCounter": 0,
+  "otpPolicyDigits": 6,
+  "otpPolicyLookAheadWindow": 1,
+  "otpPolicyPeriod": 30,
+  "otpPolicyCodeReusable": false,
+  "otpSupportedApplications": [
+   "totpAppFreeOTPName",
+   "totpAppGoogleName",
+   "totpAppMicrosoftAuthenticatorName"
+  ]
+ },
+ "browser_flow": [
+  "Cookie (alternative)",
+  "forms (alternative): Username Password Form (required), Browser - Conditional 2FA (conditional: Condition - user configured, Condition - credential, OTP Form)"
+ ],
+ "look_around_window_test": {
+  "setting": 1,
+  "period_seconds": 30,
+  "results": {
+   "previous period": {
+    "asked_for_code": true,
+    "accepted": true,
+    "message": []
+   },
+   "two periods back": {
+    "asked_for_code": true,
+    "accepted": false,
+    "message": [
+     "Invalid authenticator code."
+    ]
+   },
+   "next period": {
+    "asked_for_code": true,
+    "accepted": true,
+    "message": []
+   }
+  }
+ },
+ "policy_change_test": {
+  "credential_data": [
+   {
+    "subType": "totp",
+    "digits": 6,
+    "counter": 0,
+    "period": 30,
+    "algorithm": "HmacSHA1"
+   }
+  ],
+  "six_digit_code_after_policy_8": {
+   "accepted": true,
+   "message": []
+  },
+  "policy_restored_digits": 6
+ }
+}

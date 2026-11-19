@@ -1,0 +1,56 @@
+{
+ "title": "Reset a user's one-time password in Keycloak",
+ "seconds": 152.87,
+ "narrated": false,
+ "keycloak": "26.8.2",
+ "recorded": "2026-11-19",
+ "about": "A real task in Keycloak 26.8.2, filmed in the browser: find the user, delete the lost authenticator, require a new one, the user's own setup, and the check.",
+ "where": "Recorded on Keycloak 26.8.2, open-source software, with a test realm and test users",
+ "sections": [
+  {
+   "scene": "intro",
+   "kind": "card"
+  },
+  {
+   "scene": "before",
+   "kind": "card"
+  },
+  {
+   "scene": "find",
+   "kind": "rec"
+  },
+  {
+   "scene": "credentials",
+   "kind": "rec"
+  },
+  {
+   "scene": "delete",
+   "kind": "rec"
+  },
+  {
+   "scene": "confirm",
+   "kind": "rec"
+  },
+  {
+   "scene": "caution",
+   "kind": "rec"
+  },
+  {
+   "scene": "require",
+   "kind": "rec"
+  },
+  {
+   "scene": "user",
+   "kind": "rec"
+  },
+  {
+   "scene": "verify",
+   "kind": "rec"
+  },
+  {
+   "scene": "close",
+   "kind": "card"
+  }
+ ],
+ "captions": 30
+}

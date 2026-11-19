@@ -96,6 +96,9 @@ style:
     keep-together.within-page: always
   codeph:
     font-family: Hyperlegible Mono
+  # A step's command stays on the page with what follows it, so that no step ends a page with its code on the next one.
+  cmd:
+    keep-with-next.within-page: always
   link:
     color: '#1D4ED8'
   note:

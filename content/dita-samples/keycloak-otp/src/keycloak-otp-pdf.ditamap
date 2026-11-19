@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="keycloak-otp-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>Independent guides for Keycloak 26.8.2</booklibrary>
+<mainbooktitle>Keycloak administration: one-time passwords</mainbooktitle>
+<booktitlealt>Publication KEYCLOAK-OTP, 3 documents</booktitlealt>
+<booktitlealt>Independent guides for Keycloak 26.8.2</booktitlealt>
+<booktitlealt>Issued 2026-11-19. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-19"/></critdates>
+</bookmeta>
+<frontmatter>
+
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+<booklists><toc/></booklists>
+</frontmatter>
+<chapter href="topics/kc-adm-001.dita" type="task"/>
+<chapter href="topics/kc-adm-002.dita" type="troubleshooting"/>
+<chapter href="topics/kc-adm-003.dita" type="reference"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/kc-adm-001.dita" type="task"/></relcell><relcell><topicref href="topics/kc-adm-002.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/kc-adm-003.dita" type="reference"/></relcell></relrow>
+</reltable>
+</bookmap>

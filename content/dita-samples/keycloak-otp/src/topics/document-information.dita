@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="document-information" xml:lang="en">
+<title>Document information</title>
+<shortdesc>Independent guides by Karan Deshmukh, written for Keycloak 26.8.2 and checked against a Keycloak 26.8.2 server running on his own computer, with a test realm and test users. Keycloak is an open-source project; these guides aren't official Keycloak documentation, and nobody at the project reviewed them.</shortdesc>
+<refbody>
+<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
+<sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
+<strow><stentry>Reset a user's one-time password in Keycloak</stentry><stentry>KC-ADM-001</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
+<strow><stentry>When a Keycloak user can't sign in with a one-time password</stentry><stentry>KC-ADM-002</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
+<strow><stentry>Keycloak OTP policy: the settings and their defaults</stentry><stentry>KC-ADM-003</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
+</simpletable>
+<section><title>Publication</title>
+<p>Publication KEYCLOAK-OTP, 3 documents. Written by Karan Deshmukh. Owner: Karan Deshmukh. Published on 2026-11-19 with DITA Open Toolkit from DITA 1.3 source.</p>
+</section>
+</refbody>
+</reference>

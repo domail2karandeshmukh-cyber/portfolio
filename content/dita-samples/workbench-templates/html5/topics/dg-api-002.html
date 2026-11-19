@@ -4,14 +4,14 @@
 <h1 class="title topictitle1" id="ariaid-title1">Read the inspection results from the <span class="ph">Acme Console</span> API</h1>
 
 <div class="body taskbody"><p class="shortdesc">Developer guide. You send one request and get the readings of a work order as JSON. Fictional API, written for this portfolio.</p>
-<section class="section prereq">
+<section class="section prereq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Before you begin</h2></div>
 <ul class="ul"><li class="li">You have an API token with the scope <code class="ph codeph">readings:read</code>.</li><li class="li">You know the number of the work order.</li></ul>
 </section>
-<section><ol class="ol steps"><li class="li step stepexpand"><span class="ph cmd">Store your token in an environment variable, so it never appears in your code.</span><div class="itemgroup info"><pre class="pre codeblock language-bash"><code>export ACME_TOKEN="your token"</code></pre></div></li><li class="li step stepexpand"><span class="ph cmd">Send a request for the work order.</span><div class="itemgroup info"><pre class="pre codeblock language-bash"><code>curl -H "Authorization: Bearer $ACME_TOKEN" https://api.example.com/v1/work-orders/WO-2291/readings</code></pre></div></li><li class="li step stepexpand"><span class="ph cmd">Read the <code class="ph codeph">readings</code> list in the response. Each reading has a <code class="ph codeph">check</code>, a <code class="ph codeph">value</code> and a <code class="ph codeph">unit</code>.</span></li></ol></section>
-<section class="section result">
+<section><div class="tasklabel"><h2 class="sectiontitle tasklabel">Procedure</h2></div><ol class="ol steps"><li class="li step stepexpand"><span class="ph cmd">Store your token in an environment variable, so it never appears in your code.</span><div class="itemgroup info"><pre class="pre codeblock language-bash"><code>export ACME_TOKEN="your token"</code></pre></div></li><li class="li step stepexpand"><span class="ph cmd">Send a request for the work order.</span><div class="itemgroup info"><pre class="pre codeblock language-bash"><code>curl -H "Authorization: Bearer $ACME_TOKEN" https://api.example.com/v1/work-orders/WO-2291/readings</code></pre></div></li><li class="li step stepexpand"><span class="ph cmd">Read the <code class="ph codeph">readings</code> list in the response. Each reading has a <code class="ph codeph">check</code>, a <code class="ph codeph">value</code> and a <code class="ph codeph">unit</code>.</span></li></ol></section>
+<section class="section result"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Results</h2></div>
 <p class="p">The response has the status 200, and the list has four readings. A status of 401 means the token is missing or out of date.</p>
 </section>
-<section class="section postreq">
+<section class="section postreq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">What to do next</h2></div>
 <p class="p"><strong class="ph b">Limits</strong></p>
 <p class="p">You can send 60 requests a minute with one token. A request over the limit gets the status 429, and you can try again after the number of seconds in the <code class="ph codeph">Retry-After</code> header.</p>
 </section>

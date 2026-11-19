@@ -13,6 +13,10 @@ on:
         description: One script only (its id in lib/narration.cjs), or empty for all
         type: string
         default: ""
+      site:
+        description: The site that speaks (a preview's address records a script before its release)
+        type: string
+        default: https://karandeshmukh.dev
 
 permissions:
   contents: write
@@ -26,7 +30,12 @@ jobs:
         with:
           node-version: 22
       - name: Record the segments
-        run: node scripts/record-narration.mjs https://karandeshmukh.dev ${{ inputs.all && '--all' || '' }} ${{ inputs.script }}
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          SITE: ${{ inputs.site }}
+          ALL: ${{ inputs.all && '--all' || '' }}
+          SCRIPT: ${{ inputs.script }}
+        run: node scripts/record-narration.mjs "$SITE" $ALL $SCRIPT
       - name: Commit the recordings
         if: always()
         run: |

@@ -65,9 +65,9 @@ with sync_playwright() as p:
     check("German: the tool links stay in German", pg.evaluate("[...document.querySelectorAll('.sx-i[data-type=tool] .sx-t a')].map(a => a.getAttribute('href')).filter(h => h.startsWith('/studio/') && h !== '/studio/aerospace')") == [])
     # the field explorer on the home page
     pg.goto(BASE + "/", wait_until="load"); pg.wait_for_timeout(300)
-    check("home: the field explorer has six tabs and one panel showing", pg.locator(".fx-tabs [role=tab]").count() == 6 and pg.evaluate("[...document.querySelectorAll('.fx-p')].filter(p => !p.hidden).length") == 1)
+    check("home: the field explorer has seven tabs and one panel showing", pg.locator(".fx-tabs [role=tab]").count() == 7 and pg.evaluate("[...document.querySelectorAll('.fx-p')].filter(p => !p.hidden).length") == 1)
     pg.focus("#fx-t-software"); pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(100)
-    check("home: the arrow keys move between fields", pg.evaluate("document.activeElement.id") == "fx-t-enterprise-it" and not pg.is_hidden("#fx-enterprise-it"))
+    check("home: the arrow keys move between fields", pg.evaluate("document.activeElement.id") == "fx-t-api-documentation" and not pg.is_hidden("#fx-api-documentation"))
     pg.keyboard.press("End"); pg.wait_for_timeout(100)
     check("home: End goes to the last field, and its panel names its documents", pg.evaluate("document.activeElement.id") == "fx-t-industrial-engineering" and pg.locator("#fx-industrial-engineering .fx-list li").count() == 3)
     check("home: each panel is labelled by its tab", pg.evaluate("[...document.querySelectorAll('.fx-p')].every(p => p.getAttribute('role') === 'tabpanel' && document.getElementById(p.getAttribute('aria-labelledby')))"))

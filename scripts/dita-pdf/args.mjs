@@ -20,7 +20,9 @@ export function pdfArgs() {
     font("AtkinsonHyperlegibleMono-Regular.ttf", ["Hyperlegible Mono", "monospace", "Courier"].flatMap((n) => [[n, "normal", "normal"], [n, "italic", "normal"]])),
     font("AtkinsonHyperlegibleMono-Bold.ttf", ["Hyperlegible Mono", "monospace", "Courier"].map((n) => [n, "normal", "bold"])),
   ].join("")}</fonts></renderer></renderers></fop>`);
-  return [`--theme=${path.join(here, "theme.yaml")}`, `--args.fo.userconfig=${xconf}`];
+  // A task's parts carry DITA-OT's own labels ("Before you begin", "Procedure", "Results", "What to do next"), so a reader
+  // sees where the prerequisites end and the steps begin. The HTML5 is published with the same argument.
+  return [`--theme=${path.join(here, "theme.yaml")}`, `--args.fo.userconfig=${xconf}`, "--args.gen.task.lbl=YES"];
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) console.log(JSON.stringify(pdfArgs()));

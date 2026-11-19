@@ -25,7 +25,8 @@
   "PDF",
   "Technical Writing: Software Documentation, Prompt Engineering for LLMs, MadCap Flare, Business Analysis, Snagit, Final Cut Pro.",
   "India",
-  "Docs-as-code"
+  "Docs-as-code",
+  "LinkedIn"
  ],
  "patterns": [
   [
@@ -51,6 +52,10 @@
   [
    "^(\\d+) rules, based on the Microsoft Writing Style Guide\\. Code checks (\\d+) of them here, and in every document of the library on each build\\.$",
    "$1 reglas, basadas en la Microsoft Writing Style Guide. El código comprueba $2 de ellas aquí, y en cada documento de la biblioteca en cada compilación."
+  ],
+  [
+   "^Version ([0-9.]+), built from commit (<a [^>]+>[0-9a-f]+</a>)\\.$",
+   "Versión $1, generada a partir del commit $2."
   ]
  ],
  "units": {
@@ -287,7 +292,7 @@
   "All projects": "Todos los proyectos",
   "Karan Deshmukh | Technical Documentation Specialist": "Karan Deshmukh | Especialista en documentación técnica",
   "Technical documentation specialist with 5+ years across industrial engineering, enterprise IT and cybersecurity, most recently at MongoDB and Magna International. Writing samples, a documentation workbench, and live projects.": "Especialista en documentación técnica con más de 5 años en ingeniería industrial, TI empresarial y ciberseguridad, más recientemente en MongoDB y Magna International. Muestras de redacción, un taller de documentación y proyectos en línea.",
-  "Technical documentation specialist with 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International. I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.": "Especialista en documentación técnica con más de 5 años en ingeniería industrial, TI empresarial y ciberseguridad, más recientemente en MongoDB y Magna International. Convierto información técnica compleja en procedimientos claros, manuales, guías de resolución de problemas y documentación estructurada.",
+  "With 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International, I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.": "Con más de 5 años en ingeniería industrial, TI empresarial y ciberseguridad, más recientemente en MongoDB y Magna International, convierto información técnica compleja en procedimientos claros, manuales, guías de resolución de problemas y documentación estructurada.",
   "View writing samples": "Ver muestras de redacción",
   "Hiring? <a href=\"/recruiters\">Read the one-minute summary for recruiters</a>": "¿Busca candidatos? <a href=\"/recruiters\">Lea el resumen de un minuto para reclutadores</a>",
   "Open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of my work authorization in France. Remote or hybrid. Based in Angers, France.": "Abierto a puestos de documentación técnica: jornada completa, contrato, tiempo parcial, freelance, prácticas o formación en alternancia, en el marco de mi autorización de trabajo en Francia. En remoto o híbrido. Resido en Angers, Francia.",
@@ -309,7 +314,7 @@
   "My first degree is a BSc in Aircraft Maintenance Engineering, a field where maintenance follows written procedures, inspections, and records. The same discipline applies wherever people install, run, and maintain equipment by following written procedures: industrial engineering, automotive, aerospace, manufacturing, renewable energy such as offshore wind, and technical operations.": "Mi primer título es un BSc en Ingeniería de Mantenimiento Aeronáutico, un campo en el que el mantenimiento sigue procedimientos escritos, inspecciones y registros. La misma disciplina se aplica allí donde se instalan, operan y mantienen equipos siguiendo procedimientos escritos: ingeniería industrial, automoción, aeroespacial, fabricación, energías renovables como la eólica marina, y operaciones técnicas.",
   "Read about my roles": "Más sobre mis puestos",
   "Knowledge-base articles, SOPs, runbooks, how-to guides, and troubleshooting guides, mostly for IT, security, and identity teams. Across his roles he has created, reviewed, and maintained more than 1,000 documents, over 500 of them at MongoDB. At Magna International he wrote product manuals, troubleshooting resources, and maintenance updates, prepared for localization into up to 29 languages.": "Artículos de base de conocimientos, SOP, runbooks, guías prácticas y guías de resolución de problemas, sobre todo para equipos de TI, seguridad e identidad. A lo largo de sus puestos ha creado, revisado y mantenido más de 1.000 documentos, más de 500 de ellos en MongoDB. En Magna International redactó manuales de producto, recursos de resolución de problemas y actualizaciones de mantenimiento, preparados para su localización a un máximo de 29 idiomas.",
-  "Yes. Karan is open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of his work authorization in France. Remote or hybrid, from Angers. Message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/": "Sí. Karan está abierto a puestos de documentación técnica: jornada completa, contrato, tiempo parcial, freelance, prácticas o formación en alternancia, en el marco de su autorización de trabajo en Francia. En remoto o híbrido, desde Angers. Escríbale por LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/",
+  "Yes. Karan is open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of his work authorization in France. Remote or hybrid, from Angers. Email him at domail2karandeshmukh@gmail.com, or message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/": "Sí. Karan está abierto a puestos de documentación técnica: jornada completa, contrato, tiempo parcial, freelance, prácticas o formación en alternancia, en el marco de su autorización de trabajo en Francia. En remoto o híbrido, desde Angers. Escríbale a domail2karandeshmukh@gmail.com o por LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/",
   "Studio": "Estudio",
   "Explore the Documentation Studio": "Explorar el estudio de documentación",
   "The workbench and the Documentation Studio": "El taller y el estudio de documentación",
@@ -395,6 +400,38 @@
   "One procedure through every tool": "Un procedimiento por todas las herramientas",
   "Employee onboarding and access provisioning": "Incorporación de empleados y concesión de accesos",
   "Investigating a simulated Wazuh security alert": "Investigar una alerta de seguridad simulada de Wazuh",
-  "Preventive maintenance: monthly equipment inspection": "Mantenimiento preventivo: inspección mensual de un equipo"
+  "Preventive maintenance: monthly equipment inspection": "Mantenimiento preventivo: inspección mensual de un equipo",
+  "Karan Deshmukh, technical documentation specialist": "Karan Deshmukh, especialista en documentación técnica",
+  "Complex technology.": "Tecnología compleja.",
+  "Clear documentation.": "Documentación clara.",
+  "Explore my work": "Explorar mi trabajo",
+  "More ways in": "Más accesos",
+  "Recruiter overview": "Resumen para reclutadores",
+  "Explore industries": "Explorar sectores",
+  "Watch demonstrations": "Ver demostraciones",
+  "Contact me": "Contactarme",
+  "Email me, or send a message on LinkedIn. I'm based in Angers, France, and work remote or hybrid.": "Escríbame un correo o un mensaje en LinkedIn. Vivo en Angers, Francia, y trabajo en remoto o en modalidad híbrida.",
+  "Email Karan": "Escribir a Karan",
+  "Connect on LinkedIn": "Conectar en LinkedIn",
+  "Every way to reach me": "Todas las formas de contactarme",
+  "Angers, France": "Angers, Francia",
+  "Stages of the case study": "Etapas del caso práctico",
+  "Input": "Origen",
+  "Analysis": "Análisis",
+  "Edit": "Edición",
+  "Quality": "Calidad",
+  "Publish": "Publicación",
+  "What I check before I write: what the task depends on, what could go wrong, and what the message leaves out.": "Lo que compruebo antes de escribir: de qué depende la tarea, qué puede salir mal y qué deja fuera el mensaje.",
+  "What it passes before release. The build runs these checks on every change.": "Lo que debe superar antes de publicarse. La compilación repite estas comprobaciones con cada cambio.",
+  "One source, four outputs.": "Una fuente, cuatro formatos.",
+  "A demonstration: the message and the answers were written for this portfolio. <a class=\"rw-case\" href=\"/message-to-document\">See the whole case study</a>.": "Una demostración: el mensaje y las respuestas se escribieron para este portafolio. <a class=\"rw-case\" href=\"/message-to-document\">Ver el caso práctico completo</a>.",
+  "Troubleshooting": "Solución de problemas",
+  "Help centers, release notes, user guides": "Centros de ayuda, notas de versión, guías de usuario",
+  "API documentation": "Documentación de API",
+  "References, quick starts, OpenAPI and error guides": "Referencias, inicios rápidos, OpenAPI y guías de errores",
+  "Has he documented a real product?": "¿Ha documentado un producto real?",
+  "Yes. Keycloak 26.8.2, an open-source identity server: three independent guides for administrators, written against a Keycloak server Karan ran himself, with every screen from it and every behaviour tested, and a tutorial film of one task. And the KC1 prediction API from his MSc team project: a reference, a quick start and a troubleshooting guide, with every request and response recorded from the API. Both are in the library, and as PDF on the Downloads page.": "Sí. Keycloak 26.8.2, un servidor de identidad de código abierto: tres guías independientes para administradores, escritas sobre un servidor Keycloak que Karan ejecutó él mismo, con cada pantalla tomada de ese servidor y cada comportamiento probado, y un vídeo tutorial de una tarea. Y la API de predicción KC1 de su proyecto de equipo del máster: una referencia, una guía de inicio rápido y una guía de solución de problemas, con cada solicitud y cada respuesta grabadas de la API. Ambas están en la biblioteca, y en PDF en la página de descargas.",
+  "How does he take a document from start to release?": "¿Cómo lleva un documento desde el inicio hasta la publicación?",
+  "The documentation lifecycle page follows three KC1 API documents through sixteen stages, each with its real output: the requirement, the sources, the recorded API, the structure, the writing, the screenshots and their marks, the diagram, the style check, the verification, DITA publishing, a short film, the release, then a real change to the API, the impact analysis and revision 1.1.": "La página del ciclo de vida de la documentación sigue tres documentos de la API KC1 a lo largo de dieciséis etapas, cada una con su resultado real: el requisito, las fuentes, la API grabada, la estructura, la redacción, las capturas de pantalla y sus marcas, el diagrama, la comprobación de estilo, la verificación, la publicación en DITA, un vídeo breve, la publicación, y luego un cambio real en la API, el análisis de impacto y la revisión 1.1."
  }
 }

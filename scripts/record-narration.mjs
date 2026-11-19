@@ -4,6 +4,7 @@
 //   node scripts/record-narration.mjs https://karandeshmukh.dev                record the segments that have no recording yet
 //   node scripts/record-narration.mjs https://karandeshmukh.dev --all          record every segment again, after a change of voice
 //   node scripts/record-narration.mjs https://karandeshmukh.dev schedule-a-report   one script
+//   VERCEL_AUTOMATION_BYPASS_SECRET=… node scripts/record-narration.mjs https://<preview>.vercel.app keycloak-reset-otp   a preview, before release
 //
 // A recording is kept only when the best speech model made it and when the site spoke the words this copy of the
 // repository holds, so deploy a change to a script before recording it. The best model accepts a few requests a
@@ -16,6 +17,9 @@ const Narration = createRequire(import.meta.url)("../lib/narration.cjs");
 const args = process.argv.slice(2), base = String(args[0] || "").replace(/\/$/, ""), all = args.includes("--all"), only = args.slice(1).find((a) => !a.startsWith("--"));
 if (!/^https?:\/\//.test(base)) { console.error("usage: record-narration.mjs <address of the site> [--all] [script]"); process.exit(2); }
 const wait = (ms) => new Promise((done) => setTimeout(done, ms));
+// A preview deployment is behind Vercel Authentication: VERCEL_AUTOMATION_BYPASS_SECRET lets this script through. It is sent only to
+// this project's own preview addresses (karan-deshmukh-…vercel.app), never to another site.
+const BYPASS = process.env.VERCEL_AUTOMATION_BYPASS_SECRET && /^https:\/\/karan-deshmukh-[a-z0-9-]+\.vercel\.app$/.test(base) ? { "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET } : {};
 const kb = (n) => `${Math.round(n / 1024)} KB`;
 let made = 0, kept = 0, failed = 0, removed = 0;
 
@@ -29,7 +33,7 @@ for (const [id, script] of Object.entries(Narration.SCRIPTS)) {
     if (!all && existsSync(target)) { kept++; continue; }
     let done = false, why = "";
     for (let attempt = 1; attempt <= 5 && !done; attempt++) {
-      const r = await fetch(`${base}/api/april?narrate=${id}&seg=${n}&rec=${Date.now().toString(36)}`).catch((e) => ({ ok: false, status: 0, why: e.message }));
+      const r = await fetch(`${base}/api/april?narrate=${id}&seg=${n}&rec=${Date.now().toString(36)}`, { headers: BYPASS }).catch((e) => ({ ok: false, status: 0, why: e.message }));
       if (!r.ok) {
         why = `HTTP ${r.status}${r.why ? " " + r.why : ""}`;
         if (r.status && r.status !== 429 && r.status < 500) break;

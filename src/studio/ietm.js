@@ -145,7 +145,7 @@
       "<div><dt>Verification</dt><dd>" + esc(id.qaCode === "unverified" ? "Unverified. No qualified person has verified this content." : id.qa) + "</dd></div>" +
       "<div><dt>Security classification</dt><dd>" + esc(id.security) + (id.security === "01" ? ", unclassified" : "") + "</dd></div>" +
       "<div><dt>Responsible partner company</dt><dd>" + esc(id.owner) + "</dd></div></dl>" +
-      '<p class="ie-tp-warn"><b>Fictional demonstration.</b> ' + esc(id.distribution) + " Written by Karan Deshmukh as an independent portfolio piece: not work for an employer, a customer or a defence programme.</p></div>";
+      '<p class="ie-tp-warn"><b>Demonstration data.</b> ' + esc(id.distribution) + " Written by Karan Deshmukh as an independent portfolio piece: not work for an employer, a customer or a defence programme.</p></div>";
     if (prev && changed.length) {
       html += '<h2 id="ie-hl">Highlights of issue ' + esc(id.issue) + "</h2>" + (id.rfu.length ? "<p>" + esc(id.rfu.map(function (r) { return r.text; }).join(" ")) + "</p>" : "") +
         '<table class="ie-fm">' + head(["Data module", "Code", "Issue", "Reason for update"]) + "<tbody>" + changed.map(function (it) {
