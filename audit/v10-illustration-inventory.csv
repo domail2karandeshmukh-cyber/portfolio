@@ -1,0 +1,55 @@
+page,kind,source,label,production (c32ffc0),v10
+/,picture,/img/chainguard-800.webp,"AI-ChainGuard project site with the headline Signed is not safe: a verified signed model on one side, a digit the model misreads on the othe",yes,yes
+/,picture,/img/sentinel-800.webp,"NOVATECH Sentinel landing page: See the threat. Own the decision. Prove the response, beside a map of the company's offices and partners",yes,yes
+/,picture,/img/trustnav-800.webp,"TrustNav console: a fleet list with trust scores, a map of vehicles, and open alerts during a replayed spoofing attack",yes,yes
+/,picture,/img/workbench-800.webp,"The workbench. On the left, a draft in Markdown with its problems underlined. On the right, the style check lists each one with a fix.",yes,yes
+/docs/ai-chainguard/architecture,screenshot,/docs/img/ai-chainguard-02_provenance_chain.webp,Provenance chain: signed stages linked from the datasets to the deployment,yes,yes
+/docs/ai-chainguard/threat-model,screenshot,/docs/img/ai-chainguard-04_attack_lab_tamper.webp,"Attack lab: a tampered dataset fails verification, with two failed checks listed",yes,yes
+/docs/kc1/readme,screenshot,/docs/img/kc1-docker-image-layers.webp,Docker Image and Build Layers,yes,yes
+/docs/novatech-sentinel/readme,screenshot,/docs/img/novatech-sentinel-command.webp,"Command Center showing the enterprise atlas, the three rehearsal scenarios and the owner of each gate",yes,yes
+/docs/novatech-sentinel/readme,screenshot,/docs/img/novatech-sentinel-incident.webp,"The live incident console: scenario NT-SEC-041 with the seven gates, their owners, and the modelled financial exposure",yes,yes
+/docs/novatech-sentinel/readme,screenshot,/docs/img/novatech-sentinel-landing.webp,"NOVATECH Sentinel landing page: an atlas of NOVATECH's offices in Angers, Nantes and Rennes, its EU cloud, bank, suppliers and clients",yes,yes
+/docs/novatech-sentinel/readme,screenshot,/docs/img/novatech-sentinel-quant.webp,"Risk quantification page showing expected annual loss, 1-in-10-year loss, loss avoided by controls and the loss exceedance curve",yes,yes
+/docs/novatech-sentinel/release-notes,screenshot,/docs/img/novatech-sentinel-command.webp,"Command Center: a map of the company's sites, the incident queue, and the evidence ledger",yes,yes
+/docs/studio/screenshot-studio-guide,screenshot,/docs/img/studio-annotate-01-open.webp,"The Screenshot Studio's toolbar. Open image is marked 1, Capture screen 2 and Samples 3.",no,yes
+/docs/studio/screenshot-studio-guide,screenshot,/docs/img/studio-annotate-02-tools.webp,The editor with a sample open. The Rectangle tool is marked 1 and the Numbered callout tool 2.,no,yes
+/docs/studio/screenshot-studio-guide,screenshot,/docs/img/studio-annotate-03-redact.webp,The editor with the Redact tool selected (1) and its note on the right (2).,no,yes
+/docs/studio/screenshot-studio-guide,screenshot,/docs/img/studio-annotate-04-export.webp,"The export buttons. Export PNG is marked 1, Export SVG 2 and Save project 3.",no,yes
+/docs/trustnav/code-guide,screenshot,/docs/img/trustnav-guide-2-replay.webp,"Replay screen: a spoofing attack on a delivery van, with its trust score, the reasons, and a timeline",yes,yes
+/docs/trustnav/glossary,screenshot,/docs/img/trustnav-kpi-strip.webp,"Summary strip of the console: fleet trust 76, 7 platforms, 2 open incidents, 2 positions refused",yes,yes
+/docs/trustnav/how-it-works,screenshot,/docs/img/trustnav-console.webp,"TrustNav console: a fleet list with trust scores, a map of the vehicles, and an alerts panel",yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-1.webp,Screenshot: Select AI Cloud.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-10.webp,Screenshot: Select Login.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-11.webp,Screenshot: Select Sign In.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-12.webp,Screenshot: Confirm the Welcome to Core42 AI Cloud platform page displays.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-2.webp,Screenshot: Select Get started.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-3.webp,"Screenshot: In the sign-up window, select Individual.",yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-4.webp,Animation: Refer to the following animation to complete the sign-up form.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-5.webp,Screenshot: Select Verify Code.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-6.webp,Screenshot: Confirm the verification success message displays.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-7.webp,"Screenshot: On the Core42 website, select AI Cloud.",yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-8.webp,Screenshot: Select Log In.,yes,yes
+/samples/core42-portal,screenshot,/samples/img/core42-portal-9.webp,Screenshot: Copy the Tenant ID from the email you receive.,yes,yes
+/samples/google-workspace-faqs/docs,screenshot,/samples/img/faq-google-docs-1.webp,Screenshot: Select the Share button (top-right).,yes,yes
+/samples/google-workspace-faqs/docs,screenshot,/samples/img/faq-google-docs-2.webp,Screenshot: Select Send.,yes,yes
+/samples/google-workspace-faqs/docs,screenshot,/samples/img/faq-google-docs-3.webp,Screenshot: Select the Settings (gear) icon in the top-right corner.,yes,yes
+/samples/google-workspace-faqs/docs,screenshot,/samples/img/faq-google-docs-4.webp,Screenshot: Select Settings.,yes,yes
+/samples/google-workspace-faqs/docs,screenshot,/samples/img/faq-google-docs-5.webp,Screenshot: Scroll down and check the Offline box to enable offline access.,yes,yes
+/studio/aerospace,diagram (inline SVG),inline:SX000i in the middle connects S3000L logistics support analy,"SX000i in the middle connects S3000L logistics support analysis, S1000D technical publications, S2000M material management, S4000P preventiv",yes,yes
+/studio/aerospace,diagram (inline SVG),inline:The project BREX and the applicability tables govern the dat,The project BREX and the applicability tables govern the data modules; the data modules use the illustrations; publication modules select da,yes,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0001-001-01.svg,ARF-1 training rig - general view,no,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0002-001-01.svg,Fan assembly - removal and installation (before Modification M01),no,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0003-001-01.svg,Air filter - examination,no,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0004-001-01.svg,Training rig - parts catalogue view,no,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0004-002-01.svg,"Training rig - parts catalogue view (issue 2, with Modification M01 parts)",no,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0005-001-01.svg,Fan assembly - removal and installation (after Modification M01),no,yes
+/studio/aerospace,engineering illustration (SVG),/studio/aerospace/illustrations/icn-0demo-arf0006-001-01.svg,"Control box - controls, indicators, test points and adjustment potentiometer",no,yes
+/studio/aerospace/downloads/arf1-maintenance-publication,picture,data URI,Training rig,yes,yes
+/studio/aerospace/downloads/arf1-operator-publication,picture,data URI,Training rig - general view,yes,yes
+/studio/flagship,screenshot,/studio/flagship/files/screenshots/work-order-annotated.png,"The work order screen with the access key covered by a solid black box, and the Record readings button boxed in green.",yes,yes
+/studio/flagship/files/guide/guide,picture,data URI,"Step 3: Check that all four results are inside their range, then select Close work order",yes,yes
+/studio/samples/guides/cloud-config/guide,picture,data URI,Step 5: Check that the deployment is live and the health check passed,yes,yes
+/studio/samples/guides/engineering-inspection/guide,picture,data URI,"Step 3: Check that all four results are inside their range, then select Close work order",yes,yes
+/studio/samples/guides/it-onboarding/guide,picture,data URI,"Step 5: Pre-register the laptop, and then generate the enrolment link",yes,yes
+/studio/samples/guides/software-feature/guide,picture,data URI,Step 6: Check the schedule on the Schedules tab,yes,yes
+/studio/samples/guides/support-unlock/guide,picture,data URI,"Step 5: Check the confirmation, and then record what you did in the ticket",yes,yes

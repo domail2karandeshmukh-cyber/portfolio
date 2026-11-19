@@ -57,7 +57,7 @@ Choose the notation for the question the reader has.
 | The reader asks | Diagram |
 |---|---|
 | What is the system, and who uses it? | C4 system context |
-| What runs where, and how do the parts talk? | C4 container, or a deployment diagram |
+| What runs where, and how do the parts talk? | C4 container diagram or deployment diagram |
 | In what order do things happen? | UML sequence diagram |
 | Where does the data go, and where does it cross a trust boundary? | Data-flow diagram, with trust boundaries drawn as dashed lines |
 | What states can it be in? | State diagram |

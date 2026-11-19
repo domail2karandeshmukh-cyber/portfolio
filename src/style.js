@@ -361,8 +361,9 @@
         if (/!$/.test(s) && !/^\s*\[!/.test(s)) add("exclamation", line, s.slice(-24), "The sentence ends with an exclamation mark.", calm(line));
         var list = /\b([\w'’-]+(?: [\w'’-]+){0,3}), ([\w'’-]+(?: [\w'’-]+){0,3}) (and|or) ([\w'’-]+)/.exec(s);
         // "a, b and c". A sentence that opens with "If ..." or "When ..." has a comma for another reason.
+        // A comma soon after "and c" means the list goes on, so "b and c" is one item ("title, product and version, audience").
         var opens = s.slice(0, list ? list.index + list[1].length : 0).replace(/^\s*[A-Z][a-z]+:\s+/, ""), rest = list ? s.slice(list.index + list[0].length) : "";
-        if (list && !/^[\w'’-]*(?: [\w'’-]+){0,2},\s+(and|or)\b/.test(rest) && !(INTRO.test(opens.trim()) && opens.indexOf(",") < 0) && !INTRO.test(opens.trim()) && !/\b(and|or)\b/.test(list[2]) && !NOT_AN_ITEM.test(list[2]) && !/-$/.test(list[2])) {
+        if (list && !/^[\w'’-]*(?: [\w'’-]+){0,2},\s+(and|or)\b/.test(rest) && !/^[\w'’ -]{0,30},/.test(rest) && !(INTRO.test(opens.trim()) && opens.indexOf(",") < 0) && !INTRO.test(opens.trim()) && !/\b(and|or)\b/.test(list[2]) && !NOT_AN_ITEM.test(list[2]) && !/-$/.test(list[2])) {
           if (words(s.slice(0, list.index)).length <= 12) add("serial-comma", line, list[2] + " " + list[3] + " " + list[4], "A list of three or more: put a comma before \"" + list[3] + "\".", list[2] + ", " + list[3] + " " + list[4]);
         }
       });
@@ -531,9 +532,10 @@
   }
 
   // The rules whose fixes can be applied to a document without a person looking at each one.
-  // A fix that needs a look, such as the present tense of a verb, is offered and never applied by itself.
+  // A fix that needs a look, such as the present tense of a verb, is offered and never applied by itself. The serial
+  // comma needs a look: a program can't always tell a list of three from a list whose item contains "and".
   var AUTO = ["heading-case", "heading-punctuation", "contractions", "plain-words", "latin", "minimizers", "please", "input-neutral", "inclusive", "all-caps",
-    "serial-comma", "double-space", "spaced-dash", "ampersand", "exclamation", "intro-period", "step-period", "quoted-ui"];
+    "double-space", "spaced-dash", "ampersand", "exclamation", "intro-period", "step-period", "quoted-ui"];
 
   return { RULES: RULES, AUTO: AUTO, rule: function (id) { return BY_ID[id]; }, check: check, summary: summary, fix: fix, fixAll: fixAll };
 });

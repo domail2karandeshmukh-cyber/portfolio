@@ -14,7 +14,7 @@ The last column says how current my reading is: **checked** means I read the sou
 |---|---|---|---|---|
 | Microsoft Writing Style Guide | Sentence-case headings; one action per step; location before action; "select" for every input device; spaced angle brackets for menu paths | The house style for software and IT, and most rules of the [style guide](/style) | Text and examples are Microsoft's; only the rules are used | checked |
 | Google developer documentation style guide | Procedures with an introductory sentence; "Optional:" steps; images introduced by a sentence; solid redaction, never blur; numbered figure captions | Second reference, and the image and redaction rules of the [screenshot standard](/standards/screenshots) | Licensed CC BY 4.0; cite it when quoting | checked |
-| Kubernetes documentation style guide | US English, sentence-case headings, code style for commands, and API objects, UpperCamelCase for API kinds | The API and developer profile: code style for objects and commands | Project-specific terms don't carry over | checked |
+| Kubernetes documentation style guide | US English, sentence-case headings, code style for commands and API objects, UpperCamelCase for API kinds | The API and developer profile: code style for objects and commands | Project-specific terms don't carry over | checked |
 | Diátaxis | Four kinds of documentation: tutorials, how-to guides, reference, explanation | The document kinds of the software profile and the library's grouping | A framework, not a style guide | practice |
 
 ## Screenshots and visuals
@@ -35,7 +35,7 @@ The last column says how current my reading is: **checked** means I read the sou
 | Stripe API reference, GitHub Docs | Each endpoint with its parameters, a request, a response, and its errors, side by side | The structure of the API reference in the [editorial standard](/standards/editorial) | Their layouts and text are theirs | practice |
 | NIST SP 800-61, MITRE ATT&CK | Incident-response phases; a shared name for every adversary technique | The runbook structure and ATT&CK IDs in the security profile | ATT&CK is used under its terms of use, with attribution | practice |
 | Wazuh documentation | Alert rules, decoders, and agents explained from the console the reader sees | The simulated alert scenario | The scenario is simulated; no real alert is shown | practice |
-| Hugging Face model cards; Mitchell et al., 2019 | Fixed sections: description, intended uses, and limitations, training data, procedure, evaluation, including the decision threshold | The model card and dataset card of the AI profile | Report only measured results | checked |
+| Hugging Face model cards; Mitchell et al., 2019 | Fixed sections: description, intended uses and limitations, training data, procedure, evaluation, including the decision threshold | The model card and dataset card of the AI profile | Report only measured results | checked |
 
 ## Aerospace and industrial
 

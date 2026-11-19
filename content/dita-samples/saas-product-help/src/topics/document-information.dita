@@ -4,16 +4,16 @@
 <title>Document information</title>
 <shortdesc>A demonstration publication for Karan Deshmukh's portfolio. Ledgerly is an example company, and every person, address and figure in it is an example: these documents aren't operating instructions or vendor documentation.</shortdesc>
 <refbody>
-<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
-<sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
-<strow><stentry>Fix sign-in problems</stentry><stentry></stentry><stentry></stentry><stentry>published</stentry><stentry></stentry></strow>
-<strow><stentry>Reset your password</stentry><stentry></stentry><stentry></stentry><stentry>published</stentry><stentry></stentry></strow>
-<strow><stentry>Why your account is locked, and how to unlock it</stentry><stentry></stentry><stentry></stentry><stentry>published</stentry><stentry></stentry></strow>
-<strow><stentry>Manage users and roles</stentry><stentry></stentry><stentry></stentry><stentry>published</stentry><stentry></stentry></strow>
-<strow><stentry>Sign-in and security: questions and answers</stentry><stentry></stentry><stentry></stentry><stentry>published</stentry><stentry></stentry></strow>
+<simpletable relcolwidth="4* 1.4*">
+<sthead><stentry>Document</stentry><stentry>Status</stentry></sthead>
+<strow><stentry>Fix sign-in problems</stentry><stentry>Published</stentry></strow>
+<strow><stentry>Reset your password</stentry><stentry>Published</stentry></strow>
+<strow><stentry>Why your account is locked, and how to unlock it</stentry><stentry>Published</stentry></strow>
+<strow><stentry>Manage users and roles</stentry><stentry>Published</stentry></strow>
+<strow><stentry>Sign-in and security: questions and answers</stentry><stentry>Published</stentry></strow>
 </simpletable>
 <section><title>Publication</title>
-<p>Publication SAAS-PRODUCT-HELP, 5 documents. Written by Karan Deshmukh. Published on 2026-11-18 with DITA Open Toolkit from DITA 1.3 source.</p>
+<p>Publication SAAS-PRODUCT-HELP, 5 documents. Written by Karan Deshmukh. Published on 2026-11-19 with DITA Open Toolkit from DITA 1.3 source.</p>
 </section>
 </refbody>
 </reference>

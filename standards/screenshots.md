@@ -69,7 +69,7 @@ Red, amber, and blue are kept for meaning: red for an error the reader must see,
 
 ### Redaction
 
-Cover personal details with a solid, fully opaque box, never with blur, or pixels: both can be reversed. That means names, email addresses, account, and transaction IDs, tokens, internal host names, private addresses, and customer data. A redaction is drawn into the exported pixels, so it can't be removed from the file. Keep the unredacted capture out of the repository.
+Cover personal details with a solid, fully opaque box, never with blur or pixelation: both can be reversed. That means names, email addresses, account and transaction IDs, tokens, internal host names, private addresses, and customer data. A redaction is drawn into the exported pixels, so it can't be removed from the file. Keep the unredacted capture out of the repository.
 
 ## Placement
 

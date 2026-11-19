@@ -37,7 +37,7 @@ Write the script before recording. It has the title, the objective in one senten
 - Use the [screenshot standard](/standards/screenshots), scaled by 1.5 for 1080p: a 4.5 px rectangle, a 36 px callout.
 - Show a click with a short ring that fades in about 0.4 seconds; keep the pointer's halo small.
 - Zoom to between 125 and 175 percent, and only to make small text readable. Zoom in and out over about 0.6 seconds, and keep the surrounding context in view.
-- No decorative transitions. A cut, or a short cross-fade between sections.
+- No decorative transitions. A cut or a short cross-fade between sections.
 
 ## Narration and captions
 

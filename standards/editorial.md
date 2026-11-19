@@ -44,7 +44,7 @@ Product and feature names keep their official capitalization: Okta Verify, Googl
 
 - One H1, the document's title. Don't skip levels.
 - A task heading starts with a verb: "Install the agent". A concept heading is a noun phrase: "How fault isolation works".
-- Headings at the same level are parallel: all verbs, or all nouns.
+- Headings at the same level are parallel: all verbs or all nouns.
 - Don't number headings in software documentation. Aerospace and industrial publications number them when the publication's specification does.
 
 ### Procedures
@@ -116,7 +116,7 @@ Where Microsoft and Google differ.
 
 Rests on: the software profile, and the OpenAPI Specification (3.2.0 is current; the API descriptions here use 3.1 or later).
 
-- A reference page for an endpoint gives the method and path, what it does, authentication, and permissions, path and query parameters, the request body, a request example, the response schema, a response example, errors, and rate limits and pagination where they apply.
+- A reference page for an endpoint gives the method and path, what it does, authentication and permissions, path and query parameters, the request body, a request example, the response schema, a response example, errors, and rate limits and pagination where they apply.
 - Every example is a real request against a real API, with secrets replaced by named placeholders such as `$API_TOKEN`.
 - A sequence diagram sits beside the description of a flow that crosses systems.
 
@@ -154,8 +154,8 @@ Rests on: S1000D Issue 6 and the project's business rules (BREX) for structure; 
 Rests on: IEC/IEEE 82079-1:2019 (information for use); ISO 20607:2019 for the instruction handbooks of machinery; ANSI Z535.6 for safety messages where the market requires it.
 
 - An instruction identifies the product and its version, says who it's for, and gives safety information before the step it applies to.
-- A maintenance procedure has its purpose, the interval, safety, and lock-out conditions, tools, and materials, numbered steps with the expected reading or result in each, acceptance criteria, and how to record the result.
-- An inspection record is a form: what was checked, the expected value, the measured value, pass, or fail, who checked it and when.
+- A maintenance procedure has its purpose, the interval, safety and lock-out conditions, tools and materials, numbered steps with the expected reading or result in each, acceptance criteria, and how to record the result.
+- An inspection record is a form: what was checked, the expected value, the measured value, pass or fail, who checked it and when.
 - A test report gives its objective, scope, method, results in a table, analysis, limitations, conclusions and recommendations. Its numbers must agree with each other in every section.
 
 ## Document structures
@@ -163,13 +163,13 @@ Rests on: IEC/IEEE 82079-1:2019 (information for use); ISO 20607:2019 for the in
 | Document | Sections, in order |
 |---|---|
 | How-to guide | Title, purpose, prerequisites, steps, result, troubleshooting, related |
-| User guide | Title, product, and version, audience, overview, contents, getting started, tasks, reference, troubleshooting, glossary |
-| Installation guide | Requirements, prerequisites, dependencies, installation, configuration, verification, troubleshooting, upgrade, or removal |
+| User guide | Title, product and version, audience, overview, contents, getting started, tasks, reference, troubleshooting, glossary |
+| Installation guide | Requirements, prerequisites, dependencies, installation, configuration, verification, troubleshooting, upgrade or removal |
 | API reference | Overview, authentication, base URL, permissions, endpoints (method, path, parameters, examples, schemas, errors), limits, pagination |
 | Runbook | Purpose, scope, roles, triggers, severity, investigation, decisions, evidence, escalation, containment, recovery, verification, closure, revisions |
 | Release notes | Version and date, highlights, new, changed, fixed, known issues, upgrade steps |
 | Knowledge-base article | Problem in the reader's words, cause, solution steps, result, related articles |
-| Technical report | Title, objective, scope, method, results, tables, and figures, analysis, limitations, conclusions, recommendations, references |
+| Technical report | Title, objective, scope, method, results, tables and figures, analysis, limitations, conclusions, recommendations, references |
 | Maintenance procedure | Identification, applicability, preliminary requirements, safety, steps, inspection criteria, close-up, record |
 | Illustrated parts catalogue | Identification, applicability, illustration, item numbers, parts table (part number, name, quantity, applicability) |
 | Engineering change record | Change number, reason, affected items, impact on each document, approvals, effective serial numbers |
@@ -178,4 +178,4 @@ A short help article doesn't need a title page, a contents list, or a revision h
 
 ## Checks
 
-Programs check what they can: the [style guide](/style) rules on every build, headings, and lists, links, schemas and business rules, alternative text, and the layout of every page at eight screen widths. A person checks the rest: that the steps work, that the words are the right ones, and that the document answers its reader's question. A clean check isn't an approval.
+Programs check what they can: the [style guide](/style) rules on every build, headings and lists, links, schemas and business rules, alternative text, and the layout of every page at eight screen widths. A person checks the rest: that the steps work, that the words are the right ones, and that the document answers its reader's question. A clean check isn't an approval.

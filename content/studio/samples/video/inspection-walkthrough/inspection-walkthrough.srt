@@ -1,51 +1,75 @@
 1
-00:00:00,600 --> 00:00:06,130
-This walkthrough shows the monthly inspection of feed pump B in the maintenance console.
+00:00:00,600 --> 00:00:04,809
+This walkthrough shows the monthly
+inspection of feed pump B in the
 
 2
-00:00:06,130 --> 00:00:09,390
-It's a fictional procedure, made for this portfolio.
+00:00:04,859 --> 00:00:06,130
+maintenance console.
 
 3
+00:00:06,130 --> 00:00:09,390
+It's a fictional procedure, made for this
+portfolio.
+
+4
 00:00:09,990 --> 00:00:11,570
 Open the work order.
 
-4
-00:00:11,570 --> 00:00:16,080
-It lists the four checks and the expected range for each.
-
 5
+00:00:11,570 --> 00:00:16,080
+It lists the four checks and the expected
+range for each.
+
+6
 00:00:16,080 --> 00:00:17,900
 Select Record readings.
 
-6
-00:00:18,500 --> 00:00:28,970
-Enter each reading as you took it from the local gauge: the discharge pressure in bar, the bearing temperature, the vibration, and whether the seal leaks.
-
 7
+00:00:18,500 --> 00:00:22,238
+Enter each reading as you took it from the
+local gauge:
+
+8
+00:00:22,288 --> 00:00:27,060
+the discharge pressure in bar, the bearing
+temperature, the vibration,
+
+9
+00:00:27,110 --> 00:00:28,970
+and whether the seal leaks.
+
+10
 00:00:28,970 --> 00:00:30,740
 Then select Save readings.
 
-8
+11
 00:00:31,340 --> 00:00:34,300
 Every result now shows against its range.
 
-9
+12
 00:00:34,300 --> 00:00:38,620
-All four are inside it, so the work order is ready to close.
+All four are inside it, so the work order
+is ready to close.
 
-10
+13
 00:00:39,220 --> 00:00:40,880
 Select Close work order.
 
-11
-00:00:40,880 --> 00:00:47,470
-If any reading had been outside its range, you would report it to the shift supervisor instead.
+14
+00:00:40,880 --> 00:00:43,774
+If any reading had been outside its range,
 
-12
+15
+00:00:43,824 --> 00:00:47,470
+you would report it to the shift
+supervisor instead.
+
+16
 00:00:48,070 --> 00:00:49,450
 That's the procedure.
 
-13
+17
 00:00:49,450 --> 00:00:54,690
-The written version, the step guide and the DITA output are in the same package.
+The written version, the step guide and
+the DITA output are in the same package.

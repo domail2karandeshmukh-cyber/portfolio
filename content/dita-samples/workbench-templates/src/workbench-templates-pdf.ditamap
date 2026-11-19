@@ -3,14 +3,14 @@
 <bookmap id="workbench-templates-pdf" xml:lang="en">
 <booktitle>
 <booklibrary>Documentation Studio: a demonstration publication</booklibrary>
-<mainbooktitle>Acme Console help (fictional sample)</mainbooktitle>
+<mainbooktitle>Acme Console help, from the workbench's templates</mainbooktitle>
 <booktitlealt>Publication WORKBENCH-TEMPLATES, 12 documents</booktitlealt>
 <booktitlealt>Documentation Studio: a demonstration publication</booktitlealt>
-<booktitlealt>Issued 2026-11-18. Written by Karan Deshmukh.</booktitlealt>
+<booktitlealt>Issued 2026-11-19. Written by Karan Deshmukh.</booktitlealt>
 </booktitle>
 <bookmeta>
 <author>Karan Deshmukh</author>
-<critdates><created date="2026-11-18"/></critdates>
+<critdates><created date="2026-11-19"/></critdates>
 </bookmeta>
 <frontmatter>
 <keydef keys="product"><topicmeta><keywords><keyword>Acme Console</keyword></keywords></topicmeta></keydef>

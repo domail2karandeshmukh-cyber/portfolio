@@ -21,7 +21,7 @@ The [style guide](/style) is the editorial standard's software profile as rules 
 
 1. A document's kind decides its profile: a how-to guide for a web application uses the software profile; a maintenance procedure uses the industrial or aerospace profile.
 2. The profile decides the structure, the words, and the visuals: a software screenshot gets green annotations; an engineering drawing stays in black line work with item numbers.
-3. Automated checks run first: the style check, schema, and business-rule validation, link checks, layout checks, and accessibility checks. A person reviews what programs can't judge.
+3. Automated checks run first: the style check, schema and business-rule validation, link checks, layout checks, and accessibility checks. A person reviews what programs can't judge.
 4. Each published file is checked as published: every PDF page rendered, every film watched with its captions on.
 
 ## Version

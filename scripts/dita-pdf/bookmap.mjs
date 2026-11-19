@@ -30,7 +30,10 @@ export function writeBookmap(src, mapFile, info) {
 
   // The page of document information: what the publication is, then one row for each document.
   const cap = (s) => String(s || "").replace(/^./, (c) => c.toUpperCase());
-  const rows = info.docs.map((d) => `<strow><stentry>${esc(d.title)}</stentry><stentry>${esc(d.id || "")}</stentry><stentry>${esc(d.version || "")}</stentry><stentry>${esc(cap(d.status))}</stentry><stentry>${esc(d.date || "")}</stentry></strow>`).join("\n");
+  // A column that no document fills is left out: help articles, for example, carry a status but no ID or version.
+  const COLS = [["Document", "4*", (d) => d.title], ["ID", "2*", (d) => d.id], ["Version", "1*", (d) => d.version], ["Status", "1.4*", (d) => cap(d.status)], ["Date", "1.6*", (d) => d.date]]
+    .filter(([name, , get], i) => i === 0 || info.docs.some((d) => String(get(d) || "").trim()));
+  const rows = info.docs.map((d) => `<strow>${COLS.map(([, , get]) => `<stentry>${esc(get(d) || "")}</stentry>`).join("")}</strow>`).join("\n");
   const owners = [...new Set(info.docs.map((d) => d.owner).filter(Boolean))];
   const reviewers = [...new Set(info.docs.map((d) => d.reviewer).filter(Boolean))];
   const infoTopic = `<?xml version="1.0" encoding="UTF-8"?>
@@ -39,8 +42,8 @@ export function writeBookmap(src, mapFile, info) {
 <title>Document information</title>
 <shortdesc>${esc(info.notice)}</shortdesc>
 <refbody>
-<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
-<sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
+<simpletable relcolwidth="${COLS.map(([, w]) => w).join(" ")}">
+<sthead>${COLS.map(([name]) => `<stentry>${name}</stentry>`).join("")}</sthead>
 ${rows}
 </simpletable>
 <section><title>Publication</title>

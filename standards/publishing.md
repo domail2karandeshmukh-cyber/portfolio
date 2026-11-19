@@ -17,7 +17,7 @@ HTML and PDF come from the same source: Markdown, DITA, or S1000D XML. A correct
 | Title page | No | Yes | Yes |
 | Document identifier, version, and date | In the header line | On the title page | On the title page, with the issue number |
 | Applicability (product, version, serial numbers) | Only if it varies | Yes | Yes |
-| Revision history or highlights | No | Yes, short | Yes: highlights of the issue, and a revision record |
+| Revision history or highlights | No | Yes, short | Yes: highlights of the issue and a revision record |
 | Table of contents | No | Yes | Yes |
 | List of effective pages or data modules | No | No | Yes |
 | Lists of figures and tables | No | Over 10 figures | Yes |

@@ -53,9 +53,13 @@ for (const [id, set] of Object.entries(SETS)) {
   const info = {
     publication: `Publication ${id.toUpperCase()}, ${docs.length} document${docs.length > 1 ? "s" : ""}`,
     library: org ? `${org}, an example company` : "Documentation Studio: a demonstration publication",
-    notice: `A demonstration publication for Karan Deshmukh's portfolio.${org ? ` ${org} is an example company, and` : " The companies,"} every person, address and figure in it ${org ? "is an example" : "people, addresses and figures in it are examples"}: these documents aren't operating instructions or vendor documentation.`,
+    notice: org
+      ? `A demonstration publication for Karan Deshmukh's portfolio. ${org} is an example company, and every person, address and figure in it is an example: these documents aren't operating instructions or vendor documentation.`
+      : "A demonstration publication for Karan Deshmukh's portfolio. The companies, people, addresses and figures in it are examples: these documents aren't operating instructions or vendor documentation.",
     author: "Karan Deshmukh", date: today,
-    docs: docs.map((d) => { const r = Doc.resolve(d, Doc.GENERAL); return { title: r.title, id: d.meta.id, version: d.meta.version != null ? String(d.meta.version) : "", status: d.meta.status || "", date: d.meta.date || "", owner: d.meta.owner || "", reviewer: d.meta.reviewer || "" }; }),
+    // A workbench template that isn't a controlled document has no status of its own: it is a template.
+    docs: docs.map((d) => { const r = Doc.resolve(d, Doc.GENERAL); return { title: r.title, id: d.meta.id, version: d.meta.version != null ? String(d.meta.version) : "",
+      status: d.meta.status || (id === "workbench-templates" ? "Template" : ""), date: d.meta.date || "", owner: d.meta.owner || "", reviewer: d.meta.reviewer || "" }; }),
   };
   const bookmap = writeBookmap(SRC, `${id}.ditamap`, info);
   const files = project.files.filter((f) => /\.(dita|ditamap)$/.test(f.name)).map((f) => `${SRC}/${f.name}`).concat([bookmap, `${SRC}/topics/document-information.dita`]);

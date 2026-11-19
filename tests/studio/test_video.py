@@ -73,7 +73,15 @@ with sync_playwright() as p:
     first = P()["captions"][0]
     with pg.expect_download() as dl: pg.click("#vd-srt")
     srt = f"{OUT}/video.srt"; dl.value.save_as(srt); s = open(srt).read()
-    check("the SRT file has numbered, timed captions", s.startswith(f"1\n00:00:00,{int(round(first['start'] * 1000)):03d} --> ") and first["text"] in s, s[:120])
+    check("the SRT file has numbered, timed captions", s.startswith(f"1\n00:00:00,{int(round(first['start'] * 1000)):03d} --> "), s[:120])
+    # Each caption is split into cues of at most two lines of 42 characters (standards/video.md), and no word is lost.
+    blocks = [b.split("\n") for b in s.strip().split("\n\n")]
+    cue_lines = [b[2:] for b in blocks]
+    check("every SRT cue has at most two lines of 42 characters", all(1 <= len(c) <= 2 and all(len(l) <= 42 for l in c) for c in cue_lines), [c for c in cue_lines if len(c) > 2 or any(len(l) > 42 for l in c)][:2])
+    check("the SRT cues hold every word of the captions, in order", " ".join(" ".join(c) for c in cue_lines).split() == " ".join(c["text"] for c in P()["captions"]).split())
+    def secs(x): h, m, rest = x.replace(",", ".").split(":"); return int(h) * 3600 + int(m) * 60 + float(rest)
+    spans = [tuple(secs(t) for t in b[1].split(" --> ")) for b in blocks]
+    check("the SRT cues run in order without overlapping", all(a < b for a, b in spans) and all(spans[i][1] <= spans[i + 1][0] + 0.001 for i in range(len(spans) - 1)), spans[:4])
     with pg.expect_download() as dl: pg.click("#vd-vtt")
     vtt = f"{OUT}/video.vtt"; dl.value.save_as(vtt); v = open(vtt).read()
     check("the WebVTT file is valid in form", v.startswith(f"WEBVTT\n\n1\n00:00:00.{int(round(first['start'] * 1000)):03d} --> "), v[:60])
@@ -144,7 +152,7 @@ with sync_playwright() as p:
     r = pg2.evaluate("[studioVideo.duration(), studioVideo.project().overlays.length, studioVideo.project().captions.length, !!studioVideo.project().narration]")
     check("the project opens again with its edits and narration", abs(r[0] - d2) < 0.1 and r[1] == len(before["overlays"]) and r[2] == len(before["captions"]) and r[3], r)
     pg2.set_input_files("#vd-files", srt); pg2.wait_for_timeout(600)
-    check("an SRT file can be imported", pg2.evaluate("studioVideo.project().captions.length") == 2 * len(before["captions"]))
+    check("an SRT file can be imported", pg2.evaluate("studioVideo.project().captions.length") == len(before["captions"]) + len(cue_lines), (pg2.evaluate("studioVideo.project().captions.length"), len(before["captions"]), len(cue_lines)))
     with pg2.expect_download(timeout=30000) as dl: pg2.click(".st-head h1"); pg2.keyboard.press("Control+s")
     check("Ctrl+S saves the project", dl.value.suggested_filename.endswith(".video.zip"), dl.value.suggested_filename)
     bad_zip = f"{OUT}/not-a-project.zip"; zipfile.ZipFile(bad_zip, "w").writestr("hello.txt", "hi")

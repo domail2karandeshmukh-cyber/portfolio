@@ -205,9 +205,9 @@
     ctx.restore();
   }
   function drawCaption(t) {
-    var c = P.captions.filter(function (x) { return t >= x.start && t < x.end; })[0];
+    var c = shownCues().filter(function (x) { return t >= x.start && t < x.end; })[0];
     if (!c) return;
-    var px = 32, ls = wrap(c.text, W * 0.8, px).slice(0, 3), bw = 0;
+    var px = 32, ls = [].concat.apply([], c.text.split("\n").map(function (l) { return wrap(l, W * 0.8, px); })).slice(0, 3), bw = 0;
     ctx.save(); ctx.font = font(px, 600); ls.forEach(function (l) { bw = Math.max(bw, ctx.measureText(l).width); });
     var bh = ls.length * px * 1.3 + 20, y = H - 56 - bh;
     ctx.fillStyle = "rgba(11,11,12,.82)"; roundRect(W / 2 - bw / 2 - 18, y, bw + 36, bh, 8); ctx.fill();
@@ -559,10 +559,79 @@
   });
 
   /* ---------- Captions as files ---------- */
-  function stamp(s, sep) { s = Math.max(0, s); var h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, r = s % 60; return pad(h) + ":" + pad(m) + ":" + pad(Math.floor(r)) + sep + String(Math.round((r % 1) * 1000)).padStart(3, "0"); }
+  // A caption is written as one piece of text, as long as the writer likes. On screen and in the files it becomes cues
+  // of at most two lines of 42 characters (standards/video.md). A cue holds whole sentences where they fit; a longer
+  // sentence is cut after a comma, a colon or a semicolon, and a phrase too long for a cue is cut between words. Each
+  // cue gets its share of the caption's time by its characters, at least a second where the caption has the time,
+  // and a cue that would still flash by is held until the next one starts.
+  var CUE_WIDTH = 42, CUE_MIN = 1;
+  function cueLines(text) {
+    var out = [], cur = "";
+    String(text).split(/\s+/).forEach(function (w) {
+      if (!w) return;
+      if (cur && cur.length + 1 + w.length > CUE_WIDTH) { out.push(cur); cur = w; } else cur = cur ? cur + " " + w : w;
+    });
+    if (cur) out.push(cur);
+    return out;
+  }
+  function pieces(text, re) { return String(text).replace(re, "$1\u0000").split("\u0000").map(function (x) { return x.trim(); }).filter(Boolean); }
+  function fits(units) { return cueLines(units.join(" ")).length <= 2; }
+  function cueText(text) {
+    var units = [], out = [], buf = [];
+    pieces(text, /([.!?])\s+/g).forEach(function (sentence) {
+      (fits([sentence]) ? [sentence] : pieces(sentence, /([,:;])\s+/g)).forEach(function (u) {
+        if (fits([u])) units.push(u); else units = units.concat(u.split(/\s+/));
+      });
+    });
+    units.forEach(function (u) {
+      if (buf.length && !fits(buf.concat([u]))) { out.push(buf); buf = [u]; } else buf.push(u);
+    });
+    if (buf.length) out.push(buf);
+    return out.map(function (c) { return cueLines(c.join(" ")).join("\n"); });
+  }
+  // Shares of a span by length, each at least `floor` when the span allows it.
+  function allot(lengths, span, floor) {
+    var total = lengths.reduce(function (s, x) { return s + x; }, 0) || 1;
+    if (span < floor * lengths.length) return lengths.map(function (x) { return span * x / total; });
+    var fixed = lengths.map(function () { return false; });
+    for (;;) {
+      var freeLen = 0, freeSpan = span, more = false;
+      lengths.forEach(function (x, i) { if (fixed[i]) freeSpan -= floor; else freeLen += x; });
+      var d = lengths.map(function (x, i) { return fixed[i] ? floor : freeSpan * x / (freeLen || 1); });
+      d.forEach(function (x, i) { if (!fixed[i] && x < floor) { fixed[i] = true; more = true; } });
+      if (!more) return d;
+    }
+  }
+  function cues(list) {
+    var out = [];
+    list.forEach(function (c) {
+      var parts = cueText(c.text), t = c.start, span = Math.max(0, c.end - c.start);
+      var d = allot(parts.map(function (x) { return x.length; }), span, CUE_MIN);
+      parts.forEach(function (x, i) {
+        var last = i === parts.length - 1;
+        // A short pause between cues, unless it would cut the cue below a second.
+        out.push({ start: t, end: last ? c.end : t + d[i] - (d[i] - 0.05 >= CUE_MIN ? 0.05 : 0), text: x });
+        t += d[i];
+      });
+    });
+    out.sort(function (x, y) { return x.start - y.start; });
+    var stop = duration() || Infinity;
+    out.forEach(function (c, i) {
+      var next = out[i + 1] ? out[i + 1].start - 0.05 : stop;
+      if (c.end - c.start < CUE_MIN) c.end = Math.max(c.end, Math.min(c.start + CUE_MIN, next));
+    });
+    return out;
+  }
+  var cueMemo = { key: null, list: [] };
+  function shownCues() {
+    var key = JSON.stringify(P.captions);
+    if (key !== cueMemo.key) cueMemo = { key: key, list: cues(P.captions) };
+    return cueMemo.list;
+  }
+  function stamp(s, sep) { var ms = Math.round(Math.max(0, s) * 1000), h = Math.floor(ms / 3600000), m = Math.floor(ms / 60000) % 60, r = Math.floor(ms / 1000) % 60; return pad(h) + ":" + pad(m) + ":" + pad(r) + sep + String(ms % 1000).padStart(3, "0"); }
   function pad(n) { return (n < 10 ? "0" : "") + n; }
-  function toSRT(list) { return list.map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ",") + " --> " + stamp(c.end, ",") + "\n" + c.text + "\n"; }).join("\n"); }
-  function toVTT(list) { return "WEBVTT\n\n" + list.map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ".") + " --> " + stamp(c.end, ".") + "\n" + c.text + "\n"; }).join("\n"); }
+  function toSRT(list) { return cues(list).map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ",") + " --> " + stamp(c.end, ",") + "\n" + c.text + "\n"; }).join("\n"); }
+  function toVTT(list) { return "WEBVTT\n\n" + cues(list).map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ".") + " --> " + stamp(c.end, ".") + "\n" + c.text + "\n"; }).join("\n"); }
   function parseTime(s) { var m = /(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})/.exec(s); return m ? (+(m[1] || 0)) * 3600 + (+m[2]) * 60 + (+m[3]) + (+m[4].padEnd(3, "0")) / 1000 : NaN; }
   function parseCaptions(text) {
     var out = [];
