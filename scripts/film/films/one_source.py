@@ -10,6 +10,8 @@ FRAME = (1120, 630, 2)      # filmed at twice the window's size, where every edg
 OUTPUT = (1920, 1080)
 NARRATION = 'one-source'          # the script in lib/narration.cjs; a scene's segment has the scene's name
 SEGMENTS = {}
+# Captions are a track the viewer turns on (WebVTT and SRT, standards/video.md), so none is drawn in the picture.
+BURN_CAPTIONS = False
 TOUCH = False
 
 LAST_CARD = (

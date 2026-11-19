@@ -1,0 +1,40 @@
+1
+00:00:00,400 --> 00:00:03,666
+One document can serve two kinds of
+reader.
+
+2
+00:00:03,716 --> 00:00:06,107
+Start from the how-to template.
+
+3
+00:00:06,600 --> 00:00:10,766
+In the source, these lines are marked for
+administrators only.
+
+4
+00:00:11,267 --> 00:00:14,153
+A general reader's page leaves them out.
+
+5
+00:00:14,867 --> 00:00:17,587
+An administrator's page keeps them.
+
+6
+00:00:17,637 --> 00:00:21,436
+Same source, two pages, no copy to keep in
+step.
+
+7
+00:00:21,933 --> 00:00:27,782
+Publish either page as Markdown, as HTML
+for a help center, or as DITA,
+
+8
+00:00:27,832 --> 00:00:30,906
+where each step gets its own element.
+
+9
+00:00:31,400 --> 00:00:36,533
+Try it on your own document at
+karandeshmukh.dev/workbench.

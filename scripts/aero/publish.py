@@ -27,8 +27,10 @@ def standalone(title, inner):
     inner = re.sub(r'src="/studio/aerospace/csdb/([^"]+\.SVG)"', inline, inner)
     base = (":root{--desk:#F3F3F0;--ink:#0B0B0C;--ink2:#3B3D42;--mute:#696C73;--rule:#DDDDD9;--rule2:#B8B9B5;--red:#CE2F20;--blue:#1D4ED8;--green:#0B7E47;--hl:#FFDF2B;"
             "--serif:Georgia,serif;--sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--mono:ui-monospace,Menlo,Consolas,monospace}"
-            "body{font:15px/1.55 var(--sans);color:var(--ink);max-width:1000px;margin:2rem auto;padding:0 1rem}h1,h2{font-family:var(--serif);font-weight:500}.ie-psec{border-top:2px solid var(--ink);margin-top:2.5rem;padding-top:1rem}")
-    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><style>{base}{CSS}</style></head><body class="s1k"><main>{inner}</main></body></html>'
+            "body{font:15px/1.55 var(--sans);color:var(--ink);max-width:1000px;margin:2rem auto;padding:0 1rem}h1,h2{font-family:var(--serif);font-weight:500}.ie-psec{border-top:2px solid var(--ink);margin-top:2.5rem;padding-top:1rem}"
+            # On a phone: long codes wrap, and wide tables scroll inside their own box.
+            "code,dd{overflow-wrap:anywhere}@media (max-width:760px){body{margin:1rem auto}table{display:block;overflow-x:auto;max-width:100%}}")
+    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><style>{base}{CSS}</style></head><body class="s1k"><main>{inner}</main><script>(function(){{function m(){{[].forEach.call(document.querySelectorAll("main table,main pre"),function(e){{var s=getComputedStyle(e),x=(s.overflowX==="auto"||s.overflowX==="scroll")&&e.scrollWidth>e.clientWidth+1;if(x&&!e.hasAttribute("tabindex")){{e.tabIndex=0;e.setAttribute("data-scrolls","")}}else if(!x&&e.hasAttribute("data-scrolls")){{e.removeAttribute("tabindex");e.removeAttribute("data-scrolls")}}}})}}m();addEventListener("resize",m)}})();</script></body></html>'
 
 
 async def main():

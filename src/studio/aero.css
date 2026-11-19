@@ -218,6 +218,8 @@ mark.ie-hit{background:var(--hl)}
 .ae-wide{overflow-x:auto}
 .ae-terms th[scope=row]{white-space:nowrap}
 .ae-diagram{border:1px solid var(--rule);border-radius:10px;background:#fff;padding:.6rem;margin:.6rem 0 1.4rem}
+.ae-diagram figcaption{font-size:.84rem;color:var(--mute,#5b5e66);margin:.5rem .3rem .1rem;max-width:72ch}
+@media (max-width:640px){.ae-diagram{overflow-x:auto}.ae-diagram svg{min-width:560px}}
 .ae-diagram svg{width:100%;height:auto;display:block}
 .ae-dl{columns:2 320px;padding-left:1.1rem;font-size:.92rem}
 .ae-dl li{margin:0 0 .3rem;break-inside:avoid}
@@ -303,3 +305,37 @@ mark.ie-hit{background:var(--hl)}
  h1,h2,h3,h4,.ie-tp-k{break-after:avoid}
  a{color:inherit;text-decoration:none}
 }
+
+/* The overview in sections (lib/aero.mjs, aero-nav.js): a side menu beside one section at a time. */
+.ae-layout{display:grid;grid-template-columns:212px minmax(0,1fr);gap:40px;align-items:start;margin-top:.4rem}
+.ae-secnav{position:sticky;top:92px;max-height:calc(100vh - 110px);overflow-y:auto;padding:4px 2px 12px 0;font-size:.93rem}
+.ae-secnav-h{margin:0 0 .4rem;font-weight:600;color:var(--mute);font-size:.82rem}
+.ae-secnav ul{list-style:none;margin:0 0 1.2rem;padding:0;border-left:1.5px solid var(--rule)}
+.ae-secnav a{display:block;padding:.42em .75em;margin-left:-1.5px;border-left:3px solid transparent;color:var(--ink2);text-decoration:none;line-height:1.3}
+.ae-secnav a:hover{color:var(--ink);background:var(--desk)}
+.ae-secnav a[aria-current]{color:var(--ink);font-weight:600;border-left-color:var(--ink);background:var(--hl)}
+.ae-secnav-tools a{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.ae-panels{min-width:0}
+.ae-panel>h2:first-child,.ae-panel>.st-h2:first-child{margin-top:0}
+.ae-panel+.ae-panel{margin-top:2.4rem}
+html.ae-tabs .ae-panel+.ae-panel{margin-top:0}
+.ae-panel:focus-within h2[tabindex]:focus{outline:none}
+.ae-next{margin:2rem 0 0;padding-top:1rem;border-top:1px solid var(--rule)}
+.ae-next a{font-weight:600}
+.ae-h3{font:600 1.08rem/1.3 var(--sans);letter-spacing:0;margin:1.6rem 0 .5rem}
+.ae-code{font:500 .8rem/1.4 var(--mono);overflow-wrap:anywhere}
+.ae-gallery{list-style:none;margin:1rem 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:18px}
+.ae-gallery figure{margin:0;border:1px solid var(--rule);border-radius:10px;background:#fff;overflow:hidden}
+.ae-gallery img{display:block;width:100%;height:auto;aspect-ratio:800/560;border-bottom:1px solid var(--rule)}
+.ae-gallery figcaption{padding:.65rem .8rem .8rem;font-size:.88rem;line-height:1.45}
+.ae-transcript{max-width:72ch;border-left:3px solid var(--rule2);padding:.2rem 0 .2rem 1rem;color:var(--ink2)}
+@media (max-width:900px){
+ .ae-layout{grid-template-columns:minmax(0,1fr);gap:14px}
+ .ae-secnav{position:static;max-height:none;overflow:visible;padding:0}
+ .ae-secnav-h,.ae-secnav-tools{display:none}
+ .ae-secnav ul{display:flex;gap:8px;overflow-x:auto;border:0;margin:0 -20px;padding:2px 20px 10px;scrollbar-width:none}
+ .ae-secnav ul::-webkit-scrollbar{display:none}
+ .ae-secnav a{flex:none;white-space:nowrap;border:1.5px solid var(--rule2);border-radius:999px;margin:0;padding:.5em .95em;background:#fff}
+ .ae-secnav a[aria-current]{border-color:var(--ink)}
+}
+@media print{.ae-secnav,.ae-next{display:none}.ae-layout{display:block}.ae-panel[hidden]{display:block!important}}

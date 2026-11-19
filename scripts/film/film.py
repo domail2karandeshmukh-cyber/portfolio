@@ -64,8 +64,10 @@ class Film:
             elif self.frame in self.stills:
                 pathlib.Path(self.stills[self.frame]).write_bytes(self.shot())
 
+    burn = True     # a film with BURN_CAPTIONS = False draws no caption bar: its captions are a track the viewer turns on
+
     def caption(self, html):
-        self.js("h => __film.caption(h)", html)
+        if self.burn: self.js("h => __film.caption(h)", html)
 
     def glide(self, top, ms):
         self.js("a => __film.glide(a[0], a[1])", [top, ms])
@@ -180,6 +182,53 @@ def play(film, module, out, only=None, capture=False, scene_lengths=None):
         print(f"{name}: {used} frames{' filmed' if want else ''} in {time.time() - began:.1f} s. Page: {module.state(film)}", flush=True)
 
 
+def cue_text(text, width=42):
+    """Splits a narration into cues of at most two lines of `width` characters, at sentence ends first, then at
+    commas, then between words. Each cue is returned with its line break."""
+    def lines(words):
+        out, cur = [], ""
+        for w in words:
+            if cur and len(cur) + 1 + len(w) > width: out.append(cur); cur = w
+            else: cur = (cur + " " + w).strip()
+        if cur: out.append(cur)
+        return out
+    # An address is spoken as words ("karandeshmukh dot dev slash docs") and written as an address.
+    text = re.sub(r"\b([a-z0-9-]+) dot ([a-z]+)(?: slash ([a-z0-9-]+))?", lambda m: f"{m.group(1)}.{m.group(2)}" + (f"/{m.group(3)}" if m.group(3) else ""), text)
+    cues = []
+    for sentence in re.split(r"(?<=[.!?])\s+", text.strip()):
+        parts = [sentence]
+        if len(lines(sentence.split())) > 2:
+            parts = re.split(r"(?<=,)\s+", sentence)
+        buf = []
+        for part in parts:
+            trial = lines(" ".join(buf + [part]).split())
+            if buf and len(trial) > 2:
+                cues.append(buf); buf = [part]
+            else:
+                buf.append(part)
+        if buf: cues.append(buf)
+    out = []
+    for c in cues:
+        ls = lines(" ".join(c).split())
+        while len(ls) > 2:                    # a phrase too long for two lines: cut between words
+            out.append("\n".join(ls[:2])); ls = ls[2:]
+        out.append("\n".join(ls))
+    return out
+
+
+def write_captions(stem, timed):
+    """Writes the same cues as WebVTT and as SubRip (SRT), from (start, end, text) in seconds."""
+    def vtt(x): return f"{int(x // 3600):02d}:{int(x % 3600 // 60):02d}:{x % 60:06.3f}"
+    def srt(x): return vtt(x).replace(".", ",")
+    v, r = ["WEBVTT", ""], []
+    for i, (a, b, text) in enumerate(timed, 1):
+        b = max(b, a + 1.0)
+        v += [str(i), f"{vtt(a)} --> {vtt(b)}", text, ""]
+        r += [str(i), f"{srt(a)} --> {srt(b)}", text, ""]
+    pathlib.Path(f"{stem}.vtt").write_text("\n".join(v), encoding="utf8")
+    pathlib.Path(f"{stem}.srt").write_text("\n".join(r), encoding="utf8")
+
+
 def join(module, out, voice, scene_lengths):
     names = [n for n, _, _ in module.SCENES]
     listing = out / "scenes" / "list.txt"
@@ -201,13 +250,24 @@ def join(module, out, voice, scene_lengths):
         args += ["-filter_complex", chain + mix, "-map", "0:v", "-map", "[out]", "-c:v", "copy", "-c:a", "aac", "-b:a", "128k", "-t", f"{total:.3f}", "-movflags", "+faststart", str(part)]
         subprocess.run(args, check=True)
         os.replace(part, final); silent.unlink()
-        # Captions follow the narration: one cue per spoken scene.
-        def stamp(x): return f"{int(x // 3600):02d}:{int(x % 3600 // 60):02d}:{x % 60:06.3f}"
-        cues = ["WEBVTT", ""]
+        # The level checked and, where the one-pass loudnorm missed, set by gain (scripts/loudness.py).
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from loudness import level
+        lufs, peak, rate = level(str(final))
+        print(f"Sound: {lufs} LUFS, true peak {peak} dBTP, {rate} Hz")
+        # Captions follow the narration (standards/video.md): each scene's words in cues of at most two lines of 42
+        # characters, broken at the end of a sentence or a phrase, each shown for 1 to 7 seconds. A cue's share of
+        # the scene's recording is its share of the words' characters, so the timing follows the speech closely.
+        timed = []
         for i, (n, v) in enumerate(spoken):
             a = starts[n] + LEAD; b = min(a + v["seconds"] + 0.3, (starts[spoken[i + 1][0]] + LEAD - 0.05) if i + 1 < len(spoken) else total)
-            cues += [str(i + 1), f"{stamp(a)} --> {stamp(b)}", v["text"], ""]
-        (out / f"{module.NAME}.vtt").write_text("\n".join(cues), encoding="utf8")
+            chunks = cue_text(v["text"])
+            weights = [len(c.replace("\n", " ")) for c in chunks]
+            span, t = (b - a), a
+            for c, w in zip(chunks, weights):
+                d = span * w / sum(weights)
+                timed.append((t, t + d - (0.05 if c is not chunks[-1] else 0), c)); t += d
+        write_captions(out / module.NAME, timed)
     else:
         os.replace(silent, final)
     print(f"The film: {final} ({final.stat().st_size / 1e6:.1f} MB), {total:.1f} s, narration on {len(spoken)} of {len(names)} scenes")
@@ -223,9 +283,10 @@ def join(module, out, voice, scene_lengths):
         served_copy(final, dest / f"{name}.mp4")
     else:
         (dest / f"{name}.mp4").write_bytes(final.read_bytes())
-    vtt = out / f"{module.NAME}.vtt"
-    if spoken: (dest / f"{name}.vtt").write_text(vtt.read_text(encoding="utf8"), encoding="utf8")
-    elif (dest / f"{name}.vtt").exists(): (dest / f"{name}.vtt").unlink()
+    for ext in ("vtt", "srt"):
+        cap = out / f"{module.NAME}.{ext}"
+        if spoken: (dest / f"{name}.{ext}").write_text(cap.read_text(encoding="utf8"), encoding="utf8")
+        elif (dest / f"{name}.{ext}").exists(): (dest / f"{name}.{ext}").unlink()
     print(f"Copied to {dest / name}.mp4" + (" with its captions" if spoken else ", silent"))
 
 
@@ -251,6 +312,7 @@ def main():
     if len(sys.argv) < 4 or sys.argv[3] not in ("sheet", "stills", "render"):
         sys.exit(__doc__)
     base, module, mode, rest = sys.argv[1].rstrip("/"), load(sys.argv[2]), sys.argv[3], sys.argv[4:]
+    Film.burn = getattr(module, "BURN_CAPTIONS", True)
     out = ROOT / ".cache" / "film" / module.NAME
     voice = narration(module)
     scene_lengths = lengths(module, voice)

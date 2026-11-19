@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
+<reference id="document-information" xml:lang="en">
+<title>Document information</title>
+<shortdesc>A demonstration publication for Karan Deshmukh's portfolio. Fieldbook is an example company, and every person, address and figure in it is an example: these documents aren't operating instructions or vendor documentation.</shortdesc>
+<refbody>
+<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
+<sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
+<strow><stentry>Fieldbook 2.4 release notes</stentry><stentry>RN-FB-2.4</stentry><stentry>2.4.0</stentry><stentry>Published</stentry><stentry>2026-11-03</stentry></strow>
+<strow><stentry>Upgrade from Fieldbook 2.3 to 2.4</stentry><stentry>RN-FB-2.4-MG</stentry><stentry>2.4.0</stentry><stentry>Published</stentry><stentry>2026-11-03</stentry></strow>
+<strow><stentry>Fieldbook version history and change impact</stentry><stentry>RN-FB-HIST</stentry><stentry>2.4.0</stentry><stentry>Published</stentry><stentry>2026-11-03</stentry></strow>
+</simpletable>
+<section><title>Publication</title>
+<p>Publication RELEASE-DOCUMENTATION, 3 documents. Written by Karan Deshmukh. Owner: Product documentation. Reviewed by: Release manager. Published on 2026-11-19 with DITA Open Toolkit from DITA 1.3 source.</p>
+</section>
+</refbody>
+</reference>

@@ -19,7 +19,7 @@
   var MEDIA = {};                       // id -> {kind, name, blob, url, el, duration, w, h, cursor: [{t,x,y,click}]}
   var P = blank(), sel = null, playhead = 0, playing = false;
   function blank() {
-    return { version: 1, name: "training-video", clips: [], overlays: [], captions: [], markers: [], narration: null, clipVolume: 1, burnCaptions: true,
+    return { version: 1, name: "training-video", clips: [], overlays: [], captions: [], markers: [], narration: null, clipVolume: 1, burnCaptions: false,
       cursor: { show: true, size: 1, halo: true, ripple: true, spotlight: false, numbers: false, follow: false, factor: 1.6 } };
   }
   var uid = function (p) { return (p || "x") + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); };
@@ -117,9 +117,12 @@
   }
 
   /* ---------- Drawing one frame ---------- */
-  var COLORS = { title: "#0B0B0C", step: "#E5251B", arrow: "#E5251B", box: "#E5251B", callout: "#E5251B", warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
-  var TYPES = { title: T("Title"), step: T("Step number"), arrow: T("Arrow"), box: T("Highlight box"), callout: T("Callout"), warning: T("Warning"), instruction: T("Instruction"), done: T("Confirmation"), zoom: T("Zoom region"), blur: T("Blur region"), intro: T("Intro slide"), outro: T("Closing slide"), lower: T("Lower-third label") };
-  var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1 };          // drawn in the picture, so they zoom with it
+  // The house annotation green and its dark keyline (standards/screenshots.md), at the video scale of 1.5.
+  var HOUSE = "#6CE975", EDGE = "#0E5A2B";
+  var COLORS = { title: "#0B0B0C", step: HOUSE, arrow: HOUSE, box: HOUSE, callout: HOUSE, warning: "#C62828", instruction: "#0B0B0C", zoom: "#1D4ED8", blur: "#1D4ED8", redact: "#0B0B0C", intro: "#0B0B0C", outro: "#0B0B0C", lower: "#0B0B0C", done: "#0D9A57" };
+  var TYPES = { title: T("Title"), step: T("Step number"), arrow: T("Arrow"), box: T("Highlight box"), callout: T("Callout"), warning: T("Warning"), instruction: T("Instruction"), done: T("Confirmation"), zoom: T("Zoom region"), blur: T("Blur region"), redact: T("Redaction"), intro: T("Intro slide"), outro: T("Closing slide"), lower: T("Lower-third label") };
+  // Drawn in the picture, so they zoom with it. A redaction is a solid box: a blur can be reversed, a solid box can't.
+  var WORLD = { arrow: 1, box: 1, callout: 1, blur: 1, step: 1, redact: 1 };
   function font(px, w) { return (w || 600) + " " + Math.round(px) + "px 'Hanken', Arial, sans-serif"; }
   function fade(o, t) { var f = o.type === "intro" || o.type === "outro" ? 0.5 : 0.25; return Math.min(1, o.start <= 0 ? 1 : (t - o.start) / f, (o.end - t) / f); }   // a slide that opens the video is there from the first frame
   function wrap(text, max, px) {
@@ -135,18 +138,27 @@
     try { ctx.drawImage(el, (W - dw) / 2, (H - dh) / 2, dw, dh); } catch (e) { /* not ready yet */ }
   }
   function drawWorld(o, t) {
-    var a = fade(o, t); if (a <= 0) return;
+    var a = o.type === "redact" ? 1 : fade(o, t); if (a <= 0) return;      // a redaction never fades: it covers every frame of its span
     var x = o.x * W, y = o.y * H, w = o.w * W, h = o.h * H, c = o.color || COLORS[o.type];
-    ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = ctx.fillStyle = c; ctx.lineWidth = 6; ctx.lineCap = ctx.lineJoin = "round";
-    if (o.type === "box") { ctx.strokeRect(x, y, w, h); }
+    var house = String(c).toLowerCase() === HOUSE.toLowerCase();
+    ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = ctx.fillStyle = c; ctx.lineWidth = house ? 4 : 6; ctx.lineCap = ctx.lineJoin = "round";
+    if (o.type === "redact") { ctx.globalAlpha = 1; ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+    else if (o.type === "box") {
+      // The house box: 4 px of green with a 2 px dark keyline outside it and 5 px corners; it never covers the control.
+      if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 2; roundRect(x - 3, y - 3, w + 6, h + 6, 8); ctx.stroke(); ctx.restore(); roundRect(x, y, w, h, 5); ctx.stroke(); }
+      else ctx.strokeRect(x, y, w, h);
+    }
     else if (o.type === "arrow") {
-      var x2 = x + w, y2 = y + h, ang = Math.atan2(y2 - y, x2 - x), s = 26;
-      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2 - 14 * Math.cos(ang), y2 - 14 * Math.sin(ang)); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - s * Math.cos(ang - 0.45), y2 - s * Math.sin(ang - 0.45)); ctx.lineTo(x2 - s * Math.cos(ang + 0.45), y2 - s * Math.sin(ang + 0.45)); ctx.closePath(); ctx.fill();
+      var x2 = x + w, y2 = y + h, ang = Math.atan2(y2 - y, x2 - x), s = house ? 24 : 26, cut = house ? 14 : 14;
+      if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2 - cut * Math.cos(ang), y2 - cut * Math.sin(ang)); ctx.stroke(); ctx.restore(); }
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x2 - cut * Math.cos(ang), y2 - cut * Math.sin(ang)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - s * Math.cos(ang - 0.45), y2 - s * Math.sin(ang - 0.45)); ctx.lineTo(x2 - s * Math.cos(ang + 0.45), y2 - s * Math.sin(ang + 0.45)); ctx.closePath();
+      if (house) { ctx.save(); ctx.strokeStyle = EDGE; ctx.lineWidth = 4; ctx.stroke(); ctx.restore(); }
+      ctx.fill();
     } else if (o.type === "step") {
-      var r = (o.size || 36) / 2 * 1.2;
-      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = "#fff"; ctx.stroke();
-      ctx.fillStyle = "#fff"; ctx.font = font(r * 1.15, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(o.text || "1"), x, y + 1);
+      var r = (o.size || (house ? 30 : 36)) / 2 * (house ? 1 : 1.2);
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = house ? 2 : 4; ctx.strokeStyle = house ? EDGE : "#fff"; ctx.stroke();
+      ctx.fillStyle = house ? "#0B2E16" : "#fff"; ctx.font = font(r * 1.15, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(o.text || "1"), x, y + 1);
     } else if (o.type === "callout") {
       var px = o.size || 26, lines = wrap(o.text, Math.max(120, w), px), bw = 0;
       ctx.font = font(px); lines.forEach(function (l) { bw = Math.max(bw, ctx.measureText(l).width); });
@@ -193,9 +205,9 @@
     ctx.restore();
   }
   function drawCaption(t) {
-    var c = P.captions.filter(function (x) { return t >= x.start && t < x.end; })[0];
+    var c = shownCues().filter(function (x) { return t >= x.start && t < x.end; })[0];
     if (!c) return;
-    var px = 32, ls = wrap(c.text, W * 0.8, px).slice(0, 3), bw = 0;
+    var px = 32, ls = [].concat.apply([], c.text.split("\n").map(function (l) { return wrap(l, W * 0.8, px); })).slice(0, 3), bw = 0;
     ctx.save(); ctx.font = font(px, 600); ls.forEach(function (l) { bw = Math.max(bw, ctx.measureText(l).width); });
     var bh = ls.length * px * 1.3 + 20, y = H - 56 - bh;
     ctx.fillStyle = "rgba(11,11,12,.82)"; roundRect(W / 2 - bw / 2 - 18, y, bw + 36, bh, 8); ctx.fill();
@@ -213,12 +225,14 @@
       if (d >= -0.12 && d < 0.15) pressed = Math.max(pressed, 1 - Math.abs(d) / 0.15);
       if (P.cursor.ripple && d >= 0 && d < 0.7) {
         var ex = (e.x - cam.x) * cam.z, ey = (e.y - cam.y) * cam.z;
-        ctx.save(); ctx.strokeStyle = "rgba(229,37,27," + (1 - d / 0.7) + ")"; ctx.lineWidth = 5 * s; ctx.beginPath(); ctx.arc(ex, ey, (14 + d * 90) * s, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+        // The click ring, in the house green over a dark keyline, gone in 0.7 seconds.
+        ctx.save(); ctx.lineWidth = 6 * s; ctx.strokeStyle = "rgba(14,90,43," + (1 - d / 0.7) + ")"; ctx.beginPath(); ctx.arc(ex, ey, (14 + d * 60) * s, 0, Math.PI * 2); ctx.stroke();
+        ctx.lineWidth = 3 * s; ctx.strokeStyle = "rgba(108,233,117," + (1 - d / 0.7) + ")"; ctx.stroke(); ctx.restore();
       }
       if (P.cursor.numbers && d >= 0 && d < 2.2) {
         var nx = (e.x - cam.x) * cam.z + 30 * s, ny = (e.y - cam.y) * cam.z - 30 * s;
-        ctx.save(); ctx.globalAlpha = Math.min(1, (2.2 - d) / 0.3); ctx.fillStyle = "#E5251B"; ctx.beginPath(); ctx.arc(nx, ny, 17 * s, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = "#fff"; ctx.font = font(19 * s, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(e.n), nx, ny + 1); ctx.restore();
+        ctx.save(); ctx.globalAlpha = Math.min(1, (2.2 - d) / 0.3); ctx.fillStyle = HOUSE; ctx.beginPath(); ctx.arc(nx, ny, 17 * s, 0, Math.PI * 2); ctx.fill(); ctx.lineWidth = 2 * s; ctx.strokeStyle = EDGE; ctx.stroke();
+        ctx.fillStyle = "#0B2E16"; ctx.font = font(19 * s, 700); ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(String(e.n), nx, ny + 1); ctx.restore();
       }
     });
     if (P.cursor.halo) { ctx.save(); ctx.fillStyle = "rgba(255,223,43,.45)"; ctx.beginPath(); ctx.arc(x, y, (28 - pressed * 8) * s, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
@@ -453,7 +467,7 @@
         '<button type="button" class="btn line sm" data-act="left"' + (i ? "" : " disabled") + ">" + T("Move earlier") + '</button><button type="button" class="btn line sm" data-act="right"' + (i < P.clips.length - 1 ? "" : " disabled") + ">" + T("Move later") + '</button><button type="button" class="btn line sm" data-act="del">' + T("Delete clip") + "</button></p>";
     } else if (sel.kind === "overlay") {
       var o = find(P.overlays, sel.id); if (!o) { sel = null; return props(); }
-      h = "<h3>" + TYPES[o.type] + "</h3>" + (/zoom|blur|arrow|box/.test(o.type) ? "" : field(o.type === "intro" || o.type === "outro" ? T("Text (first line is the title)") : T("Text"), "text", o.text, "textarea")) +
+      h = "<h3>" + TYPES[o.type] + "</h3>" + (/zoom|blur|redact|arrow|box/.test(o.type) ? "" : field(o.type === "intro" || o.type === "outro" ? T("Text (first line is the title)") : T("Text"), "text", o.text, "textarea")) +
         '<div class="vd-two">' + field(T("Start (s)"), "start", o.start.toFixed(2)) + field(T("End (s)"), "end", o.end.toFixed(2)) + "</div>" +
         (o.type === "intro" || o.type === "outro" || o.type === "lower" ? "" : '<div class="vd-two">' + field(T("X (%)"), "x", Math.round(o.x * 100), "number", ' step="1"') + field(T("Y (%)"), "y", Math.round(o.y * 100), "number", ' step="1"') + "</div>") +
         (/zoom|blur|box|arrow|callout/.test(o.type) ? '<div class="vd-two">' + field(T("Width (%)"), "w", Math.round(o.w * 100), "number", ' step="1"') + field(T("Height (%)"), "h", Math.round(o.h * 100), "number", ' step="1"') + "</div>" : "") +
@@ -545,10 +559,79 @@
   });
 
   /* ---------- Captions as files ---------- */
-  function stamp(s, sep) { s = Math.max(0, s); var h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60, r = s % 60; return pad(h) + ":" + pad(m) + ":" + pad(Math.floor(r)) + sep + String(Math.round((r % 1) * 1000)).padStart(3, "0"); }
+  // A caption is written as one piece of text, as long as the writer likes. On screen and in the files it becomes cues
+  // of at most two lines of 42 characters (standards/video.md). A cue holds whole sentences where they fit; a longer
+  // sentence is cut after a comma, a colon or a semicolon, and a phrase too long for a cue is cut between words. Each
+  // cue gets its share of the caption's time by its characters, at least a second where the caption has the time,
+  // and a cue that would still flash by is held until the next one starts.
+  var CUE_WIDTH = 42, CUE_MIN = 1;
+  function cueLines(text) {
+    var out = [], cur = "";
+    String(text).split(/\s+/).forEach(function (w) {
+      if (!w) return;
+      if (cur && cur.length + 1 + w.length > CUE_WIDTH) { out.push(cur); cur = w; } else cur = cur ? cur + " " + w : w;
+    });
+    if (cur) out.push(cur);
+    return out;
+  }
+  function pieces(text, re) { return String(text).replace(re, "$1\u0000").split("\u0000").map(function (x) { return x.trim(); }).filter(Boolean); }
+  function fits(units) { return cueLines(units.join(" ")).length <= 2; }
+  function cueText(text) {
+    var units = [], out = [], buf = [];
+    pieces(text, /([.!?])\s+/g).forEach(function (sentence) {
+      (fits([sentence]) ? [sentence] : pieces(sentence, /([,:;])\s+/g)).forEach(function (u) {
+        if (fits([u])) units.push(u); else units = units.concat(u.split(/\s+/));
+      });
+    });
+    units.forEach(function (u) {
+      if (buf.length && !fits(buf.concat([u]))) { out.push(buf); buf = [u]; } else buf.push(u);
+    });
+    if (buf.length) out.push(buf);
+    return out.map(function (c) { return cueLines(c.join(" ")).join("\n"); });
+  }
+  // Shares of a span by length, each at least `floor` when the span allows it.
+  function allot(lengths, span, floor) {
+    var total = lengths.reduce(function (s, x) { return s + x; }, 0) || 1;
+    if (span < floor * lengths.length) return lengths.map(function (x) { return span * x / total; });
+    var fixed = lengths.map(function () { return false; });
+    for (;;) {
+      var freeLen = 0, freeSpan = span, more = false;
+      lengths.forEach(function (x, i) { if (fixed[i]) freeSpan -= floor; else freeLen += x; });
+      var d = lengths.map(function (x, i) { return fixed[i] ? floor : freeSpan * x / (freeLen || 1); });
+      d.forEach(function (x, i) { if (!fixed[i] && x < floor) { fixed[i] = true; more = true; } });
+      if (!more) return d;
+    }
+  }
+  function cues(list) {
+    var out = [];
+    list.forEach(function (c) {
+      var parts = cueText(c.text), t = c.start, span = Math.max(0, c.end - c.start);
+      var d = allot(parts.map(function (x) { return x.length; }), span, CUE_MIN);
+      parts.forEach(function (x, i) {
+        var last = i === parts.length - 1;
+        // A short pause between cues, unless it would cut the cue below a second.
+        out.push({ start: t, end: last ? c.end : t + d[i] - (d[i] - 0.05 >= CUE_MIN ? 0.05 : 0), text: x });
+        t += d[i];
+      });
+    });
+    out.sort(function (x, y) { return x.start - y.start; });
+    var stop = duration() || Infinity;
+    out.forEach(function (c, i) {
+      var next = out[i + 1] ? out[i + 1].start - 0.05 : stop;
+      if (c.end - c.start < CUE_MIN) c.end = Math.max(c.end, Math.min(c.start + CUE_MIN, next));
+    });
+    return out;
+  }
+  var cueMemo = { key: null, list: [] };
+  function shownCues() {
+    var key = JSON.stringify(P.captions);
+    if (key !== cueMemo.key) cueMemo = { key: key, list: cues(P.captions) };
+    return cueMemo.list;
+  }
+  function stamp(s, sep) { var ms = Math.round(Math.max(0, s) * 1000), h = Math.floor(ms / 3600000), m = Math.floor(ms / 60000) % 60, r = Math.floor(ms / 1000) % 60; return pad(h) + ":" + pad(m) + ":" + pad(r) + sep + String(ms % 1000).padStart(3, "0"); }
   function pad(n) { return (n < 10 ? "0" : "") + n; }
-  function toSRT(list) { return list.map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ",") + " --> " + stamp(c.end, ",") + "\n" + c.text + "\n"; }).join("\n"); }
-  function toVTT(list) { return "WEBVTT\n\n" + list.map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ".") + " --> " + stamp(c.end, ".") + "\n" + c.text + "\n"; }).join("\n"); }
+  function toSRT(list) { return cues(list).map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ",") + " --> " + stamp(c.end, ",") + "\n" + c.text + "\n"; }).join("\n"); }
+  function toVTT(list) { return "WEBVTT\n\n" + cues(list).map(function (c, i) { return (i + 1) + "\n" + stamp(c.start, ".") + " --> " + stamp(c.end, ".") + "\n" + c.text + "\n"; }).join("\n"); }
   function parseTime(s) { var m = /(?:(\d+):)?(\d{1,2}):(\d{2})[.,](\d{1,3})/.exec(s); return m ? (+(m[1] || 0)) * 3600 + (+m[2]) * 60 + (+m[3]) + (+m[4].padEnd(3, "0")) / 1000 : NaN; }
   function parseCaptions(text) {
     var out = [];

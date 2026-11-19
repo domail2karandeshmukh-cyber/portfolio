@@ -355,7 +355,7 @@
     return { title: title, lead: lead, parts: out };
   }
   var SYMPTOM = /^(symptoms?|what you see|the problem|problem)\b/, CAUSE = /^(why it happens|why|causes?)\b/;
-  var PREREQ = /^(before you (start|begin)|prerequisites?|requirements?|what you need)/, RESULT = /^(check that it worked|result|results|what happens next|verify|confirm)/, AFTER = /^(next steps?|what to do next|after you finish)/;
+  var PREREQ = /^(before you (start|begin)|prerequisites?|requirements?|what you need)/, RESULT = /^(check that it worked|result|results|what happens next|verify|confirm)/, AFTER = /^(next steps?|what to do next|after you finish)/, CRITERIA = /^(acceptance criteria|expected (values|results?|readings))/;
   /**
    * A DITA topic. A how-to becomes a task with its prerequisites, steps and result in the places DITA gives them.
    * A troubleshooting document becomes a troubleshooting topic: what the reader sees, why, and what to do.
@@ -372,15 +372,20 @@
     if ((kind === "how-to" || kind === "task" || kind === "howto" || (!kind && steps)) && (steps || lead.some(function (b) { return b.t === "ol"; }))) {
       var prereq = [], context = lead.filter(function (b) { return b.t !== "ol"; }), result = [], post = [], more = [], list = null;
       lead.forEach(function (b) { if (b.t === "ol" && !list) list = b; });
+      // Sections keep their place: one written before the steps ("Tools and materials", "Safety") is a prerequisite,
+      // acceptance criteria belong to the result, and anything else after the steps follows them, each under its heading.
+      var passed = false, titled = function (s) { return [{ t: "h", runs: s.title }].concat(s.blocks); };
       p.parts.forEach(function (s) {
         if (PREREQ.test(s.name)) prereq = prereq.concat(s.blocks);
         else if (RESULT.test(s.name)) result = result.concat(s.blocks);
         else if (AFTER.test(s.name)) post = post.concat(s.blocks);
-        else if (s === steps && !list) s.blocks.forEach(function (b) { if (b.t === "ol" && !list) list = b; else (list ? post : context).push(b); });
+        else if (s === steps && !list) { passed = true; s.blocks.forEach(function (b) { if (b.t === "ol" && !list) list = b; else (list ? post : context).push(b); }); }
+        else if (s === steps) passed = true;
+        else if (!passed) prereq = prereq.concat(titled(s));
+        else if (CRITERIA.test(s.name)) result = titled(s).concat(result);
         else more.push(s);
       });
-      // What a task has no place for goes after the steps, under its own heading, so nothing written is lost.
-      more.forEach(function (s) { post.push({ t: "h", runs: s.title }); post = post.concat(s.blocks); });
+      more.forEach(function (s) { post = post.concat(titled(s)); });
       var body = "";
       if (prereq.length) body += "<prereq>\n" + ditaBlocks(prereq) + "\n</prereq>\n";
       if (context.length) body += "<context>\n" + ditaBlocks(context) + "\n</context>\n";

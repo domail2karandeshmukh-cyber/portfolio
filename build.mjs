@@ -1,13 +1,16 @@
 // Builds karandeshmukh.dev from content/site.json:
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
+import { siteNav } from "./lib/nav.mjs";
+import { buildHubs, fieldExplorer } from "./lib/hubs.mjs";
+import { buildStandards } from "./lib/standards.mjs";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
 import { execSync } from "node:child_process";
 import sharp from "sharp";
-import { esc, host, sources, template } from "./lib/util.mjs";
+import { esc, host, sources, template, siteRef } from "./lib/util.mjs";
 import { buildLibrary, docCard } from "./lib/library.mjs";
 import { styleGuide } from "./lib/styleguide.mjs";
 import { translate, typeset, units } from "./lib/i18n.mjs";
@@ -74,10 +77,11 @@ const liveSites = [
 const pmenu = (all) => `<details class="pm"><summary>Projects</summary><div class="pm-menu">${liveSites
   .map((p) => `<a href="${p.href}" target="_blank" rel="noopener"><b translate="no">${esc(p.name)}</b><small>${esc(p.label)}</small></a>`)
   .join("")}<a class="pm-all" href="${all}">All projects</a></div></details>`;
-const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects") };
+const navEn = siteNav({ cv: S.cv, projects: pmenu("/#projects") });
+const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
 const library = await buildLibrary({ C, OUT, source, common });
 // The style guide: its rules, and what the check found in each document of the library.
-const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/main/src/style.js` });
+const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/${siteRef}/src/style.js` });
 await library.extra({ path: "/style", title: "Style guide", description: `The ${guide.figures.rules} rules my documents follow, based on the Microsoft Writing Style Guide. Code checks ${guide.figures.coded} of them on every build.`,
   trail: [["Portfolio", "/"], ["Library", "/docs"], ["Style guide"]], body: guide.body, kind: "Style guide", shelf: "Library", text: guide.text });
 
@@ -92,7 +96,7 @@ for (const t of C.workbench.templates) {
 }
 const bench = await template("src/workbench.html");
 await fs.mkdir(`${OUT}/workbench`, { recursive: true });
-await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
+await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, sitenav: navEn.desktop, mnav: navEn.phone, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
 await library.extra({ path: "/workbench", title: "Workbench", description: "Write a document, check it against the style guide as you type, and publish it for each reader as Markdown, HTML or DITA.", only: "search",
   kind: "Tool", shelf: "Library", text: [{ id: "", title: "", text: "Write a document in Markdown, check it against the style guide as you type, and publish it for more than one reader as Markdown, as HTML for a help center, or as DITA. It runs in your browser." }] });
 // The Documentation Studio's fictional scenarios join the search, labelled as demonstrations, so that a search for
@@ -106,7 +110,7 @@ await library.extra({ path: "/workbench", title: "Workbench", description: "Writ
       const src = await fs.readFile(d.path, "utf8"), view = Doc.resolve(Doc.parse(src), Doc.GENERAL);
       text.push({ id: d.path.split("/").pop().replace(/\.md$/, "").toLowerCase().replace(/[^a-z0-9]+/g, "-"), title: view.title || d.kind, text: Doc.text ? src.replace(/^---[\s\S]*?---\n/, "").replace(/[#*`>|_]/g, " ").replace(/\s+/g, " ").trim() : src });
     }
-    if (text.length) await library.extra({ path: `/studio/scenarios/${sc.id}`, title: `${sc.title} (fictional demonstration)`, only: "search", kind: "Fictional demonstration", shelf: `Scenario ${sc.letter}: ${sc.field}`, text });
+    if (text.length) await library.extra({ path: `/studio/scenarios/${sc.id}`, title: `${sc.title} (demonstration scenario)`, only: "search", kind: "Demonstration scenario", shelf: `Scenario ${sc.letter}: ${sc.field}`, text });
   }
 }
 await library.finish();
@@ -119,6 +123,8 @@ for (const f of reel) {
   await fs.copyFile(`content/films/${f.id}.mp4`, `${OUT}/films/${f.id}.mp4`);
   f.captions = existsSync(`content/films/${f.id}.vtt`);
   if (f.captions) await fs.copyFile(`content/films/${f.id}.vtt`, `${OUT}/films/${f.id}.vtt`);
+  // The same captions as SubRip, for players and editors (LinkedIn among them) that take SRT.
+  if (existsSync(`content/films/${f.id}.srt`)) await fs.copyFile(`content/films/${f.id}.srt`, `${OUT}/films/${f.id}.srt`);
   await sharp(`content/films/${f.id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${OUT}/films/${f.id}.webp`);
   console.log(`film: ${f.id} (${f.length}) ${f.title}${f.captions ? ", with captions" : ""}`);
 }
@@ -150,8 +156,14 @@ const engineering = `
   <p class="eng-note">${esc(E.grounding)} ${esc(E.applies)}</p>
   <p class="eng-note"><a href="#experience">Read about my roles</a></p>`;
 
+// The field explorer, and the pictures it shows that aren't already on the site.
+for (const ind of JSON.parse(await fs.readFile("content/industries.json", "utf8")).industries) {
+  const pv = ind.preview;
+  if (pv && pv.src.startsWith("/thumbs/") && !existsSync(`${OUT}${pv.src}`)) await fs.copyFile(pv.from, `${OUT}${pv.src}`);
+}
 const parts = {
   engineering,
+  fields: fieldExplorer({ byId, C }),
   stats: figures.map((s) => `<li><b data-count>${esc(s.n)}</b><span>${esc(s.label)}</span></li>`).join(""),
   // Three sheets on the desk. The first one is where to start.
   featured: C.featured.map((id, i) => docCard({ ...byId[id], start: i === 0 }, T)).join("\n"),
@@ -272,11 +284,13 @@ for (const loc of locales) {
     jsonld: JSON.stringify(jsonld),
     // April's tour: the section each stop scrolls to, and the line she says there.
     stops: C.tour.map((t) => t.to).join(","),
-    // The brief the drafting model follows is kept with the site's source, where anyone can read it.
+    // The brief the drafting model follows is kept with the site's source, where anyone can read it. It links to main, the
+    // same on every build, because the translations of this sentence include the link.
     brief: `${S.links.github}/${S.repo}/blob/main/content/desk/brief.md`,
     i18n: json({ ...C.strings, ...Object.fromEntries(C.tour.map((t, i) => [`tour${i + 1}`, t.say])) }),
     voice: json(recorded[loc.code] || {}),
     pmenu: pmenu("#projects"),
+    ...(() => { const n = siteNav({ cv: S.cv, projects: pmenu("#projects"), home: true, lang: loc.code }); return { sitenav: n.desktop, mnav: n.phone }; })(),
     livelinks: liveSites.map((p) => `<a href="${p.href}" target="_blank" rel="noopener" translate="no">${esc(p.name)}</a>`).join(""),
   };
   for (const d of C.docs) tokens[`doc:${d.id}`] = byId[d.id].url;
@@ -312,14 +326,14 @@ for (const loc of locales) {
 }
 
 // doc.js and style.js are the document model and the style checker. The build uses them, and so does the workbench in a browser.
-for (const f of ["site.css", "app.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+for (const f of ["site.css", "app.js", "nav.js", "hubs.js", "fields.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
 const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
-const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls];
+const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
+const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`
@@ -327,6 +341,11 @@ await fs.writeFile(
 
 await socialCard({ S, OUT });
 await cv({ C, OUT });
+
+// The industry pages, the downloads center and the videos page: written last, when every file they list exists.
+await buildHubs({ C, OUT, library: { byId: library.byId, aeroDownloads: studio.aeroDownloads }, extra: library.extra });
+const standardUrls = await buildStandards({ extra: library.extra });
+await library.finish();
 
 // What was built
 const files = await Promise.all((await fs.readdir(OUT, { recursive: true, withFileTypes: true })).filter((f) => f.isFile()).map(async (f) => [path.join(f.parentPath, f.name), (await fs.stat(path.join(f.parentPath, f.name))).size]));

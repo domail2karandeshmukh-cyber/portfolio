@@ -9,3 +9,10 @@ nav.related-links li a,
   min-height: 24px;
   padding: 2px 0;
 }
+
+/* Version 10: on a phone, wide code and wide tables scroll inside their own box instead of widening the page,
+   and long identifiers wrap. */
+pre, .pre, .codeblock { overflow-x: auto; max-width: 100%; }
+table.table, table.simpletable, table.choicetableborder, table.properties { display: block; overflow-x: auto; max-width: 100%; }
+body { overflow-wrap: break-word; }
+img { max-width: 100%; height: auto; }

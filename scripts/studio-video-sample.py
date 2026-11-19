@@ -1,4 +1,4 @@
-"""Makes the Video Studio's sample projects: a screen recording of a fictional demo app with its pointer events, the
+"""Makes the Video Studio's sample projects: a screen recording of a demo app (an example company's) with its pointer events, the
 narration mixed to the recording's pace, captions from the narration, highlight boxes on the controls that get
 selected, step numbers, an intro and a closing slide, all saved as a project the studio opens.
 
@@ -107,12 +107,12 @@ def console_steps():
 
 SAMPLES = {
     "schedule-a-report": {"demo": "reports", "steps": reports_steps, "title": "Schedule a report for automatic delivery", "scenario": "g-training",
-                          "intro": "Schedule a report for automatic delivery\nBeacon Reports · a short tutorial · fictional application", "outro": "You're done\nThe Schedules tab lists the schedule and its next delivery.",
-                          "lower": "Beacon Reports · fictional demo", "blur": None,
+                          "intro": "Schedule a report for automatic delivery\nBeacon Reports · a short tutorial · example application", "outro": "You're done\nThe Schedules tab lists the schedule and its next delivery.",
+                          "lower": "Beacon Reports, an example company", "blur": None,
                           "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions."},
     "inspection-walkthrough": {"demo": "console", "steps": console_steps, "title": "Monthly inspection of feed pump B", "scenario": "a-industrial",
-                               "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · fictional procedure", "outro": "Inspection recorded\nThe written procedure, the step guide and the DITA output are in the same package.",
-                               "lower": "Harbor Pump Station · fictional demo", "blur": "#key",
+                               "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · example procedure", "outro": "Inspection recorded\nThe written procedure, the step guide and the DITA output are in the same package.",
+                               "lower": "Harbor Pump Station, an example company", "blur": "#key",
                                "prepare": "document.head.insertAdjacentHTML('beforeend', '<style>.in:empty::after{content:\\'\\\\00a0\\'}</style>'); document.querySelectorAll('" + CONSOLE_FIELDS + "').forEach((e) => { e.textContent = ''; e.classList.remove('f'); })",
                                "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions."},
 }
@@ -209,7 +209,7 @@ def make(sample_id):
     def nid(p): count.append(1); return p + str(len(count)).zfill(3)
     ov = []
     def overlay(type_, start, end, x=0, y=0, w=1, h=1, text="", color=None, size=30, layer=0):
-        ov.append({"id": nid("o"), "type": type_, "start": round(max(0, start), 2), "end": round(min(dur, end), 2), "x": x, "y": y, "w": w, "h": h, "text": text, "color": color or {"intro": "#0B0B0C", "outro": "#0B0B0C", "lower": "#0B0B0C", "box": "#E5251B", "step": "#E5251B", "warning": "#C62828", "blur": "#1D4ED8", "callout": "#E5251B", "instruction": "#0B0B0C", "done": "#0D9A57", "zoom": "#1D4ED8"}[type_], "size": size, "layer": layer})
+        ov.append({"id": nid("o"), "type": type_, "start": round(max(0, start), 2), "end": round(min(dur, end), 2), "x": x, "y": y, "w": w, "h": h, "text": text, "color": color or {"intro": "#0B0B0C", "outro": "#0B0B0C", "lower": "#0B0B0C", "box": "#6CE975", "step": "#6CE975", "warning": "#C62828", "blur": "#1D4ED8", "redact": "#0B0B0C", "callout": "#6CE975", "instruction": "#0B0B0C", "done": "#0D9A57", "zoom": "#1D4ED8"}[type_], "size": size, "layer": layer})
     overlay("intro", 0, starts[0] + segs[0]["seconds"] + 0.3, text=s["intro"], size=30, layer=0)
     overlay("lower", starts[1] - 0.2, starts[1] + 3.4, text=s["lower"], size=24, layer=1)
     clicks = [e for e in m.events if e.get("click")]
@@ -220,7 +220,8 @@ def make(sample_id):
     for z in m.zooms:
         overlay("zoom", z["start"], z["end"], x=max(0, z["x"]) / W, y=max(0, z["y"]) / H, w=min(W, z["w"]) / W, h=min(H, z["h"]) / H, layer=1)
     if s["blur"] and blurbox:
-        overlay("blur", 0, m.boxes[0]["t"] + 0.5, x=(blurbox["x"] - 4) / W, y=(blurbox["y"] - 4) / H, w=(blurbox["w"] + 8) / W, h=(blurbox["h"] + 8) / H, layer=1)
+        # The key is covered with a solid box while it is on screen (standards/video.md): a blur can be reversed.
+        overlay("redact", 0, m.boxes[0]["t"] + 0.5, x=(blurbox["x"] - 4) / W, y=(blurbox["y"] - 4) / H, w=(blurbox["w"] + 8) / W, h=(blurbox["h"] + 8) / H, layer=1)
     if sample_id == "inspection-walkthrough":
         # The warning comes before the last step, and goes as the pointer reaches the button; the confirmation follows it.
         overlay("warning", starts[3] + segs[3]["seconds"] * 0.4, starts[4] + 1.2, x=0.05, y=0.08, w=0, h=0, text="Close the work order only when every reading is in range", size=28, layer=3)
@@ -246,7 +247,7 @@ def make(sample_id):
     project = {"app": "karandeshmukh.dev/studio/video", "version": 1,
                "project": {"version": 1, "name": sample_id, "clips": [{"id": "c001", "media": "footage", "in": 0, "out": round(dur, 3)}], "overlays": ov, "captions": out_caps, "markers": markers,
                            "narration": {"media": "narration", "offset": 0, "volume": 1, "fadeIn": 0, "fadeOut": 0.3, "trimIn": 0, "trimOut": round(dur, 3)} if narr else None,
-                           "clipVolume": 1, "burnCaptions": True, "cursor": {"show": True, "size": 1, "halo": True, "ripple": True, "spotlight": False, "numbers": False, "follow": True, "factor": 1.5}},
+                           "clipVolume": 1, "burnCaptions": False, "cursor": {"show": True, "size": 1, "halo": True, "ripple": True, "spotlight": False, "numbers": False, "follow": True, "factor": 1.5}},
                "media": {"footage": {"kind": "video", "name": f"{sample_id}-footage.mp4", "type": "video/mp4", "file": "media/footage.mp4", "cursor": m.events}}}
     if narr: project["media"]["narration"] = {"kind": "audio", "name": f"{sample_id}-narration.mp3", "type": "audio/mpeg", "file": "media/narration.mp3", "cursor": []}
     zpath = d / f"{sample_id}.video.zip"

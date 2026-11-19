@@ -1,5 +1,5 @@
 {
- "note": "What scripts/studio-samples.py makes: screenshots of the fictional demo apps (src/studio/demos), marked up in the Screenshot Studio, and step guides built from them in the Step Guide Studio. Positions are resolved from element ids in the demo page, so a layout change moves the marks with it.",
+ "note": "What scripts/studio-samples.py makes: screenshots of the fictional demo apps (src/studio/demos), marked up in the Screenshot Studio, and step guides built from them in the Step Guide Studio. Positions are resolved from element ids in the demo page, so a layout change moves the marks with it. Version 10: the marks follow standards/screenshots.md (house green with its keyline, 4 px of space round each control, short straight arrows, solid redaction, no explanatory text in the picture).",
  "frames": {
   "console-work-order": {
    "demo": "console",
@@ -13,32 +13,7 @@
     {
      "type": "rect",
      "at": "#record",
-     "pad": 8
-    },
-    {
-     "type": "callout",
-     "at": "#record",
-     "side": "left",
-     "n": 1
-    },
-    {
-     "type": "arrow",
-     "to": "#record",
-     "side": "right",
-     "from": [
-      150,
-      -70
-     ]
-    },
-    {
-     "type": "text",
-     "to": "#record",
-     "side": "right",
-     "from": [
-      160,
-      -112
-     ],
-     "text": "Start here"
+     "pad": 4
     }
    ]
   },
@@ -55,7 +30,7 @@
     {
      "type": "rect",
      "at": "#save",
-     "pad": 8
+     "pad": 4
     },
     {
      "type": "callout",
@@ -74,12 +49,6 @@
      "at": "#check",
      "pad": 6,
      "color": "#FFDF2B"
-    },
-    {
-     "type": "callout",
-     "at": "#closewo",
-     "side": "left",
-     "n": 4
     }
    ]
   },
@@ -107,7 +76,7 @@
     {
      "type": "rect",
      "at": "#deploy",
-     "pad": 8
+     "pad": 4
     },
     {
      "type": "callout",
@@ -130,13 +99,7 @@
     {
      "type": "rect",
      "at": "#tab-config",
-     "pad": 6
-    },
-    {
-     "type": "callout",
-     "at": "#tab-config",
-     "side": "above",
-     "n": 1
+     "pad": 4
     },
     {
      "type": "redact",
@@ -153,12 +116,6 @@
      "type": "rect",
      "at": "#row-url",
      "pad": 4
-    },
-    {
-     "type": "callout",
-     "at": "#edit-url",
-     "side": "right",
-     "n": 2
     },
     {
      "type": "redact",
@@ -186,7 +143,7 @@
     {
      "type": "rect",
      "at": "#save-var",
-     "pad": 8
+     "pad": 4
     }
    ]
   },
@@ -197,13 +154,7 @@
     {
      "type": "rect",
      "at": "#deploy",
-     "pad": 8
-    },
-    {
-     "type": "callout",
-     "at": "#deploy",
-     "side": "left",
-     "n": 5
+     "pad": 4
     },
     {
      "type": "redact",
@@ -225,8 +176,7 @@
     {
      "type": "rect",
      "at": "#deploying",
-     "pad": 4,
-     "color": "#0D9A57"
+     "pad": 4
     }
    ]
   },
@@ -247,7 +197,7 @@
     {
      "type": "callout",
      "at": "#f-start",
-     "side": "left",
+     "side": "right",
      "n": 1
     },
     {
@@ -259,47 +209,24 @@
     {
      "type": "rect",
      "at": "#p-groups",
-     "pad": 4,
-     "color": "#1D4ED8"
+     "pad": 4
     },
     {
      "type": "callout",
      "at": "#p-groups",
      "side": "left",
-     "n": 3,
-     "color": "#1D4ED8"
+     "n": 3
     },
     {
      "type": "rect",
      "at": "#create",
-     "pad": 8
+     "pad": 4
     },
     {
      "type": "callout",
      "at": "#create",
      "side": "left",
      "n": 4
-    },
-    {
-     "type": "arrow",
-     "to": "#f-account",
-     "side": "topright",
-     "from": [
-      110,
-      -150
-     ]
-    },
-    {
-     "type": "text",
-     "to": "#f-account",
-     "side": "topright",
-     "from": [
-      30,
-      -196
-     ],
-     "text": "Proposed by the system. Don't change it.",
-     "size": 20,
-     "color": "#0B0B0C"
     }
    ]
   },
@@ -311,12 +238,6 @@
      "type": "rect",
      "at": "#nav-users",
      "pad": 2
-    },
-    {
-     "type": "callout",
-     "at": "#nav-users",
-     "side": "right",
-     "n": 1
     },
     {
      "type": "redact",
@@ -347,13 +268,13 @@
     {
      "type": "callout",
      "at": "#f-start",
-     "side": "left",
+     "side": "right",
      "n": 2
     },
     {
      "type": "callout",
      "at": "#f-dept",
-     "side": "left",
+     "side": "right",
      "n": 3
     }
    ]
@@ -413,13 +334,7 @@
     {
      "type": "rect",
      "at": "#create",
-     "pad": 8
-    },
-    {
-     "type": "callout",
-     "at": "#create",
-     "side": "left",
-     "n": 6
+     "pad": 4
     }
    ]
   },
@@ -430,13 +345,7 @@
     {
      "type": "rect",
      "at": "#prereg",
-     "pad": 8
-    },
-    {
-     "type": "callout",
-     "at": "#prereg",
-     "side": "left",
-     "n": 7
+     "pad": 4
     },
     {
      "type": "highlight",
@@ -463,33 +372,13 @@
      "color": "#FFDF2B"
     },
     {
-     "type": "callout",
-     "at": "#row-invited",
-     "side": "inleft",
-     "n": 2
-    },
-    {
      "type": "rect",
      "at": "#admins",
-     "pad": 4,
-     "color": "#1D4ED8"
+     "pad": 4
     },
     {
-     "type": "text",
-     "to": "#admins",
-     "side": "below",
-     "from": [
-      0,
-      42
-     ],
-     "text": "Keep at least two administrators",
-     "size": 20,
-     "color": "#1D4ED8"
-    },
-    {
-     "type": "pixelate",
-     "at": "#svc-email",
-     "pad": 2
+     "type": "redact",
+     "at": "#svc-email"
     }
    ]
   },
@@ -500,15 +389,7 @@
     {
      "type": "rect",
      "at": "#verified",
-     "pad": 4,
-     "color": "#0D9A57"
-    },
-    {
-     "type": "callout",
-     "at": "#verified",
-     "side": "above",
-     "n": 1,
-     "color": "#0D9A57"
+     "pad": 4
     },
     {
      "type": "highlight",
@@ -519,25 +400,15 @@
     {
      "type": "rect",
      "at": "#unlock",
-     "pad": 8
+     "pad": 4
     },
     {
-     "type": "callout",
-     "at": "#unlock",
-     "side": "below",
-     "n": 2
+     "type": "redact",
+     "at": "#attempts td:nth-child(5)"
     },
     {
-     "type": "callout",
-     "at": "#reset",
-     "side": "below",
-     "n": 3
-    },
-    {
-     "type": "blur",
-     "at": "#attempts td:nth-child(5)",
-     "pad": 2,
-     "all": true
+     "type": "rect",
+     "at": "#reset"
     }
    ]
   },
@@ -549,12 +420,6 @@
      "type": "rect",
      "at": ".top input",
      "pad": 4
-    },
-    {
-     "type": "callout",
-     "at": ".top input",
-     "side": "right",
-     "n": 1
     }
    ]
   },
@@ -565,15 +430,7 @@
     {
      "type": "rect",
      "at": "#verified",
-     "pad": 4,
-     "color": "#0D9A57"
-    },
-    {
-     "type": "callout",
-     "at": "#verified",
-     "side": "above",
-     "n": 2,
-     "color": "#0D9A57"
+     "pad": 4
     }
    ]
   },
@@ -585,12 +442,6 @@
      "type": "rect",
      "at": "#attempts",
      "pad": 4
-    },
-    {
-     "type": "callout",
-     "at": "#attempts",
-     "side": "above",
-     "n": 3
     },
     {
      "type": "highlight",
@@ -607,7 +458,7 @@
     {
      "type": "rect",
      "at": "#unlock",
-     "pad": 8
+     "pad": 4
     },
     {
      "type": "callout",
@@ -632,12 +483,6 @@
      "at": "#unlocked",
      "pad": 0,
      "color": "#FFDF2B"
-    },
-    {
-     "type": "callout",
-     "at": "#unlocked",
-     "side": "above",
-     "n": 6
     }
    ]
   },
@@ -659,53 +504,35 @@
     {
      "type": "rect",
      "at": "#j-rule",
-     "pad": 3,
-     "color": "#FFDF2B"
+     "pad": 3
     },
     {
      "type": "callout",
      "at": "#j-rule",
      "side": "left",
-     "n": 2,
-     "color": "#FFDF2B"
+     "n": 2
     },
     {
      "type": "rect",
      "at": "#j-data",
-     "pad": 3,
-     "color": "#FFDF2B"
+     "pad": 3
     },
     {
      "type": "callout",
      "at": "#j-data",
      "side": "left",
-     "n": 3,
-     "color": "#FFDF2B"
+     "n": 3
     },
     {
      "type": "rect",
      "at": "#triage",
-     "pad": 4,
-     "color": "#0D9A57"
+     "pad": 4
     },
     {
      "type": "callout",
      "at": "#triage",
      "side": "left",
-     "n": 4,
-     "color": "#0D9A57"
-    },
-    {
-     "type": "text",
-     "to": "#json",
-     "side": "below",
-     "from": [
-      0,
-      34
-     ],
-     "text": "Decision: external source, a user that exists, no success in 24 h. Medium: open a case.",
-     "size": 20,
-     "color": "#FFFFFF"
+     "n": 4
     }
    ]
   },
@@ -718,23 +545,16 @@
    },
    "marks": [
     {
-     "type": "highlight",
-     "at": "#j-rule",
-     "pad": 3,
-     "color": "#FFDF2B"
+     "type": "rect",
+     "at": "#j-rule"
     },
     {
-     "type": "highlight",
-     "at": "#j-data",
-     "pad": 3,
-     "color": "#FFDF2B"
+     "type": "rect",
+     "at": "#j-data"
     },
     {
-     "type": "callout",
-     "at": "#j-agent",
-     "side": "right",
-     "n": 1,
-     "color": "#FFFFFF"
+     "type": "rect",
+     "at": "#j-agent"
     }
    ]
   },
@@ -776,7 +596,7 @@
     {
      "type": "rect",
      "at": "#save",
-     "pad": 6
+     "pad": 4
     },
     {
      "type": "callout",
@@ -793,13 +613,7 @@
     {
      "type": "rect",
      "at": "#open",
-     "pad": 8
-    },
-    {
-     "type": "callout",
-     "at": "#open",
-     "side": "left",
-     "n": 1
+     "pad": 4
     }
    ]
   },
@@ -812,12 +626,6 @@
      "type": "rect",
      "at": "#rcpt",
      "pad": 4
-    },
-    {
-     "type": "callout",
-     "at": "#rcpt",
-     "side": "left",
-     "n": 2
     }
    ]
   },
@@ -861,7 +669,7 @@
     {
      "type": "rect",
      "at": "#preview",
-     "pad": 6
+     "pad": 4
     },
     {
      "type": "callout",
@@ -880,13 +688,7 @@
     {
      "type": "rect",
      "at": "#save",
-     "pad": 6
-    },
-    {
-     "type": "callout",
-     "at": "#save",
-     "side": "right",
-     "n": 8
+     "pad": 4
     }
    ]
   },
@@ -900,12 +702,6 @@
      "at": "#rows",
      "pad": 2,
      "color": "#FFDF2B"
-    },
-    {
-     "type": "callout",
-     "at": "#rows",
-     "side": "left",
-     "n": 9
     }
    ]
   }
@@ -923,42 +719,42 @@
    "scenario": "b-enterprise-it",
    "frame": "identity-new-user",
    "title": "Enterprise IT: a new user form",
-   "blurb": "Numbered callouts in the order the fields are filled, personal data redacted, and an arrow with a label for the one field not to touch."
+   "blurb": "Numbered callouts in the order the fields are filled, and personal data covered with solid boxes."
   },
   {
    "id": "ledgerly-users",
    "scenario": "e-support",
    "frame": "ledgerly-users",
    "title": "SaaS account administration",
-   "blurb": "A spotlight on the number that matters, a highlighted row, a pixelated address, and a text label."
+   "blurb": "The Invite button numbered, the invited user highlighted, the administrators boxed, and a service address covered with a solid box."
   },
   {
    "id": "support-unlock",
    "scenario": "e-support",
    "frame": "support-unlock",
    "title": "Support troubleshooting: a locked account",
-   "blurb": "Green for what to check first, red for the actions, and a blurred column of network addresses."
+   "blurb": "The verification check and both actions boxed, the lock highlighted, and a column of network addresses covered."
   },
   {
    "id": "console-work-order",
    "scenario": "a-industrial",
    "frame": "console-work-order",
    "title": "Engineering console: a work order",
-   "blurb": "A service key redacted, the button to select boxed and numbered, and an arrow that says where to start."
+   "blurb": "A service key covered with a solid box, and the button to select boxed: one action, so no number."
   },
   {
    "id": "soc-alert",
    "scenario": "d-security",
    "frame": "soc-alert",
    "title": "Security monitoring: a Wazuh alert",
-   "blurb": "The fields that decide the triage boxed in yellow on a dark console, and the decision written next to the action."
+   "blurb": "The fields that decide the triage boxed and numbered on a dark console, in the house green that reads on dark and light screens."
   },
   {
    "id": "soc-alert-detail",
    "scenario": "d-security",
    "frame": "soc-alert-detail",
    "title": "Security monitoring: cropped alert detail",
-   "blurb": "The alert JSON cropped and enlarged, with the two decisive lines highlighted."
+   "blurb": "The alert JSON cropped and enlarged, with the three lines the triage depends on boxed in green, which reads on a dark console."
   },
   {
    "id": "reports-schedule",

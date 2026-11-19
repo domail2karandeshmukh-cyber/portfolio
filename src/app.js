@@ -372,16 +372,53 @@
     io.observe(el);
   });
 
-  /* Documents: filter by kind, and group by kind or by project */
+  /* Documents: filter by kind and by facet (field, reader, standard, format), and group by kind or by project.
+     The facets are kept in the address (?field=cybersecurity), so a link can open the library filtered. */
   var chips = $$(".filters .chip"), cards = $$("#docs > li, [data-docs] > li"), kind = "all", grouping = "kind";
+  var refine = $(".lib-refine"), FACETS = ["field", "audience", "standard", "format"], want = {};
+  var rows = $$(".demo-rows > li");
+  function fits(li) {
+    return FACETS.every(function (k) { return !want[k] || (" " + (li.getAttribute("data-" + k) || "") + " ").indexOf(" " + want[k] + " ") >= 0; });
+  }
   function showDocs() {
-    cards.forEach(function (li) { li.hidden = !(kind === "all" || li.dataset.t === kind); });
+    var faceted = FACETS.some(function (k) { return want[k]; });
+    cards.forEach(function (li) { li.hidden = !((kind === "all" || li.dataset.t === kind) && fits(li)); });
+    rows.forEach(function (li) { li.hidden = !fits(li); });
     $$(".shelf").forEach(function (s) {
-      var own = $$("[data-docs] > li", s), demo = $(".demo-rows", s);
-      if (demo) demo.hidden = !(kind === "all" || s.dataset.kind === kind) && own.length > 0;
-      s.hidden = own.length ? !own.some(function (li) { return !li.hidden; }) : !(kind === "all" || s.dataset.kind === kind);
+      var own = $$("[data-docs] > li", s), demo = $(".demo-rows", s), head = $(".demo-head", s);
+      var demoOn = demo && (kind === "all" || s.dataset.kind === kind || !own.length) && $$("li", demo).some(function (li) { return !li.hidden; });
+      if (demo) { demo.hidden = !demoOn; if (head) head.hidden = !demoOn; }
+      var ownOn = own.some(function (li) { return !li.hidden; });
+      s.hidden = !(ownOn || (demoOn && (kind === "all" || s.dataset.kind === kind)));
     });
     $$(".lib-group").forEach(function (g) { g.hidden = g.dataset.group !== grouping; });
+    if (refine) {
+      var group = $('.lib-group[data-group="' + grouping + '"]');
+      var n = $$("[data-docs] > li", group).filter(function (li) { return !li.hidden; }).length + (grouping === "kind" ? $$(".demo-rows > li", group).filter(function (li) { return !li.hidden && !li.closest("[hidden]"); }).length : 0);
+      $(".lib-n", refine).textContent = faceted ? (n === 1 ? "1 document" : n + " documents") : "";
+      $("[data-refine-clear]", refine).hidden = !faceted;
+    }
+  }
+  if (refine) {
+    var q0 = new URLSearchParams(location.search);
+    FACETS.forEach(function (k) {
+      var s = $("select[name=" + k + "]", refine), v = q0.get(k) || "";
+      if (v && [].some.call(s.options, function (o) { return o.value === v; })) { s.value = v; want[k] = v; }
+      s.addEventListener("change", function () {
+        want[k] = s.value;
+        var q = new URLSearchParams(location.search);
+        if (s.value) q.set(k, s.value); else q.delete(k);
+        history.replaceState(null, "", location.pathname + (q.toString() ? "?" + q : "") + location.hash);
+        showDocs();
+      });
+    });
+    $("[data-refine-clear]", refine).addEventListener("click", function () {
+      FACETS.forEach(function (k) { want[k] = ""; $("select[name=" + k + "]", refine).value = ""; });
+      history.replaceState(null, "", location.pathname + location.hash);
+      showDocs();
+      $("select", refine).focus();
+    });
+    refine.hidden = false;
   }
   chips.forEach(function (c) {
     c.addEventListener("click", function () {

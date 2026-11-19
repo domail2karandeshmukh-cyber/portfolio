@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="developer-documentation-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>Lattice Cloud, an example company</booklibrary>
+<mainbooktitle>Lattice Relay developer documentation</mainbooktitle>
+<booktitlealt>Publication DEVELOPER-DOCUMENTATION, 4 documents</booktitlealt>
+<booktitlealt>Lattice Cloud, an example company</booktitlealt>
+<booktitlealt>Issued 2026-11-19. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-19"/></critdates>
+</bookmeta>
+<frontmatter>
+<keydef keys="cloud"><topicmeta><keywords><keyword>Lattice Cloud</keyword></keywords></topicmeta></keydef>
+<keydef keys="service"><topicmeta><keywords><keyword>Lattice Relay</keyword></keywords></topicmeta></keydef>
+<keydef keys="cli"><topicmeta><keywords><keyword>lattice</keyword></keywords></topicmeta></keydef>
+<keydef keys="region"><topicmeta><keywords><keyword>eu-west-2</keyword></keywords></topicmeta></keydef>
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+<booklists><toc/></booklists>
+</frontmatter>
+<chapter href="topics/dg-relay-100.dita" type="concept"/>
+<chapter href="topics/dg-relay-101.dita" type="task"/>
+<chapter href="topics/dg-relay-103.dita" type="troubleshooting"/>
+<chapter href="topics/dg-relay-102.dita" type="reference"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/dg-relay-101.dita" type="task"/></relcell><relcell><topicref href="topics/dg-relay-103.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/dg-relay-102.dita" type="reference"/></relcell></relrow>
+</reltable>
+</bookmap>

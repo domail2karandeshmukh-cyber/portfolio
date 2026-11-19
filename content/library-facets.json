@@ -1,0 +1,205 @@
+{
+  "_": "Facets of the library (/docs): who each document is written for, and the standards and frameworks it applies or explains. lib/library.mjs reads it; the field of a document comes from content/industries.json, the format from the document itself, and the version from its front matter. A standard is listed only where the document names it. Audiences and fields of the Studio scenarios' documents follow their scenario, with the exceptions under \"kinds\".",
+  "audiences": [
+    "Technical writers",
+    "Developers",
+    "Data scientists",
+    "Security teams",
+    "IT staff",
+    "Administrators",
+    "End users",
+    "Customers",
+    "Support agents",
+    "Technicians",
+    "Non-specialists",
+    "Evaluators",
+    "Technical reviewers"
+  ],
+  "docs": {
+    "cg-threat": {
+      "audience": [
+        "Security teams"
+      ],
+      "standards": [
+        "STRIDE",
+        "Sigstore"
+      ]
+    },
+    "tn-demo": {
+      "audience": [
+        "Evaluators"
+      ],
+      "standards": []
+    },
+    "tn-how": {
+      "audience": [
+        "Non-specialists"
+      ],
+      "standards": [
+        "Galileo OSNMA"
+      ]
+    },
+    "kc1-build": {
+      "audience": [
+        "Developers"
+      ],
+      "standards": []
+    },
+    "ns-release": {
+      "audience": [
+        "Administrators",
+        "End users"
+      ],
+      "standards": [
+        "WCAG",
+        "MITRE ATT&CK"
+      ],
+      "version": "2.4"
+    },
+    "tn-glossary": {
+      "audience": [
+        "Non-specialists"
+      ],
+      "standards": [
+        "Galileo OSNMA"
+      ]
+    },
+    "tn-code": {
+      "audience": [
+        "Developers"
+      ],
+      "standards": [
+        "Galileo OSNMA"
+      ]
+    },
+    "cg-arch": {
+      "audience": [
+        "Developers",
+        "Security teams"
+      ],
+      "standards": []
+    },
+    "ns-readme": {
+      "audience": [
+        "Developers",
+        "Administrators"
+      ],
+      "standards": [
+        "GDPR",
+        "ISO 31000",
+        "MITRE ATT&CK"
+      ]
+    },
+    "kc1-readme": {
+      "audience": [
+        "Developers",
+        "Data scientists"
+      ],
+      "standards": []
+    },
+    "cg-report": {
+      "audience": [
+        "Technical reviewers"
+      ],
+      "standards": [
+        "SLSA",
+        "in-toto",
+        "Sigstore",
+        "SBOM (CycloneDX, SPDX)",
+        "STRIDE",
+        "OWASP"
+      ]
+    },
+    "cg-paper": {
+      "audience": [
+        "Technical reviewers"
+      ],
+      "standards": [
+        "SLSA",
+        "in-toto",
+        "Sigstore",
+        "IEEE paper format"
+      ]
+    },
+    "tn-report": {
+      "audience": [
+        "Technical reviewers"
+      ],
+      "standards": [
+        "Galileo OSNMA"
+      ]
+    },
+    "core42": {
+      "audience": [
+        "End users"
+      ],
+      "standards": []
+    },
+    "workspace-faqs": {
+      "audience": [
+        "End users"
+      ],
+      "standards": []
+    },
+    "kc1-model-card": {
+      "audience": [
+        "Data scientists",
+        "Developers",
+        "Technical reviewers"
+      ],
+      "standards": [
+        "Model cards (Mitchell and others, 2019)"
+      ]
+    },
+    "kc1-dataset-card": {
+      "audience": [
+        "Data scientists",
+        "Technical reviewers"
+      ],
+      "standards": [
+        "Datasheets for datasets (Gebru and others, 2018)"
+      ]
+    },
+    "studio-shots-guide": {
+      "audience": [
+        "Technical writers"
+      ],
+      "standards": []
+    }
+  },
+  "scenarios": {
+    "a-industrial": [
+      "Technicians"
+    ],
+    "b-enterprise-it": [
+      "IT staff"
+    ],
+    "c-cloud": [
+      "Developers"
+    ],
+    "d-security": [
+      "Security teams"
+    ],
+    "e-support": [
+      "Customers"
+    ],
+    "f-release": [
+      "Administrators"
+    ],
+    "g-training": [
+      "End users"
+    ]
+  },
+  "kinds": {
+    "Internal article": [
+      "Support agents"
+    ],
+    "Troubleshooting tree": [
+      "Customers",
+      "Support agents"
+    ],
+    "Technical report": [
+      "Technical reviewers"
+    ]
+  }
+}

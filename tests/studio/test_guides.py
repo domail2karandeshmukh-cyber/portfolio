@@ -57,7 +57,9 @@ with sync_playwright() as p:
     check("the Markdown has the title, numbered steps and picture links", text.startswith("# Record the readings") and "\n1. Open the work order" in text and "](images/step-01.png)" in text and "## Before you start" in text and "**Warning**:" in text, text[:200])
     im = Image.open(io.BytesIO(z.read("images/step-01.png"))).convert("RGB")
     check("the first picture has its redaction burned in", all(im.getpixel((x, y)) == (0, 0, 0) for x in range(450, 636, 6) for y in range(556, 579, 4)))
-    check("the first picture has its numbered callout", im.getpixel((230 - 12, 509))[0] > 200 and im.getpixel((230 - 12, 509))[1] < 80, im.getpixel((218, 509)))
+    # Version 10: one action, so a green box and no number (standards/screenshots.md).
+    greens = sum(1 for x in range(0, im.width, 2) for y in range(0, im.height, 2) if (lambda p: p[1] > 200 and p[0] < 150 and p[2] < 160)(im.getpixel((x, y))))
+    check("the first picture has the control boxed in the house green", greens > 150, greens)
     sc = subprocess.run(["node", f"{ROOT}/scripts/style.mjs", "check", "/dev/stdin"], input=text, capture_output=True, text=True)
     check("the style checker runs on the exported Markdown", sc.returncode in (0, 1) and "errors" in sc.stdout, sc.stdout[-160:] + sc.stderr[-100:])
     # HTML

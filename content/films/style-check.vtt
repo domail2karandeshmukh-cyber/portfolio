@@ -1,29 +1,60 @@
 WEBVTT
 
 1
-00:00:00.400 --> 00:00:06.107
-This draft breaks my style guide on purpose. Let's see what the workbench does with it.
+00:00:00.400 --> 00:00:03.270
+This draft breaks my style guide on
+purpose.
 
 2
-00:00:06.600 --> 00:00:12.621
-Every red underline in the source is something to fix. Select Check to see them all.
+00:00:03.320 --> 00:00:06.107
+Let's see what the workbench does with it.
 
 3
-00:00:13.133 --> 00:00:19.467
-The check names the rule behind each finding, says why it matters, and shows the fix.
+00:00:06.600 --> 00:00:10.467
+Every red underline in the source is
+something to fix.
 
 4
-00:00:19.967 --> 00:00:24.551
-One fix rewrites one line of the source, and nothing else.
+00:00:10.517 --> 00:00:12.621
+Select Check to see them all.
 
 5
-00:00:25.067 --> 00:00:29.651
-Or take every fix at once. The draft now passes.
+00:00:13.133 --> 00:00:18.060
+The check names the rule behind each
+finding, says why it matters,
 
 6
-00:00:30.167 --> 00:00:36.815
-The same code checks every document in my library, so what you read here passed the same test.
+00:00:18.110 --> 00:00:19.467
+and shows the fix.
 
 7
-00:00:37.300 --> 00:00:43.791
-Write a document yourself, and watch it get checked, at karandeshmukh dot dev slash workbench.
+00:00:19.967 --> 00:00:24.551
+One fix rewrites one line of the source,
+and nothing else.
+
+8
+00:00:25.067 --> 00:00:27.552
+Or take every fix at once.
+
+9
+00:00:27.602 --> 00:00:29.651
+The draft now passes.
+
+10
+00:00:30.167 --> 00:00:33.691
+The same code checks every document in my
+library,
+
+11
+00:00:33.741 --> 00:00:36.815
+so what you read here passed the same
+test.
+
+12
+00:00:37.300 --> 00:00:41.317
+Write a document yourself, and watch it
+get checked,
+
+13
+00:00:41.367 --> 00:00:43.791
+at karandeshmukh.dev/workbench.

@@ -182,7 +182,7 @@
     var all = [title(), guide.docId, guide.version, guide.intro, guide.prereq, guide.warn, guide.done, word("before"), word("steps"), word("check")].concat(guide.steps.map(function (s) { return s.title + s.body; })).join(" ");
     if (!latinOnly(all)) return say(T("The PDF maker in this browser draws Latin script only, so this guide can't be made into a PDF here. Export HTML, open it, and print it to PDF from the browser."), true);
     say(T("Making the PDF..."));
-    loadPdf().then(function () { Kit.save(pdf(), fileName() + ".pdf"); say(T("Exported the PDF.")); }, fail);
+    loadPdf().then(loadFonts).then(function (fonts) { Kit.save(pdf(fonts), fileName() + ".pdf"); say(T("Exported the PDF.")); }, fail);
   });
   /** True when every character is one the PDF's standard fonts can draw (Windows-1252). */
   function latinOnly(s) { return /^[\u0000-\u00FF\u0152\u0153\u0160\u0161\u0178\u017D\u017E\u0192\u02C6\u02DC\u2013\u2014\u2018-\u201E\u2020-\u2022\u2026\u2030\u2039\u203A\u20AC\u2122]*$/.test(s); }
@@ -190,40 +190,61 @@
     if (window.jspdf) return Promise.resolve();
     return new Promise(function (ok, no) { var s = document.createElement("script"); s.src = "/studio/vendor/jspdf.umd.min.js"; s.onload = ok; s.onerror = function () { no(new Error(T("The PDF maker couldn't be loaded. Check your connection and try again."))); }; document.head.appendChild(s); });
   }
-  function pdf() {
-    var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4" }), W = 210, M = 18, y = M, w = W - 2 * M, foot = 284;
-    doc.setProperties({ title: title(), subject: word("subject"), creator: "karandeshmukh.dev/studio/guides" });
+  // The guide's font, embedded in the PDF: Hanken Grotesk, the site's own (SIL Open Font License). Fetched the first time a PDF is made.
+  var fontData = null;
+  function loadFonts() {
+    if (fontData) return Promise.resolve(fontData);
+    var b64 = function (buf) { var s = "", a = new Uint8Array(buf); for (var i = 0; i < a.length; i += 0x8000) s += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000)); return btoa(s); };
+    return Promise.all(["Regular", "Bold"].map(function (w) { return fetch("/studio/fonts/HankenGrotesk-" + w + ".ttf").then(function (r) { if (!r.ok) throw new Error("font"); return r.arrayBuffer(); }); }))
+      .then(function (bufs) { fontData = { normal: b64(bufs[0]), bold: b64(bufs[1]) }; return fontData; })
+      .catch(function () { fontData = null; return null; });
+  }
+  function pdf(fonts) {
+    var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4", putOnlyUsedFonts: true }), W = 210, M = 18, y = M, w = W - 2 * M, foot = 280;
+    // The house PDF (standards/publishing.md): embedded fonts, the title and page number on every page, bookmarks for the steps.
+    var F = "helvetica";
+    if (fonts) { doc.addFileToVFS("HankenGrotesk-Regular.ttf", fonts.normal); doc.addFont("HankenGrotesk-Regular.ttf", "Hanken", "normal"); doc.addFileToVFS("HankenGrotesk-Bold.ttf", fonts.bold); doc.addFont("HankenGrotesk-Bold.ttf", "Hanken", "bold"); F = "Hanken"; }
+    doc.setProperties({ title: title(), subject: word("subject"), author: "Karan Deshmukh", creator: "karandeshmukh.dev/studio/guides" });
+    var marks = [];
     function room(h) { if (y + h > foot) { doc.addPage(); y = M; } }
     function text(t, size, style, color, gap) {
-      doc.setFont("helvetica", style || "normal"); doc.setFontSize(size); doc.setTextColor(color || "#111111");
+      doc.setFont(F, style || "normal"); doc.setFontSize(size); doc.setTextColor(color || "#0B0B0C");
       doc.splitTextToSize(String(t), w).forEach(function (l) { room(size * 0.45); doc.text(l, M, y + size * 0.35); y += size * 0.45; });
       y += gap == null ? 2 : gap;
     }
     function box(t, fill, edge) {
-      doc.setFont("helvetica", "normal"); doc.setFontSize(10.5); var ls = doc.splitTextToSize(t, w - 8), h = ls.length * 4.8 + 5;
+      doc.setFont(F, "normal"); doc.setFontSize(10.5); var ls = doc.splitTextToSize(t, w - 8), h = ls.length * 4.8 + 5;
       room(h); doc.setFillColor(fill); doc.rect(M, y, w, h, "F"); doc.setFillColor(edge); doc.rect(M, y, 1.4, h, "F");
-      doc.setTextColor("#111111"); ls.forEach(function (l, i) { doc.text(l, M + 5, y + 5.2 + i * 4.8); }); y += h + 3;
+      doc.setTextColor("#0B0B0C"); ls.forEach(function (l, i) { doc.text(l, M + 5, y + 5.2 + i * 4.8); }); y += h + 3;
     }
-    text(title(), 20, "bold", "#111111", 3);
+    text(title(), 20, "bold", "#0B0B0C", 2);
+    doc.setDrawColor("#0B0B0C"); doc.setLineWidth(0.5); doc.line(M, y, W - M, y); y += 4;
     var meta = []; if (guide.docId) meta.push(word("docId") + " " + guide.docId); if (guide.version) meta.push(word("version") + " " + guide.version);
-    if (meta.length) text(meta.join("  |  "), 9.5, "normal", "#666666", 3);
+    if (meta.length) text(meta.join(", "), 9.5, "normal", "#696C73", 3);
     if (guide.intro.trim()) text(guide.intro.trim(), 11);
-    if (lines(guide.prereq).length) { text(word("before"), 12.5, "bold", "#111111", 1); lines(guide.prereq).forEach(function (l) { text("•  " + l, 11, "normal", "#111111", 0.5); }); y += 2; }
+    if (lines(guide.prereq).length) { text(word("before"), 12.5, "bold", "#0B0B0C", 1); lines(guide.prereq).forEach(function (l) { text("\u2022  " + l, 11, "normal", "#0B0B0C", 0.5); }); y += 2; }
     lines(guide.warn).forEach(function (l) { box(word("warning") + ": " + l, "#FDECEA", "#C62828"); });
-    text(word("steps"), 12.5, "bold", "#111111", 1);
+    text(word("steps"), 12.5, "bold", "#0B0B0C", 1);
     guide.steps.forEach(function (s, i) {
       room(14);
-      text((i + 1) + ".  " + (s.title.trim() || word("step", { n: i + 1 })), 11.5, "bold", "#111111", 1);
-      if (s.body.trim()) text(s.body.trim(), 10.5, "normal", "#333333", 1.5);
+      var head = (i + 1) + ".  " + (s.title.trim() || word("step", { n: i + 1 }));
+      marks.push([head, doc.getNumberOfPages()]);
+      text(head, 11.5, "bold", "#0B0B0C", 1);
+      if (s.body.trim()) text(s.body.trim(), 10.5, "normal", "#3B3D42", 1.5);
       if (pics[s.id]) {
         var c = pics[s.id], iw = Math.min(w, 150), ih = iw * c.height / c.width;
         if (ih > 150) { ih = 150; iw = ih * c.width / c.height; }
-        room(ih + 3); doc.addImage(c.toDataURL("image/jpeg", 0.9), "JPEG", M, y, iw, ih); doc.setDrawColor("#BBBBBB"); doc.rect(M, y, iw, ih); y += ih + 5;
+        room(ih + 3); doc.addImage(c.toDataURL("image/jpeg", 0.92), "JPEG", M, y, iw, ih); doc.setDrawColor("#D0D4D9"); doc.setLineWidth(0.3); doc.rect(M, y, iw, ih); y += ih + 5;
       }
     });
-    if (guide.done.trim()) { text(word("check"), 12.5, "bold", "#111111", 1); box(guide.done.trim(), "#E8F6EE", "#1B7F4B"); }
+    if (guide.done.trim()) { text(word("check"), 12.5, "bold", "#0B0B0C", 1); box(guide.done.trim(), "#E8F6EE", "#1B7F4B"); }
     var pages = doc.getNumberOfPages();
-    for (var p = 1; p <= pages; p++) { doc.setPage(p); doc.setFont("helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor("#888888"); doc.text(title() + "  |  " + word("page", { p: p, n: pages }), M, 291); }
+    for (var p = 1; p <= pages; p++) {
+      doc.setPage(p); doc.setDrawColor("#DDDDD9"); doc.setLineWidth(0.3); doc.line(M, 286, W - M, 286);
+      doc.setFont(F, "normal"); doc.setFontSize(8.5); doc.setTextColor("#696C73");
+      doc.text(title(), M, 291); doc.text(word("page", { p: p, n: pages }), W - M, 291, { align: "right" });
+    }
+    if (doc.outline) { var top = doc.outline.add(null, title(), { pageNumber: 1 }); marks.forEach(function (m) { doc.outline.add(top, m[0], { pageNumber: m[1] }); }); }
     return doc.output("blob");
   }
 
