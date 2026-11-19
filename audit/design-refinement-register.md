@@ -1,0 +1,85 @@
+# Design refinement register (Version 10.1 brief, November 2026)
+
+What the audit of the rendered site found against the brief "Definitive professional design, documentation and user experience transformation", what was done about each finding, and how it was verified. It starts from the three iPhone screenshots that came with the brief, then covers every page type at 1,440 and 390 pixels, the PDFs at full size, and the Studio.
+
+Baseline: production at commit `3043e98`, screenshotted at the start of the work on 19 November 2026. Work: branch `design-refinement`, not merged and not deployed to production.
+
+Priority: **P1** stops a visitor from doing what they came for, or makes the work look less credible. **P2** costs a visitor time or attention. **P3** is polish. Status: **Fixed** (verified as stated), **Open** (with the reason), **Decision** (needs Karan).
+
+## From the iPhone screenshots
+
+| # | Finding | Root cause | Priority | Status | Fix and verification |
+|---|---|---|---|---|---|
+| D1 | On the contact page, the April button covered the footer. | April was a floating button fixed to the bottom of the viewport, so it sat over whatever scrolled under it. | P1 | Fixed | April opens from a button in the header; on a phone her panel is a sheet that leaves the header visible. No fixed element is left over the content: checked at 320, 390 and 1,440 px on every page type. |
+| D2 | On the home page, the April button covered the availability line. | The same floating button. | P1 | Fixed | As D1. The availability line is fully visible in the first screen at 390 px. |
+| D3 | A giant monospace block of the raw chat message filled the phone screen. | The message-to-document card showed the whole raw message in the code face at a large size. | P1 | Fixed | The card shows a compact preview in the text face, up to 880 px wide; the full message, the analysis and every output are on /message-to-document, and **Try your own message** opens a folded tray. `tests/studio/test_case.py` checks the tray. |
+| D4 | The signature headline had been replaced by "Complex technology. Clear documentation." | A Version 10 change to shorten the first screen. | P1 | Fixed | "I turn what engineers know into docs people can follow." is back, with an editorial edit that plays once (type to turn, say to know, read to follow, then the highlight). It reads correctly without scripts, shows its final words with reduced motion, keeps its size (no layout shift), and wraps on a phone. Translated into French, German, Spanish and Hindi. |
+
+## Home page and first screen
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D5 | The home page was 16,224 px tall on a desktop and 22,372 px on a phone, with 2,209 words. | P2 | Fixed | 8,486 px (−48 %) and 11,063 px (−51 %), with 1,134 words, measured on 19 November 2026. Nothing was hidden: the long material moved to the pages it belongs to (the case study, the recruiter overview, the library), and the home page links to each. |
+| D6 | The first screen had no clear first action for a recruiter. | P1 | Fixed | Two primary actions, **Explore my work** and **Download CV**, then **Recruiter overview** and **Contact me**. |
+| D7 | The order of the home page didn't follow what a visitor needs. | P2 | Fixed | Introduction, selected work, fields, the message-to-document card, tools, projects, films, experience, contact. |
+| D8 | Document cards described publications without showing them. | P2 | Fixed | Each card shows a real page of its published PDF, its field, kind and basis, and **Read online** and **PDF** with the page count and size. The thumbnails are made from the PDFs by `scripts/pdf-covers.py`, and were made again after the PDFs changed. |
+
+## Navigation, header and footer
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D9 | At 1,440 px the header's actions overflowed into the menu. | P2 | Fixed | The search button lost its keyboard hint and the menu's spacing was tightened. No overflow from 320 to 1,920 px. |
+| D10 | The phone menu was a long flat list with small targets. | P2 | Fixed | A drawer with labelled, collapsible groups; every item has an icon and a 44 px target; the drawer closes when a link is chosen. |
+| D11 | A link to `/#april-band` led nowhere after the redesign. | P2 | Fixed | The link goes to `/#april`, which opens April. The link check passes on 208 pages. |
+| D12 | The footer was different on each page type, and April could cover it. | P2 | Fixed | One structured footer (identity, Work, Documentation, Connect, legal) on the home pages, inner pages, the Studio and the workbench. |
+
+## Contact, feedback and privacy
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D13 | The contact page didn't invite a conversation, and the address couldn't be copied. | P1 | Fixed | "Let's work together", with **Discuss an opportunity**, the address with a **Copy** button, **Connect on LinkedIn** and **Download CV**. Email only, as Karan decided; no phone number. |
+| D14 | Visitors had no way to report a problem with the portfolio. | P3 | Fixed | **Portfolio feedback**: an email with its subject ready. No ticket system and no promised response time. |
+| D15 | The site had no privacy page. | P2 | Fixed | /privacy: no accounts, cookies or analytics; what April and the rewrite desk send to the AI service; what stays in the browser; hosting by Vercel. |
+
+## Industries, icons and the recruiter page
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D16 | Industries had no consistent visual identity. | P3 | Fixed | One icon family (Lucide, ISC) on the home tiles, the industry pages, the menus and the Studio. |
+| D17 | In German at 320 px, "Dokumentationsstudio" pushed a tile 10 px past the screen. | P2 | Fixed | A soft hyphen in the translation, and tiles that can wrap a long word. No sideways scrolling in any language at 320 px. |
+| D18 | An automotive entry was suggested in the brief "where appropriate". | P3 | Decision | The only automotive work is Karan's role at Magna International, whose documents are confidential. An automotive field needs his decision and material that he may publish; the car icon is ready for it. |
+
+## Documents and publications (PDF)
+
+| # | Finding | Root cause | Priority | Status | Fix and verification |
+|---|---|---|---|---|---|
+| D19 | DITA PDFs put "Chapter" in front of each document's title and contents entry. | The theme can turn chapter numbers off but not DITA-OT's label. | P2 | Fixed | A small plug-in (`scripts/dita-pdf/plugin`) removes the label; `args.mjs` installs it. No "Chapter" in any of the nine sets. |
+| D20 | In every FOP-made PDF, words with "fi" and "fl" lost those letters when searched, copied or read aloud ("first" became "rst"). | FOP gives a ligature glyph a private-use character. | P1 | Fixed | The PDF fonts have their ligatures turned off (`no-ligatures.py`). No private-use character in any DITA PDF; checked with pdfplumber. |
+| D21 | The S1000D PDFs had the same fault on ICN codes and part labels ("ICN-0DEMO" was not findable). | The illustrations asked for a font the site doesn't load, and the fallback's contextual alternates have no characters. | P1 | Fixed | The illustrations print inline in the site's face with contextual alternates off. `tests/studio/test_aero.py` checks every ARF-1 PDF. |
+| D22 | Illustration labels printed at 4.6 to 6.5 pt, and the page footer at 6 pt. | Drawings scaled to 92 mm high; an 8 px footer. | P2 | Fixed | Callouts about 8 pt and labels about 7 pt, each measured inside its drawing and clear of the others (new test); footer 7.5 pt. |
+| D23 | Straight apostrophes and quotation marks in PDF text, and tables boxed on every side. | Markdown source; the theme's default table frame. | P3 | Fixed | Typographic apostrophes and quotation marks in running text, never in code (`typeset.mjs`), and tables ruled across. |
+| D24 | The KC1 sequence diagram printed at about 5 pt, its lifelines ran through its labels, and its alternative text was "Diagram". | A wide diagram scaled down; Mermaid draws labels without a ground. | P2 | Fixed | Wrapped messages (text about 7 pt in print), a ground under every label, and alternative text that lists the participants and the nine messages. The site's other sequence diagrams improved the same way. |
+| D25 | A diagram caption repeated its section number ("Figure 1. 1. Overall system architecture"). | The caption took the heading's own number. | P3 | Fixed | The number is dropped from the heading's words. |
+
+## Lifecycle, reader and Studio
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D26 | The documentation lifecycle was a list of 16 stage chips, with no sense of where a reader was. | P2 | Fixed | Nine phases (Requirement, Research, Author, Illustrate, Review, Validate, Publish, Change, Revise) on a rail that stays under the header, marks the phase being read and fills with progress; an index of the evidence; the revision diffs folded. Every stage keeps its address. 8 new checks in `test_case.py`. |
+| D27 | On a phone, a document's contents took a row of chips before the article. | P3 | Fixed | The contents fold under one button that names the section being read. |
+| D28 | An enlarged picture had no visible way to close it and let focus leave. | P2 | Fixed | A modal dialog with **Close**, a caption, focus kept on **Close** and the page behind still. |
+| D29 | The Studio's menu had no icons, and its items were 32 px high on a phone. | P3 | Fixed | An icon for every tool and 44 px items below 1,200 px. |
+| D30 | Text fields across the site and the Studio had borders at 2:1 against white, below the 3:1 that WCAG 2.2 asks for a control's edge (SC 1.4.11). | P2 | Fixed | A `--field` token at 3.7:1, on every text field, list and text area. |
+
+## Documentation coverage
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D31 | Real-product documentation covered identity (Keycloak) and an API, but not AI and data science. | P2 | Fixed | "Compare the KC1 model candidates in MLflow": MLflow 3.18.0 on the project's own runs, five annotated screenshots of the real interface, every figure checked by the self-test against the recorded runs. Docker wasn't available, and the guide says so. |
+| D32 | More real products (GitHub, Docker, Grafana, Wazuh and others in the brief). | P3 | Open | Each needs a running product and tested steps. Docker isn't available on this computer; the others are possible in a later round. |
+
+## Open questions for Karan
+
+- The availability line (full-time, contract, part-time, freelance, internship, apprenticeship) is unchanged since Version 8. Is it still right?
+- The stray branch `fix/refuse-non-finite-values` in the KC1 repository can be deleted: its pull request was merged.
+- The titles of the nine videos in the YouTube playlist weren't available, so the playlist isn't described video by video.
