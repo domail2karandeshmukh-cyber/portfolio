@@ -389,3 +389,31 @@
  .sx-filters label:not(.sx-q){flex:1 1 40%}
  .sx-filters select{min-width:0;width:100%}
 }
+
+/* Version 10.1: the studio's navigation. A wide screen shows every tool on the left; a narrow one puts them behind
+   "Studio tools". The current page is marked as in the library: a yellow bar and bold. */
+.st-side{font-size:.92rem}
+.st-side ul{list-style:none;margin:0;padding:0}
+.st-side a{display:block;padding:6px 12px;border-left:3px solid var(--rule);color:var(--ink2);text-decoration:none;line-height:1.35}
+.st-side a:hover{color:var(--ink);border-left-color:var(--rule2)}
+.st-side a[aria-current]{color:var(--ink);font-weight:700;border-left-color:var(--ink);background:var(--hl)}
+.st-side summary{cursor:pointer;font-weight:700;color:var(--ink);padding:14px 0 6px;list-style:none;display:flex;align-items:center;gap:8px}
+.st-side summary::-webkit-details-marker{display:none}
+.st-side .st-side-g>summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:-3px 0 0 auto;transition:transform .15s}
+.st-side .st-side-g:not([open])>summary::after{transform:rotate(-45deg)}
+.st-side-all>summary{border:1px solid var(--rule2);border-radius:999px;padding:9px 18px;width:max-content;background:#fff;margin:4px 0 8px}
+.st-side-all>summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin-top:-4px}
+.st-side-all[open]>summary::after{transform:rotate(-135deg);margin-top:3px}
+.st-side-all[open]{padding-bottom:10px;border-bottom:1px solid var(--rule)}
+.st-pager{margin-top:40px}
+.st-pager .pg-prev,.st-pager .pg-next{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;height:auto;padding-top:10px;padding-bottom:10px;white-space:normal;text-align:left}
+.st-pager .pg-next{margin-left:auto;align-items:flex-end;text-align:right}
+.st-pager .pg-k{font-size:.78rem;font-weight:400;color:var(--mute)}
+@media (min-width:1200px){
+ .st-main.st-sided{width:min(1520px,100% - 64px)}
+ .st-layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;align-items:start}
+ .st-side{position:sticky;top:96px;max-height:calc(100vh - 112px);overflow-y:auto;scrollbar-width:thin;padding-bottom:16px}
+ .st-side-all>summary{display:none}
+ .st-side-all[open]{padding-bottom:0;border-bottom:0}
+}
+@media print{.st-side,.st-pager{display:none}}

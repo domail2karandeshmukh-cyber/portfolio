@@ -32,14 +32,17 @@ await fs.mkdir(`${OUT}/fonts`, { recursive: true });
 // Fonts, self-hosted. The Devanagari file is fetched by a browser only on the Hindi page. On the other pages, the name
 // हिन्दी in the language links is drawn by src/fonts/devanagari-name.woff2, a 5 KB subset of the same font made with
 //   pyftsubset <the Devanagari file below> --text="हिन्दी" --layout-features='*' --flavor=woff2
+// Newsreader sets only headings, from 18 pixels up, at weights 400 to 600: src/fonts/newsreader.woff2 is the Latin
+// file of @fontsource-variable/newsreader cut to those ranges of its two axes, 68 KB instead of 131 KB, made with
+//   fontTools.varLib.instancer.instantiateVariableFont(<newsreader-latin-opsz-normal.woff2>, {"wght": (400, 600), "opsz": (18, 72)})
 const FONTS = [
-  ["@fontsource-variable/newsreader/files/newsreader-latin-opsz-normal.woff2", "newsreader.woff2"],
   ["@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2", "hanken.woff2"],
   ["@fontsource-variable/atkinson-hyperlegible-mono/files/atkinson-hyperlegible-mono-latin-wght-normal.woff2", "ahm.woff2"],
   ["@fontsource-variable/noto-sans-devanagari/files/noto-sans-devanagari-devanagari-wght-normal.woff2", "devanagari.woff2"],
 ];
 for (const [from, to] of FONTS) await fs.copyFile(`node_modules/${from}`, `${OUT}/fonts/${to}`);
 await fs.copyFile("src/fonts/devanagari-name.woff2", `${OUT}/fonts/devanagari-name.woff2`);
+await fs.copyFile("src/fonts/newsreader.woff2", `${OUT}/fonts/newsreader.woff2`);
 
 // Project screenshots: crop to 16:10 and write two WebP sizes
 for (const [id, im] of Object.entries(C.images)) {
@@ -290,7 +293,7 @@ ${ind.films.length ? `<h3>Watch</h3><ul>${ind.films.filter((id) => films[id]).ma
 <h2>Education</h2>
 <ul class="rec-edu">${C.education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}, ${esc(e.dates)}</li>`).join("")}</ul>
 </article>`;
-  await library.extra({ path: "/recruiters", title: `${S.name} | For recruiters`, description: `${S.role} with 5+ years across industrial engineering, enterprise IT, and cybersecurity. Experience, figures, three writing samples, and contact in one page.`,
+  await library.extra({ path: "/recruiters", title: "For recruiters", description: `${S.role} with 5+ years across industrial engineering, enterprise IT, and cybersecurity. Experience, figures, three writing samples, and contact in one page.`,
     trail: [["Portfolio", "/"], ["For recruiters"]], body });
 }
 

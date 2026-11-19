@@ -1,4 +1,4 @@
-@font-face{font-family:"Newsreader";src:url("/fonts/newsreader.woff2") format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
+@font-face{font-family:"Newsreader";src:url("/fonts/newsreader.woff2") format("woff2");font-weight:400 600;font-style:normal;font-display:swap}
 @font-face{font-family:"Hanken";src:url("/fonts/hanken.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Hyperlegible Mono";src:url("/fonts/ahm.woff2") format("woff2");font-weight:200 800;font-style:normal;font-display:swap}
 @font-face{font-family:"Deva";src:url("/fonts/devanagari.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap;unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}
@@ -1119,3 +1119,36 @@ html[lang=hi] .fx-t{line-height:1.4}
 
 /* Version 10.1: a tutorial film under a document's title. */
 .doc-film{margin:1.5rem 0 2rem}.doc-film video{display:block;width:100%;height:auto;background:#0B0B0C;border-radius:4px}.doc-film figcaption{margin-top:.6rem;font-size:.9rem;color:var(--mute)}
+
+/* Version 10.1: the reader of a help center. On a wide screen the page's contents move to the right of the reading
+   column; between 901 and 1279 pixels they stay under the shelf; on a phone everything is one column, in that order. */
+.r-main{min-width:0}
+@media (min-width:1280px){
+ .reading.three{grid-template-columns:minmax(0,200px) minmax(0,760px) minmax(0,200px);grid-template-areas:"left main toc";gap:clamp(24px,2.8vw,40px)}
+ .reading.three.solo{grid-template-columns:minmax(0,840px) minmax(0,220px);grid-template-areas:"main toc"}
+ .reading.three>.r-left{grid-area:left}.reading.three>.r-main{grid-area:main}.reading.three>.r-toc{grid-area:toc}
+}
+@media (min-width:901px) and (max-width:1279px){
+ .reading.three{grid-template-areas:"left main" "toc main";grid-template-rows:auto 1fr}
+ .reading.three.solo{grid-template-areas:"toc main";grid-template-rows:auto}
+ .reading.three>.r-left{grid-area:left;position:static;max-height:none}.reading.three>.r-main{grid-area:main}.reading.three>.r-toc{grid-area:toc}
+}
+.doc-acts{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:-.2rem 0 1.4rem;font-size:.92rem}
+.doc-acts a{font-weight:600}.doc-acts a span{font-weight:400;color:var(--mute)}
+.doc-acts .doc-print{font:inherit;font-weight:600;background:none;border:0;padding:0;color:var(--ink);text-decoration:underline;text-decoration-color:var(--hl);text-decoration-thickness:3px;text-underline-offset:3px;cursor:pointer}
+.pager .pg-prev,.pager .pg-next{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px;max-width:min(100%,420px);text-align:left;white-space:normal;height:auto;padding-top:10px;padding-bottom:10px}
+.pager .pg-prev span,.pager .pg-next span{font-size:.78rem;font-weight:400;color:var(--mute)}
+.pager .pg-next{margin-left:auto;align-items:flex-end;text-align:right}
+@media print{.reading>.r-left,.reading>.r-toc,.pager,.doc-acts,.doc-film,.crumbs,.april,.dock{display:none!important}.reading{display:block}.sheet{border:0;box-shadow:none;padding:0}}
+
+/* Version 10.1: publication sets on /downloads, each with a page of its PDF. */
+.psets{list-style:none;margin:0 0 8px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,540px),1fr));gap:20px}
+.pset{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;align-items:start;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:22px}
+.pset-cover{display:block;border:1px solid var(--rule2);box-shadow:0 1px 3px rgba(0,0,0,.08);line-height:0;background:#fff}
+.pset-cover img{width:100%;height:auto}
+.pset h3{margin:.15rem 0 .35rem;font-size:1.14rem;line-height:1.3}
+.pset p{margin:0 0 .55rem;font-size:.94rem;line-height:1.5}
+.pset .pset-k{font-size:.8rem;color:var(--mute);margin-bottom:.2rem}.pset .pset-p{color:var(--ink2);font-weight:600}.pset .pset-r{color:var(--mute);font-size:.86rem}
+.pset-a{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:.9rem!important}
+.pset-m{font-size:.86rem;color:var(--mute);margin-left:-8px}
+@media (max-width:560px){.pset{grid-template-columns:96px minmax(0,1fr);gap:14px;padding:16px}}

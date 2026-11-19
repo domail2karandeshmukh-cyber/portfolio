@@ -290,7 +290,11 @@ mark.ie-hit{background:var(--hl)}
 }
 @media print{
  html,body{background:#fff!important}
- .s1k-fig img,.s1k-svg svg{max-height:115mm;width:auto;max-width:100%}
+ /* Version 10.1: a procedure's figure is at most 92 mm high, so that it shares a page with the preliminary requirements
+    or with its other variant instead of leaving half a page empty. A parts catalogue's exploded view keeps 115 mm, for
+    its item numbers. */
+ .s1k-fig img,.s1k-svg svg{max-height:92mm;width:auto;max-width:100%}
+ .s1k-fig:has(+ .s1k-tbl) img,.s1k-fig:has(+ .s1k-tbl) svg{max-height:115mm}
  header.top,.site-head,nav.crumbs,.st-head,.fl-warn,.st-bar,.st-status,.ie-nav,.site-foot,footer,.ie-modes,.ie-trail,.skip{display:none!important}
  .ie{display:block}.ie-main{border:0;padding:0}
  .s1k-isol.ie-one li{display:grid!important}

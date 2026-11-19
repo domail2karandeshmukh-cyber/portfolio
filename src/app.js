@@ -1217,6 +1217,7 @@
         enlarge($(".diagram-open", d) || d, copy, "Diagram");
       }
     });
+    $$(".doc-print", article).forEach(function (b) { b.hidden = false; b.addEventListener("click", function () { window.print(); }); });
     $$("[data-pdf]", article).forEach(function (b) {
       if (innerWidth < 880) return;
       b.hidden = false;

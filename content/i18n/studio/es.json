@@ -1329,7 +1329,20 @@
   "Help centers, release notes, user guides": "Centros de ayuda, notas de versión, guías de usuario",
   "API documentation": "Documentación de API",
   "References, quick starts, OpenAPI and error guides": "Referencias, inicios rápidos, OpenAPI y guías de errores",
-  "The guide": "La guía"
+  "The guide": "La guía",
+  "Studio home": "Inicio del estudio",
+  "Write and review": "Redactar y revisar",
+  "Illustrate and train": "Ilustrar y formar",
+  "Reference": "Referencia",
+  "Studio tools": "Herramientas del estudio",
+  "Aerospace overview": "Visión general aeroespacial",
+  "Previous": "Anterior",
+  "Next": "Siguiente",
+  "The Delete action on the user's OTP credential, marked from the menu item's own box. Step 3 of the guide to resetting a one-time password.": "La acción Delete sobre la credencial OTP del usuario, marcada a partir del propio recuadro del elemento de menú. Paso 3 de la guía para restablecer una contraseña de un solo uso.",
+  "Real product: Keycloak 26.8.2": "Producto real: Keycloak 26.8.2",
+  "The required action Configure OTP, then Save: two numbered steps on one screen. Step 5 of the guide to resetting a one-time password.": "La acción requerida Configure OTP y luego Save: dos pasos numerados en una sola pantalla. Paso 5 de la guía para restablecer una contraseña de un solo uso.",
+  "The status code marked by the box of its text, and the response body. Step 3 of the KC1 API quick start's Swagger walkthrough.": "El código de estado marcado por el recuadro de su texto, y el cuerpo de la respuesta. Paso 3 del recorrido por Swagger de la guía de inicio rápido de la API KC1.",
+  "Real product: Swagger UI 5.35.1, on the KC1 API": "Producto real: Swagger UI 5.35.1, sobre la API KC1"
  },
  "keep": [
   "A",

@@ -47,3 +47,15 @@
     }
   });
 })();
+
+/* The studio's tools: beside the page on a wide screen, behind "Studio tools" on a narrow one, where they stay as the
+   visitor leaves them. */
+(function () {
+  var side = document.querySelector(".st-side-all");
+  if (!side || !window.matchMedia) return;
+  var wide = window.matchMedia("(min-width: 1200px)"), mine = false;
+  side.querySelector("summary").addEventListener("click", function () { mine = !side.open; });
+  function fit() { side.open = wide.matches || mine; }
+  fit();
+  if (wide.addEventListener) wide.addEventListener("change", fit); else wide.addListener(fit);
+})();

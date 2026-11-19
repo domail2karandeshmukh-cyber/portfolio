@@ -1,0 +1,181 @@
+{
+ "note": "The publication sets on /downloads: documents that belong together, each shown by a page of its PDF (preview: the page number) made by scripts/pdf-covers.py. Page counts are read from the PDFs when the site is built.",
+ "sets": [
+  {
+   "id": "keycloak-otp",
+   "title": "Keycloak administration: one-time passwords",
+   "product": "Keycloak 26.8.2, open-source identity and access management",
+   "field": "enterprise-it",
+   "basis": "Real product, independent guides",
+   "about": "Three guides for realm administrators: reset a user's one-time password, troubleshoot sign-in codes, and choose an OTP policy. Every screen comes from a running Keycloak 26.8.2 server, and every behaviour the guides state was tested.",
+   "revision": "Version 1.0, published 19 November 2026",
+   "read": "/docs/keycloak/reset-otp",
+   "pdf": "/studio/dita/keycloak-otp/keycloak-otp.pdf",
+   "files": [
+    [
+     "Read online",
+     "/docs/keycloak/reset-otp"
+    ],
+    [
+     "HTML5 (DITA Open Toolkit)",
+     "/studio/dita/keycloak-otp/html5/index.html"
+    ],
+    [
+     "DITA source (ZIP)",
+     "/studio/dita/keycloak-otp/keycloak-otp-dita.zip"
+    ],
+    [
+     "Tutorial film",
+     "/videos#keycloak-reset-otp"
+    ]
+   ],
+   "preview": 4
+  },
+  {
+   "id": "kc1-api",
+   "title": "KC1 prediction API documentation",
+   "product": "KC1 defect prediction, an MSc team project (FastAPI)",
+   "field": "api-documentation",
+   "basis": "Karan's project, recorded against the running API",
+   "about": "A reference, a quick start and a troubleshooting guide for the project's prediction API, with the OpenAPI description it serves. Every request and response in them was recorded from the API.",
+   "revision": "Version 1.0 for API 1.0.0, published 19 November 2026; revision 1.1 ready for API 1.0.1",
+   "read": "/docs/kc1/api-reference",
+   "pdf": "/studio/dita/kc1-api/kc1-api.pdf",
+   "files": [
+    [
+     "Read online",
+     "/docs/kc1/api-reference"
+    ],
+    [
+     "HTML5 (DITA Open Toolkit)",
+     "/studio/dita/kc1-api/html5/index.html"
+    ],
+    [
+     "DITA source (ZIP)",
+     "/studio/dita/kc1-api/kc1-api-dita.zip"
+    ],
+    [
+     "OpenAPI (JSON)",
+     "/docs/kc1/api/openapi.json"
+    ],
+    [
+     "Its documentation lifecycle",
+     "/documentation-lifecycle"
+    ]
+   ],
+   "preview": 4
+  },
+  {
+   "id": "arf1",
+   "title": "ARF-1 training rig: maintenance and operator publications",
+   "product": "ARF-1, a training rig invented for this portfolio",
+   "field": "aerospace",
+   "basis": "Demonstration data: not approved maintenance data",
+   "about": "An S1000D Issue 6 common source database printed as a maintenance publication, an operator publication and an illustrated parts catalogue, with the CSDB, the offline IETM and the validation report. The modules validate against the official schemas; nobody qualified has verified the content, and each module says so.",
+   "revision": "Publication issue 002, printed 19 November 2026",
+   "read": "/studio/ietm",
+   "pdf": "/studio/aerospace/downloads/arf1-maintenance-publication.pdf",
+   "files": [
+    [
+     "Read in the IETM",
+     "/studio/ietm"
+    ],
+    [
+     "Operator publication (PDF)",
+     "/studio/aerospace/downloads/arf1-operator-publication.pdf"
+    ],
+    [
+     "Parts catalogue (PDF)",
+     "/studio/aerospace/downloads/arf1-ipc.pdf"
+    ],
+    [
+     "The CSDB (ZIP)",
+     "/studio/aerospace/downloads/arf1-csdb.zip"
+    ],
+    [
+     "Validation report",
+     "/studio/aerospace/downloads/arf1-validation.html"
+    ]
+   ],
+   "preview": 1
+  },
+  {
+   "id": "ai-chainguard",
+   "title": "AI-ChainGuard: final report and paper",
+   "product": "AI-ChainGuard, an MSc team project: proof of where each machine-learning model came from",
+   "field": "cybersecurity",
+   "basis": "Karan's project",
+   "about": "The whole project in one document, following the six phases of the course brief, and a six-page IEEE-format paper on where cryptographic integrity stops and semantic trust begins.",
+   "revision": "Final report, November 2026",
+   "read": "/docs/ai-chainguard/final-report",
+   "pdf": "/docs/files/ai-chainguard-final-report.pdf",
+   "files": [
+    [
+     "Read online",
+     "/docs/ai-chainguard/final-report"
+    ],
+    [
+     "The paper (PDF)",
+     "/docs/files/ai-chainguard-paper.pdf"
+    ]
+   ],
+   "preview": 1
+  },
+  {
+   "id": "trustnav",
+   "title": "TrustNav: technical report and demonstration guide",
+   "product": "TrustNav, Karan's project: a trust score for satellite positions in a vehicle fleet",
+   "field": "cybersecurity",
+   "basis": "Karan's project",
+   "about": "The technical report: requirements, approach, how it works, results on recordings of real attacks from Jammertest 2024, a critical review and the project management. And a two-page guide for a reader who can't attend the demonstration.",
+   "revision": "Technical report, November 2026",
+   "read": "/docs/trustnav/technical-report",
+   "pdf": "/docs/files/trustnav-technical-report.pdf",
+   "files": [
+    [
+     "Read online",
+     "/docs/trustnav/technical-report"
+    ],
+    [
+     "Demonstration guide (PDF)",
+     "/docs/files/trustnav-demo-guide.pdf"
+    ]
+   ],
+   "preview": 1
+  },
+  {
+   "id": "message-to-document",
+   "title": "From a message to a published procedure",
+   "product": "A case study: an engineer's message about resetting MFA",
+   "field": "enterprise-it",
+   "basis": "Case study, with a simulated message",
+   "about": "One procedure, SD-IAM-007, taken from a rough message to a reviewed document: the analysis, the questions, the editorial decisions and the checks, then published by DITA Open Toolkit.",
+   "revision": "SD-IAM-007, version 1.0",
+   "read": "/message-to-document",
+   "pdf": "/studio/dita/message-to-document/message-to-document.pdf",
+   "files": [
+    [
+     "Read the case study",
+     "/message-to-document"
+    ],
+    [
+     "HTML5 (DITA Open Toolkit)",
+     "/studio/dita/message-to-document/html5/index.html"
+    ],
+    [
+     "DITA source (ZIP)",
+     "/studio/dita/message-to-document/message-to-document-dita.zip"
+    ]
+   ],
+   "preview": 3
+  }
+ ],
+ "samples": [
+  "developer-documentation",
+  "saas-product-help",
+  "technical-reference",
+  "release-documentation",
+  "industrial-equipment",
+  "workbench-templates"
+ ]
+}

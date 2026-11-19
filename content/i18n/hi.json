@@ -428,6 +428,10 @@
   "Troubleshooting": "समस्या निवारण",
   "Help centers, release notes, user guides": "सहायता केंद्र, रिलीज़ नोट्स, उपयोगकर्ता गाइड",
   "API documentation": "API दस्तावेज़ीकरण",
-  "References, quick starts, OpenAPI and error guides": "संदर्भ, क्विक स्टार्ट, OpenAPI और त्रुटि गाइड"
+  "References, quick starts, OpenAPI and error guides": "संदर्भ, क्विक स्टार्ट, OpenAPI और त्रुटि गाइड",
+  "Has he documented a real product?": "क्या उन्होंने किसी असली उत्पाद का डॉक्यूमेंटेशन किया है?",
+  "Yes. Keycloak 26.8.2, an open-source identity server: three independent guides for administrators, written against a Keycloak server Karan ran himself, with every screen from it and every behaviour tested, and a tutorial film of one task. And the KC1 prediction API from his MSc team project: a reference, a quick start and a troubleshooting guide, with every request and response recorded from the API. Both are in the library, and as PDF on the Downloads page.": "हाँ। Keycloak 26.8.2, एक ओपन-सोर्स आइडेंटिटी सर्वर: एडमिनिस्ट्रेटर के लिए तीन स्वतंत्र गाइड, जो Karan ने खुद चलाए एक Keycloak सर्वर पर लिखीं, हर स्क्रीन उसी सर्वर से और हर व्यवहार परखा हुआ, साथ में एक काम का ट्यूटोरियल वीडियो। और उनके MSc टीम प्रोजेक्ट की KC1 प्रेडिक्शन API: एक रेफ़रेंस, एक क्विक स्टार्ट और एक ट्रबलशूटिंग गाइड, जिनमें हर रिक्वेस्ट और रिस्पॉन्स API से रिकॉर्ड किया गया। दोनों लाइब्रेरी में हैं, और डाउनलोड पेज पर PDF के रूप में।",
+  "How does he take a document from start to release?": "वे किसी दस्तावेज़ को शुरू से रिलीज़ तक कैसे ले जाते हैं?",
+  "The documentation lifecycle page follows three KC1 API documents through sixteen stages, each with its real output: the requirement, the sources, the recorded API, the structure, the writing, the screenshots and their marks, the diagram, the style check, the verification, DITA publishing, a short film, the release, then a real change to the API, the impact analysis and revision 1.1.": "डॉक्यूमेंटेशन लाइफ़साइकल पेज KC1 API के तीन दस्तावेज़ों को सोलह चरणों से गुज़रते दिखाता है, हर चरण अपने असली नतीजे के साथ: ज़रूरत, स्रोत, रिकॉर्ड की गई API, ढाँचा, लेखन, स्क्रीनशॉट और उनके निशान, डायग्राम, स्टाइल जाँच, सत्यापन, DITA प्रकाशन, एक छोटा वीडियो, रिलीज़, फिर API में एक असली बदलाव, उसका असर विश्लेषण और संशोधन 1.1।"
  }
 }
