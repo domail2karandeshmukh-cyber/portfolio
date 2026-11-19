@@ -782,7 +782,7 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
 .nav .mnav-panel{position:absolute;left:0;right:0;top:100%;height:calc(100vh - var(--navh));height:calc(100dvh - var(--navh));z-index:25;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:2px;padding:var(--s3) var(--gutter) calc(var(--s7) + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--rule)}
 .mnav-tools{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:var(--s2) 0 var(--s4)}
 .mnav-tools .btn{min-height:44px;padding:0 1.1em;font-size:.95rem;flex:1 1 auto;justify-content:flex-start}
-.mnav-tools a[lang]{display:inline-flex;align-items:center;min-height:40px;padding:0 .8em;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:.9rem}
+.mnav-tools a[lang]{display:inline-flex;align-items:center;min-height:44px;padding:0 .8em;border:1px solid var(--rule2);border-radius:999px;text-decoration:none;font-size:.9rem}
 .mnav-tools a[aria-current],.mnav-tools a[lang]:hover{border-color:var(--ink);background:var(--hl)}
 .mnav-g{border-bottom:1px solid var(--rule)}
 .mnav-g>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:52px;font:600 1.0625rem/1.2 var(--sans);color:var(--ink);cursor:pointer}

@@ -11,7 +11,7 @@ The site shows documentation, so the design has one job: to make the documents a
 - **The work comes first.** A page leads with what a visitor came for: a document, a publication, a tool. Decoration that doesn't help a visitor find or read something is left out.
 - **One accent, used for one meaning.** The brand yellow marks where the reader is (the current page, phase or section) and the one phrase that the headline highlights. It isn't a background for decoration.
 - **Nothing covers the content.** No floating button or panel sits over text, a footer or a control. April opens from the header.
-- **Every control is easy to hit.** On a touch screen, a control is at least 44 by 44 pixels.
+- **Every control is easy to hit.** On a touch screen, the controls that move a visitor around (the header, the menu, the lifecycle rail, a document's contents and the Studio's menu) are at least 44 pixels high. Every other control is at least 24 by 24 pixels, so a button in a document or a tool isn't drawn bigger than its job.
 - **Motion answers a person or plays once.** The headline's edit plays once on arrival; everything else moves only when someone acts, and nothing moves when the reader's system asks for reduced motion.
 
 ## Research and decisions
@@ -19,7 +19,7 @@ The site shows documentation, so the design has one job: to make the documents a
 | Question | What the research says | Decision |
 |---|---|---|
 | Hide the menu behind a button? | Nielsen Norman Group's quantitative study found that hidden navigation is less discoverable than visible or partly visible navigation, and that people who use it do so later in a task ([NN/g](https://www.nngroup.com/articles/hamburger-menus/)). | On a desktop, the main sections are visible in the header. On a phone, where they don't fit, the menu opens as a drawer with labelled groups, and the most-used actions (**Ask April**, **CV**) stay visible beside it. |
-| How large must a control be? | WCAG 2.2 sets a minimum of 24 by 24 CSS pixels, or enough spacing (SC 2.5.8, [W3C](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum)). Apple asks for a hit target of at least 44 by 44 points on a touch screen ([Apple](https://developer.apple.com/design/tips/)). | 44 pixels for every control on a phone: header buttons, menu items, the lifecycle rail, the document contents and the Studio's menu. |
+| How large must a control be? | WCAG 2.2 sets a minimum of 24 by 24 CSS pixels, or enough spacing (SC 2.5.8, [W3C](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum)). Apple asks for a hit target of at least 44 by 44 points on a touch screen ([Apple](https://developer.apple.com/design/tips/)). | 44 pixels on a phone for the controls that move a visitor around: header buttons, menu items and languages, the lifecycle rail, the document contents and the Studio's menu. Every other control is at least 24 by 24 pixels, the WCAG minimum. |
 | What may a sticky header cover? | A focused item must stay at least partly visible: a sticky header or a persistent panel can fail SC 2.4.11 ([W3C](https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured)). | The page's scroll padding follows the header's height, so a heading, a section or a focused control that the browser scrolls to lands below the header. The lifecycle's sticky rail adds its own scroll margin. |
 | How should spacing scale? | Carbon builds its spacing scale from multiples of two, four and eight, with small steps inside components and larger ones between them ([Carbon](https://carbondesignsystem.com/elements/spacing/overview/)). | Nine spacing tokens from 4 to 96 pixels, and fluid tokens for the gutter and the space between sections. |
 | What does a reader expect of a help center? | GitHub Docs gives every article a standard order of content and a table of contents made automatically ([GitHub Docs](https://docs.github.com/en/contributing/style-guide-and-content-model/contents-of-a-github-docs-article)). | The reader has the shelf on the left, the article in the middle and its contents on the right, with breadcrumbs, previous and next documents, copyable code, enlargeable pictures, print, and the set's PDF and HTML5. On a phone, the contents fold under one button. |
@@ -59,7 +59,7 @@ Text meets WCAG 2.2 AA (4.5:1) everywhere; the edge of a control that has to be 
 | Component | Behaviour |
 |---|---|
 | Header | Brand, the main sections, search, **Ask April**, the language menu where a page is translated (the home pages and the Studio), and **Download CV**. On a phone: brand, April, the menu and **CV**. |
-| Phone menu | A drawer below the header with labelled, collapsible groups; each item has an icon and a 44-pixel target; it closes when a link is chosen. |
+| Phone menu | A drawer below the header with labelled groups that fold; every control in it is at least 44 pixels high, and the industries keep their icons; it closes when a link is chosen. |
 | April | Opens from the header. On a phone, as a sheet over the lower part of the screen that leaves the header visible; on a desktop, as a panel. Never a floating button. |
 | Buttons | Ink for the primary action, paper with an ink border for the second; one primary action per group. |
 | Field tiles | An industry or a tool: an icon from the family, a name and, on a wide screen, one line. |

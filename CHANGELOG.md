@@ -2,6 +2,21 @@
 
 What changed on karandeshmukh.dev, release by release. The audit registers in `audit/` hold the findings behind each change, with their evidence.
 
+## Unreleased: design refinement (branch `design-refinement`, preview only)
+
+The Version 10.1 design brief: the signature headline back, a home page half as long, navigation that covers nothing, and the fixes that testing every page at ten sizes found. Not released, and no version number raised. Findings and evidence: `audit/design-refinement-register.md`.
+
+- **Headline.** "I turn what engineers know into docs people can follow." is back, with its three edits and its highlight, in five languages. With reduced motion, or without scripts, it shows its final words.
+- **Home page.** From 16,224 to 8,486 pixels on a desktop, 22,372 to 11,063 on a phone, and 2,209 to 1,134 words. The long material moved to the recruiter page, the case study and the library. Each document card shows a real page of its PDF.
+- **Header, menu, contact, footer and privacy.** April opens from the header and covers nothing. The phone menu folds into labelled groups, with 44-pixel targets. The contact page has a copyable address and a feedback link; one footer on every page; a privacy page.
+- **Industries.** One icon family (Lucide) on the tiles, the industry pages, the menus and the Studio.
+- **The documentation lifecycle.** Nine phases on a rail that follows the reader, an index of the evidence, and the revision diffs folded. Every stage keeps its address.
+- **Reader and Studio.** On a phone, a document's contents fold under one button. An enlarged picture opens in a dialog with **Close** and its caption. The Studio's menu has icons and 44-pixel items. Text fields have edges at 3.7:1.
+- **PDFs.** Every PDF published again: no "Chapter" labels, ligatures that search and copy as letters, typographic quotation marks, illustration labels sized for print, and sequence diagrams that read at any size, with alternative text that lists their messages.
+- **A real product for AI and data science.** "Compare the KC1 model candidates in MLflow", written against MLflow 3.18.0 and the project's own runs. The self-test checks its figures against the recorded runs.
+- **Design system.** `/standards/design`: the tokens, type, components and icons, with the research behind each decision.
+- **Tests.** `tests/matrix.py` (11 pages at ten sizes, in both orientations) and `tests/journeys.py` (19 visitor journeys on a phone and a desktop).
+
 ## 10.1 (released 19 November 2026)
 
 The first screen, contact, and documentation of real work.

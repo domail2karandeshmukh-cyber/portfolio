@@ -396,7 +396,7 @@ await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 {
   const lc = await lifecyclePage();
   await library.extra({ path: "/documentation-lifecycle", title: "Signature case study: the documentation of a real API, from requirement to revision",
-    description: "The KC1 prediction API's documentation in sixteen stages: analysis, authoring, screenshots, publishing with DITA-OT, a video, an engineering change, its impact analysis and the revision.",
+    description: "The KC1 prediction API's documentation in nine phases and sixteen stages: analysis, authoring, screenshots, publishing with DITA-OT, a video, an engineering change, its impact analysis and the revision.",
     trail: [["Portfolio", "/"], ["Signature case study"]], body: lc.body,
     kind: "Case study", shelf: "Case studies", text: [{ id: "lifecycle", title: "The documentation of a real API, from requirement to revision", text: "Signature case study: the KC1 prediction API documented from recorded requests, published with DITA Open Toolkit, then revised after an engineering change, with the impact analysis." }] });
   await fs.mkdir(`${OUT}/case-study/lifecycle/revision-1.1`, { recursive: true });

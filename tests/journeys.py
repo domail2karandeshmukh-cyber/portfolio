@@ -49,7 +49,8 @@ def run(name, vp, phone):
         # 4. Open the menu (on a desktop, the Industries menu of the header).
         if phone:
             click(".mnav summary"); pg.wait_for_timeout(400)
-            step(4, "the phone menu opens", pg.locator(".mnav-panel").is_visible() and pg.evaluate("document.querySelector('.mnav').open")); shot(4)
+            low = pg.evaluate("() => [...document.querySelectorAll('.mnav[open] a, .mnav[open] summary, .mnav[open] button')].filter(e => e.checkVisibility() && e.getBoundingClientRect().height < 43.5).map(e => (e.innerText || e.getAttribute('aria-label') || '').trim())")
+            step(4, "the phone menu opens, every control in it at least 44 px high", pg.locator(".mnav-panel").is_visible() and pg.evaluate("document.querySelector('.mnav').open") and not low, low); shot(4)
         else:
             pg.locator(".gnav details.pm summary", has_text="Industries").first.click(); pg.wait_for_timeout(300)
             step(4, "the Industries menu opens", pg.get_by_role("link", name="Enterprise IT").first.is_visible()); shot(4)

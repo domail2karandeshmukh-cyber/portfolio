@@ -29,7 +29,7 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 | # | Finding | Priority | Status | Fix and verification |
 |---|---|---|---|---|
 | D9 | At 1,440 px the header's actions overflowed into the menu. | P2 | Fixed | The search button lost its keyboard hint and the menu's spacing was tightened. No overflow from 320 to 1,920 px. |
-| D10 | The phone menu was a long flat list with small targets. | P2 | Fixed | A drawer with labelled, collapsible groups; every item has an icon and a 44 px target; the drawer closes when a link is chosen. |
+| D10 | The phone menu showed all 41 links at once under six plain labels: 2,078 px, about two and a half screens. Its menu button was 40 px high and its search button 35 px. | P2 | Fixed | A drawer with labelled groups that fold (Work open first): 793 px. Every control in it is at least 44 px high, and the industries keep their icons; the drawer closes when a link is chosen. `tests/journeys.py` measures every control in the open drawer. |
 | D11 | A link to `/#april-band` led nowhere after the redesign. | P2 | Fixed | The link goes to `/#april`, which opens April. The link check passes on 208 pages. |
 | D12 | The footer was different on each page type, and April could cover it. | P2 | Fixed | One structured footer (identity, Work, Documentation, Connect, legal) on the home pages, inner pages, the Studio and the workbench. |
 
@@ -79,6 +79,18 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 | D34 | In French, German and Spanish, the header ran 44 to 87 px off the side at 1,280 and 1,366 px, common laptop widths. | P1 | Fixed | Between 1,280 and 1,439 px the CV button shows "CV" in those languages, and screen readers still hear its whole name. `tests/matrix.py`: no overflow at any of the ten sizes. |
 | D35 | On a touch screen the header's controls were 40 px high, and the name in the header 19 px. | P2 | Fixed | 44 px for every control in the header below 900 px, and for the case study's stage links. At 320 px the larger targets pushed the header 2 px off the side, so below 360 px the CV button has less padding: checked in five languages at device pixel ratios 1, 2 and 3. |
 | D36 | On a phone, folding a document's contents after the page loaded moved the article: a layout shift of 0.26 in Lighthouse. | P2 | Fixed | With scripts, the contents start folded on a phone; without scripts they stay open. Lighthouse: CLS 0. |
+
+## Found while writing the completion report
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D37 | In the phone menu, the five language links were 40 px high, under the 44 px of the rest of the menu. | P3 | Fixed | 44 px. Found while measuring the menu for the report; `tests/journeys.py` now checks every control in the open drawer. |
+| D38 | The design-system page said every control on a touch screen is 44 by 44 px, but buttons, fields and filters inside documents and tools are 24 to 41 px. | P2 | Fixed | The page now says what is true, as the brief asks not to make controls bigger than they need to look: 44 px for the header, the menu and the navigation inside a page; at least 24 by 24 px (WCAG 2.2 AA) for every other control, sliders as the browser draws them. Measured at 390 px on 26 pages. |
+| D39 | The previews on the library's document cards were older than the documents: the KC1 API reference's still showed revision 1.0, and the MLflow guide had none. | P2 | Fixed | `scripts/shoot-thumbs.py` run again on 20 November 2026: 20 previews changed and one was added. The six publication covers were already made again from the new PDFs. |
+| D40 | Straight apostrophes are left in some PDFs: two in the running text of the flagship procedure MP-PS104-01, and others in the Studio's sample guides and the TrustNav reports. | P3 | Open | Those PDFs come from their own scripts (`studio-flagship.py`, the guides tool, the TrustNav project), which don't use `typeset.mjs`. The nine DITA sets went from 293 to 1, which is inside a code sample. |
+| D41 | The note in each ARF-1 drawing ("Fictional training rig. Not to scale.") and the drawing's own copy of its ICN code print at about 5 pt. | P3 | Open | The ICN code is repeated at full size under each figure. Raising the note needs the drawings published again and their label test run again. |
+| D42 | On a 390 px phone, April's panel cuts her subtitle to "Karan's assist…", and her speaking ring touches the panel's edge. | P3 | Open | Cosmetic; the panel works and leaves the header visible. |
+| D43 | 11 of the 24 PDFs aren't tagged for screen readers: the CV, the six guides the Studio's guide tool makes in the browser, and the four project reports. The DITA and S1000D publications (13) are tagged. | P2 | Decision | The CV and its generation are protected by the brief, and the project reports are the projects' own files, so neither was changed. The guide tool's PDFs could be tagged in a later round. |
 
 ## Documentation coverage
 
