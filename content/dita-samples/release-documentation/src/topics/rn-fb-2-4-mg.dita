@@ -9,24 +9,40 @@
 <note type="important">Every integration that still calls the version 1 API stops working at the release. Check the <b>Last used</b> column before the release date, not after.</note>
 </prereq>
 <steps>
-<step><cmd>On the <uicontrol>Integrations</uicontrol> page, sort by <uicontrol>API version</uicontrol>. Each key that shows <uicontrol>v1</uicontrol> needs work.</cmd></step>
-<step><cmd>For each v1 key, ask the owning team to change the base path from <codeph>/api/v1/</codeph> to <codeph>/api/v2/</codeph> and to read the field changes below.</cmd></step>
-<step><cmd>Create a new key with the <uicontrol>v2</uicontrol> scope for each integration. Don't reuse the v1 key: its scopes don't map onto v2.</cmd></step>
-<step><cmd>Test each integration against the sandbox account, which runs <ph keyref="version">2.4</ph> from 20 October.</cmd></step>
-<step><cmd>Revoke the v1 keys once their integrations run on v2. A revoked key can't be restored, so do this last.</cmd></step>
+<step><cmd>A week before: move integrations to API version 2</cmd>
+<substeps>
+<substep><cmd>On the <uicontrol>Integrations</uicontrol> page, sort by <uicontrol>API version</uicontrol>. Each key that shows <uicontrol>v1</uicontrol> needs work.</cmd></substep>
+<substep><cmd>For each v1 key, ask the owning team to change the base path from <codeph>/api/v1/</codeph> to <codeph>/api/v2/</codeph> and to read the field changes below.</cmd></substep>
+<substep><cmd>Create a new key with the <uicontrol>v2</uicontrol> scope for each integration. Don't reuse the v1 key: its scopes don't map onto v2.</cmd></substep>
+<substep><cmd>Test each integration against the sandbox account, which runs <ph keyref="version">2.4</ph> from 20 October.</cmd></substep>
+<substep><cmd>Revoke the v1 keys once their integrations run on v2. A revoked key can't be restored, so do this last.</cmd></substep>
+</substeps><info><p><b>Field changes between v1 and v2</b></p>
+<simpletable><sthead><stentry>In v1</stentry><stentry>In v2</stentry><stentry>Note</stentry></sthead><strow><stentry><codeph>status: "done"</codeph></stentry><stentry><codeph>status: "completed"</codeph></stentry><stentry>The other statuses are unchanged.</stentry></strow><strow><stentry><codeph>assignee</codeph> (a name)</stentry><stentry><codeph>assignee_id</codeph> (an identifier)</stentry><stentry>Look up names with <codeph>GET /api/v2/technicians</codeph>.</stentry></strow><strow><stentry><codeph>scheduled</codeph> (local time, no zone)</stentry><stentry><codeph>scheduled_at</codeph> (UTC, ISO 8601)</stentry><stentry>Convert with the account's time zone from <codeph>GET /api/v2/account</codeph>.</stentry></strow><strow><stentry><codeph>parts[].code</codeph></stentry><stentry><codeph>parts[].part_number</codeph></stentry><stentry>The value is the same.</stentry></strow><strow><stentry>Pagination by <codeph>page</codeph></stentry><stentry>Pagination by <codeph>cursor</codeph></stentry><stentry>Follow the <codeph>next</codeph> link in the response instead of counting pages.</stentry></strow></simpletable></info></step>
+<step><cmd>The day before: check the mobile fleet</cmd>
+<substeps>
+<substep><cmd>Under <uicontrol>Devices</uicontrol>, filter by <uicontrol>App version</uicontrol>. Devices on 2.2 or older can't sign in after the release.</cmd></substep>
+<substep><cmd>Ask the owners of those devices to update from the store, or push the update through your device management.</cmd></substep>
+<substep><cmd>Devices on <ph keyref="previous">2.3</ph> keep working until 31 January 2027, so they don't block the release. Plan their update for the following weeks.</cmd></substep>
+</substeps></step>
+<step><cmd>Release day: review the settings with new defaults</cmd>
+<substeps>
+<substep><cmd>Under <uicontrol>Settings</uicontrol> &gt; <uicontrol>Mobile</uicontrol>, set <uicontrol>Offline mode</uicontrol> to <uicontrol>On</uicontrol> for the teams that work in places without coverage. It's off by default, so that nothing changes for teams that don't need it.</cmd></substep>
+<substep><cmd>Under <uicontrol>Settings</uicontrol> &gt; <uicontrol>Security</uicontrol>, check <uicontrol>Mobile session length</uicontrol>. The new default is 12 hours. Raise it to at most 7 days for teams that share devices and can't sign in each shift, and record why.</cmd></substep>
+<substep><cmd>Under <uicontrol>Settings</uicontrol> &gt; <uicontrol>Scheduling</uicontrol>, choose who can use <uicontrol>Bulk scheduling</uicontrol>. The default is dispatchers only.</cmd></substep>
+<substep><cmd>Under <uicontrol>Settings</uicontrol> &gt; <uicontrol>Branding</uicontrol>, upload the logo for service reports if you want one. Reports without a logo keep the layout from <ph keyref="previous">2.3</ph>.</cmd></substep>
+</substeps></step>
+<step><cmd>After the release: watch the first week</cmd>
+<substeps>
+<substep><cmd>On the <uicontrol>Integrations</uicontrol> page, confirm that no key shows a call to v1 in the last 24 hours. A call to v1 gets <codeph>410 Gone</codeph> and appears in the key's error count.</cmd></substep>
+<substep><cmd>Under <uicontrol>Devices</uicontrol>, confirm that every active device is on 2.3 or 2.4.</cmd></substep>
+<substep><cmd>Under <uicontrol>Reports</uicontrol> &gt; <uicontrol>Sync</uicontrol>, watch for work orders that stay in <uicontrol>Waiting to sync</uicontrol> for more than an hour. Most are devices that haven't been online; a device that is online and still waiting is a case for support.</cmd></substep>
+<substep><cmd>Tell technicians about the conflict prompt that appears when a dispatcher and a technician edited the same work order offline. Choosing <uicontrol>Keep mine</uicontrol> or <uicontrol>Keep theirs</uicontrol> is new to them.</cmd></substep>
+</substeps></step>
 </steps>
 <result>
 <p>Integrations show calls to v2 only. Every active device runs 2.3 or 2.4. The sync report shows no work order waiting for more than an hour from a device that is online. Technicians who were given offline mode have completed at least one work order without a connection, which shows as <b>Synced from offline</b> in the work order's history.</p>
 </result>
 <postreq>
-<p><b>Field changes between v1 and v2</b></p>
-<simpletable><sthead><stentry>In v1</stentry><stentry>In v2</stentry><stentry>Note</stentry></sthead><strow><stentry><codeph>status: "done"</codeph></stentry><stentry><codeph>status: "completed"</codeph></stentry><stentry>The other statuses are unchanged.</stentry></strow><strow><stentry><codeph>assignee</codeph> (a name)</stentry><stentry><codeph>assignee_id</codeph> (an identifier)</stentry><stentry>Look up names with <codeph>GET /api/v2/technicians</codeph>.</stentry></strow><strow><stentry><codeph>scheduled</codeph> (local time, no zone)</stentry><stentry><codeph>scheduled_at</codeph> (UTC, ISO 8601)</stentry><stentry>Convert with the account's time zone from <codeph>GET /api/v2/account</codeph>.</stentry></strow><strow><stentry><codeph>parts[].code</codeph></stentry><stentry><codeph>parts[].part_number</codeph></stentry><stentry>The value is the same.</stentry></strow><strow><stentry>Pagination by <codeph>page</codeph></stentry><stentry>Pagination by <codeph>cursor</codeph></stentry><stentry>Follow the <codeph>next</codeph> link in the response instead of counting pages.</stentry></strow></simpletable>
-<p><b>The day before: check the mobile fleet</b></p>
-<ol><li>Under <b>Devices</b>, filter by <b>App version</b>. Devices on 2.2 or older can't sign in after the release.</li><li>Ask the owners of those devices to update from the store, or push the update through your device management.</li><li>Devices on <ph keyref="previous">2.3</ph> keep working until 31 January 2027, so they don't block the release. Plan their update for the following weeks.</li></ol>
-<p><b>Release day: review the settings with new defaults</b></p>
-<ol><li>Under <b>Settings</b> &gt; <b>Mobile</b>, set <b>Offline mode</b> to <b>On</b> for the teams that work in places without coverage. It's off by default, so that nothing changes for teams that don't need it.</li><li>Under <b>Settings</b> &gt; <b>Security</b>, check <b>Mobile session length</b>. The new default is 12 hours. Raise it to at most 7 days for teams that share devices and can't sign in each shift, and record why.</li><li>Under <b>Settings</b> &gt; <b>Scheduling</b>, choose who can use <b>Bulk scheduling</b>. The default is dispatchers only.</li><li>Under <b>Settings</b> &gt; <b>Branding</b>, upload the logo for service reports if you want one. Reports without a logo keep the layout from <ph keyref="previous">2.3</ph>.</li></ol>
-<p><b>After the release: watch the first week</b></p>
-<ol><li>On the <b>Integrations</b> page, confirm that no key shows a call to v1 in the last 24 hours. A call to v1 gets <codeph>410 Gone</codeph> and appears in the key's error count.</li><li>Under <b>Devices</b>, confirm that every active device is on 2.3 or 2.4.</li><li>Under <b>Reports</b> &gt; <b>Sync</b>, watch for work orders that stay in <b>Waiting to sync</b> for more than an hour. Most are devices that haven't been online; a device that is online and still waiting is a case for support.</li><li>Tell technicians about the conflict prompt that appears when a dispatcher and a technician edited the same work order offline. Choosing <b>Keep mine</b> or <b>Keep theirs</b> is new to them.</li></ol>
 <p><b>If something goes wrong</b></p>
 <simpletable><sthead><stentry>Problem</stentry><stentry>What to do</stentry></sthead><strow><stentry>An integration gets <codeph>410 Gone</codeph></stentry><stentry>It's still calling v1. Move it to v2; there's no way to turn v1 back on.</stentry></strow><strow><stentry>An integration gets <codeph>401</codeph> on v2</stentry><stentry>It's using a v1 key. Issue a v2 key.</stentry></strow><strow><stentry>A technician's app says <b>Update required</b></stentry><stentry>The device is on 2.2 or older. Update it from the store.</stentry></strow><strow><stentry>Work orders edited offline don't appear in the office</stentry><stentry>Check the device's sync status under <b>Devices</b>. If it shows an error, ask the technician to open the app with a connection and select <b>Sync now</b>.</stentry></strow></simpletable>
 </postreq>

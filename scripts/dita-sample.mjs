@@ -68,7 +68,7 @@ for (const [id, set] of Object.entries(SETS)) {
   const dita = path.join(home, "bin", "dita"), input = `${SRC}/${id}.ditamap`;
   const filters = fs.existsSync(`${SRC}/filters/general.ditaval`) ? [`--filter=${SRC}/filters/general.ditaval`] : [];
   fs.rmSync(`${OUT}/html5`, { recursive: true, force: true });
-  const css = [`--args.cssroot=${path.dirname(fileURLToPath(import.meta.url))}`, "--args.css=dita-html5.css", "--args.copycss=yes"];
+  const css = [`--args.cssroot=${path.dirname(fileURLToPath(import.meta.url))}`, "--args.css=dita-html5.css", "--args.copycss=yes", "--args.gen.task.lbl=YES"];
   execFileSync(dita, [`--input=${input}`, "--format=html5", `--output=${OUT}/html5`, ...filters, ...css], { stdio: "inherit" });
   const pdfFilter = fs.existsSync(`${SRC}/filters/admin.ditaval`) ? [`--filter=${SRC}/filters/admin.ditaval`] : [];
   const theme = pdfArgs();

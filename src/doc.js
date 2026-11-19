@@ -211,10 +211,19 @@
    */
   function resolve(doc, target, vars, regions) {
     vars = vars || doc.meta.vars || {};
+    // Code is written as the reader types it, so a {{name}} inside code takes its value too.
+    function fill(s) { return String(s).replace(/\{\{\s*([A-Za-z][\w.-]*)\s*\}\}/g, function (m, n) { return vars[n] == null || vars[n] === "" ? m : String(vars[n]); }); }
     function runs(list) {
       return (list || []).map(function (r) {
-        if (!r.v || vars[r.s] == null || vars[r.s] === "") return r;
         var copy = {}, k;
+        if (r.c && !r.v) {
+          var code = fill(r.s);
+          if (code === r.s) return r;
+          for (k in r) copy[k] = r[k];
+          copy.s = code;
+          return copy;
+        }
+        if (!r.v || vars[r.s] == null || vars[r.s] === "") return r;
         for (k in r) if (k !== "v") copy[k] = r[k];
         copy.s = String(vars[r.s]);
         return copy;
@@ -231,6 +240,7 @@
         var c = {}, k;
         for (k in b) c[k] = b[k];
         if (b.runs) c.runs = runs(b.runs);
+        if (b.t === "code") c.text = fill(b.text);
         if (b.items) c.items = b.items.map(function (it) { return { runs: runs(it.runs), line: it.line, end: it.end, sub: each(it.sub) }; });
         if (b.t === "table") { c.head = b.head.map(runs); c.rows = b.rows.map(function (r) { return { cells: r.cells.map(runs), line: r.line }; }); }
         out.push(c);
@@ -348,7 +358,7 @@
     var lead = [], out = [], now = null, title = null;
     doc.blocks.forEach(function (b) {
       if (b.t === "h" && b.level === 1 && title === null) { title = b.runs; return; }
-      if (b.t === "h") { now = { title: b.runs, name: text(b.runs, true).toLowerCase(), blocks: [] }; out.push(now); return; }
+      if (b.t === "h") { now = { title: b.runs, name: text(b.runs, true).toLowerCase(), level: b.level, blocks: [] }; out.push(now); return; }
       if (b.t === "hr") return;
       (now ? now.blocks : lead).push(b);
     });
@@ -356,40 +366,108 @@
   }
   var SYMPTOM = /^(symptoms?|what you see|the problem|problem)\b/, CAUSE = /^(why it happens|why|causes?)\b/;
   var PREREQ = /^(before you (start|begin)|prerequisites?|requirements?|what you need)/, RESULT = /^(check that it worked|result|results|what happens next|verify|confirm)/, AFTER = /^(next steps?|what to do next|after you finish)/, CRITERIA = /^(acceptance criteria|expected (values|results?|readings))/;
+  // A heading that only holds the parts of a procedure, and a heading for a case that applies to some readers only.
+  var PROCEDURE = /^(steps|procedure|the procedure|instructions|what to do)$/, BRANCH = /^(if|when|unless|in case)\b/;
+  /** The parts of a document as a tree: each part holds the deeper parts that follow it. */
+  function tree(list) {
+    var top = [], open = [];
+    list.forEach(function (s) {
+      var node = { title: s.title, name: s.name, level: s.level, blocks: s.blocks, kids: [] };
+      while (open.length && open[open.length - 1].level >= s.level) open.pop();
+      (open.length ? open[open.length - 1].kids : top).push(node);
+      open.push(node);
+    });
+    return top;
+  }
   /**
    * A DITA topic. A how-to becomes a task with its prerequisites, steps and result in the places DITA gives them.
+   * A procedure written as one numbered list keeps its items as the steps. A procedure written across several sections,
+   * such as "Create the project", "Deploy" and "Verify", keeps its order: each section is a step, its heading the command,
+   * its numbered list the substeps, and everything else in it the information. A heading such as "Procedure" that only
+   * holds the sections is left out, so that its sections become the steps.
    * A troubleshooting document becomes a troubleshooting topic: what the reader sees, why, and what to do.
    * A reference becomes a reference topic. Anything else becomes a concept. A {{variable}} without a value is left as text.
    */
   function toDita(doc) {
     var p = parts(doc), kind = String(doc.meta.type || "").toLowerCase(), id = slug(p.title ? text(p.title, true) : "topic"), title = "<title>" + ditaRuns(p.title || [{ s: "Untitled" }]) + "</title>";
-    var steps = null;
-    p.parts.forEach(function (s) { if (!steps) s.blocks.forEach(function (b) { if (!steps && b.t === "ol") steps = s; }); });
     var lead = p.lead.slice(), short = "";
     if (lead[0] && lead[0].t === "p") short = "<shortdesc>" + ditaRuns(lead.shift().runs) + "</shortdesc>";
     var head = '<?xml version="1.0" encoding="UTF-8"?>\n';
     function section(s) { return "<section><title>" + ditaRuns(s.title) + "</title>\n" + ditaBlocks(s.blocks) + "\n</section>"; }
-    if ((kind === "how-to" || kind === "task" || kind === "howto" || (!kind && steps)) && (steps || lead.some(function (b) { return b.t === "ol"; }))) {
-      var prereq = [], context = lead.filter(function (b) { return b.t !== "ol"; }), result = [], post = [], more = [], list = null;
-      lead.forEach(function (b) { if (b.t === "ol" && !list) list = b; });
+    var units = tree(p.parts), isList = function (b) { return b.t === "ol"; };
+    var own = function (u) { return u.blocks.some(isList); }, deep = function (u) { return own(u) || u.kids.some(deep); };
+    var named = function (u) { return PREREQ.test(u.name) || RESULT.test(u.name) || AFTER.test(u.name) || CRITERIA.test(u.name); };
+    var leadList = lead.some(isList), start = -1, i;
+    if (!leadList) {
+      for (i = 0; i < units.length && start < 0; i++) if (!named(units[i]) && deep(units[i])) start = i;
+      // A procedure whose only numbered list is under "Verify".
+      for (i = 0; i < units.length && start < 0; i++) if (RESULT.test(units[i].name) && own(units[i])) start = i;
+    }
+    if ((kind === "how-to" || kind === "task" || kind === "howto" || (!kind && start > -1)) && (start > -1 || leadList)) {
+      // The procedure runs from its first numbered list until the result, a case for some readers, or the next steps.
+      // "Verify" with a list of its own is a part of it. A section at its end without a list ("Limits") is not.
+      var run = [];
+      if (start > -1) {
+        run.push(units[start]);
+        for (i = start + 1; i < units.length; i++) {
+          var u = units[i];
+          if ((named(u) && !(RESULT.test(u.name) && own(u))) || BRANCH.test(u.name)) break;
+          run.push(u);
+        }
+        while (run.length > 1 && !deep(run[run.length - 1])) run.pop();
+      }
+      var prereq = [], context = lead.filter(function (b) { return !isList(b); }), result = [], post = [], more = [], steps = [];
+      var titled = function (s) { var out = [{ t: "h", runs: s.title }].concat(s.blocks); (s.kids || []).forEach(function (k) { out = out.concat(titled(k)); }); return out; };
+      var whole = function (s) { var out = s.blocks.slice(); s.kids.forEach(function (k) { out = out.concat(titled(k)); }); return out; };
+      var item = function (it) { return { cmd: it.runs, body: it.sub.length ? [{ info: it.sub }] : [] }; };
+      var info = function (body, blocks) { if (!blocks.length) return; var last = body[body.length - 1]; if (last && last.info) last.info = last.info.concat(blocks); else body.push({ info: blocks.slice() }); };
+      var single = leadList || (run.length === 1 && run[0].blocks.filter(isList).length === 1 && !run[0].kids.some(deep));
+      if (leadList) lead.filter(isList)[0].items.forEach(function (it) { steps.push(item(it)); });
+      else if (single) {
+        // One numbered list: its items are the steps, what comes before it is the context, and what follows it comes after.
+        var seen = false;
+        run[0].blocks.forEach(function (b) { if (isList(b) && !seen) { seen = true; b.items.forEach(function (it) { steps.push(item(it)); }); } else (seen ? post : context).push(b); });
+      } else {
+        var add = function (u) {
+          if (PROCEDURE.test(u.name)) {
+            // A heading that only holds the procedure: its own list items are steps, and its sections are steps too.
+            u.blocks.forEach(function (b) { if (isList(b)) b.items.forEach(function (it) { steps.push(item(it)); }); else if (steps.length) info(steps[steps.length - 1].body, [b]); else context.push(b); });
+            u.kids.forEach(function (k) { if (deep(k)) add(k); else if (steps.length) info(steps[steps.length - 1].body, titled(k)); else context = context.concat(titled(k)); });
+            return;
+          }
+          var body = [];
+          u.blocks.forEach(function (b) { if (isList(b)) body.push({ sub: b.items }); else info(body, [b]); });
+          // Deeper sections stay with their step, each under its heading: the cases of "Investigate", or a table of changes.
+          u.kids.forEach(function (k) { info(body, titled(k)); });
+          steps.push({ cmd: u.title, body: body });
+        };
+        run.forEach(add);
+      }
       // Sections keep their place: one written before the steps ("Tools and materials", "Safety") is a prerequisite,
       // acceptance criteria belong to the result, and anything else after the steps follows them, each under its heading.
-      var passed = false, titled = function (s) { return [{ t: "h", runs: s.title }].concat(s.blocks); };
-      p.parts.forEach(function (s) {
-        if (PREREQ.test(s.name)) prereq = prereq.concat(s.blocks);
-        else if (RESULT.test(s.name)) result = result.concat(s.blocks);
-        else if (AFTER.test(s.name)) post = post.concat(s.blocks);
-        else if (s === steps && !list) { passed = true; s.blocks.forEach(function (b) { if (b.t === "ol" && !list) list = b; else (list ? post : context).push(b); }); }
-        else if (s === steps) passed = true;
-        else if (!passed) prereq = prereq.concat(titled(s));
+      // The sections under a single list's heading ("Steps") are placed the same way, after the steps.
+      var placed = [];
+      units.forEach(function (s) { if (run.indexOf(s) < 0) placed.push(s); else if (single) placed = placed.concat(s.kids); });
+      placed.forEach(function (s) {
+        var before = start > -1 && units.indexOf(s) > -1 && units.indexOf(s) < start;
+        if (PREREQ.test(s.name)) prereq = prereq.concat(whole(s));
+        else if (RESULT.test(s.name)) result = result.concat(whole(s));
+        else if (AFTER.test(s.name)) post = post.concat(whole(s));
+        else if (before) prereq = prereq.concat(titled(s));
         else if (CRITERIA.test(s.name)) result = titled(s).concat(result);
         else more.push(s);
       });
       more.forEach(function (s) { post = post.concat(titled(s)); });
+      var sub = function (it) { return "<substep><cmd>" + ditaRuns(it.runs, true) + "</cmd>" + (it.sub.length ? "<info>" + ditaBlocks(it.sub, true) + "</info>" : "") + "</substep>"; };
+      var step = function (st) {
+        return "<step><cmd>" + ditaRuns(st.cmd, true) + "</cmd>" + st.body.map(function (x) {
+          return x.sub ? "\n<substeps>\n" + x.sub.map(sub).join("\n") + "\n</substeps>" : "<info>" + ditaBlocks(x.info, true) + "</info>";
+        }).join("") + "</step>";
+      };
       var body = "";
       if (prereq.length) body += "<prereq>\n" + ditaBlocks(prereq) + "\n</prereq>\n";
       if (context.length) body += "<context>\n" + ditaBlocks(context) + "\n</context>\n";
-      body += "<steps>\n" + list.items.map(ditaStep).join("\n") + "\n</steps>\n";
+      body += "<steps>\n" + steps.map(step).join("\n") + "\n</steps>\n";
       if (result.length) body += "<result>\n" + ditaBlocks(result) + "\n</result>\n";
       if (post.length) body += "<postreq>\n" + ditaBlocks(post) + "\n</postreq>\n";
       return head + '<!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">\n<task id="' + id + '" xml:lang="en">\n' + title + "\n" + short + (short ? "\n" : "") + "<taskbody>\n" + body + "</taskbody>\n</task>\n";

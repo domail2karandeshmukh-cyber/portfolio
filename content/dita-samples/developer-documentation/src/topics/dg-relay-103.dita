@@ -2,10 +2,10 @@
 <!DOCTYPE troubleshooting PUBLIC "-//OASIS//DTD DITA Troubleshooting//EN" "troubleshooting.dtd">
 <troubleshooting id="deliveries-fail-or-stay-in-retrying" xml:lang="en">
 <title>Deliveries fail or stay in retrying</title>
-<shortdesc>Events reach the relay, but your application doesn't get them, or gets them late. Start with <codeph>{{cli}} deliveries show</codeph> on one affected delivery: its last attempt names the cause in almost every case. Fictional sample written for this portfolio.</shortdesc>
+<shortdesc>Events reach the relay, but your application doesn't get them, or gets them late. Start with <codeph><ph keyref="cli">lattice</ph> deliveries show</codeph> on one affected delivery: its last attempt names the cause in almost every case. Fictional sample written for this portfolio.</shortdesc>
 <troublebody>
 <condition>
-<ul><li><codeph>{{cli}} deliveries list</codeph> shows deliveries in the state <codeph>retrying</codeph> for more than a few minutes, or in <codeph>failed</codeph>.</li><li>The sender reports <codeph>401 Unauthorized</codeph> from the relay's address.</li><li>Your application receives the same event twice.</li></ul>
+<ul><li><codeph><ph keyref="cli">lattice</ph> deliveries list</codeph> shows deliveries in the state <codeph>retrying</codeph> for more than a few minutes, or in <codeph>failed</codeph>.</li><li>The sender reports <codeph>401 Unauthorized</codeph> from the relay's address.</li><li>Your application receives the same event twice.</li></ul>
 </condition>
 <troubleSolution>
 <cause><title>Why it happens</title>
@@ -19,9 +19,9 @@
 <remedy><title>The target can't be reached</title>
 <steps>
 <step><cmd>From a machine outside your network, request the target's address with <codeph>curl -i</codeph>. If it fails there too, the problem is the target, not the relay.</cmd></step>
-<step><cmd>If it succeeds, allow the relay's outbound addresses in your firewall. <codeph>{{cli}} info</codeph> lists them for your region.</cmd></step>
-<step><cmd>Replay one delivery, and then watch it.</cmd><info><codeblock outputclass="language-bash">{{cli}} deliveries replay &lt;delivery id&gt;
-{{cli}} deliveries show &lt;delivery id&gt;</codeblock></info></step>
+<step><cmd>If it succeeds, allow the relay's outbound addresses in your firewall. <codeph><ph keyref="cli">lattice</ph> info</codeph> lists them for your region.</cmd></step>
+<step><cmd>Replay one delivery, and then watch it.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> deliveries replay &lt;delivery id&gt;
+<ph keyref="cli">lattice</ph> deliveries show &lt;delivery id&gt;</codeblock></info></step>
 </steps>
 </remedy>
 <remedy><title>The target rejects the relay</title>
@@ -31,8 +31,8 @@
     url_from: RELAY_TARGET_URL
     headers:
       Authorization: "Bearer ${RELAY_TARGET_TOKEN}"</codeblock></info></step>
-<step><cmd>Set the variable, and then deploy again.</cmd><info><codeblock outputclass="language-bash">{{cli}} env set RELAY_TARGET_TOKEN=&lt;the token your application expects&gt;
-{{cli}} deploy</codeblock></info></step>
+<step><cmd>Set the variable, and then deploy again.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> env set RELAY_TARGET_TOKEN=&lt;the token your application expects&gt;
+<ph keyref="cli">lattice</ph> deploy</codeblock></info></step>
 </steps>
 </remedy>
 <remedy><title>Signatures don't match</title>
@@ -51,7 +51,7 @@
 </remedy>
 <remedy><title>If none of this fixes it</title>
 <steps-informal>
-<p>Collect the delivery id, the output of <codeph>{{cli}} deliveries show</codeph>, and the time of the attempt in UTC. Open a ticket with the <ph keyref="service">Lattice Relay</ph> support team from the console's <b>Help</b> menu, and include the three items. The team can see the relay's side of each attempt but not your target's logs, so attach those too.</p>
+<p>Collect the delivery id, the output of <codeph><ph keyref="cli">lattice</ph> deliveries show</codeph>, and the time of the attempt in UTC. Open a ticket with the <ph keyref="service">Lattice Relay</ph> support team from the console's <b>Help</b> menu, and include the three items. The team can see the relay's side of each attempt but not your target's logs, so attach those too.</p>
 </steps-informal>
 </remedy>
 </troubleSolution>

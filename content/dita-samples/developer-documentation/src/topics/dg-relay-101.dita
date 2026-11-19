@@ -5,24 +5,16 @@
 <shortdesc>Set up a <ph keyref="service">Lattice Relay</ph> that receives webhooks from a third party, verifies them, and forwards them to your application with retries. You create the project, write one configuration file, set three environment variables, deploy from the command line, and send a test event. Allow twenty minutes. Fictional sample written for this portfolio: <ph keyref="cloud">Lattice Cloud</ph> and <ph keyref="service">Lattice Relay</ph> are invented for it.</shortdesc>
 <taskbody>
 <prereq>
-<ul><li>A <ph keyref="cloud">Lattice Cloud</ph> account with the <b>Developer</b> role in the project you deploy to.</li><li>The <codeph>{{cli}}</codeph> command-line tool, version 2.3 or later. Check with <codeph>{{cli}} --version</codeph>.</li><li>Node.js 20 or later, for the local test client.</li><li>An HTTPS endpoint in your application that accepts <codeph>POST</codeph> requests. The guide calls it the <b>target</b>.</li><li>The signing secret of the third party that sends the webhooks, if it signs them.</li></ul>
+<ul><li>A <ph keyref="cloud">Lattice Cloud</ph> account with the <b>Developer</b> role in the project you deploy to.</li><li>The <codeph><ph keyref="cli">lattice</ph></codeph> command-line tool, version 2.3 or later. Check with <codeph><ph keyref="cli">lattice</ph> --version</codeph>.</li><li>Node.js 20 or later, for the local test client.</li><li>An HTTPS endpoint in your application that accepts <codeph>POST</codeph> requests. The guide calls it the <b>target</b>.</li><li>The signing secret of the third party that sends the webhooks, if it signs them.</li></ul>
 </prereq>
 <steps>
-<step><cmd>Sign in from the command line.</cmd><info><codeblock outputclass="language-bash">{{cli}} auth login</codeblock></info></step>
-<step><cmd>Create a project in the region nearest to your target. The project name becomes part of the relay's address, so choose a short one.</cmd><info><codeblock outputclass="language-bash">{{cli}} projects create orders-relay --region {{region}}</codeblock></info></step>
-<step><cmd>Make it the default project for the commands that follow.</cmd><info><codeblock outputclass="language-bash">{{cli}} config set project orders-relay</codeblock></info></step>
-</steps>
-<result>
-<ol><li>Check that the relay is healthy.<codeblock outputclass="language-bash">curl -i https://orders-relay.{{region}}.relay.lattice.example/healthz</codeblock>
-<p>The response is <codeph>200 OK</codeph> with the body <codeph>{"status":"ok","version":"1"}</codeph>.</p></li><li>Send a signed test event with the local test client. It signs the body with the source secret the same way the third party does.<codeblock outputclass="language-bash">npx @lattice/relay-test send --path /hooks/orders --body '{"order":"test-001"}'</codeblock></li><li>Watch the delivery reach your target.<codeblock outputclass="language-bash">{{cli}} deliveries list --last 1</codeblock>
-<p>The delivery shows the state <codeph>delivered</codeph>, the target's response code, and the time it took.</p></li></ol>
-<p>Your application received one <codeph>POST</codeph> with the body <codeph>{"order":"test-001"}</codeph> and two added headers: <codeph>Relay-Delivery-Id</codeph>, which is unique per event, and <codeph>Relay-Signature</codeph>, which your application can verify with the same secret. In the console, the project's <b>Deliveries</b> page shows the event as <b>Delivered</b> with one attempt.</p>
-<p>If the state is <codeph>retrying</codeph> or <codeph>failed</codeph>, see DG-RELAY-103, <i>Deliveries fail or stay in retrying</i>.</p>
-</result>
-<postreq>
-<ul><li>Read DG-RELAY-102, the configuration reference, for every key in <codeph>relay.yaml</codeph> and the limits of a project.</li><li>Add a second target to fan out one event to two applications. Each target retries on its own.</li></ul>
-<p><b>Write the configuration</b></p>
-<p>Create a file named <codeph>relay.yaml</codeph> in an empty folder. The example forwards every event to one target, retries for an hour, and keeps failed deliveries for a week.</p>
+<step><cmd>Create the project</cmd>
+<substeps>
+<substep><cmd>Sign in from the command line.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> auth login</codeblock></info></substep>
+<substep><cmd>Create a project in the region nearest to your target. The project name becomes part of the relay's address, so choose a short one.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> projects create orders-relay --region <ph keyref="region">eu-west-2</ph></codeblock></info></substep>
+<substep><cmd>Make it the default project for the commands that follow.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> config set project orders-relay</codeblock></info></substep>
+</substeps></step>
+<step><cmd>Write the configuration</cmd><info><p>Create a file named <codeph>relay.yaml</codeph> in an empty folder. The example forwards every event to one target, retries for an hour, and keeps failed deliveries for a week.</p>
 <codeblock outputclass="language-yaml">version: 1
 name: orders-relay
 source:
@@ -38,16 +30,34 @@ retry:
   backoff: exponential
 dead_letter:
   keep_days: 7</codeblock>
-<p>The file names the environment variables that hold the secret and the target URL, and never the values. The values live in the project's environment, so that the file can be committed.</p>
-<p><b>Set the environment variables</b></p>
-<p>Set the three variables with placeholders replaced by your own values. The command stores them encrypted in the project and shows them to nobody afterwards, including you.</p>
-<codeblock outputclass="language-bash">{{cli}} env set RELAY_TARGET_URL=&lt;https://your-app.example/webhooks/orders&gt;
-{{cli}} env set RELAY_SOURCE_SECRET=&lt;the third party's signing secret&gt;
-{{cli}} env set RELAY_API_KEY=&lt;an API key from the console, Developer role&gt;</codeblock>
+<p>The file names the environment variables that hold the secret and the target URL, and never the values. The values live in the project's environment, so that the file can be committed.</p></info></step>
+<step><cmd>Set the environment variables</cmd><info><p>Set the three variables with placeholders replaced by your own values. The command stores them encrypted in the project and shows them to nobody afterwards, including you.</p>
+<codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> env set RELAY_TARGET_URL=&lt;https://your-app.example/webhooks/orders&gt;
+<ph keyref="cli">lattice</ph> env set RELAY_SOURCE_SECRET=&lt;the third party's signing secret&gt;
+<ph keyref="cli">lattice</ph> env set RELAY_API_KEY=&lt;an API key from the console, Developer role&gt;</codeblock>
 <simpletable><sthead><stentry>Variable</stentry><stentry>What it holds</stentry><stentry>Example shape</stentry></sthead><strow><stentry><codeph>RELAY_TARGET_URL</codeph></stentry><stentry>The HTTPS address of your target</stentry><stentry><codeph>https://api.example.com/webhooks/orders</codeph></stentry></strow><strow><stentry><codeph>RELAY_SOURCE_SECRET</codeph></stentry><stentry>The secret the third party signs events with</stentry><stentry>32 or more random characters</stentry></strow><strow><stentry><codeph>RELAY_API_KEY</codeph></stentry><stentry>The key the relay uses to report delivery status to the console</stentry><stentry>Begins with <codeph>lk_live_</codeph></stentry></strow></simpletable>
-<note type="caution">Don't put a secret in <codeph>relay.yaml</codeph>, in a shell history that is synced, or in a ticket. If a secret leaks, rotate it in the third party's console and run <codeph>{{cli}} env set</codeph> again. The relay picks up the new value at the next deployment.</note>
-<p><b>Deploy</b></p>
-<ol><li>From the folder that holds <codeph>relay.yaml</codeph>, deploy.<codeblock outputclass="language-bash">{{cli}} deploy</codeblock></li><li>Wait for the command to print the relay's address. It has the shape <codeph>https://orders-relay.{{region}}.relay.lattice.example/hooks/orders</codeph>.</li><li>Give that address to the third party as the webhook URL.</li></ol>
+<note type="caution">Don't put a secret in <codeph>relay.yaml</codeph>, in a shell history that is synced, or in a ticket. If a secret leaks, rotate it in the third party's console and run <codeph><ph keyref="cli">lattice</ph> env set</codeph> again. The relay picks up the new value at the next deployment.</note></info></step>
+<step><cmd>Deploy</cmd>
+<substeps>
+<substep><cmd>From the folder that holds <codeph>relay.yaml</codeph>, deploy.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> deploy</codeblock></info></substep>
+<substep><cmd>Wait for the command to print the relay's address. It has the shape <codeph>https://orders-relay.<ph keyref="region">eu-west-2</ph>.relay.lattice.example/hooks/orders</codeph>.</cmd></substep>
+<substep><cmd>Give that address to the third party as the webhook URL.</cmd></substep>
+</substeps></step>
+<step><cmd>Verify</cmd>
+<substeps>
+<substep><cmd>Check that the relay is healthy.</cmd><info><codeblock outputclass="language-bash">curl -i https://orders-relay.<ph keyref="region">eu-west-2</ph>.relay.lattice.example/healthz</codeblock>
+<p>The response is <codeph>200 OK</codeph> with the body <codeph>{"status":"ok","version":"1"}</codeph>.</p></info></substep>
+<substep><cmd>Send a signed test event with the local test client. It signs the body with the source secret the same way the third party does.</cmd><info><codeblock outputclass="language-bash">npx @lattice/relay-test send --path /hooks/orders --body '{"order":"test-001"}'</codeblock></info></substep>
+<substep><cmd>Watch the delivery reach your target.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> deliveries list --last 1</codeblock>
+<p>The delivery shows the state <codeph>delivered</codeph>, the target's response code, and the time it took.</p></info></substep>
+</substeps></step>
+</steps>
+<result>
+<p>Your application received one <codeph>POST</codeph> with the body <codeph>{"order":"test-001"}</codeph> and two added headers: <codeph>Relay-Delivery-Id</codeph>, which is unique per event, and <codeph>Relay-Signature</codeph>, which your application can verify with the same secret. In the console, the project's <b>Deliveries</b> page shows the event as <b>Delivered</b> with one attempt.</p>
+<p>If the state is <codeph>retrying</codeph> or <codeph>failed</codeph>, see DG-RELAY-103, <i>Deliveries fail or stay in retrying</i>.</p>
+</result>
+<postreq>
+<ul><li>Read DG-RELAY-102, the configuration reference, for every key in <codeph>relay.yaml</codeph> and the limits of a project.</li><li>Add a second target to fan out one event to two applications. Each target retries on its own.</li></ul>
 </postreq>
 </taskbody>
 </task>
