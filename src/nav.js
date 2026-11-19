@@ -100,6 +100,7 @@
   var narrow = window.matchMedia("(max-width: 880px)");
   function fit() { dd.open = !narrow.matches; }
   fit();
+  dd.setAttribute("data-ready", "");
   if (narrow.addEventListener) narrow.addEventListener("change", fit); else narrow.addListener(fit);
   dd.addEventListener("click", function (e) { if (narrow.matches && e.target.closest("a")) dd.open = false; });
 })();

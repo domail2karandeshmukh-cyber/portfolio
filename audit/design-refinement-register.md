@@ -71,6 +71,15 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 | D29 | The Studio's menu had no icons, and its items were 32 px high on a phone. | P3 | Fixed | An icon for every tool and 44 px items below 1,200 px. |
 | D30 | Text fields across the site and the Studio had borders at 2:1 against white, below the 3:1 that WCAG 2.2 asks for a control's edge (SC 1.4.11). | P2 | Fixed | A `--field` token at 3.7:1, on every text field, list and text area. |
 
+## Found by the test passes
+
+| # | Finding | Priority | Status | Fix and verification |
+|---|---|---|---|---|
+| D33 | In the phone menu, every group heading looked like the open menu button: a yellow pill with its words against its left edge, and its arrow at the top left. | P1 | Fixed | The menu button's styles applied to every summary in the menu (`.mnav summary`); they now apply to the button only (`.mnav>summary`). Found in the journey screenshots; checked again at 390 px. |
+| D34 | In French, German and Spanish, the header ran 44 to 87 px off the side at 1,280 and 1,366 px, common laptop widths. | P1 | Fixed | Between 1,280 and 1,439 px the CV button shows "CV" in those languages, and screen readers still hear its whole name. `tests/matrix.py`: no overflow at any of the ten sizes. |
+| D35 | On a touch screen the header's controls were 40 px high, and the name in the header 19 px. | P2 | Fixed | 44 px for every control in the header below 900 px, and for the case study's stage links. |
+| D36 | On a phone, folding a document's contents after the page loaded moved the article: a layout shift of 0.26 in Lighthouse. | P2 | Fixed | With scripts, the contents start folded on a phone; without scripts they stay open. Lighthouse: CLS 0. |
+
 ## Documentation coverage
 
 | # | Finding | Priority | Status | Fix and verification |
@@ -83,3 +92,23 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 - The availability line (full-time, contract, part-time, freelance, internship, apprenticeship) is unchanged since Version 8. Is it still right?
 - The stray branch `fix/refuse-non-finite-values` in the KC1 repository can be deleted: its pull request was merged.
 - The titles of the nine videos in the YouTube playlist weren't available, so the playlist isn't described video by video.
+
+## How it was verified
+
+All on 19 and 20 November 2026, on a local build of the branch, in Google Chrome (Chromium) unless stated.
+
+| Check | Result |
+|---|---|
+| `tests/matrix.py`: 11 pages at the brief's ten sizes, in portrait and, for phones and tablets, landscape, with an orientation change on each phone | 181 page views, none with a problem: no sideways scrolling, the header at 56 or 64 px, nothing fixed over the content, 44 px header targets on touch screens, no clipped text, no script errors |
+| `tests/journeys.py`: the brief's 19 visitor steps, performed on a phone (390 × 844, touch) and a desktop (1,440 × 900) | 44 of 44 checks passed, twice in a row |
+| `tests/webkit_smoke.py` in WebKitGTK (GNOME's engine, not Safari) | 41 of 41 checks passed |
+| axe-core (`scripts/check-a11y.py`), 28 pages in five languages, desktop and phone | 0 WCAG problems |
+| Studio suites, self-test, link check | All pass; the self-test has 316 checks; 209 pages and 18,843 links |
+| Lighthouse 12.8.2 lab runs, local server | Desktop: performance 100 on the home page, the lifecycle, the API reference and the Studio; LCP 0.7 to 0.8 s, CLS 0. Mobile (simulated slow 4G): performance 88 to 91, LCP 3.2 to 3.7 s, CLS 0 |
+
+Limitations:
+
+- **Firefox** couldn't be tested: Playwright's Firefox and Mozilla's downloads are blocked on this computer's network, and Ubuntu's Firefox package needs snap.
+- **Safari and iOS** weren't tested: WebKitGTK shares WebKit's engine but not Safari's interface, its toolbars or iOS's safe areas. The preview is for a check on Karan's iPhone.
+- **Mobile LCP** in the lab is above 2.5 s, but the local server sends files uncompressed: Lighthouse estimates 184 KB of savings from compression, which Vercel applies. Running a compressing server locally for a fairer lab test was refused by the session's permission checks, and the preview's address can't be reached from here. No field data exists for the branch.
+- **A mail client** can't open in a headless browser: the journeys check the address, the subject and the link instead.

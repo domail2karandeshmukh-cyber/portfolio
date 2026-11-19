@@ -49,15 +49,17 @@ for path in ["/", "/recruiters", "/message-to-document", "/documentation-lifecyc
 
 # The parts that need a script.
 visit("/")
-steps = d.find_elements(By.CSS_SELECTOR, "button[data-s]")
+steps = d.find_elements(By.CSS_SELECTOR, "#rewrite .rw-tabs button[data-s]")
 check("home: the message-to-document stages are buttons", len(steps) >= 6, len(steps))
 if steps:
-    d.execute_script("arguments[0].scrollIntoView({block: 'center'})", steps[2]); steps[2].click(); time.sleep(0.8)
-    check("home: choosing a stage presses its button and no other", d.execute_script("return [...document.querySelectorAll('button[data-s]')].filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.s).join()") == steps[2].get_attribute("data-s"),
-          d.execute_script("return [...document.querySelectorAll('button[data-s]')].map(b => b.dataset.s + ':' + b.getAttribute('aria-pressed')).join(' ')"))
+    # The card plays once it is in view; a stage chosen after that stays chosen.
+    d.execute_script("document.querySelector('#rewrite').scrollIntoView({block: 'center'})"); time.sleep(6)
+    d.execute_script("arguments[0].scrollIntoView({block: 'center'})", steps[2]); time.sleep(0.4); steps[2].click(); time.sleep(0.8)
+    check("home: choosing a stage presses its button and no other", d.execute_script("return [...document.querySelectorAll('#rewrite .rw-tabs button[data-s]')].filter(b => b.getAttribute('aria-pressed') === 'true').map(b => b.dataset.s).join()") == steps[2].get_attribute("data-s"),
+          d.execute_script("return [...document.querySelectorAll('#rewrite .rw-tabs button[data-s]')].map(b => b.dataset.s + ':' + b.getAttribute('aria-pressed')).join(' ')"))
 visit("/studio/guides")
 check("studio: the tools are listed beside the page on a wide screen", d.execute_script("const s = document.querySelector('.st-side-all'); return !!s && s.open && s.getBoundingClientRect().width > 150"))
-check("studio: the current tool is marked", d.execute_script("const a = document.querySelector('.st-side a[aria-current=page]'); return a ? a.textContent : ''") == "Step Guide Studio")
+check("studio: the current tool is marked", d.execute_script("const a = document.querySelector('.st-side a[aria-current=page]'); return a ? a.textContent.trim() : ''") == "Step Guide Studio")
 visit("/studio/guides", 390, 844)
 check("studio on a phone: the tools are behind a button", d.execute_script("const s = document.querySelector('.st-side-all'); return !!s && !s.open"))
 # The engine's window can't be made as narrow as a phone; the check is against the width it has.

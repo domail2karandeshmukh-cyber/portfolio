@@ -130,8 +130,8 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 .nav .pm-menu a.pm-ic:hover .pm-i,.nav .pm-menu a.pm-ic[aria-current] .pm-i{background:var(--hl)}
 .pm-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
 .nav-act{display:flex;gap:8px;align-items:center}
-.icon-btn,.april-btn,.mnav summary,.cv-btn{position:relative}
-.icon-btn::after,.april-btn::after,.mnav summary::after,.cv-btn::after{content:"";position:absolute;inset:-2px}
+.icon-btn,.april-btn,.mnav>summary,.cv-btn{position:relative}
+.icon-btn::after,.april-btn::after,.mnav>summary::after,.cv-btn::after{content:"";position:absolute;inset:-2px}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;min-width:40px;padding:0 10px;border:1px solid var(--rule2);border-radius:var(--pill);background:none;color:var(--ink);cursor:pointer;transition:border-color var(--t1),background var(--t1)}
 .icon-btn:hover{border-color:var(--ink);background:var(--hl)}
 /* April's place: in the header, where she covers nothing. The yellow dot is how a visitor knows her. */
@@ -770,10 +770,10 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
 .gnav .pm-menu .pm-all{grid-column:1/-1}
 .gnav>a[aria-current]{color:var(--ink);background:var(--hl)}
 .mnav{display:none;position:static}
-.mnav summary{list-style:none;display:inline-flex;align-items:center;justify-content:center;gap:.5em;height:40px;min-width:40px;padding:0 13px;border:1px solid var(--rule2);border-radius:var(--pill);font:600 .95rem/1 var(--sans);color:var(--ink);cursor:pointer;transition:border-color var(--t1),background var(--t1)}
-.mnav summary::-webkit-details-marker{display:none}
-.mnav summary:hover{border-color:var(--ink)}
-.mnav[open] summary{background:var(--hl);border-color:var(--ink)}
+.mnav>summary{list-style:none;display:inline-flex;align-items:center;justify-content:center;gap:.5em;height:40px;min-width:40px;padding:0 13px;border:1px solid var(--rule2);border-radius:var(--pill);font:600 .95rem/1 var(--sans);color:var(--ink);cursor:pointer;transition:border-color var(--t1),background var(--t1)}
+.mnav>summary::-webkit-details-marker{display:none}
+.mnav>summary:hover{border-color:var(--ink)}
+.mnav[open]>summary{background:var(--hl);border-color:var(--ink)}
 .mnav-bars{display:grid;gap:3px;width:16px}
 .mnav-bars i{display:block;height:2px;background:currentColor;border-radius:2px;transition:transform var(--t2) var(--ease),opacity var(--t1)}
 .mnav[open] .mnav-bars i:nth-child(1){transform:translateY(5px) rotate(45deg)}
@@ -804,14 +804,21 @@ html.mnav-open{overflow:hidden}
 }
 @media (max-width:899px){
  .nav-act>.search-btn,.nav-act>.lang{display:none}
+ /* Version 10.1: on a touch screen every control in the header is a 44-pixel target (standards/design). */
+ .brand{display:inline-flex;align-items:center;min-height:44px}
+ .april-btn,.mnav>summary,.icon-btn{height:44px;min-width:44px}
+ .btn.cv-btn{min-height:44px}
 }
+/* Version 10.1: in French, German and Spanish the header's labels are longer, so between 1,280 and 1,439 pixels the CV
+   button shows "CV" only; screen readers still hear its whole name. */
+@media (min-width:1280px) and (max-width:1439px){html:lang(fr) .cv-btn .wide,html:lang(de) .cv-btn .wide,html:lang(es) .cv-btn .wide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
 @media (max-width:599px){
  .nav-in{gap:10px}
  .brand{font-size:1.1875rem}
  .nav-act{gap:6px}
- .april-btn{width:40px;padding:0;justify-content:center}
+ .april-btn{width:44px;padding:0;justify-content:center}
  .april-t,.mnav-t,.cv-btn .wide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
- .mnav summary{padding:0}
+ .mnav>summary{padding:0}
  .cv-btn{padding:0 12px 0 10px;gap:5px}
 }
 @media (max-width:359px){
@@ -914,6 +921,10 @@ html.mnav-open{overflow:hidden}
  .toc-dd .toc div{flex-direction:column;gap:0;overflow:visible;margin:0;padding:0}
  .toc-dd .toc a,.toc-dd .toc a:hover{display:flex;align-items:center;min-height:44px;border:0;border-radius:0;padding:.55em 1em;white-space:normal;background:none}
  .toc-dd .toc a[aria-current],.toc-dd .toc a.on{background:var(--hl)}
+ /* With scripts, the contents start folded on a phone, so the page doesn't jump when nav.js folds them (no layout
+    shift); without scripts they stay open. */
+ .js .toc-dd:not([data-ready])>.toc{display:none}
+ .js .toc-dd:not([data-ready])>summary{border-radius:12px}
 }
 .toc-dd>summary{display:none}
 @media (max-width:880px){.toc-dd>summary{display:flex}}
@@ -1067,7 +1078,7 @@ html.mnav-open{overflow:hidden}
 .cs-lead{font-size:1.2rem;line-height:1.55;color:var(--ink2);max-width:38em;margin:.8em 0 0}
 .cs-note{max-width:44em;margin:1.2em 0 0;padding:.8em 1em;border-left:3px solid var(--ink);background:var(--desk);font-size:.97rem;line-height:1.5}
 .cs-steps{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 0}
-.cs-steps a{display:inline-flex;align-items:center;gap:.5em;padding:.45em .9em .45em .45em;border:1.5px solid var(--ink);border-radius:999px;color:var(--ink);text-decoration:none;font:600 .92rem/1 var(--sans)}
+.cs-steps a{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:.45em .9em .45em .45em;border:1.5px solid var(--ink);border-radius:999px;color:var(--ink);text-decoration:none;font:600 .92rem/1 var(--sans)}
 .cs-steps a span{display:grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--ink);color:var(--hl);font-size:.78rem}
 .cs-steps a:hover{background:var(--hl)}
 .cs-stage{margin-top:clamp(48px,7vw,80px);padding-top:clamp(20px,2.6vw,30px);border-top:2px solid var(--ink)}
