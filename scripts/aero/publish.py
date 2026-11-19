@@ -30,7 +30,7 @@ def standalone(title, inner):
             "body{font:15px/1.55 var(--sans);color:var(--ink);max-width:1000px;margin:2rem auto;padding:0 1rem}h1,h2{font-family:var(--serif);font-weight:500}.ie-psec{border-top:2px solid var(--ink);margin-top:2.5rem;padding-top:1rem}"
             # On a phone: long codes wrap, and wide tables scroll inside their own box.
             "code,dd{overflow-wrap:anywhere}@media (max-width:760px){body{margin:1rem auto}table{display:block;overflow-x:auto;max-width:100%}}")
-    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><style>{base}{CSS}</style></head><body class="s1k"><main>{inner}</main></body></html>'
+    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><style>{base}{CSS}</style></head><body class="s1k"><main>{inner}</main><script>(function(){{function m(){{[].forEach.call(document.querySelectorAll("main table,main pre"),function(e){{var s=getComputedStyle(e),x=(s.overflowX==="auto"||s.overflowX==="scroll")&&e.scrollWidth>e.clientWidth+1;if(x&&!e.hasAttribute("tabindex")){{e.tabIndex=0;e.setAttribute("data-scrolls","")}}else if(!x&&e.hasAttribute("data-scrolls")){{e.removeAttribute("tabindex");e.removeAttribute("data-scrolls")}}}})}}m();addEventListener("resize",m)}})();</script></body></html>'
 
 
 async def main():

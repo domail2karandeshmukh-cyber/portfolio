@@ -762,7 +762,8 @@ html.mnav-open{overflow:hidden}
  .docs.feature{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
 }
-@media (max-width:999px){
+/* The full menu needs about 1,230 pixels with the search, language and CV buttons in French or German; below 1,280, one Menu button. */
+@media (max-width:1279px){
  .nav .gnav{display:none}
  .mnav{display:block}
 }

@@ -25,6 +25,17 @@
     [].forEach.call(document.querySelectorAll(".nav-act .lang a[lang]"), function (a) { var c = a.cloneNode(true); c.removeAttribute("tabindex"); tools.appendChild(c); });
     if (tools.children.length) panel.insertBefore(tools, panel.firstChild);
   }
+  // A table or a block of code that scrolls sideways on a narrow screen can be reached with the keyboard, so its
+  // hidden part can be scrolled into view (WCAG 2.1.1). When it fits again, it leaves the tab order.
+  function scrollables() {
+    [].forEach.call(document.querySelectorAll("main table, main pre"), function (e) {
+      var s = getComputedStyle(e), scrolls = (s.overflowX === "auto" || s.overflowX === "scroll") && e.scrollWidth > e.clientWidth + 1;
+      if (scrolls && !e.hasAttribute("tabindex")) { e.tabIndex = 0; e.setAttribute("data-scrolls", ""); }
+      else if (!scrolls && e.hasAttribute("data-scrolls")) { e.removeAttribute("tabindex"); e.removeAttribute("data-scrolls"); }
+    });
+  }
+  scrollables();
+  var later; addEventListener("resize", function () { clearTimeout(later); later = setTimeout(scrollables, 150); });
   // The open page: its link in a menu says so, and so does the menu that holds it.
   var here = location.pathname.replace(/index\.html$/, "").replace(/\/+$/, "") || "/";
   [].forEach.call(document.querySelectorAll(".gnav a[href], .mnav a[href]"), function (a) {

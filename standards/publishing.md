@@ -22,14 +22,16 @@ HTML and PDF come from the same source: Markdown, DITA, or S1000D XML. A correct
 | List of effective pages or data modules | No | No | Yes |
 | Lists of figures and tables | No | Over 10 figures | Yes |
 
-Don't add pages to make a document look larger, and don't leave out an element its specification requires.
+Don't add pages to make a document look larger, and don't leave out an element its specification requires. A publication of one document has no contents list: its headings are its bookmarks.
+
+The DITA publications on this site are published from a bookmap (scripts/dita-pdf/bookmap.mjs): a title page with the publication's identifier, the organization, the issue date and the author; a page of document information with each document's ID, version, status and date; a contents list when there is more than one document; and each document as a numbered chapter.
 
 ## Page layout
 
 - Paper: A4 by default, US Letter when the reader is in North America. One size within a document set.
 - Margins: 20 mm at the top and bottom, 18 mm at the sides; more on the binding side only for print that is bound.
 - Type: Hanken Grotesk for text and headings in software and IT documents, at 10.5 pt with 1.45 line spacing; a monospace face for code; the fonts embedded in the file.
-- Header: the document's title and identifier. Footer: the page number as "Page 3 of 27", and the issue or version.
+- Header: the publication's title. Footer: the page number. The title page and the page of document information carry none; the contents list is numbered in roman numerals, and the chapters in arabic numerals that count on from the front matter. That is how DITA Open Toolkit numbers a bookmap with Apache FOP: restarting at 1 in each chapter needs folio prefixes (XSL 1.1), which FOP doesn't support. The S1000D publications number their pages "Page 3 of 27".
 - Headings stay with the text that follows them; a warning or a caution never breaks across pages; a table that runs onto a second page repeats its header row.
 - Figures and tables are numbered in order and referred to by number.
 - Screenshots print at a size where their text is readable: at least the size they had on screen, never enlarged from a low-resolution capture.
