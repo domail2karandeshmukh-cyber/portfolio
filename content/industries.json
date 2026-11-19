@@ -12,6 +12,7 @@
         { "doc": "ns-release", "why": "Release notes for a working application: what changed, for whom, and what to do about it." }
       ],
       "projects": [
+        { "doc": "kc-otp-troubleshooting" }, { "doc": "kc-otp-policy" },
         { "doc": "ns-readme" }, { "doc": "ns-release" },
         { "title": "BizAssist AI", "url": "https://bizassist.karandeshmukh.dev", "kind": "Live application", "text": "An AI quotation assistant for small businesses, built as an academic group project.", "external": true },
         { "title": "ReleasePilot AI", "url": "https://releasepilot.karandeshmukh.dev", "kind": "Live application", "text": "A release and compliance planner for mobile apps, from an MSc project-management assignment.", "external": true }
@@ -63,6 +64,7 @@
       "intro": "Access and onboarding procedures, IT knowledge-base articles, FAQs and policies, for employees and for the service desk that supports them.",
       "basis": "Professional work: IT documentation, listed under Experience. The onboarding scenario uses an example company, and its page says so.",
       "start": [
+        { "doc": "kc-reset-otp", "why": "An administrator's procedure for a real identity server, Keycloak 26.8.2, with an annotated screenshot of every step and each behavior checked on a running server." },
         { "doc": "core42", "why": "How a new user gets into a cloud portal, step by step, with each screen annotated." },
         { "doc": "workspace-faqs", "why": "Nine short FAQ sets for end users of Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat." },
         { "title": "Employee onboarding and access provisioning", "url": "/studio/scenarios/b-enterprise-it", "kind": "Demonstration scenario", "why": "A service-desk procedure, the roles and approvals behind it, and a step guide with screenshots." }
@@ -80,7 +82,7 @@
         ["WCAG 2.2", "Alternative text for every screenshot, and steps that don't depend on the picture.", "/standards/editorial"]
       ],
       "films": ["library"],
-      "files": ["/studio/samples/guides/it-onboarding/guide.pdf", "/studio/samples/guides/support-unlock/guide.pdf", "/studio/dita/technical-reference/technical-reference.pdf"]
+      "files": ["/studio/dita/keycloak-otp/keycloak-otp.pdf", "/studio/samples/guides/it-onboarding/guide.pdf", "/studio/samples/guides/support-unlock/guide.pdf", "/studio/dita/technical-reference/technical-reference.pdf"]
     },
     {
       "id": "cybersecurity",

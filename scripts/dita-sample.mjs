@@ -37,11 +37,35 @@ if (publish && !home) throw new Error("Set DITA_HOME to a DITA Open Toolkit fold
 for (const [id, set] of Object.entries(SETS)) {
   if (only && only !== id) continue;
   const OUT = `content/dita-samples/${id}`, SRC = `${OUT}/src`;
-  const docs = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8")));
+  // A link to another document of the library becomes a link to its topic when that document is in the set, and a link to
+  // the site otherwise, so that the PDF and the HTML5 don't point at addresses that only exist on the website.
+  const library = JSON.parse(fs.readFileSync("content/site.json", "utf8")).docs, url = Object.fromEntries(library.map((d) => [`/docs/${d.shelf}/${d.slug}`, d.path]));
+  const parsed = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8"))), topicOf = Object.fromEntries(set.docs.map((p, i) => [p, `${Doc.slug(parsed[i].meta.id || Doc.resolve(parsed[i]).title)}.dita`]));
+  const docs = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8").replace(/\]\((\/[^)\s#]+)(#[^)\s]*)?\)/g, (m, to, hash) => {
+    const target = url[to.replace(/\/$/, "")];
+    return target && topicOf[target] ? `](${topicOf[target]})` : `](https://karandeshmukh.dev${to}${hash || ""})`;
+  })));
   const project = Doc.toDitaProject(docs, { title: set.map, id, author: "Karan Deshmukh", status: set.status || "Sample: fictional" });
   if (project.problems.length) throw new Error(`${id}: ${project.problems.join("\n")}`);
   fs.rmSync(SRC, { recursive: true, force: true });
   for (const f of project.files) { fs.mkdirSync(path.dirname(`${SRC}/${f.name}`), { recursive: true }); fs.writeFileSync(`${SRC}/${f.name}`, f.data); }
+  // The pictures a document shows, such as img/02-credentials.png, go into the project beside the topics, at the same
+  // relative path, so DITA-OT finds them for the HTML5 and the PDF, and the source ZIP holds them too.
+  for (const p of set.docs) for (const m of fs.readFileSync(p, "utf8").matchAll(/!\[[^\]]*\]\((img\/[^)\s]+)\)/g)) {
+    fs.mkdirSync(`${SRC}/topics/img`, { recursive: true });
+    fs.copyFileSync(path.join(path.dirname(p), m[1]), `${SRC}/topics/${m[1]}`);
+  }
+  // DITA-OT's PDF gives a picture with scalefit the whole height of the page, so a step and its screenshot take a page each.
+  // For the published PDF, each picture gets its printed width instead: its size at 96 pixels per inch, at most the 150 mm
+  // that a step leaves inside the 170 mm text column. scalefit stays in the source, for any other publishing tool.
+  for (const t of fs.readdirSync(`${SRC}/topics`).filter((f) => f.endsWith(".dita"))) {
+    const file = `${SRC}/topics/${t}`, xmlText = fs.readFileSync(file, "utf8");
+    const sized = xmlText.replace(/<image href="([^"]+)" placement="break" scalefit="yes">/g, (m, href) => {
+      const png = fs.readFileSync(`${SRC}/topics/${href}`), w = png.readUInt32BE(16);
+      return `<image href="${href}" placement="break" width="${Math.min(150, Math.round((w / 96) * 25.4))}mm">`;
+    });
+    if (sized !== xmlText) fs.writeFileSync(file, sized);
+  }
   console.log(`dita ${id}: wrote ${project.topics.length} topics (${project.topics.map((t) => t.kind).join(", ")}) to ${SRC}`);
   if (!publish) continue;
 

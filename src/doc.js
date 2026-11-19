@@ -333,7 +333,8 @@
       if (r.c) s = "<codeph>" + s + "</codeph>";
       else if (r.b) s = step ? "<uicontrol>" + s + "</uicontrol>" : "<b>" + s + "</b>";
       if (r.i) s = "<i>" + s + "</i>";
-      if (r.href) s = '<xref href="' + xml(r.href).replace(/"/g, "&quot;") + '"' + (/^https?:/.test(r.href) ? ' format="html" scope="external"' : "") + ">" + s + "</xref>";
+      // A web address, or an address on the same site ("/docs/..."), is outside the project: DITA-OT links to it and doesn't look for it.
+      if (r.href) s = '<xref href="' + xml(r.href).replace(/"/g, "&quot;") + '"' + (/^(https?:|mailto:|\/)/.test(r.href) ? ' format="html" scope="external"' : "") + ">" + s + "</xref>";
       return s;
     }).join("");
   }
@@ -341,6 +342,9 @@
     return (list || []).map(function (b) {
       // A block for one group of readers is profiled with audience, and a DITAVAL file chooses the readers when it is published.
       if (b.t === "only") return ditaBlocks(b.blocks, step).replace(/^<(\w+)/gm, '<$1 audience="' + xml(b.tags.join(" ")) + '"');
+      // A picture on a line of its own is a figure, scaled to the width of the column (scalefit), so that a screenshot
+      // never runs past the text of a PDF. DITA-OT scales a smaller picture up to the same width.
+      if (b.t === "p" && b.runs.length === 1 && b.runs[0].img !== undefined) return '<fig><image href="' + xml(b.runs[0].img).replace(/"/g, "&quot;") + '" placement="break" scalefit="yes"><alt>' + xml(b.runs[0].alt) + "</alt></image></fig>";
       if (b.t === "p") return "<p>" + ditaRuns(b.runs, step) + "</p>";
       if (b.t === "h") return "<p><b>" + ditaRuns(b.runs) + "</b></p>";
       if (b.t === "code") return "<codeblock" + (b.lang ? ' outputclass="language-' + xml(b.lang) + '"' : "") + ">" + xml(b.text) + "</codeblock>";

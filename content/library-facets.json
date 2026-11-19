@@ -16,6 +16,12 @@
     "Technical reviewers"
   ],
   "docs": {
+    "kc-reset-otp": {"audience": ["Administrators", "IT staff"], "standards": ["TOTP (RFC 6238)"], "version": "26.8.2"},
+    "kc-otp-troubleshooting": {"audience": ["Administrators", "Support agents"], "standards": ["TOTP (RFC 6238)"], "version": "26.8.2"},
+    "kc-otp-policy": {"audience": ["Administrators"], "standards": ["TOTP (RFC 6238)", "HOTP (RFC 4226)"], "version": "26.8.2"},
+    "kc1-api-reference": {"audience": ["Developers"], "standards": ["OpenAPI 3.1"]},
+    "kc1-api-quickstart": {"audience": ["Developers"], "standards": []},
+    "kc1-api-troubleshooting": {"audience": ["Developers"], "standards": []},
     "cg-threat": {
       "audience": [
         "Security teams"

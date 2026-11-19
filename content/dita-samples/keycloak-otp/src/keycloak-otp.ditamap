@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="keycloak-otp" xml:lang="en">
+<title>Keycloak administration: one-time passwords</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Published"/>
+</topicmeta>
+<topicref href="topics/kc-adm-001.dita" type="task"/>
+<topicref href="topics/kc-adm-002.dita" type="troubleshooting"/>
+<topicref href="topics/kc-adm-003.dita" type="reference"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/kc-adm-001.dita" type="task"/></relcell><relcell><topicref href="topics/kc-adm-002.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/kc-adm-003.dita" type="reference"/></relcell></relrow>
+</reltable>
+</map>
