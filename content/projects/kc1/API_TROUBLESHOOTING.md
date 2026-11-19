@@ -1,3 +1,12 @@
+---
+type: troubleshooting
+id: KC1-API-003
+owner: Karan Deshmukh
+author: Karan Deshmukh
+version: 1.0
+status: Published
+date: 2026-11-19
+---
 # Troubleshoot the KC1 API
 
 What each error from the KC1 prediction API means, and how to fix the request. The API itself gave every response quoted here, on 19 November 2026.

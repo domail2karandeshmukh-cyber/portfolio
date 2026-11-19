@@ -1,0 +1,19 @@
+/* Passed to DITA Open Toolkit with args.css when the studio's DITA samples are published as HTML5
+   (scripts/dita-sample.mjs and scripts/studio-flagship.py). It is loaded after DITA-OT's own commonltr.css
+   and changes one thing: the links in the table of contents and in the lists of related links get a target
+   at least 24 pixels high, the minimum in WCAG 2.2 (success criterion 2.5.8, target size). */
+ul.map a,
+nav.related-links li a,
+.familylinks a {
+  display: inline-block;
+  min-height: 24px;
+  padding: 2px 0;
+}
+
+/* Version 10: on a phone, wide code and wide tables scroll inside their own box instead of widening the page,
+   and long identifiers wrap. */
+/* A long command wraps instead of scrolling: a region that scrolls needs a keyboard focus, which DITA-OT doesn't give it (WCAG 2.1.1). */
+pre, .pre, .codeblock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
+table.table, table.simpletable, table.choicetableborder, table.properties { display: block; overflow-x: auto; max-width: 100%; }
+body { overflow-wrap: break-word; }
+img { max-width: 100%; height: auto; }

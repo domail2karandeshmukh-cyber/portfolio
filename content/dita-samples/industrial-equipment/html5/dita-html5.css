@@ -12,7 +12,8 @@ nav.related-links li a,
 
 /* Version 10: on a phone, wide code and wide tables scroll inside their own box instead of widening the page,
    and long identifiers wrap. */
-pre, .pre, .codeblock { overflow-x: auto; max-width: 100%; }
+/* A long command wraps instead of scrolling: a region that scrolls needs a keyboard focus, which DITA-OT doesn't give it (WCAG 2.1.1). */
+pre, .pre, .codeblock { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 100%; }
 table.table, table.simpletable, table.choicetableborder, table.properties { display: block; overflow-x: auto; max-width: 100%; }
 body { overflow-wrap: break-word; }
 img { max-width: 100%; height: auto; }

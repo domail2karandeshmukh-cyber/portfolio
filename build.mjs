@@ -18,6 +18,7 @@ import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
 import { buildStudio } from "./lib/studio.mjs";
 import { caseStudy, heroStage, caseStudyPage } from "./lib/casestudy.mjs";
+import { lifecyclePage } from "./lib/lifecycle.mjs";
 
 const C = JSON.parse(await fs.readFile("content/site.json", "utf8"));
 const S = C.site, T = C.types, OUT = "public";
@@ -330,6 +331,18 @@ for (const f of ["openapi.json", "exchanges.json"]) await fs.copyFile(`content/p
 await fs.mkdir(`${OUT}/case-study`, { recursive: true });
 await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 
+// The signature case study: the KC1 API's documentation through sixteen stages (lib/lifecycle.mjs).
+{
+  const lc = await lifecyclePage();
+  await library.extra({ path: "/documentation-lifecycle", title: "Signature case study: the documentation of a real API, from requirement to revision",
+    description: "The KC1 prediction API's documentation in sixteen stages: analysis, authoring, screenshots, publishing with DITA-OT, a video, an engineering change, its impact analysis and the revision.",
+    trail: [["Portfolio", "/"], ["Signature case study"]], body: lc.body,
+    kind: "Case study", shelf: "Case studies", text: [{ id: "lifecycle", title: "The documentation of a real API, from requirement to revision", text: "Signature case study: the KC1 prediction API documented from recorded requests, published with DITA Open Toolkit, then revised after an engineering change, with the impact analysis." }] });
+  await fs.mkdir(`${OUT}/case-study/lifecycle/revision-1.1`, { recursive: true });
+  for (const [name, text] of Object.entries(lc.files)) await fs.writeFile(`${OUT}/case-study/lifecycle/${name}`, text);
+  for (const f of ["kc1-swagger-walkthrough.mp4", "kc1-swagger-walkthrough.vtt", "kc1-swagger-walkthrough.jpg"]) await fs.copyFile(`content/case-study/lifecycle/${f}`, `${OUT}/case-study/lifecycle/${f}`);
+}
+
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
 await fs.mkdir(`${OUT}/voices`, { recursive: true });
 await fs.copyFile("src/voices.html", `${OUT}/voices/index.html`);
@@ -405,7 +418,7 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

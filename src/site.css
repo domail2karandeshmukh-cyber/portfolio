@@ -1059,7 +1059,7 @@ html[lang=hi] .fx-t{line-height:1.4}
 .cs-check{list-style:none;margin:0;padding:0;max-width:46em}
 .cs-check li{position:relative;padding:.55em 0 .55em 2em;border-bottom:1px solid var(--rule);line-height:1.5;color:var(--ink2)}
 .cs-check li::before{content:"";position:absolute;left:.2em;top:1em;width:1em;height:.52em;border-left:2.5px solid var(--green);border-bottom:2.5px solid var(--green);transform:rotate(-45deg)}
-.cs-check li.no::before{border-color:var(--red)}
+.cs-check li.no::before{content:"";top:.95em;left:.15em;width:.9em;height:0;border:0;border-top:2.5px solid var(--red);transform:none}
 .cs-check b{color:var(--ink)}
 .cs-out{list-style:none;margin:1.2em 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .cs-acts{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
@@ -1093,3 +1093,26 @@ html[lang=hi] .fx-t{line-height:1.4}
 .rec-basis{margin:0;color:var(--ink2)}
 .rec-go{margin:1em 0 18px;font-weight:600}
 @media (max-width:600px){.rec-field summary{grid-template-columns:minmax(0,1fr) auto}.rec-field summary span{grid-column:1}}
+
+/* The signature case study (/documentation-lifecycle): sixteen stages, a map of them, and the differences of the revision. */
+.lc-map{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:28px 0 0;counter-reset:lc}
+.lc-map a{display:flex;align-items:center;gap:.55em;padding:.5em .6em;border:1.5px solid var(--ink);border-radius:8px;color:var(--ink);text-decoration:none;font:600 .86rem/1.2 var(--sans)}
+.lc-map a span{flex:none;display:grid;place-items:center;width:1.75em;height:1.75em;border-radius:50%;background:var(--ink);color:var(--hl);font-size:.76rem}
+.lc-map a:hover{background:var(--hl)}
+.lc-list{max-width:46em;padding-left:1.2em;line-height:1.55;color:var(--ink2)}
+.lc-list li{margin:.35em 0}
+.lc-out{max-width:46em;padding:.7em 1em;border-radius:8px;background:var(--desk)}
+.lc-fig{margin:1.2em 0;max-width:46em}
+.lc-fig img{display:block;width:100%;height:auto;border:1px solid var(--rule2);border-radius:4px}
+.lc-fig figcaption{margin-top:.5em;font-size:.88rem;color:var(--mute)}
+.lc-video{display:block;width:100%;max-width:46em;height:auto;margin:1em 0;border-radius:6px;background:#0B2E16}
+.lc-diff{max-width:58em;overflow-x:auto;padding:12px 0;border:1px solid var(--rule2);border-radius:8px;background:#fff;font:400 .82rem/1.55 var(--mono)}
+.lc-diff>span{display:block;padding:0 14px 0 34px;position:relative;white-space:pre-wrap;word-break:break-word}
+.lc-diff b{position:absolute;left:14px;font-weight:700}
+.lc-add{background:#DCF5E1}
+.lc-del{background:#FBE3E1;color:#5A1712}
+.lc-ctx{color:var(--mute)}
+.lc-gap{display:block;padding:0 34px;color:var(--mute)}
+.lc-files{font-size:.92rem}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (max-width:880px){.lc-map{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -16,6 +16,7 @@
 // files this script wrote itself. Nothing a visitor uploads is ever parsed with these options: the browser's DITA
 // Studio checks XML with DOMParser, which doesn't load external entities or DTDs at all.
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import os from "node:os";
 import { spawnSync, execFileSync } from "node:child_process";
@@ -41,27 +42,45 @@ for (const [id, set] of Object.entries(SETS)) {
   // the site otherwise, so that the PDF and the HTML5 don't point at addresses that only exist on the website.
   const library = JSON.parse(fs.readFileSync("content/site.json", "utf8")).docs, url = Object.fromEntries(library.map((d) => [`/docs/${d.shelf}/${d.slug}`, d.path]));
   const parsed = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8"))), topicOf = Object.fromEntries(set.docs.map((p, i) => [p, `${Doc.slug(parsed[i].meta.id || Doc.resolve(parsed[i]).title)}.dita`]));
-  const docs = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8").replace(/\]\((\/[^)\s#]+)(#[^)\s]*)?\)/g, (m, to, hash) => {
-    const target = url[to.replace(/\/$/, "")];
-    return target && topicOf[target] ? `](${topicOf[target]})` : `](https://karandeshmukh.dev${to}${hash || ""})`;
-  })));
+  // A Mermaid diagram becomes the drawing that scripts/render-diagrams.py made of it (content/diagrams), as a picture.
+  const diagrams = {};
+  const texts = set.docs.map((p) => fs.readFileSync(p, "utf8")
+    .replace(/^```mermaid\n([\s\S]*?)^```\s*$/gm, (m, code) => {
+      const key = createHash("sha1").update(code.replace(/\r\n/g, "\n").trim()).digest("hex").slice(0, 12);
+      if (!fs.existsSync(`content/diagrams/${key}.svg`)) throw new Error(`${p}: no drawing for a Mermaid diagram (${key}). Run scripts/render-diagrams.py.`);
+      // FOP's SVG renderer can't read Mermaid's CSS and draws nothing, so the PNG that scripts/diagram_png.py made in Chrome is used when there is one.
+      const png = fs.existsSync(`content/diagrams/${key}.png`), ext = png ? "png" : "svg";
+      diagrams[`img/diagram-${key}.${ext}`] = `content/diagrams/${key}.${ext}`;
+      return `![Diagram](img/diagram-${key}.${ext})`;
+    })
+    .replace(/\]\((\/[^)\s#]+)(#[^)\s]*)?\)/g, (m, to, hash) => {
+      const target = url[to.replace(/\/$/, "")];
+      return target && topicOf[target] ? `](${topicOf[target]})` : `](https://karandeshmukh.dev${to}${hash || ""})`;
+    }));
+  const docs = texts.map((t) => Doc.parse(t));
   const project = Doc.toDitaProject(docs, { title: set.map, id, author: "Karan Deshmukh", status: set.status || "Sample: fictional" });
   if (project.problems.length) throw new Error(`${id}: ${project.problems.join("\n")}`);
   fs.rmSync(SRC, { recursive: true, force: true });
   for (const f of project.files) { fs.mkdirSync(path.dirname(`${SRC}/${f.name}`), { recursive: true }); fs.writeFileSync(`${SRC}/${f.name}`, f.data); }
   // The pictures a document shows, such as img/02-credentials.png, go into the project beside the topics, at the same
   // relative path, so DITA-OT finds them for the HTML5 and the PDF, and the source ZIP holds them too.
-  for (const p of set.docs) for (const m of fs.readFileSync(p, "utf8").matchAll(/!\[[^\]]*\]\((img\/[^)\s]+)\)/g)) {
+  set.docs.forEach((p, n) => { for (const m of texts[n].matchAll(/!\[[^\]]*\]\((img\/[^)\s]+)\)/g)) {
     fs.mkdirSync(`${SRC}/topics/img`, { recursive: true });
-    fs.copyFileSync(path.join(path.dirname(p), m[1]), `${SRC}/topics/${m[1]}`);
-  }
+    if (diagrams[m[1]] && m[1].endsWith(".svg")) {
+      // Apache FOP draws SVG with Batik, which doesn't know SVG 2's feDropShadow: the drawing goes in without its shadows.
+      const svg = fs.readFileSync(diagrams[m[1]], "utf8").replace(/<filter\b[\s\S]*?<\/filter>/g, "").replace(/\sfilter="url\([^)]*\)"/g, "").replace(/filter:\s*url\([^)]*\);?/g, "");
+      fs.writeFileSync(`${SRC}/topics/${m[1]}`, svg);
+    } else fs.copyFileSync(diagrams[m[1]] || path.join(path.dirname(p), m[1]), `${SRC}/topics/${m[1]}`);
+  } });
   // DITA-OT's PDF gives a picture with scalefit the whole height of the page, so a step and its screenshot take a page each.
   // For the published PDF, each picture gets its printed width instead: its size at 96 pixels per inch, at most the 150 mm
   // that a step leaves inside the 170 mm text column. scalefit stays in the source, for any other publishing tool.
   for (const t of fs.readdirSync(`${SRC}/topics`).filter((f) => f.endsWith(".dita"))) {
     const file = `${SRC}/topics/${t}`, xmlText = fs.readFileSync(file, "utf8");
     const sized = xmlText.replace(/<image href="([^"]+)" placement="break" scalefit="yes">/g, (m, href) => {
-      const png = fs.readFileSync(`${SRC}/topics/${href}`), w = png.readUInt32BE(16);
+      const file = fs.readFileSync(`${SRC}/topics/${href}`);
+      // A PNG's width is in its header; a drawing's in its viewBox.
+      const w = href.endsWith(".svg") ? +(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+)/.exec(file.toString("utf8")) || [0, 1000])[1] : file.readUInt32BE(16) / (/diagram-/.test(href) ? 2 : 1);
       return `<image href="${href}" placement="break" width="${Math.min(150, Math.round((w / 96) * 25.4))}mm">`;
     });
     if (sized !== xmlText) fs.writeFileSync(file, sized);

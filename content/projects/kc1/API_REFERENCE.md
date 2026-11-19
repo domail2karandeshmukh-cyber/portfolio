@@ -1,3 +1,12 @@
+---
+type: reference
+id: KC1-API-001
+owner: Karan Deshmukh
+author: Karan Deshmukh
+version: 1.0
+status: Published
+date: 2026-11-19
+---
 # KC1 prediction API reference
 
 The KC1 API serves the project's defect-prediction model over HTTP. Send the 21 static code metrics of one software module, and it returns whether the model flags the module as defective, with the probability and the threshold behind the decision.

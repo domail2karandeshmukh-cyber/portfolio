@@ -1,3 +1,12 @@
+---
+type: how-to
+id: KC1-API-002
+owner: Karan Deshmukh
+author: Karan Deshmukh
+version: 1.0
+status: Published
+date: 2026-11-19
+---
 # Get your first prediction from the KC1 API
 
 Train the KC1 model, start the prediction API, and send it the metrics of one software module.
@@ -60,8 +69,23 @@ The API answers with one prediction.
 
 These outputs are real. On 19 November 2026, the project's trainer produced the output in step 2. FastAPI's test client recorded the answers in steps 4 and 6 by calling the API in the same process. The Docker commands come from the project's README, and that check didn't include them.
 
+## Try it from the API's own page
+
+The API serves an interactive page at `http://127.0.0.1:8000/docs`, made by Swagger UI from the API's OpenAPI description.
+
+1. Open `http://127.0.0.1:8000/docs`, and select **POST /predict**.
+
+   ![The API's documentation page, with POST /predict marked](img/swagger-s1-endpoints.png)
+
+2. Select **Try it out**, and paste the contents of `module.json` into the request body.
+
+   ![The request body with the module's metrics, marked](img/swagger-s2-request.png)
+
+3. Select **Execute**. The page shows the status code, `200`, and the same response as step 6.
+
+   ![The server response, with the status code and the response body marked](img/swagger-s3-response.png)
+
 ## Next steps
 
 - Read the [KC1 prediction API reference](/docs/kc1/api-reference) for every field and every error.
-- Open `http://127.0.0.1:8000/docs` to try the API from Swagger UI.
 - If a request fails, see [Troubleshoot the KC1 API](/docs/kc1/api-troubleshooting).

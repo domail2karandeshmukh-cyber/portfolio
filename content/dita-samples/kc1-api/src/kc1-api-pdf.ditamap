@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookmap PUBLIC "-//OASIS//DTD DITA BookMap//EN" "bookmap.dtd">
+<bookmap id="kc1-api-pdf" xml:lang="en">
+<booktitle>
+<booklibrary>KC1 defect prediction, an MSc project</booklibrary>
+<mainbooktitle>KC1 prediction API documentation</mainbooktitle>
+<booktitlealt>Publication KC1-API, 3 documents</booktitlealt>
+<booktitlealt>KC1 defect prediction, an MSc project</booktitlealt>
+<booktitlealt>Issued 2026-11-19. Written by Karan Deshmukh.</booktitlealt>
+</booktitle>
+<bookmeta>
+<author>Karan Deshmukh</author>
+<critdates><created date="2026-11-19"/></critdates>
+</bookmeta>
+<frontmatter>
+
+<preface href="topics/document-information.dita" type="reference" toc="no"/>
+<booklists><toc/></booklists>
+</frontmatter>
+<chapter href="topics/kc1-api-002.dita" type="task"/>
+<chapter href="topics/kc1-api-001.dita" type="reference"/>
+<chapter href="topics/kc1-api-003.dita" type="troubleshooting"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/kc1-api-002.dita" type="task"/></relcell><relcell><topicref href="topics/kc1-api-003.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/kc1-api-001.dita" type="reference"/></relcell></relrow>
+</reltable>
+</bookmap>

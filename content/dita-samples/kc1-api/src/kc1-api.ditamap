@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
+<map id="kc1-api" xml:lang="en">
+<title>KC1 prediction API documentation</title>
+<topicmeta>
+<author>Karan Deshmukh</author>
+<othermeta name="status" content="Published"/>
+</topicmeta>
+<topicref href="topics/kc1-api-002.dita" type="task"/>
+<topicref href="topics/kc1-api-001.dita" type="reference"/>
+<topicref href="topics/kc1-api-003.dita" type="troubleshooting"/>
+<reltable>
+<relheader><relcolspec type="task"/><relcolspec type="troubleshooting"/><relcolspec type="reference"/></relheader>
+<relrow><relcell><topicref href="topics/kc1-api-002.dita" type="task"/></relcell><relcell><topicref href="topics/kc1-api-003.dita" type="troubleshooting"/></relcell><relcell><topicref href="topics/kc1-api-001.dita" type="reference"/></relcell></relrow>
+</reltable>
+</map>

@@ -1,0 +1,13 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:03.000
+Call the KC1 prediction API from its own documentation page, in three steps.
+
+00:00:03.000 --> 00:00:07.000
+1. On the API's page, select POST /predict.
+
+00:00:07.000 --> 00:00:11.000
+2. Select Try it out, and paste the module's 21 metrics.
+
+00:00:11.000 --> 00:00:15.000
+3. Select Execute: 200, and the prediction Non-defective.
