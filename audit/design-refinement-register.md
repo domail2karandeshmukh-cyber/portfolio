@@ -77,7 +77,7 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 |---|---|---|---|---|
 | D33 | In the phone menu, every group heading looked like the open menu button: a yellow pill with its words against its left edge, and its arrow at the top left. | P1 | Fixed | The menu button's styles applied to every summary in the menu (`.mnav summary`); they now apply to the button only (`.mnav>summary`). Found in the journey screenshots; checked again at 390 px. |
 | D34 | In French, German and Spanish, the header ran 44 to 87 px off the side at 1,280 and 1,366 px, common laptop widths. | P1 | Fixed | Between 1,280 and 1,439 px the CV button shows "CV" in those languages, and screen readers still hear its whole name. `tests/matrix.py`: no overflow at any of the ten sizes. |
-| D35 | On a touch screen the header's controls were 40 px high, and the name in the header 19 px. | P2 | Fixed | 44 px for every control in the header below 900 px, and for the case study's stage links. |
+| D35 | On a touch screen the header's controls were 40 px high, and the name in the header 19 px. | P2 | Fixed | 44 px for every control in the header below 900 px, and for the case study's stage links. At 320 px the larger targets pushed the header 2 px off the side, so below 360 px the CV button has less padding: checked in five languages at device pixel ratios 1, 2 and 3. |
 | D36 | On a phone, folding a document's contents after the page loaded moved the article: a layout shift of 0.26 in Lighthouse. | P2 | Fixed | With scripts, the contents start folded on a phone; without scripts they stay open. Lighthouse: CLS 0. |
 
 ## Documentation coverage

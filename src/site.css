@@ -822,8 +822,11 @@ html.mnav-open{overflow:hidden}
  .cv-btn{padding:0 12px 0 10px;gap:5px}
 }
 @media (max-width:359px){
- .brand{font-size:1.0625rem}
+ .brand{font-size:1rem}
+ .nav-in{gap:6px}
  .nav-act{gap:4px}
+ /* The header's three controls keep their 44-pixel targets; the CV button gives up some of its padding instead. */
+ .btn.cv-btn{padding:0 9px;gap:4px}
 }
 
 /* Industry pages, downloads and videos (lib/hubs.mjs) */
