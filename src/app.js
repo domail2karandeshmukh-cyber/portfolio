@@ -37,10 +37,12 @@
     strokes.forEach(function (m) { ho.observe(m); });
   }
 
-  /* The headline's corrections are over in under three seconds. The struck words then leave the page for good,
-     so that no reader, and no screen reader, meets them again. */
-  var struck = $$(".ed[data-was]");
-  if (struck.length) setTimeout(function () { struck.forEach(function (e) { e.removeAttribute("data-was"); }); }, reduce ? 0 : 3200);
+  /* On a phone the April button waits while the hero's two actions are on screen, so it never covers them
+     (the CSS for .dock-wait applies below 720 pixels only). */
+  var heroActs = $(".hero .btns");
+  if (heroActs && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (es) { document.body.classList.toggle("dock-wait", es[0].isIntersecting); }).observe(heroActs);
+  }
 
   /* The featured documents are dealt onto the desk when they come into view */
   var deck = $(".docs.feature");
@@ -436,6 +438,16 @@
     });
   });
   if ($(".lib-tabs")) { try { var g0 = localStorage.getItem("lib:group"); if (g0 === "project") { grouping = g0; $$(".lib-tabs [data-group]").forEach(function (o) { o.setAttribute("aria-selected", o.dataset.group === g0); }); } } catch (e) {} showDocs(); }
+  /* A link to a shelf (/docs#kc1, from a document's breadcrumb) opens the grouping that holds it, then goes to it. */
+  function toShelf() {
+    var id = decodeURIComponent(location.hash.slice(1)), t = id && document.getElementById(id), g = t && t.closest(".lib-group");
+    if (!g || g.dataset.group === grouping) return;
+    grouping = g.dataset.group;
+    $$(".lib-tabs [data-group]").forEach(function (o) { o.setAttribute("aria-selected", o.dataset.group === grouping); });
+    showDocs();
+    t.scrollIntoView({ block: "start" });
+  }
+  if ($(".lib-tabs")) { toShelf(); window.addEventListener("hashchange", toShelf); }
 
   /* Header: mark the section in view */
   var links = $$('.home .nav nav a[href^="#"]');

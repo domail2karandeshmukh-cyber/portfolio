@@ -1324,7 +1324,8 @@
   "Technical training": "Technische Schulung",
   "The documentation of my own projects is in the <a href=\"/docs\">library</a>, and my professional work is described under <a href=\"/#experience\">Experience</a>.": "Die Dokumentation meiner eigenen Projekte steht in der <a href=\"/docs\">Bibliothek</a>, und meine berufliche Arbeit ist unter <a href=\"/#experience\">Berufserfahrung</a> beschrieben.",
   "{n} of {m} shown": "{n} von {m} angezeigt",
-  "All {m} shown": "Alle {m} angezeigt"
+  "All {m} shown": "Alle {m} angezeigt",
+  "Angers, France": "Angers, Frankreich"
  },
  "keep": [
   "A",
@@ -1344,7 +1345,8 @@
   "ZIP",
   "MP4",
   "WebVTT",
-  "SRT"
+  "SRT",
+  "LinkedIn"
  ],
  "patterns": [
   [

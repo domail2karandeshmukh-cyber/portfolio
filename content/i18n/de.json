@@ -28,7 +28,8 @@
   "FAQs",
   "Video",
   "Docs-as-code",
-  "Associate Business Analyst"
+  "Associate Business Analyst",
+  "LinkedIn"
  ],
  "patterns": [
   [
@@ -287,7 +288,7 @@
   "All projects": "Alle Projekte",
   "Karan Deshmukh | Technical Documentation Specialist": "Karan Deshmukh | Spezialist für technische Dokumentation",
   "Technical documentation specialist with 5+ years across industrial engineering, enterprise IT and cybersecurity, most recently at MongoDB and Magna International. Writing samples, a documentation workbench, and live projects.": "Spezialist für technische Dokumentation mit über 5 Jahren Erfahrung in Industrietechnik, Unternehmens-IT und Cybersicherheit, zuletzt bei MongoDB und Magna International. Schreibproben, eine Dokumentationswerkstatt und Live-Projekte.",
-  "Technical documentation specialist with 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International. I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.": "Spezialist für technische Dokumentation mit über 5 Jahren Erfahrung in Industrietechnik, Unternehmens-IT und Cybersicherheit, zuletzt bei MongoDB und Magna International. Ich mache aus komplexen technischen Informationen klare Verfahrensanweisungen, Handbücher, Anleitungen zur Fehlerbehebung und strukturierte Dokumentation.",
+  "With 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International, I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.": "Mit über 5 Jahren Erfahrung in Industrietechnik, Unternehmens-IT und Cybersicherheit, zuletzt bei MongoDB und Magna International, mache ich aus komplexen technischen Informationen klare Verfahrensanweisungen, Handbücher, Anleitungen zur Fehlerbehebung und strukturierte Dokumentation.",
   "View writing samples": "Schreibproben ansehen",
   "Hiring? <a href=\"/recruiters\">Read the one-minute summary for recruiters</a>": "Sie stellen ein? <a href=\"/recruiters\">Die Zusammenfassung für Recruiter in einer Minute lesen</a>",
   "Open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of my work authorization in France. Remote or hybrid. Based in Angers, France.": "Offen für Stellen in der technischen Dokumentation: Vollzeit, Vertrag, Teilzeit, Freelance, Praktikum oder Ausbildung, im Rahmen meiner Arbeitserlaubnis in Frankreich. Remote oder hybrid. Standort: Angers, Frankreich.",
@@ -309,7 +310,7 @@
   "My first degree is a BSc in Aircraft Maintenance Engineering, a field where maintenance follows written procedures, inspections, and records. The same discipline applies wherever people install, run, and maintain equipment by following written procedures: industrial engineering, automotive, aerospace, manufacturing, renewable energy such as offshore wind, and technical operations.": "Mein erster Abschluss ist ein BSc in Flugzeuginstandhaltungstechnik, einem Fach, in dem Instandhaltung nach schriftlichen Verfahren, Inspektionen und Aufzeichnungen erfolgt. Dieselbe Disziplin gilt überall dort, wo Anlagen nach schriftlichen Verfahren installiert, betrieben und gewartet werden: in der Industrietechnik, im Automobilbau, in der Luft- und Raumfahrt, in der Fertigung, bei erneuerbaren Energien wie Offshore-Wind und im technischen Betrieb.",
   "Read about my roles": "Mehr über meine Positionen",
   "Knowledge-base articles, SOPs, runbooks, how-to guides, and troubleshooting guides, mostly for IT, security, and identity teams. Across his roles he has created, reviewed, and maintained more than 1,000 documents, over 500 of them at MongoDB. At Magna International he wrote product manuals, troubleshooting resources, and maintenance updates, prepared for localization into up to 29 languages.": "Wissensdatenbank-Artikel, SOPs, Runbooks, Anleitungen und Leitfäden zur Fehlerbehebung, vor allem für IT-, Sicherheits- und Identity-Teams. In seinen bisherigen Positionen hat er mehr als 1.000 Dokumente erstellt, geprüft und gepflegt, über 500 davon bei MongoDB. Bei Magna International schrieb er Produkthandbücher, Hilfen zur Fehlerbehebung und Wartungsaktualisierungen, vorbereitet für die Lokalisierung in bis zu 29 Sprachen.",
-  "Yes. Karan is open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of his work authorization in France. Remote or hybrid, from Angers. Message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/": "Ja. Karan ist offen für Stellen in der technischen Dokumentation: Vollzeit, Vertrag, Teilzeit, Freelance, Praktikum oder Ausbildung, im Rahmen seiner Arbeitserlaubnis in Frankreich. Remote oder hybrid, von Angers aus. Schreiben Sie ihm auf LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/",
+  "Yes. Karan is open to technical documentation roles: full-time, contract, part-time, freelance, internship, or apprenticeship, within the terms of his work authorization in France. Remote or hybrid, from Angers. Email him at domail2karandeshmukh@gmail.com, or message him on LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/": "Ja. Karan ist offen für Stellen in der technischen Dokumentation: Vollzeit, Vertrag, Teilzeit, Freelance, Praktikum oder Ausbildung, im Rahmen seiner Arbeitserlaubnis in Frankreich. Remote oder hybrid, von Angers aus. Schreiben Sie ihm an domail2karandeshmukh@gmail.com oder auf LinkedIn: https://www.linkedin.com/in/karan-deshmukh-a86986175/",
   "Studio": "Studio",
   "Explore the Documentation Studio": "Das Dokumentationsstudio entdecken",
   "The workbench and the Documentation Studio": "Die Werkbank und das Dokumentationsstudio",
@@ -395,6 +396,20 @@
   "One procedure through every tool": "Ein Verfahren durch alle Werkzeuge",
   "Employee onboarding and access provisioning": "Einarbeitung neuer Mitarbeitender und Vergabe von Zugängen",
   "Investigating a simulated Wazuh security alert": "Einen simulierten Wazuh-Sicherheitsalarm untersuchen",
-  "Preventive maintenance: monthly equipment inspection": "Vorbeugende Instandhaltung: monatliche Inspektion einer Anlage"
+  "Preventive maintenance: monthly equipment inspection": "Vorbeugende Instandhaltung: monatliche Inspektion einer Anlage",
+  "Karan Deshmukh, technical documentation specialist": "Karan Deshmukh, Spezialist für technische Dokumentation",
+  "Complex technology.": "Komplexe Technik.",
+  "Clear documentation.": "Klare Dokumentation.",
+  "Explore my work": "Meine Arbeit ansehen",
+  "More ways in": "Weitere Einstiege",
+  "Recruiter overview": "Überblick für Recruiter",
+  "Explore industries": "Branchen ansehen",
+  "Watch demonstrations": "Demonstrationen ansehen",
+  "Contact me": "Kontakt aufnehmen",
+  "Email me, or send a message on LinkedIn. I'm based in Angers, France, and work remote or hybrid.": "Schreiben Sie mir eine E-Mail oder eine Nachricht auf LinkedIn. Ich lebe in Angers, Frankreich, und arbeite remote oder hybrid.",
+  "Email Karan": "Karan eine E-Mail schreiben",
+  "Connect on LinkedIn": "Auf LinkedIn vernetzen",
+  "Every way to reach me": "Alle Wege, mich zu erreichen",
+  "Angers, France": "Angers, Frankreich"
  }
 }

@@ -1324,7 +1324,8 @@
   "Technical training": "तकनीकी ट्रेनिंग",
   "The documentation of my own projects is in the <a href=\"/docs\">library</a>, and my professional work is described under <a href=\"/#experience\">Experience</a>.": "मेरे अपने प्रोजेक्ट का डॉक्यूमेंटेशन <a href=\"/docs\">लाइब्रेरी</a> में है, और मेरे पेशेवर काम का विवरण <a href=\"/#experience\">अनुभव</a> में है।",
   "{n} of {m} shown": "{m} में से {n} दिख रहे हैं",
-  "All {m} shown": "सभी {m} दिख रहे हैं"
+  "All {m} shown": "सभी {m} दिख रहे हैं",
+  "Angers, France": "Angers, फ्रांस"
  },
  "keep": [
   "A",
@@ -1344,7 +1345,8 @@
   "ZIP",
   "MP4",
   "WebVTT",
-  "SRT"
+  "SRT",
+  "LinkedIn"
  ],
  "patterns": [
   [

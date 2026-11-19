@@ -45,19 +45,17 @@
 
 <section class="hero" id="top">
  <div class="wrap">
-  <h1>I <span class="ed e1" data-was="type">turn</span> what engineers <span class="ed e2" data-was="say">know</span> into <mark class="hl">docs people can <span class="ed e3" data-was="read">follow</span></mark></h1>
+  <p class="hero-id">Karan Deshmukh, technical documentation specialist</p>
+  <h1><span>Complex technology.</span> <span>Clear documentation.</span></h1>
   <div class="hero-grid">
    <div class="hero-copy">
-    <p class="lead">Technical documentation specialist with 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International. I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.</p>
-    <div class="btns">
-     <a class="btn paper" href="#writing">View writing samples</a>
-     <a class="btn line" href="/studio">Explore the Documentation Studio</a>
-     <button class="btn line" type="button" data-tour><span class="orb xs" aria-hidden="true"></span><span>Take the one-minute tour</span></button>
-     <a class="btn line nojs" href="{{cv}}" download>Download CV</a>
-    </div>
-    <p class="hire">Hiring? <a href="/recruiters">Read the one-minute summary for recruiters</a></p>
-    <p class="sites"><span>Live projects</span>{{livelinks}}</p>
+    <p class="lead">With 5+ years across industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International, I turn complex technical information into clear procedures, manuals, troubleshooting guides, and structured documentation.</p>
     <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
+    <div class="btns">
+     <a class="btn paper" href="#writing">Explore my work</a>
+     <a class="btn line" href="{{cv}}" download>Download CV</a>
+    </div>
+    <nav class="hero-more" aria-label="More ways in"><a href="/recruiters">Recruiter overview</a><a href="/industries">Explore industries</a><a href="/videos">Watch demonstrations</a><a href="#contact">Contact me</a></nav>
    </div>
 
    <div class="rw" id="rewrite" data-state="1" data-src="example">
@@ -294,12 +292,13 @@
 <section class="contact" id="contact">
  <div class="wrap">
   <h2>Have documentation that needs an owner?</h2>
-  <p>The fastest way to reach me is a LinkedIn message. I'm based in {{location}}, and work remote or hybrid.</p>
+  <p>Email me, or send a message on LinkedIn. I'm based in {{location}}, and work remote or hybrid.</p>
   <div class="btns">
-   <a class="btn paper" href="{{linkedin}}" target="_blank" rel="noopener">Message me on LinkedIn</a>
+   <a class="btn paper" href="mailto:{{email}}">Email Karan</a>
+   <a class="btn line" href="{{linkedin}}" target="_blank" rel="noopener">Connect on LinkedIn</a>
    <a class="btn line" href="{{cv}}" download>Download CV</a>
-   <a class="btn text" href="{{github}}" target="_blank" rel="noopener" translate="no">GitHub</a>
   </div>
+  <p class="contact-more"><a href="mailto:{{email}}" translate="no">{{email}}</a><a href="/contact">Every way to reach me</a><a href="{{github}}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
  </div>
 </section>
 
@@ -308,6 +307,7 @@
 <footer class="foot">
  <div class="wrap">
   <p>How this site is made: one content file builds this page, the library, the PDF CV, and April's answers. Documents and screenshots are pulled from the project repositories when the site is built.</p>
+  <!--#include foot-contact-->
   <p class="foot-langs" translate="no"><!--@langlinks--></p>
   <!--@rev-->
  </div>

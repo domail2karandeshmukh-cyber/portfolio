@@ -8,6 +8,7 @@ html:not([lang=hi]) :is(.lang-menu,.foot-langs) a[lang=hi]{font-family:"Hanken",
 
 /* The editor's desk: white paper, black ink, one highlighter. Yellow marks what matters and nothing else. */
 :root{
+ --navh:73px;
  --paper:#fff;--desk:#F3F3F0;--ink:#0B0B0C;--ink2:#3B3D42;--mute:#696C73;--rule:#DDDDD9;--rule2:#B8B9B5;
  --hl:#FFDF2B;--red:#CE2F20;--blue:#1D4ED8;--green:#0B7E47;
  --night:#0B0B0C;--night2:#18191C;--nline:#303136;--ntext:#F5F5F2;--nsoft:#B7B9BF;
@@ -20,7 +21,12 @@ html:not([lang=hi]) :is(.lang-menu,.foot-langs) a[lang=hi]{font-family:"Hanken",
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{scroll-behavior:smooth;scroll-padding-top:92px;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--navh) + 24px);-webkit-text-size-adjust:100%}
+/* A link to a section of a page lands its heading 24 px under the header. The address points at the section, and the
+   section's own top padding is taken off, so the reader arrives at the heading, not at an empty band above it. */
+.sec[id]{scroll-margin-top:calc(-1 * clamp(80px,10.5vw,164px))}
+.contact[id]{scroll-margin-top:calc(-1 * clamp(88px,12vw,184px))}
+.fields[id]{scroll-margin-top:calc(-1 * clamp(48px,5.6vw,84px))}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 1.0625rem/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:var(--hl);color:#000}
 h1,h2,h3,h4{margin:0;font-family:var(--serif);font-weight:500;line-height:1.06;letter-spacing:-.02em;overflow-wrap:break-word}
@@ -121,23 +127,17 @@ html[lang=de],html[lang=fr],html[lang=es]{hyphens:manual}
 
 /* Hero */
 .hero{padding:clamp(30px,5.2vw,76px) 0 clamp(60px,8vw,116px)}
-.hero h1{max-width:13.2em}
-/* The headline is corrected in front of the reader. Three words are struck with the red pen and replaced, then the
-   highlighter comes down. Each new word holds its place from the start, so nothing on the page moves.
-   The struck word is drawn, never read aloud: its text alternative is empty (the second `content`), it is there
-   only where the correction plays, and the script takes it away when the correction is over. */
-.ed{position:relative;display:inline-block}
-.js .ed::before{content:attr(data-was);content:attr(data-was) / "";position:absolute;left:0;top:0;white-space:nowrap;color:var(--ink);opacity:0;pointer-events:none;background:linear-gradient(var(--red),var(--red)) no-repeat 0 52%/0% .075em}
-.e1{--d:.35s}.e2{--d:.95s}.e3{--d:1.55s}
-.js .ed{animation:ed-now .5s calc(var(--d,0s) + .62s) ease-out backwards}
-.js .ed::before{animation:ed-was 1.05s var(--d,0s) cubic-bezier(.4,0,.2,1) backwards}
-@keyframes ed-was{0%,14%{opacity:1;background-size:0% .075em;transform:none}52%,60%{opacity:1;background-size:100% .075em;transform:none}100%{opacity:0;background-size:100% .075em;transform:translateY(-.2em)}}
-@keyframes ed-now{from{color:transparent}}
-.js .hero h1 .hl{transition-delay:2.3s}
+.hero h1{max-width:13.2em;font-size:clamp(2.6rem,6.4vw,6rem)}
+.hero-id{margin:0 0 .85em;font-size:1.06rem;font-weight:600;color:var(--ink2)}
+.hero h1 span{display:block}
+.hero-more{display:flex;flex-wrap:wrap;gap:10px 24px;margin:1.5em 0 0;font-size:1rem}
+.hero-more a{color:var(--ink);font-weight:600;text-decoration:none;background:linear-gradient(var(--hl),var(--hl)) no-repeat 0 100%/100% 2px;transition:background-size .2s var(--ease)}
+.hero-more a:hover{background-size:100% 100%}
 .hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,5.4vw,88px);align-items:start;margin-top:clamp(30px,4.6vw,64px)}
 .hero-copy{position:sticky;top:104px}
 .lead{font-size:1.26rem;line-height:1.5;color:var(--ink2);max-width:31em;margin:0 0 1.5em}
 .avail{display:flex;gap:.7em;align-items:baseline;color:var(--mute);font-size:.97rem;margin:1.9em 0 0;max-width:32em}
+.hero-copy .avail{margin:0 0 1.7em}
 .tnote{margin:.9em 0 0;padding-left:1.3em;max-width:34em;color:var(--mute);font-size:.9rem}
 .dot{flex:none;width:.6em;height:.6em;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(11,126,71,.16)}
 
@@ -610,7 +610,7 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
 .docs.compact .doc h2{font-size:1.65rem;margin-bottom:1.25em;padding-right:20px}
 .hub+.pager{margin-top:34px}
 .library .finder{margin:1.8em 0 1.2em;min-width:min(440px,100%)}
-.shelf{margin-top:60px;scroll-margin-top:96px}
+.shelf{margin-top:60px}
 .shelf-head{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:8px 40px;align-items:baseline;padding-bottom:16px;border-bottom:2px solid var(--ink)}
 .shelf-head h2{font-size:2.2rem}
 .shelf-head p{margin:0;color:var(--ink2)}
@@ -640,7 +640,7 @@ pre.code:hover .copy,.copy:focus-visible{opacity:1}
 .checked{white-space:nowrap}
 .checked::before{content:"";display:inline-block;width:.34em;height:.62em;margin:0 .5em .06em .2em;border:solid var(--green);border-width:0 2.5px 2.5px 0;transform:rotate(42deg)}
 .checked.no::before{content:"!";width:auto;height:auto;margin:0 .35em 0 0;border:0;transform:none;color:var(--red);font-weight:800}
-.guide .rule{padding:1.2em 0 1.3em;border-top:1px solid var(--rule);scroll-margin-top:96px}
+.guide .rule{padding:1.2em 0 1.3em;border-top:1px solid var(--rule)}
 .guide h3+.rule{border-top:2px solid var(--ink)}
 .guide .rule:target{box-shadow:-14px 0 0 #fff,-19px 0 0 var(--hl)}
 .guide .rule h4{margin:0 0 .35em;font-size:1.08rem}
@@ -847,7 +847,6 @@ html.mnav-open{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
  html{scroll-behavior:auto}
  *,*::before,*::after{animation:none!important;transition:none!important}
- .js .ed::before{content:none}
  @view-transition{navigation:none}
  .rw-again{display:none!important}
 }
@@ -945,3 +944,21 @@ html[lang=hi] .fx-t{line-height:1.4}
 .lib-refine select{font:500 .95rem var(--sans);padding:.5em .6em;border:1.5px solid var(--rule2);border-radius:8px;background:#fff;color:var(--ink);min-width:11em;max-width:100%}
 .lib-n{font-size:.9rem;color:var(--mute);padding-bottom:.55em}
 @media (max-width:600px){.lib-refine label{flex:1 1 44%}.lib-refine select{min-width:0;width:100%}}
+
+/* Contact: the line in every footer, the links under the contact section, and the contact page. */
+@media (max-width:600px){:root{--navh:63px}}
+.foot-contact{display:flex;flex-wrap:wrap;gap:6px 18px}
+.contact-more{display:flex;flex-wrap:wrap;gap:8px 24px;margin:1.6em 0 0;font-size:1.02rem}
+.contact-more a{color:var(--ink);font-weight:600}
+.topics{list-style:none;margin:1.6em 0 2.4em;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px}
+.topics a{display:block;height:100%;padding:18px 20px;border:1.5px solid var(--rule2);border-radius:14px;text-decoration:none;color:var(--ink);transition:border-color .15s,background .15s}
+.topics a:hover{border-color:var(--ink);background:var(--paper)}
+.topics b{display:block;font-size:1.06rem;margin-bottom:.35em}
+.topics span{display:block;color:var(--ink2);font-size:.95rem;line-height:1.45}
+.contact-dl{margin:1em 0 2em;padding:0}
+.contact-dl div{display:grid;grid-template-columns:7em minmax(0,1fr);gap:16px;padding:11px 0;border-bottom:1px solid var(--rule)}
+.contact-dl dt{font-weight:700}
+.contact-dl dd{margin:0}
+
+/* On a phone, the April button waits until the hero's actions have scrolled away, so it never covers them. */
+@media (max-width:720px){.dock{transition:opacity .2s,transform .2s var(--ease),visibility .2s}.dock-wait .dock{opacity:0;visibility:hidden;transform:translateY(10px)}}

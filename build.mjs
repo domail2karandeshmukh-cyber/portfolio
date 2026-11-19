@@ -78,7 +78,7 @@ const pmenu = (all) => `<details class="pm"><summary>Projects</summary><div clas
   .map((p) => `<a href="${p.href}" target="_blank" rel="noopener"><b translate="no">${esc(p.name)}</b><small>${esc(p.label)}</small></a>`)
   .join("")}<a class="pm-all" href="${all}">All projects</a></div></details>`;
 const navEn = siteNav({ cv: S.cv, projects: pmenu("/#projects") });
-const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
+const common = { url: S.url, cv: S.cv, linkedin: S.links.linkedin, email: S.email, faq: json(C.faq), i18n: json(C.strings), voice: json(recorded.en), pmenu: pmenu("/#projects"), sitenav: navEn.desktop, mnav: navEn.phone };
 const library = await buildLibrary({ C, OUT, source, common });
 // The style guide: its rules, and what the check found in each document of the library.
 const guide = styleGuide({ checked: library.checked, source: `${S.links.github}/${S.repo}/blob/${siteRef}/src/style.js` });
@@ -233,7 +233,7 @@ const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github
 <h1>${esc(S.name)}</h1>
 <p class="rec-role">${esc(S.role)}</p>
 <p class="rec-lead">${esc(R.intro)}</p>
-<p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Message me on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
+<p class="rec-act"><a class="btn ink" href="${S.cv}" download>Download CV</a><a class="btn line" href="mailto:${S.email}">Email Karan</a><a class="btn line" href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a><a class="btn text" href="${S.links.github}" target="_blank" rel="noopener" translate="no">GitHub</a></p>
 <ul class="rec-figs">${R.figures.map(([n, l]) => `<li><b>${esc(n)}</b><span>${esc(l)}</span></li>`).join("")}</ul>
 <h2>Experience</h2>
 <ol class="rec-roles">${C.experience.map(role).join("")}</ol>
@@ -244,19 +244,53 @@ const rev = commit ? `<p class="rev">Built from commit <a href="${S.links.github
 <ul class="rec-tools">
 <li><a href="/workbench">Workbench</a>: write a document, check it against my style guide as you type, and publish it as Markdown, HTML, or DITA.</li>
 <li><a href="/studio">Documentation Studio</a>: screenshots with permanent redaction, numbered step guides, training videos with captions, DITA projects published with DITA Open Toolkit, a help center, and document control.</li>
-<li><a href="/studio/flagship">A maintenance procedure, start to finish</a>: one fictional procedure taken through every tool, with every file it produced.</li>
+<li><a href="/studio/flagship">A maintenance procedure, start to finish</a>: one demonstration procedure taken through every tool, with every file it produced.</li>
 <li><a href="/style">Style guide</a>: ${guide.figures.rules} rules, ${guide.figures.coded} of them checked by code on every build.</li>
 <li><a href="/#rewrite">Rewrite desk</a>: an engineer's chat message turned into a how-to, with every fact checked.</li>
 <li><a href="/docs">Library</a>: every document on this site, with search.</li>
 </ul>
-<h2>Availability</h2>
+<h2>Availability and contact</h2>
 <p>${esc(S.availability)} Based in ${esc(S.location)}.</p>
+<p>Email <a href="mailto:${S.email}" translate="no">${esc(S.email)}</a>, or <a href="${S.links.linkedin}" target="_blank" rel="noopener">connect on LinkedIn</a>. <a href="/contact">Every way to reach me</a>.</p>
 <p>Languages: ${esc(C.languages.join(", "))}.</p>
 <h2>Education</h2>
 <ul class="rec-edu">${C.education.map((e) => `<li>${esc(e.title)}, ${esc(e.org)}, ${esc(e.dates)}</li>`).join("")}</ul>
 </article>`;
   await library.extra({ path: "/recruiters", title: `${S.name} | For recruiters`, description: `${S.role} with 5+ years across industrial engineering, enterprise IT, and cybersecurity. Experience, figures, three writing samples, and contact in one page.`,
     trail: [["Portfolio", "/"], ["For recruiters"]], body });
+}
+
+// The contact page: the ways to reach me, by what the visitor is writing about. There is no form: an email goes from the
+// visitor's own mail program to my inbox, and this site never sees it.
+{
+  const mail = (subject) => `mailto:${S.email}?subject=${encodeURIComponent(subject)}`;
+  const topics = [
+    ["Recruitment opportunity", "A technical documentation role: full-time, contract, part-time, freelance, internship or apprenticeship."],
+    ["Documentation collaboration", "Documentation for a product, a system or a project, written or reviewed with your engineers."],
+    ["Freelance enquiry", "A defined piece of work: a user guide, a knowledge base, a set of procedures, a migration."],
+    ["Project feedback", "A question or a remark about TrustNav, AI-ChainGuard, NOVATECH Sentinel, BizAssist AI, ReleasePilot AI or KC1."],
+    ["Portfolio or Studio support", "A page that doesn't load, a broken link, or a Studio tool that doesn't do what its page says."],
+    ["General enquiry", "Anything else."],
+  ];
+  const body = `<article class="rec contact-page">
+<h1>Contact</h1>
+<p class="rec-lead">Email reaches me directly. Choose what you're writing about, and your mail program opens a message with the subject filled in.</p>
+<ul class="topics">${topics.map(([t, d]) => `<li><a href="${mail(t)}"><b>${esc(t)}</b><span>${esc(d)}</span></a></li>`).join("")}</ul>
+<h2>Direct details</h2>
+<dl class="contact-dl">
+<div><dt>Email</dt><dd><a href="mailto:${S.email}" translate="no">${esc(S.email)}</a></dd></div>
+<div><dt>LinkedIn</dt><dd><a href="${S.links.linkedin}" target="_blank" rel="noopener">Connect on LinkedIn</a></dd></div>
+<div><dt>Location</dt><dd>${esc(S.location)}. Remote or hybrid.</dd></div>
+<div><dt>CV</dt><dd><a href="${S.cv}" download>Download the CV</a> (PDF, two pages)</dd></div>
+</dl>
+<h2>Availability</h2>
+<p>${esc(S.availability)}</p>
+<h2>What happens to your message</h2>
+<p>This site has no contact form. Your message goes from your own mail program to my inbox, and the site never sees it or keeps it.</p>
+<p>April, the assistant on this site, is an AI model. She answers questions about my work, but she can't pass a message on to me.</p>
+</article>`;
+  await library.extra({ path: "/contact", title: "Contact", description: `How to reach ${S.name}, technical documentation specialist in ${S.location}: email, LinkedIn and availability.`,
+    trail: [["Portfolio", "/"], ["Contact"]], body });
 }
 
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
@@ -333,7 +367,7 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`
