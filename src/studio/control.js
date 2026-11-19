@@ -148,7 +148,7 @@
   var panel = Kit.start($("#dc-start"), {
     tool: "control", title: T("Open a document"),
     lead: T("Four documents of different kinds, each on its way through review: a maintenance procedure, an IT standard operating procedure, a security runbook, and release notes. Open one and take it from draft to published, with its reviews and audit trail. Or open your own."),
-    open: function (s) { say(T("Opening {title}…", { title: T(s.title) })); return Kit.fetchText(s.url).then(function (t) { start(t, T("{title} (fictional sample: {kind})", { title: T(s.title), kind: T(s.kind) })); sw.close(); }); },
+    open: function (s) { say(T("Opening {title}…", { title: T(s.title) })); return Kit.fetchText(s.url).then(function (t) { start(t, T("{title} (simulated sample: {kind})", { title: T(s.title), kind: T(s.kind) })); sw.close(); }); },
     fail: function (e) { say(e.message, true); },
     files: [{ label: T("Open a Markdown file"), input: "dc-file" }],
     extra: '<button type="button" class="btn line sm" id="dc-bench2">' + T("Open my workbench document") + "</button>",
@@ -191,7 +191,7 @@
       var s = (all.control || []).filter(function (x) { return x.id === id; })[0];
       if (!s) return;
       if (D && D.meta && D.meta.id === s.docId) return say(T("{title} is already open.", { title: T(s.title) }));
-      var go = function () { return Kit.fetchText(s.url).then(function (t) { start(t, T("{title} (fictional sample: {kind})", { title: T(s.title), kind: T(s.kind) })); sw.close(); }); };
+      var go = function () { return Kit.fetchText(s.url).then(function (t) { start(t, T("{title} (simulated sample: {kind})", { title: T(s.title), kind: T(s.kind) })); sw.close(); }); };
       if (!D) return go();
       return Kit.confirm(T("Open {title}?", { title: T(s.title) }), T("It replaces the document open now. Export its audit history first if you need it.")).then(function (yes) { if (yes) return go(); });
     }).catch(function (e) { say(e.message, true); });

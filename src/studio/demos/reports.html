@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><head><title>Demo app: a fictional reporting application</title><meta name="robots" content="noindex"><meta name="viewport" content="width=1280"><meta charset="utf-8"><style>
 *{box-sizing:border-box}body{margin:0;font:14px/1.45 'Segoe UI',Arial,sans-serif;color:#1a1d2e;background:#f5f6fb;min-height:720px}
 .top{display:flex;align-items:center;gap:18px;height:52px;padding:0 22px;background:#fff;border-bottom:1px solid #dfe2ef}.top b{font-size:17px;color:#3346d3}.top nav{display:flex;gap:16px;height:52px}.top nav span{color:#4a4f6a;display:flex;align-items:center;border-bottom:2px solid transparent}.top nav span.on{color:#3346d3;font-weight:600;border-bottom-color:#3346d3}
-.demo{background:#ffd23f;color:#1a1d2e;font-weight:700;font-size:11px;padding:3px 8px;border-radius:4px}.top .who{margin-left:auto;font-size:13px;color:#4a4f6a}
+.demo{background:#fff4d6;color:#6b4a00;border:1px solid #e3c171;font-weight:600;font-size:11px;padding:2px 9px;border-radius:999px;white-space:nowrap}.top .who{margin-left:auto;font-size:13px;color:#4a4f6a}
 main{padding:18px 24px}.head{display:flex;align-items:center;gap:12px}h1{font-size:21px;margin:0}.sub{color:#4a4f6a;margin:2px 0 12px}
 .btn{display:inline-block;border:0;font:inherit;cursor:pointer;padding:9px 16px;border-radius:8px;background:#3346d3;color:#fff;font-weight:600}.btn.alt{background:#fff;color:#3346d3;border:1px solid #3346d3}.btn.sm{padding:5px 10px;font-size:13px}
 .tabs{display:flex;gap:4px;border-bottom:1px solid #dfe2ef;margin:6px 0 14px}.tabs button{border:0;background:none;font:inherit;padding:8px 12px;color:#4a4f6a;cursor:pointer}.tabs button.on{color:#3346d3;border-bottom:2px solid #3346d3;font-weight:600}
@@ -20,7 +20,7 @@ label{display:block;font-weight:600;font-size:13px;margin:12px 0 4px}.in{width:1
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#1a1d2e;color:#fff;padding:12px 18px;border-radius:8px;font-weight:600;display:none;box-shadow:0 8px 30px rgba(0,0,0,.3)}.toast.show{display:block}.toast i{display:inline-block;width:10px;height:10px;border-radius:50%;background:#2ecc71;margin-right:8px}
 .empty{color:#4a4f6a;padding:20px 0}.st{display:inline-block;padding:2px 8px;border-radius:999px;background:#e3f6ea;color:#127a3e;font-size:12px;font-weight:600}
 </style></head><body>
-<header class="top"><b>Beacon Reports</b><nav><span>Home</span><span class="on">Reports</span><span>Dashboards</span><span>Data</span></nav><span class="demo">FICTIONAL DEMO</span><span class="who">dana.k@meridian.example</span></header>
+<header class="top"><b>Beacon Reports</b><nav><span>Home</span><span class="on">Reports</span><span>Dashboards</span><span>Data</span></nav><span class="demo" title="An interface made for this portfolio. The product, the people and the data are invented.">Simulated interface</span><span class="who">dana.k@meridian.example</span></header>
 <main><div class="head"><h1>Monthly revenue by region</h1><span class="st">Shared with Sales</span><span style="flex:1"></span><button class="btn alt" id="export">Export</button><button class="btn" id="open" style="margin-left:10px">Schedule</button></div>
 <p class="sub">Reports / Sales / Monthly revenue by region · Data as of today 06:00</p>
 <div class="tabs"><button class="on" data-tab="report">Report</button><button data-tab="schedules">Schedules <span id="count">(0)</span></button><button>History</button></div>

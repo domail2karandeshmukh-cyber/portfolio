@@ -220,7 +220,7 @@
   /* ---------- The samples, and keeping the knowledge base in this browser ---------- */
   var start = Kit.start($("#kb-start"), {
     tool: "kb", title: T("Open a knowledge base"),
-    lead: T("Two fictional help centers with real article structure: one for customers of an accounting application, with an internal agent handbook kept apart, and one internal IT knowledge base. Open one and edit it, or start your own."),
+    lead: T("Two help centers for invented products, with real article structure: one for customers of an accounting application, with an internal agent handbook kept apart, and one internal IT knowledge base. Open one and edit it, or start your own."),
     open: function (s) {
       return (KB.categories.length ? Kit.confirm(T("Replace the knowledge base on screen?"), T("{title} takes its place. Export the current one first if you want to keep it.", { title: T(s.title) }), { ok: T("Replace") }) : Promise.resolve(true)).then(function (yes) {
         if (!yes) return;

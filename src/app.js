@@ -650,7 +650,7 @@
       // Every section once, with the words it can be found by: its title, its document, and its project.
       var all = [];
       docs.forEach(function (d) {
-        if (/fictional/i.test(d.k || "")) return;       // the studio's fictional demonstrations are not sources about Karan's work
+        if (/demonstration scenario|fictional|simulated/i.test(d.k || "")) return;       // the studio's simulated scenarios are not sources about Karan's work
         (d.s || []).forEach(function (sec) { all.push({ d: d, sec: sec, glossary: /glossary/i.test(d.t + " " + d.u), title: (d.t + " " + (d.p || "") + " " + sec[1]).toLowerCase(), text: String(sec[2] || "").toLowerCase() }); });
       });
       return all;

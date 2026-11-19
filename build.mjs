@@ -119,6 +119,14 @@ await library.finish();
 console.log(`style: ${guide.figures.passing} of ${guide.figures.docs} documents pass (${guide.figures.rules} rules, ${guide.figures.coded} checked by code)`);
 // The films are kept with the site's source: content/films/<id>.mp4, and a poster frame of the same name. A narrated
 // film also has its captions, content/films/<id>.vtt, which the player offers as a captions track.
+// Tutorial films of real products (content/videos/<id>/, made by scripts/tutorial/): the film, its captions and a poster.
+if (existsSync("content/videos")) for (const id of (await fs.readdir("content/videos")).sort()) {
+  const from = `content/videos/${id}`, to = `${OUT}/videos/${id}`;
+  if (!existsSync(`${from}/video.json`)) continue;
+  await fs.mkdir(to, { recursive: true });
+  for (const ext of ["mp4", "vtt", "srt"]) if (existsSync(`${from}/${id}.${ext}`)) await fs.copyFile(`${from}/${id}.${ext}`, `${to}/${id}.${ext}`);
+  await sharp(`${from}/${id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${to}/${id}.webp`);
+}
 const reel = C.films?.items ?? [];
 await fs.mkdir(`${OUT}/films`, { recursive: true });
 for (const f of reel) {

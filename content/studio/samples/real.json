@@ -1,0 +1,59 @@
+{
+ "note": "Screenshots of real software, captured on 19 November 2026 and marked up in the Screenshot Studio: Keycloak 26.8.2, an open-source identity server run on this computer for the Keycloak guides, and Swagger UI 5.35.1 as the KC1 prediction API serves it. The realm, the users and the data in them are a test setup, and the guides are independent work, not Keycloak's documentation.",
+ "screenshots": [
+  {
+   "id": "kc-remove-otp",
+   "scenario": "real",
+   "scenarioLabel": "Real product: Keycloak 26.8.2",
+   "title": "Keycloak: remove a user's OTP credential",
+   "blurb": "The Delete action on the user's OTP credential, marked from the menu item's own box. Step 3 of the guide to resetting a one-time password.",
+   "doc": "/docs/keycloak/reset-otp",
+   "project": "screenshots/kc-remove-otp/project.screenshot.json",
+   "before": "screenshots/kc-remove-otp/before.png",
+   "after": "screenshots/kc-remove-otp/after.png",
+   "preview": "screenshots/kc-remove-otp/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 2,
+   "fields": [
+    "enterprise-it"
+   ]
+  },
+  {
+   "id": "kc-require-otp",
+   "scenario": "real",
+   "scenarioLabel": "Real product: Keycloak 26.8.2",
+   "title": "Keycloak: require a new OTP at the next sign-in",
+   "blurb": "The required action Configure OTP, then Save: two numbered steps on one screen. Step 5 of the guide to resetting a one-time password.",
+   "doc": "/docs/keycloak/reset-otp",
+   "project": "screenshots/kc-require-otp/project.screenshot.json",
+   "before": "screenshots/kc-require-otp/before.png",
+   "after": "screenshots/kc-require-otp/after.png",
+   "preview": "screenshots/kc-require-otp/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 4,
+   "fields": [
+    "enterprise-it"
+   ]
+  },
+  {
+   "id": "kc1-swagger-response",
+   "scenario": "real",
+   "scenarioLabel": "Real product: Swagger UI 5.35.1, on the KC1 API",
+   "title": "Swagger UI: the KC1 API's answer",
+   "blurb": "The status code marked by the box of its text, and the response body. Step 3 of the KC1 API quick start's Swagger walkthrough.",
+   "doc": "/docs/kc1/api-quickstart",
+   "project": "screenshots/kc1-swagger-response/project.screenshot.json",
+   "before": "screenshots/kc1-swagger-response/before.png",
+   "after": "screenshots/kc1-swagger-response/after.png",
+   "preview": "screenshots/kc1-swagger-response/preview.jpg",
+   "width": 1280,
+   "height": 800,
+   "marks": 4,
+   "fields": [
+    "api-documentation"
+   ]
+  }
+ ]
+}

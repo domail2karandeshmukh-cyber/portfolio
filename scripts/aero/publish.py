@@ -14,7 +14,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 OUT = os.path.join(ROOT, "content", "aerospace", "out")
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:8765"
 FOOT = ('<div style="font:8px Helvetica,Arial,sans-serif;width:100%;margin:0 12mm;display:flex;justify-content:space-between;color:#555">'
-        '<span>Fictional demonstration (karandeshmukh.dev). Not approved maintenance data.</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>')
+        '<span>Demonstration data on an invented rig (karandeshmukh.dev). Not approved maintenance data.</span><span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span></div>')
 CSS = open(os.path.join(ROOT, "src", "studio", "aero.css"), encoding="utf-8").read()
 
 
@@ -36,7 +36,8 @@ def standalone(title, inner):
 async def main():
     os.makedirs(OUT, exist_ok=True)
     async with async_playwright() as p:
-        b = await p.chromium.launch()
+        chrome = os.environ.get("CHROME")   # Google Chrome, when Playwright has no Chromium of its own
+        b = await (p.chromium.launch(executable_path=chrome, args=["--no-sandbox"]) if chrome else p.chromium.launch())
         page = await b.new_page(viewport={"width": 1280, "height": 900})
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
@@ -47,7 +48,7 @@ async def main():
             await page.wait_for_timeout(800)
             # The PDF's title is the publication's, with its code, issue and the fact that it is fictional.
             await page.evaluate("""() => { const h = document.querySelector('#ie-printarea h1').textContent, c = document.querySelector('#ie-printarea .ie-tp-meta code').textContent;
-              document.title = h + ' (' + c + ') - fictional demonstration, not maintenance data'; }""")
+              document.title = h + ' (' + c + ') - demonstration data, not maintenance data'; }""")
             await page.emulate_media(media="print")
             # tagged: a structured, accessible PDF; outline: bookmarks from the headings
             await page.pdf(path=os.path.join(OUT, name + ".pdf"), format="A4", print_background=True, margin={"top": "14mm", "bottom": "16mm", "left": "12mm", "right": "12mm"}, display_header_footer=True, header_template="<span></span>", footer_template=FOOT, tagged=True, outline=True)
@@ -58,7 +59,7 @@ async def main():
             print("publish:", name, ".pdf and .html")
         await page.goto(f"{BASE}/studio/ietm?dm=DMC-ARFRIG-A-00-00-00-00A-941A-D", wait_until="networkidle")
         await page.wait_for_selector("#ie-main .s1k-svg svg")
-        await page.evaluate("() => { document.title = 'ARF-1 training rig - Illustrated parts catalogue (DMC-ARFRIG-A-00-00-00-00A-941A-D) - fictional demonstration, not maintenance data'; }")
+        await page.evaluate("() => { document.title = 'ARF-1 training rig - Illustrated parts catalogue (DMC-ARFRIG-A-00-00-00-00A-941A-D) - demonstration data, not maintenance data'; }")
         await page.emulate_media(media="print")
         await page.pdf(path=os.path.join(OUT, "arf1-ipc.pdf"), format="A4", print_background=True, margin={"top": "14mm", "bottom": "16mm", "left": "12mm", "right": "12mm"}, display_header_footer=True, header_template="<span></span>", footer_template=FOOT, tagged=True, outline=True)
         print("publish: arf1-ipc.pdf")

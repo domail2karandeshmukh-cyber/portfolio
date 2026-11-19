@@ -32,11 +32,11 @@
   /* The samples: annotated screenshots of the fictional demo apps, each one a project file this tool saved. */
   var start = Kit.start(document.getElementById("sh-start"), {
     tool: "screenshots", title: T("Open a screenshot"),
-    lead: T("Eight annotated screenshots of fictional applications, each one a project you can edit: move a callout, change a colour, or undo a mark. Or open your own image. Nothing is uploaded."),
+    lead: T("Annotated screenshots, each one a project you can edit: three of real products (Keycloak and Swagger UI) and eight of simulated applications. Move a callout, change a colour, or undo a mark. Or open your own image. Nothing is uploaded."),
     open: function (s) { say(T("Opening {title}…", { title: T(s.title) })); return Kit.fetchJson(s.project).then(function (p) { return ed.loadProject(p); }).then(function () { sw.close(); say(T("Opened the sample {title}: {n} marks, all editable. The redactions were burned into the picture when the sample was made.", { title: T(s.title), n: s.marks })); }); },
     fail: fail,
     files: [{ label: T("Open image"), input: "sh-file" }, { label: T("Open project"), input: "sh-proj" }],
-    links: function (s) { return '<a href="' + Kit.esc(s.before) + '" target="_blank" rel="noopener">' + T("Before") + '</a><a href="' + Kit.esc(s.after) + '" target="_blank" rel="noopener">' + T("After") + "</a>"; },
+    links: function (s) { return '<a href="' + Kit.esc(s.before) + '" target="_blank" rel="noopener">' + T("Before") + '</a><a href="' + Kit.esc(s.after) + '" target="_blank" rel="noopener">' + T("After") + "</a>" + (s.doc ? '<a href="' + Kit.esc(s.doc) + '">' + T("The guide") + "</a>" : ""); },
     note: T("Each card opens the project behind the picture. Before and After open the original screenshot and the exported file."),
   });
   var sw = Kit.startSwitch(start, document.getElementById("sh-slot"), document.getElementById("sh-samples"));
