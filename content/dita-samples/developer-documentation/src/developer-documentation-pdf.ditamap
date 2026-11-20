@@ -6,11 +6,11 @@
 <mainbooktitle>Lattice Relay developer documentation</mainbooktitle>
 <booktitlealt>Publication DEVELOPER-DOCUMENTATION, 4 documents</booktitlealt>
 <booktitlealt>Lattice Cloud, an example company</booktitlealt>
-<booktitlealt>Issued 2026-11-19. Written by Karan Deshmukh.</booktitlealt>
+<booktitlealt>Issued 2026-11-20. Written by Karan Deshmukh.</booktitlealt>
 </booktitle>
 <bookmeta>
 <author>Karan Deshmukh</author>
-<critdates><created date="2026-11-19"/></critdates>
+<critdates><created date="2026-11-20"/></critdates>
 </bookmeta>
 <frontmatter>
 <keydef keys="cloud"><topicmeta><keywords><keyword>Lattice Cloud</keyword></keywords></topicmeta></keydef>
