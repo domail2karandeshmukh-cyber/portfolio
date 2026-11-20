@@ -392,6 +392,9 @@ for (const f of ["openapi.json", "exchanges.json", "openapi-1.0.0.json", "exchan
 // The sample notebook of the JupyterLab guide and its data, for a reader to follow the guide as written.
 await fs.mkdir(`${OUT}/docs/jupyterlab/sample`, { recursive: true });
 for (const f of ["pump-readings.ipynb", "readings.csv"]) await fs.copyFile(`content/projects/jupyterlab/sample/${f}`, `${OUT}/docs/jupyterlab/sample/${f}`);
+// The capture, the test server and the requests of the tshark guide.
+await fs.mkdir(`${OUT}/docs/wireshark/sample`, { recursive: true });
+for (const f of ["web.pcapng", "shop_api.py", "traffic.sh"]) await fs.copyFile(`content/projects/wireshark/sample/${f}`, `${OUT}/docs/wireshark/sample/${f}`);
 await fs.mkdir(`${OUT}/case-study`, { recursive: true });
 await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 

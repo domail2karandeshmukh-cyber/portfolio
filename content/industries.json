@@ -69,7 +69,7 @@
         { "doc": "workspace-faqs", "why": "Nine short FAQ sets for end users of Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat." },
         { "title": "Employee onboarding and access provisioning", "url": "/studio/scenarios/b-enterprise-it", "kind": "Demonstration scenario", "why": "A service-desk procedure, the roles and approvals behind it, and a step guide with screenshots." }
       ],
-      "projects": [],
+      "projects": [{ "doc": "ws-slow-http" }],
       "demos": [
         { "title": "Step guide: create a new employee's account", "url": "/studio/samples/guides/it-onboarding/guide.pdf", "kind": "PDF, demonstration scenario", "text": "Five steps, each with an annotated screenshot of the identity console." },
         { "title": "Step guide: unlock a customer's account", "url": "/studio/samples/guides/support-unlock/guide.pdf", "kind": "PDF, demonstration scenario", "text": "A support-desk procedure with a caution about identity checks." },

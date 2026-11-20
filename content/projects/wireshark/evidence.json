@@ -1,0 +1,47 @@
+{
+ "note": "What tshark printed while the guide in this folder was checked, on 20 November 2026, on Ubuntu 24.04.5 LTS: a capture on the loopback interface of the guide's test server (shop_api.py) while traffic.sh sent ten requests. The capture is sample/web.pcapng.",
+ "tshark": "4.2.2",
+ "capture": {
+  "command": "tshark -i lo -f \"tcp port 8000\" -a duration:12 -w web.pcapng",
+  "output": "Capturing on 'Loopback: lo'\n120 packets captured"
+ },
+ "capinfos": "File name:           web.pcapng\nNumber of packets:   120\nCapture duration:    3.327373161 seconds",
+ "server_log": [
+  "GET /health 200 0.010 s",
+  "GET /api/parts 200 0.010 s",
+  "GET /api/parts?page=2 200 0.010 s",
+  "GET /api/search?q=impeller 200 0.400 s",
+  "GET /api/report?month=2026-10 200 1.201 s",
+  "GET /api/parts?page=3 200 0.010 s",
+  "GET /api/search?q=seal 200 0.400 s",
+  "GET /api/report?month=2026-11 200 1.200 s",
+  "GET /api/parts/9101 404 0.010 s",
+  "GET /health 200 0.010 s"
+ ],
+ "commands": {
+  "every_response": {
+   "command": "tshark -r web.pcapng -Y http.response -T fields -e frame.number -e http.response_for.uri -e http.response.code -e http.time",
+   "output": "8\thttp://127.0.0.1:8000/health\t200\t0.011127956\n20\thttp://127.0.0.1:8000/api/parts\t200\t0.010899343\n32\thttp://127.0.0.1:8000/api/parts?page=2\t200\t0.010755734\n44\thttp://127.0.0.1:8000/api/search?q=impeller\t200\t0.400836014\n56\thttp://127.0.0.1:8000/api/report?month=2026-10\t200\t1.201125948\n68\thttp://127.0.0.1:8000/api/parts?page=3\t200\t0.011001642\n80\thttp://127.0.0.1:8000/api/search?q=seal\t200\t0.400769448\n92\thttp://127.0.0.1:8000/api/report?month=2026-11\t200\t1.201089440\n104\thttp://127.0.0.1:8000/api/parts/9101\t404\t0.010994395\n116\thttp://127.0.0.1:8000/health\t200\t0.010976470"
+  },
+  "slow_responses": {
+   "command": "tshark -r web.pcapng -Y \"http.response && http.time > 0.5\" -T fields -e frame.number -e http.response_for.uri -e http.response.code -e http.time",
+   "output": "56\thttp://127.0.0.1:8000/api/report?month=2026-10\t200\t1.201125948\n92\thttp://127.0.0.1:8000/api/report?month=2026-11\t200\t1.201089440"
+  },
+  "slowest_first": {
+   "command": "tshark -r web.pcapng -Y http.response -T fields -e http.time -e http.response.code -e http.response_for.uri | sort -gr | head -5",
+   "output": "1.201125948\t200\thttp://127.0.0.1:8000/api/report?month=2026-10\n1.201089440\t200\thttp://127.0.0.1:8000/api/report?month=2026-11\n0.400836014\t200\thttp://127.0.0.1:8000/api/search?q=impeller\n0.400769448\t200\thttp://127.0.0.1:8000/api/search?q=seal\n0.011127956\t200\thttp://127.0.0.1:8000/health"
+  },
+  "request_frames": {
+   "command": "tshark -r web.pcapng -Y \"http.response && http.time > 0.5\" -T fields -e frame.number -e http.request_in",
+   "output": "56\t52\n92\t88"
+  },
+  "request_52": {
+   "command": "tshark -r web.pcapng -Y \"frame.number == 52\" -T fields -e frame.time_relative -e http.request.method -e http.request.uri -e http.user_agent",
+   "output": "0.459699244\tGET\t/api/report?month=2026-10\tcurl/8.5.0"
+  },
+  "status_codes": {
+   "command": "tshark -r web.pcapng -q -z http,stat",
+   "output": "\n===================================================================\nHTTP Statistics\n* HTTP Response Status Codes                Packets\n  200 OK                                          9\n  404 Not Found                                   1\n* HTTP Request Methods                      Packets\n  GET                                            10 \n==================================================================="
+  }
+ }
+}
