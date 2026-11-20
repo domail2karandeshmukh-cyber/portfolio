@@ -229,7 +229,7 @@
       else say(T("That module is not in this CSDB."), true);
     });
   }
-  S1K.load().then(function (d) {
+  Kit.wait(S1K.load().then(function (d) {
     db = d;
     var pubs = db.items.filter(function (x) { return x.id.kind === "pm" && db.latest(x.id.code) === x; });
     $("#ie-pub").innerHTML = pubs.map(function (p) { return '<option value="' + esc(p.id.code) + '">' + esc(p.id.pmTitle.replace("ARF-1 training rig - ", "")) + "</option>"; }).join("");
@@ -241,5 +241,5 @@
     $("#ie-pub").value = start; choosePub(start); wire();
     var target = want ? (entries.reduce(function (f, e) { return f || e.items.filter(function (i) { return i.code === want; }).map(function (i) { return i.item; })[0]; }, null) || db.latest(want)) : entries[0].items[0].item;
     show(target || entries[0].items[0].item);
-  }).catch(function (e) { say(e.message, true); });
+  }).catch(function (e) { say(e.message, true); }));
 })();

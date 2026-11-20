@@ -427,6 +427,12 @@
    explanation, the shortcuts and the limits under the header, pushing the tool down rather than covering it); a command
    bar (starting points on the left, the output on the right, and the status line under them); and panels with one edge,
    one corner and one kind of title. A document shown inside a tool keeps its own type. */
+/* A tool fills its page when its scripts run. Until it has drawn itself (st-ready, set by kit.js: once the page has
+   loaded, or once the data a tool waits for has come), what comes after the command bar, and the pager at the end,
+   is left out and the page keeps the screen's height, so nothing on screen moves when the samples and the editor
+   appear: no layout shift. Without scripts nothing is left out. */
+.st-tool .st-body{min-height:calc(100vh - var(--navh, 64px))}
+.js .st-tool:not(.st-ready) :is(.st-cmd ~ *,.st-pager){display:none}
 .st-tool .st-head{margin:10px 0 14px}
 .st-tool .st-head p{max-width:56em}
 .st-helpbtn{flex:none}

@@ -4,9 +4,10 @@ What changed on karandeshmukh.dev, release by release. The audit registers in `a
 
 ## Unreleased: round 2 (a preview, not yet released)
 
-The leftovers of the design refinement, the Studio's tools, and two more real products. No version number raised. Findings and evidence: `audit/design-refinement-register.md` (D40 to D47).
+The leftovers of the design refinement, the Studio's tools, and two more real products. No version number raised. Findings and evidence: `audit/design-refinement-register.md` (D40 to D49).
 
-- **The Studio's tools share one working surface.** A header with one sentence and **Help**, which opens the longer explanation, the shortcuts and the limits; a command bar with the starting points on the left, the output on the right and the status under them; and panels with one edge, corner and title. The DITA Studio has a command bar too. In five languages.
+- **The Studio's tools share one working surface.** A header with one sentence and **Help**, which opens the longer explanation, the shortcuts and the limits; a command bar with the starting points on the left, the output on the right and the status under them; and panels with one edge, corner and title. The DITA Studio and the offline IETM package have the command bar too. In five languages.
+- **Nothing moves while a Studio tool loads.** Each tool shows once it has drawn itself, so its panels no longer jump as the samples or the CSDB arrive. Lighthouse's layout-shift score on desktop, 0.14 to 0.59 on ten of the tools in 10.1, is now 0 (0.002 on the IETM), and 0 on a phone on all eleven.
 - **Two more real products.** "Run a notebook from a clean start and share it as HTML in JupyterLab" (JupyterLab 4.6.6), with nine annotated screens and the sample notebook, and "Find the slowest HTTP responses in a capture with tshark" (Wireshark's tshark 4.2.2), with the capture to download. Each is checked on a running copy, and its `evidence.json` keeps what the product showed.
 - **PDFs.** The flagship procedure and the Studio's sample guides print typographic apostrophes. Printed, the notes under the ARF-1 drawings are 6.3 pt instead of 5.3.
 - **April on a phone.** Her subtitle is whole at 390 px and wraps at 320 px; her voice button is an icon there.

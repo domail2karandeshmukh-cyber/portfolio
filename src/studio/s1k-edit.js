@@ -215,10 +215,10 @@
     b.addEventListener("keydown", function (e) { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { var o = all[1 - i]; o.focus(); tab(o === all[0] ? "checks" : "preview"); } });
   });
 
-  S1K.load().then(function (d) {
+  Kit.wait(S1K.load().then(function (d) {
     db = d; fill();
     var want = new URLSearchParams(location.search).get("open");
     openFile(want && db.items.some(function (i) { return i.file === want; }) ? want : "DMC-ARFRIG-A-20-00-00-00A-520A-A_002-00_EN-US.XML");
     $("#se-open").value = file;
-  }).catch(function (e) { say(e.message, true); open(template("descript"), "", "new"); });
+  }).catch(function (e) { say(e.message, true); open(template("descript"), "", "new"); }));
 })();

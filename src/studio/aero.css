@@ -360,3 +360,8 @@ html.ae-tabs .ae-panel+.ae-panel{margin-top:0}
  .ae-secnav a[aria-current]{border-color:var(--ink)}
 }
 @media print{.ae-secnav,.ae-next{display:none}.ae-layout{display:block}.ae-panel[hidden]{display:block!important}}
+
+/* The command bar's lists are as wide as their longest choice from the start. Their choices arrive once the CSDB has
+   loaded, and a list that widened then wrapped the bar and moved the tool below it (a layout shift of 0.13 to 0.5). */
+#cd-type{width:11rem}#cd-sns{width:13.5rem}#ie-pub{width:12.5rem}#ip-issue{width:14.5rem}#ie-product,#ip-product,#se-open{width:22rem}
+@media (max-width:699px){#cd-type,#cd-sns,#ie-pub,#ip-issue,#ie-product,#ip-product,#se-open{width:auto}}
