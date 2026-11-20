@@ -13,6 +13,7 @@ These standards say how I write, annotate, illustrate, publish, and film technic
 | [Illustration standard](/standards/illustration) | Engineering line drawings, callouts, figure titles, and diagram notation | Technical-illustration practice, S1000D ICN rules, the C4 model, and UML |
 | [Publishing standard](/standards/publishing) | Page layout, front matter, contents, numbering, and PDF checks | IEC/IEEE 82079-1, S1000D front matter, PDF/UA practice |
 | [Video standard](/standards/video) | Scripts, recording, annotation, zoom, narration, captions, and checks | W3C WAI media guidance, WCAG 2.2 |
+| [Design system](/standards/design) | The site's tokens, type, components, icons, and motion, with the research behind each decision | Nielsen Norman Group, WCAG 2.2, Apple's design guidance, Carbon, GitHub Docs, and the Microsoft Writing Style Guide |
 | [Benchmark](/standards/benchmark) | What I studied, what I adapted from it, and what I may not copy | The sources above and the documentation they describe |
 
 The [style guide](/style) is the editorial standard's software profile as rules a program can check: every document in the library is checked against it on every build.
@@ -26,4 +27,4 @@ The [style guide](/style) is the editorial standard's software profile as rules 
 
 ## Version
 
-Version 10, November 2026. The previous rules are in the repository history.
+Version 10.1, November 2026: the design system is new. The previous rules are in the repository history.

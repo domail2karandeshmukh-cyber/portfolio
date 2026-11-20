@@ -2,9 +2,9 @@
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
 <title>Document information</title>
-<shortdesc>A demonstration publication for Karan Deshmukh's portfolio. Lattice Cloud is an example company, and every person, address and figure in it is an example: these documents aren't operating instructions or vendor documentation.</shortdesc>
+<shortdesc>A demonstration publication for Karan Deshmukh’s portfolio. Lattice Cloud is an example company, and every person, address and figure in it is an example: these documents aren’t operating instructions or vendor documentation.</shortdesc>
 <refbody>
-<simpletable relcolwidth="4* 2* 1* 1.4* 1.6*">
+<simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4* 1.6*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
 <strow><stentry>How Lattice Relay delivers a webhook</stentry><stentry>DG-RELAY-100</stentry><stentry>3.0</stentry><stentry>Published</stentry><stentry>2026-10-06</stentry></strow>
 <strow><stentry>Deploy a webhook relay on Lattice Cloud</stentry><stentry>DG-RELAY-101</stentry><stentry>3.0</stentry><stentry>Published</stentry><stentry>2026-10-06</stentry></strow>

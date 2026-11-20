@@ -8,8 +8,8 @@
 <ul><li>Confirm that the request is genuine. Call the user on the number in the HR system, not the number in the ticket.</li><li>Contractor accounts follow a different process. Send those requests to the IAM team.</li></ul>
 </prereq>
 <steps>
-<step><cmd>In <ph keyref="product">Acme Console</ph>, open the user's profile.</cmd></step>
-<step><cmd>Select <uicontrol>Reset MFA</uicontrol>.</cmd><info><note type="caution">Don't select <uicontrol>Reset password</uicontrol>. It leaves the old device enrolled.</note></info></step>
+<step><cmd>In <ph keyref="product">Acme Console</ph>, open the user’s profile.</cmd></step>
+<step><cmd>Select <uicontrol>Reset MFA</uicontrol>.</cmd><info><note type="caution">Don’t select <uicontrol>Reset password</uicontrol>. It leaves the old device enrolled.</note></info></step>
 <step><cmd>Ask the user to open the enrollment email and register the new device.</cmd></step>
 </steps>
 <result>

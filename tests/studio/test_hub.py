@@ -63,14 +63,14 @@ with sync_playwright() as p:
     check("German: the tabs, the filters and the count are in German", pg.text_content(".sx-tabs [data-stage=train]") == "Schulen" and "angezeigt" in pg.text_content(".sx-n-out") and pg.evaluate("document.querySelector('select[name=field] option').textContent") == "Alle Branchen")
     # The aerospace overview and the workbench are English pages, so they are linked as they are.
     check("German: the tool links stay in German", pg.evaluate("[...document.querySelectorAll('.sx-i[data-type=tool] .sx-t a')].map(a => a.getAttribute('href')).filter(h => h.startsWith('/studio/') && h !== '/studio/aerospace')") == [])
-    # the field explorer on the home page
+    # the fields on the home page: a tile for each industry and one for the Studio, each a link with its icon and its name
     pg.goto(BASE + "/", wait_until="load"); pg.wait_for_timeout(300)
-    check("home: the field explorer has seven tabs and one panel showing", pg.locator(".fx-tabs [role=tab]").count() == 7 and pg.evaluate("[...document.querySelectorAll('.fx-p')].filter(p => !p.hidden).length") == 1)
-    pg.focus("#fx-t-software"); pg.keyboard.press("ArrowRight"); pg.wait_for_timeout(100)
-    check("home: the arrow keys move between fields", pg.evaluate("document.activeElement.id") == "fx-t-api-documentation" and not pg.is_hidden("#fx-api-documentation"))
-    pg.keyboard.press("End"); pg.wait_for_timeout(100)
-    check("home: End goes to the last field, and its panel names its documents", pg.evaluate("document.activeElement.id") == "fx-t-industrial-engineering" and pg.locator("#fx-industrial-engineering .fx-list li").count() == 3)
-    check("home: each panel is labelled by its tab", pg.evaluate("[...document.querySelectorAll('.fx-p')].every(p => p.getAttribute('role') === 'tabpanel' && document.getElementById(p.getAttribute('aria-labelledby')))"))
+    tiles = pg.eval_on_selector_all(".fields-grid a.field", "as => as.map(a => [a.getAttribute('href'), !!a.querySelector('svg.ic'), (a.querySelector('b') || {}).textContent || ''])")
+    check("home: eight field tiles, each a link with an icon and a name", len(tiles) == 8 and all(t[1] and t[2].strip() for t in tiles), tiles)
+    want = ["/industries/" + i for i in ["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"]] + ["/studio"]
+    check("home: the tiles lead to the seven industry pages and the Studio", [t[0] for t in tiles] == want, [t[0] for t in tiles])
+    dead = [t[0] for t in tiles if not pg.request.get(BASE + t[0]).ok]
+    check("home: every tile's page answers", not dead, dead)
     # the library's facets
     LIB = "[...document.querySelectorAll('.lib-group:not([hidden]) [data-docs] > li, .lib-group:not([hidden]) .demo-rows > li')].filter(li => !li.hidden && !li.closest('[hidden]'))"
     pg.goto(BASE + "/docs?standard=stride", wait_until="load"); pg.wait_for_timeout(300)

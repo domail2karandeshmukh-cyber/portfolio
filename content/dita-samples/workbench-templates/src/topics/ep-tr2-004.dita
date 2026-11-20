@@ -2,11 +2,11 @@
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="calibrate-the-pressure-sensor-on-rig" xml:lang="en">
 <title>Calibrate the pressure sensor on <ph keyref="rig">test rig TR-2</ph></title>
-<shortdesc>Engineering procedure for the test lab. Run it before each test campaign, and after you replace any sensor. Fictional sample: don't use it on real equipment.</shortdesc>
+<shortdesc>Engineering procedure for the test lab. Run it before each test campaign, and after you replace any sensor. Fictional sample: don’t use it on real equipment.</shortdesc>
 <taskbody>
 <prereq>
-<ul><li>You've stopped the rig, and the line is at atmospheric pressure.</li><li>The reference gauge has a valid calibration certificate.</li><li>You have the calibration sheet for the campaign.</li></ul>
-<note type="caution">Don't open the sensor housing. Calibration uses the console only.</note>
+<ul><li>You’ve stopped the rig, and the line is at atmospheric pressure.</li><li>The reference gauge has a valid calibration certificate.</li><li>You have the calibration sheet for the campaign.</li></ul>
+<note type="caution">Don’t open the sensor housing. Calibration uses the console only.</note>
 </prereq>
 <steps>
 <step><cmd>On the rig console, open <uicontrol>Sensors</uicontrol>, and then select the pressure sensor.</cmd></step>
@@ -17,7 +17,7 @@
 <step><cmd>Select <uicontrol>Finish</uicontrol>, and then write the result on the calibration sheet.</cmd></step>
 </steps>
 <result>
-<p>Each reading is within 0.5 % of the reference gauge, and the console shows <b>Calibrated</b> with today's date.</p>
+<p>Each reading is within 0.5 % of the reference gauge, and the console shows <b>Calibrated</b> with today’s date.</p>
 </result>
 <postreq>
 <p><b>If a reading is out of tolerance</b></p>

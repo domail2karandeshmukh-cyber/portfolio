@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- House labels for the PDFs that DITA Open Toolkit publishes in the house style (scripts/dita-pdf).
+     scripts/dita-pdf/args.mjs copies this folder into the toolkit's plugins folder and integrates it when it is
+     missing or has changed. -->
+<plugin id="dev.karandeshmukh.pdf" version="1.0.0">
+  <require plugin="org.dita.pdf2"/>
+  <feature extension="dita.xsl.strings" file="strings.xml"/>
+</plugin>

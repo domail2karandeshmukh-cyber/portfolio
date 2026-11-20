@@ -5,10 +5,10 @@
 <shortdesc>What each role in a <ph keyref="product">Acme Console</ph> workspace can open and change.</shortdesc>
 <refbody>
 <section><title>Roles</title>
-<simpletable><sthead><stentry>Role</stentry><stentry>Can open</stentry><stentry>Can change</stentry></sthead><strow><stentry>Viewer</stentry><stentry>Dashboards</stentry><stentry>Nothing</stentry></strow><strow><stentry>Analyst</stentry><stentry>Dashboards and reports</stentry><stentry>Their own reports</stentry></strow><strow><stentry>Owner</stentry><stentry>Everything</stentry><stentry>Everything, including the list of members</stentry></strow></simpletable>
+<simpletable frame="topbot"><sthead><stentry>Role</stentry><stentry>Can open</stentry><stentry>Can change</stentry></sthead><strow><stentry>Viewer</stentry><stentry>Dashboards</stentry><stentry>Nothing</stentry></strow><strow><stentry>Analyst</stentry><stentry>Dashboards and reports</stentry><stentry>Their own reports</stentry></strow><strow><stentry>Owner</stentry><stentry>Everything</stentry><stentry>Everything, including the list of members</stentry></strow></simpletable>
 </section>
 <section><title>Limits</title>
-<simpletable><sthead><stentry>Setting</stentry><stentry>Limit</stentry></sthead><strow><stentry>Members in a workspace</stentry><stentry>500</stentry></strow><strow><stentry>Reports in a workspace</stentry><stentry>2,000</stentry></strow><strow><stentry>Owners in a workspace</stentry><stentry>At least one</stentry></strow></simpletable>
+<simpletable frame="topbot"><sthead><stentry>Setting</stentry><stentry>Limit</stentry></sthead><strow><stentry>Members in a workspace</stentry><stentry>500</stentry></strow><strow><stentry>Reports in a workspace</stentry><stentry>2,000</stentry></strow><strow><stentry>Owners in a workspace</stentry><stentry>At least one</stentry></strow></simpletable>
 <p audience="admin"><b>Who can change a role</b></p>
 <p audience="admin">Only an owner can change a role. An administrator of the organization can make themselves an owner of any workspace.</p>
 </section>

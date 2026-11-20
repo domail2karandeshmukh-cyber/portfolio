@@ -25,6 +25,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { SETS } from "../lib/dita-sets.mjs";
 import { pdfArgs } from "./dita-pdf/args.mjs";
 import { writeBookmap } from "./dita-pdf/bookmap.mjs";
+import { typeset as typesetDita } from "./dita-pdf/typeset.mjs";
 // libxml2 2.11 and later stop reading the OASIS DTDs at their entity-amplification limit unless it is raised.
 const XMLLINT_LIMITS = (() => { try { const h = spawnSync("xmllint", ["--help"], { encoding: "utf8" }); return ["--huge"].concat(/--max-ampl/.test((h.stdout || "") + (h.stderr || "")) ? ["--max-ampl", "1000"] : []); } catch { return ["--huge"]; } })();
 const require = createRequire(import.meta.url);
@@ -32,6 +33,32 @@ const Doc = require("../src/doc.js");
 
 const publish = process.argv.includes("--publish");
 const only = process.argv.slice(2).filter((a) => !a.startsWith("--"))[0];
+// Version 10.1: a diagram's alternative text says what the diagram says, for a reader who can't see it: a sequence
+// diagram lists who takes part and every message in order, with its conditions. Other kinds name their kind.
+function describeDiagram(code) {
+  const lines = code.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
+  const kind = (lines[0] || "").split(/\s/)[0];
+  const list = (a) => (a.length < 3 ? a.join(" and ") : `${a.slice(0, -1).join(", ")}, and ${a[a.length - 1]}`);
+  const clean = (t) => t.replace(/[[\]]/g, "").replace(/<br\s*\/?>/gi, " ").replace(/\s+/g, " ").trim();
+  const lower = (t) => t.replace(/^\p{Lu}(?!\p{Lu})/u, (c) => c.toLowerCase());
+  if (kind !== "sequenceDiagram") return `Diagram (${kind || "Mermaid"})`;
+  const names = {}, order = [];
+  for (const l of lines) { const m = /^(?:participant|actor)\s+(\S+)(?:\s+as\s+(.+))?$/.exec(l); if (m) { names[m[1]] = clean(m[2] || m[1]); order.push(m[1]); } }
+  const name = (id) => names[id] || id;
+  const numbered = lines.includes("autonumber");
+  const out = [`Sequence diagram between ${list(order.map(name))}.`];
+  let k = 0;
+  for (const l of lines.slice(1)) {
+    let m;
+    if ((m = /^([^\s:-]+)\s*--?(?:>>|>|x|\))[+-]?\s*([^\s:]+)\s*:\s*(.+)$/.exec(l))) {
+      k++;
+      out.push(`${numbered ? `${k}. ` : ""}${name(m[1])} to ${m[1] === m[2] ? "itself" : name(m[2])}: ${clean(m[3]).replace(/\.?$/, ".")}`);
+    } else if ((m = /^(alt|opt|loop|par|critical|break)\s+(.+)$/.exec(l))) out.push(`${m[1] === "loop" ? "Repeated while" : "If"} ${lower(clean(m[2]))}:`);
+    else if ((m = /^else\s+(.+)$/.exec(l))) out.push(`Otherwise, if ${lower(clean(m[1]))}:`);
+  }
+  return out.join(" ");
+}
+
 const home = process.env.DITA_HOME;
 if (publish && !home) throw new Error("Set DITA_HOME to a DITA Open Toolkit folder.");
 
@@ -51,7 +78,7 @@ for (const [id, set] of Object.entries(SETS)) {
       // FOP's SVG renderer can't read Mermaid's CSS and draws nothing, so the PNG that scripts/diagram_png.py made in Chrome is used when there is one.
       const png = fs.existsSync(`content/diagrams/${key}.png`), ext = png ? "png" : "svg";
       diagrams[`img/diagram-${key}.${ext}`] = `content/diagrams/${key}.${ext}`;
-      return `![Diagram](img/diagram-${key}.${ext})`;
+      return `![${describeDiagram(code)}](img/diagram-${key}.${ext})`;
     })
     .replace(/\]\((\/[^)\s#]+)(#[^)\s]*)?\)/g, (m, to, hash) => {
       const target = url[to.replace(/\/$/, "")];
@@ -83,8 +110,13 @@ for (const [id, set] of Object.entries(SETS)) {
       const w = href.endsWith(".svg") ? +(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+)/.exec(file.toString("utf8")) || [0, 1000])[1] : file.readUInt32BE(16) / (/diagram-/.test(href) ? 2 : 1);
       return `<image href="${href}" placement="break" width="${Math.min(150, Math.round((w / 96) * 25.4))}mm">`;
     });
-    if (sized !== xmlText) fs.writeFileSync(file, sized);
+    // Print conventions the Markdown source leaves to the publisher (scripts/dita-pdf/typeset.mjs): typographic apostrophes
+    // in running text, and tables ruled across rather than boxed.
+    const typeset = typesetDita(sized);
+    if (typeset !== xmlText) fs.writeFileSync(file, typeset);
   }
+  // The map's own title and navigation titles follow the same conventions.
+  for (const m of fs.readdirSync(SRC).filter((f) => f.endsWith(".ditamap"))) { const t = fs.readFileSync(`${SRC}/${m}`, "utf8"), u = typesetDita(t); if (u !== t) fs.writeFileSync(`${SRC}/${m}`, u); }
   console.log(`dita ${id}: wrote ${project.topics.length} topics (${project.topics.map((t) => t.kind).join(", ")}) to ${SRC}`);
   if (!publish) continue;
 

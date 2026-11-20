@@ -89,5 +89,19 @@ for (const r of Style.RULES.filter((r) => r.level !== "review" && r.bad && r.goo
   ok(hit(r.bad), `${r.id}: the check misses the rule's own "not this" example`);
   ok(!hit(r.good), `${r.id}: the check flags the rule's own "this" example`);
 }
+// Version 10.1: every figure in the MLflow guide's tables is the one MLflow recorded (content/projects/kc1/mlflow-evidence.json).
+{
+  const ev = JSON.parse(fs.readFileSync("content/projects/kc1/mlflow-evidence.json", "utf8")), guide = fs.readFileSync("content/projects/kc1/MLFLOW_COMPARE_RUNS.md", "utf8");
+  const run = (name) => ev.runs.find((r) => r.run === name), f3 = (x) => x.toFixed(3);
+  const rows = Object.fromEntries([...guide.matchAll(/^\| ([^|]+?) \| ([\d.]+) \| ([\d.]+) \| ([\d.]+) \|(?: ([\d.]+) \|)?$/gm)].map((m) => [m[1], m.slice(2).filter(Boolean)]));
+  for (const name of ["Logistic balanced", "Random Forest balanced", "Random Forest default", "Logistic default"]) {
+    const m = run(name).metrics;
+    ok(JSON.stringify(rows[name]) === JSON.stringify([m.recall, m.average_precision, m.f1, m.precision].map(f3)), `MLflow guide: the row of ${name} matches the recorded run`);
+  }
+  for (const t of ["0.30", "0.50", "0.70"]) {
+    const m = run(`Threshold ${t} (balanced Logistic)`).metrics;
+    ok(JSON.stringify(rows[t]) === JSON.stringify([m.recall, m.precision, m.f1].map(f3)), `MLflow guide: the threshold ${t} matches the recorded run`);
+  }
+}
 console.log(failed ? `${failed} of ${checks} checks failed` : `${checks} checks passed${catalog ? ", DITA validated against the DTDs" : " (set DITA_CATALOG to validate the DITA too)"}`);
 process.exit(failed ? 1 : 0);

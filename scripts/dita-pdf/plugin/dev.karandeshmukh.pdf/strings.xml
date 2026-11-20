@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<langlist>
+  <lang filename="vars/en.xml" xml:lang="en"/>
+  <lang filename="vars/en.xml" xml:lang="en-us"/>
+  <lang filename="vars/en.xml" xml:lang="en-gb"/>
+</langlist>

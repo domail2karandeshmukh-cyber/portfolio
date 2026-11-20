@@ -5,24 +5,24 @@
 <shortdesc>Start with the message you see on the sign-in page. Each one has a different cause and a different fix, and the first two cover most cases.</shortdesc>
 <taskbody>
 <steps>
-<step><cmd>"The email or password isn't right"</cmd>
+<step><cmd>“The email or password isn’t right”</cmd>
 <substeps>
 <substep><cmd>Check the email address. A typo in it looks the same as a wrong password.</cmd></substep>
-<substep><cmd>If you've typed the password twice without luck, stop before the account locks. Select <uicontrol>Forgot your password?</uicontrol> and set a new one.</cmd></substep>
+<substep><cmd>If you’ve typed the password twice without luck, stop before the account locks. Select <uicontrol>Forgot your password?</uicontrol> and set a new one.</cmd></substep>
 </substeps></step>
-<step><cmd>"Your account is locked"</cmd><info><p>Wait 15 minutes, and then try again with the right password. If you aren't sure of it, reset it: a reset unlocks the account at once. See <i>Why your account is locked</i>.</p></info></step>
-<step><cmd>"Sign in with your company account"</cmd><info><p>Your company uses single sign-on, so Ledgerly doesn't hold a password for you. Select the button with your company's name and sign in the way you sign in to your other work tools. If that fails, the problem is on your company's side: contact your IT team.</p></info></step>
-<step><cmd>"We couldn't verify your code"</cmd>
+<step><cmd>“Your account is locked”</cmd><info><p>Wait 15 minutes, and then try again with the right password. If you aren’t sure of it, reset it: a reset unlocks the account at once. See <i>Why your account is locked</i>.</p></info></step>
+<step><cmd>“Sign in with your company account”</cmd><info><p>Your company uses single sign-on, so Ledgerly doesn’t hold a password for you. Select the button with your company’s name and sign in the way you sign in to your other work tools. If that fails, the problem is on your company’s side: contact your IT team.</p></info></step>
+<step><cmd>“We couldn’t verify your code”</cmd>
 <substeps>
 <substep><cmd>Check the time on your phone. Codes depend on it; an automatic time setting fixes most cases.</cmd></substep>
 <substep><cmd>Wait for a new code, and enter it before it changes.</cmd></substep>
 <substep><cmd>If the codes never work, use a backup code, and then set up the authenticator again under <uicontrol>Your account</uicontrol> &gt; <uicontrol>Security</uicontrol>.</cmd></substep>
 </substeps></step>
-<step><cmd>The page keeps returning to the sign-in form</cmd><info><p>Your browser isn't keeping the sign-in cookie.</p></info>
+<step><cmd>The page keeps returning to the sign-in form</cmd><info><p>Your browser isn’t keeping the sign-in cookie.</p></info>
 <substeps>
 <substep><cmd>Allow cookies for ledgerly.example.</cmd></substep>
 <substep><cmd>Turn off extensions that block scripts or cookies, and try again.</cmd></substep>
-<substep><cmd>Try a private window. If that works, clear the site's cookies in your usual window.</cmd></substep>
+<substep><cmd>Try a private window. If that works, clear the site’s cookies in your usual window.</cmd></substep>
 </substeps></step>
 </steps>
 <postreq>

@@ -211,6 +211,21 @@ with sync_playwright() as p:
     check("a cross-reference opens the module it names", "Fan assembly - Function test" in pg.inner_text("#ie-main h2"))
     code = pg.evaluate("IETM.renderAll()")
     check("the whole publication renders for printing", pg.locator("#ie-printarea .ie-psec").count() == 8, code)
+    # Version 10.1: printed, the labels are a size larger than drawn. Each one has to stay inside its drawing and clear
+    # of every other label, measured in the drawing's own coordinates.
+    pg.emulate_media(media="print"); pg.wait_for_timeout(300)
+    clash = pg.evaluate("""() => [...document.querySelectorAll('#ie-printarea .s1k-svg svg')].flatMap(s => {
+      const vb = s.viewBox.baseVal, root = s.getScreenCTM().inverse();
+      const ts = [...s.querySelectorAll('text')].filter(t => t.getBBox().width).map(t => { const r = t.getBBox(), m = root.multiply(t.getScreenCTM());
+        const p = [[r.x, r.y], [r.x + r.width, r.y], [r.x, r.y + r.height], [r.x + r.width, r.y + r.height]].map(([x, y]) => new DOMPoint(x, y).matrixTransform(m));
+        const xs = p.map(q => q.x), ys = p.map(q => q.y);
+        return {t: t.textContent, x: Math.min(...xs), y: Math.min(...ys), r: Math.max(...xs), b: Math.max(...ys), px: parseFloat(getComputedStyle(t).fontSize)}; });
+      const bad = ts.filter(a => a.x < vb.x - .5 || a.y < vb.y - .5 || a.r > vb.x + vb.width + .5 || a.b > vb.y + vb.height + .5).map(a => 'outside: ' + a.t);
+      ts.forEach((a, i) => ts.slice(i + 1).forEach(c => { if (Math.min(a.r, c.r) - Math.max(a.x, c.x) > .5 && Math.min(a.b, c.b) - Math.max(a.y, c.y) > .5) bad.push(a.t + ' / ' + c.t); }));
+      return bad; })""")
+    bigger = pg.evaluate("[...document.querySelectorAll('#ie-printarea .s1k-svg svg text[font-size=\"14\"]')].every(t => parseFloat(getComputedStyle(t).fontSize) === 16)")
+    check("printed, every illustration's callouts are a size larger, each label inside its drawing and clear of the others", bigger and not clash, clash[:6])
+    pg.emulate_media(media="screen")
     pg.select_option("#ie-pub", "PMC-ARFRIG-0DEMO-00002-00"); pg.wait_for_timeout(700)
     check("the operator publication has the description and the operation procedure", pg.locator("#ie-toc li").count() == 2)
     m = ctx.new_page(); m.set_viewport_size({"width": 390, "height": 844})
@@ -330,6 +345,14 @@ with sync_playwright() as p:
     check("the maintenance PDF has bookmarks, tags and a title that says it is not maintenance data", marks(rd.outline) > 20 and "/StructTreeRoot" in rd.trailer["/Root"] and "not maintenance data" in (rd.metadata.title or ""), rd.metadata.title)
     blank = [i + 1 for i, pgx in enumerate(rd.pages) if len(_re.sub(r"\s+|Demonstration data.*?Page \d+ of \d+", "", pgx.extract_text())) < 15]
     check("no blank page in the maintenance PDF", not blank, blank)
+    # Version 10.1: a glyph without a character (a contextual alternate, a ligature) reaches the PDF as a private-use
+    # character, so "ICN-0DEMO" could not be found or read aloud. Every ARF-1 PDF keeps its real characters.
+    pua = []
+    for name in ("arf1-maintenance-publication", "arf1-operator-publication", "arf1-ipc"):
+        rx = PdfReader(io.BytesIO(urllib.request.urlopen(f"{BASE}/studio/aerospace/downloads/{name}.pdf").read()))
+        n = sum(1 for c in "".join(px.extract_text() for px in rx.pages) if 0xE000 <= ord(c) <= 0xF8FF)
+        if n: pua.append((name, n))
+    check("every ARF-1 PDF keeps its real characters: no private-use glyph in its text", not pua, pua)
 
     # ---------- the parts catalogue zooms, and item 6 is on the picture
     pg.goto(BASE + "/studio/ipc", wait_until="networkidle"); pg.wait_for_timeout(900)

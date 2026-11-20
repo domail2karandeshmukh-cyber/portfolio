@@ -1342,7 +1342,16 @@
   "Real product: Keycloak 26.8.2": "Producto real: Keycloak 26.8.2",
   "The required action Configure OTP, then Save: two numbered steps on one screen. Step 5 of the guide to resetting a one-time password.": "La acción requerida Configure OTP y luego Save: dos pasos numerados en una sola pantalla. Paso 5 de la guía para restablecer una contraseña de un solo uso.",
   "The status code marked by the box of its text, and the response body. Step 3 of the KC1 API quick start's Swagger walkthrough.": "El código de estado marcado por el recuadro de su texto, y el cuerpo de la respuesta. Paso 3 del recorrido por Swagger de la guía de inicio rápido de la API KC1.",
-  "Real product: Swagger UI 5.35.1, on the KC1 API": "Producto real: Swagger UI 5.35.1, sobre la API KC1"
+  "Real product: Swagger UI 5.35.1, on the KC1 API": "Producto real: Swagger UI 5.35.1, sobre la API KC1",
+  "Technical documentation specialist in Angers, France.": "Especialista en documentación técnica en Angers, Francia.",
+  "Footer": "Pie de página",
+  "Selected work": "Trabajos seleccionados",
+  "Films": "Películas",
+  "Connect": "Contacto",
+  "Portfolio feedback": "Comentarios sobre el portafolio",
+  "© 2026 Karan Deshmukh.": "© 2026 Karan Deshmukh.",
+  "Product names and screenshots belong to their owners. Guides to other companies’ products are my independent work, not their official documentation.": "Los nombres de productos y las capturas de pantalla pertenecen a sus propietarios. Las guías de productos de otras empresas son mi trabajo independiente, no su documentación oficial.",
+  "Privacy": "Privacidad"
  },
  "keep": [
   "A",
