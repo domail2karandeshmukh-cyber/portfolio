@@ -107,20 +107,25 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 
 ## How it was verified
 
-All on 19 and 20 November 2026, on a local build of the branch, in Google Chrome (Chromium) unless stated.
+All on 19 and 20 November 2026, in Google Chrome for Testing 153 (Chromium) unless stated. The runs of 20 November are on the final build of the branch, after the fixes D37 to D39.
 
 | Check | Result |
 |---|---|
 | `tests/matrix.py`: 11 pages at the brief's ten sizes, in portrait and, for phones and tablets, landscape, with an orientation change on each phone | 181 page views, none with a problem: no sideways scrolling, the header at 56 or 64 px, nothing fixed over the content, 44 px header targets on touch screens, no clipped text, no script errors |
-| `tests/journeys.py`: the brief's 19 visitor steps, performed on a phone (390 × 844, touch) and a desktop (1,440 × 900) | 44 of 44 checks passed, twice in a row |
-| `tests/webkit_smoke.py` in WebKitGTK (GNOME's engine, not Safari) | 41 of 41 checks passed |
-| axe-core (`scripts/check-a11y.py`), 28 pages in five languages, desktop and phone | 0 WCAG problems |
-| Studio suites, self-test, link check | All pass; the self-test has 316 checks; 209 pages and 18,843 links |
-| Lighthouse 12.8.2 lab runs, local server | Desktop: performance 100 on the home page, the lifecycle, the API reference and the Studio; LCP 0.7 to 0.8 s, CLS 0. Mobile (simulated slow 4G): performance 88 to 91, LCP 3.2 to 3.7 s, CLS 0 |
+| `tests/journeys.py`: the brief's 19 visitor steps, performed on a phone (390 × 844, touch) and a desktop (1,440 × 900) | 44 of 44 checks passed, every control in the open phone menu at least 44 px high |
+| `tests/webkit_smoke.py` in WebKitGTK 2.52.6 (GNOME's engine, not Safari) | 41 of 41 checks passed |
+| axe-core 4.14.1 (`scripts/check-a11y.py`): all 209 pages, desktop and phone | 0 WCAG problems; 40 best-practice notes, all on the ten contents pages that DITA-OT makes for HTML5 |
+| The picture dialog by keyboard | Focus on **Close**, kept in the dialog, returned to the picture on Esc |
+| The 12 Studio suites | 473 of 473 checks passed |
+| Self-test and link check | 316 checks; 209 pages and 18,845 links |
+| The headline, in five languages at 390 and 320 px, with motion, reduced motion and no scripts | 10 of 10 |
+| Lighthouse 12.8.2 lab runs, local server | Desktop: performance 100 on the home page, the lifecycle and the API reference, 99 on the Studio; LCP 0.7 to 0.8 s. Mobile (simulated slow 4G): performance 88 to 92, LCP 3.2 to 3.7 s, CLS 0. Accessibility 100 in all eight runs |
+| PDFs: text extracted from all 24 | 0 private-use characters (329 in production), 0 "Chapter" labels (78 in production) |
+| S1000D: `scripts/aero/validate.py` on the 23 ARF-1 files without the schema layer | 0 errors, 0 warnings; the files are unchanged since the full run with the official Issue 6 schemas on 18 November |
 
 Limitations:
 
 - **Firefox** couldn't be tested: Playwright's Firefox and Mozilla's downloads are blocked on this computer's network, and Ubuntu's Firefox package needs snap.
 - **Safari and iOS** weren't tested: WebKitGTK shares WebKit's engine but not Safari's interface, its toolbars or iOS's safe areas. The preview is for a check on Karan's iPhone.
-- **Mobile LCP** in the lab is above 2.5 s, but the local server sends files uncompressed: Lighthouse estimates 184 KB of savings from compression, which Vercel applies. Running a compressing server locally for a fairer lab test was refused by the session's permission checks, and the preview's address can't be reached from here. No field data exists for the branch.
+- **Mobile LCP** in the lab is above 2.5 s, but the local server sends files uncompressed: Lighthouse estimates 175 to 200 KB of savings per page from compression, which Vercel applies. Running a compressing server locally for a fairer lab test was refused by the session's permission checks, and the preview's address can't be reached from here. No field data exists for the branch.
 - **A mail client** can't open in a headless browser: the journeys check the address, the subject and the link instead.
