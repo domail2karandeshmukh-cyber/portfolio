@@ -1,17 +1,27 @@
 <div class="st-head">
  <div>
   <h1>Document Control</h1>
-  <p>Take one document from draft to published: its ID, version, owner and reviewer, the checks a program can run, the reviews people give, a revision history, and an audit log you can export. Editorial review, technical review and safety approval are separate, and a passing style check never counts as an approval.</p>
+  <p>Take one document from draft to published, with reviews, a revision history and an audit log, all kept in this browser.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
-<div class="st-bar" role="toolbar" aria-label="Open a document">
- <button class="btn line sm" type="button" id="dc-samples">Samples</button>
- <button class="btn line sm" type="button" id="dc-bench">Open my workbench document</button>
- <label class="btn line sm" for="dc-file">Open a Markdown file</label><input class="st-file" id="dc-file" type="file" accept=".md,.markdown,text/markdown,text/plain">
- <span class="sep" aria-hidden="true"></span>
- <label class="dc-me">Your name <input id="dc-me" type="text" maxlength="60" autocomplete="name"></label>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Take one document from draft to published: its ID, version, owner and reviewer, the checks a program can run, the reviews people give, a revision history, and an audit log you can export. Editorial review, technical review and safety approval are separate, and a passing style check never counts as an approval.</p>
+ <p>A local demonstration: the names in the log are typed, not signed in, and everything stays in this browser. A real approval workflow needs accounts and a server that keeps the record.</p>
+</section>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Open a document">
+  <div class="st-grp">
+   <button class="btn line sm" type="button" id="dc-samples">{{i:layout-grid}}Samples</button>
+   <button class="btn line sm" type="button" id="dc-bench">{{i:pen-line}}Open my workbench document</button>
+   <label class="btn line sm" for="dc-file">{{i:folder-open}}Open a Markdown file</label><input class="st-file" id="dc-file" type="file" accept=".md,.markdown,text/markdown,text/plain">
+  </div>
+  <div class="st-grp st-grp-out">
+   <label class="dc-me">Your name <input id="dc-me" type="text" maxlength="60" autocomplete="name"></label>
+  </div>
+ </div>
+ <p class="st-status" id="dc-status" role="status" aria-live="polite"></p>
 </div>
-<p class="st-status" id="dc-status" role="status" aria-live="polite"></p>
 <div id="dc-slot"><div id="dc-start"></div></div>
 <p id="dc-none" class="kb-hint" hidden></p>
 <div id="dc-doc" class="dc" hidden>
@@ -46,4 +56,3 @@
   <div class="tbl dc-logbox"><table class="dt-table"><thead><tr><th scope="col">Time (UTC)</th><th scope="col">Who</th><th scope="col">Action</th><th scope="col">Detail</th><th scope="col">Version</th></tr></thead><tbody id="dc-log"></tbody></table></div>
  </section>
 </div>
-<p class="st-note">A local demonstration: the names in the log are typed, not signed in, and everything stays in this browser. A real approval workflow needs accounts and a server that keeps the record.</p>

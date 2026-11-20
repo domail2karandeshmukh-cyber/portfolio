@@ -2,19 +2,28 @@
 <div class="st-head">
  <div>
   <h1>Common source database</h1>
-  <p>Every module of the ARF-1 demonstration rig in one place: data modules, publication modules, the BREX, the applicability tables and the illustrations. Search and filter them, see which publications use a module and what it refers to, compare two issues, read the XML, and download it.</p>
+  <p>Every module of the ARF-1 demonstration rig in one place: search, filter, compare issues and read the XML.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Every module of the ARF-1 demonstration rig in one place: data modules, publication modules, the BREX, the applicability tables and the illustrations. Search and filter them, see which publications use a module and what it refers to, compare two issues, read the XML, and download it.</p>
+</section>
 <p class="fl-warn" role="note"><strong>A demonstration, not a certified CSDB.</strong> It reads S1000D Issue 6 XML that validates against the official schemas, and keeps no confidential data: the rig and everything about it is invented. Edits you save in the S1000D editor stay in this browser.</p>
-<div class="st-bar" role="toolbar" aria-label="Search and filter">
- <label class="ae-pick">Search <input id="cd-q" type="search" placeholder="Code, title or text"></label>
- <label class="ae-pick">Type <select id="cd-type"><option value="">All types</option></select></label>
- <label class="ae-pick">System <select id="cd-sns"><option value="">All systems</option></select></label>
- <label class="vd-chk"><input type="checkbox" id="cd-latest" checked> Latest issues only</label>
- <span class="sep" aria-hidden="true"></span>
- <a class="btn line sm" href="/studio/aerospace/downloads/arf1-csdb.zip" download>Download the CSDB (ZIP)</a>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Search and filter">
+  <div class="st-grp">
+   <label class="ae-pick">Search <input id="cd-q" type="search" placeholder="Code, title or text"></label>
+   <label class="ae-pick">Type <select id="cd-type"><option value="">All types</option></select></label>
+   <label class="ae-pick">System <select id="cd-sns"><option value="">All systems</option></select></label>
+   <label class="vd-chk"><input type="checkbox" id="cd-latest" checked> Latest issues only</label>
+  </div>
+  <div class="st-grp st-grp-out">
+   <a class="btn line sm" href="/studio/aerospace/downloads/arf1-csdb.zip" download>{{i:download}}Download the CSDB (ZIP)</a>
+  </div>
+ </div>
+ <p class="st-status" id="cd-status" role="status" aria-live="polite"></p>
 </div>
-<p class="st-status" id="cd-status" role="status" aria-live="polite"></p>
 <div class="cd" id="cd-app">
  <section class="dt-card cd-list" aria-labelledby="cd-list-h">
   <h2 class="ae-h" id="cd-list-h">Inventory <small id="cd-count"></small></h2>

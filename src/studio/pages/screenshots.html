@@ -1,21 +1,30 @@
 <div class="st-head">
  <div>
   <h1>Screenshot Studio</h1>
-  <p>Mark up a screenshot the way a procedure needs it: arrows, numbered callouts, highlights, a spotlight, and redaction that can't be undone in the file. Export a PNG, JPEG or SVG, or save the project and keep editing later.</p>
+  <p>Mark up a screenshot for a procedure, with redaction that can't be undone in the file.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
-<div class="st-bar" role="toolbar" aria-label="Open and export">
- <label class="btn line sm" for="sh-file">Open image</label><input class="st-file" id="sh-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
- <button class="btn line sm" type="button" id="sh-capture">Capture screen</button>
- <button class="btn line sm" type="button" id="sh-samples">Samples</button>
- <label class="btn line sm" for="sh-proj">Open project</label><input class="st-file" id="sh-proj" type="file" accept=".json,application/json">
- <span class="sep" aria-hidden="true"></span>
- <button class="btn ink sm" type="button" id="sh-png" disabled>Export PNG</button>
- <button class="btn line sm" type="button" id="sh-jpg" disabled>Export JPEG</button>
- <button class="btn line sm" type="button" id="sh-svg" disabled>Export SVG</button>
- <button class="btn line sm" type="button" id="sh-save" disabled>Save project</button>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Mark up a screenshot the way a procedure needs it: arrows, numbered callouts, highlights, a spotlight, and redaction that can't be undone in the file. Export a PNG, JPEG or SVG, or save the project and keep editing later.</p>
+ <p>Screen capture asks your browser for permission and takes one frame: sharing stops at once, and nothing is uploaded. Opening an image here drops its hidden metadata, such as camera, place and editing software, from every export. Shortcuts: V select, A arrow, R rectangle, N callout, T text, X redact, C crop, Ctrl+Z undo, Ctrl+S save the project, arrow keys to move the selected mark.</p>
+</section>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Open and export">
+  <div class="st-grp">
+   <button class="btn line sm" type="button" id="sh-samples">{{i:layout-grid}}Samples</button>
+   <label class="btn line sm" for="sh-file">{{i:folder-open}}Open image</label><input class="st-file" id="sh-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif">
+   <button class="btn line sm" type="button" id="sh-capture">{{i:screen-share}}Capture screen</button>
+   <label class="btn line sm" for="sh-proj">Open project</label><input class="st-file" id="sh-proj" type="file" accept=".json,application/json">
+  </div>
+  <div class="st-grp st-grp-out">
+   <button class="btn ink sm" type="button" id="sh-png" disabled>{{i:download}}Export PNG</button>
+   <button class="btn line sm" type="button" id="sh-jpg" disabled>Export JPEG</button>
+   <button class="btn line sm" type="button" id="sh-svg" disabled>Export SVG</button>
+   <button class="btn line sm" type="button" id="sh-save" disabled>{{i:save}}Save project</button>
+  </div>
+ </div>
+ <p class="st-status" id="sh-status" role="status" aria-live="polite">Open a sample below, or your own image. You can also paste an image with Ctrl+V or drop a file on the canvas.</p>
 </div>
-<p class="st-status" id="sh-status" role="status" aria-live="polite">Open a sample below, or your own image. You can also paste an image with Ctrl+V or drop a file on the canvas.</p>
 <div id="sh-slot"><div id="sh-start"></div></div>
 <div id="sh-editor"></div>
-<p class="st-note">Screen capture asks your browser for permission and takes one frame: sharing stops at once, and nothing is uploaded. Opening an image here drops its hidden metadata, such as camera, place and editing software, from every export. Shortcuts: V select, A arrow, R rectangle, N callout, T text, X redact, C crop, Ctrl+Z undo, Ctrl+S save the project, arrow keys to move the selected mark.</p>

@@ -2,22 +2,33 @@
 <div class="st-head">
  <div>
   <h1>Simplified Technical English checker</h1>
-  <p>Check procedural or descriptive text against original rules modelled on the public summary of ASD-STE100 Issue 9, or against the site's house style. Each finding is marked in the text, with the rule, an explanation and a suggestion. Apply the suggestions to a corrected copy, then compare the two.</p>
+  <p>Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Check procedural or descriptive text against original rules modelled on the public summary of ASD-STE100 Issue 9, or against the site's house style. Each finding is marked in the text, with the rule, an explanation and a suggestion. Apply the suggestions to a corrected copy, then compare the two.</p>
+</section>
 <p class="fl-warn" role="note"><strong>Not a compliance check.</strong> ASD-STE100 is a standard of ASD, free on request from asd-ste100.org. This checker doesn't reproduce its dictionary: it uses an original project word list, so a word it accepts may still not be approved. No tool can certify that a text complies with the standard, and this one doesn't say so. Translations of controlled English are not STE.</p>
 <div id="ste-app" class="ste" data-mode="procedural">
- <div class="st-bar" role="toolbar" aria-label="Writing mode and samples">
-  <fieldset class="ste-modes"><legend class="vh">Writing mode</legend>
+ <div class="st-cmd">
+  <div class="st-bar" role="toolbar" aria-label="Writing mode and samples">
+   <div class="st-grp">
+    <fieldset class="ste-modes"><legend class="vh">Writing mode</legend>
    <label><input type="radio" name="ste-mode" value="procedural" checked> ASD-STE100 rules: procedural writing</label>
    <label><input type="radio" name="ste-mode" value="descriptive"> ASD-STE100 rules: descriptive writing</label>
    <label><input type="radio" name="ste-mode" value="house"> House style (Microsoft-inspired)</label>
   </fieldset>
-  <span class="sep" aria-hidden="true"></span>
-  <label class="ae-pick">Sample <select id="ste-sample"><option value="">Choose a sample</option><option value="proc">A procedure that needs work</option><option value="arf">ARF-1: remove the fan assembly (steps from the data module)</option><option value="descr">A description that needs work</option><option value="house">House style: a sentence that needs work</option></select></label>
-  <button class="btn line sm" type="button" id="ste-download">Download the findings</button>
+   </div>
+   <div class="st-grp">
+    <label class="ae-pick">Sample <select id="ste-sample"><option value="">Choose a sample</option><option value="proc">A procedure that needs work</option><option value="arf">ARF-1: remove the fan assembly (steps from the data module)</option><option value="descr">A description that needs work</option><option value="house">House style: a sentence that needs work</option></select></label>
+   </div>
+   <div class="st-grp st-grp-out">
+    <button class="btn line sm" type="button" id="ste-download">{{i:download}}Download the findings</button>
+   </div>
+  </div>
+  <p class="st-status" id="ste-status" role="status" aria-live="polite"></p>
  </div>
- <p class="st-status" id="ste-status" role="status" aria-live="polite"></p>
  <div class="ste-grid">
   <section class="dt-card" aria-labelledby="ste-in-h">
    <h2 class="ae-h" id="ste-in-h">Your text</h2>

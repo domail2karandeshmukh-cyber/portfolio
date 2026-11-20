@@ -682,10 +682,10 @@
     if (screenRec) { screenRec.stop(); return; }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder) return fail(new Error(T("This browser can't record the screen. Record it with another tool and add the file.")));
     navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 30 }, audio: false }).then(function (stream) {
-      var b = $("#vd-screen"); b.textContent = T("Stop recording"); say(T("Recording what you chose to share. Select Stop recording when you're done. The pointer of another app or tab isn't recorded as events, only as pixels."));
+      var b = $("#vd-screen"); b.lastChild.textContent = T("Stop recording"); say(T("Recording what you chose to share. Select Stop recording when you're done. The pointer of another app or tab isn't recorded as events, only as pixels."));
       stream.getVideoTracks()[0].addEventListener("ended", function () { if (screenRec) screenRec.stop(); });
       screenRec = recordStream(stream, 0, function (blob) {
-        screenRec = null; b.textContent = T("Record the screen");
+        screenRec = null; b.lastChild.textContent = T("Record the screen");
         addMedia(blob, T("screen recording"), "video").then(function (m) { addClip(m); changed(); props(); show(0); say(T("Added the screen recording: {s} s.", { s: m.duration.toFixed(1) })); }, fail);
       });
     }, function (e) { fail(new Error(e && e.name === "NotAllowedError" ? T("Screen recording was cancelled. Nothing was recorded.") : T("The screen couldn't be recorded."))); });
@@ -695,9 +695,9 @@
     if (micRec) { micRec.stop(); return; }
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) return fail(new Error(T("This browser can't record from a microphone. Record the narration elsewhere and add the file.")));
     navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }).then(function (stream) {
-      var b = $("#vd-mic"), at = +playhead.toFixed(2); b.textContent = T("Stop narration"); say(T("Recording narration from {t}. Read your script, then select Stop narration.", { t: clock(at) }));
+      var b = $("#vd-mic"), at = +playhead.toFixed(2); b.lastChild.textContent = T("Stop narration"); say(T("Recording narration from {t}. Read your script, then select Stop narration.", { t: clock(at) }));
       micRec = recordStream(stream, 0, function (blob) {
-        micRec = null; b.textContent = T("Record narration");
+        micRec = null; b.lastChild.textContent = T("Record narration");
         addMedia(blob, T("narration"), "audio").then(function (m) { P.narration = { media: m.id, offset: at, volume: 1, fadeIn: 0.2, fadeOut: 0.4, trimIn: 0, trimOut: +m.duration.toFixed(2) }; sel = { kind: "narration", id: "n" }; changed(); props(); say(T("Added the narration: {s} s, starting at {t}.", { s: m.duration.toFixed(1), t: clock(at) })); }, fail);
       });
     }, function (e) { fail(new Error(e && e.name === "NotAllowedError" ? T("The microphone wasn't allowed. Nothing was recorded.") : T("The microphone couldn't be used."))); });

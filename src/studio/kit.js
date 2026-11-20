@@ -309,6 +309,21 @@
   /** Asks yes or no. Resolves true or false. */
   Kit.confirm = function (title, text, more) { return dialog(Object.assign({ title: title, text: text, ok: T("Yes") }, more || {})); };
 
+  /* ---------- Help on demand ----------
+     A tool's header says in one sentence what it does; its Help button opens the rest (how it works, shortcuts,
+     privacy and limits) in a panel under the header, which pushes the tool down rather than covering it. */
+  if (typeof document !== "undefined") document.addEventListener("DOMContentLoaded", function () {
+    var btn = document.querySelector(".st-helpbtn"), panel = btn && document.getElementById(btn.getAttribute("aria-controls"));
+    if (!panel) return;
+    function show(on) { btn.setAttribute("aria-expanded", String(on)); panel.hidden = !on; }
+    btn.addEventListener("click", function () { show(panel.hidden); });
+    // Escape closes it from the button or from inside it (a link in the help, say), and leaves the focus on the button.
+    document.addEventListener("keydown", function (e) {
+      var at = document.activeElement;
+      if (e.key === "Escape" && !panel.hidden && (at === btn || panel.contains(at))) { show(false); btn.focus(); }
+    });
+  });
+
   root.Kit = Kit;
   if (typeof module !== "undefined") module.exports = Kit;
 })(typeof window !== "undefined" ? window : globalThis);

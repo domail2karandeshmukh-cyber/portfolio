@@ -1,23 +1,35 @@
 <div class="st-head">
  <div>
   <h1>Step Guide Studio</h1>
-  <p>Build a numbered procedure from screenshots: a title and an instruction for each step, a marked-up picture, the prerequisites, the warnings, and the check that tells the reader they're done. Export it as Markdown, HTML or PDF.</p>
+  <p>Build a numbered procedure from screenshots, and export it as Markdown, HTML or PDF.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
-<div class="st-bar" role="toolbar" aria-label="Open and export">
- <button class="btn line sm" type="button" id="gd-new">New guide</button>
- <button class="btn line sm" type="button" id="gd-samples">Samples</button>
- <label class="btn line sm" for="gd-open">Open project</label><input class="st-file" id="gd-open" type="file" accept=".zip,application/zip">
- <button class="btn line sm" type="button" id="gd-undo" disabled aria-keyshortcuts="Control+Z">Undo</button>
- <button class="btn line sm" type="button" id="gd-redo" disabled aria-keyshortcuts="Control+Shift+Z">Redo</button>
- <span class="sep" aria-hidden="true"></span>
- <button class="btn ink sm" type="button" id="gd-md">Export Markdown</button>
- <button class="btn line sm" type="button" id="gd-html">Export HTML</button>
- <button class="btn line sm" type="button" id="gd-pdf">Export PDF</button>
- <button class="btn line sm" type="button" id="gd-shots">Screenshots (ZIP)</button>
- <button class="btn line sm" type="button" id="gd-save">Save project</button>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Build a numbered procedure from screenshots: a title and an instruction for each step, a marked-up picture, the prerequisites, the warnings, and the check that tells the reader they're done. Export it as Markdown, HTML or PDF.</p>
+ <p>Pictures are kept with the guide in this browser and in the project file. Each picture can be marked up with the same tools as the Screenshot Studio, including permanent redaction. The PDF uses a standard font, so it shows Latin-script languages only. Shortcuts: Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save the project.</p>
+</section>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Open and export">
+  <div class="st-grp">
+   <button class="btn line sm" type="button" id="gd-new">{{i:file-plus}}New guide</button>
+   <button class="btn line sm" type="button" id="gd-samples">{{i:layout-grid}}Samples</button>
+   <label class="btn line sm" for="gd-open">{{i:folder-open}}Open project</label><input class="st-file" id="gd-open" type="file" accept=".zip,application/zip">
+  </div>
+  <div class="st-grp">
+   <button class="btn line sm st-ico" type="button" id="gd-undo" disabled aria-keyshortcuts="Control+Z" aria-label="Undo" title="Undo">{{i:undo-2}}</button>
+   <button class="btn line sm st-ico" type="button" id="gd-redo" disabled aria-keyshortcuts="Control+Shift+Z" aria-label="Redo" title="Redo">{{i:redo-2}}</button>
+  </div>
+  <div class="st-grp st-grp-out">
+   <button class="btn ink sm" type="button" id="gd-md">{{i:download}}Export Markdown</button>
+   <button class="btn line sm" type="button" id="gd-html">Export HTML</button>
+   <button class="btn line sm" type="button" id="gd-pdf">Export PDF</button>
+   <button class="btn line sm" type="button" id="gd-shots">Screenshots (ZIP)</button>
+   <button class="btn line sm" type="button" id="gd-save">{{i:save}}Save project</button>
+  </div>
+ </div>
+ <p class="st-status" id="gd-status" role="status" aria-live="polite"></p>
 </div>
-<p class="st-status" id="gd-status" role="status" aria-live="polite"></p>
 <div id="gd-slot"><div id="gd-start"></div></div>
 <div class="gd">
  <div class="gd-edit">
@@ -41,4 +53,3 @@
  <div class="gd-dlg-head"><h2 id="gd-dlg-title">Mark up the picture</h2><p><button class="btn ink sm" type="button" id="gd-dlg-ok">Done</button> <button class="btn line sm" type="button" id="gd-dlg-no">Cancel</button></p></div>
  <div id="gd-editor"></div>
 </dialog>
-<p class="st-note">Pictures are kept with the guide in this browser and in the project file. Each picture can be marked up with the same tools as the Screenshot Studio, including permanent redaction. The PDF uses a standard font, so it shows Latin-script languages only. Shortcuts: Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save the project.</p>

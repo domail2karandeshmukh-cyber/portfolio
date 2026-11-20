@@ -1,17 +1,27 @@
 <div class="st-head">
  <div>
   <h1>Knowledge Base Studio</h1>
-  <p>Organize a help center the way Zendesk Guide does: categories, sections and articles, with tags, draft and published states, a version history, and translations prepared for a translator. Preview it as readers see it, with search. This is a local demonstration: nothing is sent to Zendesk.</p>
+  <p>Organize a help center in categories, sections and articles, and preview it as readers see it.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
-<div class="st-bar" role="toolbar" aria-label="Knowledge base">
- <button class="btn line sm" type="button" id="kb-samples">Samples</button>
- <button class="btn line sm" type="button" id="kb-addcat">Add a category</button>
- <label class="btn line sm" for="kb-open">Open</label><input class="st-file" id="kb-open" type="file" accept=".zip,.json,application/zip,application/json">
- <span class="sep" aria-hidden="true"></span>
- <button class="btn ink sm" type="button" id="kb-export">Export (ZIP)</button>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Organize a help center the way Zendesk Guide does: categories, sections and articles, with tags, draft and published states, a version history, and translations prepared for a translator. Preview it as readers see it, with search. This is a local demonstration: nothing is sent to Zendesk.</p>
+ <p>Connecting to a real Zendesk account would need your subdomain and an API token, kept on a server, never in this page; it isn't built, because there's no account to test it with. The export holds the request bodies the Help Center API takes for each article and translation, so the content can be published from a script you control.</p>
+</section>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Knowledge base">
+  <div class="st-grp">
+   <button class="btn line sm" type="button" id="kb-samples">{{i:layout-grid}}Samples</button>
+   <button class="btn line sm" type="button" id="kb-addcat">{{i:plus}}Add a category</button>
+   <label class="btn line sm" for="kb-open">{{i:folder-open}}Open</label><input class="st-file" id="kb-open" type="file" accept=".zip,.json,application/zip,application/json">
+  </div>
+  <div class="st-grp st-grp-out">
+   <button class="btn ink sm" type="button" id="kb-export">{{i:download}}Export (ZIP)</button>
+  </div>
+ </div>
+ <p class="st-status" id="kb-status" role="status" aria-live="polite"></p>
 </div>
-<p class="st-status" id="kb-status" role="status" aria-live="polite"></p>
 <div id="kb-slot"><div id="kb-start"></div></div>
 <div class="kb">
  <nav class="kb-nav" aria-label="Categories, sections and articles"><ul class="kb-tree" id="kb-tree"></ul></nav>
@@ -37,4 +47,3 @@
   <div id="kb-preview" class="kb-preview"></div>
  </section>
 </div>
-<p class="st-note">Connecting to a real Zendesk account would need your subdomain and an API token, kept on a server, never in this page; it isn't built, because there's no account to test it with. The export holds the request bodies the Help Center API takes for each article and translation, so the content can be published from a script you control.</p>

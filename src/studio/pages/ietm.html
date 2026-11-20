@@ -2,21 +2,30 @@
 <div class="st-head ie-head">
  <div>
   <h1>Interactive electronic technical publication</h1>
-  <p>The maintenance and operator publications of the ARF-1 demonstration rig, read from their S1000D publication modules. Choose a product to see only what applies to it, follow cross-references, search the text, step through the fault isolation one question at a time, and print a module or the whole publication.</p>
+  <p>Read the ARF-1 demonstration publications by product: follow cross-references, search, and print.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>The maintenance and operator publications of the ARF-1 demonstration rig, read from their S1000D publication modules. Choose a product to see only what applies to it, follow cross-references, search the text, step through the fault isolation one question at a time, and print a module or the whole publication.</p>
+</section>
 <p class="fl-warn" role="note"><strong>Demonstration viewer.</strong> A viewer built for this portfolio to show what an IETM does, on an invented rig. It claims no IETM class and no conformance to the S1000D functionality matrix, and the publications are not approved maintenance data.</p>
-<div class="st-bar ie-bar" role="toolbar" aria-label="Publication, product and view">
- <label class="ae-pick">Publication <select id="ie-pub"></select></label>
- <label class="ae-pick">Product <select id="ie-product"><option value="">All products</option></select></label>
- <label class="vd-chk"><input type="checkbox" id="ie-changes" checked> Mark changes</label>
- <label class="ae-pick ie-search">Search <input id="ie-q" type="search" placeholder="Words in the publication"></label>
- <span class="sep" aria-hidden="true"></span>
- <button class="btn line sm" type="button" id="ie-print">Print this module</button>
- <button class="btn line sm" type="button" id="ie-printall">Print the publication</button>
- <a class="btn line sm" href="/studio/aerospace/downloads/arf1-ietm.zip" download>Download the IETM package (ZIP)</a>
+<div class="st-cmd">
+ <div class="st-bar ie-bar" role="toolbar" aria-label="Publication, product and view">
+  <div class="st-grp">
+   <label class="ae-pick">Publication <select id="ie-pub"></select></label>
+   <label class="ae-pick">Product <select id="ie-product"><option value="">All products</option></select></label>
+   <label class="vd-chk"><input type="checkbox" id="ie-changes" checked> Mark changes</label>
+   <label class="ae-pick ie-search">Search <input id="ie-q" type="search" placeholder="Words in the publication"></label>
+  </div>
+  <div class="st-grp st-grp-out">
+   <button class="btn line sm" type="button" id="ie-print">{{i:printer}}Print this module</button>
+   <button class="btn line sm" type="button" id="ie-printall">{{i:printer}}Print the publication</button>
+   <a class="btn line sm" href="/studio/aerospace/downloads/arf1-ietm.zip" download>{{i:download}}Download the IETM package (ZIP)</a>
+  </div>
+ </div>
+ <p class="st-status" id="ie-status" role="status" aria-live="polite"></p>
 </div>
-<p class="st-status" id="ie-status" role="status" aria-live="polite"></p>
 <div class="ie" id="ie-app">
  <nav class="ie-nav" aria-label="Contents of the publication">
   <button class="btn line sm ie-navbtn" type="button" id="ie-navbtn" aria-expanded="false" aria-controls="ie-toc">Contents</button>

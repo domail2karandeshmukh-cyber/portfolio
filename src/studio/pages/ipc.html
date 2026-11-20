@@ -2,18 +2,27 @@
 <div class="st-head">
  <div>
   <h1>Illustrated parts catalogue</h1>
-  <p>The parts list of the ARF-1 demonstration rig, read from its S1000D illustrated parts data module, beside the exploded view it refers to. Select a part in the picture or in the list and the other follows. Filter by issue, by product and by text.</p>
+  <p>The ARF-1 parts list beside its exploded view: select a part in one, and the other follows.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>The parts list of the ARF-1 demonstration rig, read from its S1000D illustrated parts data module, beside the exploded view it refers to. Select a part in the picture or in the list and the other follows. Filter by issue, by product and by text.</p>
+</section>
 <p class="fl-warn" role="note"><strong>Invented parts.</strong> The part numbers, the manufacturer code 0DEMO and the quantities are invented for this demonstration. Don't use them to order parts or to maintain equipment.</p>
-<div class="st-bar" role="toolbar" aria-label="Filter the parts">
- <label class="ae-pick">Issue <select id="ip-issue"></select></label>
- <label class="ae-pick">Product <select id="ip-product"><option value="">All products</option></select></label>
- <label class="ae-pick">Search <input id="ip-q" type="search" placeholder="Part number or description"></label>
- <span class="sep" aria-hidden="true"></span>
- <a class="btn line sm" href="/studio/aerospace/downloads/arf1-ipc.pdf">Download the catalogue (PDF)</a>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Filter the parts">
+  <div class="st-grp">
+   <label class="ae-pick">Issue <select id="ip-issue"></select></label>
+   <label class="ae-pick">Product <select id="ip-product"><option value="">All products</option></select></label>
+   <label class="ae-pick">Search <input id="ip-q" type="search" placeholder="Part number or description"></label>
+  </div>
+  <div class="st-grp st-grp-out">
+   <a class="btn line sm" href="/studio/aerospace/downloads/arf1-ipc.pdf">{{i:download}}Download the catalogue (PDF)</a>
+  </div>
+ </div>
+ <p class="st-status" id="ip-status" role="status" aria-live="polite"></p>
 </div>
-<p class="st-status" id="ip-status" role="status" aria-live="polite"></p>
 <div class="ip" id="ip-app">
  <section class="dt-card ip-pic" aria-labelledby="ip-pic-h">
   <div class="ip-pichead"><h2 class="ae-h" id="ip-pic-h">Figure 1 <small id="ip-icn"></small></h2>

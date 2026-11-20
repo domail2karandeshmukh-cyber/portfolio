@@ -1,27 +1,41 @@
 <div class="st-head">
  <div>
   <h1>Video Studio</h1>
-  <p>Edit a software walkthrough into a training video: cut the footage, add titles, step numbers, arrows, highlight boxes, warnings, zoom and blur regions, a clear pointer with click ripples, captions and narration. Then render a video file in your browser.</p>
+  <p>Edit a software walkthrough into a training video with captions, and render it in your browser.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Edit a software walkthrough into a training video: cut the footage, add titles, step numbers, arrows, highlight boxes, warnings, zoom and blur regions, a clear pointer with click ripples, captions and narration. Then render a video file in your browser.</p>
+ <p>The export plays the timeline once in real time and records it, so a 30-second video takes about 30 seconds. Chrome and Edge make MP4; browsers that can't make MP4 make WebM, and the studio says which. The file is checked by playing it back before it's saved. Text-to-speech and automatic transcription aren't included: record or add the narration, and write or import the captions. Shortcuts: Space plays and pauses, the arrow keys move one frame (one second with Shift), Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save the project.</p>
+</section>
 <p class="vd-narrow" role="note">Editing a video needs a wider screen than this one. On a phone you can open the sample and play it; to edit and export, use a computer.</p>
 <div class="vd">
- <div class="st-bar" role="toolbar" aria-label="Footage and files">
-  <button class="btn line sm" type="button" id="vd-samples">Samples</button>
-  <label class="btn line sm" for="vd-files">Add files</label><input class="st-file" id="vd-files" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/webp,audio/*,.srt,.vtt">
-  <button class="btn line sm" type="button" id="vd-screen">Record the screen</button>
-  <button class="btn line sm" type="button" id="vd-demo">Record the demo app</button>
-  <button class="btn line sm" type="button" id="vd-mic">Record narration</button>
-  <label class="btn line sm" for="vd-open">Open project</label><input class="st-file" id="vd-open" type="file" accept=".zip,application/zip">
-  <button class="btn line sm" type="button" id="vd-undo" disabled aria-keyshortcuts="Control+Z">Undo</button>
-  <button class="btn line sm" type="button" id="vd-redo" disabled aria-keyshortcuts="Control+Shift+Z">Redo</button>
-  <span class="sep" aria-hidden="true"></span>
-  <button class="btn ink sm" type="button" id="vd-export" disabled>Export video</button>
-  <button class="btn line sm" type="button" id="vd-srt">Captions (SRT)</button>
-  <button class="btn line sm" type="button" id="vd-vtt">Captions (WebVTT)</button>
-  <button class="btn line sm" type="button" id="vd-save" disabled>Save project</button>
+ <div class="st-cmd">
+  <div class="st-bar" role="toolbar" aria-label="Footage and files">
+   <div class="st-grp">
+    <button class="btn line sm" type="button" id="vd-samples">{{i:layout-grid}}Samples</button>
+    <label class="btn line sm" for="vd-files">{{i:file-plus}}Add files</label><input class="st-file" id="vd-files" type="file" multiple accept="video/mp4,video/webm,video/quicktime,image/png,image/jpeg,image/webp,audio/*,.srt,.vtt">
+    <label class="btn line sm" for="vd-open">{{i:folder-open}}Open project</label><input class="st-file" id="vd-open" type="file" accept=".zip,application/zip">
+   </div>
+   <div class="st-grp">
+    <button class="btn line sm" type="button" id="vd-screen">{{i:screen-share}}<span>Record the screen</span></button>
+    <button class="btn line sm" type="button" id="vd-demo">{{i:monitor}}Record the demo app</button>
+    <button class="btn line sm" type="button" id="vd-mic">{{i:mic}}<span>Record narration</span></button>
+   </div>
+   <div class="st-grp">
+    <button class="btn line sm st-ico" type="button" id="vd-undo" disabled aria-keyshortcuts="Control+Z" aria-label="Undo" title="Undo">{{i:undo-2}}</button>
+    <button class="btn line sm st-ico" type="button" id="vd-redo" disabled aria-keyshortcuts="Control+Shift+Z" aria-label="Redo" title="Redo">{{i:redo-2}}</button>
+   </div>
+   <div class="st-grp st-grp-out">
+    <button class="btn ink sm" type="button" id="vd-export" disabled>{{i:download}}Export video</button>
+    <button class="btn line sm" type="button" id="vd-srt">Captions (SRT)</button>
+    <button class="btn line sm" type="button" id="vd-vtt">Captions (WebVTT)</button>
+    <button class="btn line sm" type="button" id="vd-save" disabled>{{i:save}}Save project</button>
+   </div>
+  </div>
+  <p class="st-status" id="vd-status" role="status" aria-live="polite">Open a sample below, or add a recording, pictures, sound or caption files.</p>
  </div>
- <p class="st-status" id="vd-status" role="status" aria-live="polite">Open a sample below, or add a recording, pictures, sound or caption files.</p>
  <progress id="vd-progress" class="vd-progress" hidden aria-label="Rendering"></progress>
  <div id="vd-slot"><div id="vd-start"></div></div>
  <div class="vd-grid">
@@ -44,4 +58,3 @@
  </div>
  <div class="vd-tl" id="vd-timeline" aria-label="Timeline: select an item to edit it, or select a place to move the playhead"></div>
 </div>
-<p class="st-note">The export plays the timeline once in real time and records it, so a 30-second video takes about 30 seconds. Chrome and Edge make MP4; browsers that can't make MP4 make WebM, and the studio says which. The file is checked by playing it back before it's saved. Text-to-speech and automatic transcription aren't included: record or add the narration, and write or import the captions. Shortcuts: Space plays and pauses, the arrow keys move one frame (one second with Shift), Ctrl+Z undo, Ctrl+Shift+Z redo, Ctrl+S save the project.</p>
