@@ -140,3 +140,22 @@ Limitations:
 - **Safari and iOS** weren't tested: WebKitGTK shares WebKit's engine but not Safari's interface, its toolbars or iOS's safe areas. The preview is for a check on Karan's iPhone.
 - **Mobile LCP** in the lab is above 2.5 s, but the local server sends files uncompressed: Lighthouse estimates 175 to 200 KB of savings per page from compression, which Vercel applies. Running a compressing server locally for a fairer lab test was refused by the session's permission checks, and the preview's address can't be reached from here. No field data exists for the branch.
 - **A mail client** can't open in a headless browser: the journeys check the address, the subject and the link instead.
+
+## How round 2 was verified
+
+On 20 November 2026, on the build of commit `595ae7f` (the preview), in Google Chrome for Testing 153 (Chromium) unless stated.
+
+| Check | Result |
+|---|---|
+| The 12 Studio suites | 473 of 473 checks passed |
+| `tests/matrix.py`: 11 pages at the brief's ten sizes, in portrait and, for phones and tablets, landscape | 181 page views, none with a problem |
+| `tests/journeys.py`: the brief's 19 visitor steps on a phone and a desktop | 44 of 44 checks passed |
+| `tests/webkit_smoke.py` in WebKitGTK 2.52.6 (GNOME's engine, not Safari) | 41 of 41 checks passed |
+| axe-core 4.14.1 (`scripts/check-a11y.py`): all 211 pages, desktop and phone | 0 WCAG problems; 40 best-practice notes, all on the contents pages that DITA-OT makes for HTML5 |
+| Self-test and link check | 316 checks; 211 pages and 19,085 links |
+| Lighthouse 12.8.2 lab runs on the eleven Studio tools, local server | Layout shift 0 on a phone on all eleven, and 0 on desktop except the IETM (0.002). Performance 99 or 100 on desktop, 83 to 90 on a phone (LCP 3.5 to 4.5 s). Accessibility 100 in all 22 runs |
+| Lighthouse on the home page and the two new guides, build `81e322a` (the last commit changes only the Studio's tool pages and the offline package) | Performance 100 on desktop on all three; on a phone 88 (home), 86 (JupyterLab guide) and 94 (tshark guide) |
+| The offline IETM package, opened from the disk at 1,350 and 390 px | No icon codes, nothing wider than the screen, no script errors |
+| The preview, fetched through Vercel | It serves commit `595ae7f`; pages answer with `noindex` |
+
+The limitations of the first round apply: no Firefox, no Safari or iOS, mobile LCP measured on an uncompressed local server, and no field data for the branch.
