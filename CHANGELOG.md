@@ -2,9 +2,9 @@
 
 What changed on karandeshmukh.dev, release by release. The audit registers in `audit/` hold the findings behind each change, with their evidence.
 
-## Unreleased: design refinement (branch `design-refinement`, preview only)
+## 10.1, design refinement (released 20 November 2026)
 
-The Version 10.1 design brief: the signature headline back, a home page half as long, navigation that covers nothing, and the fixes that testing every page at ten sizes found. Not released, and no version number raised. Findings and evidence: `audit/design-refinement-register.md`.
+The Version 10.1 design brief: the signature headline back, a home page half as long, navigation that covers nothing, and the fixes that testing every page at ten sizes found. Released with Karan's approval; no version number raised. Findings and evidence: `audit/design-refinement-register.md`.
 
 - **Headline.** "I turn what engineers know into docs people can follow." is back, with its three edits and its highlight, in five languages. With reduced motion, or without scripts, it shows its final words.
 - **Home page.** From 16,224 to 8,486 pixels on a desktop, 22,372 to 11,063 on a phone, and 2,209 to 1,134 words. The long material moved to the recruiter page, the case study and the library. Each document card shows a real page of its PDF.
