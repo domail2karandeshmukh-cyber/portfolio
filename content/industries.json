@@ -123,7 +123,7 @@
         { "doc": "tn-report", "why": "A technical report with precision, recall and false-alarm rates measured on recorded attacks." }
       ],
       "projects": [
-        { "doc": "kc1-dataset-card" }, { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "cg-report" }, { "doc": "tn-how" },
+        { "doc": "kc1-dataset-card" }, { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "jl-run-export" }, { "doc": "cg-report" }, { "doc": "tn-how" },
         { "title": "April, the assistant on this site", "url": "/#april", "kind": "Live application", "text": "Answers questions about my work from the same content file the site is built from, and can open what she names." }
       ],
       "demos": [
