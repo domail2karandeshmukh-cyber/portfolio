@@ -444,15 +444,15 @@
 .st-cmd .st-status{margin:0;padding:8px 14px 9px;border-top:1px solid var(--rule);font-size:.9rem}
 .st-cmd .st-status:empty{display:none}
 .st-bar .sep{display:none}
-/* One button size in every tool: 36 pixels with a 44-pixel target, an ink fill for the one main action of a group,
+/* One button size in every tool (not the site's header, which keeps its 44-pixel controls): 36 pixels with a 44-pixel target, an ink fill for the one main action of a group,
    and a grey edge (3.7:1 on white) for the others, so a row of commands stays calm and the main one stands out. */
-.st-tool .btn.sm{min-height:36px;padding:0 12px;font-size:.9rem;gap:7px}
-.st-tool .btn.sm::after{inset:-4px -2px}
-.st-tool .btn.sm.line{border-color:var(--field)}
-.st-tool .btn.sm.line:hover{border-color:var(--ink)}
+.st-tool :is(main,dialog) .btn.sm{min-height:36px;padding:0 12px;font-size:.9rem;gap:7px}
+.st-tool :is(main,dialog) .btn.sm::after{inset:-4px -2px}
+.st-tool :is(main,dialog) .btn.sm.line{border-color:var(--field)}
+.st-tool :is(main,dialog) .btn.sm.line:hover{border-color:var(--ink)}
 .st-bar .btn.st-ico{width:36px;padding:0}
 .st-bar .ae-pick input[type=search]{width:15rem}
-.st-tool .btn .ic{flex:none;width:16px;height:16px}
+.st-tool :is(main,dialog) .btn .ic{flex:none;width:16px;height:16px}
 .st-bar .ae-pick,.st-bar .vd-chk,.st-bar .dc-me{font-size:.88rem;font-weight:600;color:var(--ink2)}
 .st-bar .ae-pick select,.st-bar .ae-pick input,.st-bar .dc-me input{min-height:36px;font-weight:400;color:var(--ink)}
 .st-bar .ste-modes{font-size:.88rem}
@@ -473,7 +473,7 @@
  .st-cmd .st-bar{gap:10px}
  .st-grp{flex:1 1 100%}
  .st-grp-out{margin-left:0}
- .st-tool .btn.sm{min-height:40px}
+ .st-tool :is(main,dialog) .btn.sm{min-height:40px}
  .st-bar .btn.st-ico{width:40px}
  .st-bar .ae-pick{display:flex;flex:1 1 100%;flex-wrap:wrap}
  .st-bar .ae-pick select,.st-bar .ae-pick input,.st-bar .ae-pick input[type=search]{flex:1 1 12rem;width:auto;min-width:0;max-width:100%}

@@ -2,6 +2,15 @@
 
 What changed on karandeshmukh.dev, release by release. The audit registers in `audit/` hold the findings behind each change, with their evidence.
 
+## Unreleased: round 2 (a preview, not yet released)
+
+The leftovers of the design refinement, the Studio's tools, and two more real products. No version number raised. Findings and evidence: `audit/design-refinement-register.md` (D40 to D47).
+
+- **The Studio's tools share one working surface.** A header with one sentence and **Help**, which opens the longer explanation, the shortcuts and the limits; a command bar with the starting points on the left, the output on the right and the status under them; and panels with one edge, corner and title. The DITA Studio has a command bar too. In five languages.
+- **Two more real products.** "Run a notebook from a clean start and share it as HTML in JupyterLab" (JupyterLab 4.6.6), with nine annotated screens and the sample notebook, and "Find the slowest HTTP responses in a capture with tshark" (Wireshark's tshark 4.2.2), with the capture to download. Each is checked on a running copy, and its `evidence.json` keeps what the product showed.
+- **PDFs.** The flagship procedure and the Studio's sample guides print typographic apostrophes. Printed, the notes under the ARF-1 drawings are 6.3 pt instead of 5.3.
+- **April on a phone.** Her subtitle is whole at 390 px and wraps at 320 px; her voice button is an icon there.
+
 ## 10.1, design refinement (released 20 November 2026)
 
 The Version 10.1 design brief: the signature headline back, a home page half as long, navigation that covers nothing, and the fixes that testing every page at ten sizes found. Released with Karan's approval; no version number raised. Findings and evidence: `audit/design-refinement-register.md`.
