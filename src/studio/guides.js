@@ -201,19 +201,22 @@
   }
   function pdf(fonts) {
     var doc = new window.jspdf.jsPDF({ unit: "mm", format: "a4", putOnlyUsedFonts: true }), W = 210, M = 18, y = M, w = W - 2 * M, foot = 280;
+    // An apostrophe inside a word prints as a typographic one (don\u2019t), as in the house PDFs; quotation marks stay
+    // as typed, since a step can hold a command.
+    var typo = function (t) { return String(t).replace(/(\p{L})'(?=\p{L})/gu, "$1\u2019"); };
     // The house PDF (standards/publishing.md): embedded fonts, the title and page number on every page, bookmarks for the steps.
     var F = "helvetica";
     if (fonts) { doc.addFileToVFS("HankenGrotesk-Regular.ttf", fonts.normal); doc.addFont("HankenGrotesk-Regular.ttf", "Hanken", "normal"); doc.addFileToVFS("HankenGrotesk-Bold.ttf", fonts.bold); doc.addFont("HankenGrotesk-Bold.ttf", "Hanken", "bold"); F = "Hanken"; }
-    doc.setProperties({ title: title(), subject: word("subject"), author: "Karan Deshmukh", creator: "karandeshmukh.dev/studio/guides" });
+    doc.setProperties({ title: typo(title()), subject: word("subject"), author: "Karan Deshmukh", creator: "karandeshmukh.dev/studio/guides" });
     var marks = [];
     function room(h) { if (y + h > foot) { doc.addPage(); y = M; } }
     function text(t, size, style, color, gap) {
       doc.setFont(F, style || "normal"); doc.setFontSize(size); doc.setTextColor(color || "#0B0B0C");
-      doc.splitTextToSize(String(t), w).forEach(function (l) { room(size * 0.45); doc.text(l, M, y + size * 0.35); y += size * 0.45; });
+      doc.splitTextToSize(typo(t), w).forEach(function (l) { room(size * 0.45); doc.text(l, M, y + size * 0.35); y += size * 0.45; });
       y += gap == null ? 2 : gap;
     }
     function box(t, fill, edge) {
-      doc.setFont(F, "normal"); doc.setFontSize(10.5); var ls = doc.splitTextToSize(t, w - 8), h = ls.length * 4.8 + 5;
+      doc.setFont(F, "normal"); doc.setFontSize(10.5); var ls = doc.splitTextToSize(typo(t), w - 8), h = ls.length * 4.8 + 5;
       room(h); doc.setFillColor(fill); doc.rect(M, y, w, h, "F"); doc.setFillColor(edge); doc.rect(M, y, 1.4, h, "F");
       doc.setTextColor("#0B0B0C"); ls.forEach(function (l, i) { doc.text(l, M + 5, y + 5.2 + i * 4.8); }); y += h + 3;
     }
@@ -228,7 +231,7 @@
     guide.steps.forEach(function (s, i) {
       room(14);
       var head = (i + 1) + ".  " + (s.title.trim() || word("step", { n: i + 1 }));
-      marks.push([head, doc.getNumberOfPages()]);
+      marks.push([typo(head), doc.getNumberOfPages()]);
       text(head, 11.5, "bold", "#0B0B0C", 1);
       if (s.body.trim()) text(s.body.trim(), 10.5, "normal", "#3B3D42", 1.5);
       if (pics[s.id]) {
@@ -242,9 +245,9 @@
     for (var p = 1; p <= pages; p++) {
       doc.setPage(p); doc.setDrawColor("#DDDDD9"); doc.setLineWidth(0.3); doc.line(M, 286, W - M, 286);
       doc.setFont(F, "normal"); doc.setFontSize(8.5); doc.setTextColor("#696C73");
-      doc.text(title(), M, 291); doc.text(word("page", { p: p, n: pages }), W - M, 291, { align: "right" });
+      doc.text(typo(title()), M, 291); doc.text(word("page", { p: p, n: pages }), W - M, 291, { align: "right" });
     }
-    if (doc.outline) { var top = doc.outline.add(null, title(), { pageNumber: 1 }); marks.forEach(function (m) { doc.outline.add(top, m[0], { pageNumber: m[1] }); }); }
+    if (doc.outline) { var top = doc.outline.add(null, typo(title()), { pageNumber: 1 }); marks.forEach(function (m) { doc.outline.add(top, m[0], { pageNumber: m[1] }); }); }
     return doc.output("blob");
   }
 

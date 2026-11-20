@@ -541,9 +541,14 @@ html[lang=hi] .sig{line-height:1.3}
 /* April: the panel and the tour. Her button is in the header (Header). On a phone the panel is a sheet along the
    bottom edge, clear of the home indicator. */
 .april{position:fixed;right:22px;bottom:22px;z-index:40;width:min(420px,calc(100vw - 24px));height:min(640px,calc(100vh - 44px));height:min(640px,calc(100dvh - 44px));display:flex;flex-direction:column;overflow:hidden;background:#fff;color:var(--ink);border:1.5px solid var(--ink);border-radius:20px;box-shadow:0 30px 70px -20px rgba(0,0,0,.5);animation:pop .25s var(--ease)}
-@media (max-width:599px){.april{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:auto;height:min(78vh,620px);height:min(78dvh,620px)}}
+@media (max-width:599px){.april{left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom));width:auto;height:min(78vh,620px);height:min(78dvh,620px)}
+ .april-head{gap:10px}
+ .april-head div small{white-space:normal;line-height:1.3}
+ .speak:not(.x){width:36px;padding:0;justify-content:center}
+ .speak:not(.x) span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
 @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}}
-.april-head{display:flex;align-items:center;gap:12px;padding:14px 14px 14px 16px;background:var(--ink);color:#fff}
+.april-head{display:flex;align-items:center;gap:12px;padding:14px 14px 14px 20px;background:var(--ink);color:#fff}
+.april-head .orb.live{transform:scale(calc(1 + var(--lvl,0)*.25));box-shadow:0 0 0 calc(var(--lvl,0)*5px) rgba(255,223,43,.34)}
 .april-head div{margin-right:auto;min-width:0}
 .april-head small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .april-head b{display:block;font-size:1.5rem;line-height:1}
