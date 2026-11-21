@@ -1351,7 +1351,19 @@
   "Portfolio feedback": "Commentaires sur le portfolio",
   "© 2026 Karan Deshmukh.": "© 2026 Karan Deshmukh.",
   "Product names and screenshots belong to their owners. Guides to other companies’ products are my independent work, not their official documentation.": "Les noms de produits et les captures d’écran appartiennent à leurs propriétaires. Les guides des produits d’autres entreprises sont mon travail indépendant, pas leur documentation officielle.",
-  "Privacy": "Confidentialité"
+  "Privacy": "Confidentialité",
+  "Help": "Aide",
+  "Mark up a screenshot for a procedure, with redaction that can't be undone in the file.": "Annotez une capture d'écran pour une procédure, avec un caviardage définitif dans le fichier.",
+  "Build a numbered procedure from screenshots, and export it as Markdown, HTML or PDF.": "Construisez une procédure numérotée à partir de captures d'écran, et exportez-la en Markdown, HTML ou PDF.",
+  "Edit a software walkthrough into a training video with captions, and render it in your browser.": "Montez une démonstration logicielle en vidéo de formation sous-titrée, et produisez-la dans votre navigateur.",
+  "Organize a help center in categories, sections and articles, and preview it as readers see it.": "Organisez un centre d'aide en catégories, sections et articles, et prévisualisez-le comme le voient les lecteurs.",
+  "Take one document from draft to published, with reviews, a revision history and an audit log, all kept in this browser.": "Faites passer un document du brouillon à la publication, avec les relectures, un historique des révisions et un journal d'audit, le tout conservé dans ce navigateur.",
+  "Turn Markdown documents into a DITA 1.3 project, ready to publish with DITA Open Toolkit.": "Transformez des documents Markdown en projet DITA 1.3, prêt à publier avec DITA Open Toolkit.",
+  "Edit a data module of the ARF-1 demonstration rig in a form or as XML, and check it layer by layer.": "Modifiez un module de données du banc de démonstration ARF-1 dans un formulaire ou en XML, et vérifiez-le couche par couche.",
+  "Every module of the ARF-1 demonstration rig in one place: search, filter, compare issues and read the XML.": "Tous les modules du banc de démonstration ARF-1 au même endroit : recherchez, filtrez, comparez les éditions et lisez le XML.",
+  "Read the ARF-1 demonstration publications by product: follow cross-references, search, and print.": "Lisez les publications du banc de démonstration ARF-1 par produit : suivez les renvois, cherchez et imprimez.",
+  "The ARF-1 parts list beside its exploded view: select a part in one, and the other follows.": "La liste des pièces de l’ARF-1 à côté de sa vue éclatée : sélectionnez une pièce dans l’une, et l’autre suit.",
+  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "Vérifiez une procédure ou une description selon des règles originales calquées sur ASD-STE100, et appliquez les suggestions."
  },
  "keep": [
   "A",

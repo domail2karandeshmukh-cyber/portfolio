@@ -150,7 +150,7 @@
     $("#cd-rows").addEventListener("click", function (e) { var tr = e.target.closest("tr[data-file]"); if (tr) select(tr.dataset.file, !!e.target.closest(".cd-open")); });
     document.addEventListener("click", function (e) { var a = e.target.closest("a[data-file]"); if (a && (a.closest("#cd-body") || a.closest("#cd-graph"))) { e.preventDefault(); select(a.dataset.file, true); } });
   }
-  S1K.load().then(function (d) {
+  Kit.wait(S1K.load().then(function (d) {
     db = d;
     var types = {}; db.items.forEach(function (x) { types[x.id.type] = 1; });
     $("#cd-type").innerHTML += Object.keys(types).map(function (t) { return '<option value="' + esc(t) + '">' + esc(T(t)) + "</option>"; }).join("");
@@ -159,5 +159,5 @@
     var want = new URLSearchParams(location.search).get("file");
     select(want && db.items.some(function (i) { return i.file === want; }) ? want : "DMC-ARFRIG-A-00-00-00-00A-040A-D_002-00_EN-US.XML");
     say(T("{n} modules and {i} illustrations, read from their XML.", { n: db.items.length, i: db.icns.length }));
-  }).catch(function (e) { say(e.message, true); });
+  }).catch(function (e) { say(e.message, true); }));
 })();

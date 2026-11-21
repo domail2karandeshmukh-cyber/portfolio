@@ -38,9 +38,10 @@
       });
       paint();
     };
-    if (svgs[icn]) show(svgs[icn]);
-    else fetch(S1K.icnUrl(icn)).then(function (r) { return r.text(); }).then(function (t) { svgs[icn] = t; show(t); });
+    // Resolves once the drawing is in, so the first view can wait for it (Kit.wait below).
+    var drawn = svgs[icn] ? Promise.resolve(show(svgs[icn])) : fetch(S1K.icnUrl(icn)).then(function (r) { return r.text(); }).then(function (t) { svgs[icn] = t; show(t); });
     paint();
+    return drawn;
   }
   function visible(p) {
     var q = $("#ip-q").value.trim().toLowerCase();
@@ -112,7 +113,7 @@
   })();
   zoom(0);
 
-  S1K.load().then(function (d) {
+  Kit.wait(S1K.load().then(function (d) {
     db = d;
     var issues = db.byCode[CODE] || [];
     $("#ip-issue").innerHTML = issues.slice().reverse().map(function (x, i) { return '<option value="' + esc(x.file) + '">' + esc(T("Issue {n}, {date}", { n: x.id.issue, date: x.id.date }) + (i === 0 ? " · " + T("latest") : "")) + "</option>"; }).join("");
@@ -126,7 +127,8 @@
     $("#ip-svg").addEventListener("keydown", function (e) { var g = e.target.closest("[data-item]"); if (g && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); choose(g.dataset.item, "svg"); } });
     $("#ip-svg").addEventListener("mouseover", function (e) { var g = e.target.closest("[data-item]"); document.querySelectorAll("#ip-rows tr").forEach(function (tr) { tr.classList.toggle("hover", !!g && tr.dataset.item === g.dataset.item); }); });
     var want = new URLSearchParams(location.search).get("item");
-    open(issues[issues.length - 1].file);
+    var drawn = open(issues[issues.length - 1].file);
     if (want) choose(("00" + want).slice(-3), "row");
-  }).catch(function (e) { say(e.message, true); });
+    return drawn;
+  }).catch(function (e) { say(e.message, true); }));
 })();

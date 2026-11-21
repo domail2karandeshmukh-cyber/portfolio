@@ -69,7 +69,7 @@
         { "doc": "workspace-faqs", "why": "Nine short FAQ sets for end users of Gmail, Calendar, Drive, Docs, Sheets, Slides, Forms, Meet and Chat." },
         { "title": "Employee onboarding and access provisioning", "url": "/studio/scenarios/b-enterprise-it", "kind": "Demonstration scenario", "why": "A service-desk procedure, the roles and approvals behind it, and a step guide with screenshots." }
       ],
-      "projects": [],
+      "projects": [{ "doc": "ws-slow-http" }],
       "demos": [
         { "title": "Step guide: create a new employee's account", "url": "/studio/samples/guides/it-onboarding/guide.pdf", "kind": "PDF, demonstration scenario", "text": "Five steps, each with an annotated screenshot of the identity console." },
         { "title": "Step guide: unlock a customer's account", "url": "/studio/samples/guides/support-unlock/guide.pdf", "kind": "PDF, demonstration scenario", "text": "A support-desk procedure with a caution about identity checks." },
@@ -123,7 +123,7 @@
         { "doc": "tn-report", "why": "A technical report with precision, recall and false-alarm rates measured on recorded attacks." }
       ],
       "projects": [
-        { "doc": "kc1-dataset-card" }, { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "cg-report" }, { "doc": "tn-how" },
+        { "doc": "kc1-dataset-card" }, { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "jl-run-export" }, { "doc": "cg-report" }, { "doc": "tn-how" },
         { "title": "April, the assistant on this site", "url": "/#april", "kind": "Live application", "text": "Answers questions about my work from the same content file the site is built from, and can open what she names." }
       ],
       "demos": [

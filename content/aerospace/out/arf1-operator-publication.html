@@ -5,7 +5,7 @@
 .ae-h3{font:600 .98rem/1.3 var(--sans);letter-spacing:0;margin:1.1rem 0 .5rem}
 .ae-hint{font-size:.86rem;color:var(--mute);margin:.5rem 0 0}
 .ae-pick{display:inline-flex;align-items:center;gap:.4rem;font-size:.86rem}
-.ae-pick select,.ae-pick input{font:inherit;min-height:34px;padding:.2rem .5rem;border:1px solid var(--rule2);border-radius:6px;background:#fff;max-width:22rem}
+.ae-pick select,.ae-pick input{font:inherit;min-height:34px;padding:.2rem .5rem;border:1px solid var(--field);border-radius:6px;background:#fff;max-width:22rem}
 .ae-chip{display:inline-block;font:600 .72rem/1.5 var(--sans);padding:.05rem .5rem;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
 .ae-chip.ae-pass{color:var(--green)}.ae-chip.ae-fail{color:var(--red)}.ae-chip.ae-warn{color:#8a5300}.ae-chip.ae-skip{color:var(--mute)}.ae-chip.ae-human{color:var(--blue)}
 .ae-bad{color:var(--red)}
@@ -16,7 +16,7 @@ code{font-family:var(--mono);font-size:.86em}
 .ae-edit{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}
 .ae-col{display:grid;gap:18px;min-width:0}
 .ae-form label{display:grid;gap:.2rem;font-size:.84rem;margin:0 0 .6rem}
-.ae-form input,.ae-form select{font:inherit;font-size:.92rem;padding:.35rem .5rem;border:1px solid var(--rule2);border-radius:6px;min-height:36px;width:100%}
+.ae-form input,.ae-form select{font:inherit;font-size:.92rem;padding:.35rem .5rem;border:1px solid var(--field);border-radius:6px;min-height:36px;width:100%}
 .ae-dmc{display:grid;grid-template-columns:repeat(auto-fill,minmax(94px,1fr));align-items:end;gap:.2rem .5rem;border:1px solid var(--rule);border-radius:8px;padding:.6rem .7rem .2rem;margin:0 0 .8rem}
 .ae-dmc legend{font-size:.82rem;color:var(--mute);padding:0 .3rem}
 .ae-dmc input{font-family:var(--mono)}
@@ -107,7 +107,7 @@ tr.s1k-chg{box-shadow:none}tr.s1k-chg>td:first-child{box-shadow:inset 3px 0 0 #d
 .ste-modes{border:0;margin:0;padding:0;display:flex;gap:.3rem 1rem;flex-wrap:wrap;font-size:.88rem}
 .ste-modes label{display:inline-flex;gap:.35rem;align-items:center;min-height:32px}
 .ste-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
-.ste textarea{width:100%;font:400 .95rem/1.55 var(--sans);border:1px solid var(--rule2);border-radius:8px;padding:.6rem}
+.ste textarea{width:100%;font:400 .95rem/1.55 var(--sans);border:1px solid var(--field);border-radius:8px;padding:.6rem}
 .ste-marked{white-space:pre-wrap;font-size:.95rem;line-height:1.75;border:1px solid var(--rule);border-radius:8px;padding:.6rem;background:#fff;min-height:6rem}
 .ste-m{background:#fff2c6;border-bottom:2px solid #c98a00;cursor:pointer;padding:0 1px;border-radius:2px}
 .ste-m.ste-error{background:#fde3df;border-bottom-color:var(--red)}
@@ -307,6 +307,11 @@ mark.ie-hit{background:var(--hl)}
  .s1k-svg svg text[font-size="12.5"]{font-size:13.5px}
  .s1k-svg svg text[font-size="12"]{font-size:13px}
  .s1k-svg svg text[font-size="11.5"]{font-size:12.5px}
+ /* The note under each drawing and the drawing's own ICN code print at about 6.3 pt instead of 5.3. A parts
+    catalogue's exploded view prints larger (115 mm), so its longer note needs less to reach the same size. The key in
+    the indicator's inset (centred labels) has room for 5.6 pt, with a clear gap between its two labels. */
+ .s1k-svg svg text[font-size="10.5"]{font-size:12.5px}
+ .s1k-fig:has(+ .s1k-tbl) svg text[font-size="10.5"],.s1k-svg svg text[font-size="10.5"][text-anchor="middle"]{font-size:11px}
  header.top,.site-head,nav.crumbs,.st-head,.fl-warn,.st-bar,.st-status,.ie-nav,.site-foot,footer,.ie-modes,.ie-trail,.skip{display:none!important}
  .ie{display:block}.ie-main{border:0;padding:0}
  .s1k-isol.ie-one li{display:grid!important}

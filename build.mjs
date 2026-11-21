@@ -389,6 +389,12 @@ await library.extra({ path: "/message-to-document", title: "Case study: from a m
 await fs.mkdir(`${OUT}/docs/kc1/api`, { recursive: true });
 // The current files are those of the API as it is now (1.0.1); the versioned ones are what each revision was recorded with.
 for (const f of ["openapi.json", "exchanges.json", "openapi-1.0.0.json", "exchanges-1.0.0.json", "openapi-1.0.1.json", "exchanges-1.0.1.json"]) await fs.copyFile(`content/projects/kc1/api/${f}`, `${OUT}/docs/kc1/api/${f}`);
+// The sample notebook of the JupyterLab guide and its data, for a reader to follow the guide as written.
+await fs.mkdir(`${OUT}/docs/jupyterlab/sample`, { recursive: true });
+for (const f of ["pump-readings.ipynb", "readings.csv"]) await fs.copyFile(`content/projects/jupyterlab/sample/${f}`, `${OUT}/docs/jupyterlab/sample/${f}`);
+// The capture, the test server and the requests of the tshark guide.
+await fs.mkdir(`${OUT}/docs/wireshark/sample`, { recursive: true });
+for (const f of ["web.pcapng", "shop_api.py", "traffic.sh"]) await fs.copyFile(`content/projects/wireshark/sample/${f}`, `${OUT}/docs/wireshark/sample/${f}`);
 await fs.mkdir(`${OUT}/case-study`, { recursive: true });
 await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 

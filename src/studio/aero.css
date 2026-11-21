@@ -307,7 +307,12 @@ mark.ie-hit{background:var(--hl)}
  .s1k-svg svg text[font-size="12.5"]{font-size:13.5px}
  .s1k-svg svg text[font-size="12"]{font-size:13px}
  .s1k-svg svg text[font-size="11.5"]{font-size:12.5px}
- header.top,.site-head,nav.crumbs,.st-head,.fl-warn,.st-bar,.st-status,.ie-nav,.site-foot,footer,.ie-modes,.ie-trail,.skip{display:none!important}
+ /* The note under each drawing and the drawing's own ICN code print at about 6.3 pt instead of 5.3. A parts
+    catalogue's exploded view prints larger (115 mm), so its longer note needs less to reach the same size. The key in
+    the indicator's inset (centred labels) has room for 5.6 pt, with a clear gap between its two labels. */
+ .s1k-svg svg text[font-size="10.5"]{font-size:12.5px}
+ .s1k-fig:has(+ .s1k-tbl) svg text[font-size="10.5"],.s1k-svg svg text[font-size="10.5"][text-anchor="middle"]{font-size:11px}
+ header.top,.site-head,nav.crumbs,.st-head,.st-help,.fl-warn,.st-cmd,.st-bar,.st-status,.ie-nav,.site-foot,footer,.ie-modes,.ie-trail,.skip{display:none!important}
  .ie{display:block}.ie-main{border:0;padding:0}
  .s1k-isol.ie-one li{display:grid!important}
  .s1k-isol li[hidden]{display:grid!important}
@@ -355,3 +360,8 @@ html.ae-tabs .ae-panel+.ae-panel{margin-top:0}
  .ae-secnav a[aria-current]{border-color:var(--ink)}
 }
 @media print{.ae-secnav,.ae-next{display:none}.ae-layout{display:block}.ae-panel[hidden]{display:block!important}}
+
+/* The command bar's lists are as wide as their longest choice from the start. Their choices arrive once the CSDB has
+   loaded, and a list that widened then wrapped the bar and moved the tool below it (a layout shift of 0.13 to 0.5). */
+#cd-type{width:11rem}#cd-sns{width:13.5rem}#ie-pub{width:12.5rem}#ip-issue{width:14.5rem}#ie-product,#ip-product,#se-open{width:22rem}
+@media (max-width:699px){#cd-type,#cd-sns,#ie-pub,#ip-issue,#ie-product,#ip-product,#se-open{width:auto}}

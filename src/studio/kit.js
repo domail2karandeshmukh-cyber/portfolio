@@ -230,6 +230,9 @@
   var idx = null;
   /** The sample index (/studio/samples/index.json), fetched once. */
   Kit.samples = function () {
+    // A tool's page carries its own samples (lib/studio.mjs), so its cards are drawn at once; other pages fetch them.
+    var own = !idx && typeof document !== "undefined" && document.getElementById("st-samples");
+    if (own) { try { idx = Promise.resolve(JSON.parse(own.textContent)); } catch (e) { idx = null; } }
     if (!idx) idx = fetch("/studio/samples/index.json").then(function (r) { if (!r.ok) throw new Error(T("The samples couldn't be loaded.")); return r.json(); }).catch(function (e) { idx = null; throw e; });
     return idx;
   };
@@ -308,6 +311,34 @@
   Kit.ask = function (title, field, value, more) { return dialog(Object.assign({ title: title, field: field, value: value }, more || {})); };
   /** Asks yes or no. Resolves true or false. */
   Kit.confirm = function (title, text, more) { return dialog(Object.assign({ title: title, text: text, ok: T("Yes") }, more || {})); };
+
+  /* ---------- Showing the tool ----------
+     Everything under a tool's command bar stays hidden until the tool has drawn itself (studio.css), so the reader
+     sees it once, finished, and nothing moves as it fills in. Most tools draw as their script runs. A tool that
+     first loads data (the aerospace tools read the CSDB) passes that work to Kit.wait, and shows when the work
+     ends, or after three seconds if it hasn't: a slow or failed load never hides the tool for good. */
+  var waits = [];
+  /** Keeps the tool hidden until this promise settles, or three seconds have passed. Returns the promise. */
+  Kit.wait = function (p) { waits.push(p); return p; };
+
+  /* ---------- Help on demand ----------
+     A tool's header says in one sentence what it does; its Help button opens the rest (how it works, shortcuts,
+     privacy and limits) in a panel under the header, which pushes the tool down rather than covering it. */
+  if (typeof document !== "undefined") document.addEventListener("DOMContentLoaded", function () {
+    // Every tool's script has run by now (they are deferred, and kit.js comes first), so every Kit.wait is in.
+    var show = function () { document.body.classList.add("st-ready"); };
+    if (!waits.length) show();
+    else { Promise.all(waits.map(function (p) { return Promise.resolve(p).then(null, function () {}); })).then(show); setTimeout(show, 3000); }
+    var btn = document.querySelector(".st-helpbtn"), panel = btn && document.getElementById(btn.getAttribute("aria-controls"));
+    if (!panel) return;
+    function show(on) { btn.setAttribute("aria-expanded", String(on)); panel.hidden = !on; }
+    btn.addEventListener("click", function () { show(panel.hidden); });
+    // Escape closes it from the button or from inside it (a link in the help, say), and leaves the focus on the button.
+    document.addEventListener("keydown", function (e) {
+      var at = document.activeElement;
+      if (e.key === "Escape" && !panel.hidden && (at === btn || panel.contains(at))) { show(false); btn.focus(); }
+    });
+  });
 
   root.Kit = Kit;
   if (typeof module !== "undefined") module.exports = Kit;

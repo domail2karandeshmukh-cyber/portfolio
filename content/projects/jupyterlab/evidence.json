@@ -1,0 +1,82 @@
+{
+ "note": "What JupyterLab showed and wrote while the guide in this folder was checked, on 20 November 2026: a local test server on 127.0.0.1, the sample notebook of the guide and its invented data. Read from the page and from the files that JupyterLab exported.",
+ "versions": {
+  "jupyterlab": "4.6.6",
+  "jupyter_server": "2.21.1",
+  "ipykernel": "7.4.0",
+  "nbconvert": "7.17.2",
+  "pandas": "3.1.1",
+  "matplotlib": "3.11.2",
+  "python": "3.13.18"
+ },
+ "numbers_before": [
+  5,
+  6,
+  3,
+  4
+ ],
+ "restart_dialog": "Restart Kernel?\nDo you want to restart the kernel of pump-readings.ipynb? All variables will be lost.\nDo not ask me again.\nCancel\nRestart",
+ "numbers_after": [
+  1,
+  2,
+  3,
+  4
+ ],
+ "error_outputs_after": 0,
+ "status_bar": "Python 3 (ipykernel) | Idle",
+ "export_dialog": "Export as HTML\nSanitize HTML output\nCancel\nOk",
+ "sanitize_selected_when_the_dialog_opens": true,
+ "exports": {
+  "box_cleared": {
+   "file": "pump-readings.html",
+   "request": "/nbconvert/html/pump-readings.ipynb?download=true",
+   "bytes": 337412,
+   "prompts": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "heading_as_code": false,
+   "tables": 2,
+   "code": true,
+   "summary_line": true,
+   "chart": true
+  },
+  "box_selected": {
+   "file": "pump-readings-sanitized.html",
+   "request": "/nbconvert/html/pump-readings.ipynb?download=true&sanitize_html=true",
+   "bytes": 337803,
+   "prompts": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "heading_as_code": true,
+   "tables": 2,
+   "code": true,
+   "summary_line": true,
+   "chart": true
+  }
+ },
+ "command_line": {
+  "note": "jupyter nbconvert 7.17.2 on the notebook after the run, for the claims of the guide's last two sections.",
+  "sanitize_html_true": {
+   "heading_as_code": true,
+   "tables": 2,
+   "chart": true
+  },
+  "sanitize_html_true_on_a_script_output": {
+   "script_runs": false,
+   "written_as_text": true,
+   "bold_kept": true
+  },
+  "no_input": {
+   "code": false,
+   "tables": 2,
+   "chart": true,
+   "summary_line": true
+  }
+ }
+}

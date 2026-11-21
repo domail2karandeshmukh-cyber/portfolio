@@ -2,22 +2,32 @@
 <div class="st-head">
  <div>
   <h1>S1000D editor and validator</h1>
-  <p>Open a data module from the CSDB of the ARF-1 demonstration rig, or start a new one. Edit its identification in a form or the whole module as XML, preview it, and check it layer by layer: well-formed XML, the official S1000D Issue 6 schema, identification, references, applicability and the project BREX. Download the XML when it passes.</p>
+  <p>Edit a data module of the ARF-1 demonstration rig in a form or as XML, and check it layer by layer.</p>
  </div>
+ <button class="btn line sm st-helpbtn" type="button" aria-expanded="false" aria-controls="st-help">{{i:circle-help}}Help</button>
 </div>
+<section class="st-help" id="st-help" aria-label="Help" hidden>
+ <p>Open a data module from the CSDB of the ARF-1 demonstration rig, or start a new one. Edit its identification in a form or the whole module as XML, preview it, and check it layer by layer: well-formed XML, the official S1000D Issue 6 schema, identification, references, applicability and the project BREX. Download the XML when it passes.</p>
+</section>
 <p class="fl-warn" role="note"><strong>Demonstration data.</strong> The rig, its codes, part numbers and values are invented. A module that passes every check here is still not approved maintenance data: technical accuracy and approval need a qualified person.</p>
-<div class="st-bar" role="toolbar" aria-label="Open a module">
- <label class="ae-pick">Open from the CSDB <select id="se-open"><option value="">Loading the CSDB…</option></select></label>
- <span class="sep" aria-hidden="true"></span>
- <button class="btn line sm" type="button" data-new="descript">New descriptive</button>
- <button class="btn line sm" type="button" data-new="proced">New procedural</button>
- <button class="btn line sm" type="button" data-new="ipd">New parts data</button>
- <label class="btn line sm" for="se-file">Open an XML file</label><input class="st-file" id="se-file" type="file" accept=".xml,.XML,application/xml,text/xml">
- <span class="sep" aria-hidden="true"></span>
- <button class="btn line sm" type="button" id="se-save">Save in this browser</button>
- <button class="btn ink sm" type="button" id="se-download">Download the XML</button>
+<div class="st-cmd">
+ <div class="st-bar" role="toolbar" aria-label="Open a module">
+  <div class="st-grp">
+   <label class="ae-pick">Open from the CSDB <select id="se-open"><option value="">Loading the CSDB…</option></select></label>
+  </div>
+  <div class="st-grp">
+   <button class="btn line sm" type="button" data-new="descript">{{i:file-plus}}New descriptive</button>
+   <button class="btn line sm" type="button" data-new="proced">{{i:file-plus}}New procedural</button>
+   <button class="btn line sm" type="button" data-new="ipd">{{i:file-plus}}New parts data</button>
+   <label class="btn line sm" for="se-file">{{i:folder-open}}Open an XML file</label><input class="st-file" id="se-file" type="file" accept=".xml,.XML,application/xml,text/xml">
+  </div>
+  <div class="st-grp st-grp-out">
+   <button class="btn line sm" type="button" id="se-save">{{i:save}}Save in this browser</button>
+   <button class="btn ink sm" type="button" id="se-download">{{i:download}}Download the XML</button>
+  </div>
+ </div>
+ <p class="st-status" id="se-status" role="status" aria-live="polite">Loading the CSDB…</p>
 </div>
-<p class="st-status" id="se-status" role="status" aria-live="polite"></p>
 <div class="ae-edit" id="se-app">
  <div class="ae-col">
   <section class="dt-card ae-form" aria-labelledby="se-form-h">
