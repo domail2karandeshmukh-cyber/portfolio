@@ -2,9 +2,9 @@
 
 What the audit of the rendered site found against the brief "Definitive professional design, documentation and user experience transformation", what was done about each finding, and how it was verified. It starts from the three iPhone screenshots that came with the brief, then covers every page type at 1,440 and 390 pixels, the PDFs at full size, and the Studio.
 
-Baseline: production at commit `3043e98`, screenshotted at the start of the work on 19 November 2026. Work: branch `design-refinement`, merged into main and released to production on 20 November 2026 with Karan's approval; the production deployment of `3043e98` is kept for a rollback. A second round on branch `round-2` (the leftovers D40 to D42, the Studio's tools, and two more real products, D44 to D47, and two defects found on the way, D48 and D49) is a preview that waits for Karan's approval; production runs `ef17f01` meanwhile.
+Baseline: production at commit `3043e98`, screenshotted at the start of the work on 19 November 2026. Work: branch `design-refinement`, merged into main and released to production on 20 November 2026 with Karan's approval; the production deployment of `3043e98` is kept for a rollback. A second round on branch `round-2` (the leftovers D40 to D42, the Studio's tools, and two more real products, D44 to D47, and two defects found on the way, D48 and D49) was released to production on 21 November 2026 with Karan's approval; the production deployment of `ef17f01` is kept for a rollback.
 
-Priority: **P1** stops a visitor from doing what they came for, or makes the work look less credible. **P2** costs a visitor time or attention. **P3** is polish. Status: **Fixed** (verified as stated), **Fixed in round 2** (verified as stated, on branch `round-2`, not yet released), **Open** (with the reason), **Decision** (needs Karan).
+Priority: **P1** stops a visitor from doing what they came for, or makes the work look less credible. **P2** costs a visitor time or attention. **P3** is polish. Status: **Fixed** (verified as stated), **Fixed in round 2** (verified as stated on branch `round-2`, released on 21 November 2026), **Open** (with the reason), **Decision** (needs Karan).
 
 ## From the iPhone screenshots
 

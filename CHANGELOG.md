@@ -2,7 +2,7 @@
 
 What changed on karandeshmukh.dev, release by release. The audit registers in `audit/` hold the findings behind each change, with their evidence.
 
-## Unreleased: round 2 (a preview, not yet released)
+## Round 2: the Studio's tools and two more products (released 21 November 2026)
 
 The leftovers of the design refinement, the Studio's tools, and two more real products. No version number raised. Findings and evidence: `audit/design-refinement-register.md` (D40 to D49).
 
