@@ -4,7 +4,7 @@ What the audit of the rendered site found against the brief "Definitive professi
 
 Baseline: production at commit `3043e98`, screenshotted at the start of the work on 19 November 2026. Work: branch `design-refinement`, merged into main and released to production on 20 November 2026 with Karan's approval; the production deployment of `3043e98` is kept for a rollback. A second round on branch `round-2` (the leftovers D40 to D42, the Studio's tools, and two more real products, D44 to D47, and two defects found on the way, D48 and D49) was released to production on 21 November 2026 with Karan's approval; the production deployment of `ef17f01` is kept for a rollback.
 
-Priority: **P1** stops a visitor from doing what they came for, or makes the work look less credible. **P2** costs a visitor time or attention. **P3** is polish. Status: **Fixed** (verified as stated), **Fixed in round 2** (verified as stated on branch `round-2`, released on 21 November 2026), **Open** (with the reason), **Decision** (needs Karan).
+Priority: **P1** stops a visitor from doing what they came for, or makes the work look less credible. **P2** costs a visitor time or attention. **P3** is polish. Status: **Fixed** (verified as stated), **Fixed in round 2** (verified as stated on branch `round-2`, released on 21 November 2026), **Open** (with the reason), **Decision** (needs Karan), **Decided** (Karan left the call to Claude on 21 November 2026; the reason is given).
 
 ## From the iPhone screenshots
 
@@ -47,7 +47,7 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 |---|---|---|---|---|
 | D16 | Industries had no consistent visual identity. | P3 | Fixed | One icon family (Lucide, ISC) on the home tiles, the industry pages, the menus and the Studio. |
 | D17 | In German at 320 px, "Dokumentationsstudio" pushed a tile 10 px past the screen. | P2 | Fixed | A soft hyphen in the translation, and tiles that can wrap a long word. No sideways scrolling in any language at 320 px. |
-| D18 | An automotive entry was suggested in the brief "where appropriate". | P3 | Decision | The only automotive work is Karan's role at Magna International, whose documents are confidential. An automotive field needs his decision and material that he may publish; the car icon is ready for it. |
+| D18 | An automotive entry was suggested in the brief "where appropriate". | P3 | Decided | Not added. The only automotive work is Karan's role at Magna International, whose documents are confidential, so an automotive field would have no real work to show. Magna stays in his experience and his CV, and the car icon is ready if he has material he may publish. |
 
 ## Documents and publications (PDF)
 
@@ -90,7 +90,7 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 | D40 | Straight apostrophes are left in some PDFs: two in the running text of the flagship procedure MP-PS104-01, and others in the Studio's sample guides and the TrustNav reports. | P3 | Fixed in round 2 | `studio-flagship.py` typesets the procedure's DITA source with `typeset.mjs`, as the nine DITA sets are (MP-PS104-01: 0 straight apostrophes, 4 typographic ones). The Step Guide Studio prints an apostrophe inside a word as a typographic one, and the five sample guides and the flagship guide were made again with it (0 straight ones in each). The TrustNav reports are that project's own files and weren't changed. |
 | D41 | The note in each ARF-1 drawing ("Fictional training rig. Not to scale.") and the drawing's own copy of its ICN code print at about 5 pt. | P3 | Fixed in round 2 | Printed, the notes and ICN codes are 6.3 to 6.4 pt (measured in the three PDFs), and the indicator's key 5.6 pt with a clear gap between its two labels. The drawings themselves aren't changed: their files are issued illustrations, so the print style sizes them. `test_aero.py` measures every label inside its drawing and clear of the others (106 of 106). Page counts unchanged (26, 7 and 2); the PDFs are still tagged. |
 | D42 | On a 390 px phone, April's panel cuts her subtitle to "Karan's assist…", and her speaking ring touches the panel's edge. | P3 | Fixed in round 2 | The voice button is an icon on a phone (its label stays for screen readers), so the subtitle is whole at 390 px, and wraps instead of being cut at 320 px. The speaking ring keeps 12 px from the panel's edge at its widest. |
-| D43 | 11 of the 24 PDFs aren't tagged for screen readers: the CV, the six guides the Studio's guide tool makes in the browser, and the four project reports. The DITA and S1000D publications (13) are tagged. | P2 | Decision | The CV and its generation are protected by the brief, and the project reports are the projects' own files, so neither was changed. The guide tool's PDFs could be tagged in a later round. |
+| D43 | 11 of the 24 PDFs aren't tagged for screen readers: the CV, the six guides the Studio's guide tool makes in the browser, and the four project reports. The DITA and S1000D publications (13) are tagged. | P2 | Decided, in part open | The CV stays as it is: the brief protects the CV and how it is made, and its text can still be selected and searched. The project reports are the projects' own files, so they weren't changed either. The guide tool's PDFs could be tagged in a later round. |
 
 ## Round 2: the Studio's tools and two more products
 
@@ -110,11 +110,14 @@ Priority: **P1** stops a visitor from doing what they came for, or makes the wor
 | D31 | Real-product documentation covered identity (Keycloak) and an API, but not AI and data science. | P2 | Fixed | "Compare the KC1 model candidates in MLflow": MLflow 3.18.0 on the project's own runs, five annotated screenshots of the real interface, every figure checked by the self-test against the recorded runs. Docker wasn't available, and the guide says so. |
 | D32 | More real products (GitHub, Docker, Grafana, Wazuh and others in the brief). | P3 | Open, in part fixed in round 2 | Two products added, each checked on a running copy: JupyterLab 4.6.6 (D46) and Wireshark's tshark 4.2.2 (D47). Docker isn't available on this computer, and Grafana, Wazuh and Bitwarden's server need it or a download that the network refuses; GitHub, Jira and Google Workspace need an account to show. |
 
-## Open questions for Karan
+## Questions for Karan, decided on 21 November 2026
 
-- The availability line (full-time, contract, part-time, freelance, internship, apprenticeship) is unchanged since Version 8. Is it still right?
-- The stray branch `fix/refuse-non-finite-values` in the KC1 repository can be deleted: its pull request was merged.
-- The titles of the nine videos in the YouTube playlist weren't available, so the playlist isn't described video by video.
+Karan left these calls to Claude.
+
+- **The availability line** stays as it is. It covers the part-time, internship and apprenticeship roles he is open to, adds full-time and contract work, and holds them all to his work authorization in France.
+- **The stray KC1 branch** `fix/refuse-non-finite-values` holds nothing that isn't in main: the fix arrived through pull request #2, from another branch. Deleting it was blocked by the session's permission checks, so it is still there for Karan to delete.
+- **The YouTube playlist** is no longer on the site. The films kept on the site replaced it, and no page or the CV links it, so it needs no titles.
+- **The automotive field** and **the CV's tags**: see D18 and D43.
 
 ## How it was verified
 
