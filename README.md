@@ -242,6 +242,15 @@ The walkthrough on the overview is filmed from the pages themselves by `scripts/
 
 `tests/studio/test_aero.py` drives the five pages in a browser, and checks the walkthrough's file and playback.
 
+## Interactive pages on review branches
+
+These are on the `ai/portfolio-*` branches and their Vercel previews. They are not on the live site until they are merged.
+
+- **The hero's pages in depth** (`src/hero3d.js`). On a screen 1,080 pixels wide or more, the three publication pages beside the headline rise into a 3D stack, turn toward the pointer and separate on scroll. CSS 3D transforms on the existing images; no library. Below that width, with reduced motion, or without scripts, the hero is unchanged.
+- **The ARF-1 rig in 3D** (`/studio/ipc`, `src/studio/arf3d.mjs`). A **3D view** button puts a model of the rig in place of the exploded drawing: drag to turn it, a slider between assembled and exploded, and a part selected on the rig or in the list selects the other. The model uses the boxes and cylinders of `scripts/aero/draw.py`, which draws the catalogue figures: change a part in both. The build bundles it with three.js into `/studio/arf3d.js`, which the page fetches only when the button is pressed. Without WebGL the drawing comes back.
+- **Sign-in flows** (`/sign-in-flows`, `lib/flows.mjs`, `src/flows.js`). OAuth 2.0, OpenID Connect, SAML 2.0 and single sign-on as sequence diagrams drawn at build time, each with its steps: the message, what it carries and what the receiver checks. Every value is invented, on example.com. Without a script every step is listed.
+- **The KC1 API explorer** (`/kc1-api-explorer`, `lib/explorer.mjs`, `src/explorer.js`). The requests recorded against the KC1 prediction API with the responses they got, read from `content/projects/kc1/api` on every build. The page sends nothing. A recording without a title in `lib/explorer.mjs` stops the build.
+
 ## Films
 
 The video section plays films that are kept with the site: nothing is streamed from another service, and no visitor's browser contacts one.
@@ -407,6 +416,9 @@ The scripts need Python with Playwright and Pillow, Google Chrome, and ffmpeg.
 | `node scripts/check-links.mjs` | Every link of the built site. A link inside the site has to lead to a file, and a link to a part of a page to an element that the page holds. A link to another site has to answer. |
 | `python3 tests/studio/run.py http://localhost:8765` | The studio, end to end in a real browser: each tool opens two different inputs, is edited, saved, reopened and exported, every export is opened and its content checked, a bad file is refused, and no script error occurs; on a phone where the tool supports it (249 checks in nine scripts). Set `CHROME` for Google Chrome and `DITA_HOME` for the DITA tests. |
 | `python3 scripts/check-a11y.py http://localhost:8765` | Every page of a local build with axe-core, on a desktop and on a phone: WCAG 2.0, 2.1 and 2.2 at levels A and AA, plus best practices. A WCAG problem fails the check. Install the checker first with `npm install --no-save axe-core`. |
+| `python3 tests/studio/test_ipc3d.py http://localhost:8765` | The 3D view of the parts catalogue: it loads on request, selects a part both ways, turns, zooms, speaks French, fits a phone, and gives the drawing back without WebGL (26 checks). `tests/studio/run.py` runs it with the others. |
+| `python3 tests/flows.py http://localhost:8765` | The sign-in flows page: whole without a script, one step at a time with it, a link to a step, the keyboard, a phone, and the PKCE hash (40 checks, two of them axe-core's when it is installed). |
+| `python3 tests/explorer.py http://localhost:8765` | The KC1 API explorer: every exchange shows its recorded status and answer, the filters, no request to another host, a phone (21 checks, one of them axe-core's when it is installed). |
 | `python3 scripts/check-live.py` | The live site and every live project, opened in a real browser on a desktop and on a phone. A page passes when it shows text and reports no script error and no missing file. It also opens the recruiter page and the studio pages. The script also opens April and listens: her greeting, one answer in words and aloud, and the first stop of her tour. It fetches every recording in every language. |
 
 The workflow **Check the site** builds the site and runs the self-test, the link check and the live check; run the accessibility check on your own build. It runs on demand and every Monday morning, and GitHub sends an email when it fails. Run it after a release, once the release is live.
@@ -419,7 +431,7 @@ npm run build                                      # writes public/
 python3 -m http.server 8765 --directory public    # preview at http://localhost:8765
 ```
 
-The build needs Node.js 22 and a network connection: it fetches project files from GitHub and keeps copies in `.cache/`. The assistant and live drafting don't run in the local preview. There, April answers from her built-in questions, and the rewrite desk works for its three samples.
+The build bundles the parts catalogue's 3D view with esbuild (`three` and `esbuild` are pinned in `package.json`). The build needs Node.js 22 and a network connection: it fetches project files from GitHub and keeps copies in `.cache/`. The assistant and live drafting don't run in the local preview. There, April answers from her built-in questions, and the rewrite desk works for its three samples.
 
 ## Deploy
 

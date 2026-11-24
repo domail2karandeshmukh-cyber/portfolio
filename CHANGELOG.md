@@ -2,6 +2,16 @@
 
 What changed on karandeshmukh.dev, release by release. The audit registers in `audit/` hold the findings behind each change, with their evidence.
 
+## Unreleased: interactive pages, on review branches (25 November 2026)
+
+Built on the `ai/portfolio-*` branches, each with a Vercel preview. Not on the live site. State and evidence: `docs/ai/HANDOFF.md` and `docs/ai/TEST_REPORT.md`.
+
+- **The hero's three pages in depth.** On a wide screen they rise into a 3D stack, turn toward the pointer and separate on scroll. No library; unchanged below 1,080 pixels, with reduced motion and without scripts.
+- **The ARF-1 rig in 3D, in the parts catalogue.** A model to turn by hand, between assembled and exploded, selected from the rig or from the list. The drawing stays the default. In five languages.
+- **Sign-in flows.** `/sign-in-flows`: OAuth 2.0, OpenID Connect, SAML 2.0 and single sign-on in 33 steps, with invented values. To check before release: a review by someone who works with these protocols, and the six links to the specifications.
+- **The KC1 API explorer.** `/kc1-api-explorer`: the 13 recorded requests with their responses. Nothing on it is live.
+- **Shared rules for coding agents.** `AGENTS.md`, `CLAUDE.md` and `docs/ai/`.
+
 ## Round 2: the Studio's tools and two more products (released 21 November 2026)
 
 The leftovers of the design refinement, the Studio's tools, and two more real products. No version number raised. Findings and evidence: `audit/design-refinement-register.md` (D40 to D49).

@@ -1276,6 +1276,7 @@ html.mnav-open{overflow:hidden}
    frame on a phone, so the page never does. */
 .sf-q{font-size:1.05rem}
 .sf-fig{margin:1.4em 0 0;border:1px solid var(--rule);border-radius:var(--r2);background:#fff;overflow-x:auto}
+.sf-fig:focus-visible,.sf-tbl:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .sf-svg{display:block;width:100%;min-width:640px;height:auto;font-family:var(--sans)}
 .sf-life{stroke:var(--rule2);stroke-width:1.2;stroke-dasharray:4 5}
 .sf-actor{fill:var(--desk);stroke:var(--ink);stroke-width:1.2}

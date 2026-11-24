@@ -88,3 +88,11 @@ Not run: the Studio tests other than those listed for the 3D view, `scripts/chec
 `tests/explorer.py` failed once on "every control is a 44-pixel target" on a phone, then passed on three runs after the test was given 500 ms for the layout to settle. Watch that check.
 
 Not run: the Studio tests, `scripts/check-a11y.py` on the whole site, Lighthouse, WebKit, Firefox, a real phone.
+
+## Integration branch, 2026-11-25
+
+`ai/portfolio-upgrade-claude`, same workspace, local build at `http://localhost:8765`.
+
+`python3 scripts/check-a11y.py` on the whole site ran out of time after the desktop pass and part of the phone pass. Desktop, all 213 pages: no WCAG problem. It found one on a phone, on `/sign-in-flows`: the diagram's frame scrolls sideways and the keyboard could not reach it. Fixed (the frame takes the focus and has a name), with two best-practice notes about landmarks that shared a name.
+
+After the fixes, `python3 scripts/check-a11y.py` on 14 pages (`/`, `/fr/`, `/hi/`, `/sign-in-flows`, `/kc1-api-explorer`, `/studio/ipc`, `/fr/studio/ipc`, three industry pages, `/standards/design`, `/studio`, `/workbench`, `/style`), desktop and phone: 0 WCAG problems, 0 best-practice notes. The phone pass of the other pages is not done.

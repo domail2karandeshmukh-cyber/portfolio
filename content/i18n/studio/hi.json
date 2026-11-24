@@ -1371,7 +1371,8 @@
   "Loading the 3D view…": "3D व्यू लोड हो रहा है…",
   "The ARF-1 training rig in 3D. Every part is in the parts list.": "ARF-1 प्रशिक्षण रिग 3D में। हर पुर्ज़ा पुर्ज़ा सूची में है।",
   "3D view ready. Drag the rig to turn it.": "3D व्यू तैयार है। रिग को घुमाने के लिए उसे खींचें।",
-  "The 3D view can't start in this browser. The drawing is shown instead.": "3D व्यू इस ब्राउज़र में शुरू नहीं हो सकता। इसकी जगह चित्र दिखाया गया है।"
+  "The 3D view can't start in this browser. The drawing is shown instead.": "3D व्यू इस ब्राउज़र में शुरू नहीं हो सकता। इसकी जगह चित्र दिखाया गया है।",
+  "The 3D view shows the same rig as a model that you turn by hand, anywhere between assembled and exploded. It needs WebGL in the browser. Without it, the drawing stays.": "3D व्यू उसी रिग को एक मॉडल के रूप में दिखाता है, जिसे आप हाथ से घुमाते हैं, असेंबल्ड से एक्सप्लोडेड तक कहीं भी। इसके लिए ब्राउज़र में WebGL चाहिए। उसके बिना चित्र ही रहता है।"
  },
  "keep": [
   "A",

@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code on the owner's Mac)
 
-- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`), `ai/portfolio-hero-claude` (the hero prototype, stacked on it), `ai/portfolio-arf3d-claude` (the 3D parts view, stacked on the hero) , `ai/portfolio-flows-claude` (the sign-in flows page, stacked on the 3D view) and `ai/portfolio-explorer-claude` (the KC1 API explorer, stacked on the flows page, so it holds everything). Use `git log -1` on each for the current commit.
+- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`), `ai/portfolio-hero-claude` (the hero prototype, stacked on it), `ai/portfolio-arf3d-claude` (the 3D parts view, stacked on the hero) , `ai/portfolio-flows-claude` (the sign-in flows page, stacked on the 3D view) `ai/portfolio-explorer-claude` (the KC1 API explorer, stacked on the flows page) and `ai/portfolio-upgrade-claude` (accessibility fixes, the README and the changelog, stacked on the explorer). **`ai/portfolio-upgrade-claude` holds everything: review and merge that one.** Use `git log -1` on each for the current commit.
 - **Owner of the current task:** Claude holds T06. On 25 November the owner told Claude to decide and carry on without asking. Claude still does not merge to `main` or deploy to production without the owner's word: the owner's brief rules that out.
 - **Production:** untouched. `main` is still `aed83e5`. Nothing was merged or promoted.
 
@@ -51,4 +51,4 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 
 ## Next action
 
-Next T06 piece: the message-to-publication experience, on a new branch from `ai/portfolio-explorer-claude`. The remaining three explorers wait for data from their projects. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.
+T06 is built as far as this repository allows. The message-to-publication experience was already on `main` (see `TASKS.md`). The TrustNav, AI-ChainGuard and Sentinel explorers wait for data from their projects. Next: the owner's review of `ai/portfolio-upgrade-claude`, then T07 (CyberAtlas), which needs its own repository. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.

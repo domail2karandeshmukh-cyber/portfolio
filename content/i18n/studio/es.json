@@ -1371,7 +1371,8 @@
   "Loading the 3D view…": "Cargando la vista 3D…",
   "The ARF-1 training rig in 3D. Every part is in the parts list.": "El banco de formación ARF-1 en 3D. Todas las piezas están en la lista de piezas.",
   "3D view ready. Drag the rig to turn it.": "Vista 3D lista. Arrastre el banco para girarlo.",
-  "The 3D view can't start in this browser. The drawing is shown instead.": "La vista 3D no puede iniciarse en este navegador. En su lugar se muestra el dibujo."
+  "The 3D view can't start in this browser. The drawing is shown instead.": "La vista 3D no puede iniciarse en este navegador. En su lugar se muestra el dibujo.",
+  "The 3D view shows the same rig as a model that you turn by hand, anywhere between assembled and exploded. It needs WebGL in the browser. Without it, the drawing stays.": "La vista 3D muestra el mismo banco como un modelo que usted gira a mano, entre montado y explosionado. Necesita WebGL en el navegador. Sin WebGL, se mantiene el dibujo."
  },
  "keep": [
   "A",
