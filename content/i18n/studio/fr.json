@@ -1363,7 +1363,15 @@
   "Every module of the ARF-1 demonstration rig in one place: search, filter, compare issues and read the XML.": "Tous les modules du banc de démonstration ARF-1 au même endroit : recherchez, filtrez, comparez les éditions et lisez le XML.",
   "Read the ARF-1 demonstration publications by product: follow cross-references, search, and print.": "Lisez les publications du banc de démonstration ARF-1 par produit : suivez les renvois, cherchez et imprimez.",
   "The ARF-1 parts list beside its exploded view: select a part in one, and the other follows.": "La liste des pièces de l’ARF-1 à côté de sa vue éclatée : sélectionnez une pièce dans l’une, et l’autre suit.",
-  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "Vérifiez une procédure ou une description selon des règles originales calquées sur ASD-STE100, et appliquez les suggestions."
+  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "Vérifiez une procédure ou une description selon des règles originales calquées sur ASD-STE100, et appliquez les suggestions.",
+  "3D view": "Vue 3D",
+  "Exploded": "Éclaté",
+  "Reset the view": "Réinitialiser la vue",
+  "Drag the rig to turn it, or select it and press the arrow keys. Select a part on the rig or in the parts list.": "Faites glisser le banc pour le tourner, ou sélectionnez-le et appuyez sur les touches fléchées. Sélectionnez une pièce sur le banc ou dans la liste des pièces.",
+  "Loading the 3D view…": "Chargement de la vue 3D…",
+  "The ARF-1 training rig in 3D. Every part is in the parts list.": "Le banc d’entraînement ARF-1 en 3D. Chaque pièce figure dans la liste des pièces.",
+  "3D view ready. Drag the rig to turn it.": "Vue 3D prête. Faites glisser le banc pour le tourner.",
+  "The 3D view can't start in this browser. The drawing is shown instead.": "La vue 3D ne peut pas démarrer dans ce navigateur. Le dessin est affiché à la place."
  },
  "keep": [
   "A",

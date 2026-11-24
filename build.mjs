@@ -18,6 +18,7 @@ import { translate, typeset, units } from "./lib/i18n.mjs";
 import { socialCard } from "./lib/og.mjs";
 import { cv } from "./lib/cv.mjs";
 import { buildStudio } from "./lib/studio.mjs";
+import { build as bundle } from "esbuild";
 import { caseStudy, heroStage, caseStudyPage } from "./lib/casestudy.mjs";
 import { lifecyclePage } from "./lib/lifecycle.mjs";
 
@@ -490,6 +491,9 @@ await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
+// The 3D view of the parts catalogue: src/studio/arf3d.mjs and the parts of three.js it uses, in one file that
+// /studio/ipc loads only when a reader asks for the 3D view. three.js keeps its licence notice at the end.
+await bundle({ entryPoints: ["src/studio/arf3d.mjs"], bundle: true, minify: true, format: "iife", globalName: "ARF3D", target: "es2019", legalComments: "eof", outfile: `${OUT}/studio/arf3d.js`, logLevel: "warning" });
 const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "design", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,

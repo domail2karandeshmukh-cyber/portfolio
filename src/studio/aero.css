@@ -166,6 +166,15 @@ a:hover .cg rect,a:focus .cg rect{stroke:#1d4ed8;stroke-width:2}
 .ip-pichead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.4rem .8rem;margin:0 0 .6rem}
 .ip-pichead .ae-h{margin:0}
 .ip-zoom{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:0}
+.ip-tools{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem .8rem}
+/* The 3D view takes the drawing's place and its proportions (800 by 560), so nothing moves when a reader switches. */
+.ip-svg[hidden],.ip-3d[hidden],.ip-3dbar[hidden]{display:none}
+.ip-3d{border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:#fff;aspect-ratio:800/560}
+.ip-3dc{display:block;width:100%;height:100%;cursor:grab;touch-action:pan-y}
+.ip-3dc.dragging{cursor:grabbing}
+.ip-3dc:focus-visible{outline:2px solid #1d4ed8;outline-offset:-2px}
+.ip-3dbar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1rem;margin:.6rem 0 0}
+.ip-3dbar input[type=range]{width:min(220px,48vw);accent-color:var(--ink);vertical-align:middle}
 .ip-zoom output{font:600 .8rem var(--sans);min-width:3.2em;text-align:center;color:var(--ink2)}
 .ip-svg [data-item],.ie-main [data-item]{cursor:pointer}
 .ip-svg [data-item]:focus{outline:none}

@@ -26,10 +26,14 @@
 <div class="ip" id="ip-app">
  <section class="dt-card ip-pic" aria-labelledby="ip-pic-h">
   <div class="ip-pichead"><h2 class="ae-h" id="ip-pic-h">Figure 1 <small id="ip-icn"></small></h2>
-  <p class="ip-zoom" role="group" aria-label="Zoom"><button type="button" class="btn line sm" data-zoom="-1">Zoom out</button><output id="ip-zv" aria-live="polite">100%</output><button type="button" class="btn line sm" data-zoom="1">Zoom in</button><button type="button" class="btn line sm" data-zoom="0">Fit</button></p></div>
+  <div class="ip-tools"><button type="button" class="btn line sm" id="ip-3dbtn" aria-pressed="false">3D view</button>
+  <p class="ip-zoom" role="group" aria-label="Zoom"><button type="button" class="btn line sm" data-zoom="-1">Zoom out</button><output id="ip-zv" aria-live="polite">100%</output><button type="button" class="btn line sm" data-zoom="1">Zoom in</button><button type="button" class="btn line sm" data-zoom="0">Fit</button></p></div></div>
   <div id="ip-svg" class="ip-svg" tabindex="-1"></div>
-  <p class="ae-hint">Select a part or its number in the picture. With a keyboard, press Tab to reach the parts, then Enter.</p>
-  <p class="ae-hint">Zoom in to see small parts, then drag or scroll the picture.</p>
+  <div id="ip-3d" class="ip-3d" hidden></div>
+  <p class="ip-3dbar" id="ip-3dbar" hidden><label class="ae-pick">Exploded <input id="ip-ex" type="range" min="0" max="100" step="5" value="100"></label><button type="button" class="btn line sm" id="ip-3dhome">Reset the view</button></p>
+  <p class="ae-hint ip-h2">Select a part or its number in the picture. With a keyboard, press Tab to reach the parts, then Enter.</p>
+  <p class="ae-hint ip-h2">Zoom in to see small parts, then drag or scroll the picture.</p>
+  <p class="ae-hint ip-h3" hidden>Drag the rig to turn it, or select it and press the arrow keys. Select a part on the rig or in the parts list.</p>
  </section>
  <section class="dt-card ip-list" aria-labelledby="ip-list-h">
   <h2 class="ae-h" id="ip-list-h">Parts list <small id="ip-count"></small></h2>

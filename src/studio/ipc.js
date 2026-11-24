@@ -64,6 +64,13 @@
         g.classList.toggle("na", !!list.length && list.every(function (r) { return !fits(r); }));
       });
     }
+    if (v3) {
+      var ids = [], faint = [];
+      rows.forEach(function (r) { if (ids.indexOf(r.item) < 0) ids.push(r.item); });
+      ids.forEach(function (item) { if (rows.filter(function (r) { return r.item === item; }).every(function (r) { return !fits(r); })) faint.push(item); });
+      v3.show(ids, faint);
+      v3.select(selected);
+    }
     detail();
   }
   function detail() {
@@ -85,6 +92,13 @@
   /* ---------- Zoom and pan: the picture grows inside its frame, which scrolls; a drag on the picture moves it ---------- */
   var ZOOMS = [1, 1.5, 2, 3, 4], zi = 0;
   function zoom(step) {
+    if (in3d) {
+      var z = v3 ? v3.zoom(step) : 1;
+      $("#ip-zv").textContent = Math.round(z * 100) + "%";
+      document.querySelector('[data-zoom="-1"]').disabled = z <= 1;
+      document.querySelector('[data-zoom="1"]').disabled = z >= 4;
+      return;
+    }
     var box = $("#ip-svg"), cx = (box.scrollLeft + box.clientWidth / 2) / box.scrollWidth, cy = (box.scrollTop + box.clientHeight / 2) / box.scrollHeight;
     zi = step === 0 ? 0 : Math.max(0, Math.min(ZOOMS.length - 1, zi + step));
     box.style.setProperty("--z", ZOOMS[zi]);
@@ -112,6 +126,43 @@
     box.addEventListener("click", function (e) { if (box.classList.contains("dragging")) { e.stopPropagation(); e.preventDefault(); } }, true);
   })();
   zoom(0);
+
+  /* ---------- The 3D view: the same rig, turned by hand. /studio/arf3d.js holds the model and three.js, and is
+     fetched the first time a reader asks for it. If it can't start, the drawing comes back and the status says so. ---------- */
+  var v3 = null, v3wait = null, in3d = false;
+  function set3d(on) {
+    in3d = on;
+    $("#ip-3dbtn").setAttribute("aria-pressed", String(on));
+    $("#ip-svg").hidden = on; $("#ip-3d").hidden = !on; $("#ip-3dbar").hidden = !on;
+    Array.prototype.forEach.call(document.querySelectorAll(".ip-h2"), function (h) { h.hidden = on; });
+    document.querySelector(".ip-h3").hidden = !on;
+    if (!on) { zi = 0; zoom(0); return; }
+    if (v3) { v3.zoom(0); zoom(0); paint(); return; }
+    zoom(0);
+    say(T("Loading the 3D view…"));
+    v3wait = v3wait || new Promise(function (done, failed) { var s = document.createElement("script"); s.src = "/studio/arf3d.js"; s.onload = done; s.onerror = failed; document.head.appendChild(s); });
+    v3wait.then(function () {
+      if (!in3d || v3) return;
+      v3 = window.ARF3D.mount($("#ip-3d"), {
+        label: T("The ARF-1 training rig in 3D. Every part is in the parts list."),
+        still: !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches),
+        onPick: function (item) { if (item) choose(item, "svg"); },
+        onLost: no3d
+      });
+      v3.explode(+$("#ip-ex").value / 100);
+      paint();
+      say(T("3D view ready. Drag the rig to turn it."));
+    }).catch(no3d);
+  }
+  function no3d() {
+    if (v3) { try { v3.dispose(); } catch (e) {} v3 = null; }
+    v3wait = null;
+    set3d(false);
+    say(T("The 3D view can't start in this browser. The drawing is shown instead."), true);
+  }
+  $("#ip-3dbtn").addEventListener("click", function () { set3d(!in3d); });
+  $("#ip-ex").addEventListener("input", function (e) { if (v3) v3.explode(+e.target.value / 100); });
+  $("#ip-3dhome").addEventListener("click", function () { if (v3) { v3.reset(); zoom(0); } });
 
   Kit.wait(S1K.load().then(function (d) {
     db = d;

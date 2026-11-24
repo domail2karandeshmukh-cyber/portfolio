@@ -1363,7 +1363,15 @@
   "Every module of the ARF-1 demonstration rig in one place: search, filter, compare issues and read the XML.": "Jedes Modul des Demonstrationsstands ARF-1 an einem Ort: suchen, filtern, Ausgaben vergleichen und das XML lesen.",
   "Read the ARF-1 demonstration publications by product: follow cross-references, search, and print.": "Lesen Sie die Publikationen des Demonstrationsstands ARF-1 nach Produkt: Querverweisen folgen, suchen und drucken.",
   "The ARF-1 parts list beside its exploded view: select a part in one, and the other follows.": "Die Teileliste des ARF-1 neben ihrer Explosionszeichnung: Wählen Sie ein Teil in einer der beiden, und die andere folgt.",
-  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "Prüfen Sie eine Anleitung oder eine Beschreibung nach eigenen Regeln, die ASD-STE100 nachgebildet sind, und übernehmen Sie die Vorschläge."
+  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "Prüfen Sie eine Anleitung oder eine Beschreibung nach eigenen Regeln, die ASD-STE100 nachgebildet sind, und übernehmen Sie die Vorschläge.",
+  "3D view": "3D-Ansicht",
+  "Exploded": "Auseinandergezogen",
+  "Reset the view": "Ansicht zurücksetzen",
+  "Drag the rig to turn it, or select it and press the arrow keys. Select a part on the rig or in the parts list.": "Ziehen Sie die Anlage, um sie zu drehen, oder wählen Sie sie aus und drücken Sie die Pfeiltasten. Wählen Sie ein Teil an der Anlage oder in der Teileliste.",
+  "Loading the 3D view…": "3D-Ansicht wird geladen …",
+  "The ARF-1 training rig in 3D. Every part is in the parts list.": "Die Schulungsanlage ARF-1 in 3D. Jedes Teil steht in der Teileliste.",
+  "3D view ready. Drag the rig to turn it.": "3D-Ansicht bereit. Ziehen Sie die Anlage, um sie zu drehen.",
+  "The 3D view can't start in this browser. The drawing is shown instead.": "Die 3D-Ansicht kann in diesem Browser nicht starten. Stattdessen wird die Zeichnung gezeigt."
  },
  "keep": [
   "A",

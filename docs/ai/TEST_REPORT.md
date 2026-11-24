@@ -39,3 +39,19 @@ Checked by hand in Google Chrome with Playwright:
 | 390 pixels, touch | Script does nothing |
 
 Not run: Lighthouse and Core Web Vitals, `scripts/check-a11y.py`, the studio tests, WebKit, Firefox, a real phone.
+
+## 3D parts view, 2026-11-25
+
+`ai/portfolio-arf3d-claude`, same workspace, local build at `http://localhost:8765`. Headless Chrome drew WebGL in software (SwiftShader).
+
+| Command | Exit | Result |
+|---|---|---|
+| `npm run build` | 0 | 211 pages in 5 languages; no untranslated Studio piece; `studio/arf3d.js` 552 KB (139 KB gzipped) |
+| `node scripts/selftest.mjs` | 0 | 252 checks passed |
+| `python3 tests/studio/test_ipc3d.py` (new) | 0 | 26 passed: loads on demand, selection both ways, drag and arrow keys, zoom, French, phone, no-WebGL fallback |
+| `python3 tests/studio/test_i18n.py` | 0 | 128 passed |
+| `python3 tests/studio/test_aero.py` | 1 | 105 passed, 1 failed: "Watch it in the film plays the IETM part of the film". The same check fails on the baseline build in this workspace, so it is the workspace's video playback, not this change |
+| `python3 tests/journeys.py` | 0 | 44 passed |
+| `python3 tests/matrix.py` | 0 | 181 page views, 181 clean |
+
+Not run: the other Studio tests, `scripts/check-links.mjs`, `scripts/check-a11y.py`, Lighthouse, a real GPU, WebKit, Firefox, a real phone.

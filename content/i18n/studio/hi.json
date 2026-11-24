@@ -1363,7 +1363,15 @@
   "Every module of the ARF-1 demonstration rig in one place: search, filter, compare issues and read the XML.": "ARF-1 प्रदर्शन रिग का हर मॉड्यूल एक जगह: खोजें, फ़िल्टर करें, इश्यू की तुलना करें और XML पढ़ें।",
   "Read the ARF-1 demonstration publications by product: follow cross-references, search, and print.": "ARF-1 प्रदर्शन रिग के पब्लिकेशन उत्पाद के अनुसार पढ़ें: क्रॉस-रेफ़रेंस खोलें, खोजें और प्रिंट करें।",
   "The ARF-1 parts list beside its exploded view: select a part in one, and the other follows.": "ARF-1 की पुर्ज़ा सूची उसके एक्सप्लोडेड व्यू के साथ: किसी एक में पुर्ज़ा चुनें, दूसरा साथ चलता है।",
-  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "किसी प्रक्रिया या विवरण को ASD-STE100 पर आधारित मौलिक नियमों से जाँचें, और सुझाव लागू करें।"
+  "Check a procedure or a description against original rules modelled on ASD-STE100, and apply the suggestions.": "किसी प्रक्रिया या विवरण को ASD-STE100 पर आधारित मौलिक नियमों से जाँचें, और सुझाव लागू करें।",
+  "3D view": "3D व्यू",
+  "Exploded": "एक्सप्लोडेड",
+  "Reset the view": "व्यू रीसेट करें",
+  "Drag the rig to turn it, or select it and press the arrow keys. Select a part on the rig or in the parts list.": "रिग को घुमाने के लिए उसे खींचें, या उसे चुनकर ऐरो कुंजियाँ दबाएँ। रिग पर या पुर्ज़ा सूची में कोई पुर्ज़ा चुनें।",
+  "Loading the 3D view…": "3D व्यू लोड हो रहा है…",
+  "The ARF-1 training rig in 3D. Every part is in the parts list.": "ARF-1 प्रशिक्षण रिग 3D में। हर पुर्ज़ा पुर्ज़ा सूची में है।",
+  "3D view ready. Drag the rig to turn it.": "3D व्यू तैयार है। रिग को घुमाने के लिए उसे खींचें।",
+  "The 3D view can't start in this browser. The drawing is shown instead.": "3D व्यू इस ब्राउज़र में शुरू नहीं हो सकता। इसकी जगह चित्र दिखाया गया है।"
  },
  "keep": [
   "A",
