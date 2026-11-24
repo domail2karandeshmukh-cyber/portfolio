@@ -70,3 +70,21 @@ Not run: the other Studio tests, `scripts/check-links.mjs`, `scripts/check-a11y.
 | `node scripts/check-links.mjs` | 1 | 19,187 links inside the site all lead somewhere. Links to other sites: 26 `ENOTFOUND` (blocked hosts, among them the page's six links to the specifications) and 21 `HTTP 404` on GitHub links to this branch before it was pushed |
 
 Not run: the Studio tests other than those listed for the 3D view, `scripts/check-a11y.py` on the whole site, Lighthouse, WebKit, Firefox, a real phone.
+
+## KC1 API explorer, 2026-11-25
+
+`ai/portfolio-explorer-claude`, same workspace, local build at `http://localhost:8765`.
+
+| Command | Exit | Result |
+|---|---|---|
+| `npm run build` | 0 | 213 pages in 5 languages (two more than the baseline) |
+| `node scripts/selftest.mjs` | 0 | 252 checks passed |
+| `python3 tests/explorer.py` (new) | 0 | 21 passed: every exchange shows its recorded status and answer, opens without a script, the filters, a link to an exchange, no request to another host, a phone, and axe-core with no finding |
+| `python3 tests/flows.py` | 0 | 40 passed |
+| `python3 tests/journeys.py` | 0 | 44 passed |
+| `python3 tests/matrix.py` | 0 | 181 page views, 181 clean |
+| `node scripts/check-links.mjs` | 1 | 19,309 links inside the site all lead somewhere. Links to other sites: 26 `ENOTFOUND` (blocked hosts) and 21 `HTTP 404` on GitHub links to this branch before it was pushed |
+
+`tests/explorer.py` failed once on "every control is a 44-pixel target" on a phone, then passed on three runs after the test was given 500 ms for the layout to settle. Watch that check.
+
+Not run: the Studio tests, `scripts/check-a11y.py` on the whole site, Lighthouse, WebKit, Firefox, a real phone.

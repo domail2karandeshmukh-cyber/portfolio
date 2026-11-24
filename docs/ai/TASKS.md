@@ -9,7 +9,7 @@ One owner per task. Change the status and owner in the same commit as the work.
 | T03 | Shared branch and rules | Done | Claude | Authorized branch on GitHub, `main` unchanged |
 | T04 | Portfolio baseline | Done, except Lighthouse | Claude | Screenshots, tests and performance evidence |
 | T05 | Hero prototype | In review on `ai/portfolio-hero-claude` | Claude, then the owner | Responsive, accessible, original, reviewable preview |
-| T06 | Portfolio upgrade | In progress. Two pieces are in review; the newest branch is `ai/portfolio-flows-claude` | Claude | Every existing route and all content preserved |
+| T06 | Portfolio upgrade | In progress. Three pieces are in review; the newest branch is `ai/portfolio-explorer-claude` | Claude | Every existing route and all content preserved |
 | T07 | CyberAtlas MVP | Pending; repository and hosting to agree with the owner | Unassigned | 10 original lessons, 3 safe simulations |
 | T08 | AI SOC MVP | Deferred until after T06 | Unassigned | Defensive triage with evaluation and approvals |
 | T09 | StudioBridge | Optional | Unassigned | Shared git handoff demonstrated first |
@@ -27,4 +27,5 @@ T06 pieces, from the owner's brief:
 | Aerospace: the ARF-1 rig in 3D, exploded view, parts list | Built on `ai/portfolio-arf3d-claude`, in review |
 | Technical documentation: the six-stage message-to-publication experience | Not started |
 | Enterprise IT and IAM: SSO, OAuth 2.0, OIDC and SAML sequences | Built on `ai/portfolio-flows-claude` at `/sign-in-flows`, in review |
-| Cybersecurity and AI: TrustNav, AI-ChainGuard, Sentinel, KC1 explorers | Not started |
+| Cybersecurity and AI: the KC1 API explorer | Built on `ai/portfolio-explorer-claude` at `/kc1-api-explorer`, in review |
+| Cybersecurity and AI: TrustNav, AI-ChainGuard and Sentinel explorers | Not started. This repository holds no data of those projects; see the handoff |

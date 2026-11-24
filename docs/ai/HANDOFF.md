@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code on the owner's Mac)
 
-- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`), `ai/portfolio-hero-claude` (the hero prototype, stacked on it), `ai/portfolio-arf3d-claude` (the 3D parts view, stacked on the hero) and `ai/portfolio-flows-claude` (the sign-in flows page, stacked on the 3D view, so it holds everything). Use `git log -1` on each for the current commit.
+- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`), `ai/portfolio-hero-claude` (the hero prototype, stacked on it), `ai/portfolio-arf3d-claude` (the 3D parts view, stacked on the hero) , `ai/portfolio-flows-claude` (the sign-in flows page, stacked on the 3D view) and `ai/portfolio-explorer-claude` (the KC1 API explorer, stacked on the flows page, so it holds everything). Use `git log -1` on each for the current commit.
 - **Owner of the current task:** Claude holds T06. On 25 November the owner told Claude to decide and carry on without asking. Claude still does not merge to `main` or deploy to production without the owner's word: the owner's brief rules that out.
 - **Production:** untouched. `main` is still `aed83e5`. Nothing was merged or promoted.
 
@@ -37,10 +37,18 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 - **Without a script** every step is listed under its diagram. Nothing plays by itself. The diagram scrolls in its own frame on a phone.
 - **Accuracy:** every value is invented, on example.com, and the page says so. The PKCE verifier and challenge are the pair of RFC 7636, Appendix B; `tests/flows.py` computes the hash. Claude wrote the content from the specifications listed on the page. **Nobody with identity-engineering experience has reviewed it, and the six links to the specifications could not be opened from the build workspace.** Check both before release.
 
+## The KC1 API explorer (`ai/portfolio-explorer-claude`)
+
+- **What it is:** a new page, `/kc1-api-explorer`: the 13 requests recorded against the KC1 prediction API, each with the response it got, filters by outcome and address, the same request as a curl command, and a link to where the documentation covers it.
+- **Where the content comes from:** `lib/explorer.mjs` reads `content/projects/kc1/api/exchanges.json`, `exchanges-1.0.0.json` and `openapi.json` on every build. Only the titles and one-line notes are written by hand, and a recording without a title stops the build. The page sends nothing; `tests/explorer.py` checks that it asks no other host for anything.
+- **No dependency added.** `src/explorer.js` is 3.4 KB. Without a script each exchange still opens (a `details` element).
+- **Linked from:** the API documentation and the AI and data science pages, the sitemap and the search.
+- **Why KC1 first, and what is left:** KC1 is the only one of the four projects whose data is in this repository. TrustNav, AI-ChainGuard and NOVATECH Sentinel have their documents fetched from their own repositories at build time, and no recorded data here. An explorer for each needs real data from that project first (a recorded run, an export, a fixture); do not invent it.
+
 ## Blockers
 
 1. **The Mac was not audited.** Claude's cloud session has no link to it. Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
 
 ## Next action
 
-Next T06 piece: the cybersecurity and AI explorers, or the message-to-publication experience, on a new branch from `ai/portfolio-flows-claude`. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.
+Next T06 piece: the message-to-publication experience, on a new branch from `ai/portfolio-explorer-claude`. The remaining three explorers wait for data from their projects. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.

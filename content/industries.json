@@ -48,6 +48,7 @@
         { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "kc1-model-card" }
       ],
       "demos": [
+        { "title": "The KC1 prediction API, in recorded requests", "url": "/kc1-api-explorer", "kind": "Interactive explorer", "text": "Every request recorded against the API with the response it got: predictions, validation errors and wrong addresses. Recorded, not live." },
         { "title": "Developer documentation, in DITA", "url": "/studio/dita/developer-documentation/html5/index.html", "kind": "Demonstration", "text": "A concept, a deployment task, a troubleshooting topic and a configuration reference for an invented webhook relay, published by DITA Open Toolkit." },
         { "title": "Developer guide template", "url": "/workbench", "kind": "Tool", "text": "The workbench's developer guide: write against the style guide, and export Markdown, HTML or DITA." }
       ],
@@ -128,6 +129,7 @@
         { "title": "April, the assistant on this site", "url": "/#april", "kind": "Live application", "text": "Answers questions about my work from the same content file the site is built from, and can open what she names." }
       ],
       "demos": [
+        { "title": "The KC1 prediction API, in recorded requests", "url": "/kc1-api-explorer", "kind": "Interactive explorer", "text": "Every request recorded against the API with the response it got: predictions, validation errors and wrong addresses. Recorded, not live." },
         { "title": "The rewrite desk", "url": "/#rewrite", "kind": "Live tool", "text": "A model drafts a document from a chat message; the style guide checks the draft." }
       ],
       "standards": [

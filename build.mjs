@@ -22,6 +22,7 @@ import { build as bundle } from "esbuild";
 import { caseStudy, heroStage, caseStudyPage } from "./lib/casestudy.mjs";
 import { lifecyclePage } from "./lib/lifecycle.mjs";
 import { flowsPage } from "./lib/flows.mjs";
+import { explorerPage } from "./lib/explorer.mjs";
 
 const C = JSON.parse(await fs.readFile("content/site.json", "utf8"));
 const S = C.site, T = C.types, OUT = "public";
@@ -423,6 +424,16 @@ await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
   console.log(`flows: ${fl.flows} flows, ${fl.steps} steps`);
 }
 
+// The KC1 API through its recorded requests and responses (lib/explorer.mjs). Nothing on it is live.
+{
+  const ex = await explorerPage();
+  await library.extra({ path: "/kc1-api-explorer", title: `The KC1 prediction API, in ${ex.exchanges} recorded requests`,
+    description: `Every request recorded against the KC1 prediction API (version ${ex.version}) with the response it got: predictions, validation errors and wrong addresses. Recorded, not live.`,
+    trail: [["Portfolio", "/"], ["API documentation", "/industries/api-documentation"], ["KC1 API explorer"]], body: ex.body,
+    kind: "Explorer", shelf: "Case studies", text: ex.text });
+  console.log(`explorer: ${ex.exchanges} recorded exchanges of the KC1 API ${ex.version}`);
+}
+
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
 await fs.mkdir(`${OUT}/voices`, { recursive: true });
 await fs.copyFile("src/voices.html", `${OUT}/voices/index.html`);
@@ -495,7 +506,7 @@ for (const loc of locales) {
 }
 
 // doc.js and style.js are the document model and the style checker. The build uses them, and so does the workbench in a browser.
-for (const f of ["site.css", "app.js", "nav.js", "hero3d.js", "flows.js", "hubs.js", "fields.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+for (const f of ["site.css", "app.js", "nav.js", "hero3d.js", "flows.js", "explorer.js", "hubs.js", "fields.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
 const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
@@ -505,7 +516,7 @@ const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, t
 // The 3D view of the parts catalogue: src/studio/arf3d.mjs and the parts of three.js it uses, in one file that
 // /studio/ipc loads only when a reader asks for the 3D view. three.js keeps its licence notice at the end.
 await bundle({ entryPoints: ["src/studio/arf3d.mjs"], bundle: true, minify: true, format: "iife", globalName: "ARF3D", target: "es2019", legalComments: "eof", outfile: `${OUT}/studio/arf3d.js`, logLevel: "warning" });
-const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", "/sign-in-flows", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "design", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", "/sign-in-flows", "/kc1-api-explorer", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "design", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

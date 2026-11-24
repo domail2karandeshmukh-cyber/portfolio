@@ -1322,3 +1322,42 @@ html.mnav-open{overflow:hidden}
 .sf-live .sf-step.on{border-color:var(--ink);box-shadow:var(--lift)}
 .sf-live.sf-open .sf-step.on{box-shadow:none;border-color:var(--rule)}
 @media (prefers-reduced-motion:reduce){.sf-live .sf-m{transition:none}}
+
+/* /kc1-api-explorer (lib/explorer.mjs, src/explorer.js): the API's recorded requests and responses. Each exchange is
+   a details element, so it opens without a script; the script adds the filters. */
+.kx-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;margin:1.2em 0 0;border:1px solid var(--rule);border-radius:var(--r2);overflow:hidden;background:var(--rule)}
+.kx-facts div{background:#fff;padding:.7em .9em}
+.kx-facts dt{font:600 .8rem/1.3 var(--sans);color:var(--mute)}
+.kx-facts dd{margin:.15em 0 0;font-weight:600}
+.kx-list{list-style:none;margin:1.2em 0 0;padding:0;display:grid;gap:10px}
+.kx-x>details{border:1px solid var(--rule);border-radius:var(--r2);background:#fff}
+.kx-x>details[open]{border-color:var(--ink)}
+.kx-x>details>summary{display:flex;flex-wrap:wrap;align-items:center;gap:.4em .7em;min-height:52px;padding:.6em 1em;cursor:pointer;list-style:none}
+.kx-x>details>summary::-webkit-details-marker{display:none}
+.kx-x>details>summary::after{content:"";margin-left:auto;width:.55em;height:.55em;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg);transition:transform var(--t1) var(--ease)}
+.kx-x>details[open]>summary::after{transform:rotate(-135deg)}
+.kx-m{display:inline-block;min-width:3.6em;padding:.2em .5em;border-radius:4px;font:700 .76rem/1.2 var(--mono);text-align:center;color:#fff;background:var(--ink)}
+.kx-get{background:#1D4ED8}.kx-post{background:#0B7E47}
+.kx-p{font:600 .92rem var(--mono)}
+.kx-s{display:inline-block;padding:.15em .55em;border-radius:999px;font:700 .8rem/1.3 var(--sans)}
+.kx-ok{background:#DCEFE4;color:#06512D}.kx-err{background:#FBE0DC;color:#8A1C12}
+summary .kx-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.kx-t{font-weight:600}
+.kx-body{padding:0 1em 1em;border-top:1px solid var(--rule)}
+.kx-note{margin:.9em 0 0;max-width:46em;line-height:1.55;color:var(--ink2)}
+.kx-chg{display:block;margin-top:.4em;font-size:.94rem}
+.kx-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:1em}
+@media (min-width:900px){.kx-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.kx-pair h3{margin:0 0 .5em;font:700 .95rem/1.3 var(--sans);display:flex;gap:.6em;align-items:center}
+.kx-code{margin:0!important;font-size:.8rem!important;line-height:1.55!important;max-height:26rem;overflow:auto}
+.kx-curl{margin-top:1em}
+.kx-curl summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.kx-curl p,.kx-doc{margin:.7em 0 0;font-size:.95rem;color:var(--ink2)}
+.kx-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:1.2em 0 0}
+.kx-bar .btn{min-height:44px}
+.kx-seg{display:flex;flex-wrap:wrap;gap:6px}
+.kx-seg [aria-pressed=true]{background:var(--ink);color:#fff}
+.kx-pick{display:inline-flex;align-items:center;gap:.5em;font:600 .92rem var(--sans)}
+.kx-pick select{min-height:44px;padding:0 .7em;border:1.5px solid var(--ink);border-radius:999px;background:#fff;font:inherit}
+.kx-count{margin:0 0 0 auto;font:600 .92rem var(--sans);color:var(--ink2)}
+@media (prefers-reduced-motion:reduce){.kx-x>details>summary::after{transition:none}}
