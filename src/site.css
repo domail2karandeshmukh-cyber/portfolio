@@ -1269,3 +1269,56 @@ html.mnav-open{overflow:hidden}
 .pset-a{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-top:.9rem!important}
 .pset-m{font-size:.86rem;color:var(--mute);margin-left:-8px}
 @media (max-width:560px){.pset{grid-template-columns:96px minmax(0,1fr);gap:14px;padding:16px}}
+
+/* /sign-in-flows (lib/flows.mjs, src/flows.js): four flows as sequence diagrams with their steps. Without the script
+   every step is listed under its diagram. With it (.sf-live) the current step sits beside the diagram on a wide
+   screen, its message is marked in the picture, and the others are faint. The diagram scrolls sideways in its own
+   frame on a phone, so the page never does. */
+.sf-q{font-size:1.05rem}
+.sf-fig{margin:1.4em 0 0;border:1px solid var(--rule);border-radius:var(--r2);background:#fff;overflow-x:auto}
+.sf-svg{display:block;width:100%;min-width:640px;height:auto;font-family:var(--sans)}
+.sf-life{stroke:var(--rule2);stroke-width:1.2;stroke-dasharray:4 5}
+.sf-actor{fill:var(--desk);stroke:var(--ink);stroke-width:1.2}
+.sf-an{font-size:13px;font-weight:700;fill:var(--ink)}
+.sf-ah{font-size:11px;fill:var(--mute);font-family:var(--mono)}
+.sf-line{fill:none;stroke:var(--ink);stroke-width:1.5}
+.sf-head{fill:var(--ink)}
+.sf-dot{fill:var(--ink)}
+.sf-self{fill:#fff;stroke:var(--ink);stroke-width:1.2}
+.sf-lab{font-size:12.5px;fill:var(--ink);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round}
+.sf-self+.sf-dot+.sf-lab{stroke:none}
+.sf-num{font-weight:700}
+.sf-hit{fill:#fff;fill-opacity:0}
+.sf-live .sf-m:hover .sf-hit{fill:var(--desk);fill-opacity:.7}
+.sf-steps{list-style:none;margin:1.4em 0 0;padding:0;display:grid;gap:18px}
+.sf-step{border:1px solid var(--rule);border-radius:var(--r2);padding:18px 20px;background:#fff;max-width:52rem}
+.sf-step h3{display:flex;gap:.6em;align-items:baseline;margin:0;font:700 1.1rem/1.3 var(--sans)}
+.sf-k{flex:none;display:grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--ink);color:var(--hl);font-size:.8rem}
+.sf-who{margin:.5em 0 0;font:600 .86rem/1.4 var(--sans);color:var(--mute)}
+.sf-step>p{margin:.7em 0 0;line-height:1.6;color:var(--ink2)}
+.sf-step .sf-code{margin:.9em 0 0;font-size:.8rem;line-height:1.55}
+.sf-checks{margin:.9em 0 0;padding:.7em 1em;border-left:3px solid var(--green);background:#EEF7F2;font-size:.95rem}
+.sf-checks p{margin:0;font-weight:700}
+.sf-checks ul{margin:.3em 0 0;padding-left:1.2em;line-height:1.55}
+.sf-result{margin-top:1.4em!important;padding:.9em 1.1em;border-left:3px solid var(--ink);background:var(--hl-soft);color:var(--ink)!important}
+.sf-tbl{margin-top:1.2em;overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r2)}
+.sf-tbl table{width:100%;min-width:640px;border-collapse:collapse;font-size:.95rem;line-height:1.45}
+.sf-tbl th,.sf-tbl td{padding:.7em .9em;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+.sf-tbl thead th{background:var(--desk);font-size:.86rem}
+.sf-tbl tbody tr:last-child>*{border-bottom:0}
+.sf-src{line-height:1.7}
+.sf-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:1.2em 0 0}
+.sf-bar .btn{min-height:44px}
+.sf-pos{margin:0 4px;font:600 .95rem/1.3 var(--sans);color:var(--ink);min-width:6.5em}
+.sf-all{margin-left:auto}
+.sf-live .sf-m{cursor:pointer}
+.sf-live .sf-m.todo{opacity:.32}
+.sf-live .sf-m.done{opacity:.6}
+.sf-live .sf-m.on .sf-line{stroke-width:2.6}
+.sf-live .sf-m.on .sf-lab{font-weight:700}
+.sf-live .sf-m.on .sf-self{fill:var(--hl)}
+.sf-live .sf-m.on .sf-lab{stroke:var(--hl)}
+.sf-live .sf-m{transition:opacity var(--t2) var(--ease)}
+.sf-live .sf-step.on{border-color:var(--ink);box-shadow:var(--lift)}
+.sf-live.sf-open .sf-step.on{box-shadow:none;border-color:var(--rule)}
+@media (prefers-reduced-motion:reduce){.sf-live .sf-m{transition:none}}

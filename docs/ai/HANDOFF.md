@@ -2,8 +2,8 @@
 
 Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code on the owner's Mac)
 
-- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`), `ai/portfolio-hero-claude` (the hero prototype, stacked on it) and `ai/portfolio-arf3d-claude` (the 3D parts view, stacked on the hero). Use `git log -1` on each for the current commit.
-- **Owner of the current task:** T05 and the first piece of T06 are with the owner for review. The owner told Claude to decide the hero's direction and to start T06. Claude holds T06.
+- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`), `ai/portfolio-hero-claude` (the hero prototype, stacked on it), `ai/portfolio-arf3d-claude` (the 3D parts view, stacked on the hero) and `ai/portfolio-flows-claude` (the sign-in flows page, stacked on the 3D view, so it holds everything). Use `git log -1` on each for the current commit.
+- **Owner of the current task:** Claude holds T06. On 25 November the owner told Claude to decide and carry on without asking. Claude still does not merge to `main` or deploy to production without the owner's word: the owner's brief rules that out.
 - **Production:** untouched. `main` is still `aed83e5`. Nothing was merged or promoted.
 
 ## Done
@@ -29,10 +29,18 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 - **Languages:** eight new strings, translated by Claude into French, German, Spanish and Hindi in `content/i18n/studio/`. A native reader has not checked them.
 - **Not done:** the page's Help text and the README don't mention the view; the user guide and the film of the catalogue don't show it; `scripts/check-a11y.py` and Lighthouse were not run.
 
+## The sign-in flows page (`ai/portfolio-flows-claude`)
+
+- **What it is:** a new page, `/sign-in-flows`: OAuth 2.0 (authorization code with PKCE), OpenID Connect (authorization code flow), SAML 2.0 (SSO started at the service provider) and single sign-on to a second application. Each is a sequence diagram with its steps: the message, what it carries, and what the receiver checks. 33 steps in all, and a table of the differences.
+- **How:** `lib/flows.mjs` holds the content and draws the diagrams as SVG at build time. `src/flows.js` (3.9 KB) shows one step at a time. No dependency added. English only, like the other standalone pages.
+- **Reached from:** the enterprise IT page (`content/industries.json`), the sitemap and the site search.
+- **Without a script** every step is listed under its diagram. Nothing plays by itself. The diagram scrolls in its own frame on a phone.
+- **Accuracy:** every value is invented, on example.com, and the page says so. The PKCE verifier and challenge are the pair of RFC 7636, Appendix B; `tests/flows.py` computes the hash. Claude wrote the content from the specifications listed on the page. **Nobody with identity-engineering experience has reviewed it, and the six links to the specifications could not be opened from the build workspace.** Check both before release.
+
 ## Blockers
 
 1. **The Mac was not audited.** Claude's cloud session has no link to it. Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
 
 ## Next action
 
-The owner reviews the two previews. Then the next T06 piece: the IAM sequences (no new dependency needed), on a new branch from `ai/portfolio-arf3d-claude`.
+Next T06 piece: the cybersecurity and AI explorers, or the message-to-publication experience, on a new branch from `ai/portfolio-flows-claude`. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.

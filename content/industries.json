@@ -71,6 +71,7 @@
       ],
       "projects": [{ "doc": "ws-slow-http" }],
       "demos": [
+        { "title": "OAuth 2.0, OpenID Connect, SAML and single sign-on, step by step", "url": "/sign-in-flows", "kind": "Interactive explainer", "text": "Four flows as sequences to step through: each message, what it carries and what the receiver checks. Invented example values." },
         { "title": "Step guide: create a new employee's account", "url": "/studio/samples/guides/it-onboarding/guide.pdf", "kind": "PDF, demonstration scenario", "text": "Five steps, each with an annotated screenshot of the identity console." },
         { "title": "Step guide: unlock a customer's account", "url": "/studio/samples/guides/support-unlock/guide.pdf", "kind": "PDF, demonstration scenario", "text": "A support-desk procedure with a caution about identity checks." },
         { "title": "Document control", "url": "/studio/control", "kind": "Tool", "text": "Draft, review, approval and publication, with an audit trail." },

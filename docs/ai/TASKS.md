@@ -9,7 +9,7 @@ One owner per task. Change the status and owner in the same commit as the work.
 | T03 | Shared branch and rules | Done | Claude | Authorized branch on GitHub, `main` unchanged |
 | T04 | Portfolio baseline | Done, except Lighthouse | Claude | Screenshots, tests and performance evidence |
 | T05 | Hero prototype | In review on `ai/portfolio-hero-claude` | Claude, then the owner | Responsive, accessible, original, reviewable preview |
-| T06 | Portfolio upgrade | In progress. First piece, the 3D parts view, is in review on `ai/portfolio-arf3d-claude` | Claude | Every existing route and all content preserved |
+| T06 | Portfolio upgrade | In progress. Two pieces are in review; the newest branch is `ai/portfolio-flows-claude` | Claude | Every existing route and all content preserved |
 | T07 | CyberAtlas MVP | Pending; repository and hosting to agree with the owner | Unassigned | 10 original lessons, 3 safe simulations |
 | T08 | AI SOC MVP | Deferred until after T06 | Unassigned | Defensive triage with evaluation and approvals |
 | T09 | StudioBridge | Optional | Unassigned | Shared git handoff demonstrated first |
@@ -26,5 +26,5 @@ T06 pieces, from the owner's brief:
 |---|---|
 | Aerospace: the ARF-1 rig in 3D, exploded view, parts list | Built on `ai/portfolio-arf3d-claude`, in review |
 | Technical documentation: the six-stage message-to-publication experience | Not started |
-| Enterprise IT and IAM: SSO, OAuth 2.0, OIDC and SAML sequences | Not started |
+| Enterprise IT and IAM: SSO, OAuth 2.0, OIDC and SAML sequences | Built on `ai/portfolio-flows-claude` at `/sign-in-flows`, in review |
 | Cybersecurity and AI: TrustNav, AI-ChainGuard, Sentinel, KC1 explorers | Not started |

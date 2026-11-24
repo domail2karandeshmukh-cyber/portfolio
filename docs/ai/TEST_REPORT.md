@@ -55,3 +55,18 @@ Not run: Lighthouse and Core Web Vitals, `scripts/check-a11y.py`, the studio tes
 | `python3 tests/matrix.py` | 0 | 181 page views, 181 clean |
 
 Not run: the other Studio tests, `scripts/check-links.mjs`, `scripts/check-a11y.py`, Lighthouse, a real GPU, WebKit, Firefox, a real phone.
+
+## Sign-in flows page, 2026-11-25
+
+`ai/portfolio-flows-claude`, same workspace, local build at `http://localhost:8765`.
+
+| Command | Exit | Result |
+|---|---|---|
+| `npm run build` | 0 | 212 pages in 5 languages (one more than the baseline) |
+| `node scripts/selftest.mjs` | 0 | 252 checks passed |
+| `python3 tests/flows.py` (new) | 0 | 40 passed: whole without a script, stepping in all four flows, the diagram follows, a link to a step, the keyboard, a phone, the PKCE hash, and axe-core's WCAG 2.0 to 2.2 A and AA rules with no finding in two states |
+| `python3 tests/journeys.py` | 0 | 44 passed |
+| `python3 tests/matrix.py` | 0 | 181 page views, 181 clean |
+| `node scripts/check-links.mjs` | 1 | 19,187 links inside the site all lead somewhere. Links to other sites: 26 `ENOTFOUND` (blocked hosts, among them the page's six links to the specifications) and 21 `HTTP 404` on GitHub links to this branch before it was pushed |
+
+Not run: the Studio tests other than those listed for the 3D view, `scripts/check-a11y.py` on the whole site, Lighthouse, WebKit, Firefox, a real phone.
