@@ -15,7 +15,6 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 ## Blockers
 
 1. **The Mac was not audited.** Claude's cloud session has no link to it. Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
-2. **Spline and Context7 need the owner's sign-in** in claude.ai (Customize, Connectors, Connect).
 
 ## Next action
 

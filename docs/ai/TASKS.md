@@ -17,5 +17,5 @@ One owner per task. Change the status and owner in the same commit as the work.
 Open items inside finished tasks:
 
 - T01: audit the Mac (Node, Python, `claude mcp list`, `codex mcp list`, plugins, skills).
-- T02: owner sign-in for Spline and Context7; Firecrawl, Figma, Magic UI, 21st.dev and Chrome DevTools are not set up.
+- T02: Spline and Context7 are signed in but no tool has been called; Firecrawl, Figma, Magic UI, 21st.dev and Chrome DevTools are not set up.
 - T04: Lighthouse and Core Web Vitals on a preview, and `scripts/check-a11y.py`.
