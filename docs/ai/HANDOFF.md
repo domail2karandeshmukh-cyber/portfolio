@@ -2,23 +2,21 @@
 
 Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code on the owner's Mac)
 
-- **Branch:** `ai/shared-handoff-claude`, cut from `main` at `aed83e5`. It existed only in Claude's cloud workspace when this was written; the owner received it as a patch file. If the branch is not on GitHub, apply the patch first (`git am`).
-- **Owner of the current task:** nobody. T01 to T04 are done as far as the cloud session allows; T05 is ready to claim.
-- **Changed files:** `AGENTS.md`, `CLAUDE.md`, `docs/ai/*`. No site source, content or configuration changed.
-- **Production:** untouched. Nothing was deployed.
+- **Branches on GitHub:** `ai/shared-handoff-claude` (these shared files, cut from `main` at `aed83e5`) and `ai/portfolio-hero-claude` (the hero prototype, stacked on it). Use `git log -1` on each for the current commit.
+- **Owner of the current task:** T05 is with the owner for review. Nothing else is claimed.
+- **Production:** untouched. `main` is still `aed83e5`. Nothing was merged or promoted.
 
-## Done in this session
+## Done
 
-- Cloned `main` read-only, installed the pinned dependencies, built the site and ran the repository's own checks. Results are in `docs/ai/TEST_REPORT.md`.
+- Applied the owner's patch with `git am` on a fresh clone and pushed `ai/shared-handoff-claude`.
 - Tested each connector that the claude.ai account holds. Results are in `docs/ai/INTEGRATIONS.md`.
-- Wrote these shared files, merged from the owner's setup pack and the repository's existing standards.
+- Built the T05 prototype on `ai/portfolio-hero-claude`. What it does, and how it was tested, is in that branch's copy of this file and of `TEST_REPORT.md`.
 
 ## Blockers
 
-1. **No push access from Claude's cloud session.** Attaching the repository with write access was refused by the session's permission check. Smallest owner action: apply the patch locally and push the branch, or run the next session in Claude Code on the Mac.
-2. **The Mac was not audited.** Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
-3. **Spline and Context7 need the owner's sign-in** in claude.ai (Customize, Connectors, Connect).
+1. **The Mac was not audited.** Claude's cloud session has no link to it. Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
+2. **Spline and Context7 need the owner's sign-in** in claude.ai (Customize, Connectors, Connect).
 
 ## Next action
 
-T05, hero prototype. Read `standards/design.md` and `audit/design-refinement-register.md` first: the current hero (the headline that corrects itself and the three document pages) was released with the owner's approval on 20 November 2026. Prototype the 3D directions on a preview branch, load any WebGL after the text and actions have painted, keep the static hero as the fallback for reduced motion and for WebGL failure, and compare `tests/journeys.py` and `tests/matrix.py` against the baseline before asking for review.
+The owner reviews the hero preview. If approved, T06 starts from `ai/portfolio-hero-claude`. If not, change the prototype on that branch; do not open a second hero branch.
