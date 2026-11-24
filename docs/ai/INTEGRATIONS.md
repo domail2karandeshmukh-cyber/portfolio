@@ -1,6 +1,6 @@
 # Integration status
 
-Checked on 2026-11-25 from the owner's claude.ai account. The Mac's Claude Code and Codex configuration is not covered: both sessions ran in Claude's cloud workspace, which has no link to the Mac. Statuses: VERIFIED, CONFIGURED_NOT_AUTHENTICATED, BLOCKED, NOT_SUPPORTED, DEFERRED.
+Checked on 2026-11-25 from the owner's claude.ai account. The Mac's Claude Code and Codex configuration is not covered: both sessions ran in Claude's cloud workspace, which has no link to the Mac. Statuses: VERIFIED, CONFIGURED (signed in, not yet exercised), CONFIGURED_NOT_AUTHENTICATED, BLOCKED, NOT_SUPPORTED, DEFERRED.
 
 | Integration | Status | Evidence | Next action |
 |---|---|---|---|
@@ -11,8 +11,8 @@ Checked on 2026-11-25 from the owner's claude.ai account. The Mac's Claude Code 
 | MotionSites | VERIFIED | Account call and a library search succeeded. Free plan: 3 free prompts, 0 used, no premium content | Decide on a plan only if a design needs it |
 | MotionSites Studio | VERIFIED | Account call succeeded. No active plan, so building, saving and generating are unavailable | None unless the owner buys a plan |
 | OpenAI developer docs | VERIFIED | Added as a public no-sign-in connector; a documentation search returned 16 results | None |
-| Context7 | CONFIGURED_NOT_AUTHENTICATED | Connector added; stopped at Context7's sign-in. Still incomplete at the second check | Owner signs in |
-| Spline | CONFIGURED_NOT_AUTHENTICATED | Connector present; connection still incomplete at the second check | Owner signs in |
+| Context7 | CONFIGURED | The owner's account is signed in and claude.ai shows the connector connected. No tool called yet | Fetch one library's documentation in a new chat |
+| Spline | CONFIGURED | The owner's free account is signed in and claude.ai shows the connector connected. No tool called yet | List the scene tools in a new chat |
 | Playwright | VERIFIED in the cloud workspace | The repository's Playwright tests ran against Google Chrome (see `TEST_REPORT.md`). No Playwright MCP was set up | Check on the Mac |
 | Chrome DevTools MCP | NOT_SUPPORTED in claude.ai | Local server only | Set up in Claude Code or Codex on the Mac if needed |
 | Firecrawl | DEFERRED | Authenticated in ChatGPT only | Owner connects it in Claude if wanted |
