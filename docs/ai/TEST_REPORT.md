@@ -16,3 +16,26 @@ Record what ran, where, and the result. Leave a gap rather than estimate a numbe
 | `python3 tests/matrix.py` | 0 | 181 page views at 10 sizes, portrait and landscape: 181 clean |
 
 Not run: Lighthouse and Core Web Vitals, `scripts/check-a11y.py`, `tests/studio/run.py`, `tests/webkit_smoke.py`, `scripts/check-live.py`. Screenshots from the matrix run stayed in the cloud workspace and are not in the repository.
+
+## Hero prototype, 2026-11-25
+
+`ai/portfolio-hero-claude`, same workspace as the baseline, local build at `http://localhost:8765`.
+
+| Command | Exit | Result |
+|---|---|---|
+| `npm run build` | 0 | 211 pages in 5 languages; `index.html` 73 KB and `app.js` 68 KB, as in the baseline; `hero3d.js` 5.9 KB |
+| `node scripts/selftest.mjs` | 0 | 252 checks passed |
+| `node scripts/check-links.mjs` | 1 | 19,090 links inside the site all lead somewhere. Links to other sites: 20 `ENOTFOUND` (blocked hosts, as in the baseline), 20 `HTTP 404` on GitHub links to this branch, which was not pushed when the check ran, and 1 `HTTP 503` |
+| `python3 tests/journeys.py` | 0 | 44 passed, 0 failed |
+| `python3 tests/matrix.py` | 0 | 181 page views, 181 clean |
+
+Checked by hand in Google Chrome with Playwright:
+
+| Case | Result |
+|---|---|
+| 1,440 pixels, English and French | 3D on, no script error, the document no wider than the window |
+| 1,080 pixels | 3D on, the document no wider than the window |
+| 1,440 pixels with reduced motion | Script does nothing; the hero is the baseline's |
+| 390 pixels, touch | Script does nothing |
+
+Not run: Lighthouse and Core Web Vitals, `scripts/check-a11y.py`, the studio tests, WebKit, Firefox, a real phone.
