@@ -1,6 +1,6 @@
 # CyberAtlas
 
-Ten short lessons and three hands-on labs for people starting in cybersecurity, in one static page. "CyberAtlas" is a provisional name.
+Thirteen short lessons and four hands-on labs for people starting in cybersecurity, in one static page. "CyberAtlas" is a provisional name.
 
 This is an MVP. It is not published anywhere yet.
 
@@ -17,6 +17,7 @@ Each lesson ends with three questions that say why the right answer is right. Ea
 ## The labs are simulations
 
 - **The shell** (`src/engine/terminal.js`) is a set of small functions over an invented file tree in memory. It has 18 read-only commands and pipes. It runs no program, can write nothing, and refuses `;`, `&`, redirection and substitution.
+- **The inbox** (`src/engine/mail.js`) is six invented messages to sort into phishing and genuine. Every name ends in `.example`, which nobody can register, and links are shown as text, never as links.
 - **The firewall** (`src/engine/firewall.js`) is a first-match rule list with a default deny. A packet is three words; nothing is sent.
 - **The alerts** (`src/engine/triage.js`) are invented and only shaped like a SIEM's. The rule numbers are not Wazuh's.
 
@@ -34,9 +35,9 @@ No dependency, no server, no build tool beyond Node 22.
 ## Test it
 
 ```bash
-npm test                                 # 14 tests: the three engines and the content
+npm test                                 # 17 tests: the four engines and the content
 npm install --no-save axe-core           # once
-node build.js && python3 tests/e2e.py    # 52 checks in Google Chrome, with axe-core's WCAG rules
+node build.js && python3 tests/e2e.py    # 63 checks in Google Chrome, with axe-core's WCAG rules
 ```
 
 `tests/e2e.py` needs Python with Playwright and Google Chrome (`CHROME` names another one).

@@ -15,9 +15,9 @@ CHROME = os.environ.get("CHROME") or "/usr/bin/google-chrome"
 AXE = ROOT / "node_modules" / "axe-core" / "axe.min.js"
 # The answers, read from the same data the page uses.
 DATA = json.loads(subprocess.check_output(["node", "-e", """
-const C=require('./src/content.js'),T=require('./src/engine/terminal.js'),F=require('./src/engine/firewall.js'),G=require('./src/engine/triage.js');
+const C=require('./src/content.js'),T=require('./src/engine/terminal.js'),F=require('./src/engine/firewall.js'),G=require('./src/engine/triage.js'),M=require('./src/engine/mail.js');
 console.log(JSON.stringify({modules:C.MODULES,quiz:Object.fromEntries(Object.entries(C.LESSONS).map(([k,l])=>[k,l.quiz.map(q=>q.answer)])),
- shell:Object.fromEntries(T.lab().questions.map(q=>[q.id,q.answer])),fw:F.SOLUTION,tri:G.ALERTS.map(a=>[a.id,a.verdict,a.action])}))"""], cwd=ROOT))
+ shell:Object.fromEntries(T.lab().questions.map(q=>[q.id,q.answer])),fw:F.SOLUTION,tri:G.ALERTS.map(a=>[a.id,a.verdict,a.action]),mail:M.MESSAGES.map(a=>[a.id,a.verdict,a.action])}))"""], cwd=ROOT))
 ok = bad = 0
 def check(label, good, note=""):
     global ok, bad
@@ -44,9 +44,9 @@ with sync_playwright() as p:
     pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
     pg.on("request", lambda r: asked.append(r.url))
     pg.goto(PAGE)
-    check("the home page lists 3 modules, 10 lessons and 3 labs", pg.locator(".module .steps").count() == 3 and pg.locator(".steps li:not(.lab)").count() == 10 and pg.locator(".steps li.lab").count() == 3)
+    check("the home page lists 4 modules, 13 lessons and 4 labs", pg.locator(".module .steps").count() == 4 and pg.locator(".steps li:not(.lab)").count() == 13 and pg.locator(".steps li.lab").count() == 4 and "13 short lessons and 4 hands-on labs" in pg.inner_text(".lead"))
     check("it says the labs are simulations", "simulation" in pg.inner_text(".note"))
-    check("nothing is done at the start", "0 of 13" in pg.inner_text(".progress"))
+    check("nothing is done at the start", "0 of 17" in pg.inner_text(".progress"))
     axe(pg, "axe: home")
 
     # A lesson: a wrong answer is not told the right one; all right marks the lesson done.
@@ -71,7 +71,7 @@ with sync_playwright() as p:
             for i, a in enumerate(DATA["quiz"][l]): pg.check(f'input[name="q{i}"][value="{a}"]')
             pg.click("#quiz button[type=submit]")
     go(pg, "#home")
-    check("all ten lessons are done", pg.locator(".steps li:not(.lab) .tick.on").count() == 10)
+    check("all thirteen lessons are done", pg.locator(".steps li:not(.lab) .tick.on").count() == 13)
 
     # Lab 1: the shell, worked the way the lesson teaches, then the findings.
     go(pg, "#lab-ssh-log")
@@ -117,7 +117,25 @@ with sync_playwright() as p:
     pg.reload()
     check("the rules survive a reload", pg.locator("#rules li[data-i]").count() == 3)
 
-    # Lab 3: triage. Marking needs every alert decided; the right decisions pass.
+    # The phishing lab. Marking needs every message decided; the links are text, not links.
+    go(pg, "#lab-phishing")
+    check("no link in a message can be followed", pg.locator("#mail a").count() == 0 and pg.locator("#mail .links li").count() == 4)
+    check("a link shows where it goes", "account-verify.example" in pg.inner_text('.mail[data-a="m1"] .links'))
+    pg.click("#mail button[type=submit]")
+    check("marking waits until every message is decided", "Decide all six" in pg.inner_text("#mail .result"))
+    for a, v, act in DATA["mail"]:
+        pg.check(f'input[name="{a}-verdict"][value="{"real" if v == "phish" else "phish"}"]'); pg.check(f'input[name="{a}-action"][value="{act}"]')
+    pg.click("#mail button[type=submit]")
+    check("the wrong verdicts don't pass, and each says why", "0 of 6" in pg.inner_text("#mail .result") and pg.locator(".mail .fb.bad").count() == 6)
+    go(pg, "#home"); check("a failed lab isn't marked done", "Done" not in pg.inner_text('.steps li.lab:has(a[href="#lab-phishing"])'))
+    go(pg, "#lab-phishing")
+    for a, v, act in DATA["mail"]:
+        pg.check(f'input[name="{a}-verdict"][value="{v}"]'); pg.check(f'input[name="{a}-action"][value="{act}"]')
+    pg.click("#mail button[type=submit]")
+    check("the right decisions finish the lab, each with its reason", "6 of 6" in pg.inner_text("#mail .result") and pg.locator(".mail .fb.good").count() == 6)
+    axe(pg, "axe: the phishing lab with feedback")
+
+    # Lab 4: triage. Marking needs every alert decided; the right decisions pass.
     go(pg, "#lab-triage")
     pg.click("#tri button[type=submit]")
     check("marking waits until every alert is decided", "Decide all six" in pg.inner_text("#tri .result"))
@@ -128,7 +146,7 @@ with sync_playwright() as p:
     axe(pg, "axe: the triage lab with feedback")
 
     go(pg, "#home")
-    check("everything is done: 13 of 13", "13 of 13" in pg.inner_text(".progress"), pg.inner_text(".progress")[:60])
+    check("everything is done: 17 of 17", "17 of 17" in pg.inner_text(".progress"), pg.inner_text(".progress")[:60])
     go(pg, "#roadmap")
     note = pg.inner_text(".note")
     check("the roadmap promises nothing", "not affiliated" in note and "no exam result" in note and pg.locator("tbody tr").count() == 6)
@@ -137,14 +155,14 @@ with sync_playwright() as p:
     check("moving to a page puts the focus on its heading", pg.evaluate("document.activeElement.tagName") == "H1")
     check("the page title follows the page", pg.title() == "Files and paths | CyberAtlas", pg.title())
     go(pg, "#lesson-nothing-here")
-    check("an unknown address shows the home page", pg.locator(".module").count() == 4)
+    check("an unknown address shows the home page", pg.locator(".module").count() == 5)
     go(pg, "#home")
     pg.click("#reset"); pg.click("#reset-no")
-    check("Reset asks first, and Keep my progress keeps it", "13 of 13" in pg.inner_text(".progress") and not pg.is_visible("#reset-ask"))
+    check("Reset asks first, and Keep my progress keeps it", "17 of 17" in pg.inner_text(".progress") and not pg.is_visible("#reset-ask"))
     pg.click("#reset"); pg.click("#reset-yes")
-    check("Yes, reset clears the progress", "0 of 13" in pg.inner_text(".progress"))
+    check("Yes, reset clears the progress", "0 of 17" in pg.inner_text(".progress"))
     pg.reload()
-    check("and it stays cleared", "0 of 13" in pg.inner_text(".progress"))
+    check("and it stays cleared", "0 of 17" in pg.inner_text(".progress"))
     off = [u for u in asked if not u.startswith("file:")]
     check("the page asks nothing of any host", not off, off[:3])
     check("no script error", not errs, errs[:3])
@@ -152,7 +170,7 @@ with sync_playwright() as p:
 
     ctx = b.new_context(viewport={"width": 360, "height": 740}, is_mobile=True, has_touch=True, device_scale_factor=2)
     pg = ctx.new_page(); pg.goto(PAGE)
-    for h in ("#home", "#lesson-logs", "#lab-ssh-log", "#lab-firewall", "#lab-triage", "#roadmap"):
+    for h in ("#home", "#lesson-logs", "#lab-ssh-log", "#lab-firewall", "#lab-phishing", "#lesson-phishing", "#lab-triage", "#roadmap"):
         go(pg, h)
         if h == "#lab-firewall": pg.tap("#add"); pg.tap("#run")
         check(f"phone {h}: nothing runs off the side", pg.evaluate("document.documentElement.scrollWidth <= innerWidth"), pg.evaluate("document.documentElement.scrollWidth"))

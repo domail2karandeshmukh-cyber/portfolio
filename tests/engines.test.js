@@ -4,13 +4,15 @@ const assert = require("node:assert/strict");
 const T = require("../src/engine/terminal.js");
 const F = require("../src/engine/firewall.js");
 const G = require("../src/engine/triage.js");
+const M = require("../src/engine/mail.js");
 const C = require("../src/content.js");
 
-test("content: three modules, ten lessons, three labs", () => {
-  assert.equal(C.MODULES.length, 3);
+test("content: four modules, thirteen lessons, four labs", () => {
+  assert.equal(C.MODULES.length, 4);
+  assert.equal(Object.keys(C.LABS).length, 4);
   const lessons = C.MODULES.flatMap((m) => m.lessons);
-  assert.equal(lessons.length, 10);
-  assert.equal(new Set(lessons).size, 10, "a lesson is in one module only");
+  assert.equal(lessons.length, 13);
+  assert.equal(new Set(lessons).size, 13, "a lesson is in one module only");
   assert.deepEqual(Object.keys(C.LESSONS).sort(), lessons.slice().sort(), "every lesson is in a module, and every listed lesson exists");
   for (const m of C.MODULES) assert.ok(C.LABS[m.lab] && C.LABS[m.lab].module === m.id, `${m.id} has its lab`);
 });
@@ -134,4 +136,38 @@ test("triage: the alerts are a fair set", () => {
     assert.equal(a.action, a.verdict === "tp" ? "escalate" : "close", `${a.id}: a real attack is escalated, a false alarm closed`);
   }
   assert.equal(new Set(G.ALERTS.map((a) => a.id)).size, 6);
+});
+
+test("mail: the right decisions pass, five of six pass, four don't", () => {
+  const right = Object.fromEntries(M.MESSAGES.map((m) => [m.id, { verdict: m.verdict, action: m.action }]));
+  assert.deepEqual([M.grade(right).score, M.grade(right).passed], [6, true]);
+  const one = { ...right, m2: { verdict: "phish", action: "report" } };
+  assert.deepEqual([M.grade(one).score, M.grade(one).passed], [5, true]);
+  const two = { ...one, m1: { verdict: "real", action: "proceed" } };
+  assert.deepEqual([M.grade(two).score, M.grade(two).passed], [4, false]);
+  assert.equal(M.grade({ ...right, m1: { verdict: "phish", action: "proceed" } }).results[0].correct, false, "knowing it is phishing and acting on it anyway doesn't count");
+  assert.deepEqual([M.grade({}).score, M.grade(null).score], [0, 0]);
+});
+test("mail: the messages are a fair set", () => {
+  assert.equal(M.MESSAGES.length, 6);
+  assert.equal(M.MESSAGES.filter((m) => m.verdict === "phish").length, 3, "half are phishing");
+  for (const m of M.MESSAGES) {
+    assert.ok(m.body.length >= 2 && m.context.length > 40 && m.why.length > 60, m.id);
+    assert.equal(m.action, m.verdict === "phish" ? "report" : "proceed", m.id);
+  }
+  const own = (a) => a.endsWith("@" + M.YOU.domain);
+  assert.ok(M.MESSAGES.some((m) => m.verdict === "phish" && own(m.from.address)), "one phishing message comes from a real, taken-over address");
+  assert.ok(M.MESSAGES.some((m) => m.verdict === "real" && !own(m.from.address)), "one genuine message comes from outside");
+  assert.ok(M.MESSAGES.some((m) => m.verdict === "phish" && !m.links.length && !m.attachment), "one phishing message has no link and no file");
+  assert.ok(M.MESSAGES.some((m) => m.verdict === "real" && m.links.some((l) => l.shows !== l.goes)), "one genuine link's text isn't its address");
+});
+test("mail: every address and link is under .example, and the lesson's rule gives the lab's answer", () => {
+  const text = JSON.stringify([M, C.LESSONS.phishing, C.LESSONS.mfa, C.LESSONS.passwords]);
+  for (const host of text.match(/[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(?=[\/"\s\\,:]|$)/g).filter((h) => /\.(example|com|net|org|io|uk)$/.test(h) || h.includes("@")))
+    assert.match(host, /\.example$|^co\.uk$/, host);
+  for (const m of M.MESSAGES) assert.match(m.from.address, /^[a-z.-]+@[a-z.-]+\.example$/);
+  const owner = (url) => new URL(url).hostname.split(".").slice(-2).join(".");
+  const m1 = M.MESSAGES[0].links[0];
+  assert.deepEqual([owner(m1.shows), owner(m1.goes)], ["larkfield.example", "account-verify.example"]);
+  for (const m of M.MESSAGES.filter((x) => x.verdict === "real")) for (const l of m.links) assert.ok(["larkfield.example", "brightdesk.example"].includes(owner(l.goes)), l.goes);
 });

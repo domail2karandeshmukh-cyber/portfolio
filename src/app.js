@@ -5,7 +5,7 @@
    the page. The labs are simulations worked out in the browser: no command runs, no packet is sent. */
 (function () {
   "use strict";
-  var C = window.CAContent, T = window.CATerminal, F = window.CAFirewall, G = window.CATriage;
+  var C = window.CAContent, T = window.CATerminal, F = window.CAFirewall, G = window.CATriage, M = window.CAMail;
   var main = document.getElementById("main"), live = document.getElementById("live");
 
   /* ---------- Progress: in this browser, or in memory when the browser won't store it ---------- */
@@ -44,7 +44,7 @@
   function home() {
     var total = ORDER.length, got = ORDER.filter(isDone).length;
     return '<h1 tabindex="-1">Learn cybersecurity by doing it</h1>' +
-      '<p class="lead">Ten short lessons and three hands-on labs, from the Linux command line to triaging alerts like a security analyst. Free, in your browser, with nothing to install.</p>' +
+      '<p class="lead">' + Object.keys(C.LESSONS).length + ' short lessons and ' + Object.keys(C.LABS).length + ' hands-on labs, from the Linux command line to triaging alerts like a security analyst. Free, in your browser, with nothing to install.</p>' +
       '<p class="note"><strong>A safe place to practise.</strong> Every lab is a simulation that runs on this page. No command reaches a real computer, no packet leaves your browser, and every address, account and alert is invented.</p>' +
       '<section aria-labelledby="prog-h" class="progress"><h2 id="prog-h">Your progress</h2><p><strong>' + got + " of " + total + '</strong> steps done.</p>' +
       '<div class="bar" role="img" aria-label="' + got + " of " + total + ' steps done"><i style="width:' + Math.round(got / total * 100) + '%"></i></div>' +
@@ -235,6 +235,32 @@
     });
   }
 
+  /* ---------- Lab: phishing ---------- */
+  function mailLab() {
+    var you = M.YOU;
+    return labHead("phishing") + '<p class="note">You are <strong>' + esc(you.name) + "</strong>, " + esc(you.address) + ". Your company, " + esc(you.company) + ", uses the name <code>" + esc(you.domain) + '</code>.</p><form id="mail" novalidate>' + M.MESSAGES.map(function (m, i) {
+      function radios(kind, list) { return '<fieldset><legend>' + (kind === "verdict" ? "What is it?" : "What do you do?") + "</legend>" + list.map(function (o) { return '<label><input type="radio" name="' + m.id + "-" + kind + '" value="' + o.id + '"> ' + esc(o.name) + "</label>"; }).join("") + "</fieldset>"; }
+      // Links are shown as text, never as links: there is nothing here to click through to.
+      return '<article class="alert mail" data-a="' + m.id + '" aria-labelledby="h-' + m.id + '"><p class="kicker">Message ' + (i + 1) + " of " + M.MESSAGES.length + " · " + esc(m.time) + '</p><h2 id="h-' + m.id + '">' + esc(m.subject) + '</h2><dl class="facts"><div><dt>From (name shown)</dt><dd>' + esc(m.from.name) + "</dd></div><div><dt>From (address)</dt><dd><code>" + esc(m.from.address) + "</code></dd></div>" +
+        (m.attachment ? "<div><dt>Attachment</dt><dd><code>" + esc(m.attachment) + "</code></dd></div>" : "") + '</dl><div class="letter">' + m.body.map(function (l) { return "<p>" + esc(l) + "</p>"; }).join("") + "</div>" +
+        (m.links.length ? "<h3>Links in the message</h3><ul class=\"links\">" + m.links.map(function (l) { return "<li>Shows as: <code>" + esc(l.shows) + "</code><br>Goes to: <code>" + esc(l.goes) + "</code></li>"; }).join("") + "</ul>" : "<h3>Links in the message</h3><p>None.</p>") +
+        "<h3>What you know</h3><p>" + esc(m.context) + '</p><div class="decide">' + radios("verdict", M.VERDICTS) + radios("action", M.ACTIONS) + '</div><p class="fb" hidden></p></article>';
+    }).join("") + '<p><button class="btn ink" type="submit">Mark my decisions</button></p><p class="result" role="status"></p></form>' + pager("lab", "phishing");
+  }
+  function mailWire() {
+    $("#mail").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var d = {};
+      M.MESSAGES.forEach(function (m) { var v = $('input[name="' + m.id + '-verdict"]:checked'), c = $('input[name="' + m.id + '-action"]:checked'); d[m.id] = { verdict: v && v.value, action: c && c.value }; });
+      var g = M.grade(d), open = g.results.filter(function (r) { return !r.answered; }).length;
+      if (open) { var msg0 = "Decide all six messages first: " + open + " still " + (open === 1 ? "has" : "have") + " an open choice."; $("#mail .result").textContent = msg0; say(msg0); return; }
+      g.results.forEach(function (r) { var fb = $('.mail[data-a="' + r.id + '"] .fb'); fb.hidden = false; fb.className = "fb " + (r.correct ? "good" : "bad"); fb.textContent = (r.correct ? "Right. " : !r.verdict ? "Look again at what kind of message this is. " : "Right about the message, but not the next step. ") + r.why; });
+      var msg = g.score + " of " + g.total + " right. " + (g.passed ? "Lab done." : "Five passes. Read the reasons, change your decisions and mark again.");
+      $("#mail .result").textContent = msg; say(msg);
+      if (g.passed) done("labs", "phishing");
+    });
+  }
+
   /* ---------- Roadmap ---------- */
   function roadmap() {
     return '<p class="crumbs"><a href="#home">CyberAtlas</a></p><h1 tabindex="-1">Certification roadmap</h1><p class="lead">Certifications that people starting in security often aim for, and where this course touches the same ground.</p>' +
@@ -253,6 +279,7 @@
     else if (kind === "lab" && id === "ssh-log") { main.innerHTML = shellLab(); wire = shellWire; title = "Lab: " + C.LABS[id].title; }
     else if (kind === "lab" && id === "firewall") { main.innerHTML = fwLab(); wire = fwWire; title = "Lab: " + C.LABS[id].title; }
     else if (kind === "lab" && id === "triage") { main.innerHTML = triLab(); wire = triWire; title = "Lab: " + C.LABS[id].title; }
+    else if (kind === "lab" && id === "phishing") { main.innerHTML = mailLab(); wire = mailWire; title = "Lab: " + C.LABS[id].title; }
     else if (kind === "roadmap") { main.innerHTML = roadmap(); title = "Certification roadmap"; }
     else { main.innerHTML = home(); wire = homeWire; }
     document.title = title === "CyberAtlas" ? "CyberAtlas: learn cybersecurity by doing it" : title + " | CyberAtlas";

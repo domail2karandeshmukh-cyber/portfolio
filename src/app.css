@@ -98,3 +98,8 @@ tr.fail td:last-child{color:var(--bad);font-weight:700}
 tr.fail{background:var(--badbg)}
 .decide{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0 16px}
 .foot{border-top:1px solid var(--rule);background:var(--paper);color:var(--mute);font-size:.92rem;padding:14px 0}
+.letter{border-left:4px solid var(--rule);padding:2px 0 2px 16px;margin:14px 0}
+.letter p{margin:.5em 0}
+.links{padding-left:1.2em}
+.links li{margin:.4em 0}
+.links code,.facts code{overflow-wrap:anywhere}
