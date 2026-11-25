@@ -45,6 +45,10 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 - **Linked from:** the API documentation and the AI and data science pages, the sitemap and the search.
 - **Why KC1 first, and what is left:** KC1 is the only one of the four projects whose data is in this repository. TrustNav, AI-ChainGuard and NOVATECH Sentinel have their documents fetched from their own repositories at build time, and no recorded data here. An explorer for each needs real data from that project first (a recorded run, an export, a fixture); do not invent it.
 
+## CyberAtlas (T07)
+
+Built as a separate project: 3 modules, 10 lessons, 3 simulated graded labs, one static page with no dependency. It is on the orphan branch `ai/cyberatlas-mvp-claude`, which shares no history with the site, because Claude could not create a repository. Read that branch's `README.md`, `AGENTS.md` and `HANDOFF.md`. Its tests: 14 unit tests and 52 browser checks pass. Before any release it needs a security instructor's read, a check of the certification names, and the owner's choice of name, licence, repository and host.
+
 ## Blockers
 
 1. **The Mac was not audited.** Claude's cloud session has no link to it. Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
