@@ -43,7 +43,6 @@ with sync_playwright() as p:
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
     pg.on("request", lambda r: asked.append(r.url))
-    pg.on("dialog", lambda d: d.accept())
     pg.goto(PAGE)
     check("the home page lists 3 modules, 10 lessons and 3 labs", pg.locator(".module .steps").count() == 3 and pg.locator(".steps li:not(.lab)").count() == 10 and pg.locator(".steps li.lab").count() == 3)
     check("it says the labs are simulations", "simulation" in pg.inner_text(".note"))
@@ -52,7 +51,7 @@ with sync_playwright() as p:
 
     # A lesson: a wrong answer is not told the right one; all right marks the lesson done.
     first = DATA["modules"][0]["lessons"][0]
-    go(pg, f"#/lesson/{first}")
+    go(pg, f"#lesson-{first}")
     pg.click("#quiz button[type=submit]")
     check("an unanswered quiz asks for answers", "Answer every question" in pg.inner_text(".result"))
     wrong = (DATA["quiz"][first][0] + 1) % 4
@@ -68,14 +67,14 @@ with sync_playwright() as p:
     check("progress survives a reload", "Done" in pg.inner_text(".meta"))
     for m in DATA["modules"]:
         for l in m["lessons"]:
-            go(pg, f"#/lesson/{l}")
+            go(pg, f"#lesson-{l}")
             for i, a in enumerate(DATA["quiz"][l]): pg.check(f'input[name="q{i}"][value="{a}"]')
             pg.click("#quiz button[type=submit]")
-    go(pg, "#/")
+    go(pg, "#home")
     check("all ten lessons are done", pg.locator(".steps li:not(.lab) .tick.on").count() == 10)
 
     # Lab 1: the shell, worked the way the lesson teaches, then the findings.
-    go(pg, "#/lab/ssh-log")
+    go(pg, "#lab-ssh-log")
     def run(cmd):
         pg.fill("#term-cmd", cmd); pg.press("#term-cmd", "Enter"); pg.wait_for_timeout(40)
         return pg.inner_text("#term-out")
@@ -98,7 +97,7 @@ with sync_playwright() as p:
     check("the right findings finish the lab", "Lab done" in pg.inner_text("#lab-form .result"))
 
     # Lab 2: the firewall. No rules fails; a wide rule fails on SSH; the three narrow rules pass.
-    go(pg, "#/lab/firewall")
+    go(pg, "#lab-firewall")
     pg.click("#run")
     check("with no rules, the allowed traffic is dropped", "5 of 8" in pg.inner_text("#fw-result"), pg.inner_text("#fw-result"))
     pg.click("#add")
@@ -119,7 +118,7 @@ with sync_playwright() as p:
     check("the rules survive a reload", pg.locator("#rules li[data-i]").count() == 3)
 
     # Lab 3: triage. Marking needs every alert decided; the right decisions pass.
-    go(pg, "#/lab/triage")
+    go(pg, "#lab-triage")
     pg.click("#tri button[type=submit]")
     check("marking waits until every alert is decided", "Decide all six" in pg.inner_text("#tri .result"))
     for a, v, act in DATA["tri"]:
@@ -128,19 +127,22 @@ with sync_playwright() as p:
     check("the right decisions finish the lab, each with its reason", "6 of 6" in pg.inner_text("#tri .result") and pg.locator(".alert .fb.good").count() == 6)
     axe(pg, "axe: the triage lab with feedback")
 
-    go(pg, "#/")
+    go(pg, "#home")
     check("everything is done: 13 of 13", "13 of 13" in pg.inner_text(".progress"), pg.inner_text(".progress")[:60])
-    go(pg, "#/roadmap")
+    go(pg, "#roadmap")
     note = pg.inner_text(".note")
     check("the roadmap promises nothing", "not affiliated" in note and "no exam result" in note and pg.locator("tbody tr").count() == 6)
     axe(pg, "axe: the roadmap")
-    go(pg, "#/lesson/files")
+    go(pg, "#lesson-files")
     check("moving to a page puts the focus on its heading", pg.evaluate("document.activeElement.tagName") == "H1")
     check("the page title follows the page", pg.title() == "Files and paths | CyberAtlas", pg.title())
-    go(pg, "#/lesson/nothing-here")
+    go(pg, "#lesson-nothing-here")
     check("an unknown address shows the home page", pg.locator(".module").count() == 4)
-    pg.click("#reset")
-    check("Reset clears the progress", "0 of 13" in pg.inner_text(".progress"))
+    go(pg, "#home")
+    pg.click("#reset"); pg.click("#reset-no")
+    check("Reset asks first, and Keep my progress keeps it", "13 of 13" in pg.inner_text(".progress") and not pg.is_visible("#reset-ask"))
+    pg.click("#reset"); pg.click("#reset-yes")
+    check("Yes, reset clears the progress", "0 of 13" in pg.inner_text(".progress"))
     pg.reload()
     check("and it stays cleared", "0 of 13" in pg.inner_text(".progress"))
     off = [u for u in asked if not u.startswith("file:")]
@@ -150,9 +152,9 @@ with sync_playwright() as p:
 
     ctx = b.new_context(viewport={"width": 360, "height": 740}, is_mobile=True, has_touch=True, device_scale_factor=2)
     pg = ctx.new_page(); pg.goto(PAGE)
-    for h in ("#/", "#/lesson/logs", "#/lab/ssh-log", "#/lab/firewall", "#/lab/triage", "#/roadmap"):
+    for h in ("#home", "#lesson-logs", "#lab-ssh-log", "#lab-firewall", "#lab-triage", "#roadmap"):
         go(pg, h)
-        if h == "#/lab/firewall": pg.tap("#add"); pg.tap("#run")
+        if h == "#lab-firewall": pg.tap("#add"); pg.tap("#run")
         check(f"phone {h}: nothing runs off the side", pg.evaluate("document.documentElement.scrollWidth <= innerWidth"), pg.evaluate("document.documentElement.scrollWidth"))
         small = pg.locator("main button, main select, main input[type=text], .top a, .steps a, .pager a").evaluate_all("els => els.filter(e => e.offsetParent && e.getBoundingClientRect().height < 43.5).map(e => (e.textContent || e.id).trim().slice(0, 30))")
         check(f"phone {h}: every control is a 44-pixel target", not small, small[:4])

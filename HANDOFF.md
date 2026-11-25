@@ -12,7 +12,7 @@ Last updated: 2026-11-25 by Claude (cloud session)
 | Command | Result |
 |---|---|
 | `npm test` | 14 passed |
-| `node build.js && python3 tests/e2e.py` | 51 passed, with axe-core's WCAG 2.0 to 2.2 A and AA rules clean on the home page, a lesson, each lab and the roadmap, and a 360-pixel phone |
+| `node build.js && python3 tests/e2e.py` | 52 passed, with axe-core's WCAG 2.0 to 2.2 A and AA rules clean on the home page, a lesson, each lab and the roadmap, and a 360-pixel phone |
 
 Not run: Lighthouse, WebKit, Firefox, a screen reader, a real phone.
 

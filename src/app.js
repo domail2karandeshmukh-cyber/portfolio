@@ -1,5 +1,5 @@
 /* CyberAtlas: the pages. One HTML file, no framework and no server: the address after # picks the page
-   (#/lesson/files, #/lab/firewall, #/roadmap), and progress is kept in this browser only.
+   (#lesson-files, #lab-firewall, #roadmap), and progress is kept in this browser only.
 
    Everything shown comes from content.js and the three lab engines. Text from them is escaped before it is put in
    the page. The labs are simulations worked out in the browser: no command runs, no packet is sent. */
@@ -30,13 +30,13 @@
   function all(sel, el) { return Array.prototype.slice.call((el || main).querySelectorAll(sel)); }
   var ORDER = [];
   C.MODULES.forEach(function (m) { m.lessons.forEach(function (l) { ORDER.push(["lesson", l]); }); ORDER.push(["lab", m.lab]); });
-  function href(step) { return "#/" + step[0] + "/" + step[1]; }
+  function href(step) { return "#" + step[0] + "-" + step[1]; }
   function nameOf(step) { return step[0] === "lesson" ? C.LESSONS[step[1]].title : "Lab: " + C.LABS[step[1]].title; }
   function isDone(step) { return !!P[step[0] === "lesson" ? "lessons" : "labs"][step[1]]; }
   function pager(kind, id) {
     var i = ORDER.findIndex(function (s) { return s[0] === kind && s[1] === id; }), a = ORDER[i - 1], b = ORDER[i + 1];
     return '<nav class="pager" aria-label="Previous and next">' + (a ? '<a href="' + href(a) + '"><span>Previous</span>' + esc(nameOf(a)) + "</a>" : "<span></span>") +
-      (b ? '<a class="next" href="' + href(b) + '"><span>Next</span>' + esc(nameOf(b)) + "</a>" : '<a class="next" href="#/roadmap"><span>Next</span>Certification roadmap</a>') + "</nav>";
+      (b ? '<a class="next" href="' + href(b) + '"><span>Next</span>' + esc(nameOf(b)) + "</a>" : '<a class="next" href="#roadmap"><span>Next</span>Certification roadmap</a>') + "</nav>";
   }
   function tick(yes) { return '<span class="tick' + (yes ? " on" : "") + '">' + (yes ? "Done" : "To do") + "</span>"; }
 
@@ -49,19 +49,19 @@
       '<section aria-labelledby="prog-h" class="progress"><h2 id="prog-h">Your progress</h2><p><strong>' + got + " of " + total + '</strong> steps done.</p>' +
       '<div class="bar" role="img" aria-label="' + got + " of " + total + ' steps done"><i style="width:' + Math.round(got / total * 100) + '%"></i></div>' +
       '<p class="small">Progress is kept in this browser only. Nothing is sent anywhere, and there is no account.</p>' +
-      '<button type="button" class="btn line" id="reset">Reset my progress</button></section>' +
+      '<p><button type="button" class="btn line" id="reset">Reset my progress</button></p><p id="reset-ask" hidden>Lessons and labs will show as not done on this browser. <button type="button" class="btn ink sm" id="reset-yes">Yes, reset</button> <button type="button" class="btn line sm" id="reset-no">Keep my progress</button></p></section>' +
       C.MODULES.map(function (m, i) {
         return '<section class="module" aria-labelledby="m-' + m.id + '"><p class="kicker">Module ' + (i + 1) + '</p><h2 id="m-' + m.id + '">' + esc(m.title) + "</h2><p>" + esc(m.blurb) + '</p><ol class="steps">' +
-          m.lessons.map(function (l) { return '<li><a href="#/lesson/' + l + '">' + esc(C.LESSONS[l].title) + '</a><span class="meta">' + C.LESSONS[l].minutes + " min · 3 questions</span>" + tick(P.lessons[l]) + "</li>"; }).join("") +
-          '<li class="lab"><a href="#/lab/' + m.lab + '">Lab: ' + esc(C.LABS[m.lab].title) + '</a><span class="meta">' + C.LABS[m.lab].minutes + " min · graded</span>" + tick(P.labs[m.lab]) + "</li></ol></section>";
+          m.lessons.map(function (l) { return '<li><a href="#lesson-' + l + '">' + esc(C.LESSONS[l].title) + '</a><span class="meta">' + C.LESSONS[l].minutes + " min · 3 questions</span>" + tick(P.lessons[l]) + "</li>"; }).join("") +
+          '<li class="lab"><a href="#lab-' + m.lab + '">Lab: ' + esc(C.LABS[m.lab].title) + '</a><span class="meta">' + C.LABS[m.lab].minutes + " min · graded</span>" + tick(P.labs[m.lab]) + "</li></ol></section>";
       }).join("") +
-      '<section class="module" aria-labelledby="road-h"><h2 id="road-h">Where this can lead</h2><p>Six certifications that learners often aim for, and which modules touch the same ground.</p><p><a class="btn line" href="#/roadmap">See the certification roadmap</a></p></section>';
+      '<section class="module" aria-labelledby="road-h"><h2 id="road-h">Where this can lead</h2><p>Six certifications that learners often aim for, and which modules touch the same ground.</p><p><a class="btn line" href="#roadmap">See the certification roadmap</a></p></section>';
   }
   function homeWire() {
-    $("#reset").addEventListener("click", function () {
-      if (!window.confirm("Reset your progress on this browser? Lessons and labs will show as not done.")) return;
-      reset(); P = load(); render(); say("Progress reset.");
-    });
+    // The question is asked on the page: a browser's own confirm box isn't available everywhere this page is shown.
+    $("#reset").addEventListener("click", function () { $("#reset-ask").hidden = false; $("#reset-no").focus(); });
+    $("#reset-no").addEventListener("click", function () { $("#reset-ask").hidden = true; $("#reset").focus(); });
+    $("#reset-yes").addEventListener("click", function () { reset(); P = load(); render(); say("Progress reset."); });
   }
 
   /* ---------- Lessons and their quizzes ---------- */
@@ -73,7 +73,7 @@
   }
   function lesson(id) {
     var L = C.LESSONS[id], m = C.MODULES.filter(function (x) { return x.lessons.indexOf(id) >= 0; })[0];
-    return '<p class="crumbs"><a href="#/">CyberAtlas</a> / ' + esc(m.title) + '</p><h1 tabindex="-1">' + esc(L.title) + '</h1><p class="meta">' + L.minutes + " minutes · " + (P.lessons[id] ? "Done" : "Not done yet") + "</p>" +
+    return '<p class="crumbs"><a href="#home">CyberAtlas</a> / ' + esc(m.title) + '</p><h1 tabindex="-1">' + esc(L.title) + '</h1><p class="meta">' + L.minutes + " minutes · " + (P.lessons[id] ? "Done" : "Not done yet") + "</p>" +
       '<div class="prose">' + L.body.map(block).join("") + "</div>" +
       '<section aria-labelledby="quiz-h" class="quiz"><h2 id="quiz-h">Check what you learned</h2><form id="quiz" novalidate>' +
       L.quiz.map(function (q, i) {
@@ -106,7 +106,7 @@
   /* ---------- Lab 1: the simulated shell ---------- */
   function labHead(id) {
     var L = C.LABS[id], m = C.MODULES.filter(function (x) { return x.id === L.module; })[0];
-    return '<p class="crumbs"><a href="#/">CyberAtlas</a> / ' + esc(m.title) + '</p><h1 tabindex="-1">Lab: ' + esc(L.title) + '</h1><p class="meta">' + L.minutes + " minutes · graded · " + (P.labs[id] ? "Done" : "Not done yet") + '</p><p class="lead">' + esc(L.intro) + "</p>";
+    return '<p class="crumbs"><a href="#home">CyberAtlas</a> / ' + esc(m.title) + '</p><h1 tabindex="-1">Lab: ' + esc(L.title) + '</h1><p class="meta">' + L.minutes + " minutes · graded · " + (P.labs[id] ? "Done" : "Not done yet") + '</p><p class="lead">' + esc(L.intro) + "</p>";
   }
   function shellLab() {
     var qs = T.lab().questions;
@@ -237,17 +237,18 @@
 
   /* ---------- Roadmap ---------- */
   function roadmap() {
-    return '<p class="crumbs"><a href="#/">CyberAtlas</a></p><h1 tabindex="-1">Certification roadmap</h1><p class="lead">Certifications that people starting in security often aim for, and where this course touches the same ground.</p>' +
+    return '<p class="crumbs"><a href="#home">CyberAtlas</a></p><h1 tabindex="-1">Certification roadmap</h1><p class="lead">Certifications that people starting in security often aim for, and where this course touches the same ground.</p>' +
       '<p class="note"><strong>Read this first.</strong> CyberAtlas is not affiliated with any certifying body, contains no exam questions, and promises no exam result. It is a first step. Exams change: take the current objectives, prices and rules from each body’s own website before you plan.</p>' +
       '<div class="scroll" role="region" tabindex="0" aria-label="Certifications"><table><caption>Certifications and the modules that help</caption><thead><tr><th scope="col">Certification</th><th scope="col">From</th><th scope="col">Level</th><th scope="col">What it covers</th><th scope="col">Modules here that help</th></tr></thead><tbody>' +
       C.ROADMAP.map(function (r) {
         return '<tr><th scope="row">' + esc(r.name) + "</th><td>" + esc(r.body) + "</td><td>" + esc(r.level) + "</td><td>" + esc(r.note) + "</td><td>" + r.helps.map(function (h) { return esc(C.MODULES.filter(function (m) { return m.id === h; })[0].title); }).join(", ") + "</td></tr>";
-      }).join("") + '</tbody></table></div><p><a class="btn line" href="#/">Back to the modules</a></p>';
+      }).join("") + '</tbody></table></div><p><a class="btn line" href="#home">Back to the modules</a></p>';
   }
 
   /* ---------- Routing ---------- */
   function render() {
-    var parts = (window.location.hash || "#/").replace(/^#\/?/, "").split("/"), kind = parts[0], id = parts[1], wire = null, title = "CyberAtlas";
+    // Addresses are plain names: #home, #lesson-files, #lab-firewall, #roadmap.
+    var m = /^#(lesson|lab|roadmap)(?:-([a-z-]+))?$/.exec(window.location.hash) || [], kind = m[1], id = m[2], wire = null, title = "CyberAtlas";
     if (kind === "lesson" && Object.prototype.hasOwnProperty.call(C.LESSONS, id)) { main.innerHTML = lesson(id); wire = function () { lessonWire(id); }; title = C.LESSONS[id].title; }
     else if (kind === "lab" && id === "ssh-log") { main.innerHTML = shellLab(); wire = shellWire; title = "Lab: " + C.LABS[id].title; }
     else if (kind === "lab" && id === "firewall") { main.innerHTML = fwLab(); wire = fwWire; title = "Lab: " + C.LABS[id].title; }

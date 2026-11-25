@@ -25,7 +25,7 @@ Every address is from the ranges reserved for documentation (RFC 5737). A test f
 ## Run it
 
 ```bash
-node build.js              # writes dist/index.html: the whole site in one file, 85 KB
+node build.js              # writes dist/index.html: the whole site in one file, 86 KB
 open dist/index.html       # or open index.html, which loads the files in src/
 ```
 
@@ -36,7 +36,7 @@ No dependency, no server, no build tool beyond Node 22.
 ```bash
 npm test                                 # 14 tests: the three engines and the content
 npm install --no-save axe-core           # once
-node build.js && python3 tests/e2e.py    # 51 checks in Google Chrome, with axe-core's WCAG rules
+node build.js && python3 tests/e2e.py    # 52 checks in Google Chrome, with axe-core's WCAG rules
 ```
 
 `tests/e2e.py` needs Python with Playwright and Google Chrome (`CHROME` names another one).
