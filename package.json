@@ -1,0 +1,13 @@
+{
+  "name": "soc-baseline",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "An alert triage pipeline for Wazuh-shaped alerts: normalize, enrich, correlate, explain, propose, with analyst approval, an audit log and an evaluation. Rule-based baseline; no model, no dependency.",
+  "scripts": {
+    "data": "node data/build.ts",
+    "evaluate": "node src/cli.ts evaluate",
+    "test": "node --test tests/pipeline.test.ts"
+  },
+  "engines": { "node": ">=22.18" }
+}

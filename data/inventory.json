@@ -1,0 +1,99 @@
+{
+ "internal": [
+  "192.0.2.0/24"
+ ],
+ "assets": [
+  {
+   "ip": "192.0.2.50",
+   "name": "lab-scan01",
+   "role": "vulnerability_scanner",
+   "owner": "security team",
+   "schedule": {
+    "weekday": 4,
+    "fromHour": 14,
+    "toHour": 15
+   }
+  },
+  {
+   "ip": "192.0.2.10",
+   "name": "lab-backup01",
+   "role": "backup_server",
+   "owner": "infrastructure team"
+  },
+  {
+   "ip": "192.0.2.80",
+   "name": "lab-web01",
+   "role": "web_server",
+   "owner": "web team"
+  },
+  {
+   "ip": "192.0.2.90",
+   "name": "lab-db01",
+   "role": "db_server",
+   "owner": "data team"
+  },
+  {
+   "ip": "192.0.2.31",
+   "name": "pc-maria",
+   "role": "workstation",
+   "owner": "maria"
+  }
+ ],
+ "accounts": [
+  {
+   "name": "deploy",
+   "kind": "service",
+   "passwordLogin": false
+  },
+  {
+   "name": "backup",
+   "kind": "service",
+   "passwordLogin": false
+  },
+  {
+   "name": "maria",
+   "kind": "human",
+   "passwordLogin": true
+  },
+  {
+   "name": "root",
+   "kind": "service",
+   "passwordLogin": false
+  }
+ ],
+ "changes": [
+  {
+   "id": "CHG-1042",
+   "date": "2026-11-11",
+   "summary": "Backup server's SSH key replaced; lab-db01 still to update.",
+   "hosts": [
+    "lab-db01"
+   ],
+   "covers": [
+    "auth_failed",
+    "brute_force"
+   ]
+  },
+  {
+   "id": "CHG-1050",
+   "date": "2026-11-12",
+   "summary": "Create the account svc-metrics on lab-db01 for the monitoring agent.",
+   "hosts": [
+    "lab-db01"
+   ],
+   "covers": [
+    "account_created"
+   ],
+   "subject": "svc-metrics"
+  }
+ ],
+ "training": [
+  {
+   "host": "train-pc07",
+   "date": "2026-11-12",
+   "fromHour": 10,
+   "toHour": 12,
+   "summary": "Security awareness workshop, with the EICAR test file"
+  }
+ ]
+}
