@@ -1,0 +1,11 @@
+{
+  "name": "cyberatlas",
+  "private": true,
+  "version": "0.1.0",
+  "description": "CyberAtlas: ten lessons and three simulated labs for people starting in cybersecurity. Static, no dependency.",
+  "scripts": {
+    "build": "node build.js",
+    "test": "node --test tests/engines.test.js"
+  },
+  "engines": { "node": ">=22" }
+}
