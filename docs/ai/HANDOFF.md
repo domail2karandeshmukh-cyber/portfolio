@@ -49,10 +49,14 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 
 Built as a separate project: 3 modules, 10 lessons, 3 simulated graded labs, one static page with no dependency. It is on the orphan branch `ai/cyberatlas-mvp-claude`, which shares no history with the site, because Claude could not create a repository. Read that branch's `README.md`, `AGENTS.md` and `HANDOFF.md`. Its tests: 14 unit tests and 52 browser checks pass. Before any release it needs a security instructor's read, a check of the certification names, and the owner's choice of name, licence, repository and host.
 
+## AI SOC baseline (T08)
+
+A separate project on the orphan branch `ai/soc-mvp-claude` (no shared history with the site; never merge it). It takes alerts in the shape Wazuh sends, normalises and masks them, adds inventory context, groups them into incidents, and triages each with fixed rules that give a reason and the evidence for every point of the score. Response actions are only proposed: a named analyst approves or rejects each, and the code has no way to run one. Every step goes into a hash-chained audit log. No model, no dependency, no interface, no database yet. `npm test`: 16 pass. `npm run evaluate`: 12 of 12 labelled scenarios, which shows the pipeline works as designed and nothing more, because the rules and scenarios were written together. All data is synthetic, and the Wazuh rule IDs in it are from memory and unverified. Read that branch's `README.md`, `AGENTS.md` and `HANDOFF.md` for limits and the ordered next steps.
+
 ## Blockers
 
 1. **The Mac was not audited.** Claude's cloud session has no link to it. Local Claude Code and Codex MCP configuration, plugins and skills are unknown. Run `claude mcp list` and `codex mcp list` there and record the output, with credentials removed, in `docs/ai/INTEGRATIONS.md`.
 
 ## Next action
 
-T06 is built as far as this repository allows. The message-to-publication experience was already on `main` (see `TASKS.md`). The TrustNav, AI-ChainGuard and Sentinel explorers wait for data from their projects. Next: the owner's review of `ai/portfolio-upgrade-claude`, then T07 (CyberAtlas), which needs its own repository. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.
+T06 is built as far as this repository allows. The message-to-publication experience was already on `main` (see `TASKS.md`). The TrustNav, AI-ChainGuard and Sentinel explorers wait for data from their projects. Next: the owner's review of `ai/portfolio-upgrade-claude`. T07 (CyberAtlas) and T08 (AI SOC baseline) are built and each needs its own repository. T08's next step is real alerts from the owner's own Wazuh lab; creating a Supabase project for it waits for the owner's approval. Before any release: a reader who knows OAuth and SAML checks `/sign-in-flows`, native readers check the eight translated strings of the 3D view, and `scripts/check-links.mjs` runs on an open network.

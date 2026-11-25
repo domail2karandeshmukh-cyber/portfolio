@@ -11,7 +11,7 @@ One owner per task. Change the status and owner in the same commit as the work.
 | T05 | Hero prototype | In review on `ai/portfolio-hero-claude` | Claude, then the owner | Responsive, accessible, original, reviewable preview |
 | T06 | Portfolio upgrade | Built as far as this repository's data allows; in review on `ai/portfolio-upgrade-claude`, which holds every piece | Claude | Every existing route and all content preserved |
 | T07 | CyberAtlas MVP | Built, in review. Parked on the orphan branch `ai/cyberatlas-mvp-claude` of this repository until it has its own; never merge it here. Its own `HANDOFF.md` has the state | Claude | 10 original lessons, 3 safe simulations |
-| T08 | AI SOC MVP | Deferred until after T06 | Unassigned | Defensive triage with evaluation and approvals |
+| T08 | AI SOC MVP | Baseline built, in review. Parked on the orphan branch `ai/soc-mvp-claude` of this repository until it has its own; never merge it here. Rule-based pipeline with no model yet; interface, storage and model evaluation are still open. Its own `HANDOFF.md` has the state | Claude | Defensive triage with evaluation and approvals |
 | T09 | StudioBridge | Optional | Unassigned | Shared git handoff demonstrated first |
 
 Open items inside finished tasks:
