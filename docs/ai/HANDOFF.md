@@ -47,7 +47,7 @@ Last updated: 2026-11-25 by Claude (cloud session on claude.ai, not Claude Code 
 
 ## CyberAtlas (T07)
 
-Built as a separate project: 3 modules, 10 lessons, 3 simulated graded labs, one static page with no dependency. It is on the orphan branch `ai/cyberatlas-mvp-claude`, which shares no history with the site, because Claude could not create a repository. Read that branch's `README.md`, `AGENTS.md` and `HANDOFF.md`. Its tests: 14 unit tests and 52 browser checks pass. Before any release it needs a security instructor's read, a check of the certification names, and the owner's choice of name, licence, repository and host.
+Built as a separate project, now 4 modules, 13 lessons and 4 simulated graded labs (the fourth module, accounts and phishing, was added on 25 November), one static page with no dependency. It is on the orphan branch `ai/cyberatlas-mvp-claude`, which shares no history with the site, because Claude could not create a repository. Read that branch's `README.md`, `AGENTS.md` and `HANDOFF.md`. Its tests: 17 unit tests and 63 browser checks pass. Before any release it needs a security instructor's read, a check of the certification names, and the owner's choice of name, licence, repository and host.
 
 ## AI SOC baseline (T08)
 
