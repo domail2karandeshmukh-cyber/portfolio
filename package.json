@@ -3,11 +3,25 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "An alert triage pipeline for Wazuh-shaped alerts: normalize, enrich, correlate, explain, propose, with analyst approval, an audit log and an evaluation. Rule-based baseline; no model, no dependency.",
+  "description": "An alert triage pipeline for Wazuh-shaped alerts: normalize, enrich, correlate, explain, propose, with analyst approval, an audit log and an evaluation. Rule-based baseline, no model; a React page for the analyst.",
   "scripts": {
     "data": "node data/build.ts",
     "evaluate": "node src/cli.ts evaluate",
-    "test": "node --test tests/pipeline.test.ts"
+    "test": "node --test tests/pipeline.test.ts",
+    "check": "tsc",
+    "build": "node ui/build.mjs",
+    "e2e": "node ui/build.mjs && python3 tests/e2e.py"
   },
-  "engines": { "node": ">=22.18" }
+  "engines": {
+    "node": ">=22.18"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.7",
+    "@types/react": "^19.3.1",
+    "@types/react-dom": "^19.3.0",
+    "esbuild": "^0.28.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "typescript": "^7.0.2"
+  }
 }

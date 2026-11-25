@@ -1,9 +1,11 @@
 // node --test tests/pipeline.test.ts
 import assert from "node:assert/strict";
+import { createHash, randomBytes } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { ActionQueue, AuditLog } from "../src/control.ts";
 import { enrich, inRange, mask, normalize, normalizeOne } from "../src/ingest.ts";
+import { sha256 } from "../src/sha256.ts";
 import { evaluate, run } from "../src/pipeline.ts";
 import { baseline, correlate } from "../src/triage.ts";
 import type { Inventory, RawAlert, Scenario, Triager } from "../src/types.ts";
@@ -149,4 +151,10 @@ test("data: every address is reserved for documentation, and the labels are bala
   for (const ip of text.match(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/g)!) assert.match(ip, /^(192\.0\.2\.|198\.51\.100\.|203\.0\.113\.)/, ip);
   const count = (v: string) => scenarios.filter((s) => s.expected === v).length;
   assert.deepEqual([count("true_positive"), count("false_positive"), count("needs_review")], [4, 5, 3]);
+});
+test("hash: the built-in SHA-256 gives what Node's gives, at every length around a block edge", () => {
+  const node = (t: string) => createHash("sha256").update(t).digest("hex");
+  assert.equal(sha256("abc"), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad");
+  for (let n = 0; n <= 200; n++) { const t = "a".repeat(n); assert.equal(sha256(t), node(t), `length ${n}`); }
+  for (let i = 0; i < 50; i++) { const t = randomBytes(i * 37).toString("base64") + "é€😀"; assert.equal(sha256(t), node(t)); }
 });

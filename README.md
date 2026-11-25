@@ -1,6 +1,6 @@
 # AI SOC — baseline triage pipeline
 
-A first, working slice of the SOC product: alerts in the shape Wazuh sends go in; explained incidents and a queue of proposed actions come out. No model is involved yet. This is the baseline any model has to beat on accuracy, speed and cost before it earns a place.
+A first, working slice of the SOC product: alerts in the shape Wazuh sends go in; explained incidents and a queue of proposed actions come out. A React page lets an analyst read each incident and approve or reject the proposed actions. No model is involved yet. This is the baseline any model has to beat on accuracy, speed and cost before it earns a place.
 
 > **This branch is parked in the portfolio repository only because the project has no repository of its own yet. It shares no history with the website. Never merge it into `main`.**
 
@@ -16,14 +16,28 @@ A first, working slice of the SOC product: alerts in the shape Wazuh sends go in
 
 ## Run it
 
-Needs Node 22.18 or later (it runs the TypeScript directly; there is nothing to install).
+Needs Node 22.18 or later. The pipeline itself has no dependency and Node runs its TypeScript directly; `npm install` is only for the analyst's page (React, esbuild) and the type check (TypeScript).
 
 ```
-npm test                               # 16 tests
+npm test                               # 17 pipeline tests
 npm run evaluate                       # the 12 labelled scenarios
 node src/cli.ts triage data/sample-day.json
 npm run data                           # regenerate data/ from data/build.ts
+
+npm install
+npm run check                          # type check
+npm run build                          # dist/index.html, one self-contained file: open it in a browser
+npm run e2e                            # 67 browser checks (needs Python Playwright, Chrome, and `npm install --no-save axe-core`)
 ```
+
+## The analyst's page
+
+`ui/main.tsx` runs the same pipeline in the browser on `data/sample-day.json`. Four views: incidents (escalations first; each reason with its weight and a control that marks the events behind it), the approval queue, the audit log with its chain check, and the evaluation with its warning above the numbers.
+
+- Approving or rejecting calls the same `ActionQueue.decide()` the tests cover, so the page enforces nothing of its own: a machine name, an empty name or a missing reason is refused by the core.
+- **There is no sign-in.** The analyst's name is whatever is typed, so the page shows the approval flow but proves nothing about who approved. Real use needs authentication first.
+- Decisions and the audit log live in the page's memory and are gone on reload.
+- Alert text is rendered as text only.
 
 ## What the numbers mean, and don't
 
@@ -36,7 +50,7 @@ npm run data                           # regenerate data/ from data/build.ts
 - The ATT&CK technique names in `src/ingest.ts` are a short hand-written list, also unchecked against the current ATT&CK release.
 - The rules cover six patterns (password guessing, new accounts and rights, web shells, malware and test files, scans). Anything else is sent to a person as "needs review", which is the intended safe default, not coverage.
 - Secret masking is pattern-based and will miss formats it doesn't know.
-- No interface, no database, no live connection to Wazuh, no model. The audit log lives in memory; its chain detects edits but isn't signed, so someone who can rewrite the whole log can rewrite the hashes.
+- No database, no sign-in, no live connection to Wazuh, no model. The audit log lives in memory; its chain detects edits but isn't signed, so someone who can rewrite the whole log can rewrite the hashes.
 
 ## Adding a model later
 
@@ -51,6 +65,8 @@ src/triage.ts     correlate, baseline rules
 src/control.ts    audit log, approval queue
 src/pipeline.ts   run, evaluate
 src/cli.ts        command line
+src/sha256.ts     the hash for the audit chain, the same in Node and a browser
+ui/               the analyst's page (React) and its build
 data/build.ts     writes inventory.json, scenarios.json, sample-day.json
-tests/            node --test
+tests/            node --test, and e2e.py for the page
 ```

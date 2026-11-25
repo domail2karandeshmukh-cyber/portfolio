@@ -7,4 +7,5 @@
 5. Synthetic data only, documentation address ranges only. No real hosts, no scanning, no secrets in the repository (it is public).
 6. Don't change a scenario's expected label to make a test pass. If a label is wrong, say why in the commit.
 7. Run `npm test` and `npm run evaluate` before every commit and report the real output.
-8. No paid services, no new dependencies without the owner's approval. The project currently has none.
+8. No paid services, no new dependencies without the owner's approval. `src/` has none and must stay that way so Node can run it as it is. The page uses React, built with esbuild and checked with TypeScript: the stack the owner chose.
+9. `src/` must run in both Node and a browser: no `node:` imports outside `src/cli.ts`.

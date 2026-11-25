@@ -1,5 +1,4 @@
 // The whole path for a batch of alerts, and the measurement of a triager against labelled scenarios.
-import { performance } from "node:perf_hooks";
 import { ActionQueue, AuditLog } from "./control.ts";
 import { enrich, normalize } from "./ingest.ts";
 import { baseline, correlate } from "./triage.ts";

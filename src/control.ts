@@ -3,11 +3,11 @@
 //
 // There is no "execute" here, on purpose. An approved action is a recorded decision for a person or a later,
 // separately reviewed connector to carry out. Nothing in this project can change a system.
-import { createHash } from "node:crypto";
+import { sha256 } from "./sha256.ts";
 import type { Proposal } from "./types.ts";
 
 export type AuditEntry = { seq: number; time: string; actor: string; action: string; details: unknown; prev: string; hash: string };
-const digest = (e: Omit<AuditEntry, "hash">) => createHash("sha256").update(JSON.stringify([e.seq, e.time, e.actor, e.action, e.details, e.prev])).digest("hex");
+const digest = (e: Omit<AuditEntry, "hash">) => sha256(JSON.stringify([e.seq, e.time, e.actor, e.action, e.details, e.prev]));
 
 /** An append-only log. Each entry carries the hash of the one before, so a changed or removed entry breaks the chain. */
 export class AuditLog {
