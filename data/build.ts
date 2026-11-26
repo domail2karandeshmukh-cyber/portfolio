@@ -12,15 +12,17 @@ const DAY = "2026-11-12"; // a Thursday
 const at = (hhmmss: string) => `${DAY}T${hhmmss}.000+0000`;
 let n = 0;
 type Rule = [id: string, level: number, description: string, groups: string[], mitre?: string[]];
+// 5715, 5716, 5763, 5902 and 52502 are as in Wazuh 4.14.1's ruleset (id, level, description, groups, techniques).
+// The 1002xx rules are this project's own: Wazuh keeps IDs from 100000 for local rules, and ships no rule like them.
 const R: Record<string, Rule> = {
   fail: ["5716", 5, "sshd: authentication failed.", ["syslog", "sshd", "authentication_failed"], ["T1110"]],
   brute: ["5763", 10, "sshd: brute force trying to get access to the system. Authentication failed.", ["syslog", "sshd", "authentication_failures"], ["T1110"]],
-  ok: ["5715", 3, "sshd: authentication success.", ["syslog", "sshd", "authentication_success"], ["T1078"]],
+  ok: ["5715", 3, "sshd: authentication success.", ["syslog", "sshd", "authentication_success"], ["T1078", "T1021"]],
   adduser: ["5902", 8, "New user added to the system.", ["syslog", "adduser"], ["T1136"]],
   sudoers: ["100210", 12, "User added to the sudo group.", ["syslog", "privilege_change"], ["T1098"]],
   scan: ["100220", 8, "Port scan detected by the firewall.", ["firewall", "recon"], ["T1046"]],
   shell: ["100230", 13, "Web server process started a shell.", ["audit", "attack", "web_shell"], ["T1505.003", "T1059"]],
-  virus: ["52502", 8, "ClamAV: virus detected.", ["clamd", "virus"]],
+  virus: ["52502", 8, "ClamAV: Virus detected", ["clamd", "freshclam", "virus"]],
 };
 function alert(rule: keyof typeof R, time: string, agent: string, data: Record<string, string>, log: string): RawAlert {
   const [id, level, description, groups, mitre] = R[rule];

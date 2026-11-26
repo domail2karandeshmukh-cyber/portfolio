@@ -19,7 +19,7 @@ A first, working slice of the SOC product: alerts in the shape Wazuh sends go in
 Needs Node 22.18 or later. The pipeline itself has no dependency and Node runs its TypeScript directly; `npm install` is only for the analyst's page (React, esbuild) and the type check (TypeScript).
 
 ```
-npm test                               # 17 pipeline tests
+npm test                               # 19 pipeline tests
 npm run evaluate                       # the 12 labelled scenarios
 node src/cli.ts triage data/sample-day.json
 npm run data                           # regenerate data/ from data/build.ts
@@ -46,7 +46,7 @@ npm run e2e                            # 67 browser checks (needs Python Playwri
 ## Limits to know before relying on anything here
 
 - **All data is synthetic.** Hosts, accounts and events are invented; every address is from the ranges reserved for documentation (192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24).
-- **The Wazuh rule IDs, groups and descriptions in the data were written from memory and have not been checked against a Wazuh installation.** The pipeline has never read alerts from a real manager. Expect to adjust `kindOf()` in `src/ingest.ts` when it does.
+- **The rule definitions are checked against Wazuh's own files, not against a running Wazuh.** The IDs, levels, descriptions, groups and decoder field names for the stock rules in the data (5710, 5712, 5715, 5716, 5763, 5902, 52502) match the ruleset and SSH decoders in Wazuh's public repository at tag `v4.14.1`. That check found two faults, now fixed and tested: a name that doesn't exist arrives in `srcuser`, not `dstuser`; and every ClamAV rule carries the group `virus`, so a database update was being read as malware. The 1002xx rules are this project's own. The pipeline has still never read `alerts.json` from a real manager, and Wazuh's main branch (version 5) no longer ships these rule files, so expect differences there.
 - The ATT&CK technique names in `src/ingest.ts` are a short hand-written list, also unchecked against the current ATT&CK release.
 - The rules cover six patterns (password guessing, new accounts and rights, web shells, malware and test files, scans). Anything else is sent to a person as "needs review", which is the intended safe default, not coverage.
 - Secret masking is pattern-based and will miss formats it doesn't know.

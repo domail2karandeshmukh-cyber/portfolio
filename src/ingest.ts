@@ -22,7 +22,8 @@ export function mask(line: string): string {
 /** The kind of event, from the groups Wazuh's rules carry. The first line that fits decides. */
 function kindOf(groups: string[], description: string, detail: string): EventKind {
   const g = new Set(groups), d = description.toLowerCase();
-  if (g.has("virus") || g.has("malware")) return /eicar/i.test(detail + " " + description) ? "malware_test" : "malware";
+  // Wazuh's ClamAV rules put "virus" on every clamd message (a restart, a database update), so the group alone isn't a detection.
+  if ((g.has("virus") || g.has("malware")) && /detected|found/.test(d)) return /eicar/i.test(detail + " " + description) ? "malware_test" : "malware";
   if (g.has("web_shell") || (g.has("attack") && /shell/.test(d))) return "web_shell";
   if (g.has("authentication_failures")) return "brute_force";
   if (g.has("authentication_failed") || g.has("invalid_login")) return "auth_failed";
@@ -48,15 +49,18 @@ export function normalizeOne(raw: RawAlert, index = 0): SecurityEvent | Rejected
   const groups = list(rule.groups);
   const srcIp = str(data.srcip, 45);
   const detail = str(data.command, MAX) ?? str(data.virus, 200) ?? str(data.file, 400) ?? str(data.detail, MAX);
+  const kind = kindOf(groups, description, detail ?? "");
+  // Wazuh's sshd decoders put the name that was tried in dstuser, except for a name that doesn't exist, which goes in srcuser.
+  const guess = kind === "auth_failed" || kind === "brute_force";
   return {
     id: str(a.id, 64) ?? `${time}-${ruleId}-${index}`,
     time, timeIso: new Date(time).toISOString(),
     ruleId, level, description, groups,
-    kind: kindOf(groups, description, detail ?? ""),
+    kind,
     agent: agentName,
     srcIp: srcIp && IPV4.test(srcIp) ? srcIp : undefined,   // a source that isn't an address is dropped, not trusted
-    user: str(data.dstuser, 64),
-    actor: str(data.srcuser, 64),
+    user: str(data.dstuser, 64) ?? (guess ? str(data.srcuser, 64) : undefined),
+    actor: guess ? undefined : str(data.srcuser, 64),
     detail: detail ? mask(detail) : undefined,
     mitre: list(obj(rule.mitre).id).filter((t) => /^T\d{4}(\.\d{3})?$/.test(t)),
     log: mask(str(a.full_log, MAX) ?? ""),

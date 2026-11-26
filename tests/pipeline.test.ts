@@ -158,3 +158,21 @@ test("hash: the built-in SHA-256 gives what Node's gives, at every length around
   for (let n = 0; n <= 200; n++) { const t = "a".repeat(n); assert.equal(sha256(t), node(t), `length ${n}`); }
   for (let i = 0; i < 50; i++) { const t = randomBytes(i * 37).toString("base64") + "é€😀"; assert.equal(sha256(t), node(t)); }
 });
+test("normalize: alerts shaped as Wazuh 4.14.1's own rules and decoders write them", () => {
+  const base = { timestamp: "2026-11-12T11:40:00.000+0000", agent: { id: "001", name: "lab-web01" }, manager: { name: "wazuh" }, decoder: { parent: "sshd", name: "sshd" }, location: "/var/log/auth.log" };
+  // Rule 5710: the decoder puts a name that doesn't exist in srcuser, not dstuser.
+  const invalid = normalizeOne({ ...base, rule: { id: "5710", level: 5, description: "sshd: Attempt to login using a non-existent user", groups: ["syslog", "sshd", "authentication_failed", "invalid_login"], mitre: { id: ["T1110.001", "T1021.004"] }, firedtimes: 3 }, data: { srcip: "203.0.113.45", srcuser: "oracle" }, full_log: "sshd[2101]: Invalid user oracle from 203.0.113.45 port 42000" });
+  assert.ok(!("reason" in invalid));
+  assert.deepEqual([invalid.kind, invalid.user, invalid.actor, invalid.mitre], ["auth_failed", "oracle", undefined, ["T1110.001", "T1021.004"]]);
+  const brute = normalizeOne({ ...base, rule: { id: "5712", level: 10, description: "sshd: brute force trying to get access to the system. Non existent user.", groups: ["syslog", "sshd", "authentication_failures"] }, data: { srcip: "203.0.113.45", srcuser: "oracle" } });
+  assert.ok(!("reason" in brute) && brute.kind === "brute_force" && brute.user === "oracle");
+  // Every clamd rule carries the group "virus"; only a detection is malware.
+  const clam = (id: string, level: number, description: string) => normalizeOne({ ...base, rule: { id, level, description, groups: ["clamd", "freshclam", "virus"] }, data: {} });
+  const kinds = [clam("52502", 8, "ClamAV: Virus detected"), clam("52506", 3, "Clamd database updated"), clam("52505", 3, "Clamd restarted"), clam("52503", 10, "Clamd error")].map((e) => "reason" in e ? e.reason : e.kind);
+  assert.deepEqual(kinds, ["malware", "other", "other", "other"]);
+});
+test("triage: an antivirus housekeeping message is not escalated as malware", async () => {
+  const r = await run([{ timestamp: "2026-11-12T04:00:00.000+0000", agent: { name: "pc-maria" }, rule: { id: "52506", level: 3, description: "Clamd database updated", groups: ["clamd", "freshclam", "virus"] }, data: {} }], inv);
+  assert.notEqual(r.triage[0].verdict, "true_positive");
+  assert.equal(r.queue.list().length, 0);
+});
