@@ -1,0 +1,19 @@
+{
+ "_demonstration": "An original help-center article written by Karan Deshmukh for this case study, in the shape of an article from Zendesk Guide's Help Center API. It is not an export from any employer or customer. Its weaknesses are deliberate and typical: the audit lists them. The product is Keycloak 26.8.2, which runs on my own computer, so every claim can be checked.",
+ "article": {
+  "id": 900000000001,
+  "html_url": "https://help.example.com/hc/en-us/articles/900000000001-How-to-reset-2FA",
+  "title": "How to reset 2FA",
+  "locale": "en-us",
+  "source_locale": "en-us",
+  "section_id": 900000000100,
+  "label_names": ["mfa", "keycloak", "login issues"],
+  "draft": false,
+  "promoted": false,
+  "outdated": false,
+  "created_at": "2025-03-04T09:12:44Z",
+  "updated_at": "2025-03-04T09:12:44Z",
+  "edited_at": "2025-03-04T09:12:44Z",
+  "body": "<p>Sometimes users lose their phone and can't login anymore. This is a piece of cake to fix!</p>\n<p><strong>Steps:</strong></p>\n<p>1. Login to Keycloak and go to users.</p>\n<p>2. Find the user and click on credentials tab.</p>\n<p>3. Simply delete the OTP and the user will be asked to setup 2FA again on their next login.</p>\n<p><img src=\"/hc/article_attachments/900000000201\"></p>\n<p>You can change the MFA settings <a href=\"/hc/en-us/articles/900000000002\">here</a> if needed.</p>\n<p><strong>Note:</strong> codes are valid 30 secs.</p>\n<p>If it still doesn't work please contact IT.</p>\n<p>Last updated 3/4/25</p>"
+ }
+}
