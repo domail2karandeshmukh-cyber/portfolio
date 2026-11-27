@@ -1,0 +1,7 @@
+# Audit finding A9: link text has to say where it goes.
+extends: existence
+message: "Link text '%s' doesn't say where the link goes."
+level: error
+scope: raw
+raw:
+  - '\[(?:here|click here|this link|link)\]\('

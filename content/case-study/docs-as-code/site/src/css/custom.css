@@ -1,0 +1,35 @@
+/* The portfolio's palette on Docusaurus's theme: ink, white, a warm neutral and the yellow highlight.
+   Links stay a strong blue so they read as links; the yellow marks, it doesn't carry text. */
+:root {
+  --ifm-color-primary: #1d4ed8;
+  --ifm-color-primary-dark: #1a46c2;
+  --ifm-color-primary-darker: #1942b7;
+  --ifm-color-primary-darkest: #143697;
+  --ifm-color-primary-light: #2f5ee6;
+  --ifm-color-primary-lighter: #3b67e8;
+  --ifm-color-primary-lightest: #5f84ec;
+  --ifm-font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ifm-heading-font-weight: 650;
+  --ifm-code-font-size: 92%;
+  --ifm-navbar-background-color: #fff;
+  --ifm-background-surface-color: #fff;
+  --ifm-font-color-base: #0b0b0c;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 223, 43, .35);
+}
+[data-theme="dark"] {
+  --ifm-color-primary: #8fb0ff;
+  --ifm-color-primary-dark: #6f97ff;
+  --ifm-color-primary-darker: #5f8bff;
+  --ifm-color-primary-darkest: #2f66ff;
+  --ifm-color-primary-light: #afc7ff;
+  --ifm-color-primary-lighter: #bfd2ff;
+  --ifm-color-primary-lightest: #eef3ff;
+  --ifm-font-color-base: #ececec;
+}
+.markdown { max-width: 46rem; }
+.markdown h1 { letter-spacing: -.015em; }
+.markdown kbd, .markdown b, .markdown strong { font-weight: 650; }
+.markdown li + li { margin-top: .35rem; }
+.footer { font-size: .85rem; }
+/* The pseudo-locale is a test: say so on every page it builds. */
+html[lang="en-x-pseudo"] .navbar::after { content: "Pseudo-locale test build: not a translation"; position: absolute; right: 1rem; bottom: -1.6rem; font-size: .75rem; background: #ffdf2b; color: #0b0b0c; padding: .1rem .5rem; border-radius: 4px; }
