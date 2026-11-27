@@ -325,5 +325,25 @@
   "theme.tags.tagsPageTitle": {
     "message": "[Ţàĝš ·]",
     "description": "The title of the tag list page"
+  },
+  "pageFacts.type": {
+    "message": "[Ţýþé ·]",
+    "description": "Label: the kind of page (concept, how-to, reference)"
+  },
+  "pageFacts.audience": {
+    "message": "[Ƒöŕ ·]",
+    "description": "Label: who the page is written for"
+  },
+  "pageFacts.version": {
+    "message": "[Çĥéçķéð àĝàîñšţ ·· ·]",
+    "description": "Label: the product version the steps were checked on"
+  },
+  "pageFacts.owner": {
+    "message": "[Öŵñéŕ ·]",
+    "description": "Label: the person responsible for the page"
+  },
+  "pageFacts.review": {
+    "message": "[Ļàšţ ŕéṽîéŵ ·· ]",
+    "description": "Label: the date of the page's last review"
   }
 }
