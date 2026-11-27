@@ -12,6 +12,8 @@
         { "doc": "ns-release", "why": "Release notes for a working application: what changed, for whom, and what to do about it." }
       ],
       "projects": [
+        { "title": "From a help-center article to docs-as-code", "url": "/case-study/help-center-to-docs-as-code", "kind": "Case study", "text": "A help-center article audited, migrated to MDX, versioned in Git, checked with Vale and published with Docusaurus, every stage a commit." },
+        { "title": "Software, SaaS and fintech documentation", "url": "/work/software-saas-fintech", "kind": "Overview", "text": "Help centers, docs-as-code, API references, release communication and localization, in one place." },
         { "doc": "kc-otp-troubleshooting" }, { "doc": "kc-otp-policy" },
         { "doc": "ns-readme" }, { "doc": "ns-release" },
         { "title": "BizAssist AI", "url": "https://bizassist.karandeshmukh.dev", "kind": "Live application", "text": "An AI quotation assistant for small businesses, built as an academic group project.", "external": true },
@@ -45,6 +47,7 @@
         { "doc": "kc1-api-troubleshooting", "why": "Each error the API returns and how to fix the request, including a fault that the recording found." }
       ],
       "projects": [
+        { "title": "The library API: a GraphQL guide", "url": "/work/graphql-api", "kind": "API guide", "text": "Queries, variables, cursor pagination, a mutation and two kinds of errors, with every example tested on each build." },
         { "doc": "kc1-readme" }, { "doc": "kc1-build" }, { "doc": "kc1-model-card" }
       ],
       "demos": [

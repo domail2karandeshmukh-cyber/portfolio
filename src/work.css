@@ -262,3 +262,10 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
 @media print{.w-steps,.tab-list,.w-acts,.w-quiet,.w-contact .w-acts,.sk-filter{display:none}.tab-panel[hidden]{display:block!important}}
 /* On a phone, the first screen is who I am and the two actions; the before-and-after is the case study's first card. */
 @media (max-width:599px){.hero-art{display:none}}
+
+/* Tables in the short documents (the Markdown renderer wraps each in .tbl). */
+.w-article .tbl{overflow-x:auto;margin:0 0 var(--s4)}
+.w-article table{width:100%;border-collapse:collapse;background:#fff;font-size:var(--fs-small)}
+.w-article :is(th,td){padding:var(--s2) var(--s3);border-bottom:1px solid var(--rule);text-align:left;vertical-align:top;line-height:1.5}
+.w-article thead th{border-bottom:2px solid var(--ink);font-weight:600}
+.w-article tbody th,.w-article tbody td:first-child{font-weight:600;white-space:nowrap}
