@@ -34,3 +34,7 @@ What the source does so that a translation team can work from it, and how it was
 
 No language other than English is published. A real translation would be done by a translator and reviewed by a
 native speaker; machine output is never published as a translation here.
+
+The revision of 1.1 added code blocks with titles (`title="Variables"`, `title="Output"`). The pseudo-locale check found
+both titles still in English: a code block's title is text a reader sees, so `scripts/pseudo.mjs` now treats it as
+text and leaves the code alone (`quality/pseudo-3-after-revision.txt`: nothing left).

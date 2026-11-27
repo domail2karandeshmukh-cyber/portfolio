@@ -7,5 +7,6 @@ export default {
     { type: "category", label: "How-to guides", collapsible: false, items: ["how-to/reset-otp"] },
     { type: "category", label: "Reference", collapsible: false, items: ["reference/otp-policy", "reference/terminology"] },
     { type: "category", label: "Troubleshooting", collapsible: false, items: ["troubleshooting/otp-sign-in"] },
+    "changes",
   ],
 };

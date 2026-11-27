@@ -5,7 +5,7 @@ doc_type: Reference
 audience: Keycloak administrators
 product_version: Keycloak 26.8.2
 owner: Karan Deshmukh
-last_review: 2026-11-28
+last_review: 2026-11-27
 ---
 
 import PageFacts from '@site/src/components/PageFacts';
@@ -53,3 +53,4 @@ Each setting is a field of the realm representation, at `GET /admin/realms/{real
 A change applies only to authenticators set up after it.
 Each OTP credential keeps the type, digits, period and algorithm it was set up with: after a change from 6 to 8 digits, a phone set up before the change still signed in with 6-digit codes.
 To move a user to the new policy, [reset their one-time password](../how-to/reset-otp.mdx).
+To move many users, [reset them with the admin REST API](../how-to/reset-otp.mdx#rest-api).

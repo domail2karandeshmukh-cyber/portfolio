@@ -1,0 +1,24 @@
+---
+title: Changes
+description: What changed in these pages, and why.
+doc_type: Changelog
+audience: Keycloak administrators
+product_version: Keycloak 26.8.2
+owner: Karan Deshmukh
+last_review: 2026-11-27
+---
+
+# Changes
+
+## 1.1 (2026-11-27) {#1-1}
+
+- **Added:** [Reset many users with the admin REST API](./how-to/reset-otp.mdx#rest-api).
+  After a change to the OTP policy, every user needs a reset, and the console does one at a time.
+  Every command ran as written against Keycloak 26.8.2.
+- **Added:** a warning that a `PUT` of a user's required actions replaces the whole list.
+  Found while testing the commands: sending `CONFIGURE_TOTP` alone removed a pending profile update.
+- **Fixed:** the review date on every page.
+
+## 1.0 (2026-11-27) {#1-0}
+
+- First version, migrated from the help-center article *How to reset 2FA*: a concept, a how-to, a reference, a troubleshooting page, and a terminology list.

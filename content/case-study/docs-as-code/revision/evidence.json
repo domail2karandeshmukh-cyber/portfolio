@@ -1,0 +1,36 @@
+{
+ "note": "What Keycloak 26.8.2 answered when the REST steps of the revision were run as written, on 27 November 2026, on the local test realm portfolio-demo with the test user alex.morgan. No password or token is recorded.",
+ "probe_put_replaces_list": {
+  "before": [
+   "UPDATE_PROFILE"
+  ],
+  "sent": {
+   "requiredActions": [
+    "CONFIGURE_TOTP"
+   ]
+  },
+  "after": [
+   "CONFIGURE_TOTP"
+  ],
+  "other_fields_kept": true,
+  "conclusion": "A PUT replaces the whole list of required actions: read the list first and add to it."
+ },
+ "run": [
+  "user: alex.morgan",
+  "credentials before:",
+  "[{\"type\":\"password\",\"userLabel\":null},{\"type\":\"otp\",\"userLabel\":\"Alex's new phone\"}]",
+  "DELETE credential: HTTP 204",
+  "PUT requiredActions [\"CONFIGURE_TOTP\",\"UPDATE_PROFILE\"]: HTTP 204",
+  "credentials after:",
+  "[{\"type\":\"password\",\"userLabel\":null}]",
+  "requiredActions after:",
+  "[\"CONFIGURE_TOTP\",\"UPDATE_PROFILE\"]"
+ ],
+ "sign_in_after": {
+  "after_password": [
+   "Update Account Information",
+   "Mobile Authenticator Setup"
+  ],
+  "asks_for_otp_setup": true
+ }
+}

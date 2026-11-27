@@ -5,7 +5,7 @@ doc_type: "[Ĥöŵ-ţö ·]"
 audience: "[Ķéýçļöàķ àðɱîñîšţŕàţöŕš ·· ·· ·]"
 product_version: Keycloak 26.8.2
 owner: Karan Deshmukh
-last_review: 2026-11-28
+last_review: 2026-11-27
 ---
 
 import PageFacts from '@site/src/components/PageFacts';
@@ -75,6 +75,75 @@ import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
 [Ŵĥéñ ţĥé ŕéàļɱ šàṽéš àðɱîñ éṽéñţš, ·· ·· ·· ] **[Éṽéñţš ·]** > **[Åðɱîñ éṽéñţš ·· ]** [ļîšţš ţĥé ðéļéţîöñ àš àñ ·· ·· ] `ACTION` [öñ ţĥé ûšéŕ'š çŕéðéñţîàļ, àñð ţĥé ñéŵ ŕéqûîŕéð àçţîöñ àš àñ ·· ·· ·· ·· ·· ·] `UPDATE` [öƒ ţĥé ûšéŕ. ·· ]
 
 <Screenshot src="/img/keycloak/12-admin-events.png" alt="[Åðɱîñ éṽéñţš, ŵîţĥ ţĥé ÅÇŢÎÖÑ öñ ţĥé ûšéŕ'š çŕéðéñţîàļ ɱàŕķéð ·· ·· ·· ·· ·· ··]" caption="[Ţĥé ŕéçöŕð öƒ ţĥé ŕéšéţ, ƒöŕ àñ àûðîţ. ·· ·· ·· ·]" />
+
+## [Ŕéšéţ ɱàñý ûšéŕš ŵîţĥ ţĥé àðɱîñ ŔÉŠŢ ÅƤÎ ·· ·· ·· ··] {#rest-api}
+
+[Åƒţéŕ à çĥàñĝé ţö ţĥé ·· ··] [[ÖŢƤ þöļîçý ··]](../reference/otp-policy.mdx#before-change), [éṽéŕý ûšéŕ'š àûţĥéñţîçàţöŕ ñééðš à ŕéšéţ, àñð ţĥé àðɱîñ çöñšöļé ðöéš öñé ûšéŕ àţ à ţîɱé. ·· ·· ·· ·· ·· ·· ·· ·· ·]
+[Ţĥé àðɱîñ ŔÉŠŢ ÅƤÎ ðöéš ţĥé šàɱé ţŵö ţĥîñĝš: îţ ðéļéţéš ţĥé ÖŢƤ çŕéðéñţîàļ, àñð îţ àððš ·· ·· ·· ·· ·· ·· ·· ·· ] **[Çöñƒîĝûŕé ÖŢƤ ·· ]** [ţö ţĥé ûšéŕ'š ŕéqûîŕéð àçţîöñš. ·· ·· ··]
+
+<ConfirmIdentity />
+
+[Šéţ ţĥéšé ṽàŕîàƀļéš ƒîŕšţ. ·· ·· ·]
+[Ŕéàð ţĥé þàššŵöŕð ƒŕöɱ à þàššŵöŕð ɱàñàĝéŕ öŕ à þŕöɱþţ, šö ţĥàţ îţ šţàýš öûţ öƒ ýöûŕ šĥéļļ ĥîšţöŕý. ·· ·· ·· ·· ·· ·· ·· ·· ·· ]
+
+```bash title="[Vàŕîàƀļéš ··]"
+KC_URL=https://keycloak.example.com   # your Keycloak server
+REALM=portfolio-demo                  # the user's realm
+KC_ADMIN=sam.rivera                   # an administrator of the master realm
+USERNAME=alex.morgan                  # the user to reset
+read -rs -p "Password for $KC_ADMIN: " KC_ADMIN_PASSWORD; echo
+```
+
+1. [Ĝéţ àñ àççéšš ţöķéñ ƒöŕ ţĥé àðɱîñ ŔÉŠŢ ÅƤÎ, àñð ƒîñð ţĥé ûšéŕ'š ÎÐ. ·· ·· ·· ·· ·· ·· ]
+
+   ```bash
+   TOKEN=$(curl -s "$KC_URL/realms/master/protocol/openid-connect/token" \
+     -d grant_type=password -d client_id=admin-cli \
+     --data-urlencode "username=$KC_ADMIN" --data-urlencode "password=$KC_ADMIN_PASSWORD" | jq -r .access_token)
+   USER_ID=$(curl -s -H "Authorization: Bearer $TOKEN" \
+     "$KC_URL/admin/realms/$REALM/users?username=$USERNAME&exact=true" | jq -r '.[0].id')
+   ```
+
+2. [Ðéļéţé éàçĥ öƒ ţĥé ûšéŕ'š ÖŢƤ çŕéðéñţîàļš. ·· ·· ·· ·· ]
+   [Ķéýçļöàķ àñšŵéŕš éàçĥ ðéļéţîöñ ŵîţĥ ·· ·· ·· ·] `204 No Content`.
+
+   ```bash
+   for ID in $(curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" \
+     | jq -r '.[] | select(.type == "otp") | .id'); do
+     curl -s -o /dev/null -w '%{http_code}\n' -X DELETE -H "Authorization: Bearer $TOKEN" \
+       "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials/$ID"
+   done
+   ```
+
+3. [Åðð ·] `CONFIGURE_TOTP` [ţö ţĥé ûšéŕ'š ŕéqûîŕéð àçţîöñš. ·· ·· ··]
+
+   :::[ŵàŕñîñĝ Ķééþ ţĥé àçţîöñš àļŕéàðý ţĥéŕé ·· ·· ·· ··]
+   [Å ·] `PUT` [ŕéþļàçéš ţĥé ûšéŕ'š ŵĥöļé ļîšţ öƒ ŕéqûîŕéð àçţîöñš. ·· ·· ·· ·· ··]
+   [Šéñðîñĝ ·] `{"requiredActions": ["CONFIGURE_TOTP"]}` [àļöñé ŕéɱöṽéš àñý àçţîöñ ţĥé ûšéŕ šţîļļ ĥàš ţö ðö, šûçĥ àš ûþðàţîñĝ ţĥéîŕ þŕöƒîļé. ·· ·· ·· ·· ·· ·· ·· ··]
+   [Ŕéàð ţĥé ļîšţ ƒîŕšţ àñð àðð ţö îţ, àš ţĥîš çöɱɱàñð ðöéš. ·· ·· ·· ·· ·· ]
+   :::
+
+   ```bash
+   ACTIONS=$(curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID" \
+     | jq -c '.requiredActions + ["CONFIGURE_TOTP"] | unique')
+   curl -s -o /dev/null -w '%{http_code}\n' -X PUT -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+     -d "{\"requiredActions\": $ACTIONS}" "$KC_URL/admin/realms/$REALM/users/$USER_ID"
+   ```
+
+4. [Çĥéçķ ţĥé ŕéšûļţ. ·· ·]
+   [Ţĥé çŕéðéñţîàļš ļîšţ ĥöļðš ţĥé þàššŵöŕð öñļý, àñð ţĥé ŕéqûîŕéð àçţîöñš îñçļûðé ·· ·· ·· ·· ·· ·· ·· ·] `CONFIGURE_TOTP`.
+
+   ```bash
+   curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -c '[.[] | .type]'
+   curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID" | jq -c '.requiredActions'
+   ```
+
+   ```json title="[Öûţþûţ ·]"
+   ["password"]
+   ["CONFIGURE_TOTP","UPDATE_PROFILE"]
+   ```
+
+[Åţ ţĥéîŕ ñéẋţ šîĝñ-îñ, Ķéýçļöàķ ŕûñš ţĥé ûšéŕ'š ŕéqûîŕéð àçţîöñš öñé àƒţéŕ àñöţĥéŕ, àñð àšķš ţĥéɱ ţö šéţ ûþ àñ àûţĥéñţîçàţöŕ ƀéƒöŕé ţĥéý ĝéţ îñ. ·· ·· ·· ·· ·· ·· ·· ·· ·· ··]
 
 ## [Ñéẋţ šţéþš ··] {#next-steps}
 

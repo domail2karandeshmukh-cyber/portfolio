@@ -33,7 +33,8 @@ function convert(text) {
   return lines.map((l) => {
     if (l === "---" && fm < 2) { fm++; return l; }
     if (fm === 1) return l.replace(/^(title|description|audience|doc_type):\s*(.+)$/, (_, k, v) => `${k}: "${pseudo(v.replace(/^"|"$/g, "")).replace(/"/g, '\\"')}"`);
-    if (/^\s*```/.test(l)) { code = !code; return l; }
+    // A code block's title is text a reader sees: pseudo-localize it, and leave the code alone.
+    if (/^\s*```/.test(l)) { code = !code; return l.replace(/title="([^"]*)"/, (_, t) => `title="${pseudo(t)}"`); }
     if (code || /^import /.test(l) || /^\s*$/.test(l) || /^\|[-| ]+\|$/.test(l)) return l;
     if (/^\s*<[A-Z]/.test(l)) return component(l);
     if (/^:::\w+/.test(l)) return l.replace(/^(:::\w+)(\s+)(.+)$/, (_, a, b, t) => a + b + pseudo(t));
