@@ -1,0 +1,206 @@
+{
+ "vale": "3.28.1",
+ "config": "site/.vale.ini",
+ "results": {
+  "../source/article-body.html": [
+   {
+    "Line": 1,
+    "Span": [
+     30,
+     32
+    ],
+    "Check": "Portfolio.Terms",
+    "Severity": "error",
+    "Match": "2FA",
+    "Message": "Use 'one-time password (OTP)' instead of '2FA': it's the term Keycloak's console uses."
+   },
+   {
+    "Line": 2,
+    "Span": [
+     4,
+     12
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "Sometimes",
+    "Message": "'Sometimes' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 2,
+    "Span": [
+     41,
+     51
+    ],
+    "Check": "Portfolio.Verbs",
+    "Severity": "error",
+    "Match": "can't login",
+    "Message": "Use 'can't sign in' instead of 'can't login'."
+   },
+   {
+    "Line": 2,
+    "Span": [
+     53,
+     59
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "anymore",
+    "Message": "'anymore' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 2,
+    "Span": [
+     70,
+     84
+    ],
+    "Check": "Portfolio.Minimizers",
+    "Severity": "warning",
+    "Match": "a piece of cake",
+    "Message": "Remove 'a piece of cake': it tells the reader the task is easy."
+   },
+   {
+    "Line": 2,
+    "Span": [
+     89,
+     92
+    ],
+    "Check": "Google.Exclamation",
+    "Severity": "error",
+    "Match": "fix!",
+    "Message": "Don't use exclamation points in text."
+   },
+   {
+    "Line": 4,
+    "Span": [
+     7,
+     14
+    ],
+    "Check": "Portfolio.Verbs",
+    "Severity": "error",
+    "Match": "Login to",
+    "Message": "Use 'sign in to' instead of 'Login to'."
+   },
+   {
+    "Line": 5,
+    "Span": [
+     25,
+     32
+    ],
+    "Check": "Google.WordListCase",
+    "Severity": "warning",
+    "Match": "click on",
+    "Message": "Use 'click' or 'click in' instead of 'click on'."
+   },
+   {
+    "Line": 5,
+    "Span": [
+     25,
+     32
+    ],
+    "Check": "Portfolio.Terms",
+    "Severity": "error",
+    "Match": "click on",
+    "Message": "Use 'select' instead of 'click on': it's the term Keycloak's console uses."
+   },
+   {
+    "Line": 5,
+    "Span": [
+     34,
+     44
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credentials",
+    "Message": "'credentials' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 6,
+    "Span": [
+     7,
+     12
+    ],
+    "Check": "Portfolio.Minimizers",
+    "Severity": "warning",
+    "Match": "Simply",
+    "Message": "Remove 'Simply': it tells the reader the task is easy."
+   },
+   {
+    "Line": 6,
+    "Span": [
+     7,
+     12
+    ],
+    "Check": "alex.Condescending",
+    "Severity": "warning",
+    "Match": "Simply",
+    "Message": "'Simply' may be insensitive, try not to use it."
+   },
+   {
+    "Line": 6,
+    "Span": [
+     42,
+     45
+    ],
+    "Check": "Google.Will",
+    "Severity": "warning",
+    "Match": "will",
+    "Message": "Avoid using 'will'."
+   },
+   {
+    "Line": 6,
+    "Span": [
+     47,
+     54
+    ],
+    "Check": "Google.Passive",
+    "Severity": "suggestion",
+    "Match": "be asked",
+    "Message": "In general, use active voice instead of passive voice ('be asked')."
+   },
+   {
+    "Line": 6,
+    "Span": [
+     59,
+     67
+    ],
+    "Check": "Portfolio.Verbs",
+    "Severity": "error",
+    "Match": "setup 2FA",
+    "Message": "Use 'set up' instead of 'setup 2FA'."
+   },
+   {
+    "Line": 6,
+    "Span": [
+     65,
+     67
+    ],
+    "Check": "Portfolio.Terms",
+    "Severity": "error",
+    "Match": "2FA",
+    "Message": "Use 'one-time password (OTP)' instead of '2FA': it's the term Keycloak's console uses."
+   },
+   {
+    "Line": 8,
+    "Span": [
+     23,
+     25
+    ],
+    "Check": "Google.Acronyms",
+    "Severity": "suggestion",
+    "Match": "MFA",
+    "Message": "Spell out 'MFA', if it's unfamiliar to the audience."
+   },
+   {
+    "Line": 11,
+    "Span": [
+     9,
+     15
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "updated",
+    "Message": "'updated' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ]
+ }
+}

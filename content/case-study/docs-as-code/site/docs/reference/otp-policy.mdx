@@ -1,6 +1,6 @@
 ---
 title: OTP policy settings
-description: Every setting of a Keycloak realm's OTP policy, its default in Keycloak 26.8.2, and the matching field of the admin REST API.
+description: Every setting of a Keycloak realm's OTP policy, its default in Keycloak 26.8.2, and the matching field of Keycloak's REST API.
 doc_type: Reference
 audience: Keycloak administrators
 product_version: Keycloak 26.8.2
@@ -27,11 +27,11 @@ The defaults are those of a new realm in Keycloak 26.8.2.
 | Setting | Default | What it decides |
 |---|---|---|
 | **OTP type** | Time based | A time-based code changes every period. A counter-based code changes each time the user asks the app for one. |
-| **OTP hash algorithm** | SHA1 | The algorithm the app and Keycloak use to compute a code. |
+| **OTP hash algorithm** | **SHA1** | The algorithm the app and Keycloak use to compute a code. |
 | **Number of digits** | 6 | The length of a code: 6 or 8. |
 | **Look around window** | 1 | How many periods before and after the current one Keycloak also accepts. |
 | **OTP Token period** | 30 seconds | How long a time-based code lasts. |
-| **Supported applications** | FreeOTP, Google Authenticator, Microsoft Authenticator | The apps that **Mobile Authenticator Setup** tells users to install. |
+| **Supported applications** | FreeOTP, Google Authenticator, Microsoft Authenticator | The apps that **Mobile Authenticator Setup** lists for users to install. |
 | **Reusable token** | Off | Whether a code that has signed someone in works again before it expires. |
 
 ## Admin REST API fields {#rest-fields}

@@ -36,7 +36,7 @@ With the default look around window of 1, Keycloak also accepts the code of the 
 
 1. Ask the user to type the code that the app shows now, before its timer runs out.
 2. If every code fails, ask the user to set the phone's date and time to update automatically.
-   An authenticator computes each code from the time, so a phone that is a minute off produces codes Keycloak refuses.
+   An authenticator computes each code from the time, so a phone that's a minute off produces codes Keycloak refuses.
 3. If many users' codes fail, check the server's clock before you widen the look around window in the [OTP policy](../reference/otp-policy.mdx#settings).
    A wider window accepts older codes, for everyone.
 
@@ -48,7 +48,7 @@ With the default look around window of 1, Keycloak also accepts the code of the 
 
 <ConfirmIdentity />
 
-Delete the user's OTP credential and make them set up a new one: [Reset a user's one-time password](../how-to/reset-otp.mdx).
+Delete the user's OTP credential and make them set up a new one, as [Reset a user's one-time password](../how-to/reset-otp.mdx) describes.
 
 ## Keycloak doesn't ask for a code {#no-code-asked}
 

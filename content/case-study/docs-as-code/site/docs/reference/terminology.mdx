@@ -17,16 +17,29 @@ import PageFacts from '@site/src/components/PageFacts';
 One name for one thing.
 Vale checks these pages against this list on every change.
 
+{/* vale Portfolio.Terms = NO */}
+
+{/* vale Portfolio.Verbs = NO */}
+
+{/* vale Google.WordListCase = NO */}
+
 | Use | Not | Why |
 |---|---|---|
 | one-time password (OTP) | 2FA, MFA code, two-factor code | Keycloak's console calls the credential **Otp** and the required action **Configure OTP**. |
 | authenticator, authenticator app | token, OTP app | The app on the phone that computes the code. |
 | sign in (verb), sign-in (noun) | log in, login (verb) | Login is a noun. |
 | set up (verb), setup (noun) | setup (verb) | Setup is a noun. |
-| select | click, click on | Works for a mouse, a keyboard and a touch screen. |
+| select | click, click on | Works with a mouse, a keyboard, and a touchscreen. |
 | realm | tenant, workspace | Keycloak's term. |
+
+{/* vale Portfolio.Terms = YES */}
+
+{/* vale Portfolio.Verbs = YES */}
+
+{/* vale Google.WordListCase = YES */}
 
 ## Interface labels {#labels}
 
-Interface labels appear in bold, exactly as Keycloak 26.8.2 shows them in English, including their capitals: **Users**, **Credentials**, **Details**, **Required user actions**, **Configure OTP**, **Save**, **Mobile Authenticator Setup**.
+Interface labels appear in bold, exactly as Keycloak 26.8.2 shows them in English, including their capitals.
+For example, **Users**, **Credentials**, **Details**, **Required user actions**, **Configure OTP**, **Save**, **Mobile Authenticator Setup**.
 Keycloak's own messages appear in italics, with their wording unchanged, even where it's ungrammatical: *The credentials has been deleted successfully.*
