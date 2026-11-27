@@ -1,0 +1,87 @@
+{
+ "about": "The content of /for/swan and /work/software-saas-fintech. Each claim is classed: professional (a role on the CV), demonstrated (a public project or document of this portfolio), or learning. The CV's facts are in content/site.json and aren't repeated here.",
+ "proof": [
+  {"figure": "500+", "text": "knowledge-base articles, how-to guides, SOPs, runbooks and troubleshooting guides created, reviewed or maintained at MongoDB", "class": "professional", "href": "/Karan-Deshmukh-CV.pdf", "link": "In the CV"},
+  {"figure": "Zendesk", "text": "articles migrated into an internal wiki at MongoDB: structure, metadata, ownership, review status and approvals", "class": "professional", "href": "/Karan-Deshmukh-CV.pdf", "link": "In the CV"},
+  {"figure": "29", "text": "languages covered by the localization workflows I supported at Magna, with translation-ready source content", "class": "professional", "href": "/Karan-Deshmukh-CV.pdf", "link": "In the CV"},
+  {"figure": "MDX", "text": "a help-center article migrated to MDX, versioned in Git, checked with Vale and published with Docusaurus", "class": "demonstrated", "href": "/case-study/help-center-to-docs-as-code", "link": "The case study"}
+ ],
+ "samples": [
+  {"title": "From a help-center article to docs-as-code", "href": "/case-study/help-center-to-docs-as-code", "img": "/work/img/sample-case-study.webp", "alt": "The case study page: its twelve stages and the first, the original help-center article",
+   "kind": "Case study", "class": "demonstrated",
+   "helps": "Shows the whole migration of one help-center article: audit, page structure, MDX, Git, Vale, Docusaurus, pseudo-localization and a tested revision.",
+   "audience": "Documentation managers and reviewers", "did": "Everything: the article, the audit, the pages, the tooling, the checks and the revision.", "skill": "Migration, docs-as-code, editorial review"},
+  {"title": "Reset a user's one-time password in Keycloak", "href": "/docs/keycloak/reset-otp", "img": "/work/img/sample-keycloak.webp", "alt": "The Keycloak how-to: its first steps, with an annotated screenshot of the Users page",
+   "kind": "How-to", "class": "demonstrated",
+   "helps": "An administrator resets a user's second factor after a lost phone, safely, and checks that it worked.",
+   "audience": "Identity administrators", "did": "Wrote it, checked every step on Keycloak 26.8.2, took and annotated the screenshots.", "skill": "Task writing for a security procedure"},
+  {"title": "KC1 defect prediction API reference", "href": "/docs/kc1/api-reference", "img": "/work/img/sample-kc1.webp", "alt": "The KC1 API reference: its endpoints table and the request fields",
+   "kind": "API reference", "class": "demonstrated",
+   "helps": "A developer calls a prediction API correctly the first time: endpoints, fields, errors and real responses.",
+   "audience": "Developers", "did": "Documented a FastAPI service from its OpenAPI description and from requests I sent and recorded.", "skill": "REST and OpenAPI documentation"}
+ ],
+ "workflow": [
+  {"id": "discover", "name": "Discover", "what": "Find out who reads it, what they're trying to do and what's true now. I read the source, run the product and ask the engineers.", "artifact": "The audit of the help-center article: 14 findings, two critical, one checked on the server.", "href": "/case-study/help-center-to-docs-as-code#audit"},
+  {"id": "structure", "name": "Structure", "what": "Split content by what the reader needs: a concept, a task, a reference, a fix. One purpose per page.", "artifact": "One article became a concept, a how-to, a reference and a troubleshooting page.", "href": "/case-study/help-center-to-docs-as-code#architecture"},
+  {"id": "write", "name": "Write", "what": "Short sentences, one action per step, the result the reader should see, labels exactly as on screen.", "artifact": "The MDX source of the how-to, with front matter, a shared partial and captioned screenshots.", "href": "/case-study/help-center-to-docs-as-code#migration"},
+  {"id": "review", "name": "Review", "what": "Check every claim against the product, then the page against a checklist. AI drafts get the same review.", "artifact": "The review checklist, and an AI draft whose false step the review caught.", "href": "/case-study/help-center-to-docs-as-code#review"},
+  {"id": "validate", "name": "Validate", "what": "Lint with Vale, build with broken-link checks, test translation readiness with a pseudo-locale.", "artifact": "Four Vale runs, from 7 errors in the original to 0, and every decision recorded.", "href": "/case-study/help-center-to-docs-as-code#quality"},
+  {"id": "publish", "name": "Publish", "what": "Merge, build, publish. The source stays one click away from the page.", "artifact": "The published Docusaurus site, with an edit link on every page.", "href": "/case-study/help-center-to-docs-as-code#publication"},
+  {"id": "maintain", "name": "Maintain", "what": "Revise when the product or the need changes, test the change, and say what changed.", "artifact": "Version 1.1: a REST API method, run against the server, and a trap it found.", "href": "/case-study/help-center-to-docs-as-code#maintenance"}
+ ],
+ "skills": [
+  {"group": "Knowledge bases and help centers", "icon": "library-big", "relevant": true, "items": [
+   {"name": "Zendesk Guide", "class": "professional", "use": "Knowledge-base articles at MongoDB, and the migration of Zendesk articles into an internal wiki."},
+   {"name": "Confluence, Document360, internal wikis", "class": "professional", "use": "Knowledge bases and wikis in my roles, as listed in the CV."},
+   {"name": "Information architecture and metadata", "class": "professional", "use": "Structure, metadata, ownership and review status during the Zendesk migration at MongoDB."}]},
+  {"group": "Docs-as-code", "icon": "git-branch", "relevant": true, "items": [
+   {"name": "Git, GitHub, Markdown, HTML, VS Code", "class": "professional", "use": "Version-controlled documentation, local testing and technical review; every page of this portfolio is in Git.", "href": "https://github.com/domail2karandeshmukh-cyber/portfolio"},
+   {"name": "MDX and Docusaurus 3", "class": "demonstrated", "use": "Five pages with front matter, a partial and two components, built in two locales.", "href": "/case-study/help-center-to-docs-as-code#migration"},
+   {"name": "Vale", "class": "demonstrated", "use": "The Google, alex and Readability packages, and house rules written from an audit.", "href": "/case-study/help-center-to-docs-as-code#quality"}]},
+  {"group": "Developer and API documentation", "icon": "braces", "relevant": true, "items": [
+   {"name": "REST and OpenAPI", "class": "demonstrated", "use": "The KC1 API reference, quick start and troubleshooting, from recorded requests.", "href": "/docs/kc1/api-reference"},
+   {"name": "GraphQL", "class": "learning", "use": "A small GraphQL API I built and documented, with every example tested on each build.", "href": "/work/graphql-api"},
+   {"name": "Keycloak admin REST API", "class": "demonstrated", "use": "A reset method run against Keycloak 26.8.2, and the trap it found.", "href": "/case-study/help-center-to-docs-as-code#maintenance"}]},
+  {"group": "Writing and editing", "icon": "pen-line", "relevant": true, "items": [
+   {"name": "How-to guides, SOPs, runbooks, FAQs, troubleshooting", "class": "professional", "use": "500+ documents at MongoDB; manuals, user guides and quick starts at Magna."},
+   {"name": "Self-editing and SME review", "class": "professional", "use": "Drafting, self-editing, SME review and approval at MongoDB and Magna."},
+   {"name": "UX writing", "class": "demonstrated", "use": "Keycloak's own messages, rewritten with the reasons.", "href": "/work/ux-writing"}]},
+  {"group": "Localization and accessibility", "icon": "languages", "relevant": true, "items": [
+   {"name": "Translation-ready source", "class": "professional", "use": "Source content and review workflows for up to 29 languages at Magna. I didn't translate them."},
+   {"name": "Pseudo-localization", "class": "demonstrated", "use": "A pseudo-locale build that found strings a translator couldn't reach.", "href": "/case-study/help-center-to-docs-as-code#localization"},
+   {"name": "Accessibility checks", "class": "demonstrated", "use": "axe-core on every page of this site, alternative text, keyboard paths and contrast."}]},
+  {"group": "AI-assisted documentation", "icon": "sparkle", "relevant": true, "items": [
+   {"name": "GPT knowledge workflows, Glean, prompt engineering", "class": "professional", "use": "An internal GPT knowledge pack at MongoDB, with human editorial validation before publication."},
+   {"name": "Reviewing AI drafts", "class": "demonstrated", "use": "An AI draft that kept a false step, and the review that caught it.", "href": "/case-study/help-center-to-docs-as-code#ai-review"}]},
+  {"group": "Content lifecycle and reporting", "icon": "chart-line", "relevant": true, "items": [
+   {"name": "Lifecycle management", "class": "professional", "use": "Intake, drafting, review, approval, publication, updates and archival decisions at MongoDB."},
+   {"name": "Power BI, Excel, Google Sheets, Jira", "class": "professional", "use": "Dashboards of delivery and review status at Magna; trackers at BPEC. Not content analytics."},
+   {"name": "Documentation measurement", "class": "demonstrated", "use": "A proposed framework: the questions, the signals and what to do with them.", "href": "/case-study/help-center-to-docs-as-code#measurement"}]},
+  {"group": "Instructional video and visuals", "icon": "film", "relevant": false, "items": [
+   {"name": "Snagit, Final Cut Pro, Google Vids", "class": "professional", "use": "IT orientation videos, walkthroughs with voiceover, GIFs and explainers at MongoDB."},
+   {"name": "Annotated screenshots", "class": "demonstrated", "use": "Tight green marks, numbered callouts and hidden secrets, on real product screens.", "href": "/standards/screenshots"}]},
+  {"group": "Enterprise IT and identity", "icon": "shield-check", "relevant": false, "items": [
+   {"name": "Okta, MFA, Okta FastPass, access requests", "class": "professional", "use": "Authentication, provisioning, access reviews and identity lifecycle at MongoDB."},
+   {"name": "Cloudflare, Jamf", "class": "professional", "use": "IT platforms documented in my roles, as listed in the CV."},
+   {"name": "Keycloak", "class": "demonstrated", "use": "Three guides checked on Keycloak 26.8.2.", "href": "/docs/keycloak/reset-otp"}]},
+  {"group": "Structured authoring", "icon": "layers", "relevant": false, "items": [
+   {"name": "DITA and DITA Open Toolkit", "class": "demonstrated", "use": "DITA maps, keys and filtering, published with DITA-OT 4.3.4.", "href": "/studio/dita"},
+   {"name": "S1000D and ASD-STE100", "class": "demonstrated", "use": "Demonstration data modules on a fictional rig, validated against the official schemas.", "href": "/studio/aerospace"},
+   {"name": "MadCap Flare", "class": "professional", "use": "Listed in the CV's toolchain."}]},
+  {"group": "Engineering foundations", "icon": "code", "relevant": false, "items": [
+   {"name": "Python and SQL", "class": "learning", "use": "Foundational, as the CV says; used in the projects of my MSc."},
+   {"name": "Cybersecurity and data science", "class": "learning", "use": "MSc at ESAIP, Angers, in progress."}]}
+ ],
+ "fit": [
+  {"ask": "Write and maintain documentation in a docs-as-code workflow, with Git and Markdown or MDX", "have": "Git, GitHub and Markdown are in my CV's docs-as-code practice. MDX and Docusaurus I learned for the case study, where every page is MDX in Git.", "class": ["professional", "demonstrated"], "href": "/case-study/help-center-to-docs-as-code#migration"},
+  {"ask": "Migrate help-center articles into version-controlled repositories, with peer review", "have": "At MongoDB I supported the migration of Zendesk articles into an internal wiki. The case study takes one article into Git, one commit per stage. No peer reviewed it: that part waits for a team.", "class": ["professional", "demonstrated"], "href": "/case-study/help-center-to-docs-as-code#version-control"},
+  {"ask": "Write user guides, help-center articles and UI copy for moderately complex features", "have": "500+ documents at MongoDB, manuals and user guides at Magna, and a UX writing sample on Keycloak's own messages.", "class": ["professional", "demonstrated"], "href": "/work/ux-writing"},
+  {"ask": "Use approved AI tools, keeping the final content accurate", "have": "An internal GPT knowledge pack at MongoDB, with human validation before publication. In the case study, an AI draft kept a false step, and the review caught it.", "class": ["professional", "demonstrated"], "href": "/case-study/help-center-to-docs-as-code#ai-review"},
+  {"ask": "Work with Product, Engineering, Design, Marketing, Customer Experience and Implementation", "have": "Requirements and validation with engineering, product, DevRel, security, IT operations and support at MongoDB; SME reviews against release deadlines at Magna.", "class": ["professional"]},
+  {"ask": "Manage content from creation to publication, and track it with dashboards", "have": "Lifecycle from intake to archival at MongoDB. Power BI dashboards of delivery and review status at Magna: delivery, not content analytics. For content, a proposed measurement framework.", "class": ["professional", "demonstrated"], "href": "/case-study/help-center-to-docs-as-code#measurement"},
+  {"ask": "Typically 3+ years of technical writing, several projects at once", "have": "Almost four years in technical-writing roles: MongoDB from April 2024 to February 2026, Magna from January 2022 to December 2023, across many teams at once. Before that, two years as a business analyst writing SOPs and process guidance.", "class": ["professional"]},
+  {"ask": "Strong self-editing and peer-review skills", "have": "Self-editing and SME review at MongoDB; review checklists at Magna. The case study records every editorial decision on Vale's findings.", "class": ["professional", "demonstrated"], "href": "/case-study/help-center-to-docs-as-code#quality"},
+  {"ask": "Apply accessibility and localization best practices", "have": "Translation-ready source for up to 29 languages at Magna. A pseudo-locale test, alternative text on every screenshot, and axe-core on every page of this site.", "class": ["professional", "demonstrated"], "href": "/case-study/help-center-to-docs-as-code#localization"}
+ ],
+ "gap": "I haven't worked in banking or payments. The nearest is identity and access documentation at MongoDB: procedures where a wrong step is a security problem, and accuracy can't be traded for speed."
+}

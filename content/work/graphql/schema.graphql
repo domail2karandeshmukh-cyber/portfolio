@@ -1,0 +1,103 @@
+"""
+The library API: the documents of the portfolio's library, read with queries, and readers' feedback on them, sent
+with a mutation. A demonstration for its documentation: it runs on your own computer, and keeps feedback in memory.
+"""
+type Query {
+  """
+  The library's documents, in the library's order, a page at a time.
+  `first` is the size of the page (1 to 50, 10 if you leave it out); `after` is the `endCursor` of the page before.
+  """
+  documents(first: Int = 10, after: String, kind: DocumentKind): DocumentConnection!
+  "One document by its ID, or null if there is none."
+  document(id: ID!): Document
+}
+
+type Mutation {
+  "Records a reader's feedback on a document. Needs an access token."
+  submitFeedback(input: SubmitFeedbackInput!): SubmitFeedbackPayload!
+}
+
+"A document of the library."
+type Document {
+  id: ID!
+  title: String!
+  kind: DocumentKind!
+  "The project the document belongs to."
+  project: String!
+  "The document's address on karandeshmukh.dev."
+  url: String!
+}
+
+"What a document is for."
+enum DocumentKind {
+  HOW_TO
+  CONCEPT
+  REFERENCE
+  TROUBLESHOOTING
+  ARCHITECTURE
+  RELEASE_NOTES
+  REPORT
+  SECURITY
+  DEVELOPER_GUIDE
+}
+
+"A page of documents, in the shape of the GraphQL Cursor Connections Specification."
+type DocumentConnection {
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
+  "How many documents match, on every page."
+  totalCount: Int!
+}
+
+type DocumentEdge {
+  node: Document!
+  "Pass it as `after` to start the next page after this document."
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+input SubmitFeedbackInput {
+  documentId: ID!
+  "Did the document help?"
+  helpful: Boolean!
+  "What was missing or wrong: 500 characters at most."
+  comment: String
+}
+
+"""
+What `submitFeedback` returns: the feedback, or the reason it wasn't recorded. A reason that comes from a rule of the
+API, such as an unknown document, is part of the answer, so a client can handle it by type.
+"""
+union SubmitFeedbackPayload = SubmitFeedbackSuccess | DocumentNotFoundProblem | CommentTooLongProblem
+
+type SubmitFeedbackSuccess {
+  feedback: Feedback!
+}
+
+type Feedback {
+  id: ID!
+  documentId: ID!
+  helpful: Boolean!
+  comment: String
+}
+
+"A rule of the API that stopped a mutation."
+interface Problem {
+  message: String!
+}
+
+type DocumentNotFoundProblem implements Problem {
+  message: String!
+  documentId: ID!
+}
+
+type CommentTooLongProblem implements Problem {
+  message: String!
+  maxLength: Int!
+}

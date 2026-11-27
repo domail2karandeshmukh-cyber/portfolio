@@ -9,7 +9,7 @@ Three runs, kept as JSON beside this file:
 | The first migration to MDX | `vale-1-first-migration.json` | 26 | 41 | 99 |
 | After review | `vale-2-after-review.json` | 0 | 8 | 72 |
 
-The first migration has more findings than the original because it has six times more text, and because the
+The first migration has more findings than the original because it has about twenty times as much text, and because the
 terminology page lists the words the house rules forbid.
 
 Vale didn't find either critical problem of the original article: the step that leaves the account with a password

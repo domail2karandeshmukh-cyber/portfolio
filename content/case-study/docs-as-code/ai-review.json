@@ -1,5 +1,5 @@
 {
- "about": "An AI-assisted draft, and the human review that corrected it. The draft was produced on 27 November 2026 by Claude (Anthropic), the AI assistant that helped build this portfolio, from the source article alone and the prompt below, with no access to the Keycloak server or its recorded evidence. Karan Deshmukh's review checked each claim against the server's recorded behaviour before anything was published.",
+ "about": "An AI-assisted draft, and the human review that corrected it. The draft was produced on 27 November 2026 by Claude (Anthropic), the AI assistant that helped build this portfolio, from the source article alone and the prompt below, with no access to the Keycloak server or its recorded evidence. The review then checked each claim against the server's recorded behaviour, before anything was published.",
  "prompt": "Rewrite this help-center article as a clear, step-by-step guide for administrators. Keep it short.",
  "draft": [
   "# Reset two-factor authentication (2FA) for a user",

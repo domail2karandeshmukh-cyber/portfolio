@@ -1,0 +1,180 @@
+{
+ "about": "A snapshot of the portfolio library's documents, the data the GraphQL demonstration serves. Generated from content/site.json on 27 November 2026; it doesn't change when the library does, so the recorded examples stay exact.",
+ "documents": [
+  {
+   "id": "cg-threat",
+   "title": "Threat model",
+   "kind": "SECURITY",
+   "project": "AI-ChainGuard",
+   "url": "https://karandeshmukh.dev/docs/ai-chainguard/threat-model"
+  },
+  {
+   "id": "tn-demo",
+   "title": "The demonstration in two minutes",
+   "kind": "HOW_TO",
+   "project": "TrustNav",
+   "url": "https://karandeshmukh.dev/docs/trustnav/demo-guide"
+  },
+  {
+   "id": "tn-how",
+   "title": "How TrustNav works, step by step",
+   "kind": "CONCEPT",
+   "project": "TrustNav",
+   "url": "https://karandeshmukh.dev/docs/trustnav/how-it-works"
+  },
+  {
+   "id": "studio-shots-guide",
+   "title": "Annotate a screenshot in the Screenshot Studio",
+   "kind": "HOW_TO",
+   "project": "Documentation Studio",
+   "url": "https://karandeshmukh.dev/docs/studio/screenshot-studio-guide"
+  },
+  {
+   "id": "kc1-model-card",
+   "title": "Model card: KC1 defect prediction",
+   "kind": "REFERENCE",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/model-card"
+  },
+  {
+   "id": "kc1-dataset-card",
+   "title": "Dataset card: NASA PROMISE KC1, as the KC1 project uses it",
+   "kind": "REFERENCE",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/dataset-card"
+  },
+  {
+   "id": "kc1-build",
+   "title": "Manual Docker build guide",
+   "kind": "HOW_TO",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/build-guide"
+  },
+  {
+   "id": "ns-release",
+   "title": "Release notes, V2.4",
+   "kind": "RELEASE_NOTES",
+   "project": "NOVATECH Sentinel",
+   "url": "https://karandeshmukh.dev/docs/novatech-sentinel/release-notes"
+  },
+  {
+   "id": "tn-glossary",
+   "title": "Glossary",
+   "kind": "REFERENCE",
+   "project": "TrustNav",
+   "url": "https://karandeshmukh.dev/docs/trustnav/glossary"
+  },
+  {
+   "id": "tn-code",
+   "title": "Code guide: every file and what it does",
+   "kind": "DEVELOPER_GUIDE",
+   "project": "TrustNav",
+   "url": "https://karandeshmukh.dev/docs/trustnav/code-guide"
+  },
+  {
+   "id": "cg-arch",
+   "title": "Architecture",
+   "kind": "ARCHITECTURE",
+   "project": "AI-ChainGuard",
+   "url": "https://karandeshmukh.dev/docs/ai-chainguard/architecture"
+  },
+  {
+   "id": "ns-readme",
+   "title": "README: NOVATECH Sentinel",
+   "kind": "REFERENCE",
+   "project": "NOVATECH Sentinel",
+   "url": "https://karandeshmukh.dev/docs/novatech-sentinel/readme"
+  },
+  {
+   "id": "kc1-readme",
+   "title": "README: KC1 defect prediction",
+   "kind": "REFERENCE",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/readme"
+  },
+  {
+   "id": "kc1-api-reference",
+   "title": "KC1 prediction API reference",
+   "kind": "REFERENCE",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/api-reference"
+  },
+  {
+   "id": "kc1-api-quickstart",
+   "title": "Get your first prediction from the KC1 API",
+   "kind": "HOW_TO",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/api-quickstart"
+  },
+  {
+   "id": "kc1-api-troubleshooting",
+   "title": "Troubleshoot the KC1 API",
+   "kind": "TROUBLESHOOTING",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/api-troubleshooting"
+  },
+  {
+   "id": "kc1-mlflow-compare",
+   "title": "Compare the KC1 model candidates in MLflow",
+   "kind": "HOW_TO",
+   "project": "KC1 defect prediction",
+   "url": "https://karandeshmukh.dev/docs/kc1/mlflow-compare-runs"
+  },
+  {
+   "id": "kc-reset-otp",
+   "title": "Reset a user's one-time password in Keycloak",
+   "kind": "HOW_TO",
+   "project": "Keycloak (independent)",
+   "url": "https://karandeshmukh.dev/docs/keycloak/reset-otp"
+  },
+  {
+   "id": "kc-otp-troubleshooting",
+   "title": "When a Keycloak user can't sign in with a one-time password",
+   "kind": "TROUBLESHOOTING",
+   "project": "Keycloak (independent)",
+   "url": "https://karandeshmukh.dev/docs/keycloak/otp-troubleshooting"
+  },
+  {
+   "id": "kc-otp-policy",
+   "title": "Keycloak OTP policy: the settings and their defaults",
+   "kind": "REFERENCE",
+   "project": "Keycloak (independent)",
+   "url": "https://karandeshmukh.dev/docs/keycloak/otp-policy"
+  },
+  {
+   "id": "jl-run-export",
+   "title": "Run a notebook from a clean start and share it as HTML in JupyterLab",
+   "kind": "HOW_TO",
+   "project": "JupyterLab (independent)",
+   "url": "https://karandeshmukh.dev/docs/jupyterlab/run-and-export"
+  },
+  {
+   "id": "ws-slow-http",
+   "title": "Find the slowest HTTP responses in a capture with tshark",
+   "kind": "HOW_TO",
+   "project": "Wireshark (independent)",
+   "url": "https://karandeshmukh.dev/docs/wireshark/slow-http-responses"
+  },
+  {
+   "id": "cg-report",
+   "title": "AI-ChainGuard final report",
+   "kind": "REPORT",
+   "project": "AI-ChainGuard",
+   "url": "https://karandeshmukh.dev/docs/ai-chainguard/final-report"
+  },
+  {
+   "id": "cg-paper",
+   "title": "Signed Is Not Safe",
+   "kind": "REPORT",
+   "project": "AI-ChainGuard",
+   "url": "https://karandeshmukh.dev/docs/ai-chainguard/paper"
+  },
+  {
+   "id": "tn-report",
+   "title": "TrustNav technical report",
+   "kind": "REPORT",
+   "project": "TrustNav",
+   "url": "https://karandeshmukh.dev/docs/trustnav/technical-report"
+  }
+ ]
+}

@@ -1,0 +1,358 @@
+{
+ "about": "Every example of the library API's guide. scripts/graphql-examples.mjs sends each one to a fresh server and compares the answer with `response`; the build fails if one differs. Run it with --record to rewrite the responses after a deliberate change.",
+ "endpoint": "http://localhost:4000/graphql",
+ "token": "local-demo-token",
+ "examples": [
+  {
+   "id": "first-page",
+   "title": "Read the first page of documents",
+   "query": "query FirstPage {\n  documents(first: 3) {\n    totalCount\n    edges {\n      cursor\n      node { id title kind }\n    }\n    pageInfo { hasNextPage endCursor }\n  }\n}",
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "documents": {
+       "totalCount": 25,
+       "edges": [
+        {
+         "cursor": "ZG9jOjA=",
+         "node": {
+          "id": "cg-threat",
+          "title": "Threat model",
+          "kind": "SECURITY"
+         }
+        },
+        {
+         "cursor": "ZG9jOjE=",
+         "node": {
+          "id": "tn-demo",
+          "title": "The demonstration in two minutes",
+          "kind": "HOW_TO"
+         }
+        },
+        {
+         "cursor": "ZG9jOjI=",
+         "node": {
+          "id": "tn-how",
+          "title": "How TrustNav works, step by step",
+          "kind": "CONCEPT"
+         }
+        }
+       ],
+       "pageInfo": {
+        "hasNextPage": true,
+        "endCursor": "ZG9jOjI="
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "next-page",
+   "title": "Read the next page",
+   "query": "query NextPage($after: String) {\n  documents(first: 3, after: $after) {\n    edges { node { id title } }\n    pageInfo { hasPreviousPage hasNextPage endCursor }\n  }\n}",
+   "variables": {
+    "after": "ZG9jOjI="
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "documents": {
+       "edges": [
+        {
+         "node": {
+          "id": "studio-shots-guide",
+          "title": "Annotate a screenshot in the Screenshot Studio"
+         }
+        },
+        {
+         "node": {
+          "id": "kc1-model-card",
+          "title": "Model card: KC1 defect prediction"
+         }
+        },
+        {
+         "node": {
+          "id": "kc1-dataset-card",
+          "title": "Dataset card: NASA PROMISE KC1, as the KC1 project uses it"
+         }
+        }
+       ],
+       "pageInfo": {
+        "hasPreviousPage": true,
+        "hasNextPage": true,
+        "endCursor": "ZG9jOjU="
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "filter-kind",
+   "title": "Keep one kind of document",
+   "query": "query HowTos {\n  documents(kind: HOW_TO, first: 50) {\n    totalCount\n    edges { node { title project } }\n  }\n}",
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "documents": {
+       "totalCount": 8,
+       "edges": [
+        {
+         "node": {
+          "title": "The demonstration in two minutes",
+          "project": "TrustNav"
+         }
+        },
+        {
+         "node": {
+          "title": "Annotate a screenshot in the Screenshot Studio",
+          "project": "Documentation Studio"
+         }
+        },
+        {
+         "node": {
+          "title": "Manual Docker build guide",
+          "project": "KC1 defect prediction"
+         }
+        },
+        {
+         "node": {
+          "title": "Get your first prediction from the KC1 API",
+          "project": "KC1 defect prediction"
+         }
+        },
+        {
+         "node": {
+          "title": "Compare the KC1 model candidates in MLflow",
+          "project": "KC1 defect prediction"
+         }
+        },
+        {
+         "node": {
+          "title": "Reset a user's one-time password in Keycloak",
+          "project": "Keycloak (independent)"
+         }
+        },
+        {
+         "node": {
+          "title": "Run a notebook from a clean start and share it as HTML in JupyterLab",
+          "project": "JupyterLab (independent)"
+         }
+        },
+        {
+         "node": {
+          "title": "Find the slowest HTTP responses in a capture with tshark",
+          "project": "Wireshark (independent)"
+         }
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "one-document",
+   "title": "Read one document",
+   "query": "query OneDocument($id: ID!) {\n  document(id: $id) { title kind project url }\n}",
+   "variables": {
+    "id": "kc-reset-otp"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "document": {
+       "title": "Reset a user's one-time password in Keycloak",
+       "kind": "HOW_TO",
+       "project": "Keycloak (independent)",
+       "url": "https://karandeshmukh.dev/docs/keycloak/reset-otp"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "no-document",
+   "title": "Ask for a document that doesn't exist",
+   "query": "query OneDocument($id: ID!) {\n  document(id: $id) { title }\n}",
+   "variables": {
+    "id": "kc-reset-2fa"
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "document": null
+     }
+    }
+   }
+  },
+  {
+   "id": "feedback-no-token",
+   "title": "Send feedback without a token",
+   "query": "mutation SendFeedback($input: SubmitFeedbackInput!) {\n  submitFeedback(input: $input) {\n    __typename\n  }\n}",
+   "variables": {
+    "input": {
+     "documentId": "kc-reset-otp",
+     "helpful": true
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "errors": [
+      {
+       "message": "Send an access token: Authorization: Bearer <token>.",
+       "locations": [
+        {
+         "line": 2,
+         "column": 3
+        }
+       ],
+       "path": [
+        "submitFeedback"
+       ],
+       "extensions": {
+        "code": "UNAUTHENTICATED"
+       }
+      }
+     ],
+     "data": null
+    }
+   }
+  },
+  {
+   "id": "feedback",
+   "title": "Send feedback",
+   "token": true,
+   "query": "mutation SendFeedback($input: SubmitFeedbackInput!) {\n  submitFeedback(input: $input) {\n    __typename\n    ... on SubmitFeedbackSuccess {\n      feedback { id documentId helpful comment }\n    }\n    ... on Problem { message }\n  }\n}",
+   "variables": {
+    "input": {
+     "documentId": "kc-reset-otp",
+     "helpful": false,
+     "comment": "Step 5 doesn't say what to do if the user has other required actions."
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "submitFeedback": {
+       "__typename": "SubmitFeedbackSuccess",
+       "feedback": {
+        "id": "fb-1",
+        "documentId": "kc-reset-otp",
+        "helpful": false,
+        "comment": "Step 5 doesn't say what to do if the user has other required actions."
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "feedback-unknown-document",
+   "title": "Send feedback on a document that doesn't exist",
+   "token": true,
+   "query": "mutation SendFeedback($input: SubmitFeedbackInput!) {\n  submitFeedback(input: $input) {\n    __typename\n    ... on Problem { message }\n    ... on DocumentNotFoundProblem { documentId }\n  }\n}",
+   "variables": {
+    "input": {
+     "documentId": "kc-reset-2fa",
+     "helpful": true
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "submitFeedback": {
+       "__typename": "DocumentNotFoundProblem",
+       "message": "No document has this ID.",
+       "documentId": "kc-reset-2fa"
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "feedback-long-comment",
+   "title": "Send a comment that is too long",
+   "token": true,
+   "query": "mutation SendFeedback($input: SubmitFeedbackInput!) {\n  submitFeedback(input: $input) {\n    __typename\n    ... on Problem { message }\n    ... on CommentTooLongProblem { maxLength }\n  }\n}",
+   "variables": {
+    "input": {
+     "documentId": "kc-reset-otp",
+     "helpful": false,
+     "comment": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+   },
+   "response": {
+    "status": 200,
+    "body": {
+     "data": {
+      "submitFeedback": {
+       "__typename": "CommentTooLongProblem",
+       "message": "The comment is longer than 500 characters.",
+       "maxLength": 500
+      }
+     }
+    }
+   }
+  },
+  {
+   "id": "page-too-large",
+   "title": "Ask for a page that is too large",
+   "query": "query {\n  documents(first: 100) { totalCount }\n}",
+   "response": {
+    "status": 200,
+    "body": {
+     "errors": [
+      {
+       "message": "`first` must be between 1 and 50.",
+       "locations": [
+        {
+         "line": 2,
+         "column": 3
+        }
+       ],
+       "path": [
+        "documents"
+       ],
+       "extensions": {
+        "code": "BAD_USER_INPUT",
+        "argument": "first"
+       }
+      }
+     ],
+     "data": null
+    }
+   }
+  },
+  {
+   "id": "unknown-field",
+   "title": "Ask for a field that doesn't exist",
+   "query": "query {\n  document(id: \"kc-reset-otp\") { title author }\n}",
+   "response": {
+    "status": 200,
+    "body": {
+     "errors": [
+      {
+       "message": "Cannot query field \"author\" on type \"Document\".",
+       "locations": [
+        {
+         "line": 2,
+         "column": 40
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ]
+}
