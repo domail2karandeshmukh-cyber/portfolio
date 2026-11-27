@@ -140,7 +140,7 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
  .w-table.fit thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
  .w-table.fit tr{display:block;padding:var(--s3) 0;border-bottom:1px solid var(--rule)}
  .w-table.fit :is(th,td){display:block;border:0;padding:0 0 var(--s2);width:auto!important}
- .wcs .w-table:not(.num){display:block;overflow-x:auto}
+ .w-table :is(th,td){padding:var(--s2)}
 }
 .w-gap{max-width:46rem;margin-top:var(--s4);padding:var(--s4);background:var(--hl-soft);border-radius:var(--r1)}
 
@@ -169,7 +169,8 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
 .w-facts{list-style:none;margin:0 0 var(--s5);padding:0;display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5)}
 .w-facts li{font-size:var(--fs-small);color:var(--ink2)}
 .w-facts b{display:block;font:500 1.75rem/1.1 var(--serif);color:var(--ink)}
-.wcs-grid{display:grid;gap:var(--s5);margin-top:var(--s7)}
+.wcs-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--s5);margin-top:var(--s7)}
+.w-steps{min-width:0}
 .w-steps ol{list-style:none;margin:0;padding:0;display:flex;gap:var(--s2);overflow-x:auto;padding-bottom:var(--s2)}
 .w-steps a{display:flex;align-items:center;gap:8px;min-height:44px;padding:0 12px 0 6px;border:1px solid var(--rule);border-radius:var(--pill);background:#fff;color:var(--ink);text-decoration:none;font:500 .875rem/1.2 var(--sans);white-space:nowrap}
 .w-steps a:hover,.w-steps a[aria-current]{border-color:var(--ink);background:var(--hl-soft)}
@@ -269,3 +270,6 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
 .w-article :is(th,td){padding:var(--s2) var(--s3);border-bottom:1px solid var(--rule);text-align:left;vertical-align:top;line-height:1.5}
 .w-article thead th{border-bottom:2px solid var(--ink);font-weight:600}
 .w-article tbody th,.w-article tbody td:first-child{font-weight:600;white-space:nowrap}
+.w-article :not(pre)>code{overflow-wrap:anywhere}
+.w-tscroll{overflow-x:auto;margin:0 0 var(--s4)}
+.w-tscroll>.w-table{margin:0}
