@@ -1,0 +1,25 @@
+Docusaurus 3.10.2, Node v22.23.4, built 2026-11-27T22:02Z from the commit before this file was added.
+Command: npm run build (both locales: en, qps-ploc)
+
+[webpackbar] √ Server: Compiled successfully in 1.09s
+[webpackbar] √ Client: Compiled successfully in 1.42s
+[SUCCESS] Generated static files in "build".
+[webpackbar] √ Server: Compiled successfully in 995.12ms
+[webpackbar] √ Client: Compiled successfully in 1.40s
+[SUCCESS] Generated static files in "build/qps-ploc".
+
+Pages:
+./changes.html
+./concepts/one-time-passwords.html
+./how-to/reset-otp.html
+./index.html
+./qps-ploc/changes.html
+./qps-ploc/concepts/one-time-passwords.html
+./qps-ploc/how-to/reset-otp.html
+./qps-ploc/index.html
+./qps-ploc/reference/otp-policy.html
+./qps-ploc/reference/terminology.html
+./qps-ploc/troubleshooting/otp-sign-in.html
+./reference/otp-policy.html
+./reference/terminology.html
+./troubleshooting/otp-sign-in.html

@@ -1,0 +1,59 @@
+{
+ "about": "An AI-assisted draft, and the human review that corrected it. The draft was produced on 27 November 2026 by Claude (Anthropic), the AI assistant that helped build this portfolio, from the source article alone and the prompt below, with no access to the Keycloak server or its recorded evidence. Karan Deshmukh's review checked each claim against the server's recorded behaviour before anything was published.",
+ "prompt": "Rewrite this help-center article as a clear, step-by-step guide for administrators. Keep it short.",
+ "draft": [
+  "# Reset two-factor authentication (2FA) for a user",
+  "If a user loses access to their authenticator app, an administrator can reset their 2FA.",
+  "1. Log in to the Keycloak Admin Console.",
+  "2. Go to **Users** and search for the user.",
+  "3. Open the **Credentials** tab.",
+  "4. Delete the OTP credential.",
+  "5. The user will be prompted to configure 2FA again the next time they log in.",
+  "Note: OTP codes are valid for 30 seconds."
+ ],
+ "review": [
+  {
+   "line": 7,
+   "claim": "The user will be prompted to configure 2FA again the next time they log in.",
+   "verdict": "False",
+   "check": "Keycloak 26.8.2's recorded behaviour: after the deletion, the user signed in with the password alone (evidence.json, signin-without-required-action, otp_prompt false).",
+   "why_the_draft_got_it_wrong": "The draft rewrote the source's claim fluently and kept it. Better wording made a false step more convincing.",
+   "correction": "Add the step that was missing: Configure OTP in Required user actions, then Save, with a caution that says why."
+  },
+  {
+   "line": 3,
+   "claim": "Log in to the Keycloak Admin Console.",
+   "verdict": "Incomplete",
+   "check": "An administrator of the master realm lands in the master realm, not the user's.",
+   "correction": "Sign in, and check that the user's realm is the current realm before searching."
+  },
+  {
+   "line": 2,
+   "claim": "an administrator can reset their 2FA",
+   "verdict": "Missing a safeguard",
+   "check": "Nothing asks who is making the request. A reset for someone else hands them the account.",
+   "correction": "Confirm the request through contact details the user gave before they lost the phone."
+  },
+  {
+   "line": 8,
+   "claim": "OTP codes are valid for 30 seconds.",
+   "verdict": "True by default only",
+   "check": "30 seconds is the default period of a new realm's OTP policy; a realm can change it, and the default look around window also accepts the previous and next code.",
+   "correction": "Moved to the OTP policy reference, as a default, with the look around window."
+  },
+  {
+   "line": 1,
+   "claim": "Reset two-factor authentication (2FA)",
+   "verdict": "Terminology",
+   "check": "Keycloak's console calls it OTP: the credential type is Otp and the required action is Configure OTP.",
+   "correction": "One-time password (OTP), the term on the screens the reader will use."
+  }
+ ],
+ "lesson": "The AI draft read better than the source and was as wrong: it fixed the tone and kept the error. Vale flagged four things in step 5, all of them wording; none of them the false claim. Each factual claim went to the server's recorded behaviour before publication.",
+ "vale_on_step_5": [
+  "Google.Will: Avoid using 'will'.",
+  "Google.Passive: 'be prompted'.",
+  "Portfolio.Terms: '2FA'.",
+  "Portfolio.Verbs: 'log in'."
+ ]
+}
