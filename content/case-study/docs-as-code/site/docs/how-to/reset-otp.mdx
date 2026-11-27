@@ -1,0 +1,82 @@
+---
+title: Reset a user's one-time password
+description: Delete a lost authenticator's OTP credential in the Keycloak admin console, and make the user set up a new one at their next sign-in.
+doc_type: How-to
+audience: Keycloak administrators
+product_version: Keycloak 26.8.2
+owner: Karan Deshmukh
+last_review: 2026-11-28
+---
+
+import PageFacts from '@site/src/components/PageFacts';
+import Screenshot from '@site/src/components/Screenshot';
+import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
+
+# Reset a user's one-time password
+
+<PageFacts />
+
+When a user loses or replaces the phone that holds their authenticator, delete its one-time password (OTP) credential.
+Then make the user set up a new one at their next sign-in.
+
+## Before you start {#before-you-start}
+
+<ConfirmIdentity />
+
+- Sign in to the admin console with an account that can manage the users of the user's realm.
+- Have the user's username or email address.
+
+## Steps {#steps}
+
+1. In the admin console, check that the user's realm is the current realm: its name is at the top of the menu.
+   Select **Users**, search for the user, and select their username.
+
+   <Screenshot src="/img/keycloak/01-find-user.png" alt="The Users page, with the search box and the username alex.morgan marked" caption="Users, with the search box and the user's row marked." />
+
+2. Select the **Credentials** tab.
+   Find the row of type **Otp**.
+   Its user label names the device, such as *Alex's phone*.
+
+   <Screenshot src="/img/keycloak/02-credentials.png" alt="The Credentials tab, with the Otp row of Alex's phone marked" caption="The Otp row is the authenticator to remove. Leave the password row." />
+
+3. Open the row's menu, and then select **Delete**.
+
+   <Screenshot src="/img/keycloak/03-delete-menu.png" alt="The row's menu open, with Delete marked" caption="The menu at the end of the Otp row." />
+
+4. In **Delete credentials?**, select **Delete**.
+   Keycloak reports *The credentials has been deleted successfully.*, and only the password is left on the tab.
+
+   <Screenshot src="/img/keycloak/04-confirm-delete.png" alt="The confirmation dialog, with the Delete button marked" caption="The confirmation. Keycloak's own message keeps its wording." />
+
+   :::caution Don't stop here
+   The user can now sign in with the password alone.
+   Keycloak asks for a code only from a user who has a second factor set up.
+   Step 5 makes the user set up a new one.
+   :::
+
+5. Select the **Details** tab.
+   In **Required user actions**, select **Configure OTP**, and then select **Save**.
+   Keycloak reports *The user has been saved*.
+
+   <Screenshot src="/img/keycloak/07-required-action.png" alt="The Details tab, with Configure OTP in Required user actions and the Save button marked" caption="Configure OTP added to the user's required actions." />
+
+6. Ask the user to sign in.
+   After their password, Keycloak shows **Mobile Authenticator Setup**.
+   They scan the code with an authenticator app on the new phone, type the code the app shows, name the device, and select **Submit**.
+
+   <Screenshot src="/img/keycloak/09b-setup-code.png" alt="Mobile Authenticator Setup, with the code, the device name and Submit marked, and the QR code hidden" caption="What the user sees. The QR code is hidden in this picture: it holds the secret." />
+
+## Check that it worked {#check}
+
+On the **Credentials** tab, a new **Otp** row shows the name the user gave the new device, with today's date.
+
+<Screenshot src="/img/keycloak/11-new-credential.png" alt="The Credentials tab with the new Otp row, Alex's new phone, marked" caption="The new authenticator, set up by the user." />
+
+When the realm saves admin events, **Events** > **Admin events** lists the deletion as an `ACTION` on the user's credential, and the new required action as an `UPDATE` of the user.
+
+<Screenshot src="/img/keycloak/12-admin-events.png" alt="Admin events, with the ACTION on the user's credential marked" caption="The record of the reset, for an audit." />
+
+## Next steps {#next-steps}
+
+- If the user sees *Invalid authenticator code.* during the setup, see [When a user can't sign in with a one-time password](../troubleshooting/otp-sign-in.mdx#code-refused).
+- To see what the realm asks of an authenticator, see [OTP policy settings](../reference/otp-policy.mdx).

@@ -1,0 +1,61 @@
+---
+title: When a user can't sign in with a one-time password
+description: Three things that go wrong with one-time passwords in Keycloak, what the user sees, why it happens, and what an administrator does.
+doc_type: Troubleshooting
+audience: Keycloak administrators
+product_version: Keycloak 26.8.2
+owner: Karan Deshmukh
+last_review: 2026-11-28
+---
+
+import PageFacts from '@site/src/components/PageFacts';
+import Screenshot from '@site/src/components/Screenshot';
+import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
+
+# When a user can't sign in with a one-time password
+
+<PageFacts />
+
+Find what the user sees in the table, then go to its section.
+
+| The user sees | Section |
+|---|---|
+| *Invalid authenticator code.* after typing a code | [Keycloak refuses the code](#code-refused) |
+| No code to type: the phone is lost | [The user lost the phone](#phone-lost) |
+| No request for a code at all | [Keycloak doesn't ask for a code](#no-code-asked) |
+
+## Keycloak refuses the code {#code-refused}
+
+**Cause.** The code is from an earlier period, or the phone's clock is wrong.
+A code is valid for one period of the realm's OTP policy, 30 seconds by default.
+With the default look around window of 1, Keycloak also accepts the code of the period before and the period after, and refuses a code from two periods back.
+
+<Screenshot src="/img/keycloak/10-wrong-code.png" alt="Mobile Authenticator Setup after a refused code, with Invalid authenticator code. marked and the key hidden" caption="Keycloak's message for a refused code." />
+
+**Fix.**
+
+1. Ask the user to type the code that the app shows now, before its timer runs out.
+2. If every code fails, ask the user to set the phone's date and time to update automatically.
+   An authenticator computes each code from the time, so a phone that is a minute off produces codes Keycloak refuses.
+3. If many users' codes fail, check the server's clock before you widen the look around window in the [OTP policy](../reference/otp-policy.mdx#settings).
+   A wider window accepts older codes, for everyone.
+
+## The user lost the phone {#phone-lost}
+
+**Cause.** The authenticator went with the phone, and Keycloak keeps no copy within the user's reach.
+
+**Fix.**
+
+<ConfirmIdentity />
+
+Delete the user's OTP credential and make them set up a new one: [Reset a user's one-time password](../how-to/reset-otp.mdx).
+
+## Keycloak doesn't ask for a code {#no-code-asked}
+
+**Cause.** An administrator deleted the user's OTP credential, and nothing asked the user to set up a new one.
+Keycloak's default sign-in flow asks for a second factor only from a user who has one configured.
+
+<Screenshot src="/img/keycloak/06-password-only.png" alt="The account console, reached with the password alone after the OTP credential was deleted" caption="Signed in with the password alone." />
+
+**Fix.** On the user's **Details** tab, add **Configure OTP** to **Required user actions**, and select **Save**.
+At the next sign-in, Keycloak asks the user to set up an authenticator before they get in.

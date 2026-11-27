@@ -1,0 +1,32 @@
+---
+title: Terminology
+description: The terms these pages use, the words they avoid, and the interface labels they quote exactly.
+doc_type: Reference
+audience: Writers, reviewers and translators
+product_version: Keycloak 26.8.2
+owner: Karan Deshmukh
+last_review: 2026-11-28
+---
+
+import PageFacts from '@site/src/components/PageFacts';
+
+# Terminology
+
+<PageFacts />
+
+One name for one thing.
+Vale checks these pages against this list on every change.
+
+| Use | Not | Why |
+|---|---|---|
+| one-time password (OTP) | 2FA, MFA code, two-factor code | Keycloak's console calls the credential **Otp** and the required action **Configure OTP**. |
+| authenticator, authenticator app | token, OTP app | The app on the phone that computes the code. |
+| sign in (verb), sign-in (noun) | log in, login (verb) | Login is a noun. |
+| set up (verb), setup (noun) | setup (verb) | Setup is a noun. |
+| select | click, click on | Works for a mouse, a keyboard and a touch screen. |
+| realm | tenant, workspace | Keycloak's term. |
+
+## Interface labels {#labels}
+
+Interface labels appear in bold, exactly as Keycloak 26.8.2 shows them in English, including their capitals: **Users**, **Credentials**, **Details**, **Required user actions**, **Configure OTP**, **Save**, **Mobile Authenticator Setup**.
+Keycloak's own messages appear in italics, with their wording unchanged, even where it's ungrammatical: *The credentials has been deleted successfully.*

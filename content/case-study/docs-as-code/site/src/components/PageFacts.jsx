@@ -6,12 +6,14 @@ import styles from "./PageFacts.module.css";
 
 export default function PageFacts() {
   const { frontMatter: f } = useDoc();
+  // YAML reads a bare date such as 2026-11-28 as a Date; show it as written, in ISO 8601, for every locale.
+  const day = (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : v);
   const rows = [
     ["Type", f.doc_type],
     ["For", f.audience],
     ["Checked against", f.product_version],
     ["Owner", f.owner],
-    ["Last review", f.last_review],
+    ["Last review", day(f.last_review)],
   ].filter(([, v]) => v);
   return (
     <dl className={styles.facts}>
