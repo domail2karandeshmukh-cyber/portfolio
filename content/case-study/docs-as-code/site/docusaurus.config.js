@@ -4,6 +4,14 @@
 // Not official Keycloak documentation, and not work done for any employer.
 import { themes as prismThemes } from "prism-react-renderer";
 
+// Prism's GitHub theme, with the token colours that fall below 4.5:1 on its grey darkened until they pass (axe-core,
+// 27 November 2026). Hue kept, so the code still looks like GitHub's.
+const DARKER = { "#999988": "#5f5f52", "#e3116c": "#b30d56", "#36acaa": "#1d6e6d", "#00a4db": "#006a8f", "#d73a49": "#b3262f" };
+const codeTheme = {
+  ...prismThemes.github,
+  styles: prismThemes.github.styles.map((s) => ({ ...s, style: { ...s.style, color: DARKER[s.style.color] || s.style.color } })),
+};
+
 const REPO = "https://github.com/domail2karandeshmukh-cyber/portfolio";
 const DIR = "content/case-study/docs-as-code/site";
 
@@ -62,7 +70,7 @@ const config = {
         copyright:
           "An independent demonstration by Karan Deshmukh, checked against Keycloak 26.8.2 on his own computer. Not official Keycloak documentation. Keycloak is a Cloud Native Computing Foundation project.",
       },
-      prism: { theme: prismThemes.github, additionalLanguages: ["bash", "json"] },
+      prism: { theme: codeTheme, additionalLanguages: ["bash", "json"] },
     }),
 };
 

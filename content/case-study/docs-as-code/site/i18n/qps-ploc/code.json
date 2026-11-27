@@ -345,5 +345,8 @@
   "pageFacts.review": {
     "message": "[Ļàšţ ŕéṽîéŵ ·· ]",
     "description": "Label: the date of the page's last review"
+  },
+  "table.scrollLabel": {
+    "message": "[Ţàƀļé, šçŕöļļš šîðéŵàýš ·· ·· ]"
   }
 }
