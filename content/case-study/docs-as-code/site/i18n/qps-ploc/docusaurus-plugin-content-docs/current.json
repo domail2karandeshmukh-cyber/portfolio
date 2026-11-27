@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "[Ñéẋţ ·]",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Concepts": {
+    "message": "[Çöñçéþţš ··]",
+    "description": "The label for category 'Concepts' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.How-to guides": {
+    "message": "[Ĥöŵ-ţö ĝûîðéš ·· ]",
+    "description": "The label for category 'How-to guides' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Reference": {
+    "message": "[Ŕéƒéŕéñçé ··]",
+    "description": "The label for category 'Reference' in sidebar 'docs'"
+  },
+  "sidebar.docs.category.Troubleshooting": {
+    "message": "[Ţŕöûƀļéšĥööţîñĝ ·· ·]",
+    "description": "The label for category 'Troubleshooting' in sidebar 'docs'"
+  }
+}

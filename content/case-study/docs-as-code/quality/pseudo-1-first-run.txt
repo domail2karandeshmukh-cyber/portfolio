@@ -1,0 +1,6 @@
+concepts/one-time-passwords.html ['Checked', 'For', 'Last', 'Owner', 'Type', 'against', 'review']
+how-to/reset-otp.html ['Checked', 'For', 'Last', 'Owner', 'Type', 'against', 'review']
+index.html ['Checked', 'For', 'Last', 'Owner', 'Type', 'against', 'review']
+reference/otp-policy.html ['Checked', 'For', 'Last', 'Owner', 'Type', 'against', 'review']
+reference/terminology.html ['Checked', 'For', 'Last', 'Owner', 'Type', 'against', 'review']
+troubleshooting/otp-sign-in.html ['Checked', 'For', 'Last', 'Owner', 'Type', 'against', 'review']
