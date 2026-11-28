@@ -541,6 +541,23 @@
   "A technical drawing of one of my procedures, with callouts for the five things every page has: a task title, what to check before starting, one action per step, an annotated figure, and a result the reader can check.": "मेरी एक प्रक्रिया का तकनीकी चित्र, हर पेज की पाँच चीज़ों के निशानों के साथ: कार्य का शीर्षक, शुरू करने से पहले क्या जाँचें, हर चरण में एक काम, एक चिह्नित चित्र, और ऐसा परिणाम जिसे पाठक जाँच सके।",
   "Help centers, API references and procedures, written from the product and tested before they ship": "हेल्प सेंटर, API संदर्भ और प्रक्रियाएँ, उत्पाद से लिखे गए और प्रकाशन से पहले परखे गए",
   "Selected documentation, <span class=\"ch-dim\">each page tested against the product it describes</span>": "चुना हुआ दस्तावेज़ीकरण, <span class=\"ch-dim\">हर पेज उसी उत्पाद पर परखा गया जिसका वह वर्णन करता है</span>",
-  "Documentation<br>that holds up": "दस्तावेज़ीकरण<br>जो टिकता है"
+  "Documentation<br>that holds up": "दस्तावेज़ीकरण<br>जो टिकता है",
+  "Angers, France. Four years in dedicated documentation roles at MongoDB and Magna International.": "Angers, फ़्रांस। MongoDB और Magna International में चार साल, पूरी तरह दस्तावेज़ीकरण की भूमिकाओं में।",
+  "Technical<br><span class=\"dx-m\">writer</span>": "तकनीकी<br><span class=\"dx-m\">लेखक</span>",
+  "What I do": "मैं क्या करता हूँ",
+  "I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "मैं इंजीनियरों की जानकारी को ऐसे चरणों में बदलता हूँ जिन्हें पाठक अपना सके, और हर चरण को असली उत्पाद पर परखता हूँ।",
+  "What I write": "मैं क्या लिखता हूँ",
+  "How-to guides, tested": "परखी हुई how-to गाइड",
+  "API references from OpenAPI": "OpenAPI से API संदर्भ",
+  "GraphQL API guides": "GraphQL API गाइड",
+  "Help-center articles": "हेल्प-सेंटर लेख",
+  "S1000D Issue 6 and IETMs": "S1000D Issue 6 और IETM",
+  "Docs as code: Docusaurus, DITA 1.3": "Docs as code: Docusaurus, DITA 1.3",
+  "Documentation <span class=\"dx-m\">tested</span> on the product it <span class=\"dx-m\">describes</span>": "जिस उत्पाद का <span class=\"dx-m\">वर्णन</span> करे, उसी पर <span class=\"dx-m\">परखा</span> गया दस्तावेज़ीकरण",
+  "Watch a guide being tested": "एक गाइड को परखते हुए देखें",
+  "Standards I write to": "जिन मानकों पर मैं लिखता हूँ",
+  "style": "शैली",
+  "Issue 6": "Issue 6",
+  "Open to technical writer roles. <a href=\"#contact\">Get in touch</a>": "तकनीकी लेखक की भूमिकाओं के लिए उपलब्ध। <a href=\"#contact\">संपर्क करें</a>"
  }
 }

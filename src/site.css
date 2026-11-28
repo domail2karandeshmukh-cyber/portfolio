@@ -1410,3 +1410,43 @@ html.mnav-open{overflow:hidden}
  .ch-imgs{inset:56px 20px 56px}
 }
 @media (prefers-reduced-motion:reduce){.ch-imgs img{transition:opacity .2s;transform:none;filter:none}}
+/* Digital Director variant of the home hero (branch design-digital-director): one dark viewport over a grey loop of
+   the Keycloak film, the reader's first sight of the product a guide was tested on. Plex Mono stands in for the
+   design's pixel face. The film is held at 22 % so white text stays above 7:1 on any frame. */
+.dx{position:relative;isolation:isolate;overflow:hidden;background:#000;color:#fff;min-height:calc(100svh - var(--navh));display:flex}
+.dx-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:grayscale(1);opacity:.22;transform:scale(1.04)}
+.dx::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 38%,rgba(0,0,0,0) 55%,rgba(0,0,0,.7))}
+.dx-in{display:flex;flex-direction:column;width:min(1440px,100% - 2 * clamp(20px,4vw,56px));margin-inline:auto;padding:clamp(24px,3vw,40px) 0 clamp(16px,2vw,24px)}
+.dx-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+.dx-n{margin:0;font:400 1.25rem/1.05 var(--sans);letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.dx-n .dx-m{font-size:1.4em}h1.dx-n .dx-m{display:block}
+.dx-m{font-family:var(--mono);font-weight:500;letter-spacing:-.01em}
+.dx-ast{margin:.9em 0 0;font:400 .7rem var(--mono);color:#a3a3a3}
+.dx-blurb{margin:.3em 0 0;font:400 .8rem/1.6 var(--mono);color:#c9c9c9;max-width:30ch}
+.dx-lbl{margin:0 0 .8em;font:500 .8rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#a3a3a3}
+.dx-body{margin:0;font-size:.92rem;line-height:1.6;color:#ededed;max-width:28ch}
+.dx-list{list-style:none;margin:0;padding:0;font-size:.92rem;line-height:1.65;color:#ededed}
+.dx-c2,.dx-c4{text-align:right}
+.dx-spacer{flex:1;min-height:clamp(56px,14vh,200px)}
+.dx-row{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:end}
+.dx-head{margin:0;font:400 clamp(2rem,1rem + 4.2vw,4.4rem)/.92 var(--sans);letter-spacing:.01em;text-transform:uppercase;max-width:13ch;color:#fff}
+.dx-head .dx-m{font-size:1.12em;letter-spacing:-.03em}
+.dx-right{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+.dx-show{display:inline-flex;align-items:center;gap:12px;padding:12px 22px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);color:#fff;text-decoration:none;font:500 .82rem var(--mono);letter-spacing:.06em;text-transform:uppercase;transition:background .2s}
+.dx-show:hover{background:rgba(255,255,255,.14)}
+.dx-show svg{fill:#fff}
+.dx-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.dx-chips li{display:flex;align-items:baseline;gap:8px;padding:8px 14px;background:#0d0d0d;border:1px solid #262626}
+.dx-chips b{font:700 1rem var(--sans);letter-spacing:-.02em;color:#fff}
+.dx-chips i{font:400 .75rem var(--mono);font-style:normal;color:#a3a3a3}
+.dx-foot{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18);font-size:.8rem;color:#c9c9c9}
+.dx-foot p{margin:0}
+.dx-foot a{color:#6CE975;text-decoration:none}
+.dx-foot a:hover{text-decoration:underline;text-underline-offset:3px}
+.dx-fr span{color:#6b6b6b;margin:0 .35em}
+.dx a:focus-visible{outline:2px solid #6CE975;outline-offset:3px}
+@media (min-width:640px){.dx-foot{grid-template-columns:1fr auto}.dx-fr{text-align:right}}
+@media (min-width:768px){.dx-n{font-size:1.4rem}}
+@media (min-width:1024px){.dx-meta{grid-template-columns:repeat(4,minmax(0,1fr));gap:32px}.dx-c2,.dx-c4{text-align:left}.dx-row{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}.dx-right{align-items:flex-end}.dx-head{max-width:15ch}}
+@media (max-width:640px){.dx-c3{grid-column:1 / -1;text-align:left}.dx-body{max-width:40ch}.dx-c4{display:none}.dx-spacer{min-height:32px}.dx-chips li{padding:7px 10px}.dx-chips b{font-size:.9rem}}
+@media (prefers-reduced-motion:reduce){.dx-bg{transform:none}}

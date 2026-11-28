@@ -48,6 +48,9 @@ await fs.copyFile("src/fonts/newsreader.woff2", `${OUT}/fonts/newsreader.woff2`)
 // IBM Plex (SIL Open Font License, src/fonts/LICENSE-ibm-plex.txt): the type of the site since the redesign of
 // 28 November 2026. The Latin files of @fontsource/ibm-plex-*, kept in src/fonts so the build needs no package for them.
 for (const f of (await fs.readdir("src/fonts")).filter((f) => f.startsWith("plex-"))) await fs.copyFile(`src/fonts/${f}`, `${OUT}/fonts/${f}`);
+// The home hero's background: 22 seconds of the Keycloak film, in grey and without sound (src/media/dx-loop.mp4).
+await fs.mkdir(`${OUT}/media`, { recursive: true });
+for (const f of ["dx-loop.mp4", "dx-loop.webp"]) await fs.copyFile(`src/media/${f}`, `${OUT}/media/${f}`);
 
 // Project screenshots: crop to 16:10 and write two WebP sizes
 for (const [id, im] of Object.entries(C.images)) {
@@ -497,7 +500,7 @@ const CHAPTERS = [
 ];
 parts.chapters = CHAPTERS.map((c, i) => `<li${i ? "" : ' class="on"'}><a href="${c.href}" data-i="${i}"><span class="ch-k">${esc(c.k)}</span><span class="ch-t" translate="no">${esc(c.t)}</span>${icon("arrow-up-right", { size: 22, stroke: 1 })}</a></li>`).join("");
 parts.chapterimgs = CHAPTERS.map((c, i) => `<img src="${c.img}" alt="" width="1280" height="800"${i ? ' loading="lazy"' : ""} decoding="async"${i ? "" : ' class="on"'}>`).join("");
-const HI = { i_arrow: icon("arrow-right", { size: 14, stroke: 1 }), i_layout: icon("layout-grid", { size: 14 }), i_braces: icon("braces", { size: 14 }), i_shield: icon("shield-check", { size: 14 }), i_branch: icon("git-branch", { size: 14 }), i_plane: icon("plane", { size: 14 }), i_download: icon("download", { size: 18, stroke: 2 }), i_search: icon("search", { size: 18 }), i_copy: icon("copy", { size: 17 }), i_mail: icon("mail", { size: 18, stroke: 2 }), i_linkedin: icon("briefcase-business", { size: 18, stroke: 2 }), i_pin: icon("map-pin", { size: 17 }) };
+const HI = { i_arrow: icon("arrow-right", { size: 14, stroke: 1 }), i_play: icon("play", { size: 14, stroke: 2 }), i_layout: icon("layout-grid", { size: 14 }), i_braces: icon("braces", { size: 14 }), i_shield: icon("shield-check", { size: 14 }), i_branch: icon("git-branch", { size: 14 }), i_plane: icon("plane", { size: 14 }), i_download: icon("download", { size: 18, stroke: 2 }), i_search: icon("search", { size: 18 }), i_copy: icon("copy", { size: 17 }), i_mail: icon("mail", { size: 18, stroke: 2 }), i_linkedin: icon("briefcase-business", { size: 18, stroke: 2 }), i_pin: icon("map-pin", { size: 17 }) };
 const home = await template("src/home.html");
 for (const loc of locales) {
   const tokens = {

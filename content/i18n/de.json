@@ -541,6 +541,23 @@
   "A technical drawing of one of my procedures, with callouts for the five things every page has: a task title, what to check before starting, one action per step, an annotated figure, and a result the reader can check.": "Eine technische Zeichnung einer meiner Anleitungen, mit Markierungen für die fünf Dinge, die jede Seite hat: einen Aufgabentitel, was vorab zu prüfen ist, eine Handlung pro Schritt, eine beschriftete Abbildung und ein Ergebnis, das der Leser prüfen kann.",
   "Help centers, API references and procedures, written from the product and tested before they ship": "Hilfe-Center, API-Referenzen und Anleitungen, am Produkt geschrieben und getestet, bevor sie erscheinen",
   "Selected documentation, <span class=\"ch-dim\">each page tested against the product it describes</span>": "Ausgewählte Dokumentation, <span class=\"ch-dim\">jede Seite am Produkt getestet, das sie beschreibt</span>",
-  "Documentation<br>that holds up": "Dokumentation,<br>die standhält"
+  "Documentation<br>that holds up": "Dokumentation,<br>die standhält",
+  "Angers, France. Four years in dedicated documentation roles at MongoDB and Magna International.": "Angers, Frankreich. Vier Jahre in reinen Dokumentationsrollen bei MongoDB und Magna International.",
+  "Technical<br><span class=\"dx-m\">writer</span>": "Technischer<br><span class=\"dx-m\">Redakteur</span>",
+  "What I do": "Was ich mache",
+  "I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "Ich mache aus dem Wissen von Ingenieuren Schritte, denen Leser folgen können, und teste jeden Schritt am echten Produkt.",
+  "What I write": "Was ich schreibe",
+  "How-to guides, tested": "Anleitungen, getestet",
+  "API references from OpenAPI": "API-Referenzen aus OpenAPI",
+  "GraphQL API guides": "Leitfäden für GraphQL-APIs",
+  "Help-center articles": "Hilfe-Center-Artikel",
+  "S1000D Issue 6 and IETMs": "S1000D Issue 6 und IETMs",
+  "Docs as code: Docusaurus, DITA 1.3": "Docs as Code: Docusaurus, DITA 1.3",
+  "Documentation <span class=\"dx-m\">tested</span> on the product it <span class=\"dx-m\">describes</span>": "Dokumentation, <span class=\"dx-m\">getestet</span> am Produkt, das sie <span class=\"dx-m\">beschreibt</span>",
+  "Watch a guide being tested": "Einen Leitfaden im Test ansehen",
+  "Standards I write to": "Standards, nach denen ich schreibe",
+  "style": "Stil",
+  "Issue 6": "Issue 6",
+  "Open to technical writer roles. <a href=\"#contact\">Get in touch</a>": "Offen für Stellen als technischer Redakteur. <a href=\"#contact\">Kontakt aufnehmen</a>"
  }
 }

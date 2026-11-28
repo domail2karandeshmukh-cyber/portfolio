@@ -1344,3 +1344,15 @@
   if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; }, { threshold: .3 }).observe(box);
   timer = setInterval(function () { if (seen && !held && !document.hidden) show(at + 1); }, 3500);
 })();
+
+// The home hero's background film: loaded only after the page, played only while it is on screen, and never with
+// reduced motion (the grey poster stays instead).
+(function () {
+  var v = document.querySelector(".dx-bg");
+  if (!v || !v.dataset.src) return;
+  var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (still) return;
+  var start = function () { if (!v.src) v.src = v.dataset.src; var p = v.play(); if (p && p.catch) p.catch(function () {}); };
+  if (!("IntersectionObserver" in window)) { start(); return; }
+  new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) start(); else if (v.src) v.pause(); }); }).observe(v);
+})();

@@ -541,6 +541,23 @@
   "A technical drawing of one of my procedures, with callouts for the five things every page has: a task title, what to check before starting, one action per step, an annotated figure, and a result the reader can check.": "Le dessin technique d'une de mes procédures, avec un repère pour les cinq éléments de chaque page : un titre de tâche, ce qu'il faut vérifier avant de commencer, une action par étape, une figure annotée et un résultat que le lecteur peut vérifier.",
   "Help centers, API references and procedures, written from the product and tested before they ship": "Centres d'aide, références d'API et procédures, écrits à partir du produit et testés avant leur publication",
   "Selected documentation, <span class=\"ch-dim\">each page tested against the product it describes</span>": "Documentation choisie, <span class=\"ch-dim\">chaque page testée sur le produit qu'elle décrit</span>",
-  "Documentation<br>that holds up": "Une documentation<br>qui tient la route"
+  "Documentation<br>that holds up": "Une documentation<br>qui tient la route",
+  "Angers, France. Four years in dedicated documentation roles at MongoDB and Magna International.": "Angers, France. Quatre ans dans des postes dédiés à la documentation chez MongoDB et Magna International.",
+  "Technical<br><span class=\"dx-m\">writer</span>": "Rédacteur<br><span class=\"dx-m\">technique</span>",
+  "What I do": "Ce que je fais",
+  "I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "Je transforme ce que savent les ingénieurs en étapes que le lecteur peut suivre, et je teste chaque étape sur le vrai produit.",
+  "What I write": "Ce que j'écris",
+  "How-to guides, tested": "Guides pratiques, testés",
+  "API references from OpenAPI": "Références d'API à partir d'OpenAPI",
+  "GraphQL API guides": "Guides d'API GraphQL",
+  "Help-center articles": "Articles de centre d'aide",
+  "S1000D Issue 6 and IETMs": "S1000D Issue 6 et IETM",
+  "Docs as code: Docusaurus, DITA 1.3": "Docs as code : Docusaurus, DITA 1.3",
+  "Documentation <span class=\"dx-m\">tested</span> on the product it <span class=\"dx-m\">describes</span>": "Une documentation <span class=\"dx-m\">testée</span> sur le produit qu'elle <span class=\"dx-m\">décrit</span>",
+  "Watch a guide being tested": "Voir un guide en cours de test",
+  "Standards I write to": "Les normes que je suis",
+  "style": "style",
+  "Issue 6": "Issue 6",
+  "Open to technical writer roles. <a href=\"#contact\">Get in touch</a>": "Ouvert aux postes de rédacteur technique. <a href=\"#contact\">Me contacter</a>"
  }
 }
