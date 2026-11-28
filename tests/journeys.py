@@ -70,7 +70,7 @@ def run(name, vp, phone):
         try: pg.wait_for_url("**/docs/keycloak/reset-otp**", timeout=10000)
         except Exception: pass
         pg.wait_for_load_state("networkidle")
-        step(6, "a document for the field opens", "/docs/keycloak/reset-otp" in pg.url and "OTP credential" in pg.inner_text("h1"), pg.url)
+        step(6, "a document for the field opens", "/docs/keycloak/reset-otp" in pg.url and "OTP Credential" in pg.inner_text("h1"), pg.url)
         # 7. Read it: go to a section from its contents.
         if phone:
             click(".toc-dd>summary"); pg.wait_for_timeout(300)
