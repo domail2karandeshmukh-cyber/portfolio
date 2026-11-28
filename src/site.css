@@ -1,10 +1,9 @@
+@font-face{font-family:"Lexend Deca";src:url("/fonts/lexend-deca-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Lexend Deca";src:url("/fonts/lexend-deca-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:"Lexend Deca";src:url("/fonts/lexend-deca-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:"Lexend Deca";src:url("/fonts/lexend-deca-700.woff2") format("woff2");font-weight:700 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Instrument Serif";src:url("/fonts/inst-serif-400.woff2") format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Instrument Serif";src:url("/fonts/inst-serif-400i.woff2") format("woff2");font-weight:400 900;font-style:italic;font-display:swap}
-@font-face{font-family:"Instrument Sans";src:url("/fonts/inst-sans-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"Instrument Sans";src:url("/fonts/inst-sans-400i.woff2") format("woff2");font-weight:400 700;font-style:italic;font-display:swap}
-@font-face{font-family:"Instrument Sans";src:url("/fonts/inst-sans-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
-@font-face{font-family:"Instrument Sans";src:url("/fonts/inst-sans-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
-@font-face{font-family:"Instrument Sans";src:url("/fonts/inst-sans-700.woff2") format("woff2");font-weight:700 900;font-style:normal;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("/fonts/geist-mono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("/fonts/geist-mono-500.woff2") format("woff2");font-weight:500 700;font-style:normal;font-display:swap}
 @font-face{font-family:"Newsreader";src:url("/fonts/newsreader.woff2") format("woff2");font-weight:400 600;font-style:normal;font-display:swap}
@@ -24,7 +23,7 @@ html:not([lang=hi]) :is(.lang-menu,.foot-langs) a[lang=hi]{font-family:"Hanken",
  --night:#0B0B0C;--night2:#18191C;--nline:#303136;--ntext:#F5F5F2;--nsoft:#B7B9BF;
  --serif:"Instrument Serif","Deva",Georgia,serif;
  --display:"Instrument Serif",Georgia,serif;
- --sans:"Instrument Sans","Deva",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+ --sans:"Lexend Deca","Deva",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
  --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;
  /* Type: one scale from a 320-pixel phone to a wide screen. Body text is 17 pixels, the size Apple's guidelines give
     for reading on a phone; the signature line is 34 pixels on a phone and 72 on a wide screen. */
@@ -827,7 +826,7 @@ html.mnav-open{overflow:hidden}
 }
 /* Version 10.1: in French, German and Spanish the header's labels are longer, so between 1,280 and 1,439 pixels the CV
    button shows "CV" only; screen readers still hear its whole name. */
-@media (min-width:1280px) and (max-width:1439px){html:lang(fr) .cv-btn .wide,html:lang(de) .cv-btn .wide,html:lang(es) .cv-btn .wide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
+@media (min-width:1280px) and (max-width:1599px){html:lang(fr) .cv-btn .wide,html:lang(de) .cv-btn .wide,html:lang(es) .cv-btn .wide{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
 @media (max-width:599px){
  .nav-in{gap:10px}
  .brand{font-size:1.1875rem}
@@ -1282,7 +1281,7 @@ html.mnav-open{overflow:hidden}
 @media (max-width:560px){.pset{grid-template-columns:96px minmax(0,1fr);gap:14px;padding:16px}}
 
 /* ---------- Home, 28 November 2026: a technical drawing of the work ----------
-   Monochrome, Instrument Serif and Sans. The name is set as big as the screen allows; a small technical bar sits under it; the hero's
+   Monochrome, Instrument Serif and Lexend Deca. The name is set as big as the screen allows; a small technical bar sits under it; the hero's
    picture is a drawing of one of my procedures with the five things every page has, numbered in the green of my
    screenshot marks. Then one statement, and a dark panel of selected documentation. */
 .hx{position:relative;background:#fcfcfc;border-bottom:1px solid var(--rule)}
