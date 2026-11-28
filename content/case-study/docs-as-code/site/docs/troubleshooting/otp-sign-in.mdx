@@ -34,7 +34,7 @@ Find what the user sees in the table, then go to its section.
 A code is valid for one period of the realm's OTP policy, 30 seconds by default.
 With the default look around window of 1, Keycloak also accepts the code of the period before and the period after, and refuses a code from two periods back.
 
-<Screenshot src="/img/keycloak/10-wrong-code.png" alt="Mobile Authenticator Setup after a refused code, with Invalid authenticator code. marked and the key hidden" caption="Keycloak's message for a refused code." />
+<Screenshot src="/img/keycloak/10-wrong-code.png" alt="Mobile Authenticator Setup after a refused code. The message Invalid authenticator code. is outlined in green, and the key is covered." caption="Keycloak's message for a refused code." />
 
 **Fix.**
 
@@ -52,14 +52,14 @@ With the default look around window of 1, Keycloak also accepts the code of the 
 
 <ConfirmIdentity />
 
-Delete the user's OTP credential and make them set up a new one, as [Reset a user's one-time password](../how-to/reset-otp.mdx) describes.
+Sign the user out, require a new authenticator and delete the lost phone's OTP credential, as [Reset a user's OTP credential](../how-to/reset-otp.mdx) describes.
 
 ## Keycloak doesn't ask for a code {#no-code-asked}
 
 **Cause.** An administrator deleted the user's OTP credential, and nothing asked the user to set up a new one.
 Keycloak's default sign-in flow asks for a second factor only from a user who has one configured.
 
-<Screenshot src="/img/keycloak/06-password-only.png" alt="The account console, reached with the password alone after the OTP credential was deleted" caption="Signed in with the password alone." />
+<Screenshot src="/img/keycloak/06-password-only.png" alt="The Personal info page of the account console, open after a sign-in with the password alone" caption="Signed in with the password alone." />
 
-**Fix.** On the user's **Details** tab, add **Configure OTP** to **Required user actions**, and select **Save**.
+**Fix.** On the user's **Details** tab, in **Required user actions**, select **Configure OTP**, and then select **Save**.
 At the next sign-in, Keycloak asks the user to set up an authenticator before they get in.

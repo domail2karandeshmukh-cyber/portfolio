@@ -29,7 +29,12 @@ SCRIPT = json.loads(subprocess.run(["node", "-e", "console.log(JSON.stringify(re
 SEG = {s["id"]: s for s in SCRIPT["segments"]}
 REC = json.loads((WORK / "recording.json").read_text())
 # Whether every section has its recorded narration: the cards say what the viewer will hear.
-NARRATED = all(sorted(NARR.glob(f"{s['id']}.*.mp3")) for s in SCRIPT["segments"]) if NARR.exists() else False
+import hashlib
+def recorded(seg):
+    """The recording of a segment's current words, if there is one: its file name carries a fingerprint of the text."""
+    f = NARR / f"{seg['id']}.{hashlib.sha1(seg['text'].encode()).hexdigest()[:10]}.mp3"
+    return f if f.exists() else None
+NARRATED = all(recorded(s) for s in SCRIPT["segments"])
 VOICE_NOTE = "The narration is a synthetic voice, not Karan&rsquo;s." if NARRATED else "The words are in the captions: this version has no sound."
 SCENES = {s["scene"]: s for s in REC["scenes"]}
 
@@ -37,13 +42,13 @@ SCENES = {s["scene"]: s for s in REC["scenes"]}
 PLAN = [
     ("intro", "card", {"kind": "title"}),
     ("before", "card", {"kind": "before"}),
-    ("find", "rec", {"band": ("Step 1 of 6", "Find the user")}),
-    ("credentials", "rec", {"band": ("Step 2 of 6", "Open the Credentials tab")}),
-    ("delete", "rec", {"band": ("Step 3 of 6", "Delete the OTP credential")}),
-    ("confirm", "rec", {"band": ("Step 4 of 6", "Confirm the deletion")}),
-    ("caution", "rec", {"band": ("Caution", "Until step 5 is done, the user can sign in with the password alone"), "caution": True}),
-    ("require", "rec", {"band": ("Step 5 of 6", "Require a new authenticator")}),
-    ("user", "rec", {"band": ("Step 6 of 6", "The user sets up the new phone")}),
+    ("find", "rec", {"band": ("Step 1 of 7", "Find the user")}),
+    ("sessions", "rec", {"band": ("Step 2 of 7", "Sign the user out of every session")}),
+    ("require", "rec", {"band": ("Step 3 of 7", "Require a new authenticator, before deleting")}),
+    ("credentials", "rec", {"band": ("Step 4 of 7", "Find the lost phone's OTP row")}),
+    ("delete", "rec", {"band": ("Step 5 of 7", "Delete the OTP credential")}),
+    ("confirm", "rec", {"band": ("Step 6 of 7", "Confirm the deletion")}),
+    ("user", "rec", {"band": ("Step 7 of 7", "The user sets up the new phone")}),
     ("verify", "rec", {"band": ("Check", "A new OTP credential, and the record of the deletion")}),
     ("close", "card", {"kind": "close"}),
 ]
@@ -52,11 +57,11 @@ TOP = {"require", "user"}
 # The words each action waits for: the action starts as they are said.
 CUES = {
     "find": {"realm": "Check that", "users": "Select Users", "search": "search for the user", "username": "select their username"},
-    "credentials": {"tab": "Select the Credentials tab", "row": "The row of type OTP"},
+    "sessions": {"tab": "On the Sessions tab", "logout": "select Logout all sessions", "confirm": "and then Confirm"},
+    "require": {"details": "On the Details tab", "select": "in Required user actions", "save": "Then select Save"},
+    "credentials": {"tab": "Select the Credentials tab", "row": "The OTP row"},
     "delete": {"kebab": "Open the row's menu", "delete": "select Delete"},
-    "confirm": {"confirm": "Confirm with Delete", "left": "Only the password"},
-    "caution": {"hold": "Don't stop here"},
-    "require": {"details": "Select the Details tab", "select": "In Required user actions", "save": "Then select Save"},
+    "confirm": {"confirm": "Confirm with Delete", "left": "The phone's row is gone"},
     "user": {"signin": "At the next sign-in", "scan": "They scan the QR code", "code": "type the code", "label": "name the device", "submit": "select Submit"},
     "verify": {"tab": "open the Credentials tab again", "events": "the admin events"},
 }
@@ -77,8 +82,7 @@ def seconds(path):
 def voice(scene):
     """The scene's narration: its words, its recording if there is one, and where each sentence starts in it."""
     seg = SEG[scene]; text = seg["text"]
-    hits = sorted(NARR.glob(f"{scene}.*.mp3")) if NARR.exists() else []
-    path = hits[-1] if hits else None
+    path = recorded(seg) if NARRATED else None
     # Sentences end at . ! or ?, but not at the points of a version number such as 26.8.2.
     spans = [(m.start(), m.end()) for m in re.finditer(r"\S(?:[^.!?]|[.!?](?=\d))*(?:[.!?]+|$)", text)]
     if path:
@@ -89,7 +93,7 @@ def voice(scene):
         found = ([] if starts and starts[0] <= 0.05 else [0.0]) + [e for e in ends if e < length - 0.15]
         last = max([s for s in starts if s > found[-1]] or [length]) if found else length
     else:
-        length = round(len(text.split()) / 2.45 + 0.3, 2); found, last = [0.0], length
+        length = round(len(text.split()) / 2.1 + 0.6, 2); found, last = [0.0], length
     first = found[0]; total = spoken(text)
     # A sentence starts at the pause nearest to where its share of the spoken text puts it.
     sent = []
@@ -125,11 +129,11 @@ ul{{margin:0;padding:0 0 0 1.1em;font-size:38px;line-height:1.45;max-width:1350p
 .band.caution{{background:#FFF4D6;border-bottom-color:#E3C171}} .band.caution b{{color:#6B4A00}} .band.caution .t{{color:#3D2A00}}</style>"""
     out = {}
     html = {
-        "title": '<div class="c"><p class="k">Keycloak 26.8.2 admin console</p><h1>Reset a user\'s one-time password</h1><p class="o">When a user loses the phone with their authenticator: delete the old authenticator, then make the user set up a new one.</p></div>'
+        "title": '<div class="c"><p class="k">Keycloak 26.8.2 admin console</p><h1>Reset a user\'s OTP credential</h1><p class="o">When a user loses the phone with their authenticator app: sign the user out, require a new authenticator, then delete the old one.</p></div>'
                  '<p class="f">An independent tutorial by Karan Deshmukh, recorded on a Keycloak server with a test realm and test users. ' + VOICE_NOTE + '</p>',
         "before": '<div class="c"><h2>Before you start</h2><ul><li>Confirm that the request comes from the user, through a contact you had before the phone was lost.</li>'
-                  '<li>Sign in to the admin console with an account that can manage the realm\'s users.</li></ul></div>',
-        "close": '<div class="c"><p class="k">Read the guide</p><p class="u">Reset a user\'s one-time password in Keycloak (KC-ADM-001)</p><p class="a">karandeshmukh.dev/docs/keycloak/reset-otp</p>'
+                  '<li>Sign in to the admin console with an account that can manage the realm\'s users.</li><li>Do the steps in this order: sign out, require, then delete.</li></ul></div>',
+        "close": '<div class="c"><p class="k">Read the guide</p><p class="u">Reset a user\'s OTP credential in Keycloak (KC-ADM-001)</p><p class="a">karandeshmukh.dev/docs/keycloak/reset-otp</p>'
                  '<p class="r">Related: When a Keycloak user can\'t sign in with a one-time password<br>Keycloak OTP policy: what the realm asks of an authenticator</p></div>'
                  '<p class="f">An independent tutorial, not Keycloak documentation, and not connected to the Keycloak project. ' + VOICE_NOTE + '</p>',
     }
@@ -291,7 +295,7 @@ def main():
     poster = OUT / "keycloak-reset-otp.jpg"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-ss", f"{(at - 0.1) if False else 0.5:.2f}", "-i", str(final), "-frames:v", "1", "-q:v", "3", str(poster)], check=True)
     meta = {"title": SCRIPT["title"], "seconds": round(at, 2), "narrated": narrated, "keycloak": REC["keycloak"], "recorded": REC.get("recorded"),
-            "about": "A real task in Keycloak 26.8.2, filmed in the browser: find the user, delete the lost authenticator, require a new one, the user's own setup, and the check.",
+            "about": "A real task in Keycloak 26.8.2, filmed in the browser in the tested order: find the user, sign them out, require a new authenticator, delete the lost one, the user's own setup, and the check." + ("" if narrated else " Captioned, without a voice."),
             "where": "Recorded on Keycloak 26.8.2, open-source software, with a test realm and test users",
             "sections": [{"scene": s, "kind": k} for s, k, _ in PLAN], "captions": len(caps)}
     (OUT / "video.json").write_text(json.dumps(meta, indent=1) + "\n")

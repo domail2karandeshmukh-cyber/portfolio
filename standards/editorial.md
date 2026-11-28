@@ -18,6 +18,47 @@ When two sources disagree, the first one in this order wins:
 
 S1000D defines structure, not language: it says what a data module contains, not how its sentences read. For the sentences of aerospace procedures, the profile uses ASD-STE100.
 
+### Precedence by publication type
+
+Each kind of publication on this site has its own first authority. Below it, the general order above applies.
+
+| Publication type | Examples on this site | First authority | Then |
+|---|---|---|---|
+| Software how-to, concept, reference, troubleshooting | Keycloak notes, Docusaurus demo, KC1 docs | Diátaxis, for what kind of page it is | Microsoft, then Google developer style |
+| API reference and guide | KC1 API reference, GraphQL guide | The API's own description (OpenAPI, GraphQL schema): names stay exactly as defined | Google developer style |
+| Structured topics | DITA samples | The DITA specification, for element use | The software profile, for sentences |
+| Aerospace data modules | S1000D samples, ARF-1 publication | The project's S1000D business rules | ASD-STE100, for sentences |
+| Video and GIF | Keycloak film, studio films | The video standard in this folder | WCAG 2.2, for captions and contrast |
+| Portfolio and case-study pages | Home, industries, case studies | This standard's common rules | Chicago, for titles of works and citations |
+| CV | The three CV versions | This standard's common rules | The employer's form, where it asks for a format |
+| Accessibility, everywhere | Every page, PDF and video | WCAG 2.2 level AA | |
+
+This order says which source wins. It isn't a claim that every page meets every source: the checks section says what is checked and how.
+
+### Capitalization by publication type
+
+Sentence case and title case are both correct; a publication chooses one and keeps it. This site uses sentence case almost everywhere:
+
+| Element | Case | Example |
+|---|---|---|
+| Page titles, H1 to H6, card titles, navigation, table of contents, breadcrumbs | Sentence case | Reset a user's OTP credential |
+| Table headers, figure captions, video titles and chapter names | Sentence case | Step 2. Sign the user out of every open session. |
+| PDF headings and CV section headings | Sentence case | Professional experience |
+| Interface labels quoted in a step | Exactly as the interface shows them | **Logout all sessions** |
+| Product, company and feature names | As their owner writes them | Okta Verify, Core42 AI Cloud Portal |
+| Job titles held, in a CV or a résumé | As the employer wrote them | Senior Engineer, Technical Documentation |
+| Titles of papers, books and standards cited | As their authors wrote them | Signed Is Not Safe; The Chicago Manual of Style |
+| S1000D data module titles (technical name, information name) | As the project's business rules say; here, each part starts with a capital | Fan assembly - Remove procedure |
+
+A heading doesn't end with a period or a colon, even when it is a full sentence. A document's title is its only H1, and no heading level is skipped: an H4 is never a page or article title.
+
+| Right | Wrong | Why |
+|---|---|---|
+| Reset a user's OTP credential | Reset A User's OTP Credential | Sentence case |
+| `# How to reset 2FA` (the title) | `#### How to reset 2FA` (the title) | The title is the H1 |
+| Let's discuss technical documentation | Let's discuss technical documentation. | No period after a heading |
+| Sign in to the admin console | Login to the admin console | "Sign in" is the verb; "login" isn't a verb |
+
 ## Common rules
 
 ### Language
@@ -178,4 +219,4 @@ A short help article doesn't need a title page, a contents list, or a revision h
 
 ## Checks
 
-Programs check what they can: the [style guide](/style) rules on every build, headings and lists, links, schemas and business rules, alternative text, and the layout of every page at eight screen widths. A person checks the rest: that the steps work, that the words are the right ones, and that the document answers its reader's question. A clean check isn't an approval.
+Programs check what they can: the [style guide](/style) rules on every build (Vale), the editorial audit of every built page (`scripts/audit-editorial.py`: one H1, no skipped levels, heading case and punctuation, banned terms, missing alternative text), headings and lists, links, schemas and business rules, alternative text, and the layout of every page at eight screen widths. A person checks the rest: that the steps work, that the words are the right ones, and that the document answers its reader's question. A clean check isn't an approval: zero Vale alerts means only that the coded patterns are absent. The audit keeps a list of findings a person accepted, each with its reason, so an accepted exception never hides a new one.

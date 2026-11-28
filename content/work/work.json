@@ -44,7 +44,7 @@
    "skill": "Migration, docs-as-code, editorial review"
   },
   {
-   "title": "Reset a user's one-time password in Keycloak",
+   "title": "Reset a user's OTP credential in Keycloak",
    "href": "/docs/keycloak/reset-otp",
    "img": "/work/img/sample-keycloak.webp",
    "alt": "The Keycloak how-to: its first steps, with an annotated screenshot of the Users page",
@@ -126,9 +126,15 @@
    "relevant": true,
    "items": [
     {
+     "name": "Knowledge-base documentation",
+     "class": "professional",
+     "use": "500+ knowledge-base articles, how-to guides, SOPs, runbooks, FAQs and troubleshooting guides at MongoDB (contract)."
+    },
+    {
      "name": "Zendesk Guide",
      "class": "professional",
-     "use": "I supported the migration of Zendesk articles into an internal wiki at MongoDB. Zendesk Guide is in my CV's toolchain."
+     "use": "Zendesk articles moved into an internal wiki at MongoDB. In public, the case study starts from an article in Zendesk Guide's format.",
+     "href": "/case-study/help-center-to-docs-as-code#source"
     },
     {
      "name": "Confluence, Document360, internal wikis",
@@ -136,9 +142,52 @@
      "use": "Knowledge bases and wikis in my roles, as listed in the CV."
     },
     {
-     "name": "Information architecture and metadata",
+     "name": "Information architecture",
      "class": "professional",
-     "use": "Structure, metadata, ownership and review status during the Zendesk migration at MongoDB."
+     "use": "Structure, metadata, ownership and review status in the Zendesk migration at MongoDB. In public: one article split by purpose into four kinds of page.",
+     "href": "/case-study/help-center-to-docs-as-code#migration"
+    },
+    {
+     "name": "Documentation migration",
+     "class": "professional",
+     "use": "Zendesk to an internal wiki at MongoDB. In public: a help-center article to MDX, Git and Docusaurus.",
+     "href": "/case-study/help-center-to-docs-as-code#migration"
+    }
+   ]
+  },
+  {
+   "group": "Writing, editing and governance",
+   "icon": "pen-line",
+   "relevant": true,
+   "items": [
+    {
+     "name": "How-to guides, SOPs, runbooks, FAQs, troubleshooting",
+     "class": "professional",
+     "use": "At MongoDB; product manuals, user guides and quick starts at Magna."
+    },
+    {
+     "name": "Technical editing",
+     "class": "professional",
+     "use": "Self-editing, SME review and approval at MongoDB and Magna. In public: a line-by-line audit of one article, with the rule behind each finding.",
+     "href": "/case-study/help-center-to-docs-as-code#audit"
+    },
+    {
+     "name": "Content governance",
+     "class": "professional",
+     "use": "Owners, review status, controlled updates and archiving at MongoDB. In public: page facts, a change log and a dated re-test.",
+     "href": "/case-study/help-center-to-docs-as-code/site/changes"
+    },
+    {
+     "name": "Style guide and editorial standard",
+     "class": "demonstrated",
+     "use": "House rules with right and wrong examples, precedence by publication type, and the checks that enforce them.",
+     "href": "/standards/editorial"
+    },
+    {
+     "name": "UX writing",
+     "class": "demonstrated",
+     "use": "Keycloak's own messages, rewritten with the reasons.",
+     "href": "/work/ux-writing"
     }
    ]
   },
@@ -150,19 +199,19 @@
     {
      "name": "Git, GitHub, Markdown, HTML, VS Code",
      "class": "professional",
-     "use": "Version-controlled documentation, local testing and technical review; every page of this portfolio is in Git.",
+     "use": "Version-controlled documentation, local testing and technical review. This portfolio is in a public GitHub repository.",
      "href": "https://github.com/domail2karandeshmukh-cyber/portfolio"
     },
     {
      "name": "MDX and Docusaurus 3",
      "class": "demonstrated",
-     "use": "Five pages with front matter, a partial and two components, built in two locales.",
+     "use": "Pages with front matter, a partial and components, built in two locales.",
      "href": "/case-study/help-center-to-docs-as-code#migration"
     },
     {
      "name": "Vale",
      "class": "demonstrated",
-     "use": "The Google, alex and Readability packages, and house rules written from an audit.",
+     "use": "The Google, alex and Readability packages, plus house rules written from the audit.",
      "href": "/case-study/help-center-to-docs-as-code#quality"
     }
    ]
@@ -179,44 +228,69 @@
      "href": "/docs/kc1/api-reference"
     },
     {
-     "name": "GraphQL",
-     "class": "learning",
-     "use": "A small GraphQL API I built and documented, with every example tested on each build.",
-     "href": "/work/graphql-api"
-    },
-    {
      "name": "Keycloak admin REST API",
      "class": "demonstrated",
-     "use": "A reset method run against Keycloak 26.8.2, and the trap it found.",
-     "href": "/case-study/help-center-to-docs-as-code#maintenance"
+     "use": "A reset method run against Keycloak 26.8.2, including the order that keeps it safe.",
+     "href": "/docs/keycloak/reset-otp"
+    },
+    {
+     "name": "GraphQL",
+     "class": "learning",
+     "use": "A small GraphQL API I built and documented; every example is tested on each build.",
+     "href": "/work/graphql-api"
     }
    ]
   },
   {
-   "group": "Writing and editing",
-   "icon": "pen-line",
+   "group": "Identity, security and enterprise IT",
+   "icon": "shield-check",
    "relevant": true,
    "items": [
     {
-     "name": "How-to guides, SOPs, runbooks, FAQs, troubleshooting",
+     "name": "IAM: authentication, MFA, access requests, provisioning",
      "class": "professional",
-     "use": "500+ documents at MongoDB; manuals, user guides and quick starts at Magna."
+     "use": "Okta, Okta FastPass, access reviews and identity-lifecycle procedures at MongoDB."
     },
     {
-     "name": "Self-editing and SME review",
+     "name": "Enterprise IT platforms: Okta, Cloudflare, Jamf",
      "class": "professional",
-     "use": "Drafting, self-editing, SME review and approval at MongoDB and Magna."
+     "use": "Procedures and troubleshooting for IT and security teams at MongoDB."
     },
     {
-     "name": "UX writing",
+     "name": "Keycloak",
      "class": "demonstrated",
-     "use": "Keycloak's own messages, rewritten with the reasons.",
-     "href": "/work/ux-writing"
+     "use": "Administrator procedures tested on a local Keycloak 26.8.2, with sessions, several devices and the REST API.",
+     "href": "/docs/keycloak/reset-otp"
     }
    ]
   },
   {
-   "group": "Localization and accessibility",
+   "group": "Visual and instructional media",
+   "icon": "film",
+   "relevant": true,
+   "items": [
+    {
+     "name": "Instructional videos",
+     "class": "professional",
+     "use": "IT-orientation videos and narrated walkthroughs at MongoDB, with Snagit, Final Cut Pro and Google Vids. In public: a captioned film of the Keycloak procedure.",
+     "href": "/videos#keycloak-reset-otp"
+    },
+    {
+     "name": "Technical GIFs",
+     "class": "professional",
+     "use": "GIFs for self-service at MongoDB. In public: one step of the Keycloak procedure as a 13-second loop.",
+     "href": "/videos/keycloak-reset-otp/delete-otp-credential.gif"
+    },
+    {
+     "name": "Technical illustration and annotated screenshots",
+     "class": "demonstrated",
+     "use": "Numbered marks, outlines and diagrams drawn to one house style.",
+     "href": "/standards/illustration"
+    }
+   ]
+  },
+  {
+   "group": "Localization, accessibility and AI",
    "icon": "languages",
    "relevant": true,
    "items": [
@@ -234,130 +308,67 @@
     {
      "name": "Accessibility checks",
      "class": "demonstrated",
-     "use": "axe-core on every page of this site, alternative text, keyboard paths and contrast."
-    }
-   ]
-  },
-  {
-   "group": "AI-assisted documentation",
-   "icon": "sparkle",
-   "relevant": true,
-   "items": [
-    {
-     "name": "GPT knowledge workflows, Glean, prompt engineering",
-     "class": "professional",
-     "use": "An internal GPT knowledge pack at MongoDB, with human editorial validation before publication."
+     "use": "Alternative text, link text and figure captions fixed from the audit's accessibility findings, and an automated check of every page.",
+     "href": "/case-study/help-center-to-docs-as-code#audit-A8"
     },
     {
-     "name": "Reviewing AI drafts",
-     "class": "demonstrated",
-     "use": "An AI draft that kept a false step, and the review that caught it.",
+     "name": "AI-assisted documentation with human validation",
+     "class": "professional",
+     "use": "An internal GPT knowledge pack at MongoDB, with human editorial validation before publication. In public: an AI draft reviewed claim by claim.",
      "href": "/case-study/help-center-to-docs-as-code#ai-review"
     }
    ]
   },
   {
-   "group": "Content lifecycle and reporting",
-   "icon": "chart-line",
-   "relevant": true,
+   "group": "Transferable from other roles",
+   "icon": "route",
+   "relevant": false,
    "items": [
     {
-     "name": "Lifecycle management",
-     "class": "professional",
-     "use": "Intake, drafting, review, approval, publication, updates and archival decisions at MongoDB."
+     "name": "Requirements analysis",
+     "class": "transferable",
+     "use": "Two years as a business analyst at BPEC: stakeholder requirements turned into workflows, SOPs and validation steps."
     },
     {
-     "name": "Power BI, Excel, Google Sheets, Jira",
-     "class": "professional",
-     "use": "Dashboards of delivery and review status at Magna; trackers at BPEC. Not content analytics."
-    },
-    {
-     "name": "Documentation measurement",
-     "class": "demonstrated",
-     "use": "A proposed framework: the questions, the signals and what to do with them.",
+     "name": "Documentation reporting",
+     "class": "transferable",
+     "use": "Power BI dashboards for delivery and review status at Magna; the same habit drives the measurement page here.",
      "href": "/case-study/help-center-to-docs-as-code#measurement"
-    }
-   ]
-  },
-  {
-   "group": "Instructional video and visuals",
-   "icon": "film",
-   "relevant": false,
-   "items": [
-    {
-     "name": "Snagit, Final Cut Pro, Google Vids",
-     "class": "professional",
-     "use": "IT orientation videos, walkthroughs with voiceover, GIFs and explainers at MongoDB."
     },
     {
-     "name": "Annotated screenshots",
-     "class": "demonstrated",
-     "use": "Tight green marks, numbered callouts and hidden secrets, on real product screens.",
-     "href": "/standards/screenshots"
-    }
-   ]
-  },
-  {
-   "group": "Enterprise IT and identity",
-   "icon": "shield-check",
-   "relevant": false,
-   "items": [
-    {
-     "name": "Okta, MFA, Okta FastPass, access requests",
-     "class": "professional",
-     "use": "Authentication, provisioning, access reviews and identity lifecycle at MongoDB."
-    },
-    {
-     "name": "Cloudflare, Jamf",
-     "class": "professional",
-     "use": "IT platforms documented in my roles, as listed in the CV."
-    },
-    {
-     "name": "Keycloak",
-     "class": "demonstrated",
-     "use": "Three guides checked on Keycloak 26.8.2.",
-     "href": "/docs/keycloak/reset-otp"
-    }
-   ]
-  },
-  {
-   "group": "Structured authoring",
-   "icon": "layers",
-   "relevant": false,
-   "items": [
-    {
-     "name": "DITA and DITA Open Toolkit",
-     "class": "demonstrated",
-     "use": "DITA maps, keys and filtering, published with DITA-OT 4.3.4.",
-     "href": "/studio/dita"
-    },
-    {
-     "name": "S1000D and ASD-STE100",
-     "class": "demonstrated",
-     "use": "Demonstration data modules on a fictional rig, validated against the official schemas.",
+     "name": "Maintenance procedures",
+     "class": "transferable",
+     "use": "A BSc in aircraft maintenance engineering: reading and following controlled procedures. Applied in the S1000D and ASD-STE100 samples.",
      "href": "/studio/aerospace"
     },
     {
-     "name": "MadCap Flare",
-     "class": "professional",
-     "use": "Listed in the CV's toolchain."
+     "name": "Structured authoring: DITA, S1000D, MadCap Flare",
+     "class": "transferable",
+     "use": "MadCap Flare training and use; DITA and S1000D shown in independent samples.",
+     "href": "/studio/dita"
     }
    ]
   },
   {
-   "group": "Engineering foundations",
-   "icon": "code",
+   "group": "Current learning",
+   "icon": "book-open-text",
    "relevant": false,
    "items": [
     {
-     "name": "Python and SQL",
-     "class": "learning",
-     "use": "Foundational, as the CV says; used in the projects of my MSc."
-    },
-    {
      "name": "Cybersecurity and data science",
      "class": "learning",
-     "use": "MSc at ESAIP, Angers, in progress."
+     "use": "MSc at ESAIP, Angers: risk management, project management and applied AI coursework."
+    },
+    {
+     "name": "Python and SQL",
+     "class": "learning",
+     "use": "Foundational; used in coursework and in the KC1 defect-prediction team project.",
+     "href": "/docs/kc1/readme"
+    },
+    {
+     "name": "French",
+     "class": "learning",
+     "use": "A1, in an ESAIP course."
     }
    ]
   }

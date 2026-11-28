@@ -129,6 +129,8 @@ if (existsSync("content/videos")) for (const id of (await fs.readdir("content/vi
   if (!existsSync(`${from}/video.json`)) continue;
   await fs.mkdir(to, { recursive: true });
   for (const ext of ["mp4", "vtt", "srt"]) if (existsSync(`${from}/${id}.${ext}`)) await fs.copyFile(`${from}/${id}.${ext}`, `${to}/${id}.${ext}`);
+  // Short GIFs cut from the film, for places where a video can't play (a CV, an email, a help-center article).
+  for (const f of await fs.readdir(from)) if (f.endsWith(".gif")) await fs.copyFile(`${from}/${f}`, `${to}/${f}`);
   await sharp(`${from}/${id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${to}/${id}.webp`);
 }
 const reel = C.films?.items ?? [];

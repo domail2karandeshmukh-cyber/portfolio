@@ -8,7 +8,7 @@ The task has one trap: after the deletion, the user can sign in with the passwor
 
 ## 1. The confirmation
 
-| | Keycloak 26.8.2 | Proposed |
+| Element | Keycloak 26.8.2 | Proposed |
 |---|---|---|
 | Title | Delete credentials? | Delete the authenticator {credentialLabel}? |
 | Body | Are you sure you want to delete these users credentials? | {username} won't be able to use this phone to sign in. Until they set up a new authenticator, they'll sign in with their password alone. |
@@ -21,7 +21,7 @@ The task has one trap: after the deletion, the user can sign in with the passwor
 
 ## 2. The result
 
-| | Keycloak 26.8.2 | Proposed |
+| Element | Keycloak 26.8.2 | Proposed |
 |---|---|---|
 | Notification | The credentials has been deleted successfully. | Authenticator deleted. To make {username} set up a new one, add Configure OTP to their required actions. |
 | Action | (none) | Add Configure OTP |
@@ -35,7 +35,7 @@ The task has one trap: after the deletion, the user can sign in with the passwor
 
 When a user has no authenticator, the **Credentials** tab lists the password alone and says nothing.
 
-| | Keycloak 26.8.2 | Proposed |
+| Element | Keycloak 26.8.2 | Proposed |
 |---|---|---|
 | Empty state, under the password row | (none) | No authenticator. {username} signs in with a password only. Add Configure OTP to ask them to set one up at their next sign-in. |
 
@@ -43,7 +43,7 @@ An empty state is where an administrator looks after the deletion. It should say
 
 ## 4. Saving the required action
 
-| | Keycloak 26.8.2 | Proposed |
+| Element | Keycloak 26.8.2 | Proposed |
 |---|---|---|
 | Notification | The user has been saved | Saved. {username} will set up an authenticator at their next sign-in. |
 
@@ -53,7 +53,7 @@ Say what the save means for the person, not that a record was written. And end t
 
 What the user sees after their password, on **Mobile Authenticator Setup**.
 
-| | Keycloak 26.8.2 | Proposed |
+| Element | Keycloak 26.8.2 | Proposed |
 |---|---|---|
 | Instruction | Enter the one-time code provided by the application and click Submit to finish the setup. Provide a Device Name to help you manage your OTP devices. | Type the code your authenticator app shows, and name this phone. |
 | Field label | One-time code | One-time code |
@@ -70,7 +70,7 @@ What the user sees after their password, on **Mobile Authenticator Setup**.
 
 ## 6. The error
 
-| | Keycloak 26.8.2 | Proposed |
+| Element | Keycloak 26.8.2 | Proposed |
 |---|---|---|
 | Error, under the code field | Invalid authenticator code. | That code didn't work. Type the code your app shows now. If every code fails, set your phone's date and time to update automatically. |
 

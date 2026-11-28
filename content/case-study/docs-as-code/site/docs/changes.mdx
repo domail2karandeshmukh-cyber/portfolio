@@ -10,6 +10,13 @@ last_review: 2026-11-28
 
 # Changes
 
+## 1.3 (2026-11-28) {#1-3}
+
+- **Added:** sign the user out before anything else, in the console (**Sessions** > **Logout all sessions**) and in the REST commands.
+  A test showed why: an open session went straight to **Mobile Authenticator Setup**, without the password.
+- **Added:** what to do when the user has more than one **Otp** row, what the procedure doesn't reset, and the realm setup it assumes.
+- **Changed:** the title, to *Reset a user's OTP credential*, which says exactly what the page resets.
+
 ## 1.2 (2026-11-28) {#1-2}
 
 - **Fixed:** the order of the reset, in the admin console and in the REST API.

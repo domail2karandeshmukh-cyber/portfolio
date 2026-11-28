@@ -1,0 +1,19 @@
+# Editorial standard: sentence case for every heading. Names keep their capitals (the exceptions list).
+extends: capitalization
+message: "Write the heading '%s' in sentence case."
+level: error
+scope: heading
+match: $sentence
+indicators:
+  - ':'
+exceptions:
+  - Keycloak
+  - OTP
+  - TOTP
+  - REST
+  - API
+  - Docusaurus
+  - Configure OTP
+  - Mobile Authenticator Setup
+  - Sessions
+  - Credentials

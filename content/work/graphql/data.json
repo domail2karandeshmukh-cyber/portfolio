@@ -122,7 +122,7 @@
   },
   {
    "id": "kc-reset-otp",
-   "title": "Reset a user's one-time password in Keycloak",
+   "title": "Reset a user's OTP credential in Keycloak",
    "kind": "HOW_TO",
    "project": "Keycloak (independent)",
    "url": "https://karandeshmukh.dev/docs/keycloak/reset-otp"

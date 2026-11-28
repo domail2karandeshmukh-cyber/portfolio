@@ -1,0 +1,25 @@
+{
+ "existing session": {
+  "sessions before the reset": 1,
+  "still signed in after the reset": false,
+  "what the open browser shows after the reset": {
+   "page": "/realms/portfolio-demo/login-actions/required-action",
+   "heading": "Mobile Authenticator Setup",
+   "sessions": 1
+  },
+  "sessions after POST /users/{id}/logout": 0,
+  "asked to sign in again after logout": true
+ },
+ "two OTP credentials, one deleted": {
+  "labels before": [
+   "Alex's phone",
+   "Alex's tablet"
+  ],
+  "left": [
+   "Alex's tablet"
+  ],
+  "asks for a code": true,
+  "asks to set up an authenticator": false,
+  "lets the user choose the device": true
+ }
+}

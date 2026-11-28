@@ -61,7 +61,7 @@
  ],
  "architecture": [
   {"type": "Concept", "page": "one-time-passwords", "title": "One-time passwords in Keycloak", "from": "A3, A13", "holds": "What an OTP credential is, what a required action does, and why deleting a credential doesn't by itself ask for a new one."},
-  {"type": "How-to", "page": "reset-otp", "title": "Reset a user's one-time password", "from": "A1, A2, A4, A5, A6, A8", "holds": "The administrator's task, step by step, with screenshots and the check."},
+  {"type": "How-to", "page": "reset-otp", "title": "Reset a user's OTP credential", "from": "A1, A2, A4, A5, A6, A8", "holds": "The administrator's task, step by step, with screenshots and the check."},
   {"type": "Reference", "page": "otp-policy", "title": "OTP policy settings", "from": "the note on 30 seconds", "holds": "Every setting of the realm's OTP policy, its default in 26.8.2, and the matching REST field."},
   {"type": "Troubleshooting", "page": "otp-troubleshooting", "title": "When a user can't sign in with a one-time password", "from": "A7", "holds": "Three symptoms, each with its cause and the fix."}
  ]

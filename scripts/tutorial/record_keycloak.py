@@ -1,4 +1,4 @@
-"""Records the Keycloak tutorial "Reset a user's one-time password": a Keycloak 26.8.2 server running on this computer,
+"""Records the Keycloak tutorial "Reset a user's OTP credential", in the tested order (sign out, require, delete): a Keycloak 26.8.2 server running on this computer,
 driven through the real task in Google Chrome, and filmed with the DevTools screencast, frame by frame as the page
 paints. The pointer, its click rings, the green marks and the redaction are drawn in the page (overlay.js), so what
 the film shows is what the browser showed.
@@ -134,8 +134,9 @@ async def main():
         await s.fill("#username", USER); await s.fill("#password", UPW); await s.click("#kc-login"); await s.wait_for_load_state("networkidle")
         secret = await s.input_value("#totpSecret")
         await s.fill("#totp", totp(secret)); await s.fill("#userLabel", "Alex's phone"); await s.click("#saveTOTPBtn"); await s.wait_for_load_state("networkidle")
-        await s.context.close()
+        # The session stays open, as it would on the lost phone: the Sessions tab then has one to sign out.
         user = api(f"/users/{u_id}"); assert not user.get("requiredActions"), user.get("requiredActions")
+        assert len(api(f"/users/{u_id}/sessions")) >= 1
         api("/admin-events", "DELETE"); api("/events", "DELETE")
 
         ctx = await b.new_context(viewport=VIEW, device_scale_factor=SCALE, locale="en-US", color_scheme="light")
@@ -162,8 +163,36 @@ async def main():
             await d.ov("clear()"); await d.click(f"table a:has-text('{USER}')", link); await d.wait(1800); await d.ensure()
         await d.scene("find", find)
 
+        async def sessions(d):
+            await d.ov("clear()")
+            tab = await d.box("[role=tab]:has-text('Sessions')")
+            d.beat("tab"); await d.mark("tab", tab, 1, "above"); await d.click("[role=tab]:has-text('Sessions')", tab); await d.wait(1500); await d.ensure()
+            await d.ov("clear()")
+            btn = await d.box("button:has-text('Logout all sessions')")
+            d.beat("logout"); await d.mark("logout", btn, 2, "right"); await d.wait(300); await d.ov("clear()")
+            await d.click("button:has-text('Logout all sessions')", btn); await d.wait(900); await d.ensure()
+            ok = await d.box("[role=dialog] button:has-text('Confirm')")
+            d.beat("confirm"); await d.mark("ok", ok, 3); await d.wait(250); await d.ov("clear()")
+            await d.click("[role=dialog] button:has-text('Confirm')", ok); await d.wait(1600); await d.ensure()
+        await d.scene("sessions", sessions)
+
+        async def require(d):
+            await d.ov("clear()")
+            d.beat("details"); await d.click("[data-testid=user-details-tab]"); await d.wait(1400); await d.ensure()
+            field = "input[placeholder='Select action']"
+            d.beat("select"); await d.click(field); await d.wait(700); await d.ensure()
+            await d.click("[role=option]:has-text('Configure OTP')"); await d.wait(500)
+            await a.keyboard.press("Escape"); await d.wait(400); await d.ensure()
+            fbox = await a.evaluate("""s => { const i = document.querySelector(s); const t = i.closest('[class*=menu-toggle]') || i.parentElement; const r = t.getBoundingClientRect();
+                return { x: r.x, y: r.y, width: r.width, height: r.height }; }""", field)
+            await d.mark("field", fbox, 1, "above")
+            save = await d.box("[data-testid=user-creation-save]")
+            d.beat("save"); await d.mark("save", save, 2); await d.click("[data-testid=user-creation-save]", save); await d.wait(1600)
+        await d.scene("require", require)
+
         otp_row = "table tbody tr:has-text('Otp')"
         async def credentials(d):
+            await d.ov("clear()")
             tab = await d.box("[data-testid=credentials]")
             d.beat("tab"); await d.mark("tab", tab, 1, "above"); await d.click("[data-testid=credentials]", tab); await d.wait(1500); await d.ensure()
             await d.ov("clear()")
@@ -185,25 +214,9 @@ async def main():
             await d.click("[role=dialog] button:has-text('Delete')", btn); await d.wait(1500); await d.ensure()
             d.beat("left"); await d.mark("table", await d.box("table tbody"))
         await d.scene("confirm", confirm)
-
-        async def caution(d):
-            d.beat("hold"); await d.wait(600)
-        await d.scene("caution", caution)
-
-        async def require(d):
-            await d.ov("clear()")
-            d.beat("details"); await d.click("[data-testid=user-details-tab]"); await d.wait(1400); await d.ensure()
-            field = "input[placeholder='Select action']"
-            d.beat("select"); await d.click(field); await d.wait(700); await d.ensure()
-            await d.click("[role=option]:has-text('Configure OTP')"); await d.wait(500)
-            await a.keyboard.press("Escape"); await d.wait(400); await d.ensure()
-            fbox = await a.evaluate("""s => { const i = document.querySelector(s); const t = i.closest('[class*=menu-toggle]') || i.parentElement; const r = t.getBoundingClientRect();
-                return { x: r.x, y: r.y, width: r.width, height: r.height }; }""", field)
-            await d.mark("field", fbox, 1, "above")
-            save = await d.box("[data-testid=user-creation-save]")
-            d.beat("save"); await d.mark("save", save, 2); await d.click("[data-testid=user-creation-save]", save); await d.wait(1600)
-        await d.scene("require", require)
         await d.ov("clear()")
+        log["after_admin_steps"] = {"sessions": len(api(f"/users/{u_id}/sessions")), "required_actions": api(f"/users/{u_id}").get("requiredActions"),
+                                    "credentials": [c["type"] for c in api(f"/users/{u_id}/credentials")]}
 
         # The user's own browser: a second window, filmed by its own camera.
         uctx = await b.new_context(viewport=VIEW, device_scale_factor=SCALE, locale="en-US", color_scheme="light")
@@ -234,6 +247,8 @@ async def main():
         log["enrolled"] = {"url": u.url.replace(KC, ""), "title": await u.title()}
         await uctx.close()
 
+        # Off camera: the admin console still shows the table from before the user's setup, so load it again.
+        await a.goto(f"{KC}/admin/master/console/#/{REALM}/users/{u_id}/settings", wait_until="networkidle"); await a.wait_for_timeout(2500)
         async def verify(d):
             await d.ensure()
             d.beat("tab"); await d.click("[data-testid=credentials]"); await d.wait(1600); await d.ensure()
@@ -246,6 +261,7 @@ async def main():
             await d.mark("event", act, 1); await d.glide(act, 0.75, 0.5, 600)
         await d.scene("verify", verify)
         await cam.stop()
+        await s.context.close()
         await b.close()
     log["credentials_after"] = [{"type": c["type"], "label": c.get("userLabel")} for c in api(f"/users/{uid()}/credentials")]
     log["admin_events"] = [{"operation": x["operationType"], "resource": x["resourceType"]} for x in api("/admin-events?max=10")]

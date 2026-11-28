@@ -29,7 +29,7 @@ A code is valid for one period of the realm's OTP policy: 30 seconds by default.
 
 ## The user lost the phone
 
-The authenticator went with the phone, and Keycloak keeps no copy within the user's reach. Delete the user's OTP credential, and make them set up a new one: [Reset a user's one-time password in Keycloak](/docs/keycloak/reset-otp).
+The authenticator went with the phone, and Keycloak keeps no copy within the user's reach. Sign the user out, require a new authenticator, and delete the lost phone's OTP credential: [Reset a user's OTP credential in Keycloak](/docs/keycloak/reset-otp).
 
 ## Keycloak no longer asks for a code
 

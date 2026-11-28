@@ -51,3 +51,10 @@ authenticator and credential. The sentences are short: the warnings stay visible
 switched off.
 
 72 suggestions remain: 56 Readability.Polysyllables, one per long word, and the 16 rejected Google suggestions above.
+
+## 2026-11-28: two heading rules
+
+- `Portfolio.HeadingCase` (error): headings in sentence case, from the editorial standard's capitalization table. Interface labels and product names that appear in headings are listed as exceptions in the rule.
+- `Portfolio.HeadingEnd` (error): no period or colon at the end of a heading.
+
+Both pass on the current pages (0 errors). Tested against a file with a title-case heading and a heading ending in a colon: both were flagged. A pass shows only that these two patterns are absent.

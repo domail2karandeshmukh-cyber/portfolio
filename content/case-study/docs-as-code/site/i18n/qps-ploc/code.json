@@ -357,5 +357,8 @@
   },
   "screenshot.open": {
     "message": "[Öþéñ ƒûļļ šîžé ·· ]"
+  },
+  "table.scrollLabelNamed": {
+    "message": "[Ţàƀļé:  ·]{cols}[, šçŕöļļš šîðéŵàýš ·· ··]"
   }
 }

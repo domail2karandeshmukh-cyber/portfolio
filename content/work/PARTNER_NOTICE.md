@@ -1,6 +1,6 @@
 A notice about a real change: version 1.0.1 of the KC1 defect prediction API, which I documented ([API reference](/docs/kc1/api-reference)). The API is part of a university project and has no outside users, so nobody received this notice. It's written as I'd send it to developers who integrate it.
 
----
+## The notice
 
 **To:** developers who call `POST /predict` on the KC1 defect prediction API
 **Subject:** KC1 API 1.0.1: values that aren't finite now get a 422, not a 500
