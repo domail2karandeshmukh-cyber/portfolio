@@ -1413,3 +1413,8 @@ html.mnav-open{overflow:hidden}
 /* Instrument Serif has one weight and is already narrow: headings in it keep their weight and lose the tight tracking
    the condensed Plex needed. */
 .hx-name,.hx-head,h1,h2{letter-spacing:-.015em}
+/* Menu items wrap: the links of the header nav keep to one line, but a description in a menu must not run into the
+   next column or past the menu's edge. */
+.gnav .pm-menu a,.gnav .pm-menu small,.gnav .pm-menu b{white-space:normal;overflow-wrap:anywhere}
+.gnav .pm-menu.two{grid-template-columns:repeat(2,minmax(0,1fr));width:min(640px,calc(100vw - 32px));min-width:0}
+.gnav .dd .pm-menu:not(.two){width:max-content;max-width:min(380px,calc(100vw - 32px))}

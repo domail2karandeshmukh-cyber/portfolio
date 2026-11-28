@@ -334,7 +334,7 @@ with sync_playwright() as p:
         try: urllib.request.urlopen(BASE + h).read(64)
         except Exception as e: dead.append((h, str(e)[:40]))
     check("every link in the guided path and the evidence box opens", hrefs and not dead, dead or len(hrefs))
-    for path, want in (("/studio/aerospace/downloads/arf1-revision-record.html", "Configuration baselines"), ("/studio/aerospace/downloads/arf1-evidence-summary.html", "What remains")):
+    for path, want in (("/studio/aerospace/downloads/arf1-revision-record.html", "Configuration Baselines"), ("/studio/aerospace/downloads/arf1-evidence-summary.html", "What Remains")):
         body = urllib.request.urlopen(BASE + path).read().decode()
         check(f"{path.rsplit('/', 1)[1]} has its section: {want}", want in body and "invented" in body.lower())
     pdf = urllib.request.urlopen(BASE + "/studio/aerospace/downloads/arf1-maintenance-publication.pdf").read()

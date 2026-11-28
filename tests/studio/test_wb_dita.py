@@ -19,7 +19,7 @@ with sync_playwright() as p:
     b = p.chromium.launch(executable_path=CHROME, args=["--no-sandbox"])
     ctx = b.new_context(viewport={"width": 1366, "height": 900}, accept_downloads=True); pg = ctx.new_page(); errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
-    pg.add_init_script("localStorage.setItem('wb:doc', " + repr(src).replace("\\n", "\\n") + ")")
+    pg.add_init_script("localStorage.setItem('wb:doc2', " + repr(src).replace("\\n", "\\n") + ")")
     pg.goto("http://localhost:8765/workbench", wait_until="load"); pg.wait_for_timeout(900)
     pg.click("#t-publish"); pg.click('.wb-formats button[data-out="ditapkg"]'); pg.wait_for_timeout(300)
     check("the DITA project shows its map", "<keydef keys=\"asset\">" in pg.inner_text("#wb-code") and "othermeta name=\"status\" content=\"In review\"" in pg.inner_text("#wb-code"), pg.inner_text("#wb-code")[:300])
@@ -32,7 +32,7 @@ with sync_playwright() as p:
     mp = glob.glob(f"{dest}/*.ditamap")[0]
     r = subprocess.run([f"{DITA}/bin/dita", f"--input={mp}", "--format=pdf", f"--output={dest}/out"], capture_output=True, text=True)
     pdf = glob.glob(f"{dest}/out/*.pdf"); txt = subprocess.run(["pdftotext", pdf[0], "-"], capture_output=True, text=True).stdout if pdf else ""
-    check("DITA-OT publishes it to PDF, with the key resolved and the table kept", r.returncode == 0 and "Monthly inspection of feed pump B" in txt and "3.8 to 4.6 bar" in txt, (r.returncode, txt[:200]))
+    check("DITA-OT publishes it to PDF, with the key resolved and the table kept", r.returncode == 0 and "Monthly Inspection of feed pump B" in txt and "3.8 to 4.6 bar" in txt, (r.returncode, txt[:200]))
     check("no script errors", not errs, errs)
     b.close()
 print(f"{ok} checks passed, {bad} failed")

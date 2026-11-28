@@ -58,3 +58,16 @@ switched off.
 - `Portfolio.HeadingEnd` (error): no period or colon at the end of a heading.
 
 Both pass on the current pages (0 errors). Tested against a file with a title-case heading and a heading ending in a colon: both were flagged. A pass shows only that these two patterns are absent.
+
+## 2026-11-28: Title Case for headings
+
+The house style changed to Title Case for titles and headings, the style of Karan's documentation portfolio. The
+Microsoft Manual of Style (4th edition) recommends sentence case and lets a team that follows a different practice use
+its own style consistently.
+
+- `Portfolio.HeadingCase` (error) now matches `$title` with the Chicago rules. Every heading and title was rewritten.
+- `Google.Headings`, which asks for sentence case, is switched off in `.vale.ini`: it would contradict the house rule.
+
+Both heading rules pass on the current pages (0 errors). Tested against a file with a sentence-case heading and a
+heading ending in a colon: both were flagged.
+

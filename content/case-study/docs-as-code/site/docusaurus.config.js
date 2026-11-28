@@ -20,7 +20,7 @@ const DIR = "content/case-study/docs-as-code/site";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Keycloak administration notes",
+  title: "Keycloak Administration Notes",
   tagline: "An independent docs-as-code demonstration by Karan Deshmukh",
   favicon: "img/favicon.svg",
   url: "https://karandeshmukh.dev",
@@ -61,7 +61,7 @@ const config = {
     ({
       colorMode: { defaultMode: "light", respectPrefersColorScheme: true },
       navbar: {
-        title: "Keycloak administration notes",
+        title: "Keycloak Administration Notes",
         items: [
           { type: "docSidebar", sidebarId: "docs", position: "left", label: "Docs" },
           { type: "localeDropdown", position: "right" },

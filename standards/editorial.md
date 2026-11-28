@@ -51,7 +51,7 @@ Sentence case and title case are both correct; a publication chooses one and kee
 | Text quoted in a heading, such as an error message | As it is written where it comes from | A Report Shows "Access is denied" |
 | French, German, Spanish, and Hindi pages | Each language's own rule, which is sentence case | Ce que j'écris |
 
-The English pages are built with Title Case applied by the site's build (lib/title-case.mjs), and the style checker checks headings as they are published. The Docusaurus demo in the case study, the PDFs, and the films still carry sentence-case headings until they are rebuilt; they are listed as known exceptions in the audit.
+The English pages are built with Title Case applied by the site's build (lib/title-case.mjs), and the style checker checks headings as they are published. The Docusaurus demo in the case study follows the same rule through its own Vale check. The PDFs, the DITA HTML5 outputs, and the films' title cards were made before the change and still carry sentence-case headings until they are rebuilt.
 
 A heading doesn't end with a period or a colon, even when it is a full sentence. A document's title is its only H1, and no heading level is skipped: an H4 is never a page or article title.
 

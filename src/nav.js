@@ -5,6 +5,16 @@
   function closeAll(except) { all.forEach(function (d) { if (d !== except && !d.contains(except)) d.open = false; }); }
   all.forEach(function (d) {
     d.addEventListener("toggle", function () { if (d.open) { closeAll(d); if (d.classList.contains("mnav")) document.documentElement.classList.add("mnav-open"); } else if (d.classList.contains("mnav")) document.documentElement.classList.remove("mnav-open"); });
+    // A menu opens under its name and stays inside the window: one that would run past an edge moves back in.
+    d.addEventListener("toggle", function () {
+      var m = d.querySelector(".pm-menu");
+      if (!m || !d.open) return;
+      m.style.transform = "";
+      var r = m.getBoundingClientRect(), pad = 16, dx = 0;
+      if (r.left < pad) dx = pad - r.left;
+      else if (r.right > window.innerWidth - pad) dx = window.innerWidth - pad - r.right;
+      if (dx) m.style.transform = "translateX(" + Math.round(dx) + "px)";
+    });
     if (!d.classList.contains("mnav")) d.addEventListener("focusout", function (e) { if (d.open && e.relatedTarget && !d.contains(e.relatedTarget)) d.open = false; });
   });
   document.addEventListener("keydown", function (e) {
