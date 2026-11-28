@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="workspace-roles" xml:lang="en">
-<title>Workspace roles</title>
+<title>Workspace Roles</title>
 <shortdesc>What each role in a <ph keyref="product">Acme Console</ph> workspace can open and change.</shortdesc>
 <refbody>
 <section><title>Roles</title>
@@ -9,7 +9,7 @@
 </section>
 <section><title>Limits</title>
 <simpletable frame="topbot"><sthead><stentry>Setting</stentry><stentry>Limit</stentry></sthead><strow><stentry>Members in a workspace</stentry><stentry>500</stentry></strow><strow><stentry>Reports in a workspace</stentry><stentry>2,000</stentry></strow><strow><stentry>Owners in a workspace</stentry><stentry>At least one</stentry></strow></simpletable>
-<p audience="admin"><b>Who can change a role</b></p>
+<p audience="admin"><b>Who Can Change a Role</b></p>
 <p audience="admin">Only an owner can change a role. An administrator of the organization can make themselves an owner of any workspace.</p>
 </section>
 </refbody>

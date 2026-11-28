@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="product-version-release-notes" xml:lang="en">
-<title><ph keyref="product">Acme Console</ph> <ph keyref="version">4.2</ph> release notes</title>
+<title><ph keyref="product">Acme Console</ph> <ph keyref="version">4.2</ph> Release Notes</title>
 <shortdesc>Released on March 4, 2026.</shortdesc>
 <conbody>
 <section><title>New</title>
@@ -13,9 +13,9 @@
 <section><title>Fixed</title>
 <ul><li>A report with more than 10,000 rows no longer times out.</li></ul>
 </section>
-<section><title>Known issues</title>
+<section><title>Known Issues</title>
 <ul><li>An export leaves out the columns you have hidden. Show the columns before you export.</li></ul>
-<p audience="admin"><b>For administrators</b></p>
+<p audience="admin"><b>For Administrators</b></p>
 <ul audience="admin"><li>The audit log records every export, with the name of the person who ran it.</li></ul>
 </section>
 </conbody>

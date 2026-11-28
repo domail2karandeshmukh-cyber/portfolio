@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="reset-mfa-for-a-locked-out-user" xml:lang="en">
-<title>Reset MFA for a locked-out user</title>
+<title>Reset MFA for a Locked-Out User</title>
 <shortdesc>For the IT service desk. Takes about five minutes.</shortdesc>
 <taskbody>
 <prereq>
@@ -16,7 +16,7 @@
 <p>The system log shows a new enrollment for the user.</p>
 </result>
 <postreq>
-<p audience="admin"><b>If the user has no second device</b></p>
+<p audience="admin"><b>If the User Has No Second Device</b></p>
 <ol audience="admin"><li>In <ph keyref="product">Acme Console</ph>, go to <b>Security</b> &gt; <b>Recovery codes</b>.</li><li>Select <b>Generate</b>, and then read the code to the user by phone.</li></ol>
 </postreq>
 </taskbody>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="monthly-inspection-of-asset" xml:lang="en">
-<title>Monthly inspection of <ph keyref="asset">feed pump B</ph></title>
+<title>Monthly Inspection of <ph keyref="asset">feed pump B</ph></title>
 <shortdesc>Preventive maintenance procedure. The technician on shift records four readings and closes the work order. Fictional sample written for this portfolio: it isn’t an operating instruction for real equipment.</shortdesc>
 <taskbody>
 <prereq>
 <ul><li>The work order is assigned to your shift.</li><li>You have read the site safety rules for the pump room.</li><li>The pump is running at its normal load.</li></ul>
 <note type="warning">Stay outside the guard while the pump runs. Take every reading from a gauge or the console.</note>
-<p><b>Tools and materials</b></p>
+<p><b>Tools and Materials</b></p>
 <ul><li>The maintenance console on a tablet</li><li>A handheld vibration meter</li></ul>
 </prereq>
 <steps>
@@ -19,7 +19,7 @@
 <step><cmd>Select <uicontrol>Save readings</uicontrol>.</cmd></step>
 </steps>
 <result>
-<p><b>Acceptance criteria</b></p>
+<p><b>Acceptance Criteria</b></p>
 <simpletable frame="topbot"><sthead><stentry>Check</stentry><stentry>Expected</stentry></sthead><strow><stentry>Discharge pressure</stentry><stentry>3.8 to 4.6 bar</stentry></strow><strow><stentry>Bearing temperature</stentry><stentry>Below 70 °C</stentry></strow><strow><stentry>Vibration</stentry><stentry>Below 4.5 mm/s</stentry></strow><strow><stentry>Seal leakage</stentry><stentry>None visible</stentry></strow></simpletable>
 <p>The work order shows <b>Ready to close</b>, and all four results are inside their expected range. Select <b>Close work order</b>. If a result is outside its range, don’t close the work order: report it to the shift supervisor.</p>
 </result>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="calibrate-the-pressure-sensor-on-rig" xml:lang="en">
-<title>Calibrate the pressure sensor on <ph keyref="rig">test rig TR-2</ph></title>
+<title>Calibrate the Pressure Sensor on <ph keyref="rig">test rig TR-2</ph></title>
 <shortdesc>Engineering procedure for the test lab. Run it before each test campaign, and after you replace any sensor. Fictional sample: don’t use it on real equipment.</shortdesc>
 <taskbody>
 <prereq>
@@ -20,7 +20,7 @@
 <p>Each reading is within 0.5 % of the reference gauge, and the console shows <b>Calibrated</b> with today’s date.</p>
 </result>
 <postreq>
-<p><b>If a reading is out of tolerance</b></p>
+<p><b>If a Reading Is Out of Tolerance</b></p>
 <p>Stop the procedure, tag the sensor as out of service, and tell the lab supervisor.</p>
 </postreq>
 </taskbody>

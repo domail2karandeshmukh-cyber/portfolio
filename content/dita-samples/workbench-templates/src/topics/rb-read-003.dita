@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="runbook-service-stops-responding" xml:lang="en">
-<title>Runbook: <ph keyref="service">the readings service</ph> stops responding</title>
+<title>Runbook: <ph keyref="service">the readings service</ph> Stops Responding</title>
 <shortdesc>For the engineer on call. Follow it when the alert “Readings API not responding” fires. Fictional sample.</shortdesc>
 <taskbody>
 <prereq>
