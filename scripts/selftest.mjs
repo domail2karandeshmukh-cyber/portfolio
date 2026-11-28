@@ -81,7 +81,8 @@ for (const sc of fs.readdirSync("content/scenarios", { withFileTypes: true }).fi
 }
 // The guide follows itself: the name of every group, and the title and the reason of every rule, go through the check.
 const groups = [...new Set(Style.RULES.map((r) => r.group))];
-const own = Style.check(groups.map((g) => `### ${g}`).concat(Style.RULES.map((r) => `#### ${r.title}\n\n${r.why}`)).join("\n\n"), { off: ["heading-skip"] });
+// The /style page sets these headings in Title Case, as every English page does, so they are checked that way.
+const own = Style.check(groups.map((g) => `### ${Style.titleCase(g)}`).concat(Style.RULES.map((r) => `#### ${Style.titleCase(r.title)}\n\n${r.why}`)).join("\n\n"), { off: ["heading-skip"] });
 ok(!own.length, `the style guide's own words: ${own.map((f) => `${f.rule} in "${f.quote}"`).join(", ")}`);
 // Every rule that is checked by code and gives two examples: the first breaks the rule, and the second doesn't.
 for (const r of Style.RULES.filter((r) => r.level !== "review" && r.bad && r.good)) {

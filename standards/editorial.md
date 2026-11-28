@@ -37,24 +37,27 @@ This order says which source wins. It isn't a claim that every page meets every 
 
 ### Capitalization by publication type
 
-Sentence case and title case are both correct; a publication chooses one and keeps it. This site uses sentence case almost everywhere:
+Sentence case and title case are both correct; a publication chooses one and keeps it. The Microsoft Manual of Style (4th edition) recommends sentence case and also says that a team that follows a different practice uses its own style consistently. Since 28 November 2026 this site uses Title Case for titles and headings, the style of my documentation portfolio, and applies the Manual's title-style capitalization rules: capitalize every word except articles (a, an, the), coordinating conjunctions (and, but, or, nor, for, so, yet), prepositions of four letters or fewer, and the "to" of an infinitive, unless the word is first, last or follows a colon. A particle that belongs to its verb takes a capital: Set Up, Sign In. Both parts of a hyphenated compound take one, except an article or a short preposition inside it: Sign-In, Docs-as-Code.
 
 | Element | Case | Example |
 |---|---|---|
-| Page titles, H1 to H6, card titles, navigation, table of contents, breadcrumbs | Sentence case | Reset a user's OTP credential |
-| Table headers, figure captions, video titles and chapter names | Sentence case | Step 2. Sign the user out of every open session. |
-| PDF headings and CV section headings | Sentence case | Professional experience |
+| Page titles, H1 to H6, card titles, table of contents, breadcrumbs | Title Case | Reset a User's OTP Credential |
+| Navigation, buttons, table headers, figure captions, and video chapter names | Sentence case | Step 2. Sign the user out of every open session. |
 | Interface labels quoted in a step | Exactly as the interface shows them | **Logout all sessions** |
 | Product, company and feature names | As their owner writes them | Okta Verify, Core42 AI Cloud Portal |
 | Job titles held, in a CV or a résumé | As the employer wrote them | Senior Engineer, Technical Documentation |
 | Titles of papers, books and standards cited | As their authors wrote them | Signed Is Not Safe; The Chicago Manual of Style |
 | S1000D data module titles (technical name, information name) | As the project's business rules say; here, each part starts with a capital | Fan assembly - Remove procedure |
+| Text quoted in a heading, such as an error message | As it is written where it comes from | A Report Shows "Access is denied" |
+| French, German, Spanish, and Hindi pages | Each language's own rule, which is sentence case | Ce que j'écris |
+
+The English pages are built with Title Case applied by the site's build (lib/title-case.mjs), and the style checker checks headings as they are published. The Docusaurus demo in the case study, the PDFs, and the films still carry sentence-case headings until they are rebuilt; they are listed as known exceptions in the audit.
 
 A heading doesn't end with a period or a colon, even when it is a full sentence. A document's title is its only H1, and no heading level is skipped: an H4 is never a page or article title.
 
 | Right | Wrong | Why |
 |---|---|---|
-| Reset a user's OTP credential | Reset A User's OTP Credential | Sentence case |
+| Reset a User's OTP Credential | Reset A User's OTP Credential | "a" is an article: it stays lowercase |
 | `# How to reset 2FA` (the title) | `#### How to reset 2FA` (the title) | The title is the H1 |
 | Let's discuss technical documentation | Let's discuss technical documentation. | No period after a heading |
 | Sign in to the admin console | Login to the admin console | "Sign in" is the verb; "login" isn't a verb |
@@ -71,13 +74,13 @@ A heading doesn't end with a period or a colon, even when it is a full sentence.
 
 ### Capitalization
 
-Use sentence case for titles, headings, table headers, figure captions, and button names that I write: capitalize the first word, proper nouns, and the first word after a colon.
+Use Title Case for titles and headings, and sentence case for table headers, figure captions, and button names that I write.
 
 | Right | Wrong |
 |---|---|
-| Configure the application settings | Configure The Application Settings |
-| Troubleshooting: Device enrollment fails | troubleshooting: device enrollment fails |
-| Install the Okta Verify app | Install The Okta Verify App |
+| Configure the Application Settings | Configure The Application Settings |
+| Troubleshooting: Device Enrollment Fails | troubleshooting: device enrollment fails |
+| Install the Okta Verify App | Install the okta verify app |
 
 Product and feature names keep their official capitalization: Okta Verify, Google Workspace, S1000D, ASD-STE100, macOS. Interface labels match the interface exactly, even when the interface uses title case.
 

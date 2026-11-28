@@ -578,6 +578,12 @@ await library.finish();
 
 // What was built
 const files = await Promise.all((await fs.readdir(OUT, { recursive: true, withFileTypes: true })).filter((f) => f.isFile()).map(async (f) => [path.join(f.parentPath, f.name), (await fs.stat(path.join(f.parentPath, f.name))).size]));
+// Title Case on the English pages (lib/title-case.mjs), after every page is written.
+{
+  const { titleCasePages } = await import("./lib/title-case.mjs");
+  const tc = await titleCasePages(OUT, Style.titleCase);
+  console.log(`title case: ${tc.changed} of ${tc.pages} English pages had titles or headings to set`);
+}
 const kb = (n) => `${Math.round(n / 1024)} KB`;
 const sum = (re) => files.filter(([f]) => re.test(f)).reduce((n, [, s]) => n + s, 0);
 const pages = files.filter(([f]) => f.endsWith(".html"));

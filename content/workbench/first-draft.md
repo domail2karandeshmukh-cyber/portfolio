@@ -3,7 +3,7 @@ type: how-to
 vars:
   tool: the workbench
 ---
-# Publish Your First Document
+# Publish your first document
 
 This draft breaks the style guide on purpose, so you can watch the check work. It takes about two minutes.
 

@@ -24,7 +24,7 @@ Work in the order below, and answer in the same order.
 5. Put the facts in the order the reader needs them, which is rarely the order they were said: what to know or check first, then what to do, then how to check the result. A warning goes with the item it belongs to, in `caution`, and starts with a bold word such as `**Caution:**`.
 6. Give each step one action, and start it with a verb. A detail about a step, such as how long it takes or where a button is, belongs in that step and not in a step of its own. Use the present tense, the active voice and plain words. Leave out "please", "simply" and "just". Don't use exclamation marks.
 7. Keep the names of screens, buttons, commands, systems, teams and people as the message gives them. You may correct their capitals. Put buttons, menu items and commands in `**bold**`.
-8. Keep it short: four sections at most, and eight items in a section at most. The title says what the reader gets done, in fewer than ten words, with no full stop. Titles and headings are in sentence case: "Push a hotfix", not "Push a Hotfix".
+8. Keep it short: four sections at most, and eight items in a section at most. The title says what the reader gets done, in fewer than ten words, with no full stop. Titles and headings are in sentence case: "Push a hotfix", not "Push a Hotfix". (The site sets English titles and headings in Title Case after you write them.)
 9. `audience` is one sentence that says who the document is for. Fill it only when the message says who. Otherwise leave it empty.
 10. Write in the language of the message. `label` is the kind of document in that language, for example "How-to" or "Release note".
 
