@@ -1,6 +1,7 @@
 // Builds karandeshmukh.dev from content/site.json:
 //   the home page in every language, the library (/docs and /samples), the PDF CV and the social card.
 // Project files (documents, screenshots) come from GitHub at the commits pinned in content/site.json.
+import { heroDrawing } from "./lib/hero-drawing.mjs";
 import { siteNav, INDUSTRIES } from "./lib/nav.mjs";
 import { buildHubs, pdfPages } from "./lib/hubs.mjs";
 import { icon, FIELD_ICON } from "./lib/icons.mjs";
@@ -44,6 +45,9 @@ const FONTS = [
 for (const [from, to] of FONTS) await fs.copyFile(`node_modules/${from}`, `${OUT}/fonts/${to}`);
 await fs.copyFile("src/fonts/devanagari-name.woff2", `${OUT}/fonts/devanagari-name.woff2`);
 await fs.copyFile("src/fonts/newsreader.woff2", `${OUT}/fonts/newsreader.woff2`);
+// IBM Plex (SIL Open Font License, src/fonts/LICENSE-ibm-plex.txt): the type of the site since the redesign of
+// 28 November 2026. The Latin files of @fontsource/ibm-plex-*, kept in src/fonts so the build needs no package for them.
+for (const f of (await fs.readdir("src/fonts")).filter((f) => f.startsWith("plex-"))) await fs.copyFile(`src/fonts/${f}`, `${OUT}/fonts/${f}`);
 
 // Project screenshots: crop to 16:10 and write two WebP sizes
 for (const [id, im] of Object.entries(C.images)) {
@@ -481,7 +485,19 @@ const jsonld = {
 };
 parts.featured = works();
 parts.heropubs = heroPubs();
-const HI = { i_download: icon("download", { size: 18, stroke: 2 }), i_search: icon("search", { size: 18 }), i_copy: icon("copy", { size: 17 }), i_mail: icon("mail", { size: 18, stroke: 2 }), i_linkedin: icon("briefcase-business", { size: 18, stroke: 2 }), i_pin: icon("map-pin", { size: 17 }) };
+parts.herodrawing = heroDrawing();
+// The dark "selected documentation" panel: five pieces of work, each with a screenshot of the real page. The list is
+// the accessible content; the picture beside it follows the item a visitor points at, or moves on by itself.
+const CHAPTERS = [
+  { t: "From a help-center article to docs-as-code", k: "Case study", href: "/case-study/help-center-to-docs-as-code", img: "/work/img/sample-case-study.webp" },
+  { t: "Reset a user's OTP credential in Keycloak", k: "How-to, tested on Keycloak 26.8.2", href: "/docs/keycloak/reset-otp", img: "/work/img/sample-keycloak.webp" },
+  { t: "KC1 prediction API reference", k: "API reference from OpenAPI", href: "/docs/kc1/api-reference", img: "/work/img/sample-kc1.webp" },
+  { t: "A GraphQL library API", k: "API guide, every example tested", href: "/work/graphql-api", img: "/work/img/sample-graphql.webp" },
+  { t: "ARF-1 maintenance publication", k: "S1000D Issue 6 and an IETM", href: "/studio/ietm", img: "/work/img/sample-s1000d.webp" },
+];
+parts.chapters = CHAPTERS.map((c, i) => `<li${i ? "" : ' class="on"'}><a href="${c.href}" data-i="${i}"><span class="ch-k">${esc(c.k)}</span><span class="ch-t" translate="no">${esc(c.t)}</span>${icon("arrow-up-right", { size: 22, stroke: 1 })}</a></li>`).join("");
+parts.chapterimgs = CHAPTERS.map((c, i) => `<img src="${c.img}" alt="" width="1280" height="800"${i ? ' loading="lazy"' : ""} decoding="async"${i ? "" : ' class="on"'}>`).join("");
+const HI = { i_arrow: icon("arrow-right", { size: 14, stroke: 1 }), i_layout: icon("layout-grid", { size: 14 }), i_braces: icon("braces", { size: 14 }), i_shield: icon("shield-check", { size: 14 }), i_branch: icon("git-branch", { size: 14 }), i_plane: icon("plane", { size: 14 }), i_download: icon("download", { size: 18, stroke: 2 }), i_search: icon("search", { size: 18 }), i_copy: icon("copy", { size: 17 }), i_mail: icon("mail", { size: 18, stroke: 2 }), i_linkedin: icon("briefcase-business", { size: 18, stroke: 2 }), i_pin: icon("map-pin", { size: 17 }) };
 const home = await template("src/home.html");
 for (const loc of locales) {
   const tokens = {

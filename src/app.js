@@ -1315,3 +1315,32 @@
     }
   }
 })();
+
+/* The home page's selected documentation: the picture follows the item a visitor points at or focuses, and moves on
+   by itself every few seconds while nobody is pointing and the panel is on screen. With reduced motion it waits for
+   the visitor. */
+(function () {
+  var box = document.querySelector("[data-chapters]");
+  if (!box) return;
+  var items = [].slice.call(box.querySelectorAll(".ch-list li")), imgs = [].slice.call(box.querySelectorAll(".ch-imgs img"));
+  var num = box.querySelector(".ch-n"), cur = box.querySelector(".ch-cur"), at = 0, held = false, seen = false, timer;
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function two(n) { return (n < 10 ? "0" : "") + n; }
+  function show(i) {
+    at = (i + items.length) % items.length;
+    items.forEach(function (li, k) { li.classList.toggle("on", k === at); });
+    imgs.forEach(function (im, k) { im.classList.toggle("on", k === at); if (k === at) im.loading = "eager"; });
+    if (num) num.textContent = two(at + 1);
+    if (cur) cur.textContent = cur.textContent.replace(/\d+$/, two(at + 1));
+  }
+  items.forEach(function (li, k) {
+    var a = li.querySelector("a");
+    a.addEventListener("mouseenter", function () { held = true; show(k); });
+    a.addEventListener("focus", function () { held = true; show(k); });
+    a.addEventListener("mouseleave", function () { held = false; });
+    a.addEventListener("blur", function () { held = false; });
+  });
+  if (calm) return;
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { seen = es[0].isIntersecting; }, { threshold: .3 }).observe(box);
+  timer = setInterval(function () { if (seen && !held && !document.hidden) show(at + 1); }, 3500);
+})();

@@ -18,8 +18,8 @@
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="/fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/hanken.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/plex-cond-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/site.css">
 <script>document.documentElement.className="js"</script>
 <script type="application/ld+json">{{jsonld}}</script>
@@ -43,27 +43,79 @@
 
 <main id="main">
 
-<section class="hero" id="top">
- <div class="wrap hero-in">
-  <div class="hero-copy">
-   <p class="hero-id">Technical documentation specialist</p>
-   <h1 class="sig">I <span class="ed e1" data-was="type">turn</span> what engineers <span class="ed e2" data-was="say">know</span> into <mark class="hl">docs people can <span class="ed e3" data-was="read">follow</span></mark></h1>
-   <p class="lead">More than five years of procedures, manuals, and troubleshooting guides in industrial engineering, enterprise IT, and cybersecurity, most recently at MongoDB and Magna International.</p>
-   <p class="avail"><span class="dot" aria-hidden="true"></span><span>{{availability}} Based in {{location}}.</span></p>
-   <div class="btns">
-    <a class="btn ink" href="#writing">Explore my work</a>
-    <a class="btn line" href="{{cv}}" download>{{i_download}}<span>Download CV</span></a>
-   </div>
-   <p class="hero-more"><a href="/recruiters">Recruiter overview</a><a href="#contact">Contact me</a></p>
+<section class="hx" id="top" aria-labelledby="hx-name">
+ <div class="hx-in">
+  <h1 class="hx-name" id="hx-name" translate="no"><span class="hx-w">Karan</span> <span class="hx-w">Deshmukh</span></h1>
+  <div class="hx-bar">
+   <p class="hx-id">Technical writer<br>Documentation, tested<br>{{location}}</p>
+   <span class="hx-arrow" aria-hidden="true">{{i_arrow}}</span>
+   <p class="hx-what">Procedures, API references and help-center articles, written from the product and tested on it before they ship.</p>
+   <span class="hx-arrow" aria-hidden="true">{{i_arrow}}</span>
+   <nav class="hx-links" aria-label="On this page"><a href="#writing">Selected work</a><a href="/case-study/help-center-to-docs-as-code">Case study</a><a href="/docs">Library</a><a href="#experience">Experience</a><a href="#contact">Contact</a></nav>
   </div>
-  <!--@heropubs-->
+  <div class="hx-body">
+   <div class="hx-copy">
+    <p class="hx-num"><span>01</span><i aria-hidden="true"></i></p>
+    <p class="hx-head">Documentation<br>that holds up</p>
+    <p class="hx-lead">Four years in dedicated documentation roles at MongoDB and Magna International. I turn what engineers know into steps a reader can follow, and I test every step on the real product.</p>
+    <div class="hx-acts">
+     <a class="hx-cta" href="#writing"><span class="hx-fill" aria-hidden="true"></span><span class="hx-ct">See the selected work</span></a>
+     <a class="hx-cv" href="{{cv}}" download>{{i_download}}<span>Download CV</span></a>
+    </div>
+   </div>
+   <figure class="hx-draw" aria-labelledby="hx-cap">
+    <!--@herodrawing-->
+    <figcaption id="hx-cap" class="vh">A technical drawing of one of my procedures, with callouts for the five things every page has: a task title, what to check before starting, one action per step, an annotated figure, and a result the reader can check.</figcaption>
+   </figure>
+   <aside class="hx-spec" aria-label="Most recent test">
+    <p class="hx-sk">Most recent test</p>
+    <p class="hx-st" translate="no">Reset a user's OTP credential</p>
+    <p class="hx-sd">Keycloak 26.8.2<br>Tested 28 November 2026</p>
+    <dl class="hx-dl"><div><dt>Steps</dt><dd>7</dd></div><div><dt>Formats</dt><dd>Web, PDF, DITA, film</dd></div></dl>
+    <a class="hx-more" href="/docs/keycloak/reset-otp"><span class="hx-plus" aria-hidden="true">+</span><span>Open the guide</span></a>
+   </aside>
+  </div>
+  <a class="hx-scroll" href="#statement"><span class="hx-ring" aria-hidden="true"><i></i><i></i></span><span>Scroll to explore</span></a>
  </div>
 </section>
 
-<section class="sec" id="writing" aria-labelledby="writing-h">
+<section class="hst" id="statement" aria-labelledby="st-h">
+ <div class="wrap">
+  <p class="hlbl"><span>[ 02 ]</span> What I write</p>
+  <h2 id="st-h" class="hst-h">Help centers, API references and procedures, written from the product and tested before they ship</h2>
+  <ul class="hpills">
+   <li><a href="/industries/software">{{i_layout}}<span>Help centers</span></a></li>
+   <li><a href="/industries/api-documentation">{{i_braces}}<span>API documentation</span></a></li>
+   <li><a href="/industries/cybersecurity">{{i_shield}}<span>Identity and security</span></a></li>
+   <li><a href="/case-study/help-center-to-docs-as-code">{{i_branch}}<span>Docs-as-code</span></a></li>
+   <li><a href="/industries/aerospace">{{i_plane}}<span>Structured authoring</span></a></li>
+  </ul>
+ </div>
+</section>
+
+<section class="ch" id="writing" aria-labelledby="ch-h">
+ <div class="ch-top">
+  <h2 id="ch-h" class="ch-h">Selected documentation, <span class="ch-dim">each page tested against the product it describes</span></h2>
+  <div class="ch-side"><p>Open any of them in full.<br>Every source is on GitHub.</p><ul><li>Tested</li><li>Annotated</li><li>Versioned</li></ul></div>
+ </div>
+ <div class="ch-panel" data-chapters>
+  <div class="ch-view">
+   <p class="ch-stars" aria-hidden="true">***</p>
+   <div class="ch-imgs"><!--@chapterimgs--></div>
+   <p class="ch-count" aria-hidden="true"><span class="ch-n">01</span> / <span>05</span></p>
+  </div>
+  <div class="ch-list">
+   <p class="ch-bar"><span>Read the work. Check how it was made.</span><span class="ch-cur" aria-hidden="true">Chapter 01</span></p>
+   <ol><!--@chapters--></ol>
+  </div>
+ </div>
+ <p class="ch-foot"><a href="/docs">All 27 documents are in the library</a></p>
+</section>
+
+<section class="sec" id="documents" aria-labelledby="writing-h">
  <div class="wrap">
   <div class="sec-head">
-   <h2 id="writing-h">Selected work</h2>
+   <h2 id="writing-h">Documents to download</h2>
    <p>Documentation you can read here or download: independent guides to open-source software, the documentation of my own projects, and structured publications.</p>
   </div>
   <ul class="works"><!--@featured--></ul>

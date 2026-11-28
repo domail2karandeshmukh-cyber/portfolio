@@ -295,3 +295,8 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
 .w-contact{display:grid;gap:var(--s5);align-items:start}
 .w-portrait{width:120px;height:auto;aspect-ratio:240/299;object-fit:cover;border-radius:8px;filter:saturate(.96)}
 @media (min-width:700px){.w-contact.has-portrait{grid-template-columns:160px minmax(0,1fr)}.w-portrait{width:160px}}
+
+/* The Swan page's hero in the redesign of 28 November 2026: the same monochrome label and condensed headline as the
+   home page, no animated corrections. */
+.w-lbl{text-align:left;margin:0 0 22px}
+.w-h1{font:600 clamp(2.6rem,1.5rem + 3.4vw,4.6rem)/.98 var(--display);letter-spacing:-.03em;margin:0 0 24px;max-width:17ch;color:#111}

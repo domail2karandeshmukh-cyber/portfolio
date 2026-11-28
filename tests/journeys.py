@@ -38,9 +38,9 @@ def run(name, vp, phone):
         r = pg.goto(BASE + "/", wait_until="networkidle"); pg.wait_for_timeout(2200)
         step(1, "the website opens", r.ok and "Karan Deshmukh" in pg.title(), (r.status, pg.title())); shot(1)
         # 2. Understand who I am, from the first screen.
-        h1 = pg.locator("h1.sig")
-        first = pg.evaluate("() => { const h = document.querySelector('h1.sig').getBoundingClientRect(), id = document.querySelector('.hero-id').getBoundingClientRect(); return h.bottom <= innerHeight && id.top >= 0; }")
-        step(2, "the first screen says who I am and what I do", first and "docs people can follow" in h1.inner_text() and "Technical documentation specialist" in pg.inner_text(".hero-id"), h1.inner_text())
+        h1 = pg.locator("h1.hx-name")
+        first = pg.evaluate("() => { const h = document.querySelector('h1.hx-name').getBoundingClientRect(), id = document.querySelector('.hx-id').getBoundingClientRect(); return h.top >= 0 && id.bottom <= innerHeight; }")
+        step(2, "the first screen says who I am and what I do", first and "DESHMUKH" in h1.inner_text().upper() and "TECHNICAL WRITER" in pg.inner_text(".hx-id").upper(), h1.inner_text())
         # 3. Download the CV, and open it.
         with pg.expect_download() as d: click(".cv-btn")
         data = open(d.value.path(), "rb").read()
@@ -164,7 +164,7 @@ def run(name, vp, phone):
         step(18, "Discuss an opportunity opens an email to me with a subject", href.startswith(f"mailto:{EMAIL}?subject=") and pg.locator("main a", has_text="Discuss an opportunity").first.is_visible(), href)
         # 19. Back to the home page.
         pg.locator("a.brand").first.click(); pg.wait_for_load_state("networkidle")
-        step(19, "the name in the header goes back to the home page", pg.url.rstrip("/") == BASE and pg.locator("h1.sig").is_visible(), pg.url)
+        step(19, "the name in the header goes back to the home page", pg.url.rstrip("/") == BASE and pg.locator("h1.hx-name").is_visible(), pg.url)
         step(19, "no script error on the way", not errs, errs[:3])
         b.close()
     return res
