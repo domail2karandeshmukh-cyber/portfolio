@@ -115,7 +115,7 @@
    "id": "maintain",
    "name": "Maintain",
    "what": "Revise when the product or the need changes, test the change, and say what changed.",
-   "artifact": "Version 1.1: a REST API method, run against the server, and a trap it found.",
+   "artifact": "Versions 1.1 and 1.2: a REST API method and a safer order of the steps, each tested on the server.",
    "href": "/case-study/help-center-to-docs-as-code#maintenance"
   }
  ],

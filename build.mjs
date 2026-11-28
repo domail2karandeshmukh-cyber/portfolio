@@ -416,12 +416,18 @@ await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
 // short documents beside them. The GraphQL guide's examples are sent to the API again first: the build stops if one
 // answer differs from the one the guide shows.
 {
-  const { evidence, caseStudyBody, swanBody, evergreenBody, articleBody, graphqlGuide, CS, DAC } = await import("./lib/work.mjs");
+  const { evidence, caseStudyBody, swanBody, evergreenBody, articleBody, graphqlGuide, CS, DAC, SOURCE_BRANCH } = await import("./lib/work.mjs");
   const { runExamples } = await import("./scripts/graphql-examples.mjs");
   const { render } = await import("./lib/md.mjs");
   const gq = await runExamples();
   if (gq.failed.length) throw new Error(`The GraphQL guide's examples no longer match the API: ${gq.failed.join(", ")}. Run node scripts/graphql-examples.mjs --record after checking the change.`);
   const W = JSON.parse(await fs.readFile("content/work/work.json", "utf8")), E = evidence();
+  // A production build must not link to the working branch: once it is merged and deleted, those links die.
+  if (process.env.VERCEL_ENV === "production") {
+    const html = await fs.readFile(`${DAC}/published/how-to/reset-otp.html`, "utf8");
+    if (SOURCE_BRANCH !== "main" || html.includes("/blob/for-swan/"))
+      throw new Error("Source links still point to the for-swan branch: build with SOURCE_BRANCH=main, and rebuild the Docusaurus site with DOCS_BRANCH=main.");
+  }
   await fs.cp(`${DAC}/published`, `${OUT}${CS}/site`, { recursive: true });
   await fs.cp("content/work/img", `${OUT}/work/img`, { recursive: true });
   const noindex = '\n<meta name="robots" content="noindex">';
@@ -441,7 +447,7 @@ await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
   const docs = [
     { path: "/work/graphql-api", kicker: "API guide · independent demonstration", title: "The library API: a GraphQL guide", file: "content/work/graphql/GUIDE.md", transform: (t) => graphqlGuide(t, book),
       lead: "Queries, variables, pagination, a mutation and two kinds of errors, with every example tested against the API on each build.",
-      end: `The API, its schema and its examples are in <a href="https://github.com/domail2karandeshmukh-cyber/portfolio/tree/main/content/work/graphql">content/work/graphql</a>. It serves a snapshot of this site's library and isn't connected to any company's service.`,
+      end: `The API, its schema and its examples are in <a href="https://github.com/domail2karandeshmukh-cyber/portfolio/tree/${SOURCE_BRANCH}/content/work/graphql">content/work/graphql</a>. It serves a snapshot of this site's library and isn't connected to any company's service.`,
       description: "A guide to a small GraphQL API: authentication, the schema, variables, cursor pagination, a mutation, GraphQL errors and typed problems, and troubleshooting. Every example is tested on each build." },
     { path: "/work/ux-writing", kicker: "UX writing · independent proposal", title: "Six messages for a security task, rewritten", file: "content/work/UX_WRITING.md",
       lead: "Keycloak's confirmation, notifications, empty state, setup form and error for resetting a lost authenticator, as recorded from version 26.8.2, with a rewrite and the reason for each.",

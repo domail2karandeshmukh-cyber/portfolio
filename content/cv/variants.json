@@ -1,0 +1,28 @@
+{
+ "note": "Two proposed CVs for Karan to choose from. Neither replaces /Karan-Deshmukh-CV.pdf until he decides. The sample links point to the production site; the case study and the GraphQL guide go live only after the release.",
+ "headline": "Technical Writer  |  Help centers, docs-as-code, enterprise IT and identity",
+ "phone": "+33 7 45 36 53 69",
+ "photo": "content/cv/headshot.jpg",
+ "samples": [
+  {
+   "label": "Case study: from a help-center article to docs-as-code",
+   "text": "an article audited, moved to MDX and Git, checked with Vale, published with Docusaurus, revised after a test",
+   "url": "https://karandeshmukh.dev/case-study/help-center-to-docs-as-code"
+  },
+  {
+   "label": "How-to: reset a user's one-time password in Keycloak",
+   "text": "an administrator procedure with annotated screenshots, tested on Keycloak 26.8.2",
+   "url": "https://karandeshmukh.dev/docs/keycloak/reset-otp"
+  },
+  {
+   "label": "API reference: KC1 defect prediction",
+   "text": "a REST API documented from its OpenAPI description and recorded requests",
+   "url": "https://karandeshmukh.dev/docs/kc1/api-reference"
+  },
+  {
+   "label": "API guide: a GraphQL library API",
+   "text": "queries, pagination, a mutation and errors, every example run on each build",
+   "url": "https://karandeshmukh.dev/work/graphql-api"
+  }
+ ]
+}

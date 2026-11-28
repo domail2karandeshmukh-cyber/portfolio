@@ -14,7 +14,7 @@
 .wk a.btn{color:inherit;text-decoration:none}
 .wk a.btn.ink{color:#fff}
 .wk .btn .ic{flex:none}
-.w-kicker{margin:0 0 var(--s3);font:600 .8125rem/1.3 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.w-kicker{margin:0 0 var(--s3);font:600 .9375rem/1.3 var(--sans);color:var(--ink2)}
 .w-lead{font-size:var(--fs-lead);line-height:1.55;color:var(--ink2);max-width:40em;margin:0 0 var(--s5)}
 .w-acts{display:flex;flex-wrap:wrap;gap:var(--s3);margin:0 0 var(--s4)}
 .w-small{font-size:var(--fs-meta);color:var(--mute);max-width:44em}
@@ -262,7 +262,7 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
 @media (prefers-reduced-motion:reduce){.sc-img img,.sc-text h3 a{transition:none}}
 @media print{.w-steps,.tab-list,.w-acts,.w-quiet,.w-contact .w-acts,.sk-filter{display:none}.tab-panel[hidden]{display:block!important}}
 /* On a phone, the first screen is who I am and the two actions; the before-and-after is the case study's first card. */
-@media (max-width:599px){.hero-art{display:none}}
+
 
 /* Tables in the short documents (the Markdown renderer wraps each in .tbl). */
 .w-article .tbl{overflow-x:auto;margin:0 0 var(--s4)}
@@ -273,3 +273,23 @@ html:not(.js) .flow-panel+.flow-panel{margin-top:var(--s3)}
 .w-article :not(pre)>code{overflow-wrap:anywhere}
 .w-tscroll{overflow-x:auto;margin:0 0 var(--s4)}
 .w-tscroll>.w-table{margin:0}
+
+/* The before-and-after, labelled; on a phone, a compact pair: the article's failing step, then the published page. */
+.ha-tag{position:absolute;z-index:3;top:-11px;left:14px;padding:2px 10px;border-radius:999px;font:650 .75rem/1.5 var(--sans);background:var(--ink);color:#fff}
+.ha-before .ha-tag{background:#fff;color:var(--red);box-shadow:inset 0 0 0 1.5px var(--red)}
+.ha-after{overflow:visible}.ha-after img{border-radius:6px}
+.w-disclose{margin:var(--s5) 0 0;padding:var(--s3) var(--s4);border-left:3px solid var(--rule2);font-size:var(--fs-meta);color:var(--ink2);max-width:52em;line-height:1.55}
+@media (max-width:599px){
+ .hero-art{display:grid;gap:var(--s4);margin-top:var(--s2)}
+ .ha-before{width:100%;transform:none}
+ .hero-art .w-hc{max-height:none}
+ .hero-art .w-hc .hc-body p{display:none}
+ .hero-art .w-hc .hc-body p:nth-child(5),.hero-art .w-hc .hc-body p:nth-child(6){display:block}
+ .ha-after{width:100%;margin:0;box-shadow:var(--lift)}
+ .ha-after img{aspect-ratio:8/4.2;object-fit:cover;object-position:top}
+ .hero-art figcaption{margin-top:0}
+}
+/* Contact, with a small portrait: the work stays the main picture. */
+.w-contact{display:grid;gap:var(--s5);align-items:start}
+.w-portrait{width:120px;height:auto;aspect-ratio:240/299;object-fit:cover;border-radius:8px;filter:saturate(.96)}
+@media (min-width:700px){.w-contact.has-portrait{grid-template-columns:160px minmax(0,1fr)}.w-portrait{width:160px}}
