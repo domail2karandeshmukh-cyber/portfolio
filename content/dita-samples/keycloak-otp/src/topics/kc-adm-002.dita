@@ -17,7 +17,7 @@
 </remedy>
 <remedy><title>The user lost the phone</title>
 <steps-informal>
-<p>The authenticator went with the phone, and Keycloak keeps no copy within the user’s reach. Delete the user’s OTP credential, and make them set up a new one: <xref href="kc-adm-001.dita">Reset a user’s one-time password in Keycloak</xref>.</p>
+<p>The authenticator went with the phone, and Keycloak keeps no copy within the user’s reach. Sign the user out, require a new authenticator, and delete the lost phone’s OTP credential: <xref href="kc-adm-001.dita">Reset a user’s OTP credential in Keycloak</xref>.</p>
 </steps-informal>
 </remedy>
 <remedy><title>Keycloak no longer asks for a code</title>

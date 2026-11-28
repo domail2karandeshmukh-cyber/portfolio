@@ -7,7 +7,7 @@
    "product": "Keycloak 26.8.2, open-source identity and access management",
    "field": "enterprise-it",
    "basis": "Real product, independent guides",
-   "about": "Three guides for realm administrators: reset a user's one-time password, troubleshoot sign-in codes, and choose an OTP policy. Every screen comes from a running Keycloak 26.8.2 server, and every behaviour the guides state was tested.",
+   "about": "Three guides for realm administrators: reset a user's OTP credential, troubleshoot sign-in codes, and choose an OTP policy. Every screen comes from a running Keycloak 26.8.2 server, and every behaviour the guides state was tested.",
    "revision": "Version 1.0, published 19 November 2026",
    "read": "/docs/keycloak/reset-otp",
    "pdf": "/studio/dita/keycloak-otp/keycloak-otp.pdf",

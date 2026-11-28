@@ -879,6 +879,15 @@ html.mnav-open{overflow:hidden}
 .vid-files{display:flex;flex-wrap:wrap;gap:16px}
 .vid-tr{max-width:72ch}
 .vid-tr summary{cursor:pointer;font-weight:600}
+.vid-gif{margin:var(--s4,1.5rem) 0 0;max-width:800px}
+.vid-gif img{display:block;width:100%;height:auto;border:1px solid #D0D4D9;border-radius:6px}
+.vid-gif summary{position:relative;cursor:pointer;list-style:none}
+.vid-gif summary::-webkit-details-marker{display:none}
+.vid-gif .gif-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#0B0B0C;color:#fff;font-weight:600;padding:.6em 1em;border-radius:999px}
+.vid-gif summary:focus-visible{outline:3px solid #1D4ED8;outline-offset:3px}
+.vid-gif details[open] summary img,.vid-gif details:not([open]) .gif-off,.vid-gif details[open] .gif-on{display:none}
+.vid-gif details[open] .gif-play{position:static;transform:none;display:inline-block;margin-bottom:.5rem}
+.vid-gif figcaption{margin-top:.5rem;max-width:72ch;font-size:.92rem}
 @media (max-width:880px){.ix-start,.ix-grid{grid-template-columns:minmax(0,1fr)}.ix-film{grid-template-columns:minmax(0,1fr)}.dl-table code{display:none}}
 
 /* Numbered figures in documents (lib/md.mjs) */

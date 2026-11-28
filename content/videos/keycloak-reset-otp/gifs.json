@@ -1,0 +1,10 @@
+[
+ {
+  "file": "delete-otp-credential.gif",
+  "title": "Technical GIF: delete the lost phone's OTP credential",
+  "about": "Steps 5 and 6 of the procedure as a 13-second loop: open the Otp row's menu, select Delete, and confirm in the Delete credentials? dialog. Cut from the film above.",
+  "alt": "The Credentials tab of alex.morgan in the Keycloak admin console. The Otp row's menu opens, Delete is selected, and the Delete credentials? dialog is confirmed; the Otp row disappears. Green marks number each action.",
+  "width": 800,
+  "height": 450
+ }
+]

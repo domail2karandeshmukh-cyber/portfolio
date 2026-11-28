@@ -1,0 +1,85 @@
+{
+ "note": "Three proposed CVs. None replaces /Karan-Deshmukh-CV.pdf until Karan approves. Several sample links point to pages that go live only with the release, so none of these files is ready to submit before then.",
+ "phone": "+33 7 45 36 53 69",
+ "photo": "content/cv/headshot.jpg",
+ "variants": {
+  "ats": {
+   "title": "CV (application)",
+   "footer": "Curriculum vitae",
+   "phone": true, "photo": false, "mark": false,
+   "headline": "Technical Writer: API documentation, docs-as-code, identity and security",
+   "keywords": "technical writer, API documentation, developer documentation, docs-as-code, Markdown, MDX, Docusaurus, Vale, Git, OpenAPI, REST, GraphQL, IAM, MFA, knowledge base",
+   "summary": "Technical writer with four years in dedicated documentation roles at MongoDB (contract) and Magna International, and earlier documentation work as a business analyst. Procedures, knowledge-base articles and troubleshooting guides for identity, access and security workflows, tested against the product before publication. Independent projects add API references, a GraphQL guide and a docs-as-code pipeline with Git, MDX, Docusaurus and Vale.",
+   "strengths": [
+    ["Procedures that hold up", "task-based steps, prerequisites, verification and recovery, tested against the product before publication"],
+    ["Identity and access", "authentication, MFA, access requests, provisioning and deprovisioning, written for administrators and end users"],
+    ["Review and lifecycle", "SME review, approval, controlled updates and archiving; translation-ready source for up to 29 languages at Magna"],
+    ["Visual explanation", "annotated screenshots, short GIFs, captioned screen recordings and diagrams"]
+   ]
+  },
+  "photo": {
+   "title": "CV (application, with photo)",
+   "footer": "Curriculum vitae",
+   "phone": true, "photo": true, "mark": true,
+   "headline": "Technical Writer: API documentation, docs-as-code, identity and security",
+   "keywords": "technical writer, API documentation, developer documentation, docs-as-code, Markdown, MDX, Docusaurus, Vale, Git, OpenAPI, REST, GraphQL, IAM, MFA, knowledge base",
+   "summary": "Technical writer with four years in dedicated documentation roles at MongoDB (contract) and Magna International, and earlier documentation work as a business analyst. Procedures, knowledge-base articles and troubleshooting guides for identity, access and security workflows, tested against the product before publication. Independent projects add API references, a GraphQL guide and a docs-as-code pipeline with Git, MDX, Docusaurus and Vale.",
+   "strengths": [
+    ["Procedures that hold up", "task-based steps, prerequisites, verification and recovery, tested against the product before publication"],
+    ["Identity and access", "authentication, MFA, access requests, provisioning and deprovisioning, written for administrators and end users"],
+    ["Review and lifecycle", "SME review, approval, controlled updates and archiving; translation-ready source for up to 29 languages at Magna"],
+    ["Visual explanation", "annotated screenshots, short GIFs, captioned screen recordings and diagrams"]
+   ]
+  },
+  "public": {
+   "title": "CV",
+   "footer": "Curriculum vitae  |  karandeshmukh.dev",
+   "phone": false, "photo": false, "mark": false,
+   "headline": "Technical Documentation Specialist: engineering, enterprise IT, security and software documentation",
+   "keywords": "technical writer, technical documentation, knowledge base, SOP, runbook, API documentation, docs-as-code, IAM, MFA, engineering documentation",
+   "summary": "Technical documentation specialist with four years in dedicated documentation roles at MongoDB (contract) and Magna International, and earlier documentation work as a business analyst. User guides, procedures, knowledge-base articles, runbooks and troubleshooting guides for engineering, enterprise IT and security audiences, tested before publication. Independent projects add API documentation and a docs-as-code pipeline.",
+   "strengths": [
+    ["Procedures that hold up", "task-based steps, prerequisites, verification and recovery, tested before publication"],
+    ["Engineering and IT documentation", "product manuals, quick starts, SOPs, runbooks and knowledge bases for global audiences"],
+    ["Review and lifecycle", "SME review, approval, controlled updates and archiving; translation-ready source for up to 29 languages at Magna"],
+    ["Visual explanation", "annotated screenshots, short GIFs, captioned screen recordings and diagrams"]
+   ]
+  }
+ },
+ "independentTools": ["Docs-as-code (independent projects)", "MDX, Docusaurus, Vale, OpenAPI, GraphQL"],
+ "education": {
+  "MSc in Cybersecurity and Data Science": "Coursework includes risk management, project management and applied AI; team projects include software defect prediction"
+ },
+ "samples": [
+  {
+   "label": "Case study: from a help-center article to docs-as-code",
+   "text": "one article audited, moved to MDX and Git, checked with Vale, published with Docusaurus and revised after testing",
+   "url": "https://karandeshmukh.dev/case-study/help-center-to-docs-as-code"
+  },
+  {
+   "label": "How-to: reset a user's OTP credential in Keycloak",
+   "text": "an administrator procedure with annotated screenshots and a REST version, tested on Keycloak 26.8.2",
+   "url": "https://karandeshmukh.dev/docs/keycloak/reset-otp"
+  },
+  {
+   "label": "API reference: KC1 defect prediction",
+   "text": "a REST API documented from its OpenAPI description and recorded requests",
+   "url": "https://karandeshmukh.dev/docs/kc1/api-reference"
+  },
+  {
+   "label": "API guide: a GraphQL library API",
+   "text": "queries, pagination, a mutation and errors; every example runs on each build",
+   "url": "https://karandeshmukh.dev/work/graphql-api"
+  },
+  {
+   "label": "Instructional video",
+   "text": "the Keycloak OTP reset as a captioned screen recording with step bands",
+   "url": "https://karandeshmukh.dev/videos#keycloak-reset-otp"
+  },
+  {
+   "label": "Technical GIF",
+   "text": "deleting the OTP credential and confirming, as a 13-second loop",
+   "url": "https://karandeshmukh.dev/videos/keycloak-reset-otp/delete-otp-credential.gif"
+  }
+ ]
+}

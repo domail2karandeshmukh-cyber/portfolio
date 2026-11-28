@@ -1,0 +1,189 @@
+---
+title: Reset a user's OTP credential
+description: Delete a lost authenticator's OTP credential in Keycloak, and make the user set up a new one at their next sign-in.
+doc_type: How-to
+audience: Keycloak administrators
+product_version: Keycloak 26.8.2
+owner: Karan Deshmukh
+last_review: 2026-11-28
+---
+
+import PageFacts from '@site/src/components/PageFacts';
+import Screenshot from '@site/src/components/Screenshot';
+import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
+
+# Reset a user's OTP credential
+
+<PageFacts />
+
+When a user loses or replaces the phone that holds their authenticator app, sign the user out, delete the phone's one-time password (OTP) credential, and make the user set up a new one at their next sign-in.
+
+This procedure resets the OTP credential only.
+It doesn't remove passkeys, security keys or other second factors that the user may also have.
+
+## Before you start {#before-you-start}
+
+<ConfirmIdentity />
+
+- Sign in to the admin console with an account that can manage the users of the user's realm.
+- Have the user's username or email address.
+- Make sure that the user has the new phone, with an authenticator app such as FreeOTP, Google Authenticator, or Microsoft Authenticator.
+- Check that the realm uses Keycloak's default browser flow, in which the OTP step is conditional.
+  With a custom flow, Keycloak may ask for a code at a different point, or not at all.
+
+## Steps {#steps}
+
+:::important Do the steps in this order
+1. Sign the user out first: an open session reaches **Mobile Authenticator Setup** without asking for the password.
+2. Add the required action before you delete the credential: in the other order, the user can sign in with the password alone in between.
+
+Both behaviors were tested on Keycloak 26.8.2.
+:::
+
+1. In the admin console, check that the user's realm is the current realm: its name is at the top of the menu.
+   Select **Users**, search for the user, and then select their username.
+
+   <Screenshot src="/img/keycloak/01-find-user.png" alt="The Users page of the admin console. The search box is outlined in green, and the username alex.morgan is outlined and marked 1." caption="Step 1. Search for the user, and then select their username." />
+
+2. On the **Sessions** tab, select **Logout all sessions**, and then select **Confirm**.
+
+   The dialog says that it signs out "active subjects in this realm."
+   On a user's **Sessions** tab, it signs out that user only. In a test with a second user, the second user's session stayed open.
+
+   <Screenshot src="/img/keycloak/00-sessions.png" alt="The Sessions tab of alex.morgan, marked 1, with one open session in the list. The Logout all sessions button is outlined and marked 2." caption="Step 2. Sign the user out of every open session." />
+
+3. On the **Details** tab, in **Required user actions**, select **Configure OTP**, and then select **Save**.
+
+   <Screenshot src="/img/keycloak/07-required-action.png" alt="The Details tab of alex.morgan. Configure OTP is selected in Required user actions, marked 1, and the Save button is marked 2." caption="Step 3. Configure OTP in the user's required actions, before anything is deleted." />
+
+4. Select the **Credentials** tab, and find the **Otp** row of the lost phone: its **User label** names the device, such as *Alex's phone*.
+   If the user has more than one **Otp** row, delete only the row of the lost phone.
+
+   <Screenshot src="/img/keycloak/02-credentials.png" alt="The Credentials tab of alex.morgan, marked 1, with two rows, Password and Otp. The Otp row, labelled Alex's phone, is outlined in green and marked 2." caption="Step 4. The Otp row of the lost phone. Leave the Password row." />
+
+5. In that **Otp** row, open the menu at the end of the row, and then select **Delete**.
+
+   <Screenshot src="/img/keycloak/03-delete-menu.png" alt="The menu of the Otp row is open. Its Delete item is outlined in green and marked 1." caption="Step 5. Delete, in the menu of the Otp row." />
+
+6. In the **Delete credentials?** dialog, select **Delete**.
+   Check that the **Otp** row of the lost phone no longer appears on the **Credentials** tab.
+
+   <Screenshot src="/img/keycloak/04-confirm-delete.png" alt="The Delete credentials? dialog over the Credentials tab. Its red Delete button is outlined in green and marked 1." caption="Step 6. Confirm the deletion. Cancel leaves the credential in place." />
+
+7. Ask the user to sign in.
+   After the password, Keycloak shows **Mobile Authenticator Setup**.
+   The user scans the QR code with the authenticator app on the new phone, enters the code that the app shows, names the device, and then selects **Submit**.
+
+   <Screenshot src="/img/keycloak/09b-setup-code.png" alt="The Mobile Authenticator Setup page that the user sees. The one-time code field, the device name field and the Submit button are marked 1 to 3. The QR code is covered." caption="Step 7. What the user sees. The QR code is covered here because it contains the secret." />
+
+:::note If the password may also be known to someone else
+If the phone was stolen, or the password may be known to someone else, also select **Update Password** in step 3.
+The user then sets a new password before setting up the authenticator.
+:::
+
+## Check that it worked {#check}
+
+- On the **Sessions** tab, no session is listed.
+- On the **Credentials** tab, a new **Otp** row shows the name that the user gave the new device, with today's date.
+
+<Screenshot src="/img/keycloak/11-new-credential.png" alt="The Credentials tab with two rows, Password and Otp. The new Otp row, labelled Alex's new phone, is outlined in green and marked 1." caption="The new authenticator, set up by the user." />
+
+When the realm saves admin events, **Events** > **Admin events** lists the deletion as an `ACTION` on the user's credential, and the new required action as an `UPDATE` of the user.
+
+<Screenshot src="/img/keycloak/12-admin-events.png" alt="The Admin events tab. The row of the ACTION on the user's credential is outlined in green and marked 1." caption="The audit record of the deletion." />
+
+:::verified Tested on Keycloak 26.8.2
+On November 28, 2026, on a local test realm:
+
+- The REST commands below ran as written on a user with an authenticator and an open session. Afterward, the user had no session, and the next sign-in went from the password to **Mobile Authenticator Setup**.
+- Signing in between the steps showed why the order matters: an open session went to **Mobile Authenticator Setup** without the password, and with the credential deleted first, the password alone signed the user in.
+- With two **Otp** rows, deleting one left the other working: Keycloak asked for a code and let the user choose the device.
+
+The console screenshots date from November 19, 2026, except the **Sessions** tab, from November 28.
+:::
+
+## Reset many users with the admin REST API {#rest-api}
+
+After a change to the [OTP policy](../reference/otp-policy.mdx#before-change), every user's authenticator needs a reset, and the admin console does one user at a time.
+The admin REST API does the same things in the same order: it signs the user out, adds **Configure OTP** to the user's required actions, and then deletes every OTP credential, because after a policy change every device has to be set up again.
+
+<ConfirmIdentity />
+
+Set these variables first.
+Read the password from a password manager or a prompt, so that it stays out of your shell history.
+
+```bash title="Variables"
+KC_URL=https://keycloak.example.com   # your Keycloak server
+REALM=portfolio-demo                  # the user's realm
+KC_ADMIN=sam.rivera                   # an administrator of the master realm
+USERNAME=alex.morgan                  # the user to reset
+read -rs -p "Password for $KC_ADMIN: " KC_ADMIN_PASSWORD; echo
+```
+
+1. Get an access token for the admin REST API, and find the user's ID.
+
+   ```bash
+   TOKEN=$(curl -s "$KC_URL/realms/master/protocol/openid-connect/token" \
+     -d grant_type=password -d client_id=admin-cli \
+     --data-urlencode "username=$KC_ADMIN" --data-urlencode "password=$KC_ADMIN_PASSWORD" | jq -r .access_token)
+   USER_ID=$(curl -s -H "Authorization: Bearer $TOKEN" \
+     "$KC_URL/admin/realms/$REALM/users?username=$USERNAME&exact=true" | jq -r '.[0].id')
+   ```
+
+2. Sign the user out of every session.
+   Keycloak answers `204`.
+
+   ```bash
+   curl -s -o /dev/null -w '%{http_code}\n' -X POST -H "Authorization: Bearer $TOKEN" \
+     "$KC_URL/admin/realms/$REALM/users/$USER_ID/logout"
+   ```
+
+3. Add `CONFIGURE_TOTP` to the user's required actions, before deleting anything.
+
+   :::warning Keep the actions already there
+   A `PUT` replaces the user's whole list of required actions.
+   Sending `{"requiredActions": ["CONFIGURE_TOTP"]}` alone removes any action the user still has to do, such as updating their profile.
+   Read the list first and add to it, as this command does.
+   :::
+
+   ```bash
+   ACTIONS=$(curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID" \
+     | jq -c '.requiredActions + ["CONFIGURE_TOTP"] | unique')
+   curl -s -o /dev/null -w '%{http_code}\n' -X PUT -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+     -d "{\"requiredActions\": $ACTIONS}" "$KC_URL/admin/realms/$REALM/users/$USER_ID"
+   ```
+
+   Keycloak answers `204`.
+
+4. Delete each of the user's OTP credentials.
+   Keycloak answers each deletion with `204`.
+
+   ```bash
+   for ID in $(curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" \
+     | jq -r '.[] | select(.type == "otp") | .id'); do
+     curl -s -o /dev/null -w '%{http_code}\n' -X DELETE -H "Authorization: Bearer $TOKEN" \
+       "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials/$ID"
+   done
+   ```
+
+5. Check the result.
+   No session is left, no credential of type `otp` is left, and the required actions include `CONFIGURE_TOTP`.
+
+   ```bash
+   curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID/sessions" | jq length
+   curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -c '[.[] | .type]'
+   curl -s -H "Authorization: Bearer $TOKEN" "$KC_URL/admin/realms/$REALM/users/$USER_ID" | jq -c '.requiredActions'
+   ```
+
+   ```text title="Output"
+   0
+   ["password"]
+   ["CONFIGURE_TOTP"]
+   ```
+
+At their next sign-in, Keycloak runs the user's required actions one after another, and asks them to set up an authenticator before they get in.
+
+## Next steps {#next-steps}
+
+- If the user sees *Invalid authenticator code.* during the setup, see [When a user can't sign in with a one-time password](../troubleshooting/otp-sign-in.mdx#code-refused).
+- To see what the realm asks of an authenticator, see [OTP policy settings](../reference/otp-policy.mdx).

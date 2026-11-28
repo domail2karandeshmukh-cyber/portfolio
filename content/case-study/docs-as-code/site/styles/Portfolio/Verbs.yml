@@ -1,0 +1,10 @@
+# Audit finding A11: login and setup are nouns. The verbs are sign in and set up.
+extends: substitution
+message: "Use '%s' instead of '%s'."
+level: error
+ignorecase: true
+swap:
+  log in(?:to)?: sign in
+  login to: sign in to
+  setup (?:a|an|the|2FA|MFA|OTP)\b: set up
+  can't login: can't sign in

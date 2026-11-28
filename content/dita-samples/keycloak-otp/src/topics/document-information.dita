@@ -6,12 +6,12 @@
 <refbody>
 <simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4* 1.6*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
-<strow><stentry>Reset a user’s one-time password in Keycloak</stentry><stentry>KC-ADM-001</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
+<strow><stentry>Reset a user’s OTP credential in Keycloak</stentry><stentry>KC-ADM-001</stentry><stentry>1.2</stentry><stentry>Published</stentry><stentry>2026-11-28</stentry></strow>
 <strow><stentry>When a Keycloak user can’t sign in with a one-time password</stentry><stentry>KC-ADM-002</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
 <strow><stentry>Keycloak OTP policy: the settings and their defaults</stentry><stentry>KC-ADM-003</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
 </simpletable>
 <section><title>Publication</title>
-<p>Publication KEYCLOAK-OTP, 3 documents. Written by Karan Deshmukh. Owner: Karan Deshmukh. Published on 2026-11-20 with DITA Open Toolkit from DITA 1.3 source.</p>
+<p>Publication KEYCLOAK-OTP, 3 documents. Written by Karan Deshmukh. Owner: Karan Deshmukh. Published on 2026-11-28 with DITA Open Toolkit from DITA 1.3 source.</p>
 </section>
 </refbody>
 </reference>

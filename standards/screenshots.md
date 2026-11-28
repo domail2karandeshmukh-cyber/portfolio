@@ -42,22 +42,23 @@ Red, amber, and blue are kept for meaning: red for an error the reader must see,
 
 ### Rectangles
 
-- Stroke: 2 px of green with the 1 px keyline outside it, 3 px in all.
-- Corners: 3 px radius.
-- Space between the control and the inside of the stroke: 4 px on every side. The stroke never touches or covers the control's text.
+- Stroke: 3 px of green with the 1 px keyline outside it, 4 px in all.
+- Corners: 4 px radius.
+- Space between the control and the inside of the stroke: 6 px on every side. Where a label sits right above a field, reduce the space above and below, down to 1 px, so the stroke never touches or covers the label's text.
 - One rectangle marks one control. Don't include a neighbor to make the rectangle tidier.
 
 ### Arrows
 
-- Shaft: 3 px in all, green with its keyline.
-- Head: a filled triangle 11 px long and 11 px wide.
+- Shaft: 4 px in all, green with its keyline.
+- Head: a filled triangle 13 px long and 13 px wide.
 - The point stops 4 px short of the rectangle it points at.
 - Use the shortest arrow that leaves the reader in no doubt: 40 to 90 px. Draw it straight across or straight down; use a diagonal only when a straight arrow would cross another control.
 - Don't use an arrow when a rectangle alone is clear.
 
 ### Numbered callouts
 
-- A filled green circle 24 px across with a 1 px keyline, and the number in bold at 13 px, centered.
+- A filled green circle 30 px across with a 1 px keyline, and the number in bold at 15 px, centered.
+- Leave 6 px between the rectangle's keyline and the circle; 3 px where a neighbouring control leaves no more room.
 - Number in the order of the steps, and use the same number in the step's text: "2. Select **System Log**." A screenshot with one action needs no number.
 - Put the callout outside the control, at the start of a short arrow or beside the rectangle's corner, never over interface text.
 
@@ -76,7 +77,7 @@ Cover personal details with a solid, fully opaque box, never with blur or pixela
 A rectangle is placed from the control's own position, not by eye. For a screenshot of a web page, the capture script reads the control's bounding box from the page, then adds the padding and the stroke.
 
 ```text
-inside edge   = control box + 4 px on every side
+inside edge   = control box + 6 px on every side
 stroke center = inside edge + 1.5 px
 image pixels  = page pixels × device pixel ratio, minus the crop offset
 ```
@@ -101,8 +102,12 @@ The same numbers are kept with the image as data, so a resize or a new crop move
 
 ## Checks
 
-- Every rectangle encloses its control with 4 px to spare, and touches no other control: measured against the page for browser captures.
+- Every rectangle encloses its control with 6 px to spare (or less above and below a labelled field), and touches no other control: measured against the page for browser captures.
 - Every arrow points at a marked control and is no longer than 90 px.
 - Callout numbers run in step order and match the text.
 - No personal detail is visible; nothing is blurred.
 - The image has alternative text, and a caption in a long document.
+
+## Revision, 28 November 2026
+
+Version 1 used a 2 px stroke and 24 px callouts, sized for a screenshot seen at full size. In the published guides a 1280 px screenshot is shown at about 700 px, so a 2 px stroke appeared as about 1 px and a callout as 13 px: easy to miss. Version 2 uses a 3 px stroke, 6 px of space and 30 px callouts, which appear as about 2 px and 16 px. That is still lighter than the original guides' 4 to 6 px strokes and 36 px callouts, which are heavier than the controls they mark. The films keep their own sizes: they are recorded at a device scale of 1.5 and seen full width.

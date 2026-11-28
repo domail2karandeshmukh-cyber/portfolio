@@ -1,0 +1,10 @@
+# Audit finding A3: one name for one thing. Keycloak's console calls the credential OTP.
+extends: substitution
+message: "Use '%s' instead of '%s': it's the term Keycloak's console uses."
+level: error
+ignorecase: false
+swap:
+  2FA: one-time password (OTP)
+  two-factor code: one-time password (OTP)
+  MFA code: one-time password (OTP)
+  click on: select

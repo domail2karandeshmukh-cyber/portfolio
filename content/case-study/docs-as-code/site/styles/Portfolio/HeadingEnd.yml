@@ -1,0 +1,8 @@
+# Editorial standard, Capitalization by publication type: a heading doesn't end with a period or a colon.
+extends: existence
+message: "End the heading '%s' without a period or a colon."
+level: error
+scope: heading
+nonword: true
+tokens:
+  - '[.:]$'

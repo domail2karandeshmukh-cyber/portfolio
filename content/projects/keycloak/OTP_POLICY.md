@@ -43,4 +43,4 @@ Each setting is a field of the realm representation, at `GET /admin/realms/{real
 
 ## Before you change a setting
 
-A change applies only to authenticators set up after it. Each OTP credential keeps the type, the digits, the period, and the algorithm it was set up with. When I changed a realm from 6 to 8 digits, a phone set up before the change still signed in with its 6-digit codes. To move every user to the new policy, reset each user's authenticator: [Reset a user's one-time password in Keycloak](/docs/keycloak/reset-otp).
+A change applies only to authenticators set up after it. Each OTP credential keeps the type, the digits, the period, and the algorithm it was set up with. When I changed a realm from 6 to 8 digits, a phone set up before the change still signed in with its 6-digit codes. To move every user to the new policy, reset each user's authenticator: [Reset a user's OTP credential in Keycloak](/docs/keycloak/reset-otp).

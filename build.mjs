@@ -129,6 +129,9 @@ if (existsSync("content/videos")) for (const id of (await fs.readdir("content/vi
   if (!existsSync(`${from}/video.json`)) continue;
   await fs.mkdir(to, { recursive: true });
   for (const ext of ["mp4", "vtt", "srt"]) if (existsSync(`${from}/${id}.${ext}`)) await fs.copyFile(`${from}/${id}.${ext}`, `${to}/${id}.${ext}`);
+  // Short GIFs cut from the film, for places where a video can't play (a CV, an email, a help-center article).
+  // A GIF, and the still of its first frame that the page shows until a visitor plays it (WCAG 2.2.2).
+  for (const f of await fs.readdir(from)) if (f.endsWith(".gif") || (f.endsWith(".webp") && existsSync(`${from}/${f.replace(/\.webp$/, ".gif")}`))) await fs.copyFile(`${from}/${f}`, `${to}/${f}`);
   await sharp(`${from}/${id}.jpg`).resize({ width: 960, height: 540, fit: "contain", background: "#0B0B0C" }).webp({ quality: 80 }).toFile(`${to}/${id}.webp`);
 }
 const reel = C.films?.items ?? [];
@@ -411,6 +414,58 @@ await fs.writeFile(`${OUT}/case-study/reset-mfa.md`, cs.source);
   for (const f of ["kc1-swagger-walkthrough.mp4", "kc1-swagger-walkthrough.vtt", "kc1-swagger-walkthrough.jpg"]) await fs.copyFile(`content/case-study/lifecycle/${f}`, `${OUT}/case-study/lifecycle/${f}`);
 }
 
+// The software and SaaS documentation work (lib/work.mjs): the docs-as-code case study and its published Docusaurus
+// site, the application page for the Technical Writer role at Swan, the same work for any software team, and three
+// short documents beside them. The GraphQL guide's examples are sent to the API again first: the build stops if one
+// answer differs from the one the guide shows.
+{
+  const { evidence, caseStudyBody, swanBody, evergreenBody, articleBody, graphqlGuide, CS, DAC, SOURCE_BRANCH } = await import("./lib/work.mjs");
+  const { runExamples } = await import("./scripts/graphql-examples.mjs");
+  const { render } = await import("./lib/md.mjs");
+  const gq = await runExamples();
+  if (gq.failed.length) throw new Error(`The GraphQL guide's examples no longer match the API: ${gq.failed.join(", ")}. Run node scripts/graphql-examples.mjs --record after checking the change.`);
+  const W = JSON.parse(await fs.readFile("content/work/work.json", "utf8")), E = evidence();
+  // A production build must not link to the working branch: once it is merged and deleted, those links die.
+  if (process.env.VERCEL_ENV === "production") {
+    const html = await fs.readFile(`${DAC}/published/how-to/reset-otp.html`, "utf8");
+    if (SOURCE_BRANCH !== "main" || html.includes("/blob/for-swan/"))
+      throw new Error("Source links still point to the for-swan branch: build with SOURCE_BRANCH=main, and rebuild the Docusaurus site with DOCS_BRANCH=main.");
+  }
+  await fs.cp(`${DAC}/published`, `${OUT}${CS}/site`, { recursive: true });
+  await fs.cp("content/work/img", `${OUT}/work/img`, { recursive: true });
+  const noindex = '\n<meta name="robots" content="noindex">';
+  await library.extra({ path: CS, title: "Case study: from a help-center article to docs-as-code",
+    description: "A help-center article audited, split by purpose, migrated to MDX, versioned in Git, checked with Vale, published with Docusaurus, tested for translation and revised. Every stage is a real commit.",
+    trail: [["Portfolio", "/"], ["Case study"]], body: caseStudyBody(E, S), kind: "Case study", shelf: "Case studies",
+    text: [{ id: "dac", title: "From a help-center article to docs-as-code", text: "Case study: a Zendesk-style help-center article about resetting a Keycloak user's one-time password, audited, migrated to MDX and Docusaurus, linted with Vale, pseudo-localized and revised with a tested REST API method." }] });
+  await library.extra({ path: "/for/swan", title: "Technical documentation for the Technical Writer role at Swan",
+    description: `${S.name}, technical writer: help-center migration, docs-as-code, editorial review, localization. Selected work for the Technical Writer opportunity at Swan.`,
+    trail: [["Portfolio", "/"], ["Technical Writer application"]], body: swanBody(W, E, S), robots: noindex });
+  await library.extra({ path: "/work/software-saas-fintech", title: "Software, SaaS and fintech documentation",
+    description: "Help centers, docs-as-code, API references, release communication and translation-ready source: technical documentation for software product teams.",
+    trail: [["Portfolio", "/"], ["Software and SaaS documentation"]], body: evergreenBody(W, E, S), kind: "Overview", shelf: "Case studies",
+    text: [{ id: "saas", title: "Software, SaaS and fintech documentation", text: "Help centers and knowledge bases, content migration, docs-as-code, API documentation, identity and access, release communication, localization and technical training." }] });
+  const md = (f) => render(f, { link: (h) => h }).html;
+  const book = gq.book;
+  const docs = [
+    { path: "/work/graphql-api", kicker: "API guide · independent demonstration", title: "The library API: a GraphQL guide", file: "content/work/graphql/GUIDE.md", transform: (t) => graphqlGuide(t, book),
+      lead: "Queries, variables, pagination, a mutation and two kinds of errors, with every example tested against the API on each build.",
+      end: `The API, its schema and its examples are in <a href="https://github.com/domail2karandeshmukh-cyber/portfolio/tree/${SOURCE_BRANCH}/content/work/graphql">content/work/graphql</a>. It serves a snapshot of this site's library and isn't connected to any company's service.`,
+      description: "A guide to a small GraphQL API: authentication, the schema, variables, cursor pagination, a mutation, GraphQL errors and typed problems, and troubleshooting. Every example is tested on each build." },
+    { path: "/work/ux-writing", kicker: "UX writing · independent proposal", title: "Six messages for a security task, rewritten", file: "content/work/UX_WRITING.md",
+      lead: "Keycloak's confirmation, notifications, empty state, setup form and error for resetting a lost authenticator, as recorded from version 26.8.2, with a rewrite and the reason for each.",
+      end: `Part of the <a href="${CS}">docs-as-code case study</a>, which documents the same task.`, description: "UX writing: Keycloak 26.8.2's messages for deleting a lost authenticator and setting up a new one, rewritten with the reasons, for accessibility and translation." },
+    { path: "/work/partner-notice", kicker: "Change communication · real change", title: "A change notice for developers", file: "content/work/PARTNER_NOTICE.md",
+      lead: "Version 1.0.1 of the KC1 prediction API answers a value that isn't finite with a 422 instead of a 500. The notice that tells its developers.",
+      end: `The change and how its documentation followed: <a href="/documentation-lifecycle">the API's documentation lifecycle</a>.`, description: "A developer change notice for a real API change: summary, who is affected, the actions, the before and after, the updated documentation and where to ask." },
+  ];
+  for (const d of docs) {
+    const text = (d.transform || ((t) => t))(await fs.readFile(d.file, "utf8"));
+    await library.extra({ path: d.path, title: d.title, description: d.description, trail: [["Portfolio", "/"], ["Software and SaaS documentation", "/work/software-saas-fintech"], [d.title]],
+      body: articleBody({ kicker: d.kicker, title: d.title, lead: d.lead, html: md(text), end: d.end }), kind: "Sample", shelf: "Case studies", text: [{ id: d.path, title: d.title, text: d.lead }] });
+  }
+}
+
 // A page for choosing April's voice by ear. It is not linked from the site and asks not to be indexed.
 await fs.mkdir(`${OUT}/voices`, { recursive: true });
 await fs.copyFile("src/voices.html", `${OUT}/voices/index.html`);
@@ -483,14 +538,14 @@ for (const loc of locales) {
 }
 
 // doc.js and style.js are the document model and the style checker. The build uses them, and so does the workbench in a browser.
-for (const f of ["site.css", "app.js", "nav.js", "hubs.js", "fields.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
+for (const f of ["site.css", "app.js", "nav.js", "hubs.js", "fields.js", "favicon.svg", "doc.js", "style.js", "workbench.css", "workbench.js", "work.css", "work.js"]) await fs.copyFile(`src/${f}`, `${OUT}/${f}`);
 // The rewrite desk's sample messages, each with the draft recorded for it, so a sample needs no model.
 const Desk = createRequire(import.meta.url)("./api/_desk.js");
 await fs.writeFile(`${OUT}/desk.json`, JSON.stringify({ messages: Desk.MESSAGES.map((m) => ({ id: m.id, text: m.text, draft: Desk.recorded(m) || undefined })) }));
 for (const m of Desk.MESSAGES) console.log(`desk: sample "${m.id}" ${m.record ? (Desk.recorded(m) ? `has a draft on file (grade ${Desk.grade(Desk.recorded(m))})` : "HAS A RECORD THAT NO LONGER MAKES A DRAFT") : "has no draft on file, so it goes to the model"}`);
 await fs.writeFile(`${OUT}/robots.txt`, `User-agent: *\nAllow: /\nSitemap: ${S.url}/sitemap.xml\n`);
 const studio = await buildStudio({ S, C, OUT, pmenu: common.pmenu, nav: navEn, templates: starts });
-const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "design", "benchmark"].map((s) => `/standards/${s}`)];
+const urls = [...locales.map((l) => l.path), "/recruiters", "/contact", "/message-to-document", "/documentation-lifecycle", "/case-study/help-center-to-docs-as-code", "/work/software-saas-fintech", "/work/graphql-api", "/work/ux-writing", "/work/partner-notice", ...library.urls, "/style", "/workbench", ...studio.urls, "/industries", "/downloads", "/videos", ...["software", "api-documentation", "enterprise-it", "cybersecurity", "ai-data-science", "aerospace", "industrial-engineering"].map((i) => `/industries/${i}`), "/standards", ...["editorial", "screenshots", "illustration", "publishing", "video", "design", "benchmark"].map((s) => `/standards/${s}`)];
 await fs.writeFile(
   `${OUT}/sitemap.xml`,
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${S.url}${u}</loc></url>`).join("")}</urlset>\n`

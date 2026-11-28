@@ -1,0 +1,5 @@
+{
+  "theme.NotFound.title": { "message": "Page not found" },
+  "theme.NotFound.p1": { "message": "This page doesn't exist." },
+  "theme.NotFound.p2": { "message": "Use the menu to go back to the docs, or report a broken link through the source on GitHub." }
+}

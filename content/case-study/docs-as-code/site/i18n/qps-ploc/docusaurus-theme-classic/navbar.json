@@ -1,0 +1,18 @@
+{
+  "title": {
+    "message": "[Ķéýçļöàķ àðɱîñîšţŕàţîöñ ñöţéš ·· ·· ··]",
+    "description": "The title in the navbar"
+  },
+  "item.label.Docs": {
+    "message": "[Ðöçš ·]",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.The case study": {
+    "message": "[Ţĥé çàšé šţûðý ·· ]",
+    "description": "Navbar item with label The case study"
+  },
+  "item.label.Source": {
+    "message": "[Šöûŕçé ·]",
+    "description": "Navbar item with label Source"
+  }
+}

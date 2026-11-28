@@ -1,0 +1,32 @@
+---
+title: Keycloak administration notes
+description: How to reset a user's OTP credential in Keycloak, what the OTP policy controls, and what to do when a code fails.
+slug: /
+doc_type: Overview
+audience: Keycloak administrators
+product_version: Keycloak 26.8.2
+owner: Karan Deshmukh
+last_review: 2026-11-27
+---
+
+import PageFacts from '@site/src/components/PageFacts';
+
+# Keycloak administration notes
+
+<PageFacts />
+
+These pages explain one administrator task in Keycloak from every side: resetting a user's one-time password (OTP) when they lose their phone.
+They come from a single help-center article, split by what the reader needs.
+
+| If you need to | Read |
+|---|---|
+| Understand what an OTP credential and a required action are | [One-time passwords in Keycloak](./concepts/one-time-passwords.mdx) |
+| Reset a user's OTP after they lose their phone | [Reset a user's OTP credential](./how-to/reset-otp.mdx) |
+| Check the realm's code length, period, and other settings | [OTP policy settings](./reference/otp-policy.mdx) |
+| Help a user whose code doesn't work | [When a user can't sign in with a one-time password](./troubleshooting/otp-sign-in.mdx) |
+
+:::note Independent documentation
+Karan Deshmukh wrote these pages as a portfolio demonstration and checked every step on a local Keycloak 26.8.2 server.
+The server held a test realm and test users only.
+They aren't official Keycloak documentation.
+:::

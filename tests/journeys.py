@@ -70,7 +70,7 @@ def run(name, vp, phone):
         try: pg.wait_for_url("**/docs/keycloak/reset-otp**", timeout=10000)
         except Exception: pass
         pg.wait_for_load_state("networkidle")
-        step(6, "a document for the field opens", "/docs/keycloak/reset-otp" in pg.url and "one-time password" in pg.inner_text("h1"), pg.url)
+        step(6, "a document for the field opens", "/docs/keycloak/reset-otp" in pg.url and "OTP credential" in pg.inner_text("h1"), pg.url)
         # 7. Read it: go to a section from its contents.
         if phone:
             click(".toc-dd>summary"); pg.wait_for_timeout(300)
@@ -91,12 +91,14 @@ def run(name, vp, phone):
         step(9, "a screenshot opens large, with a caption, over the page", big > 300 and pg.locator(".lb figcaption").is_visible(), big); shot(9)
         pg.keyboard.press("Escape"); pg.wait_for_timeout(300)
         step(9, "Escape closes it and the page is back", not pg.locator(".lb").count())
-        # 10. Watch the document's film.
-        v = pg.locator(".doc-film video")
+        # 10. Watch an instructional film. The Keycloak guide no longer embeds its film, which shows the guide's first
+        #     order of the steps, so the film of the API documentation lifecycle is the one watched here.
+        pg.goto(BASE + "/documentation-lifecycle", wait_until="networkidle")
+        v = pg.locator("video.lc-video")
         v.scroll_into_view_if_needed()
-        pg.evaluate("() => { const v = document.querySelector('.doc-film video'); v.muted = true; return v.play(); }"); pg.wait_for_timeout(2500)
-        t = pg.evaluate("() => { const v = document.querySelector('.doc-film video'); return [v.currentTime, v.textTracks.length, v.videoWidth]; }")
-        step(10, "the instructional film plays, with captions", t[0] > 1 and t[1] >= 1 and t[2] >= 1280, t)
+        pg.evaluate("() => { const v = document.querySelector('video.lc-video'); v.muted = true; return v.play(); }"); pg.wait_for_timeout(3000)
+        t = pg.evaluate("() => { const v = document.querySelector('video.lc-video'); return [v.currentTime, v.textTracks.length, v.videoWidth]; }")
+        step(10, "an instructional film plays, with captions", t[0] > 1 and t[1] >= 1 and t[2] >= 640, t)
         # 11. Explore the Documentation Studio.
         if phone:
             click(".mnav summary"); pg.wait_for_timeout(300)

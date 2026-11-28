@@ -369,6 +369,8 @@
   "Library": "Bibliothek",
   "Maintenance, inspection, calibration and change": "Wartung, Inspektion, Kalibrierung und Änderungen",
   "Manuals, maintenance, change control": "Handbücher, Wartung, Änderungsmanagement",
+  "Software and SaaS documentation": "Software- und SaaS-Dokumentation",
+  "Help centers, docs-as-code, APIs": "Hilfecenter, Docs-as-Code, APIs",
   "Maps, keys, filters, DITA-OT": "Maps, Keys, Filter, DITA-OT",
   "Menu": "Menü",
   "Model and dataset cards, evaluation, reproducibility": "Model Cards und Dataset Cards, Evaluierung, Reproduzierbarkeit",

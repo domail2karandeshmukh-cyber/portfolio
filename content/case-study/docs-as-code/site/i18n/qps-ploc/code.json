@@ -1,0 +1,364 @@
+{
+  "theme.ErrorPageContent.title": {
+    "message": "[Ţĥîš þàĝé çŕàšĥéð. ·· ··]",
+    "description": "The title of the fallback page when the page crashed"
+  },
+  "theme.BackToTopButton.buttonAriaLabel": {
+    "message": "[Šçŕöļļ ƀàçķ ţö ţöþ ·· ·]",
+    "description": "The ARIA label for the back to top button"
+  },
+  "theme.blog.archive.title": {
+    "message": "[Åŕçĥîṽé ·]",
+    "description": "The page & hero title of the blog archive page"
+  },
+  "theme.blog.archive.description": {
+    "message": "[Åŕçĥîṽé ·]",
+    "description": "The page & hero description of the blog archive page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "[Ɓļöĝ ļîšţ þàĝé ñàṽîĝàţîöñ ·· ·· ·]",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "[Ñéŵéŕ éñţŕîéš ·· ]",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "[Öļðéŕ éñţŕîéš ·· ]",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "[Ɓļöĝ þöšţ þàĝé ñàṽîĝàţîöñ ·· ·· ·]",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "[Ñéŵéŕ þöšţ ··]",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "[Öļðéŕ þöšţ ··]",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "[Vîéŵ àļļ ţàĝš ·· ]",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.colorToggle.ariaLabel.mode.system": {
+    "message": "[šýšţéɱ ɱöðé ·· ]",
+    "description": "The name for the system color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.light": {
+    "message": "[ļîĝĥţ ɱöðé ··]",
+    "description": "The name for the light color mode"
+  },
+  "theme.colorToggle.ariaLabel.mode.dark": {
+    "message": "[ðàŕķ ɱöðé ··]",
+    "description": "The name for the dark color mode"
+  },
+  "theme.colorToggle.ariaLabel": {
+    "message": "[Šŵîţçĥ ƀéţŵééñ ðàŕķ àñð ļîĝĥţ ɱöðé (çûŕŕéñţļý  ·· ·· ·· ·· ·]{mode})",
+    "description": "The ARIA label for the color mode toggle"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "[Ɓŕéàðçŕûɱƀš ·· ]",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "[Ðöçš þàĝéš ··]",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "[Ƥŕéṽîöûš ··]",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.paginator.next": {
+    "message": "[Ñéẋţ ·]",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.tagDocListPageTitle.nDocsTagged": {
+    "message": "[Öñé ðöç ţàĝĝéð ·· ]|{count}[ ðöçš ţàĝĝéð ·· ]",
+    "description": "Pluralized label for \"{count} docs tagged\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.docs.tagDocListPageTitle": {
+    "message": "{nDocsTagged}[ ŵîţĥ \" ·]{tagName}\"",
+    "description": "The title of the page for a docs tag"
+  },
+  "theme.docs.versionBadge.label": {
+    "message": "[Véŕšîöñ:  ··]{versionLabel}"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "[Ţĥîš îš ûñŕéļéàšéð ðöçûɱéñţàţîöñ ƒöŕ  ·· ·· ·· ·]{siteTitle} {versionLabel}[ ṽéŕšîöñ. ··]",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "[Ţĥîš îš ðöçûɱéñţàţîöñ ƒöŕ  ·· ·· ·]{siteTitle} {versionLabel}[, ŵĥîçĥ îš ñö ļöñĝéŕ àçţîṽéļý ɱàîñţàîñéð. ·· ·· ·· ··]",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "[Ƒöŕ ûþ-ţö-ðàţé ðöçûɱéñţàţîöñ, šéé ţĥé  ·· ·· ·· ··]{latestVersionLink} ({versionLabel}).",
+    "description": "The label used to tell the user to check the latest version"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "[ļàţéšţ ṽéŕšîöñ ·· ·]",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.common.editThisPage": {
+    "message": "[Éðîţ ţĥîš þàĝé ·· ]",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "[Ðîŕéçţ ļîñķ ţö  ·· ]{heading}",
+    "description": "Title for link to heading"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": "[ öñ  ·]{date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": "[ ƀý  ·]{user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "[Ļàšţ ûþðàţéð ·· ]{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.navbar.mobileVersionsDropdown.label": {
+    "message": "[Véŕšîöñš ··]",
+    "description": "The label for the navbar versions dropdown on mobile view"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "[Ţàĝš: ·]",
+    "description": "The label alongside a tag list"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "[Çļöšé ·]",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.blog.sidebar.navAriaLabel": {
+    "message": "[Ɓļöĝ ŕéçéñţ þöšţš ñàṽîĝàţîöñ ·· ·· ··]",
+    "description": "The ARIA label for recent posts in the blog sidebar"
+  },
+  "theme.DocSidebarItem.expandCategoryAriaLabel": {
+    "message": "[Éẋþàñð šîðéƀàŕ çàţéĝöŕý ' ·· ·· ·]{label}'",
+    "description": "The ARIA label to expand the sidebar category"
+  },
+  "theme.DocSidebarItem.collapseCategoryAriaLabel": {
+    "message": "[Çöļļàþšé šîðéƀàŕ çàţéĝöŕý ' ·· ·· ·]{label}'",
+    "description": "The ARIA label to collapse the sidebar category"
+  },
+  "theme.IconExternalLink.ariaLabel": {
+    "message": "[(öþéñš îñ ñéŵ ţàƀ) ·· ·]",
+    "description": "The ARIA label for the external link icon"
+  },
+  "theme.NavBar.navAriaLabel": {
+    "message": "[Màîñ ·]",
+    "description": "The ARIA label for the main navigation"
+  },
+  "theme.navbar.mobileLanguageDropdown.label": {
+    "message": "[Ļàñĝûàĝéš ··]",
+    "description": "The label for the mobile language switcher dropdown"
+  },
+  "theme.TOCCollapsible.toggleButtonLabel": {
+    "message": "[Öñ ţĥîš þàĝé ·· ]",
+    "description": "The label used by the button on the collapsible TOC component"
+  },
+  "theme.blog.post.readMore": {
+    "message": "[Ŕéàð ɱöŕé ··]",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.blog.post.readMoreLabel": {
+    "message": "[Ŕéàð ɱöŕé àƀöûţ  ·· ·]{title}",
+    "description": "The ARIA label for the link to full blog posts from excerpts"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "[Öñé ɱîñ ŕéàð ·· ]|{readingTime}[ ɱîñ ŕéàð ·]",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "[Çöþý ·]",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "[Çöþîéð ·]",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "[Çöþý çöðé ţö çļîþƀöàŕð ·· ·· ]",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "[Ţöĝĝļé ŵöŕð ŵŕàþ ·· ·]",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "[Ĥöɱé þàĝé ··]",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "[Çöļļàþšé šîðéƀàŕ ·· ·]",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "[Çöļļàþšé šîðéƀàŕ ·· ·]",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.navAriaLabel": {
+    "message": "[Ðöçš šîðéƀàŕ ·· ]",
+    "description": "The ARIA label for the sidebar navigation"
+  },
+  "theme.docs.sidebar.closeSidebarButtonAriaLabel": {
+    "message": "[Çļöšé ñàṽîĝàţîöñ ƀàŕ ·· ··]",
+    "description": "The ARIA label for close button of mobile sidebar"
+  },
+  "theme.navbar.mobileSidebarSecondaryMenu.backButtonLabel": {
+    "message": "[← Ɓàçķ ţö ɱàîñ ɱéñû ·· ·]",
+    "description": "The label of the back button to return to main menu, inside the mobile navbar sidebar secondary menu (notably used to display the docs sidebar)"
+  },
+  "theme.docs.sidebar.toggleSidebarButtonAriaLabel": {
+    "message": "[Ţöĝĝļé ñàṽîĝàţîöñ ƀàŕ ·· ·· ]",
+    "description": "The ARIA label for hamburger menu button of mobile navigation"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.expandAriaLabel": {
+    "message": "[Éẋþàñð ţĥé ðŕöþðöŵñ ·· ··]",
+    "description": "The ARIA label of the button to expand the mobile dropdown navbar item"
+  },
+  "theme.navbar.mobileDropdown.collapseButton.collapseAriaLabel": {
+    "message": "[Çöļļàþšé ţĥé ðŕöþðöŵñ ·· ·· ]",
+    "description": "The ARIA label of the button to collapse the mobile dropdown navbar item"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "[Éẋþàñð šîðéƀàŕ ·· ·]",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "[Éẋþàñð šîðéƀàŕ ·· ·]",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.blog.post.plurals": {
+    "message": "[Öñé þöšţ ·]|{count}[ þöšţš ·]",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts}[ ţàĝĝéð ŵîţĥ \" ·· ]{tagName}\"",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.blog.author.pageTitle": {
+    "message": "{authorName} - {nPosts}",
+    "description": "The title of the page for a blog author"
+  },
+  "theme.blog.authorsList.pageTitle": {
+    "message": "[Åûţĥöŕš ·]",
+    "description": "The title of the authors page"
+  },
+  "theme.blog.authorsList.viewAll": {
+    "message": "[Vîéŵ àļļ àûţĥöŕš ·· ·]",
+    "description": "The label of the link targeting the blog authors page"
+  },
+  "theme.blog.author.noPosts": {
+    "message": "[Ţĥîš àûţĥöŕ ĥàš ñöţ ŵŕîţţéñ àñý þöšţš ýéţ. ·· ·· ·· ··]",
+    "description": "The text for authors with 0 blog post"
+  },
+  "theme.contentVisibility.unlistedBanner.title": {
+    "message": "[Ûñļîšţéð þàĝé ·· ]",
+    "description": "The unlisted content banner title"
+  },
+  "theme.contentVisibility.unlistedBanner.message": {
+    "message": "[Ţĥîš þàĝé îš ûñļîšţéð. Šéàŕçĥ éñĝîñéš ŵîļļ ñöţ îñðéẋ îţ, àñð öñļý ûšéŕš ĥàṽîñĝ à ðîŕéçţ ļîñķ çàñ àççéšš îţ. ·· ·· ·· ·· ·· ·· ·· ·· ·· ··]",
+    "description": "The unlisted content banner message"
+  },
+  "theme.contentVisibility.draftBanner.title": {
+    "message": "[Ðŕàƒţ þàĝé ··]",
+    "description": "The draft content banner title"
+  },
+  "theme.contentVisibility.draftBanner.message": {
+    "message": "[Ţĥîš þàĝé îš à ðŕàƒţ. Îţ ŵîļļ öñļý ƀé ṽîšîƀļé îñ ðéṽ àñð ƀé éẋçļûðéð ƒŕöɱ ţĥé þŕöðûçţîöñ ƀûîļð. ·· ·· ·· ·· ·· ·· ·· ·· ··]",
+    "description": "The draft content banner message"
+  },
+  "theme.docs.DocCard.categoryDescription.plurals": {
+    "message": "[1 îţéɱ ·]|{count}[ îţéɱš ·]",
+    "description": "The default description for a category card in the generated index about how many items this category includes"
+  },
+  "theme.ErrorPageContent.tryAgain": {
+    "message": "[Ţŕý àĝàîñ ··]",
+    "description": "The label of the button to try again rendering when the React error boundary captures an error"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "[Šķîþ ţö ɱàîñ çöñţéñţ ·· ··]",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "[Ţàĝš ·]",
+    "description": "The title of the tag list page"
+  },
+  "pageFacts.type": {
+    "message": "[Ţýþé ·]",
+    "description": "Label: the kind of page (concept, how-to, reference)"
+  },
+  "pageFacts.audience": {
+    "message": "[Ƒöŕ ·]",
+    "description": "Label: who the page is written for"
+  },
+  "pageFacts.version": {
+    "message": "[Çĥéçķéð àĝàîñšţ ·· ·]",
+    "description": "Label: the product version the steps were checked on"
+  },
+  "pageFacts.owner": {
+    "message": "[Öŵñéŕ ·]",
+    "description": "Label: the person responsible for the page"
+  },
+  "pageFacts.review": {
+    "message": "[Ļàšţ ŕéṽîéŵ ·· ]",
+    "description": "Label: the date of the page's last review"
+  },
+  "table.scrollLabel": {
+    "message": "[Ţàƀļé, šçŕöļļš šîðéŵàýš ·· ·· ]"
+  },
+  "theme.NotFound.title": {
+    "message": "[Ƥàĝé ñöţ ƒöûñð ·· ]",
+    "description": "The title of the 404 page"
+  },
+  "theme.NotFound.p1": {
+    "message": "[Ţĥîš þàĝé ðöéšñ'ţ éẋîšţ. ·· ·· ]",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "[Ûšé ţĥé ɱéñû ţö ĝö ƀàçķ ţö ţĥé ðöçš, öŕ ŕéþöŕţ à ƀŕöķéñ ļîñķ ţĥŕöûĝĥ ţĥé šöûŕçé öñ ĜîţĤûƀ. ·· ·· ·· ·· ·· ·· ·· ·· ]",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.admonition.note": {
+    "message": "[ñöţé ·]",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.info": {
+    "message": "[îñƒö ·]",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.tip": {
+    "message": "[ţîþ ·]",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.important": {
+    "message": "[Îɱþöŕţàñţ ··]"
+  },
+  "theme.admonition.caution": {
+    "message": "[çàûţîöñ ·]",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.warning": {
+    "message": "[ŵàŕñîñĝ ·]",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.admonition.danger": {
+    "message": "[ðàñĝéŕ ·]",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.verified": {
+    "message": "[Véŕîƒîéð ŕéšûļţ ·· ·]"
+  },
+  "screenshot.open": {
+    "message": "[Öþéñ ƒûļļ šîžé ·· ]"
+  },
+  "table.scrollLabelNamed": {
+    "message": "[Ţàƀļé:  ·]{cols}[, šçŕöļļš šîðéŵàýš ·· ··]"
+  }
+}

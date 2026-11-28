@@ -21,8 +21,8 @@
      and amber stay for meaning. */
   A.HOUSE = { color: "#6CE975", edge: "#0E5A2B" };
   A.COLORS = ["#6CE975", "#E5251B", "#0B0B0C", "#1D4ED8", "#FFDF2B", "#FFFFFF"];
-  /** The house stroke for an image: 2 px for a capture at screen density, 4 px for a high-density (2x) capture. */
-  A.houseStroke = function (W) { return W > 1800 ? 4 : 2; };
+  /** The house stroke for an image (standards/screenshots.md, version 2): 3 px at screen density, 6 px for a 2x capture. */
+  A.houseStroke = function (W) { return W > 1800 ? 6 : 3; };
 
   function num(v, lo, hi, d) { v = Number(v); return isFinite(v) ? Math.max(lo, Math.min(hi, v)) : d; }
   /** A mark from a project file, checked field by field. Anything unknown is dropped. */

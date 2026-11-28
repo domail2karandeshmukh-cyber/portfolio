@@ -1,0 +1,22 @@
+{
+ "user Sessions tab, Logout all sessions": {
+  "before": {
+   "alex": 3,
+   "jo": 1
+  },
+  "after": {
+   "alex": 0,
+   "jo": 1
+  }
+ },
+ "user Sessions tab, Sign out on each row": {
+  "before": {
+   "alex": 1,
+   "jo": 2
+  },
+  "after": {
+   "alex": 0,
+   "jo": 2
+  }
+ }
+}

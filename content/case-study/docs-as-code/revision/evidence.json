@@ -1,0 +1,142 @@
+{
+ "note": "What Keycloak 26.8.2 answered when the REST steps of the revision were run as written, on 27 November 2026, on the local test realm portfolio-demo with the test user alex.morgan. No password or token is recorded.",
+ "probe_put_replaces_list": {
+  "before": [
+   "UPDATE_PROFILE"
+  ],
+  "sent": {
+   "requiredActions": [
+    "CONFIGURE_TOTP"
+   ]
+  },
+  "after": [
+   "CONFIGURE_TOTP"
+  ],
+  "other_fields_kept": true,
+  "conclusion": "A PUT replaces the whole list of required actions: read the list first and add to it."
+ },
+ "run": [
+  "user: alex.morgan",
+  "credentials before:",
+  "[{\"type\":\"password\",\"userLabel\":null},{\"type\":\"otp\",\"userLabel\":\"Alex's new phone\"}]",
+  "DELETE credential: HTTP 204",
+  "PUT requiredActions [\"CONFIGURE_TOTP\",\"UPDATE_PROFILE\"]: HTTP 204",
+  "credentials after:",
+  "[{\"type\":\"password\",\"userLabel\":null}]",
+  "requiredActions after:",
+  "[\"CONFIGURE_TOTP\",\"UPDATE_PROFILE\"]"
+ ],
+ "sign_in_after": {
+  "after_password": [
+   "Update Account Information",
+   "Mobile Authenticator Setup"
+  ],
+  "asks_for_otp_setup": true
+ },
+ "revision_1_2": {
+  "note": "28 November 2026, same local realm and test user. verify-order.py signed in as the user between the two actions, in each order; capture.py is the script that took the guide's screenshots, whose helpers it reuses. Then the reordered REST commands of reset-otp.sh were run as written. Passwords are read from local files and never recorded.",
+  "order_test": {
+   "A: after deleting, before adding Configure OTP": {
+    "asks_for_code": false,
+    "asks_to_set_up_authenticator": false,
+    "signed_in_with_password_alone": true
+   },
+   "B: after adding Configure OTP, before deleting": {
+    "asks_for_code": true,
+    "asks_to_set_up_authenticator": false,
+    "signed_in_with_password_alone": false
+   },
+   "B: after both actions": {
+    "asks_for_code": false,
+    "asks_to_set_up_authenticator": true,
+    "signed_in_with_password_alone": false
+   }
+  },
+  "run": [
+   "user: alex.morgan",
+   "PUT requiredActions [\"CONFIGURE_TOTP\"]: HTTP 204",
+   "credentials before:",
+   "[{\"type\":\"password\",\"userLabel\":null},{\"type\":\"otp\",\"userLabel\":\"Alex's new phone\"}]",
+   "DELETE credential: HTTP 204",
+   "credentials after:",
+   "[{\"type\":\"password\",\"userLabel\":null}]",
+   "requiredActions after:",
+   "[\"CONFIGURE_TOTP\"]"
+  ],
+  "sign_in_after": {
+   "after_password": [
+    "Mobile Authenticator Setup"
+   ],
+   "asks_for_otp_setup": true
+  }
+ },
+ "revision_1_3": {
+  "note": "28 November 2026, same local realm and test user, after a final security review. verify-sessions.py tested an open session through the reset, and two OTP credentials with one deleted; a second throwaway user tested the scope of Logout all sessions, then was deleted. reset-otp.sh then ran as written on a user with an authenticator and an open session.",
+  "sessions_and_devices": {
+   "existing session": {
+    "sessions before the reset": 1,
+    "still signed in after the reset": false,
+    "what the open browser shows after the reset": {
+     "page": "/realms/portfolio-demo/login-actions/required-action",
+     "heading": "Mobile Authenticator Setup",
+     "sessions": 1
+    },
+    "sessions after POST /users/{id}/logout": 0,
+    "asked to sign in again after logout": true
+   },
+   "two OTP credentials, one deleted": {
+    "labels before": [
+     "Alex's phone",
+     "Alex's tablet"
+    ],
+    "left": [
+     "Alex's tablet"
+    ],
+    "asks for a code": true,
+    "asks to set up an authenticator": false,
+    "lets the user choose the device": true
+   }
+  },
+  "logout_scope": {
+   "user Sessions tab, Logout all sessions": {
+    "before": {
+     "alex": 3,
+     "jo": 1
+    },
+    "after": {
+     "alex": 0,
+     "jo": 1
+    }
+   },
+   "user Sessions tab, Sign out on each row": {
+    "before": {
+     "alex": 1,
+     "jo": 2
+    },
+    "after": {
+     "alex": 0,
+     "jo": 2
+    }
+   }
+  },
+  "run": [
+   "user: alex.morgan",
+   "POST logout: HTTP 204",
+   "PUT requiredActions [\"CONFIGURE_TOTP\"]: HTTP 204",
+   "credentials before:",
+   "[{\"type\":\"password\",\"userLabel\":null},{\"type\":\"otp\",\"userLabel\":\"Alex's phone\"}]",
+   "DELETE credential: HTTP 204",
+   "sessions after: 0",
+   "credentials after:",
+   "[{\"type\":\"password\",\"userLabel\":null}]",
+   "requiredActions after:",
+   "[\"CONFIGURE_TOTP\"]"
+  ],
+  "sign_in_after": {
+   "after_password": [
+    "Mobile Authenticator Setup"
+   ],
+   "asks_for_otp_setup": true
+  }
+ }
+}

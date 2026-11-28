@@ -1,0 +1,10 @@
+# Audit finding A14: words that tell a reader who is stuck that the task is easy.
+extends: existence
+message: "Remove '%s': it tells the reader the task is easy."
+level: warning
+ignorecase: true
+tokens:
+  - simply
+  - just
+  - easily
+  - a piece of cake

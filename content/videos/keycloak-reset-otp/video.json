@@ -1,10 +1,10 @@
 {
- "title": "Reset a user's one-time password in Keycloak",
- "seconds": 146.37,
- "narrated": true,
+ "title": "Reset a user's OTP credential in Keycloak",
+ "seconds": 166.7,
+ "narrated": false,
  "keycloak": "26.8.2",
- "recorded": "2026-11-19",
- "about": "A real task in Keycloak 26.8.2, filmed in the browser: find the user, delete the lost authenticator, require a new one, the user's own setup, and the check.",
+ "recorded": "2026-11-28",
+ "about": "A real task in Keycloak 26.8.2, filmed in the browser in the tested order: find the user, sign them out, require a new authenticator, delete the lost one, the user's own setup, and the check. Captioned, without a voice.",
  "where": "Recorded on Keycloak 26.8.2, open-source software, with a test realm and test users",
  "sections": [
   {
@@ -20,6 +20,14 @@
    "kind": "rec"
   },
   {
+   "scene": "sessions",
+   "kind": "rec"
+  },
+  {
+   "scene": "require",
+   "kind": "rec"
+  },
+  {
    "scene": "credentials",
    "kind": "rec"
   },
@@ -29,14 +37,6 @@
   },
   {
    "scene": "confirm",
-   "kind": "rec"
-  },
-  {
-   "scene": "caution",
-   "kind": "rec"
-  },
-  {
-   "scene": "require",
    "kind": "rec"
   },
   {
@@ -52,5 +52,5 @@
    "kind": "card"
   }
  ],
- "captions": 30
+ "captions": 28
 }

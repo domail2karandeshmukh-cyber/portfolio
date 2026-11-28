@@ -1,0 +1,900 @@
+{
+ "vale": "3.28.1",
+ "config": "site/.vale.ini",
+ "results": {
+  "docs/_partials/_confirm-identity.mdx": [
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.ColemanLiau",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the Coleman–Liau Index grade (10.08) below 9."
+   },
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.FleschReadingEase",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the Flesch reading ease score (65.25) above 70."
+   },
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.LIX",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the LIX score (39.07) below 35."
+   },
+   {
+    "Line": 2,
+    "Span": [
+     10,
+     22
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ],
+  "docs/concepts/one-time-passwords.mdx": [
+   {
+    "Line": 17,
+    "Span": [
+     51,
+     63
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     26,
+     31
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "policy",
+    "Message": "'policy' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     68,
+     72
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "every",
+    "Message": "'every' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 23,
+    "Span": [
+     40,
+     49
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 27,
+    "Span": [
+     16,
+     22
+    ],
+    "Check": "Google.Passive",
+    "Severity": "suggestion",
+    "Match": "is lost",
+    "Message": "In general, use active voice instead of passive voice ('is lost')."
+   },
+   {
+    "Line": 27,
+    "Span": [
+     35,
+     47
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 27,
+    "Span": [
+     85,
+     94
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     22,
+     30
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "something",
+    "Message": "'something' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 32,
+    "Span": [
+     70,
+     82
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 36,
+    "Span": [
+     90,
+     99
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "configured",
+    "Message": "'configured' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 37,
+    "Span": [
+     91,
+     99
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "condition",
+    "Message": "'condition' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 39,
+    "Span": [
+     12,
+     24
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "administrator",
+    "Message": "'administrator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 39,
+    "Span": [
+     47,
+     56
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 39,
+    "Span": [
+     146,
+     158
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 40,
+    "Span": [
+     55,
+     67
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "administrator",
+    "Message": "'administrator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 43,
+    "Span": [
+     1,
+     8
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "Deleting",
+    "Message": "'Deleting' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 43,
+    "Span": [
+     17,
+     26
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ],
+  "docs/how-to/reset-otp.mdx": [
+   {
+    "Line": 19,
+    "Span": [
+     58,
+     70
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 19,
+    "Span": [
+     108,
+     117
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 47,
+    "Span": [
+     93,
+     99
+    ],
+    "Check": "Google.Passive",
+    "Severity": "suggestion",
+    "Match": "is left",
+    "Message": "In general, use active voice instead of passive voice ('is left')."
+   },
+   {
+    "Line": 75,
+    "Span": [
+     76,
+     83
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "deletion",
+    "Message": "'deletion' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 75,
+    "Span": [
+     114,
+     123
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 81,
+    "Span": [
+     15,
+     18
+    ],
+    "Check": "Google.Anthropomorphism",
+    "Severity": "suggestion",
+    "Match": "sees",
+    "Message": "Don't attribute human qualities to software or hardware ('sees')."
+   }
+  ],
+  "docs/index.mdx": [
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.ColemanLiau",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the Coleman–Liau Index grade (10.41) below 9."
+   },
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.FleschReadingEase",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the Flesch reading ease score (54.71) above 70."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     25,
+     37
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "administrator",
+    "Message": "'administrator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     61,
+     65
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "every",
+    "Message": "'every' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     73,
+     81
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "resetting",
+    "Message": "'resetting' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 19,
+    "Span": [
+     37,
+     43
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "article",
+    "Message": "'article' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 28,
+    "Span": [
+     9,
+     19
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "Independent",
+    "Message": "'Independent' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 28,
+    "Span": [
+     21,
+     33
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "documentation",
+    "Message": "'documentation' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 29,
+    "Span": [
+     39,
+     47
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "portfolio",
+    "Message": "'portfolio' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 29,
+    "Span": [
+     49,
+     61
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "demonstration",
+    "Message": "'demonstration' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 29,
+    "Span": [
+     75,
+     79
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "every",
+    "Message": "'every' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     13,
+     20
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "official",
+    "Message": "'official' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     31,
+     43
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "documentation",
+    "Message": "'documentation' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ],
+  "docs/reference/otp-policy.mdx": [
+   {
+    "Line": 3,
+    "Span": [
+     131,
+     134
+    ],
+    "Check": "Google.Acronyms",
+    "Severity": "suggestion",
+    "Match": "REST",
+    "Message": "Spell out 'REST', if it's unfamiliar to the audience."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     15,
+     20
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "policy",
+    "Message": "'policy' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     145,
+     154
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "difference",
+    "Message": "'difference' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 39,
+    "Span": [
+     38,
+     51
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "representation",
+    "Message": "'representation' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 53,
+    "Span": [
+     26,
+     39
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticators",
+    "Message": "'authenticators' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 54,
+    "Span": [
+     10,
+     19
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 54,
+    "Span": [
+     56,
+     64
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "algorithm",
+    "Message": "'algorithm' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 54,
+    "Span": [
+     69,
+     75
+    ],
+    "Check": "Google.Passive",
+    "Severity": "suggestion",
+    "Match": "was set",
+    "Message": "In general, use active voice instead of passive voice ('was set')."
+   },
+   {
+    "Line": 55,
+    "Span": [
+     27,
+     32
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "policy",
+    "Message": "'policy' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ],
+  "docs/reference/terminology.mdx": [
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.ColemanLiau",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the Coleman–Liau Index grade (9.85) below 9."
+   },
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.FleschReadingEase",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the Flesch reading ease score (61.61) above 70."
+   },
+   {
+    "Line": 1,
+    "Span": [
+     1,
+     1
+    ],
+    "Check": "Readability.LIX",
+    "Severity": "warning",
+    "Match": "",
+    "Message": "Try to keep the LIX score (35.57) below 35."
+   },
+   {
+    "Line": 18,
+    "Span": [
+     46,
+     50
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "every",
+    "Message": "'every' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 28,
+    "Span": [
+     34,
+     36
+    ],
+    "Check": "Google.Acronyms",
+    "Severity": "suggestion",
+    "Match": "MFA",
+    "Message": "Spell out 'MFA', if it's unfamiliar to the audience."
+   },
+   {
+    "Line": 30,
+    "Span": [
+     11,
+     16
+    ],
+    "Check": "Google.Parens",
+    "Severity": "suggestion",
+    "Match": "(verb)",
+    "Message": "Use parentheses judiciously."
+   },
+   {
+    "Line": 30,
+    "Span": [
+     27,
+     32
+    ],
+    "Check": "Google.Parens",
+    "Severity": "suggestion",
+    "Match": "(noun)",
+    "Message": "Use parentheses judiciously."
+   },
+   {
+    "Line": 30,
+    "Span": [
+     50,
+     55
+    ],
+    "Check": "Google.Parens",
+    "Severity": "suggestion",
+    "Match": "(verb)",
+    "Message": "Use parentheses judiciously."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     10,
+     15
+    ],
+    "Check": "Google.Parens",
+    "Severity": "suggestion",
+    "Match": "(verb)",
+    "Message": "Use parentheses judiciously."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     24,
+     29
+    ],
+    "Check": "Google.Parens",
+    "Severity": "suggestion",
+    "Match": "(noun)",
+    "Message": "Use parentheses judiciously."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     39,
+     44
+    ],
+    "Check": "Google.Parens",
+    "Severity": "suggestion",
+    "Match": "(verb)",
+    "Message": "Use parentheses judiciously."
+   },
+   {
+    "Line": 43,
+    "Span": [
+     1,
+     9
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "Interface",
+    "Message": "'Interface' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 43,
+    "Span": [
+     34,
+     40
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "exactly",
+    "Message": "'exactly' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 43,
+    "Span": [
+     84,
+     92
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "including",
+    "Message": "'including' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 43,
+    "Span": [
+     100,
+     107
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "capitals",
+    "Message": "'capitals' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 44,
+    "Span": [
+     5,
+     11
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "example",
+    "Message": "'example' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 45,
+    "Span": [
+     35,
+     41
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "italics",
+    "Message": "'italics' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 45,
+    "Span": [
+     90,
+     102
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "ungrammatical",
+    "Message": "'ungrammatical' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ],
+  "docs/troubleshooting/otp-sign-in.mdx": [
+   {
+    "Line": 3,
+    "Span": [
+     92,
+     95
+    ],
+    "Check": "Google.Anthropomorphism",
+    "Severity": "suggestion",
+    "Match": "sees",
+    "Message": "Don't attribute human qualities to software or hardware ('sees')."
+   },
+   {
+    "Line": 19,
+    "Span": [
+     20,
+     23
+    ],
+    "Check": "Google.Anthropomorphism",
+    "Severity": "suggestion",
+    "Match": "sees",
+    "Message": "Don't attribute human qualities to software or hardware ('sees')."
+   },
+   {
+    "Line": 21,
+    "Span": [
+     12,
+     15
+    ],
+    "Check": "Google.Anthropomorphism",
+    "Severity": "suggestion",
+    "Match": "sees",
+    "Message": "Don't attribute human qualities to software or hardware ('sees')."
+   },
+   {
+    "Line": 24,
+    "Span": [
+     30,
+     36
+    ],
+    "Check": "Google.Passive",
+    "Severity": "suggestion",
+    "Match": "is lost",
+    "Message": "In general, use active voice instead of passive voice ('is lost')."
+   },
+   {
+    "Line": 30,
+    "Span": [
+     51,
+     56
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "policy",
+    "Message": "'policy' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 31,
+    "Span": [
+     121,
+     127
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "refuses",
+    "Message": "'refuses' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 45,
+    "Span": [
+     16,
+     28
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 51,
+    "Span": [
+     23,
+     32
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 55,
+    "Span": [
+     15,
+     27
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "administrator",
+    "Message": "'administrator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 55,
+    "Span": [
+     29,
+     35
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "deleted",
+    "Message": "'deleted' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 55,
+    "Span": [
+     52,
+     61
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "credential",
+    "Message": "'credential' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 56,
+    "Span": [
+     87,
+     96
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "configured",
+    "Message": "'configured' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   },
+   {
+    "Line": 61,
+    "Span": [
+     58,
+     70
+    ],
+    "Check": "Readability.Polysyllables",
+    "Severity": "suggestion",
+    "Match": "authenticator",
+    "Message": "'authenticator' has three or more syllables. It counts toward the SMOG and Gunning fog scores."
+   }
+  ]
+ }
+}
