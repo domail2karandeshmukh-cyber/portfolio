@@ -6,7 +6,7 @@
 <taskbody>
 <prereq>
 <ul><li>Confirm that the request comes from the user. Use a phone number or an address the user gave before they lost the phone, not one in the request.</li><li>Sign in to the admin console with an account that can manage the realm’s users. The screenshots were taken as an administrator of the master realm.</li><li>Make sure that the user has the new phone, with an authenticator app such as FreeOTP, Google Authenticator, or Microsoft Authenticator.</li><li>Check that the realm uses Keycloak’s default browser flow, in which the OTP step is conditional. With a custom flow, Keycloak may ask for a code at a different point, or not at all.</li></ul>
-<note type="important">Do the steps in this order. Sign the user out first: an open session reaches <b>Mobile Authenticator Setup</b> without asking for the password. Then add the required action before you delete the credential: in the other order, the user can sign in with the password alone in between. I tested both on Keycloak 26.8.2.</note>
+<note type="important">Do the steps in this order. Sign the user out first: an open session reaches <b>Mobile Authenticator Setup</b> without asking for the password. Then add the required action before you delete the credential: in the other order, the user can sign in with the password alone in between. Both orders were tested on Keycloak 26.8.2.</note>
 </prereq>
 <context>
 <p>For Keycloak administrators. Written for Keycloak 26.8.2 and checked against it. Every screen here comes from a Keycloak 26.8.2 server running on my own computer, with a test realm and test users. This is an independent guide, not official Keycloak documentation.</p>

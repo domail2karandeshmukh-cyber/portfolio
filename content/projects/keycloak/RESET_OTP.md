@@ -20,7 +20,7 @@ For Keycloak administrators. Written for Keycloak 26.8.2 and checked against it.
 - Make sure that the user has the new phone, with an authenticator app such as FreeOTP, Google Authenticator, or Microsoft Authenticator.
 - Check that the realm uses Keycloak's default browser flow, in which the OTP step is conditional. With a custom flow, Keycloak may ask for a code at a different point, or not at all.
 
-> **Important:** Do the steps in this order. Sign the user out first: an open session reaches **Mobile Authenticator Setup** without asking for the password. Then add the required action before you delete the credential: in the other order, the user can sign in with the password alone in between. I tested both on Keycloak 26.8.2.
+> **Important:** Do the steps in this order. Sign the user out first: an open session reaches **Mobile Authenticator Setup** without asking for the password. Then add the required action before you delete the credential: in the other order, the user can sign in with the password alone in between. Both orders were tested on Keycloak 26.8.2.
 
 ## Steps
 
