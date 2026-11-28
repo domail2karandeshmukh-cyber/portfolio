@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="deploy-a-webhook-relay-on-cloud" xml:lang="en">
-<title>Deploy a webhook relay on <ph keyref="cloud">Lattice Cloud</ph></title>
+<task id="deploy-a-webhook-relay-on-lattice-cloud" xml:lang="en">
+<title>Deploy a Webhook Relay on Lattice Cloud</title>
 <shortdesc>Set up a <ph keyref="service">Lattice Relay</ph> that receives webhooks from a third party, verifies them, and forwards them to your application with retries. You create the project, write one configuration file, set three environment variables, deploy from the command line, and send a test event. Allow twenty minutes. Fictional sample written for this portfolio: <ph keyref="cloud">Lattice Cloud</ph> and <ph keyref="service">Lattice Relay</ph> are invented for it.</shortdesc>
 <taskbody>
 <prereq>
 <ul><li>A <ph keyref="cloud">Lattice Cloud</ph> account with the <b>Developer</b> role in the project you deploy to.</li><li>The <codeph><ph keyref="cli">lattice</ph></codeph> command-line tool, version 2.3 or later. Check with <codeph><ph keyref="cli">lattice</ph> --version</codeph>.</li><li>Node.js 20 or later, for the local test client.</li><li>An HTTPS endpoint in your application that accepts <codeph>POST</codeph> requests. The guide calls it the <b>target</b>.</li><li>The signing secret of the third party that sends the webhooks, if it signs them.</li></ul>
 </prereq>
 <steps>
-<step><cmd>Create the project</cmd>
+<step><cmd>Create the Project</cmd>
 <substeps>
 <substep><cmd>Sign in from the command line.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> auth login</codeblock></info></substep>
 <substep><cmd>Create a project in the region nearest to your target. The project name becomes part of the relay’s address, so choose a short one.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> projects create orders-relay --region <ph keyref="region">eu-west-2</ph></codeblock></info></substep>
 <substep><cmd>Make it the default project for the commands that follow.</cmd><info><codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> config set project orders-relay</codeblock></info></substep>
 </substeps></step>
-<step><cmd>Write the configuration</cmd><info><p>Create a file named <codeph>relay.yaml</codeph> in an empty folder. The example forwards every event to one target, retries for an hour, and keeps failed deliveries for a week.</p>
+<step><cmd>Write the Configuration</cmd><info><p>Create a file named <codeph>relay.yaml</codeph> in an empty folder. The example forwards every event to one target, retries for an hour, and keeps failed deliveries for a week.</p>
 <codeblock outputclass="language-yaml">version: 1
 name: orders-relay
 source:
@@ -31,7 +31,7 @@ retry:
 dead_letter:
   keep_days: 7</codeblock>
 <p>The file names the environment variables that hold the secret and the target URL, and never the values. The values live in the project’s environment, so that the file can be committed.</p></info></step>
-<step><cmd>Set the environment variables</cmd><info><p>Set the three variables with placeholders replaced by your own values. The command stores them encrypted in the project and shows them to nobody afterwards, including you.</p>
+<step><cmd>Set the Environment Variables</cmd><info><p>Set the three variables with placeholders replaced by your own values. The command stores them encrypted in the project and shows them to nobody afterwards, including you.</p>
 <codeblock outputclass="language-bash"><ph keyref="cli">lattice</ph> env set RELAY_TARGET_URL=&lt;https://your-app.example/webhooks/orders&gt;
 <ph keyref="cli">lattice</ph> env set RELAY_SOURCE_SECRET=&lt;the third party's signing secret&gt;
 <ph keyref="cli">lattice</ph> env set RELAY_API_KEY=&lt;an API key from the console, Developer role&gt;</codeblock>

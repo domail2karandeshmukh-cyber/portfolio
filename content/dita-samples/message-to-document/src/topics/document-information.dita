@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
-<title>Document information</title>
+<title>Document Information</title>
 <shortdesc>A demonstration publication for Karan Deshmukh’s portfolio. The message, the answers to its questions and this procedure were written for the case study at karandeshmukh.dev/message-to-document: it isn’t the procedure of a real organization.</shortdesc>
 <refbody>
 <simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4* 1.6*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
-<strow><stentry>Reset MFA for a locked-out user</stentry><stentry>SD-IAM-007</stentry><stentry>1.0</stentry><stentry>Ready for technical review</stentry><stentry>2026-11-19</stentry></strow>
+<strow><stentry>Reset MFA for a Locked-Out User</stentry><stentry>SD-IAM-007</stentry><stentry>1.0</stentry><stentry>Ready for technical review</stentry><stentry>2026-11-19</stentry></strow>
 </simpletable>
 <section><title>Publication</title>
-<p>Publication MESSAGE-TO-DOCUMENT, 1 document. Written by Karan Deshmukh. Owner: IT service desk. Published on 2026-11-20 with DITA Open Toolkit from DITA 1.3 source.</p>
+<p>Publication MESSAGE-TO-DOCUMENT, 1 document. Written by Karan Deshmukh. Owner: IT service desk. Published on 2026-11-28 with DITA Open Toolkit from DITA 1.3 source.</p>
 </section>
 </refbody>
 </reference>

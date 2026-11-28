@@ -3,14 +3,14 @@
 <bookmap id="kc1-api-pdf" xml:lang="en">
 <booktitle>
 <booklibrary>KC1 defect prediction, an MSc project</booklibrary>
-<mainbooktitle>KC1 prediction API documentation</mainbooktitle>
+<mainbooktitle>KC1 Prediction API Documentation</mainbooktitle>
 <booktitlealt>Publication KC1-API, 3 documents</booktitlealt>
 <booktitlealt>KC1 defect prediction, an MSc project</booktitlealt>
-<booktitlealt>Issued 2026-11-20. Written by Karan Deshmukh.</booktitlealt>
+<booktitlealt>Issued 2026-11-28. Written by Karan Deshmukh.</booktitlealt>
 </booktitle>
 <bookmeta>
 <author>Karan Deshmukh</author>
-<critdates><created date="2026-11-20"/></critdates>
+<critdates><created date="2026-11-28"/></critdates>
 </bookmeta>
 <frontmatter>
 

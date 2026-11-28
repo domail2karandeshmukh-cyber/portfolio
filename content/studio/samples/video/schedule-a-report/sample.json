@@ -1,9 +1,9 @@
 {
  "id": "schedule-a-report",
- "title": "Schedule a report for automatic delivery",
+ "title": "Schedule a Report for Automatic Delivery",
  "scenario": "g-training",
  "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions, with a synthetic voiceover.",
- "seconds": 61.13,
+ "seconds": 61.14,
  "clicks": 8,
  "narrated": true,
  "overlays": 21,

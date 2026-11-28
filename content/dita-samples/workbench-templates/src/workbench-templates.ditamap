@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="workbench-templates" xml:lang="en">
-<title>Acme Console help, from the workbench’s templates</title>
+<title>Acme Console Help, from the Workbench’s Templates</title>
 <topicmeta>
 <author>Karan Deshmukh</author>
 <othermeta name="status" content="Sample: fictional"/>
 </topicmeta>
 <keydef keys="product"><topicmeta><keywords><keyword>Acme Console</keyword></keywords></topicmeta></keydef>
 <keydef keys="version"><topicmeta><keywords><keyword>4.2</keyword></keywords></topicmeta></keydef>
-<keydef keys="rig"><topicmeta><keywords><keyword>test rig TR-2</keyword></keywords></topicmeta></keydef>
-<keydef keys="asset"><topicmeta><keywords><keyword>feed pump B</keyword></keywords></topicmeta></keydef>
+<keydef keys="rig"><topicmeta><keywords><keyword>Test Rig TR-2</keyword></keywords></topicmeta></keydef>
+<keydef keys="asset"><topicmeta><keywords><keyword>Feed Pump B</keyword></keywords></topicmeta></keydef>
 <keydef keys="service"><topicmeta><keywords><keyword>the readings service</keyword></keywords></topicmeta></keydef>
 <topicref href="topics/reset-mfa-for-a-locked-out-user.dita" type="task"/>
 <topicref href="topics/a-report-shows-access-is-denied.dita" type="troubleshooting"/>

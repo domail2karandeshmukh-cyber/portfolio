@@ -5,7 +5,7 @@ owner: Maintenance planning
 version: 0.3
 status: In review
 vars:
-  asset: feed pump B
+  asset: Feed Pump B
 ---
 # Monthly Inspection of {{asset}}
 

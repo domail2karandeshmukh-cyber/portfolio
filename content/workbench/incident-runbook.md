@@ -7,7 +7,7 @@ status: Approved
 vars:
   service: the readings service
 ---
-# Runbook: {{service}} Stops Responding
+# Runbook: The Readings Service Stops Responding
 
 For the engineer on call. Follow it when the alert "Readings API not responding" fires. Fictional sample.
 

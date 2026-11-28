@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="manage-users-and-roles" xml:lang="en">
-<title>Manage users and roles</title>
+<title>Manage Users and Roles</title>
 <shortdesc>As an administrator, you decide who can open your company’s books and what each person can do there. Every user has one role per workspace.</shortdesc>
 <taskbody>
 <prereq>
-<p><b>The roles</b></p>
+<p><b>The Roles</b></p>
 <simpletable frame="topbot"><sthead><stentry>Role</stentry><stentry>Can</stentry><stentry>Can’t</stentry></sthead><strow><stentry>Viewer</stentry><stentry>See reports and dashboards.</stentry><stentry>See individual transactions or change anything.</stentry></strow><strow><stentry>Bookkeeper</stentry><stentry>See and edit transactions, invoices, bills, and contacts.</stentry><stentry>Change settings, users, or bank connections.</stentry></strow><strow><stentry>Accountant</stentry><stentry>Everything a bookkeeper can, plus year-end adjustments and locked periods.</stentry><stentry>Change billing or users.</stentry></strow><strow><stentry>Administrator</stentry><stentry>Everything, including users, billing, bank connections, and security settings.</stentry><stentry></stentry></strow></simpletable>
 </prereq>
 <steps>
@@ -14,11 +14,11 @@
 <step><cmd>Select <uicontrol>Send invitation</uicontrol>. The invitation works for seven days.</cmd></step>
 </steps>
 <postreq>
-<p><b>Change a role</b></p>
+<p><b>Change a Role</b></p>
 <p>Under <b>Settings</b> &gt; <b>Users</b>, select the user, choose the new role, and select <b>Save</b>. The change applies the next time they load a page.</p>
-<p><b>Remove a user</b></p>
+<p><b>Remove a User</b></p>
 <p>Under <b>Settings</b> &gt; <b>Users</b>, select the user, and then select <b>Remove</b>. They’re signed out at once. Everything they entered stays in the books, with their name on it.</p>
-<p><b>Keep at least two administrators</b></p>
+<p><b>Keep at Least Two Administrators</b></p>
 <p>If the only administrator leaves, nobody can manage users or billing. Ledgerly warns you when a workspace has one administrator. Add a second one before it becomes urgent.</p>
 </postreq>
 </taskbody>

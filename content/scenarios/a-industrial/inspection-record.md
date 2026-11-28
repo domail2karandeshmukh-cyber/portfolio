@@ -8,7 +8,7 @@ version: 1.1
 status: Approved
 date: 2026-09-22
 vars:
-  asset: feed pump B
+  asset: Feed Pump B
   tag: PS-104
 ---
 # Monthly inspection record for {{asset}}

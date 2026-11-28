@@ -132,12 +132,12 @@
     "#film-cap.on{transform:none}",
     "#film-cap::before{content:\"\";position:absolute;left:0;right:0;bottom:100%;height:8px;background:linear-gradient(rgba(255,255,255,0),#fff);pointer-events:none}",
     "html:not(.film-close) #film-cap::before{background:linear-gradient(rgba(255,255,255,0),#fff 55%)}",
-    "#film-bar{position:absolute;left:0;top:0;height:4px;width:100%;background:#FFDF2B;transform-origin:0 50%;transform:scaleX(0)}",
-    "#film-text{margin:0;font:500 22px/1.28 Newsreader,Georgia,serif;letter-spacing:-.005em;white-space:nowrap;transition:opacity .18s linear,transform .18s ease-out}",
+    "#film-bar{position:absolute;left:0;top:0;height:4px;width:100%;background:#6CE975;transform-origin:0 50%;transform:scaleX(0)}",
+    "#film-text{margin:0;font:500 22px/1.28 'Instrument Serif',Georgia,serif;letter-spacing:-.005em;white-space:nowrap;transition:opacity .18s linear,transform .18s ease-out}",
     "#film-cap.out #film-text{opacity:0;transform:translateY(5px)}",
-    "#film-text mark{background:#FFDF2B;color:#0B0B0C;padding:0 .18em;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}",
+    "#film-text mark{background:#6CE975;color:#0B2E16;padding:0 .18em;border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}",
     "#film-text s{text-decoration:line-through;text-decoration-color:#FF5A4A;text-decoration-thickness:.09em;color:#B7B9BF}",
-    "#film-site{position:absolute;right:24px;bottom:11px;font:600 12px/1 Hanken,system-ui,sans-serif;letter-spacing:.01em;color:#8E9097}",
+    "#film-site{position:absolute;right:24px;bottom:11px;font:600 12px/1 'Lexend Deca',system-ui,sans-serif;letter-spacing:.01em;color:#8E9097}",
     // The finger.
     // A yellow halo the size of a fingertip. It travels to each control before the press, then fades: a halo left on the
     // screen sits over whatever scrolls under it, and over the closing card.
@@ -153,9 +153,9 @@
     "#film-end>*{opacity:0;transform:translateY(12px);transition:opacity .45s ease-out,transform .55s cubic-bezier(.2,.7,.2,1)}",
     "#film-end.on>*{opacity:1;transform:none}",
     "#film-end.on>:nth-child(1){transition-delay:.42s}#film-end.on>:nth-child(2){transition-delay:.62s}#film-end.on>:nth-child(3){transition-delay:.86s}",
-    "#film-end h2{margin:0;font:500 39px/1.1 Newsreader,Georgia,serif;letter-spacing:-.02em;text-wrap:balance}",
-    "#film-end .url{margin:26px 0 0;align-self:flex-start;font:650 25px/1.2 Hanken,system-ui,sans-serif;letter-spacing:-.01em;background:#FFDF2B;color:#0B0B0C;padding:9px 14px 10px;border-radius:3px}",
-    "#film-end .who{margin:46px 0 0;padding-top:22px;border-top:1px solid #303136;font:400 16.5px/1.45 Hanken,system-ui,sans-serif;color:#B7B9BF;text-wrap:pretty}",
+    "#film-end h2{margin:0;font:500 39px/1.1 'Instrument Serif',Georgia,serif;letter-spacing:-.02em;text-wrap:balance}",
+    "#film-end .url{margin:26px 0 0;align-self:flex-start;font:650 25px/1.2 'Lexend Deca',system-ui,sans-serif;letter-spacing:-.01em;background:#6CE975;color:#0B2E16;padding:9px 14px 10px;border-radius:3px}",
+    "#film-end .who{margin:46px 0 0;padding-top:22px;border-top:1px solid #303136;font:400 16.5px/1.45 'Lexend Deca',system-ui,sans-serif;color:#B7B9BF;text-wrap:pretty}",
     "#film-end .who b{display:block;font-weight:650;font-size:21px;letter-spacing:-.01em;color:#fff;margin-bottom:4px}",
     // A wide film: one line of caption, the site's name beside it, a pointer the size of a cursor.
     ".film-wide #film-cap{height:92px;padding:0 44px;display:flex;align-items:center}",

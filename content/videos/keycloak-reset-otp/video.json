@@ -1,5 +1,5 @@
 {
- "title": "Reset a user's OTP credential in Keycloak",
+ "title": "Reset a User's OTP Credential in Keycloak",
  "seconds": 166.7,
  "narrated": false,
  "keycloak": "26.8.2",

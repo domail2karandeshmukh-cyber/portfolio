@@ -129,12 +129,12 @@ ul{{margin:0;padding:0 0 0 1.1em;font-size:38px;line-height:1.45;max-width:1350p
 .band.caution{{background:#FFF4D6;border-bottom-color:#E3C171}} .band.caution b{{color:#6B4A00}} .band.caution .t{{color:#3D2A00}}</style>"""
     out = {}
     html = {
-        "title": '<div class="c"><p class="k">Keycloak 26.8.2 admin console</p><h1>Reset a user\'s OTP credential</h1><p class="o">When a user loses the phone with their authenticator app: sign the user out, require a new authenticator, then delete the old one.</p></div>'
+        "title": '<div class="c"><p class="k">Keycloak 26.8.2 admin console</p><h1>Reset a User\'s OTP Credential</h1><p class="o">When a user loses the phone with their authenticator app: sign the user out, require a new authenticator, then delete the old one.</p></div>'
                  '<p class="f">An independent tutorial by Karan Deshmukh, recorded on a Keycloak server with a test realm and test users. ' + VOICE_NOTE + '</p>',
-        "before": '<div class="c"><h2>Before you start</h2><ul><li>Confirm that the request comes from the user, through a contact you had before the phone was lost.</li>'
+        "before": '<div class="c"><h2>Before You Start</h2><ul><li>Confirm that the request comes from the user, through a contact you had before the phone was lost.</li>'
                   '<li>Sign in to the admin console with an account that can manage the realm\'s users.</li><li>Do the steps in this order: sign out, require, then delete.</li></ul></div>',
-        "close": '<div class="c"><p class="k">Read the guide</p><p class="u">Reset a user\'s OTP credential in Keycloak (KC-ADM-001)</p><p class="a">karandeshmukh.dev/docs/keycloak/reset-otp</p>'
-                 '<p class="r">Related: When a Keycloak user can\'t sign in with a one-time password<br>Keycloak OTP policy: what the realm asks of an authenticator</p></div>'
+        "close": '<div class="c"><p class="k">Read the guide</p><p class="u">Reset a User\'s OTP Credential in Keycloak (KC-ADM-001)</p><p class="a">karandeshmukh.dev/docs/keycloak/reset-otp</p>'
+                 '<p class="r">Related: When a Keycloak User Can\'t Sign In with a One-Time Password<br>Keycloak OTP Policy: What the Realm Asks of an Authenticator</p></div>'
                  '<p class="f">An independent tutorial, not Keycloak documentation, and not connected to the Keycloak project. ' + VOICE_NOTE + '</p>',
     }
     for k, body in html.items():

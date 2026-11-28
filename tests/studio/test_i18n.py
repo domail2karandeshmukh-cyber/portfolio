@@ -64,7 +64,7 @@ with sync_playwright() as p:
         check(f"{lang}: Document Control's actions are in the language", w["submit"] in pg.inner_text("#dc-actions"), pg.inner_text("#dc-actions"))
         pg.goto(f"{BASE}/{lang}/studio/guides", wait_until="load"); pg.wait_for_timeout(400); card(pg, "gd-start")
         pre = pg.inner_text("#gd-preview")
-        check(f"{lang}: the guide's own headings stay in the guide's language (English) under a translated interface", "Before you start" in pre and pg.evaluate("document.getElementById('gd-preview').lang") == "en")
+        check(f"{lang}: the guide's own headings stay in the guide's language (English) under a translated interface", "Before You Start" in pre and pg.evaluate("document.getElementById('gd-preview').lang") == "en")
         pg.select_option("#gd-lang", lang); pg.wait_for_timeout(500)
         check(f"{lang}: choosing the guide's language changes the headings the tool writes, and nothing else", w["before"] in pg.inner_text("#gd-preview") and pg.evaluate("studioGuide.get().steps[0].title") and pg.evaluate("document.getElementById('gd-preview').lang") == lang)
         pg.select_option("#gd-lang", "en")

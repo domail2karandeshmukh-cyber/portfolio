@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE troubleshooting PUBLIC "-//OASIS//DTD DITA Troubleshooting//EN" "troubleshooting.dtd">
 <troubleshooting id="deliveries-fail-or-stay-in-retrying" xml:lang="en">
-<title>Deliveries fail or stay in retrying</title>
+<title>Deliveries Fail or Stay in Retrying</title>
 <shortdesc>Events reach the relay, but your application doesn’t get them, or gets them late. Start with <codeph><ph keyref="cli">lattice</ph> deliveries show</codeph> on one affected delivery: its last attempt names the cause in almost every case. Fictional sample written for this portfolio.</shortdesc>
 <troublebody>
 <condition>
 <ul><li><codeph><ph keyref="cli">lattice</ph> deliveries list</codeph> shows deliveries in the state <codeph>retrying</codeph> for more than a few minutes, or in <codeph>failed</codeph>.</li><li>The sender reports <codeph>401 Unauthorized</codeph> from the relay’s address.</li><li>Your application receives the same event twice.</li></ul>
 </condition>
 <troubleSolution>
-<cause><title>Why it happens</title>
+<cause><title>Why It Happens</title>
 <simpletable frame="topbot"><sthead><stentry>What the last attempt says</stentry><stentry>Cause</stentry></sthead><strow><stentry><codeph>connect: timeout</codeph> or <codeph>connect: refused</codeph></stentry><stentry>The target address is wrong, the target is down, or a firewall in front of it doesn’t allow the relay’s addresses.</stentry></strow><strow><stentry><codeph>502</codeph> or <codeph>503</codeph> from the target</stentry><stentry>The target is overloaded or restarting. The relay retries these on its own.</stentry></strow><strow><stentry><codeph>401</codeph> or <codeph>403</codeph> from the target</stentry><stentry>The target expects a credential the relay doesn’t send.</stentry></strow><strow><stentry><codeph>signature mismatch</codeph> on an attempt to your target</stentry><stentry>Your application verifies <codeph>Relay-Signature</codeph> with a different secret from the one the relay signs with.</stentry></strow><strow><stentry><codeph>rejected: signature mismatch</codeph> on the incoming event</stentry><stentry>The secret in <codeph>RELAY_SOURCE_SECRET</codeph> differs from the one the sender signs with, or the sender signs a different header.</stentry></strow><strow><stentry>The same event delivered twice</stentry><stentry>The target took longer than <codeph>timeout_seconds</codeph> to answer the first time, so the relay sent it again.</stentry></strow></simpletable>
 </cause>
-<remedy><title>Fix it</title>
+<remedy><title>Fix It</title>
 <steps-informal>
 
 </steps-informal>
 </remedy>
-<remedy><title>The target can’t be reached</title>
+<remedy><title>The Target Can’t Be Reached</title>
 <steps>
 <step><cmd>From a machine outside your network, request the target’s address with <codeph>curl -i</codeph>. If it fails there too, the problem is the target, not the relay.</cmd></step>
 <step><cmd>If it succeeds, allow the relay’s outbound addresses in your firewall. <codeph><ph keyref="cli">lattice</ph> info</codeph> lists them for your region.</cmd></step>
@@ -24,7 +24,7 @@
 <ph keyref="cli">lattice</ph> deliveries show &lt;delivery id&gt;</codeblock></info></step>
 </steps>
 </remedy>
-<remedy><title>The target rejects the relay</title>
+<remedy><title>The Target Rejects the Relay</title>
 <steps>
 <step><cmd>Add the credential the target expects as a header in <codeph>relay.yaml</codeph>, with the value in an environment variable.</cmd><info><codeblock outputclass="language-yaml">targets:
   - name: app
@@ -35,21 +35,21 @@
 <ph keyref="cli">lattice</ph> deploy</codeblock></info></step>
 </steps>
 </remedy>
-<remedy><title>Signatures don’t match</title>
+<remedy><title>Signatures Don’t Match</title>
 <steps>
 <step><cmd>Confirm which secret each side uses. The relay verifies incoming events with <codeph>RELAY_SOURCE_SECRET</codeph>, and signs outgoing deliveries with the project’s <uicontrol>delivery secret</uicontrol>, shown once under <uicontrol>Settings</uicontrol> &gt; <uicontrol>Signing</uicontrol> in the console.</cmd></step>
 <step><cmd>In your application, verify <codeph>Relay-Signature</codeph> with the delivery secret, not with the sender’s secret. The two are different on purpose, so that a leaked sender secret can’t forge deliveries.</cmd></step>
 <step><cmd>Compute the signature over the raw request body, before any JSON parsing. A parser that reorders keys changes the bytes.</cmd></step>
 </steps>
 </remedy>
-<remedy><title>Duplicate deliveries</title>
+<remedy><title>Duplicate Deliveries</title>
 <steps>
 <step><cmd>Make your handler idempotent: store <codeph>Relay-Delivery-Id</codeph> and ignore an id you have already processed.</cmd></step>
 <step><cmd>Answer <codeph>202</codeph> as soon as you have stored the event, and do the work afterwards. A target that answers within a second is never retried for a timeout.</cmd></step>
 <step><cmd>If the work can’t be deferred, raise <codeph>timeout_seconds</codeph> to at most 30.</cmd></step>
 </steps>
 </remedy>
-<remedy><title>If none of this fixes it</title>
+<remedy><title>If None of This Fixes It</title>
 <steps-informal>
 <p>Collect the delivery id, the output of <codeph><ph keyref="cli">lattice</ph> deliveries show</codeph>, and the time of the attempt in UTC. Open a ticket with the <ph keyref="service">Lattice Relay</ph> support team from the console’s <b>Help</b> menu, and include the three items. The team can see the relay’s side of each attempt but not your target’s logs, so attach those too.</p>
 </steps-informal>

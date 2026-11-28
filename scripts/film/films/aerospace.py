@@ -31,8 +31,8 @@ LAST_CARD = (
 
 # What the film adds to every page it opens: the step number in a caption, the ring, and the fade between pages.
 STYLE = """
-#film-text .n{display:inline-block;min-width:1.45em;margin-right:.5em;padding:.04em .32em .08em;border-radius:5px;background:#FFDF2B;color:#0B0B0C;font:650 .78em/1.3 Hanken,system-ui,sans-serif;text-align:center;vertical-align:.14em}
-.film-ring{position:absolute;z-index:9980;pointer-events:none;border:3px solid #FFDF2B;border-radius:10px;box-shadow:0 0 0 2px rgba(11,11,12,.6),0 6px 18px rgba(0,0,0,.12);opacity:0;transition:opacity .3s ease-out}
+#film-text .n{display:inline-block;min-width:1.45em;margin-right:.5em;padding:.04em .32em .08em;border-radius:5px;background:#6CE975;color:#0B0B0C;font:650 .78em/1.3 Hanken,system-ui,sans-serif;text-align:center;vertical-align:.14em}
+.film-ring{position:absolute;z-index:9980;pointer-events:none;border:3px solid #6CE975;border-radius:10px;box-shadow:0 0 0 2px rgba(11,11,12,.6),0 6px 18px rgba(0,0,0,.12);opacity:0;transition:opacity .3s ease-out}
 .film-ring.on{opacity:1}
 #film-fade{position:fixed;inset:0;z-index:9989;pointer-events:none;transition:opacity .45s ease-out}
 #main{transition:transform .9s cubic-bezier(.4,0,.2,1)}
@@ -137,7 +137,7 @@ def overview(f):
     f.js("() => __film.close(true)")
     f.glide(f.top(".ae-tour") - 24, 1200)
     f.run(4.2)
-    f.glide(f.top("h2.st-h2", "One rig, one CSDB") - 24, 1300)
+    f.glide(f.top("h2.st-h2", "One Rig, One CSDB") - 24, 1300)
     f.run(1.6)
     ring(f, ".ae-diagram", 8)
     f.run(6.8)

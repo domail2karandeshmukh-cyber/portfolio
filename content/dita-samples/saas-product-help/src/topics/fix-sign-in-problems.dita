@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="fix-sign-in-problems" xml:lang="en">
-<title>Fix sign-in problems</title>
+<title>Fix Sign-In Problems</title>
 <shortdesc>Start with the message you see on the sign-in page. Each one has a different cause and a different fix, and the first two cover most cases.</shortdesc>
 <taskbody>
 <steps>
@@ -18,7 +18,7 @@
 <substep><cmd>Wait for a new code, and enter it before it changes.</cmd></substep>
 <substep><cmd>If the codes never work, use a backup code, and then set up the authenticator again under <uicontrol>Your account</uicontrol> &gt; <uicontrol>Security</uicontrol>.</cmd></substep>
 </substeps></step>
-<step><cmd>The page keeps returning to the sign-in form</cmd><info><p>Your browser isn’t keeping the sign-in cookie.</p></info>
+<step><cmd>The Page Keeps Returning to the Sign-In Form</cmd><info><p>Your browser isn’t keeping the sign-in cookie.</p></info>
 <substeps>
 <substep><cmd>Allow cookies for ledgerly.example.</cmd></substep>
 <substep><cmd>Turn off extensions that block scripts or cookies, and try again.</cmd></substep>
@@ -26,7 +26,7 @@
 </substeps></step>
 </steps>
 <postreq>
-<p><b>Nothing above helped</b></p>
+<p><b>Nothing Above Helped</b></p>
 <p>Contact support from the <b>Help</b> button on the sign-in page. Tell us the email address, the message you see, the time of your last attempt, and the browser you use. We never ask for your password.</p>
 </postreq>
 </taskbody>

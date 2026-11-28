@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
-<task id="read-the-inspection-results-from-the-product-api" xml:lang="en">
-<title>Read the inspection results from the <ph keyref="product">Acme Console</ph> API</title>
+<task id="read-the-inspection-results-from-the-acme-console-api" xml:lang="en">
+<title>Read the Inspection Results from the Acme Console API</title>
 <shortdesc>Developer guide. You send one request and get the readings of a work order as JSON. Fictional API, written for this portfolio.</shortdesc>
 <taskbody>
 <prereq>

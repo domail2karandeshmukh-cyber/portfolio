@@ -21,6 +21,9 @@ TOUCH = True
 def prepare(page):
     # The sample drafts are in hand before the first frame.
     page.evaluate("() => fetch('/desk.json').then(r => r.text()).then(() => 1)")
+    # Since the redesign of 28 November 2026 the desk is a section of the home page, not its headline: the film
+    # starts at the desk.
+    page.evaluate("() => scrollTo(0, document.querySelector('#rewrite').getBoundingClientRect().top + scrollY - 18)")
 
 
 def state(f):
@@ -34,7 +37,7 @@ VIEW = 540 - BAR   # what is left of the frame above it
 LAST_CARD = (
     '<h2>Try it on a message from your own team.</h2>'
     '<p class="url">karandeshmukh.dev/rewrite</p>'
-    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to part-time, freelance, internship and apprenticeship roles.</p>'
+    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to technical documentation roles: full-time, contract, and part-time.</p>'
 )
 
 
@@ -94,7 +97,6 @@ def card(f):
 
 
 SCENES = [
-    ("01-headline", 4.0, headline),
     ("02-tray", 3.2, tray),
     ("03-markup", 5.8, markup),
     ("04-draft", 5.8, draft),

@@ -768,7 +768,7 @@
   {
    "id": "it-onboarding",
    "scenario": "b-enterprise-it",
-   "title": "Create a new employee's account",
+   "title": "Create a New Employee's Account",
    "docId": "IT-PR-031-G",
    "version": "1.4",
    "intro": "Create the identity a new employee signs in with, in Meridian Identity, and give it the standard access for the department. Fictional sample written for this portfolio.",
@@ -806,7 +806,7 @@
   {
    "id": "support-unlock",
    "scenario": "e-support",
-   "title": "Unlock a customer's account",
+   "title": "Unlock a Customer's Account",
    "docId": "SUP-AG-004",
    "version": "2.0",
    "intro": "Internal procedure for support agents of Ledgerly: a customer is locked out and can't wait for the lock to lift. Verify who you're talking to before you change anything. Fictional sample written for this portfolio.",
@@ -844,7 +844,7 @@
   {
    "id": "cloud-config",
    "scenario": "c-cloud",
-   "title": "Add an environment variable to a relay and deploy it",
+   "title": "Add an Environment Variable to a Relay and Deploy It",
    "docId": "DG-RELAY-101-G",
    "version": "3.0",
    "intro": "Give the relay the token your application expects, from the Lattice Cloud console, and deploy the change. Fictional sample written for this portfolio: the console and the service are invented.",
@@ -882,7 +882,7 @@
   {
    "id": "engineering-inspection",
    "scenario": "a-industrial",
-   "title": "Record the readings for a monthly pump inspection",
+   "title": "Record the Readings for a Monthly Pump Inspection",
    "docId": "MP-PS104-01-G",
    "version": "1.0",
    "intro": "Record the four inspection readings for a feed pump in the maintenance console, then close the work order. Fictional sample written for this portfolio: it isn't an operating instruction for real equipment.",
@@ -910,7 +910,7 @@
   {
    "id": "software-feature",
    "scenario": "g-training",
-   "title": "Schedule a report for automatic delivery",
+   "title": "Schedule a Report for Automatic Delivery",
    "docId": "TR-BR-007-G",
    "version": "1.0",
    "intro": "Send a report to the people who need it every week or every month, without opening Beacon Reports on the day. Fictional sample written for this portfolio: the application is invented.",

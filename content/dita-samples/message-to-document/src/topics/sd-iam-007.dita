@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="reset-mfa-for-a-locked-out-user" xml:lang="en">
-<title>Reset MFA for a locked-out user</title>
+<title>Reset MFA for a Locked-Out User</title>
 <shortdesc>Let a user who lost or replaced their phone sign in again: clear their multi-factor authentication (MFA), so that they can enroll the new phone.</shortdesc>
 <taskbody>
 <prereq>

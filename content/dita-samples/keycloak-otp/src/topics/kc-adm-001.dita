@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="reset-a-user-s-otp-credential-in-keycloak" xml:lang="en">
-<title>Reset a user’s OTP credential in Keycloak</title>
+<title>Reset a User’s OTP Credential in Keycloak</title>
 <shortdesc>When a user loses or replaces the phone that holds their authenticator app, sign the user out, delete the phone’s one-time password (OTP) credential, and make the user set up a new one at their next sign-in. This resets the OTP credential only: it doesn’t remove passkeys, security keys or other second factors that the user may also have.</shortdesc>
 <taskbody>
 <prereq>

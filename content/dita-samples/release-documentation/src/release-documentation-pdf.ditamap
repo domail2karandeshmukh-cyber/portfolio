@@ -3,14 +3,14 @@
 <bookmap id="release-documentation-pdf" xml:lang="en">
 <booktitle>
 <booklibrary>Fieldbook, an example company</booklibrary>
-<mainbooktitle>Fieldbook 2.4 release documentation</mainbooktitle>
+<mainbooktitle>Fieldbook 2.4 Release Documentation</mainbooktitle>
 <booktitlealt>Publication RELEASE-DOCUMENTATION, 3 documents</booktitlealt>
 <booktitlealt>Fieldbook, an example company</booktitlealt>
-<booktitlealt>Issued 2026-11-20. Written by Karan Deshmukh.</booktitlealt>
+<booktitlealt>Issued 2026-11-28. Written by Karan Deshmukh.</booktitlealt>
 </booktitle>
 <bookmeta>
 <author>Karan Deshmukh</author>
-<critdates><created date="2026-11-20"/></critdates>
+<critdates><created date="2026-11-28"/></critdates>
 </bookmeta>
 <frontmatter>
 <keydef keys="product"><topicmeta><keywords><keyword>Fieldbook</keyword></keywords></topicmeta></keydef>

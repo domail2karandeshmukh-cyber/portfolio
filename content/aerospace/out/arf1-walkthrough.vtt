@@ -1,29 +1,96 @@
 WEBVTT
 
 1
-00:00:00.400 --> 00:00:15.694
-These aerospace documentation demonstrations are built around one fictional training rig. Its documentation is an S1000D Issue 6 common source database: data modules, publication modules and illustrations.
+00:00:00.400 --> 00:00:05.271
+These aerospace documentation
+demonstrations are built around one
 
 2
-00:00:16.200 --> 00:00:27.106
-The common source database lists every module. For each one, it shows what refers to it, which publications use it, and what changed from one issue to the next.
+00:00:05.321 --> 00:00:07.013
+fictional training rig.
 
 3
-00:00:27.600 --> 00:00:41.379
-In the editor, the form and the XML stay in step, and the checks run as you type. A two-digit issue number fails the identification check. Put the third digit back, and every layer passes again.
+00:00:07.063 --> 00:00:12.767
+Its documentation is an S1000D Issue 6
+common source database: data modules,
 
 4
-00:00:41.900 --> 00:00:54.713
-The Simplified Technical English checker marks each finding in the text, names its rule, and suggests a fix. Its word list is an original one, so it can't certify that a text complies.
+00:00:12.817 --> 00:00:15.694
+publication modules and illustrations.
 
 5
-00:00:55.267 --> 00:01:04.005
-The interactive publication shows only what applies to the serial number you choose, and fault isolation asks one question at a time.
+00:00:16.200 --> 00:00:19.325
+The common source database lists every
+module.
 
 6
-00:01:05.600 --> 00:01:12.091
-In the parts catalogue, select a part in the exploded view, and its row in the parts list follows.
+00:00:19.375 --> 00:00:24.019
+For each one, it shows what refers to it,
+which publications use it,
 
 7
-00:01:14.467 --> 00:01:24.171
-Everything here is fictional, and none of it is maintenance data. Try it at karandeshmukh dot dev slash studio slash aerospace.
+00:00:24.069 --> 00:00:27.106
+and what changed from one issue to the
+next.
+
+8
+00:00:27.600 --> 00:00:33.363
+In the editor, the form and the XML stay
+in step, and the checks run as you type.
+
+9
+00:00:33.413 --> 00:00:37.382
+A two-digit issue number fails the
+identification check.
+
+10
+00:00:37.432 --> 00:00:41.379
+Put the third digit back, and every layer
+passes again.
+
+11
+00:00:41.900 --> 00:00:46.919
+The Simplified Technical English checker
+marks each finding in the text,
+
+12
+00:00:46.969 --> 00:00:49.383
+names its rule, and suggests a fix.
+
+13
+00:00:49.433 --> 00:00:54.713
+Its word list is an original one, so it
+can't certify that a text complies.
+
+14
+00:00:55.267 --> 00:01:00.286
+The interactive publication shows only
+what applies to the serial number you
+
+15
+00:01:00.336 --> 00:01:01.336
+choose,
+
+16
+00:01:00.803 --> 00:01:04.005
+and fault isolation asks one question at a
+time.
+
+17
+00:01:05.600 --> 00:01:09.498
+In the parts catalogue, select a part in
+the exploded view,
+
+18
+00:01:09.548 --> 00:01:12.091
+and its row in the parts list follows.
+
+19
+00:01:14.467 --> 00:01:19.854
+Everything here is fictional, and none of
+it is maintenance data.
+
+20
+00:01:19.904 --> 00:01:24.171
+Try it at karandeshmukh.dev/studio slash
+aerospace.

@@ -109,7 +109,7 @@
   {
    "id": "it-onboarding",
    "scenario": "b-enterprise-it",
-   "title": "Create a new employee's account",
+   "title": "Create a New Employee's Account",
    "blurb": "Create the identity a new employee signs in with, in Meridian Identity, and give it the standard access for the department.",
    "steps": 5,
    "project": "guides/it-onboarding/it-onboarding.guide.zip",
@@ -120,7 +120,7 @@
   {
    "id": "support-unlock",
    "scenario": "e-support",
-   "title": "Unlock a customer's account",
+   "title": "Unlock a Customer's Account",
    "blurb": "Internal procedure for support agents of Ledgerly: a customer is locked out and can't wait for the lock to lift. Verify who you're talking to before you change anything.",
    "steps": 5,
    "project": "guides/support-unlock/support-unlock.guide.zip",
@@ -131,7 +131,7 @@
   {
    "id": "cloud-config",
    "scenario": "c-cloud",
-   "title": "Add an environment variable to a relay and deploy it",
+   "title": "Add an Environment Variable to a Relay and Deploy It",
    "blurb": "Give the relay the token your application expects, from the Lattice Cloud console, and deploy the change.",
    "steps": 5,
    "project": "guides/cloud-config/cloud-config.guide.zip",
@@ -142,7 +142,7 @@
   {
    "id": "engineering-inspection",
    "scenario": "a-industrial",
-   "title": "Record the readings for a monthly pump inspection",
+   "title": "Record the Readings for a Monthly Pump Inspection",
    "blurb": "Record the four inspection readings for a feed pump in the maintenance console, then close the work order.",
    "steps": 3,
    "project": "guides/engineering-inspection/engineering-inspection.guide.zip",
@@ -153,7 +153,7 @@
   {
    "id": "software-feature",
    "scenario": "g-training",
-   "title": "Schedule a report for automatic delivery",
+   "title": "Schedule a Report for Automatic Delivery",
    "blurb": "Send a report to the people who need it every week or every month, without opening Beacon Reports on the day.",
    "steps": 6,
    "project": "guides/software-feature/software-feature.guide.zip",

@@ -17,7 +17,7 @@ TOUCH = False
 LAST_CARD = (
     '<h2>One source. A page for each reader.</h2>'
     '<p class="url">karandeshmukh.dev/workbench</p>'
-    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to part-time, freelance, internship, and apprenticeship roles.</p>'
+    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to technical documentation roles: full-time, contract, and part-time.</p>'
 )
 # Where a part of a panel is, measured in the panel's own scroll.
 INSIDE = "a => { const p = document.querySelector(a[0]), e = p.querySelector(a[1]); return e.getBoundingClientRect().top - p.getBoundingClientRect().top + p.scrollTop; }"

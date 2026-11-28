@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE troubleshooting PUBLIC "-//OASIS//DTD DITA Troubleshooting//EN" "troubleshooting.dtd">
 <troubleshooting id="a-report-shows-access-is-denied" xml:lang="en">
-<title>A report shows “Access is denied”</title>
+<title>A Report Shows “Access is denied”</title>
 <shortdesc>You open a report in <ph keyref="product">Acme Console</ph> and see “Access is denied” in place of the report.</shortdesc>
 <troublebody>
 <troubleSolution>
-<cause><title>Why it happens</title>
+<cause><title>Why It Happens</title>
 <p>Your account has the Viewer role in the workspace that owns the report. A viewer can open dashboards, but not the reports behind them.</p>
 </cause>
-<remedy><title>Fix it</title>
+<remedy><title>Fix It</title>
 <steps>
 <step><cmd>Open the workspace that owns the report.</cmd></step>
 <step><cmd>Select <uicontrol>Members</uicontrol>, and then find your name.</cmd></step>
 <step><cmd>Ask a workspace owner to change your role to <uicontrol>Analyst</uicontrol>.</cmd></step>
 </steps>
 </remedy>
-<remedy><title>If that didn’t work</title>
+<remedy><title>If That Didn’t Work</title>
 <steps-informal>
 <ul><li>Sign out, and then sign in again. A role change applies at the next sign-in.</li><li>If the message stays, send the report’s address and the time of the error to the service desk.</li></ul>
 </steps-informal>

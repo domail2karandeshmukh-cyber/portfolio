@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
-<reference id="monthly-inspection-record-for-asset" xml:lang="en">
-<title>Monthly inspection record for <ph keyref="asset">feed pump B</ph></title>
-<shortdesc>The record a technician completes during the monthly inspection of <ph keyref="asset">feed pump B</ph>, tag <ph keyref="tag">PS-104</ph>, under procedure MP-PS104-01. The maintenance console fills the first table from the work order; the technician fills the rest. A record is complete when every field has a value or the entry <b>Not applicable</b>, and the supervisor has signed it. Fictional sample written for this portfolio: it isn’t a record for real equipment.</shortdesc>
+<reference id="monthly-inspection-record-for-feed-pump-b" xml:lang="en">
+<title>Monthly Inspection Record for Feed Pump B</title>
+<shortdesc>The record a technician completes during the monthly inspection of <ph keyref="asset">Feed Pump B</ph>, tag <ph keyref="tag">PS-104</ph>, under procedure MP-PS104-01. The maintenance console fills the first table from the work order; the technician fills the rest. A record is complete when every field has a value or the entry <b>Not applicable</b>, and the supervisor has signed it. Fictional sample written for this portfolio: it isn’t a record for real equipment.</shortdesc>
 <refbody>
-<section><title>Work order</title>
-<simpletable frame="topbot"><sthead><stentry>Field</stentry><stentry>Value</stentry></sthead><strow><stentry>Work order</stentry><stentry>From the console</stentry></strow><strow><stentry>Asset</stentry><stentry><ph keyref="asset">feed pump B</ph>, tag <ph keyref="tag">PS-104</ph></stentry></strow><strow><stentry>Location</stentry><stentry>Pump room 2, east bay</stentry></strow><strow><stentry>Procedure</stentry><stentry>MP-PS104-01, version 0.3</stentry></strow><strow><stentry>Scheduled date</stentry><stentry>From the console</stentry></strow><strow><stentry>Technician</stentry><stentry>Name and badge number</stentry></strow><strow><stentry>Shift</stentry><stentry>Day or night</stentry></strow></simpletable>
+<section><title>Work Order</title>
+<simpletable frame="topbot"><sthead><stentry>Field</stentry><stentry>Value</stentry></sthead><strow><stentry>Work order</stentry><stentry>From the console</stentry></strow><strow><stentry>Asset</stentry><stentry><ph keyref="asset">Feed Pump B</ph>, tag <ph keyref="tag">PS-104</ph></stentry></strow><strow><stentry>Location</stentry><stentry>Pump room 2, east bay</stentry></strow><strow><stentry>Procedure</stentry><stentry>MP-PS104-01, version 0.3</stentry></strow><strow><stentry>Scheduled date</stentry><stentry>From the console</stentry></strow><strow><stentry>Technician</stentry><stentry>Name and badge number</stentry></strow><strow><stentry>Shift</stentry><stentry>Day or night</stentry></strow></simpletable>
 </section>
-<section><title>Conditions at the start</title>
+<section><title>Conditions at the Start</title>
 <simpletable frame="topbot"><sthead><stentry>Field</stentry><stentry>Value</stentry><stentry>Unit</stentry></sthead><strow><stentry>Pump running at normal load</stentry><stentry>Yes or no</stentry><stentry></stentry></strow><strow><stentry>Ambient temperature in the pump room</stentry><stentry></stentry><stentry>°C</stentry></strow><strow><stentry>Running hours since the last inspection</stentry><stentry>From the console</stentry><stentry>h</stentry></strow><strow><stentry>Alarms active on the console</stentry><stentry>None, or list them</stentry><stentry></stentry></strow></simpletable>
 </section>
 <section><title>Readings</title>
@@ -20,7 +20,7 @@
 <section><title>Outcome</title>
 <simpletable frame="topbot"><sthead><stentry>Field</stentry><stentry>Value</stentry></sthead><strow><stentry>All readings inside range</stentry><stentry>Yes or no</stentry></strow><strow><stentry>Work order closed</stentry><stentry>Yes or no</stentry></strow><strow><stentry>Reported to the shift supervisor</stentry><stentry>Not needed, or the time and the reading reported</stentry></strow><strow><stentry>Follow-up work order raised</stentry><stentry>None, or its number</stentry></strow></simpletable>
 </section>
-<section><title>Sign-off</title>
+<section><title>Sign-Off</title>
 <simpletable frame="topbot"><sthead><stentry>Role</stentry><stentry>Name</stentry><stentry>Date</stentry><stentry>Signature</stentry></sthead><strow><stentry>Technician</stentry><stentry></stentry><stentry></stentry><stentry></stentry></strow><strow><stentry>Shift supervisor</stentry><stentry></stentry><stentry></stentry><stentry></stentry></strow></simpletable>
 </section>
 <section><title>Retention</title>

@@ -1,19 +1,19 @@
 <!DOCTYPE html
   SYSTEM "about:legacy-compat">
-<html lang="en"><head><meta charset="UTF-8"><meta name="copyright" content="(C) Copyright 2026"><meta name="generator" content="DITA-OT"><meta name="description" content="For the engineer on call. Follow it when the alert “Readings API not responding” fires. Fictional sample."><title>Runbook: the readings service stops responding</title><link rel="stylesheet" type="text/css" href="../commonltr.css"><link rel="stylesheet" type="text/css" href="../dita-html5.css"></head><body id="runbook-service-stops-responding"><main role="main"><article role="article" aria-labelledby="ariaid-title1">
-<h1 class="title topictitle1" id="ariaid-title1">Runbook: <span class="ph">the readings service</span> stops responding</h1>
+<html lang="en"><head><meta charset="UTF-8"><meta name="copyright" content="(C) Copyright 2026"><meta name="generator" content="DITA-OT"><meta name="description" content="For the engineer on call. Follow it when the alert “Readings API not responding” fires. Fictional sample."><title>Runbook: The Readings Service Stops Responding</title><link rel="stylesheet" type="text/css" href="../commonltr.css"><link rel="stylesheet" type="text/css" href="../dita-html5.css"></head><body id="runbook-the-readings-service-stops-responding"><main role="main"><article role="article" aria-labelledby="ariaid-title1">
+<h1 class="title topictitle1" id="ariaid-title1">Runbook: The Readings Service Stops Responding</h1>
 
 <div class="body taskbody"><p class="shortdesc">For the engineer on call. Follow it when the alert “Readings API not responding” fires. Fictional sample.</p>
-<section class="section prereq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Before you begin</h2></div>
+<section class="section prereq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Before You Begin</h2></div>
 <ul class="ul"><li class="li">You’re on call, and you have access to the status page and the deployment tool.</li><li class="li">Tell the incident channel that you’re working on the alert.</li></ul>
 </section>
 <section><div class="tasklabel"><h2 class="sectiontitle tasklabel">Procedure</h2></div><ol class="ol steps"><li class="li step"><span class="ph cmd">Open the status page, and then check whether the database shows as healthy.</span></li><li class="li step"><span class="ph cmd">If the database is healthy, restart <span class="ph">the readings service</span> in the deployment tool.</span></li><li class="li step"><span class="ph cmd">Wait two minutes, and then check whether the alert clears.</span></li><li class="li step"><span class="ph cmd">If the alert stays, roll back to the last version that worked.</span></li><li class="li step"><span class="ph cmd">Post the time and the action you took in the incident channel.</span></li></ol></section>
 <section class="section result"><div class="tasklabel"><h2 class="sectiontitle tasklabel">Results</h2></div>
 <p class="p">The alert clears, and a test request to the readings API gets the status 200.</p>
 </section>
-<section class="section postreq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">What to do next</h2></div>
+<section class="section postreq"><div class="tasklabel"><h2 class="sectiontitle tasklabel">What to Do Next</h2></div>
 <p class="p"><strong class="ph b">Escalate</strong></p>
 <p class="p">If the service still doesn’t respond after the rollback, page the platform team lead. Give them the time the alert fired and every action you took.</p>
 </section>
 </div>
-<nav role="navigation" class="related-links"><div class="linklist relref"><strong>Related reference</strong><br><ul class="linklist"><li class="linklist"><a class="link" href="workspace-roles.html" title="What each role in a Acme Console workspace can open and change.">Workspace roles</a></li></ul></div><div class="linklist relinfo"><strong>Related information</strong><br><ul class="linklist"><li class="linklist"><a class="link" href="a-report-shows-access-is-denied.html" title="You open a report in Acme Console and see “Access is denied” in place of the report.">A report shows “Access is denied”</a></li></ul></div></nav></article></main></body></html>
+<nav role="navigation" class="related-links"><div class="linklist relref"><strong>Related Reference</strong><br><ul class="linklist"><li class="linklist"><a class="link" href="workspace-roles.html" title="What each role in a Acme Console workspace can open and change.">Workspace Roles</a></li></ul></div><div class="linklist relinfo"><strong>Related Information</strong><br><ul class="linklist"><li class="linklist"><a class="link" href="a-report-shows-access-is-denied.html" title="You open a report in Acme Console and see “Access is denied” in place of the report.">A Report Shows “Access is denied”</a></li></ul></div></nav></article></main></body></html>

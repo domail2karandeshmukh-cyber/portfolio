@@ -106,12 +106,12 @@ def console_steps():
 
 
 SAMPLES = {
-    "schedule-a-report": {"demo": "reports", "steps": reports_steps, "title": "Schedule a report for automatic delivery", "scenario": "g-training",
-                          "intro": "Schedule a report for automatic delivery\nBeacon Reports · a short tutorial · example application", "outro": "You're done\nThe Schedules tab lists the schedule and its next delivery.",
+    "schedule-a-report": {"demo": "reports", "steps": reports_steps, "title": "Schedule a Report for Automatic Delivery", "scenario": "g-training",
+                          "intro": "Schedule a Report for Automatic Delivery\nBeacon Reports · a short tutorial · example application", "outro": "You're Done\nThe Schedules tab lists the schedule and its next delivery.",
                           "lower": "Beacon Reports, an example company", "blur": None,
                           "blurb": "A software-feature tutorial: pointer with halo and click ripples, zoom that follows each click, highlight boxes on the controls, step numbers, labels and captions."},
-    "inspection-walkthrough": {"demo": "console", "steps": console_steps, "title": "Monthly inspection of feed pump B", "scenario": "a-industrial",
-                               "intro": "Monthly inspection of feed pump B\nRecording the readings in the maintenance console · example procedure", "outro": "Inspection recorded\nThe written procedure, the step guide and the DITA output are in the same package.",
+    "inspection-walkthrough": {"demo": "console", "steps": console_steps, "title": "Monthly Inspection of Feed Pump B", "scenario": "a-industrial",
+                               "intro": "Monthly Inspection of Feed Pump B\nRecording the readings in the maintenance console · example procedure", "outro": "Inspection Recorded\nThe written procedure, the step guide and the DITA output are in the same package.",
                                "lower": "Harbor Pump Station, an example company", "blur": "#key",
                                "prepare": "document.head.insertAdjacentHTML('beforeend', '<style>.in:empty::after{content:\\'\\\\00a0\\'}</style>'); document.querySelectorAll('" + CONSOLE_FIELDS + "').forEach((e) => { e.textContent = ''; e.classList.remove('f'); })",
                                "blurb": "A maintenance walkthrough: the console recorded with its pointer, a redacted key, a warning before the last step, and captions."},

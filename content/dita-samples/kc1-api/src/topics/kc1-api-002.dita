@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="get-your-first-prediction-from-the-kc1-api" xml:lang="en">
-<title>Get your first prediction from the KC1 API</title>
+<title>Get Your First Prediction from the KC1 API</title>
 <shortdesc>Train the KC1 model, start the prediction API, and send it the metrics of one software module.</shortdesc>
 <taskbody>
 <prereq>
@@ -24,7 +24,7 @@
 </result>
 <postreq>
 <ul><li>Read the <xref href="kc1-api-001.dita">KC1 prediction API reference</xref> for every field and every error.</li><li>If a request fails, see <xref href="kc1-api-003.dita">Troubleshoot the KC1 API</xref>.</li></ul>
-<p><b>Try it from the API’s own page</b></p>
+<p><b>Try It from the API’s Own Page</b></p>
 <p>The API serves an interactive page at <codeph>http://127.0.0.1:8000/docs</codeph>, made by Swagger UI from the API’s OpenAPI description.</p>
 <ol><li>Open <codeph>http://127.0.0.1:8000/docs</codeph>, and select <b>POST /predict</b>.<fig><image href="img/swagger-s1-endpoints.png" placement="break" width="150mm"><alt>The API’s documentation page, with POST /predict marked</alt></image></fig></li><li>Select <b>Try it out</b>, and paste the contents of <codeph>module.json</codeph> into the request body.<fig><image href="img/swagger-s2-request.png" placement="break" width="150mm"><alt>The request body with the module’s metrics, marked</alt></image></fig></li><li>Select <b>Execute</b>. The page shows the status code, <codeph>200</codeph>, and the same response as step 6.<fig><image href="img/swagger-s3-response.png" placement="break" width="150mm"><alt>The server response, with the status code and the response body marked</alt></image></fig></li></ol>
 </postreq>

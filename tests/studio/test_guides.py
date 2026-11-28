@@ -54,7 +54,7 @@ with sync_playwright() as p:
     f = f"{OUT}/guide-md.zip"; d.value.save_as(f); z = zipfile.ZipFile(f)
     names = sorted(z.namelist()); md = [n for n in names if n.endswith(".md")][0]; text = z.read(md).decode()
     check("the Markdown ZIP opens and holds the document and three pictures", len([n for n in names if n.startswith("images/step-")]) == 3 and z.testzip() is None, names)
-    check("the Markdown has the title, numbered steps and picture links", text.startswith("# Record the readings") and "\n1. Open the work order" in text and "](images/step-01.png)" in text and "## Before you start" in text and "**Warning**:" in text, text[:200])
+    check("the Markdown has the title, numbered steps and picture links", text.startswith("# Record the readings") and "\n1. Open the work order" in text and "](images/step-01.png)" in text and "## Before You Start" in text and "**Warning**:" in text, text[:200])
     im = Image.open(io.BytesIO(z.read("images/step-01.png"))).convert("RGB")
     check("the first picture has its redaction burned in", all(im.getpixel((x, y)) == (0, 0, 0) for x in range(450, 636, 6) for y in range(556, 579, 4)))
     # Version 10: one action, so a green box and no number (standards/screenshots.md).
@@ -75,7 +75,7 @@ with sync_playwright() as p:
     txt = subprocess.run(["pdftotext", pdf, "-"], capture_output=True, text=True).stdout
     imgs = subprocess.run(["pdfimages", "-list", pdf], capture_output=True, text=True).stdout.strip().splitlines()[2:]
     check("the PDF opens and has pages", "Pages:" in info and int(info.split("Pages:")[1].split()[0]) >= 2, info[:120])
-    check("the PDF holds the text of every step", all(t in txt for t in ["Record the readings", "Before you start", "Open the work order", "Enter each reading", "Check your work"]), txt[:300])
+    check("the PDF holds the text of every step", all(t in txt for t in ["Record the readings", "Before You Start", "Open the work order", "Enter each reading", "Check Your Work"]), txt[:300])
     check("the PDF holds the three pictures", len(imgs) == 3, len(imgs))
     subprocess.run(["pdftoppm", "-png", "-r", "60", "-f", "1", "-l", "1", pdf, f"{OUT}/guide-p"])
     # screenshots ZIP

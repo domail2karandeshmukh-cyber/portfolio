@@ -21,7 +21,7 @@
   // A word that already has a capital inside it, a digit or a dot (OTP, macOS, S1000D, 26.8.2, README.md) is kept.
   var TC_SMALL = {}, TC_VERB = {}, TC_PARTICLE = { in: 1, on: 1, over: 1, up: 1, out: 1, off: 1, down: 1, back: 1, through: 1 };
   "a an the and but or nor for so yet as at by in of on per to via vs from into onto over upon with".split(" ").forEach(function (w) { TC_SMALL[w] = 1; });
-  ("set sets setting sign signs signing log logs logging back look turn turns turning check checks checking roll rolls wrap start hold opt " +
+  ("set sets setting sign signs signing log logs logging back look turn turns turning check checks roll rolls wrap start hold opt " +
    "pick fill scale spin shut break clean follow plug lock sort hand take make keep show tune read step back backs backing log-in sign-in " +
    "clear clears scroll zoom write writes boot reboot power powers pin pins top log-on carry").split(" ").forEach(function (w) { TC_VERB[w] = 1; });
   function titleCase(line) {

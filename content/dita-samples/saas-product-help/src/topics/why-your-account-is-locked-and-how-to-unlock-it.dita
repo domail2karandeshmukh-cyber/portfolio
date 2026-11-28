@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="why-your-account-is-locked-and-how-to-unlock-it" xml:lang="en">
-<title>Why your account is locked, and how to unlock it</title>
+<title>Why Your Account Is Locked, and How to Unlock It</title>
 <shortdesc>Ledgerly locks an account after ten wrong passwords in a row. The lock protects your books from someone guessing your password, and it lifts on its own.</shortdesc>
 <conbody>
-<section><title>How long the lock lasts</title>
+<section><title>How Long the Lock Lasts</title>
 <p>The first lock lasts 15 minutes. If wrong passwords continue after that, each new lock lasts twice as long as the one before, up to 24 hours. A correct password after the lock lifts resets the count.</p>
 </section>
-<section><title>What you can do</title>
+<section><title>What You Can Do</title>
 <ul><li><b>Wait 15 minutes</b>, and then sign in with the right password. This is the quickest way in most cases.</li><li><b>Reset your password</b> if you aren’t sure of it. A password reset unlocks the account at once. See <i>Reset your password</i>.</li><li><b>Ask an administrator.</b> An administrator of your company’s Ledgerly account can unlock you from <b>Settings</b> &gt; <b>Users</b>. They can’t see or set your password.</li></ul>
 </section>
-<section><title>If you didn’t enter those passwords</title>
+<section><title>If You Didn’t Enter Those Passwords</title>
 <p>Someone else tried to sign in as you. Reset your password, and then turn on two-step verification under <b>Your account</b> &gt; <b>Security</b> if it isn’t on already. You can also see the attempts, with their time and approximate location, under <b>Your account</b> &gt; <b>Sign-in activity</b>.</p>
 </section>
 </conbody>

@@ -5,4 +5,14 @@
 <variables>
   <variable id="Chapter with number"></variable>
   <variable id="Table of Contents Chapter"></variable>
+  <!-- Title Case, the house style for headings (standards/editorial.md): the labels DITA-OT writes above a task's
+       sections and above related links are headings too. -->
+  <variable id="task_prereq">Before You Begin</variable>
+  <variable id="task_context">About This Task</variable>
+  <variable id="task_postreq">What to Do Next</variable>
+  <variable id="Related concepts">Related Concepts</variable>
+  <variable id="Related information">Related Information</variable>
+  <variable id="Related reference">Related Reference</variable>
+  <variable id="Related tasks">Related Tasks</variable>
+  <variable id="Related links">Related Links</variable>
 </variables>

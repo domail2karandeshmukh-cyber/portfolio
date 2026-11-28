@@ -249,7 +249,6 @@
   "An AI model drafts it by <a href=\"https://github.com/domail2karandeshmukh-cyber/portfolio/blob/main/content/desk/brief.md\" target=\"_blank\" rel=\"noopener\">this brief</a>. This site doesn't keep your text. Leave out anything confidential all the same.": "Ein KI-Modell entwirft das Dokument nach <a href=\"https://github.com/domail2karandeshmukh-cyber/portfolio/blob/main/content/desk/brief.md\" target=\"_blank\" rel=\"noopener\">diesem Briefing</a>. Diese Website speichert Ihren Text nicht. Lassen Sie Vertrauliches trotzdem weg.",
   "Your message": "Ihre Nachricht",
   "Draft": "Entwurf",
-  "Questions to settle before publishing": "Fragen, die vor der Veröffentlichung zu klären sind",
   "Paste at least a couple of sentences.": "Fügen Sie mindestens ein paar Sätze ein.",
   "The desk is busy right now. Try again in a minute, or start from a sample.": "Im Moment ist viel los. Versuchen Sie es in einer Minute noch einmal, oder beginnen Sie mit einem Beispiel.",
   "There aren't enough facts in that to make a document. Try a message that explains how something is done, or start from a sample.": "Darin stehen nicht genug Fakten für ein Dokument. Versuchen Sie es mit einer Nachricht, die erklärt, wie etwas gemacht wird, oder beginnen Sie mit einem Beispiel.",
@@ -513,7 +512,6 @@
   "Technical writer<br>Documentation, tested<br>Angers, France": "Technischer Redakteur<br>Geprüfte Dokumentation<br>Angers, Frankreich",
   "Procedures, API references and help-center articles, written from the product and tested on it before they ship.": "Anleitungen, API-Referenzen und Hilfe-Center-Artikel, am Produkt geschrieben und daran getestet, bevor sie erscheinen.",
   "Case study": "Fallstudie",
-  "Four years in dedicated documentation roles at MongoDB and Magna International. I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "Vier Jahre in Rollen, die ganz der Dokumentation gewidmet waren, bei MongoDB und Magna International. Ich mache aus dem Wissen von Ingenieuren Schritte, denen Leser folgen können, und teste jeden Schritt am echten Produkt.",
   "See the selected work": "Ausgewählte Arbeiten ansehen",
   "Most recent test": "Letzter Test",
   "Keycloak 26.8.2<br>Tested 28 November 2026": "Keycloak 26.8.2<br>Getestet am 28. November 2026",
@@ -541,6 +539,8 @@
   "A technical drawing of one of my procedures, with callouts for the five things every page has: a task title, what to check before starting, one action per step, an annotated figure, and a result the reader can check.": "Eine technische Zeichnung einer meiner Anleitungen, mit Markierungen für die fünf Dinge, die jede Seite hat: einen Aufgabentitel, was vorab zu prüfen ist, eine Handlung pro Schritt, eine beschriftete Abbildung und ein Ergebnis, das der Leser prüfen kann.",
   "Help centers, API references and procedures, written from the product and tested before they ship": "Hilfe-Center, API-Referenzen und Anleitungen, am Produkt geschrieben und getestet, bevor sie erscheinen",
   "Selected documentation, <span class=\"ch-dim\">each page tested against the product it describes</span>": "Ausgewählte Dokumentation, <span class=\"ch-dim\">jede Seite am Produkt getestet, das sie beschreibt</span>",
-  "Documentation<br>that holds up": "Dokumentation,<br>die standhält"
+  "Documentation<br>that holds up": "Dokumentation,<br>die standhält",
+  "More than five years of documentation work, most recently as a technical writer at MongoDB and Magna International. I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "Mehr als fünf Jahre Dokumentationsarbeit, zuletzt als technischer Redakteur bei MongoDB und Magna International. Ich mache aus dem Wissen von Ingenieuren Schritte, denen Leser folgen können, und teste jeden Schritt am echten Produkt.",
+  "Questions to Settle Before Publishing": "Fragen, die vor der Veröffentlichung zu klären sind"
  }
 }

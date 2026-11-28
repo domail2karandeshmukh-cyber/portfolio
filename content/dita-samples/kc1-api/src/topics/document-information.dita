@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
-<title>Document information</title>
+<title>Document Information</title>
 <shortdesc>Documentation by Karan Deshmukh of the KC1 prediction API, version 1.0.0, from the Group 6 MSc project at ESAIP. Every request and response in it was recorded from the API on 19 November 2026, against the model that the project’s trainer produced.</shortdesc>
 <refbody>
 <simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4* 1.6*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry><stentry>Date</stentry></sthead>
-<strow><stentry>Get your first prediction from the KC1 API</stentry><stentry>KC1-API-002</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
-<strow><stentry>KC1 prediction API reference</stentry><stentry>KC1-API-001</stentry><stentry>1.1</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
+<strow><stentry>Get Your First Prediction from the KC1 API</stentry><stentry>KC1-API-002</stentry><stentry>1.0</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
+<strow><stentry>KC1 Prediction API Reference</stentry><stentry>KC1-API-001</stentry><stentry>1.1</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
 <strow><stentry>Troubleshoot the KC1 API</stentry><stentry>KC1-API-003</stentry><stentry>1.1</stentry><stentry>Published</stentry><stentry>2026-11-19</stentry></strow>
 </simpletable>
 <section><title>Publication</title>
-<p>Publication KC1-API, 3 documents. Written by Karan Deshmukh. Owner: Karan Deshmukh. Published on 2026-11-20 with DITA Open Toolkit from DITA 1.3 source.</p>
+<p>Publication KC1-API, 3 documents. Written by Karan Deshmukh. Owner: Karan Deshmukh. Published on 2026-11-28 with DITA Open Toolkit from DITA 1.3 source.</p>
 </section>
 </refbody>
 </reference>

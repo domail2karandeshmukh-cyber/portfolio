@@ -40,7 +40,7 @@ export function writeBookmap(src, mapFile, info) {
   const infoTopic = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
-<title>Document information</title>
+<title>Document Information</title>
 <shortdesc>${esc(info.notice)}</shortdesc>
 <refbody>
 <simpletable relcolwidth="${COLS.map(([, w]) => w).join(" ")}">

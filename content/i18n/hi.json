@@ -249,7 +249,6 @@
   "An AI model drafts it by <a href=\"https://github.com/domail2karandeshmukh-cyber/portfolio/blob/main/content/desk/brief.md\" target=\"_blank\" rel=\"noopener\">this brief</a>. This site doesn't keep your text. Leave out anything confidential all the same.": "एक AI मॉडल इसे <a href=\"https://github.com/domail2karandeshmukh-cyber/portfolio/blob/main/content/desk/brief.md\" target=\"_blank\" rel=\"noopener\">इन निर्देशों</a> के अनुसार लिखता है। यह साइट आपका टेक्स्ट नहीं रखती। फिर भी, कोई गोपनीय जानकारी न डालें।",
   "Your message": "आपका संदेश",
   "Draft": "ड्राफ़्ट",
-  "Questions to settle before publishing": "प्रकाशित करने से पहले तय करने लायक सवाल",
   "Paste at least a couple of sentences.": "कम से कम दो-तीन वाक्य पेस्ट करें।",
   "The desk is busy right now. Try again in a minute, or start from a sample.": "अभी बहुत अनुरोध आ रहे हैं। एक मिनट बाद फिर कोशिश करें, या किसी नमूने से शुरू करें।",
   "There aren't enough facts in that to make a document. Try a message that explains how something is done, or start from a sample.": "इस टेक्स्ट में दस्तावेज़ बनाने लायक पर्याप्त तथ्य नहीं हैं। ऐसा संदेश आज़माएँ जो बताता हो कि कोई काम कैसे किया जाता है, या किसी नमूने से शुरू करें।",
@@ -513,7 +512,6 @@
   "Technical writer<br>Documentation, tested<br>Angers, France": "तकनीकी लेखक<br>परखा हुआ दस्तावेज़ीकरण<br>आंजे, फ़्रांस",
   "Procedures, API references and help-center articles, written from the product and tested on it before they ship.": "प्रक्रियाएँ, API संदर्भ और हेल्प-सेंटर लेख, उत्पाद से लिखे गए और प्रकाशन से पहले उसी पर परखे गए।",
   "Case study": "केस स्टडी",
-  "Four years in dedicated documentation roles at MongoDB and Magna International. I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "MongoDB और Magna International में पूरी तरह दस्तावेज़ीकरण की भूमिकाओं में चार साल। मैं इंजीनियरों के ज्ञान को ऐसे चरणों में बदलता हूँ जिन्हें पाठक अपना सके, और हर चरण को असली उत्पाद पर परखता हूँ।",
   "See the selected work": "चुना हुआ काम देखें",
   "Most recent test": "सबसे हाल की जाँच",
   "Keycloak 26.8.2<br>Tested 28 November 2026": "Keycloak 26.8.2<br>28 नवंबर 2026 को परखा गया",
@@ -541,6 +539,8 @@
   "A technical drawing of one of my procedures, with callouts for the five things every page has: a task title, what to check before starting, one action per step, an annotated figure, and a result the reader can check.": "मेरी एक प्रक्रिया का तकनीकी चित्र, हर पेज की पाँच चीज़ों के निशानों के साथ: कार्य का शीर्षक, शुरू करने से पहले क्या जाँचें, हर चरण में एक काम, एक चिह्नित चित्र, और ऐसा परिणाम जिसे पाठक जाँच सके।",
   "Help centers, API references and procedures, written from the product and tested before they ship": "हेल्प सेंटर, API संदर्भ और प्रक्रियाएँ, उत्पाद से लिखे गए और प्रकाशन से पहले परखे गए",
   "Selected documentation, <span class=\"ch-dim\">each page tested against the product it describes</span>": "चुना हुआ दस्तावेज़ीकरण, <span class=\"ch-dim\">हर पेज उसी उत्पाद पर परखा गया जिसका वह वर्णन करता है</span>",
-  "Documentation<br>that holds up": "दस्तावेज़ीकरण<br>जो टिकता है"
+  "Documentation<br>that holds up": "दस्तावेज़ीकरण<br>जो टिकता है",
+  "More than five years of documentation work, most recently as a technical writer at MongoDB and Magna International. I turn what engineers know into steps a reader can follow, and I test every step on the real product.": "पाँच साल से अधिक का दस्तावेज़ीकरण का काम, हाल में MongoDB और Magna International में तकनीकी लेखक के रूप में। मैं इंजीनियरों की जानकारी को ऐसे चरणों में बदलता हूँ जिन्हें पाठक अपना सके, और हर चरण को असली उत्पाद पर परखता हूँ।",
+  "Questions to Settle Before Publishing": "प्रकाशित करने से पहले तय करने लायक सवाल"
  }
 }

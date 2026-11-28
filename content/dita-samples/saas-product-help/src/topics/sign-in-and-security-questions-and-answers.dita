@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
 <concept id="sign-in-and-security-questions-and-answers" xml:lang="en">
-<title>Sign-in and security: questions and answers</title>
+<title>Sign-In and Security: Questions and Answers</title>
 <conbody>
-<section><title>Do I need two-step verification?</title>
+<section><title>Do I Need Two-Step Verification?</title>
 <p>No, but we recommend it. With it, a password alone isn’t enough to get into your books. Turn it on under <b>Your account</b> &gt; <b>Security</b>. Administrators can require it for everyone in the company.</p>
 </section>
-<section><title>Which authenticator apps work?</title>
+<section><title>Which Authenticator Apps Work?</title>
 <p>Any app that generates time-based codes, such as the ones built into most password managers. Ledgerly shows a QR code to scan when you set it up.</p>
 </section>
-<section><title>I lost my phone. How do I sign in?</title>
+<section><title>I Lost My Phone. How Do I Sign In?</title>
 <p>Use one of the backup codes you saved when you set up two-step verification. If you have none, ask your administrator to reset your second factor. They’ll check who you are first.</p>
 </section>
-<section><title>Why was I signed out?</title>
+<section><title>Why Was I Signed Out?</title>
 <p>Ledgerly signs you out after 14 days, after a password change, and when an administrator removes a device. If that happens more often, check that your browser keeps cookies for ledgerly.example.</p>
 </section>
-<section><title>Can I see where my account is signed in?</title>
+<section><title>Can I See Where My Account Is Signed In?</title>
 <p>Yes. <b>Your account</b> &gt; <b>Sign-in activity</b> lists every device, with its last activity and approximate location. Select <b>Sign out</b> next to any device you don’t recognise, and then reset your password.</p>
 </section>
-<section><title>Does the support team ever ask for my password by email?</title>
+<section><title>Does the Support Team Ever Ask for My Password by Email?</title>
 <p>Never. A message that asks for your password, a code, or a payment to keep your account isn’t from us. Forward it to security at ledgerly.example and delete it.</p>
 </section>
 </conbody>

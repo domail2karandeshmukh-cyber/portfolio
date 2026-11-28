@@ -32,7 +32,7 @@ with sync_playwright() as p:
     mp = glob.glob(f"{dest}/*.ditamap")[0]
     r = subprocess.run([f"{DITA}/bin/dita", f"--input={mp}", "--format=pdf", f"--output={dest}/out"], capture_output=True, text=True)
     pdf = glob.glob(f"{dest}/out/*.pdf"); txt = subprocess.run(["pdftotext", pdf[0], "-"], capture_output=True, text=True).stdout if pdf else ""
-    check("DITA-OT publishes it to PDF, with the key resolved and the table kept", r.returncode == 0 and "Monthly Inspection of feed pump B" in txt and "3.8 to 4.6 bar" in txt, (r.returncode, txt[:200]))
+    check("DITA-OT publishes it to PDF, with the key resolved and the table kept", r.returncode == 0 and "Monthly Inspection of Feed Pump B" in txt and "3.8 to 4.6 bar" in txt, (r.returncode, txt[:200]))
     check("no script errors", not errs, errs)
     b.close()
 print(f"{ok} checks passed, {bad} failed")

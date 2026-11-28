@@ -17,13 +17,16 @@ TOUCH = False
 LAST_CARD = (
     '<h2>Write a document, and watch it get checked.</h2>'
     '<p class="url">karandeshmukh.dev/workbench</p>'
-    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to part-time, freelance, internship, and apprenticeship roles.</p>'
+    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to technical documentation roles: full-time, contract, and part-time.</p>'
 )
 
 
 def prepare(page):
-    # A browser that has never opened the workbench: it starts with the first draft.
-    page.evaluate("() => localStorage.clear()")
+    # The workbench opens on a finished document; this film starts from the practice draft, which breaks the style
+    # guide on purpose: it is put where the workbench keeps the reader's draft (KEY in src/workbench.js).
+    import json, pathlib
+    draft = (pathlib.Path(__file__).resolve().parents[3] / "content/workbench/first-draft.md").read_text(encoding="utf-8")
+    page.evaluate("(d) => { localStorage.clear(); localStorage.setItem('wb:doc2', d); }", draft)
     page.reload(wait_until="load")
     page.evaluate("() => document.fonts.ready.then(() => 1)")
 

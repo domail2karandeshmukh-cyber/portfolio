@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="keycloak-otp" xml:lang="en">
-<title>Keycloak administration: one-time passwords</title>
+<title>Keycloak Administration: One-Time Passwords</title>
 <topicmeta>
 <author>Karan Deshmukh</author>
 <othermeta name="status" content="Published"/>

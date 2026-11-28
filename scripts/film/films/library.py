@@ -17,7 +17,7 @@ TOUCH = False
 LAST_CARD = (
     '<h2>Every document I can show, in one library.</h2>'
     '<p class="url">karandeshmukh.dev/docs</p>'
-    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to part-time, freelance, internship, and apprenticeship roles.</p>'
+    '<p class="who"><b>Karan Deshmukh</b>Technical writer, open to technical documentation roles: full-time, contract, and part-time.</p>'
 )
 
 

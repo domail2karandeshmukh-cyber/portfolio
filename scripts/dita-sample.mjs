@@ -30,6 +30,20 @@ import { typeset as typesetDita } from "./dita-pdf/typeset.mjs";
 const XMLLINT_LIMITS = (() => { try { const h = spawnSync("xmllint", ["--help"], { encoding: "utf8" }); return ["--huge"].concat(/--max-ampl/.test((h.stdout || "") + (h.stderr || "")) ? ["--max-ampl", "1000"] : []); } catch { return ["--huge"]; } })();
 const require = createRequire(import.meta.url);
 const Doc = require("../src/doc.js");
+const Style = require("../src/style.js");
+// Title Case, the house style for titles and headings (src/style.js): the Markdown's title and headings, outside code.
+function titled(md) {
+  // A variable in a title or a heading is part of the title: its value is set in Title Case with the words around it.
+  const vars = Doc.parse(md).meta.vars || {};
+  const fill = (t) => t.replace(/\{\{\s*([\w.-]+)\s*\}\}/g, (m, k) => (vars[k] != null ? String(vars[k]) : m));
+  let fence = false, head = 0;
+  return md.replace(/\r\n/g, "\n").split("\n").map((l, i, all) => {
+    if (i === 0 && l === "---") { head = 1; return l; }
+    if (head === 1) { if (l === "---") { head = 2; return l; } return l.replace(/^(title:\s*)(["']?)(.+?)\2\s*$/, (m, k, q, t) => k + q + Style.titleCase(fill(t)) + q); }
+    if (/^\s*(```|~~~)/.test(l)) { fence = !fence; return l; }
+    return fence ? l : l.replace(/^(#{1,6} +)(.+)$/, (m, h, t) => h + Style.titleCase(fill(t)));
+  }).join("\n");
+}
 
 const publish = process.argv.includes("--publish");
 const only = process.argv.slice(2).filter((a) => !a.startsWith("--"))[0];
@@ -71,7 +85,7 @@ for (const [id, set] of Object.entries(SETS)) {
   const parsed = set.docs.map((p) => Doc.parse(fs.readFileSync(p, "utf8"))), topicOf = Object.fromEntries(set.docs.map((p, i) => [p, `${Doc.slug(parsed[i].meta.id || Doc.resolve(parsed[i]).title)}.dita`]));
   // A Mermaid diagram becomes the drawing that scripts/render-diagrams.py made of it (content/diagrams), as a picture.
   const diagrams = {};
-  const texts = set.docs.map((p) => fs.readFileSync(p, "utf8")
+  const texts = set.docs.map((p) => titled(fs.readFileSync(p, "utf8"))
     .replace(/^```mermaid\n([\s\S]*?)^```\s*$/gm, (m, code) => {
       const key = createHash("sha1").update(code.replace(/\r\n/g, "\n").trim()).digest("hex").slice(0, 12);
       if (!fs.existsSync(`content/diagrams/${key}.svg`)) throw new Error(`${p}: no drawing for a Mermaid diagram (${key}). Run scripts/render-diagrams.py.`);
@@ -85,7 +99,7 @@ for (const [id, set] of Object.entries(SETS)) {
       return target && topicOf[target] ? `](${topicOf[target]})` : `](https://karandeshmukh.dev${to}${hash || ""})`;
     }));
   const docs = texts.map((t) => Doc.parse(t));
-  const project = Doc.toDitaProject(docs, { title: set.map, id, author: "Karan Deshmukh", status: set.status || "Sample: fictional" });
+  const project = Doc.toDitaProject(docs, { title: Style.titleCase(set.map), id, author: "Karan Deshmukh", status: set.status || "Sample: fictional" });
   if (project.problems.length) throw new Error(`${id}: ${project.problems.join("\n")}`);
   fs.rmSync(SRC, { recursive: true, force: true });
   for (const f of project.files) { fs.mkdirSync(path.dirname(`${SRC}/${f.name}`), { recursive: true }); fs.writeFileSync(`${SRC}/${f.name}`, f.data); }

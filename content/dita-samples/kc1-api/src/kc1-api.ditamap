@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="kc1-api" xml:lang="en">
-<title>KC1 prediction API documentation</title>
+<title>KC1 Prediction API Documentation</title>
 <topicmeta>
 <author>Karan Deshmukh</author>
 <othermeta name="status" content="Published"/>

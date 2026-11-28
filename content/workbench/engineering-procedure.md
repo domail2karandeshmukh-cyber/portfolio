@@ -5,7 +5,7 @@ owner: Test engineering
 version: 0.4
 status: Draft
 vars:
-  rig: test rig TR-2
+  rig: Test Rig TR-2
 ---
 # Calibrate the Pressure Sensor on {{rig}}
 

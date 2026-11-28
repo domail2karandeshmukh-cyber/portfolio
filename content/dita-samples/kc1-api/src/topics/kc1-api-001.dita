@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="kc1-prediction-api-reference" xml:lang="en">
-<title>KC1 prediction API reference</title>
+<title>KC1 Prediction API Reference</title>
 <shortdesc>The KC1 API serves the project’s defect-prediction model over HTTP. Send the 21 static code metrics of one software module, and it returns whether the model flags the module as defective, with the probability and the threshold behind the decision.</shortdesc>
 <refbody>
 <section>
 <p>FastAPI’s test client recorded every request and response on this page on 19 November 2026, against the model that the project’s own trainer produced. The test client calls the application in the same process, so the recording needed no server and no port. The trained model reproduces the <xref href="https://karandeshmukh.dev/docs/kc1/model-card" format="html" scope="external">model card</xref>: logistic regression with balanced class weights, a threshold of 0.50, and F1 0.500 on the 243 test modules.</p>
 </section>
-<section><title>At a glance</title>
+<section><title>At a Glance</title>
 <simpletable frame="topbot"><sthead><stentry>Item</stentry><stentry>Value</stentry></sthead><strow><stentry>Base URL</stentry><stentry><codeph>http://127.0.0.1:8000</codeph>, when you start the API with the project’s Docker Compose file. The Compose file publishes the port on this computer only.</stentry></strow><strow><stentry>API version</stentry><stentry>1.0.1</stentry></strow><strow><stentry>Format</stentry><stentry>JSON in and JSON out. Send <codeph>Content-Type: application/json</codeph>.</stentry></strow><strow><stentry>Authentication</stentry><stentry>None. The API has no sign-in and no keys. Keep it on <codeph>127.0.0.1</codeph>, as the Compose file does, or put an authenticating gateway in front of it.</stentry></strow><strow><stentry>Permissions</stentry><stentry>None.</stentry></strow><strow><stentry>Rate limits</stentry><stentry>None. The API doesn’t limit requests.</stentry></strow><strow><stentry>Pagination</stentry><stentry>Doesn’t apply. Each call returns one object.</stentry></strow><strow><stentry>Machine-readable description</stentry><stentry>OpenAPI 3.1, served by the API at <codeph>/openapi.json</codeph>, with Swagger UI at <codeph>/docs</codeph> and ReDoc at <codeph>/redoc</codeph>.</stentry></strow></simpletable>
 <p><xref href="https://karandeshmukh.dev/docs/kc1/api/openapi.json" format="html" scope="external">Download the OpenAPI description as the API serves it</xref>, or <xref href="https://karandeshmukh.dev/docs/kc1/api/exchanges.json" format="html" scope="external">every recorded request and response</xref>.</p>
 </section>
@@ -32,7 +32,7 @@
 <section><title>POST /predict</title>
 <p>Send the metrics of one module. The API answers with one prediction.</p>
 </section>
-<section><title>Request body</title>
+<section><title>Request Body</title>
 <p>A JSON object with exactly these 21 fields, each a finite number. A field that is missing, a field that isn’t on the list, and a value that isn’t a number are all refused. The definitions follow the PROMISE repository’s description of KC1.</p>
 <simpletable frame="topbot"><sthead><stentry>Field</stentry><stentry>Meaning</stentry></sthead><strow><stentry><codeph>loc</codeph></stentry><stentry>McCabe’s count of lines of code</stentry></strow><strow><stentry><codeph>v(g)</codeph></stentry><stentry>McCabe’s cyclomatic complexity</stentry></strow><strow><stentry><codeph>ev(g)</codeph></stentry><stentry>McCabe’s essential complexity</stentry></strow><strow><stentry><codeph>iv(g)</codeph></stentry><stentry>McCabe’s design complexity</stentry></strow><strow><stentry><codeph>n</codeph></stentry><stentry>Halstead’s total of operators and operands</stentry></strow><strow><stentry><codeph>v</codeph></stentry><stentry>Halstead volume</stentry></strow><strow><stentry><codeph>l</codeph></stentry><stentry>Halstead program level, about 1 divided by <codeph>d</codeph></stentry></strow><strow><stentry><codeph>d</codeph></stentry><stentry>Halstead difficulty</stentry></strow><strow><stentry><codeph>i</codeph></stentry><stentry>Halstead intelligence content</stentry></strow><strow><stentry><codeph>e</codeph></stentry><stentry>Halstead effort</stentry></strow><strow><stentry><codeph>b</codeph></stentry><stentry>Halstead’s estimate of delivered bugs</stentry></strow><strow><stentry><codeph>t</codeph></stentry><stentry>Halstead’s time estimate</stentry></strow><strow><stentry><codeph>lOCode</codeph></stentry><stentry>Lines of code</stentry></strow><strow><stentry><codeph>lOComment</codeph></stentry><stentry>Lines of comments</stentry></strow><strow><stentry><codeph>lOBlank</codeph></stentry><stentry>Blank lines</stentry></strow><strow><stentry><codeph>locCodeAndComment</codeph></stentry><stentry>Lines with both code and a comment</stentry></strow><strow><stentry><codeph>uniq_Op</codeph></stentry><stentry>Unique operators</stentry></strow><strow><stentry><codeph>uniq_Opnd</codeph></stentry><stentry>Unique operands</stentry></strow><strow><stentry><codeph>total_Op</codeph></stentry><stentry>Total operators</stentry></strow><strow><stentry><codeph>total_Opnd</codeph></stentry><stentry>Total operands</stentry></strow><strow><stentry><codeph>branchCount</codeph></stentry><stentry>Branches in the flow graph</stentry></strow></simpletable>
 <p>Three names contain parentheses: <codeph>v(g)</codeph>, <codeph>ev(g)</codeph> and <codeph>iv(g)</codeph>. The API also accepts them as <codeph>v_g</codeph>, <codeph>ev_g</codeph> and <codeph>iv_g</codeph>, which suit tools that don’t accept parentheses in a name. The recorded responses are the same either way.</p>
@@ -65,7 +65,7 @@
   "input": {"loc": 123}
 }</codeblock>
 </section>
-<section><title>Code examples</title>
+<section><title>Code Examples</title>
 <p>Here is the same request in Python, with the <codeph>requests</codeph> library.</p>
 <codeblock outputclass="language-python">import requests
 
@@ -88,10 +88,10 @@ print(result["label"], round(result["defect_probability"], 3))</codeblock>
 if (!response.ok) throw new Error(`KC1 API: ${response.status}`);
 const { label, defect_probability } = await response.json();</codeblock>
 </section>
-<section><title>How a prediction is made</title>
+<section><title>How a Prediction Is Made</title>
 <fig><image href="img/diagram-545309ed403a.png" placement="break" width="150mm"><alt>Sequence diagram between Client, API (FastAPI), Validation (Pydantic), and Model (scikit-learn). 1. Client to API (FastAPI): POST /predict with 21 metrics. 2. API (FastAPI) to Validation (Pydantic): Check the body. If a field is missing, extra or not a number: 3. Validation (Pydantic) to API (FastAPI): Errors. 4. API (FastAPI) to Client: 422 with one entry per problem. Otherwise, if the body is valid: 5. Validation (Pydantic) to API (FastAPI): 21 finite numbers. 6. API (FastAPI) to Model (scikit-learn): One row, in the training column order. 7. Model (scikit-learn) to API (FastAPI): Probability that the module is defective. 8. API (FastAPI) to itself: Compare it with the threshold, 0.50. 9. API (FastAPI) to Client: 200 with prediction, label, probability, threshold, model.</alt></image></fig>
 </section>
-<section><title>Related documents</title>
+<section><title>Related Documents</title>
 <ul><li><xref href="kc1-api-002.dita">Get your first prediction from the KC1 API</xref>, to run the API and call it.</li><li><xref href="kc1-api-003.dita">Troubleshoot the KC1 API</xref>, for every error on this page.</li><li><xref href="https://karandeshmukh.dev/docs/kc1/model-card" format="html" scope="external">Model card</xref>, for what the model can and can’t be used for.</li></ul>
 </section>
 </refbody>

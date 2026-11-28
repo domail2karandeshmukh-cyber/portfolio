@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE map PUBLIC "-//OASIS//DTD DITA Map//EN" "map.dtd">
 <map id="message-to-document" xml:lang="en">
-<title>Reset MFA for a locked-out user</title>
+<title>Reset MFA for a Locked-Out User</title>
 <topicmeta>
 <author>Karan Deshmukh</author>
 <othermeta name="status" content="Demonstration"/>

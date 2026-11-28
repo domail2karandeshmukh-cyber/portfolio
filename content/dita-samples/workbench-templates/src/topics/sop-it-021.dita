@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE task PUBLIC "-//OASIS//DTD DITA Task//EN" "task.dtd">
 <task id="grant-temporary-administrator-access" xml:lang="en">
-<title>Grant temporary administrator access</title>
+<title>Grant Temporary Administrator Access</title>
 <shortdesc>Standard operating procedure for the IT service desk. Use it when an engineer needs administrator rights in <ph keyref="product">Acme Console</ph> for a fixed time. Fictional sample.</shortdesc>
 <taskbody>
 <prereq>

@@ -15,7 +15,7 @@
   /* The words the tool writes into the guide itself. They follow the guide's own language, which the writer chooses,
      not the language of this interface: a French interface can make an English guide, and the other way round. */
   var WORDS = {
-    en: { untitled: "Untitled guide", docId: "Document ID", version: "Version", before: "Before you start", warning: "Warning", steps: "Steps", step: "Step {n}", picture: "picture", check: "Check your work", subject: "Step guide", page: "page {p} of {n}" },
+    en: { untitled: "Untitled Guide", docId: "Document ID", version: "Version", before: "Before You Start", warning: "Warning", steps: "Steps", step: "Step {n}", picture: "picture", check: "Check Your Work", subject: "Step guide", page: "page {p} of {n}" },
     fr: { untitled: "Guide sans titre", docId: "Référence du document", version: "Version", before: "Avant de commencer", warning: "Avertissement", steps: "Procédure", step: "Étape {n}", picture: "illustration", check: "Vérifier le résultat", subject: "Guide pas à pas", page: "page {p} sur {n}" },
     de: { untitled: "Anleitung ohne Titel", docId: "Dokumentnummer", version: "Version", before: "Bevor Sie beginnen", warning: "Warnung", steps: "Schritte", step: "Schritt {n}", picture: "Abbildung", check: "Ergebnis prüfen", subject: "Schritt-für-Schritt-Anleitung", page: "Seite {p} von {n}" },
     es: { untitled: "Guía sin título", docId: "Referencia del documento", version: "Versión", before: "Antes de empezar", warning: "Advertencia", steps: "Pasos", step: "Paso {n}", picture: "imagen", check: "Comprobar el resultado", subject: "Guía paso a paso", page: "página {p} de {n}" },

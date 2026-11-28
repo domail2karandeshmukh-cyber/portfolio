@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE reference PUBLIC "-//OASIS//DTD DITA Reference//EN" "reference.dtd">
 <reference id="document-information" xml:lang="en">
-<title>Document information</title>
+<title>Document Information</title>
 <shortdesc>A demonstration publication for Karan Deshmukh’s portfolio. The companies, people, addresses and figures in it are examples: these documents aren’t operating instructions or vendor documentation.</shortdesc>
 <refbody>
 <simpletable frame="topbot" relcolwidth="4* 2* 1* 1.4*">
 <sthead><stentry>Document</stentry><stentry>ID</stentry><stentry>Version</stentry><stentry>Status</stentry></sthead>
-<strow><stentry>Reset MFA for a locked-out user</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
-<strow><stentry>A report shows &quot;Access is denied&quot;</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
-<strow><stentry>Workspace roles</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
-<strow><stentry>Acme Console 4.2 release notes</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
-<strow><stentry>Shared drives: questions and answers</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
-<strow><stentry>How single sign-on works</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
-<strow><stentry>Grant temporary administrator access</stentry><stentry>SOP-IT-021</stentry><stentry>1.2</stentry><stentry>Approved</stentry></strow>
-<strow><stentry>Calibrate the pressure sensor on test rig TR-2</stentry><stentry>EP-TR2-004</stentry><stentry>0.4</stentry><stentry>Draft</stentry></strow>
-<strow><stentry>Monthly inspection of feed pump B</stentry><stentry>MP-PS104-01</stentry><stentry>0.3</stentry><stentry>In review</stentry></strow>
-<strow><stentry>Test report: seal leakage on feed pump B</stentry><stentry>TR-2026-07</stentry><stentry>1.1</stentry><stentry>Published</stentry></strow>
-<strow><stentry>Read the inspection results from the Acme Console API</stentry><stentry>DG-API-002</stentry><stentry>2.1</stentry><stentry>Published</stentry></strow>
-<strow><stentry>Runbook: the readings service stops responding</stentry><stentry>RB-READ-003</stentry><stentry>1.5</stentry><stentry>Approved</stentry></strow>
+<strow><stentry>Reset MFA for a Locked-Out User</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
+<strow><stentry>A Report Shows &quot;Access is denied&quot;</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
+<strow><stentry>Workspace Roles</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
+<strow><stentry>Acme Console 4.2 Release Notes</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
+<strow><stentry>Shared Drives: Questions and Answers</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
+<strow><stentry>How Single Sign-On Works</stentry><stentry></stentry><stentry></stentry><stentry>Template</stentry></strow>
+<strow><stentry>Grant Temporary Administrator Access</stentry><stentry>SOP-IT-021</stentry><stentry>1.2</stentry><stentry>Approved</stentry></strow>
+<strow><stentry>Calibrate the Pressure Sensor on Test Rig TR-2</stentry><stentry>EP-TR2-004</stentry><stentry>0.4</stentry><stentry>Draft</stentry></strow>
+<strow><stentry>Monthly Inspection of Feed Pump B</stentry><stentry>MP-PS104-01</stentry><stentry>0.3</stentry><stentry>In review</stentry></strow>
+<strow><stentry>Test Report: Seal Leakage on Feed Pump B</stentry><stentry>TR-2026-07</stentry><stentry>1.1</stentry><stentry>Published</stentry></strow>
+<strow><stentry>Read the Inspection Results from the Acme Console API</stentry><stentry>DG-API-002</stentry><stentry>2.1</stentry><stentry>Published</stentry></strow>
+<strow><stentry>Runbook: The Readings Service Stops Responding</stentry><stentry>RB-READ-003</stentry><stentry>1.5</stentry><stentry>Approved</stentry></strow>
 </simpletable>
 <section><title>Publication</title>
-<p>Publication WORKBENCH-TEMPLATES, 12 documents. Written by Karan Deshmukh. Owner: IT service desk, Test engineering, Maintenance planning, Reliability engineering, Platform team, Site reliability. Published on 2026-11-20 with DITA Open Toolkit from DITA 1.3 source.</p>
+<p>Publication WORKBENCH-TEMPLATES, 12 documents. Written by Karan Deshmukh. Owner: IT service desk, Test engineering, Maintenance planning, Reliability engineering, Platform team, Site reliability. Published on 2026-11-28 with DITA Open Toolkit from DITA 1.3 source.</p>
 </section>
 </refbody>
 </reference>
