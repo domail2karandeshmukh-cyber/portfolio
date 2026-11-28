@@ -7,11 +7,11 @@ status: Approved
 vars:
   service: the readings service
 ---
-# Runbook: {{service}} stops responding
+# Runbook: {{service}} Stops Responding
 
 For the engineer on call. Follow it when the alert "Readings API not responding" fires. Fictional sample.
 
-## Before you start
+## Before You Start
 
 - You're on call, and you have access to the status page and the deployment tool.
 - Tell the incident channel that you're working on the alert.
@@ -24,7 +24,7 @@ For the engineer on call. Follow it when the alert "Readings API not responding"
 4. If the alert stays, roll back to the last version that worked.
 5. Post the time and the action you took in the incident channel.
 
-## Check that it worked
+## Check That It Worked
 
 The alert clears, and a test request to the readings API gets the status 200.
 

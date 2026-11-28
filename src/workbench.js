@@ -15,7 +15,7 @@
   var grid = $("#wb"), ta = $("#wb-text"), ed = $("#wb-ed"), back = $(".wb-back"), linesEl = $("#wb-lines");
   var sheet = $("#wb-sheet"), foundEl = $("#wb-found"), verdict = $("#wb-verdict"), live = $("#wb-live"), undo = $("#wb-undo");
   var narrow = window.matchMedia("(max-width: 900px)");
-  var KEY = "wb:doc", UI = "wb:ui", IN = "wb:incoming";
+  var KEY = "wb:doc2", UI = "wb:ui", IN = "wb:incoming";
 
   // Storage can be switched off in a browser. The workbench still works, and says that the draft is not kept.
   var store = {

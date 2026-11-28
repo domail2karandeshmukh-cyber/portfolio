@@ -1,6 +1,7 @@
 // The rewrite desk, without the network: the brief, the check of a draft, and the pairing of each fact
 // in the visitor's message with the place it lands in the document. api/rewrite.js adds the model.
 const fs = require("fs");
+const Style = require("../src/style.js");
 const path = require("path");
 
 const BRIEF = fs.readFileSync(path.join(__dirname, "..", "content", "desk", "brief.md"), "utf8");
@@ -294,9 +295,17 @@ function shape(text, answer) {
 
   // What the rules below had to take out or put right. A tidy draft needs none of it.
   let fixed = 0;
+  // English titles and headings are set in Title Case, the house style; other languages keep sentence case. This is
+  // how the page is set, not a slip of the model's, so it doesn't count as a fix. Fact tags are laid aside while the
+  // words are cased and put back after, so a tagged word is cased like any other.
+  const english = (String(text).match(/\b(the|and|to|is|you|we|it|for|on|in)\b/gi) || []).length >= 3 && !/[àâçéèêëîïôûùüÿœäößñ¿¡\u0900-\u097F]/i.test(text);
+  const titled = (line) => {
+    const bare = line.replace(/<\/?f\d{1,2}>/g, (m) => " ".repeat(m.length)), want = Style.titleCase(bare);
+    return want.length === line.length ? line.split("").map((c, i) => (bare[i] === " " && c !== " " ? c : want[i])).join("") : line;
+  };
   const sectionsIn = list(answer.sections, 5);
   const prose = text + " " + sectionsIn.map((s) => list(s && s.items, 9).map((it) => `${(it && it.text) || ""} ${(it && it.caution) || ""}`).join(" ")).join(" ").replace(/<\/?f\d{1,2}>|\*\*/g, "");
-  const cased = (line) => { const t = sentenceCase(String(line || ""), prose); if (t !== String(line || "")) fixed++; return t; };
+  const cased = (line) => { const t = sentenceCase(String(line || ""), prose); if (t !== String(line || "")) fixed++; return english ? titled(t) : t; };
   const title = runs(cased(answer.title), known, used, 140);
   // A reader named in the document has to be named in the message. Otherwise the line is a guess, and it goes.
   const lowText = text.toLowerCase();

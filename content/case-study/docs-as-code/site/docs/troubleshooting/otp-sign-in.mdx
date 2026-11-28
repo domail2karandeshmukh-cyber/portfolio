@@ -1,5 +1,5 @@
 ---
-title: When a user can't sign in with a one-time password
+title: When a User Can't Sign In with a One-Time Password
 description: Three things that go wrong with one-time passwords in Keycloak, what the user sees, why it happens, and what an administrator does.
 doc_type: Troubleshooting
 audience: Keycloak administrators
@@ -12,7 +12,7 @@ import PageFacts from '@site/src/components/PageFacts';
 import Screenshot from '@site/src/components/Screenshot';
 import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
 
-# When a user can't sign in with a one-time password
+# When a User Can't Sign In with a One-Time Password
 
 <PageFacts />
 
@@ -28,7 +28,7 @@ Find what the user sees in the table, then go to its section.
 
 </div>
 
-## Keycloak refuses the code {#code-refused}
+## Keycloak Refuses the Code {#code-refused}
 
 **Cause.** The code is from an earlier period, or the phone's clock is wrong.
 A code is valid for one period of the realm's OTP policy, 30 seconds by default.
@@ -44,7 +44,7 @@ With the default look around window of 1, Keycloak also accepts the code of the 
 3. If many users' codes fail, check the server's clock before you widen the look around window in the [OTP policy](../reference/otp-policy.mdx#settings).
    A wider window accepts older codes, for everyone.
 
-## The user lost the phone {#phone-lost}
+## The User Lost the Phone {#phone-lost}
 
 **Cause.** The authenticator went with the phone, and Keycloak keeps no copy within the user's reach.
 
@@ -54,7 +54,7 @@ With the default look around window of 1, Keycloak also accepts the code of the 
 
 Sign the user out, require a new authenticator and delete the lost phone's OTP credential, as [Reset a user's OTP credential](../how-to/reset-otp.mdx) describes.
 
-## Keycloak doesn't ask for a code {#no-code-asked}
+## Keycloak Doesn't Ask for a Code {#no-code-asked}
 
 **Cause.** An administrator deleted the user's OTP credential, and nothing asked the user to set up a new one.
 Keycloak's default sign-in flow asks for a second factor only from a user who has one configured.

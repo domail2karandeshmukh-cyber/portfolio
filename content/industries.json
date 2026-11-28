@@ -28,7 +28,7 @@
         { "title": "Knowledge base", "url": "/studio/kb", "kind": "Tool", "text": "Categories, sections, articles, search and an export." }
       ],
       "standards": [
-        ["Microsoft Writing Style Guide", "The house style: sentence-case headings, one action per step, bold interface labels, no \"please\".", "/style"],
+        ["Microsoft Writing Style Guide", "The basis of the house style: one action per step, bold interface labels, no \"please\". Headings are in Title Case, by house choice.", "/style"],
         ["Google developer documentation style guide", "The second reference: procedures, images and code examples.", "/standards/editorial"],
         ["Diátaxis", "Which kind of document a reader needs: tutorial, how-to guide, reference or explanation.", "/standards/editorial"],
         ["WCAG 2.2", "Headings, alternative text, contrast and captions in every page and film.", "/standards/editorial"]

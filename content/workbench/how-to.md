@@ -3,11 +3,11 @@ type: how-to
 vars:
   product: Acme Console
 ---
-# Reset MFA for a locked-out user
+# Reset MFA for a Locked-Out User
 
 For the IT service desk. Takes about five minutes.
 
-## Before you start
+## Before You Start
 
 - Confirm that the request is genuine. Call the user on the number in the HR system, not the number in the ticket.
 - Contractor accounts follow a different process. Send those requests to the IAM team.
@@ -23,13 +23,13 @@ For the IT service desk. Takes about five minutes.
 
 ::: only admin
 
-## If the user has no second device
+## If the User Has No Second Device
 
 1. In {{product}}, go to **Security** > **Recovery codes**.
 2. Select **Generate**, and then read the code to the user by phone.
 
 :::
 
-## Check that it worked
+## Check That It Worked
 
 The system log shows a new enrollment for the user.

@@ -1,9 +1,11 @@
-# Editorial standard: sentence case for every heading. Names keep their capitals (the exceptions list).
+# Editorial standard: Title Case for every heading (the house style since 28 November 2026). Names keep their capitals
+# (the exceptions list).
 extends: capitalization
-message: "Write the heading '%s' in sentence case."
+message: "Write the heading '%s' in Title Case."
 level: error
 scope: heading
-match: $sentence
+match: $title
+style: Chicago
 indicators:
   - ':'
 exceptions:

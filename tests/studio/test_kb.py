@@ -50,9 +50,9 @@ with sync_playwright() as p:
     pg.click('[data-view="center"]'); pg.wait_for_timeout(250); hc = pg.inner_text("#kb-preview")
     check("the help center leaves the internal articles out, and says so", "Unlock a customer account" not in hc and "2 internal article(s) aren't shown" in hc, hc[-200:])
     pg.click('[data-view="agent"]'); pg.wait_for_timeout(250)
-    check("the agent view includes the internal articles", "Unlock a customer account" in pg.inner_text("#kb-preview"))
+    check("the agent view includes the internal articles", "Unlock a Customer Account" in pg.inner_text("#kb-preview"))
     pg.click('[data-view="center"]'); pg.fill("#kb-q", "bank feed"); pg.wait_for_timeout(250)
-    check("search finds the bank feed articles", "result(s) for" in pg.inner_text("#kb-preview") and "A bank feed stopped updating" in pg.inner_text("#kb-preview"), pg.inner_text("#kb-preview")[:200])
+    check("search finds the bank feed articles", "result(s) for" in pg.inner_text("#kb-preview") and "A Bank Feed Stopped Updating" in pg.inner_text("#kb-preview"), pg.inner_text("#kb-preview")[:200])
     pg.locator("#kb-preview [data-read]").first.click(); pg.wait_for_timeout(250)
     check("an article opens as a reader sees it", pg.locator("#kb-preview .kb-article h1").count() == 1)
     # a draft leaves the help center

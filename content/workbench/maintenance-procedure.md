@@ -7,11 +7,11 @@ status: In review
 vars:
   asset: feed pump B
 ---
-# Monthly inspection of {{asset}}
+# Monthly Inspection of {{asset}}
 
 Preventive maintenance procedure. The technician on shift records four readings and closes the work order. Fictional sample written for this portfolio: it isn't an operating instruction for real equipment.
 
-## Before you start
+## Before You Start
 
 - The work order is assigned to your shift.
 - You have read the site safety rules for the pump room.
@@ -19,7 +19,7 @@ Preventive maintenance procedure. The technician on shift records four readings 
 
 > **Warning:** Stay outside the guard while the pump runs. Take every reading from a gauge or the console.
 
-## Tools and materials
+## Tools and Materials
 
 - The maintenance console on a tablet
 - A handheld vibration meter
@@ -33,7 +33,7 @@ Preventive maintenance procedure. The technician on shift records four readings 
 5. Look for leaks around the seal, and enter what you see.
 6. Select **Save readings**.
 
-## Acceptance criteria
+## Acceptance Criteria
 
 | Check | Expected |
 |---|---|
@@ -42,6 +42,6 @@ Preventive maintenance procedure. The technician on shift records four readings 
 | Vibration | Below 4.5 mm/s |
 | Seal leakage | None visible |
 
-## Check that it worked
+## Check That It Worked
 
 The work order shows **Ready to close**, and all four results are inside their expected range. Select **Close work order**. If a result is outside its range, don't close the work order: report it to the shift supervisor.

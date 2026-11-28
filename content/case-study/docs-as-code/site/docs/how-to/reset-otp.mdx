@@ -1,5 +1,5 @@
 ---
-title: Reset a user's OTP credential
+title: Reset a User's OTP Credential
 description: Delete a lost authenticator's OTP credential in Keycloak, and make the user set up a new one at their next sign-in.
 doc_type: How-to
 audience: Keycloak administrators
@@ -12,7 +12,7 @@ import PageFacts from '@site/src/components/PageFacts';
 import Screenshot from '@site/src/components/Screenshot';
 import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
 
-# Reset a user's OTP credential
+# Reset a User's OTP Credential
 
 <PageFacts />
 
@@ -21,7 +21,7 @@ When a user loses or replaces the phone that holds their authenticator app, sign
 This procedure resets the OTP credential only.
 It doesn't remove passkeys, security keys or other second factors that the user may also have.
 
-## Before you start {#before-you-start}
+## Before You Start {#before-you-start}
 
 <ConfirmIdentity />
 
@@ -81,7 +81,7 @@ If the phone was stolen, or the password may be known to someone else, also sele
 The user then sets a new password before setting up the authenticator.
 :::
 
-## Check that it worked {#check}
+## Check That It Worked {#check}
 
 - On the **Sessions** tab, no session is listed.
 - On the **Credentials** tab, a new **Otp** row shows the name that the user gave the new device, with today's date.
@@ -102,7 +102,7 @@ On November 28, 2026, on a local test realm:
 The console screenshots date from November 19, 2026, except the **Sessions** tab, from November 28.
 :::
 
-## Reset many users with the admin REST API {#rest-api}
+## Reset Many Users with the Admin REST API {#rest-api}
 
 After a change to the [OTP policy](../reference/otp-policy.mdx#before-change), every user's authenticator needs a reset, and the admin console does one user at a time.
 The admin REST API does the same things in the same order: it signs the user out, adds **Configure OTP** to the user's required actions, and then deletes every OTP credential, because after a policy change every device has to be set up again.
@@ -183,7 +183,7 @@ read -rs -p "Password for $KC_ADMIN: " KC_ADMIN_PASSWORD; echo
 
 At their next sign-in, Keycloak runs the user's required actions one after another, and asks them to set up an authenticator before they get in.
 
-## Next steps {#next-steps}
+## Next Steps {#next-steps}
 
 - If the user sees *Invalid authenticator code.* during the setup, see [When a user can't sign in with a one-time password](../troubleshooting/otp-sign-in.mdx#code-refused).
 - To see what the realm asks of an authenticator, see [OTP policy settings](../reference/otp-policy.mdx).

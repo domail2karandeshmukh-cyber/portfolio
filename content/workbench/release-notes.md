@@ -4,7 +4,7 @@ vars:
   product: Acme Console
   version: 4.2
 ---
-# {{product}} {{version}} release notes
+# {{product}} {{version}} Release Notes
 
 Released on March 4, 2026.
 
@@ -20,13 +20,13 @@ Released on March 4, 2026.
 
 - A report with more than 10,000 rows no longer times out.
 
-## Known issues
+## Known Issues
 
 - An export leaves out the columns you have hidden. Show the columns before you export.
 
 ::: only admin
 
-## For administrators
+## For Administrators
 
 - The audit log records every export, with the name of the person who ran it.
 

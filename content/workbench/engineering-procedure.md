@@ -7,11 +7,11 @@ status: Draft
 vars:
   rig: test rig TR-2
 ---
-# Calibrate the pressure sensor on {{rig}}
+# Calibrate the Pressure Sensor on {{rig}}
 
 Engineering procedure for the test lab. Run it before each test campaign, and after you replace any sensor. Fictional sample: don't use it on real equipment.
 
-## Before you start
+## Before You Start
 
 - You've stopped the rig, and the line is at atmospheric pressure.
 - The reference gauge has a valid calibration certificate.
@@ -28,10 +28,10 @@ Engineering procedure for the test lab. Run it before each test campaign, and af
 5. Repeat the last two steps for each pressure on the calibration sheet.
 6. Select **Finish**, and then write the result on the calibration sheet.
 
-## Check that it worked
+## Check That It Worked
 
 Each reading is within 0.5 % of the reference gauge, and the console shows **Calibrated** with today's date.
 
-## If a reading is out of tolerance
+## If a Reading Is Out of Tolerance
 
 Stop the procedure, tag the sensor as out of service, and tell the lab supervisor.

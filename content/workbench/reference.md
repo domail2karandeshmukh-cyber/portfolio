@@ -3,7 +3,7 @@ type: reference
 vars:
   product: Acme Console
 ---
-# Workspace roles
+# Workspace Roles
 
 What each role in a {{product}} workspace can open and change.
 
@@ -25,7 +25,7 @@ What each role in a {{product}} workspace can open and change.
 
 ::: only admin
 
-## Who can change a role
+## Who Can Change a Role
 
 Only an owner can change a role. An administrator of the organization can make themselves an owner of any workspace.
 

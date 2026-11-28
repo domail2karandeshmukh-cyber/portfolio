@@ -13,11 +13,54 @@
   "use strict";
 
   var MS = "Microsoft Writing Style Guide", HOUSE = "House rule";
+
+  // Title Case, the house style for titles and headings since 28 November 2026, with the title-style capitalization
+  // rules of the Microsoft Manual of Style (4th edition): capitalize every word except articles, coordinating
+  // conjunctions, prepositions of four letters or fewer and the "to" of an infinitive, unless it is the first or the
+  // last word or follows a colon. A particle that belongs to its verb is capitalized: "Set Up", "Sign In".
+  // A word that already has a capital inside it, a digit or a dot (OTP, macOS, S1000D, 26.8.2, README.md) is kept.
+  var TC_SMALL = {}, TC_VERB = {}, TC_PARTICLE = { in: 1, on: 1, over: 1, up: 1, out: 1, off: 1, down: 1, back: 1, through: 1 };
+  "a an the and but or nor for so yet as at by in of on per to via vs from into onto over upon with".split(" ").forEach(function (w) { TC_SMALL[w] = 1; });
+  ("set sets setting sign signs signing log logs logging back look turn turns turning check checks checking roll rolls wrap start hold opt " +
+   "pick fill scale spin shut break clean follow plug lock sort hand take make keep show tune read step back backs backing log-in sign-in " +
+   "clear clears scroll zoom write writes boot reboot power powers pin pins top log-on carry").split(" ").forEach(function (w) { TC_VERB[w] = 1; });
+  function titleCase(line) {
+    var toks = String(line).split(/(\s+)/), idx = [], out = toks.slice();
+    toks.forEach(function (t, i) { if (/\S/.test(t)) idx.push(i); });
+    var prevWord = "", afterColon = false, quoted = false, lead = false;
+    idx.forEach(function (i, n) {
+      var t = toks[i], m = /^([^A-Za-z0-9\u00C0-\u024F]*)(.*?)([^A-Za-z0-9\u00C0-\u024F'\u2019]*)$/.exec(t), pre = m[1], core = m[2], post = m[3];
+      var first = n === 0 || afterColon || lead, last = n === idx.length - 1;
+      // A section number before the words ("3.1", "A.", "2)") leaves the first word still to come.
+      if ((n === 0 || lead) && /^(?:\d+(?:\.\d+)*[.)]?|[A-Z][.)])$/.test(t)) { lead = true; afterColon = false; prevWord = ""; return; }
+      lead = false;
+      afterColon = /[:\u2014]$/.test(t) || /^[\u2014\u2013-]$/.test(t);
+      var opens = /["\u201C]/.test(pre), closes = /["\u201D]/.test(post);
+      if (opens || quoted) { quoted = !closes; prevWord = ""; return; }           // quoted text keeps the capitals it has where it comes from
+      if (!core || /[{}<>`\/\\]/.test(t)) { prevWord = ""; return; }           // a variable, a tag, a path or code: as written
+      var low = core.toLowerCase();
+      var keep = function (w) { return /[0-9._\/@=]/.test(w) || /.[A-Z]/.test(w) || /^[A-Z]{2,}/.test(w); };
+      var cap = function (w) { return w.charAt(0).toUpperCase() + w.slice(1); };
+      var one = function (w, edge) {
+        if (!w || keep(w)) return w;
+        var l = w.toLowerCase();
+        if (!edge && TC_SMALL[l] && !(TC_PARTICLE[l] && TC_VERB[prevWord])) return l;
+        return cap(w);
+      };
+      var res;
+      if (keep(core)) res = core;
+      else if (core.indexOf("-") > 0) res = core.split("-").map(function (p, k, all) { return one(p, k === 0 || k === all.length - 1); }).join("-");
+      else res = one(core, first || last);
+      out[i] = pre + res + post;
+      prevWord = low.replace(/[^a-z-]/g, "");
+    });
+    return out.join("");
+  }
   var RULES = [
     // Headings
-    { id: "heading-case", group: "Headings", level: "error", title: "Write headings in sentence case",
-      why: "Capitalize the first word and proper nouns, nothing else. A heading in sentence case reads as a sentence, and no one has to decide which words deserve a capital.",
-      bad: "## Reset Your Password", good: "## Reset your password", basis: MS + ": Capitalization" },
+    { id: "heading-case", group: "Headings", level: "error", title: "Write headings in Title Case",
+      why: "Capitalize every word except articles, short prepositions and coordinating conjunctions, unless the word comes first or last. One rule for every title and heading on the site, in the documents, the PDFs, and the films.",
+      bad: "## Reset your password", good: "## Reset Your Password", basis: HOUSE + ", with the title-style capitalization rules of the Microsoft Manual of Style, 4th edition" },
     { id: "heading-punctuation", group: "Headings", level: "error", title: "End a heading without a period or a colon",
       why: "A heading is a label, not a sentence in a paragraph. A question mark stays when the heading is a question.",
       bad: "## Before you start:", good: "## Before you start", basis: MS + ": Top 10 tips" },
@@ -274,23 +317,15 @@
       var t = Doc.text(b.runs, true).trim(), plain = prose(b.runs).trim();
       var whole = (lines[b.line - 1] || "").trim();
       if (/[.:]$/.test(t) && !/\betc\.$/.test(t)) add("heading-punctuation", b.line, whole, "The heading ends with \"" + t.slice(-1) + "\".", whole.replace(/[.:]+(\s*#*)$/, "$1"));
-      // Text in quotation marks is quoted as it is written elsewhere, capitals included.
-      var ws = plain.replace(/"[^"]*"|\u201C[^\u201D]*\u201D/g, "\u00A7").replace(/^(?:[A-Z]\.|\d+(?:\.\d+)*[.)]?)\s+/, "").split(/\s+/), capped = [];
-      // A phrase that is a known name keeps its capitals: "Google Drive", "Visual Studio Code".
-      var kept = plain.toLowerCase();
-      terms.forEach(function (term) { if (term.indexOf(" ") > -1) kept = kept.split(term).join(" "); });
-      for (var n = 1; n < ws.length; n++) {
-        var w = ws[n].replace(/^[("'“]+|[)"'”,;:!?.]+$/g, ""), prev = ws[n - 1].replace(/[^A-Za-z]/g, "");
-        if (/[:.?!]$/.test(ws[n - 1])) continue;                                   // the word after a colon starts a new phrase
-        if (kept.indexOf(w.toLowerCase()) < 0) continue;                           // part of a known name
-        // A word that follows a name is taken as part of the name: "Google Drive".
-        var named = /^[A-Z]/.test(prev) && !COMMON_SET[prev.toLowerCase()] && !lower[prev.toLowerCase()] && !COMMON_SET[w.toLowerCase()];
-        if (ordinary(w) && !named) capped.push(w);
-      }
-      if (capped.length) {
-        var fixed = lines[b.line - 1] || "";
-        capped.forEach(function (w) { fixed = fixed.replace(new RegExp("(\\s)" + w + "\\b"), function (m, sp) { return sp + w.toLowerCase(); }); });
-        add("heading-case", b.line, lines[b.line - 1] ? lines[b.line - 1].trim() : t, "Sentence case: \"" + capped.join("\", \"") + "\" " + (capped.length > 1 ? "don't" : "doesn't") + " need a capital.", fixed.trim());
+      // Title Case. Text in quotation marks and code is quoted as it is written elsewhere, capitals included.
+      var bare = plain.replace(/^(?:[A-Z]\.|\d+(?:\.\d+)*[.)]?)\s+/, ""), want = titleCase(bare);
+      if (want !== bare && !/["\u201C`]/.test(bare)) {
+        var have = bare.split(/\s+/), need = want.split(/\s+/), up = [], down = [];
+        have.forEach(function (w, n) { if (w !== need[n]) (need[n] && need[n] < w ? up : down).push(need[n]); });
+        var src = lines[b.line - 1] || "", fixed = src.indexOf(bare) > -1 ? src.replace(bare, want) : src;
+        var msg = "Title Case: " + (up.length ? "\"" + up.join("\", \"") + "\" " + (up.length > 1 ? "take" : "takes") + " a capital" : "") + (up.length && down.length ? "; " : "") +
+          (down.length ? "\"" + down.join("\", \"") + "\" " + (down.length > 1 ? "stay" : "stays") + " lowercase" : "") + ".";
+        add("heading-case", b.line, src.trim() || t, msg, fixed.trim());
       }
       text(b.runs, b.line, true);
     }
@@ -537,5 +572,5 @@
   var AUTO = ["heading-case", "heading-punctuation", "contractions", "plain-words", "latin", "minimizers", "please", "input-neutral", "inclusive", "all-caps",
     "double-space", "spaced-dash", "ampersand", "exclamation", "intro-period", "step-period", "quoted-ui"];
 
-  return { RULES: RULES, AUTO: AUTO, rule: function (id) { return BY_ID[id]; }, check: check, summary: summary, fix: fix, fixAll: fixAll };
+  return { RULES: RULES, AUTO: AUTO, rule: function (id) { return BY_ID[id]; }, check: check, summary: summary, fix: fix, fixAll: fixAll, titleCase: titleCase };
 });

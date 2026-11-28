@@ -1,5 +1,5 @@
 ---
-title: OTP policy settings
+title: OTP Policy Settings
 description: Every setting of a Keycloak realm's OTP policy, its default in Keycloak 26.8.2, and the matching field of Keycloak's REST API.
 doc_type: Reference
 audience: Keycloak administrators
@@ -11,7 +11,7 @@ last_review: 2026-11-27
 import PageFacts from '@site/src/components/PageFacts';
 import Screenshot from '@site/src/components/Screenshot';
 
-# OTP policy settings
+# OTP Policy Settings
 
 <PageFacts />
 
@@ -38,7 +38,7 @@ The defaults are those of a new realm in Keycloak 26.8.2.
 
 </div>
 
-## Admin REST API fields {#rest-fields}
+## Admin REST API Fields {#rest-fields}
 
 Each setting is a field of the realm representation, at `GET /admin/realms/{realm}`.
 
@@ -56,7 +56,7 @@ Each setting is a field of the realm representation, at `GET /admin/realms/{real
 
 </div>
 
-## Before you change a setting {#before-change}
+## Before You Change a Setting {#before-change}
 
 A change applies only to authenticators set up after it.
 Each OTP credential keeps the type, digits, period and algorithm it was set up with: after a change from 6 to 8 digits, a phone set up before the change still signed in with 6-digit codes.

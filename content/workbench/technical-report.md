@@ -5,7 +5,7 @@ owner: Reliability engineering
 version: 1.1
 status: Published
 ---
-# Test report: seal leakage on feed pump B
+# Test Report: Seal Leakage on Feed Pump B
 
 A six-week test on a fictional pump: three weeks before a repair and three weeks after it. Written for this portfolio: I invented the pump, the readings, and the people.
 

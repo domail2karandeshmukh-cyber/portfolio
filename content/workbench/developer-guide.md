@@ -7,11 +7,11 @@ status: Published
 vars:
   product: Acme Console
 ---
-# Read the inspection results from the {{product}} API
+# Read the Inspection Results from the {{product}} API
 
 Developer guide. You send one request and get the readings of a work order as JSON. Fictional API, written for this portfolio.
 
-## Before you start
+## Before You Start
 
 - You have an API token with the scope `readings:read`.
 - You know the number of the work order.
@@ -32,7 +32,7 @@ Developer guide. You send one request and get the readings of a work order as JS
 
 3. Read the `readings` list in the response. Each reading has a `check`, a `value` and a `unit`.
 
-## Check that it worked
+## Check That It Worked
 
 The response has the status 200, and the list has four readings. A status of 401 means the token is missing or out of date.
 

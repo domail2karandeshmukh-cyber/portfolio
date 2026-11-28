@@ -5,11 +5,12 @@ headings a person has to judge. A clean run is not proof of good writing: it sho
 are absent.
 
   structure   one H1; no skipped heading level; the <title> starts with the H1
-  headings    sentence case (candidates for review), no all-caps words that aren't acronyms, no final period or colon
+  headings    Title Case on English pages (the build's rule, src/style.js), no all-caps words that aren't acronyms,
+              no final period or colon
   terms       sign in / log in, set up / setup, e.g. / i.e. / etc., please, simply, just, click, web site, on-premise
   images      every <img> has an alt attribute
 """
-import json, re, sys, html
+import json, re, sys, html, subprocess
 from pathlib import Path
 from html.parser import HTMLParser
 
@@ -31,23 +32,27 @@ Studio Workbench FAQ FAQs SOP SOPs KB IT HR""".split())
 class Page(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.title, self.heads, self.imgs, self.text = "", [], [], []
+        self.title, self.heads, self.imgs, self.text, self.checks, self._show = "", [], [], [], [], []
         self._in, self._buf, self._skip = None, [], 0
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         if tag in ("script", "style", "code", "pre", "kbd", "samp", "svg"): self._skip += 1
         if tag == "title": self._in, self._buf = "title", []
-        elif re.fullmatch(r"h[1-6]", tag): self._in, self._buf = tag, []
+        elif re.fullmatch(r"h[1-6]", tag): self._in, self._buf, self._show = tag, [], []
         elif tag == "img": self.imgs.append(a)
     def handle_endtag(self, tag):
         if tag in ("script", "style", "code", "pre", "kbd", "samp", "svg"): self._skip = max(0, self._skip - 1)
         if tag == self._in:
             t = re.sub(r"\s+", " ", "".join(self._buf)).strip().rstrip("#").strip()
             if tag == "title": self.title = t
-            else: self.heads.append((int(tag[1]), t))
+            else:
+                # The check text has code written as zeros, which Title Case leaves alone; the shown text is the heading.
+                self.checks.append(t)
+                self.heads.append((int(tag[1]), re.sub(r"\s+", " ", "".join(self._show)).strip().rstrip("#").strip()))
             self._in = None
     def handle_data(self, d):
-        if self._in: self._buf.append(d)
+        if self._in: self._buf.append(("0" * len(d)) if self._skip and self._in != "title" else d)
+        if self._in and self._in != "title": self._show.append(d)
         if not self._skip: self.text.append(d)
 
 TERMS = [
@@ -73,7 +78,7 @@ def all_caps(t):
     return [w for w in re.findall(r"[A-Za-z]{4,}", t) if w.isupper() and w not in PROPER and not ACRONYM.match(w + "")][:0] or \
            [w for w in re.findall(r"\b[A-Z]{5,}\b", t) if w not in PROPER and w not in {"STE100", "NOVATECH", "PROMISE"}]
 
-findings, pages = [], 0
+findings, pages, WANT = [], 0, []
 for f in sorted(ROOT.rglob("*.html")):
     rel = "/" + str(f.relative_to(ROOT)).replace("index.html", "")
     if any(s in rel for s in SKIP): continue
@@ -83,11 +88,11 @@ for f in sorted(ROOT.rglob("*.html")):
     h1 = [t for l, t in p.heads if l == 1]
     if len(h1) != 1: add("structure", f"{len(h1)} H1 elements: {h1[:3]}", "major")
     prev = 1
-    for l, t in p.heads:
+    for (l, t), ck in zip(p.heads, p.checks):
         if l > prev + 1: add("structure", f"H{prev} to H{l} at '{t[:60]}'", "major")
         prev = l
         if not t: add("structure", f"empty H{l}", "major"); continue
-        if title_case(t): add("heading-case", f"H{l} '{t}' looks like title case: check it against the publication type", "review")
+        WANT.append((rel, l, t, ck))
         if all_caps(t): add("heading-case", f"H{l} '{t}' has an all-caps word", "minor")
         if re.search(r"[.:]$", t) and not t.endswith("..."): add("heading-punct", f"H{l} '{t}' ends with punctuation", "minor")
     if h1 and p.title and not p.title.lower().startswith(h1[0].lower()[:20]):
@@ -99,6 +104,13 @@ for f in sorted(ROOT.rglob("*.html")):
         for m in re.finditer(rx, body, re.I):
             ctx = body[max(0, m.start() - 40): m.end() + 40].replace("\n", " ")
             add("terms", f"{why}: …{ctx.strip()}…")
+
+# Title Case, decided by the same function the build uses, so the audit and the pages can't disagree.
+_js = "const S=require(process.argv[1]);let d='';process.stdin.on('data',c=>d+=c).on('end',()=>process.stdout.write(JSON.stringify(JSON.parse(d).map(S.titleCase))))"
+_want = json.loads(subprocess.run(["node", "-e", _js, str(Path(__file__).resolve().parent.parent / "src" / "style.js")],
+                   input=json.dumps([ck for _, _, _, ck in WANT]), capture_output=True, text=True, check=True).stdout)
+for (rel, l, t, ck), w in zip(WANT, _want):
+    if w != ck: findings.append({"page": rel, "kind": "heading-case", "severity": "minor", "detail": f"H{l} '{t}' is not in Title Case"})
 
 # Findings a person has reviewed and accepted, with the reason. Anything not listed here stays open.
 QUOTED = "quotes the original article or the text being corrected, on purpose"
@@ -122,6 +134,8 @@ ACCEPT = [
     ("/docs/kc1/build-guide/", "", "", "published unchanged from the team's repository; house rules not applied to teammates' text"),
     ("/docs/novatech-sentinel/release-notes/", "terms", "", "published unchanged from the team's repository"),
     ("/docs/kc1/readme/", "heading-case", "", "published unchanged from the team's repository"),
+    ("/studio/aerospace/downloads/arf1-", "heading-case", "", "an S1000D publication: data module titles follow the project's business rules, not the house heading style"),
+    ("/case-study/help-center-to-docs-as-code/site/", "heading-case", "", "the Docusaurus theme's own 404 page; the demo's headings are checked by its Vale rule"),
     ("", "heading-case", "Signed Is Not Safe", "the title of a paper: titles of works keep the capitalization their authors gave them"),
     ("", "heading-case", "README", "README is the file's conventional name"),
     ("", "heading-case", "Core42 AI Cloud Portal", "product name, kept as the vendor writes it"),
