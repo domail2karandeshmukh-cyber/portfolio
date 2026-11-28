@@ -102,7 +102,7 @@ for (const t of C.workbench.templates) {
 }
 const bench = await template("src/workbench.html");
 await fs.mkdir(`${OUT}/workbench`, { recursive: true });
-await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, sitenav: navEn.desktop, mnav: navEn.phone, data: json({ first: C.workbench.first, templates: starts, types: C.workbench.types }) })));
+await fs.writeFile(`${OUT}/workbench/index.html`, typeset(bench({ url: S.url, cv: S.cv, pmenu: common.pmenu, sitenav: navEn.desktop, mnav: navEn.phone, data: json({ first: C.workbench.open || C.workbench.first, templates: starts, types: C.workbench.types }) })));
 await library.extra({ path: "/workbench", title: "Workbench", description: "Write a document, check it against the style guide as you type, and publish it for each reader as Markdown, HTML or DITA.", only: "search",
   kind: "Tool", shelf: "Library", text: [{ id: "", title: "", text: "Write a document in Markdown, check it against the style guide as you type, and publish it for more than one reader as Markdown, as HTML for a help center, or as DITA. It runs in your browser." }] });
 // The Documentation Studio's fictional scenarios join the search, labelled as demonstrations, so that a search for

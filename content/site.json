@@ -207,9 +207,9 @@
   "figure": "of the library's documents pass the style check that runs on every build"
  },
  "workbench": {
-  "first": "first-draft",
+  "first": "first-draft", "open": "how-to",
   "templates": [
-   {"id": "first-draft", "name": "A first draft to fix", "about": "Breaks the style guide on purpose, so you can watch the check work."},
+   {"id": "first-draft", "name": "A practice draft with mistakes", "about": "Breaks the style guide on purpose, so you can watch the check find and fix each problem."},
    {"id": "how-to", "name": "How-to", "about": "A task in numbered steps, with a block that only administrators get."},
    {"id": "troubleshooting", "name": "Troubleshooting", "about": "What the reader sees, why it happens, and what to do about it."},
    {"id": "reference", "name": "Reference", "about": "Tables of roles and limits, for looking things up."},
