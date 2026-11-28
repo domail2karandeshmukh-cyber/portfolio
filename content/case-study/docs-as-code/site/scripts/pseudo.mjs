@@ -36,6 +36,8 @@ function convert(text) {
     // A code block's title is text a reader sees: pseudo-localize it, and leave the code alone.
     if (/^\s*```/.test(l)) { code = !code; return l.replace(/title="([^"]*)"/, (_, t) => `title="${pseudo(t)}"`); }
     if (code || /^import /.test(l) || /^\s*$/.test(l) || /^\|[-| ]+\|$/.test(l)) return l;
+    // An HTML wrapper on a line of its own, such as a table's <div className="tbl tbl--spec">: no text to translate.
+    if (/^\s*<\/?[a-z][^>]*>\s*$/.test(l)) return l;
     if (/^\s*<[A-Z]/.test(l)) return component(l);
     if (/^:::\w+/.test(l)) return l.replace(/^(:::\w+)(\s+)(.+)$/, (_, a, b, t) => a + b + pseudo(t));
     if (/^:::$/.test(l.trim())) return l;

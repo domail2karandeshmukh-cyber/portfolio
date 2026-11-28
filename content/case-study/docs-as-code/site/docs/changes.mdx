@@ -5,10 +5,18 @@ doc_type: Changelog
 audience: Keycloak administrators
 product_version: Keycloak 26.8.2
 owner: Karan Deshmukh
-last_review: 2026-11-27
+last_review: 2026-11-28
 ---
 
 # Changes
+
+## 1.2 (2026-11-28) {#1-2}
+
+- **Fixed:** the order of the reset, in the admin console and in the REST API.
+  The guide deleted the OTP credential first and added **Configure OTP** second, which let the user sign in with the password alone between the two actions.
+  A test on Keycloak 26.8.2 confirmed it. The guide now adds the required action first: Keycloak then asks for a code until the deletion, and for a new authenticator after it.
+- **Added:** what the user needs before you start, and what to do if the password may also be known to someone else.
+- **Changed:** every screenshot caption now names its step and says what to look at, and step 5 tells you what to check instead of quoting Keycloak's success message.
 
 ## 1.1 (2026-11-27) {#1-1}
 

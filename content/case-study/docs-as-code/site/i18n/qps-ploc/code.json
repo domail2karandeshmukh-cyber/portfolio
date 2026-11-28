@@ -126,37 +126,9 @@
     "message": "[Véŕšîöñš ··]",
     "description": "The label for the navbar versions dropdown on mobile view"
   },
-  "theme.NotFound.title": {
-    "message": "[Ƥàĝé Ñöţ Ƒöûñð ·· ]",
-    "description": "The title of the 404 page"
-  },
   "theme.tags.tagsListLabel": {
     "message": "[Ţàĝš: ·]",
     "description": "The label alongside a tag list"
-  },
-  "theme.admonition.caution": {
-    "message": "[çàûţîöñ ·]",
-    "description": "The default label used for the Caution admonition (:::caution)"
-  },
-  "theme.admonition.danger": {
-    "message": "[ðàñĝéŕ ·]",
-    "description": "The default label used for the Danger admonition (:::danger)"
-  },
-  "theme.admonition.info": {
-    "message": "[îñƒö ·]",
-    "description": "The default label used for the Info admonition (:::info)"
-  },
-  "theme.admonition.note": {
-    "message": "[ñöţé ·]",
-    "description": "The default label used for the Note admonition (:::note)"
-  },
-  "theme.admonition.tip": {
-    "message": "[ţîþ ·]",
-    "description": "The default label used for the Tip admonition (:::tip)"
-  },
-  "theme.admonition.warning": {
-    "message": "[ŵàŕñîñĝ ·]",
-    "description": "The default label used for the Warning admonition (:::warning)"
   },
   "theme.AnnouncementBar.closeButtonAriaLabel": {
     "message": "[Çļöšé ·]",
@@ -185,14 +157,6 @@
   "theme.navbar.mobileLanguageDropdown.label": {
     "message": "[Ļàñĝûàĝéš ··]",
     "description": "The label for the mobile language switcher dropdown"
-  },
-  "theme.NotFound.p1": {
-    "message": "[Ŵé çöûļð ñöţ ƒîñð ŵĥàţ ýöû ŵéŕé ļööķîñĝ ƒöŕ. ·· ·· ·· ·· ]",
-    "description": "The first paragraph of the 404 page"
-  },
-  "theme.NotFound.p2": {
-    "message": "[Ƥļéàšé çöñţàçţ ţĥé öŵñéŕ öƒ ţĥé šîţé ţĥàţ ļîñķéð ýöû ţö ţĥé öŕîĝîñàļ ÛŔĻ àñð ļéţ ţĥéɱ ķñöŵ ţĥéîŕ ļîñķ îš ƀŕöķéñ. ·· ·· ·· ·· ·· ·· ·· ·· ·· ··]",
-    "description": "The 2nd paragraph of the 404 page"
   },
   "theme.TOCCollapsible.toggleButtonLabel": {
     "message": "[Öñ ţĥîš þàĝé ·· ]",
@@ -348,5 +312,50 @@
   },
   "table.scrollLabel": {
     "message": "[Ţàƀļé, šçŕöļļš šîðéŵàýš ·· ·· ]"
+  },
+  "theme.NotFound.title": {
+    "message": "[Ƥàĝé ñöţ ƒöûñð ·· ]",
+    "description": "The title of the 404 page"
+  },
+  "theme.NotFound.p1": {
+    "message": "[Ţĥîš þàĝé ðöéšñ'ţ éẋîšţ. ·· ·· ]",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "[Ûšé ţĥé ɱéñû ţö ĝö ƀàçķ ţö ţĥé ðöçš, öŕ ŕéþöŕţ à ƀŕöķéñ ļîñķ ţĥŕöûĝĥ ţĥé šöûŕçé öñ ĜîţĤûƀ. ·· ·· ·· ·· ·· ·· ·· ·· ]",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.admonition.note": {
+    "message": "[ñöţé ·]",
+    "description": "The default label used for the Note admonition (:::note)"
+  },
+  "theme.admonition.info": {
+    "message": "[îñƒö ·]",
+    "description": "The default label used for the Info admonition (:::info)"
+  },
+  "theme.admonition.tip": {
+    "message": "[ţîþ ·]",
+    "description": "The default label used for the Tip admonition (:::tip)"
+  },
+  "theme.admonition.important": {
+    "message": "[Îɱþöŕţàñţ ··]"
+  },
+  "theme.admonition.caution": {
+    "message": "[çàûţîöñ ·]",
+    "description": "The default label used for the Caution admonition (:::caution)"
+  },
+  "theme.admonition.warning": {
+    "message": "[ŵàŕñîñĝ ·]",
+    "description": "The default label used for the Warning admonition (:::warning)"
+  },
+  "theme.admonition.danger": {
+    "message": "[ðàñĝéŕ ·]",
+    "description": "The default label used for the Danger admonition (:::danger)"
+  },
+  "theme.admonition.verified": {
+    "message": "[Véŕîƒîéð ŕéšûļţ ·· ·]"
+  },
+  "screenshot.open": {
+    "message": "[Öþéñ ƒûļļ šîžé ·· ]"
   }
 }

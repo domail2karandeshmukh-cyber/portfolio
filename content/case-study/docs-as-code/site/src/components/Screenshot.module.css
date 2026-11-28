@@ -1,3 +1,5 @@
 .shot { margin: 1rem 0 1.5rem; }
 .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--ifm-color-emphasis-300); border-radius: 6px; }
 .shot figcaption { margin-top: .45rem; font-size: .875rem; color: var(--ifm-color-emphasis-700); }
+.open { white-space: nowrap; font-weight: 600; }
+@media print { .open { display: none; } }

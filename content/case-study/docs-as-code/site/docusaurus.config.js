@@ -13,6 +13,9 @@ const codeTheme = {
 };
 
 const REPO = "https://github.com/domail2karandeshmukh-cyber/portfolio";
+// The branch the edit and source links open. The pages are built on for-swan until it is merged; build with
+// DOCS_BRANCH=main before the release. The portfolio's build refuses a production build that still links to for-swan.
+const BRANCH = process.env.DOCS_BRANCH || "for-swan";
 const DIR = "content/case-study/docs-as-code/site";
 
 /** @type {import('@docusaurus/types').Config} */
@@ -43,8 +46,9 @@ const config = {
       ({
         docs: {
           routeBasePath: "/",
+          admonitions: { keywords: ["verified", "important"], extendDefaults: true },
           sidebarPath: "./sidebars.js",
-          editUrl: `${REPO}/blob/main/${DIR}/`,
+          editUrl: `${REPO}/blob/${BRANCH}/${DIR}/`,
           showLastUpdateTime: false,
         },
         blog: false,
@@ -62,7 +66,7 @@ const config = {
           { type: "docSidebar", sidebarId: "docs", position: "left", label: "Docs" },
           { type: "localeDropdown", position: "right" },
           { href: "https://karandeshmukh.dev/case-study/help-center-to-docs-as-code", label: "The case study", position: "right" },
-          { href: `${REPO}/tree/main/${DIR}`, label: "Source", position: "right" },
+          { href: `${REPO}/tree/${BRANCH}/${DIR}`, label: "Source", position: "right" },
         ],
       },
       footer: {

@@ -4,7 +4,7 @@
  "narrated": true,
  "keycloak": "26.8.2",
  "recorded": "2026-11-19",
- "about": "A real task in Keycloak 26.8.2, filmed in the browser: find the user, delete the lost authenticator, require a new one, the user's own setup, and the check.",
+ "about": "Filmed on Keycloak 26.8.2 on 19 November 2026, in the guide's first order: delete, then require a new authenticator. The written guide now adds the required action first, which a test on 28 November showed is safer.",
  "where": "Recorded on Keycloak 26.8.2, open-source software, with a test realm and test users",
  "sections": [
   {

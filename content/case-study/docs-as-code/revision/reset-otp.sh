@@ -13,19 +13,21 @@ AUTH=(-H "Authorization: Bearer $TOKEN")
 USER_ID=$(curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users?username=$USERNAME&exact=true" | jq -r '.[0].id')
 echo "user: $USERNAME"
 
-# 3. The user's OTP credentials.
-echo "credentials before:"; curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -c '[.[] | {type, userLabel}]'
-OTP_IDS=$(curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -r '.[] | select(.type == "otp") | .id')
-
-# 4. Delete each OTP credential.
-for ID in $OTP_IDS; do
-  echo "DELETE credential: HTTP $(curl -s -o /dev/null -w '%{http_code}' -X DELETE "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials/$ID")"
-done
-
-# 5. Add CONFIGURE_TOTP to the user's required actions, keeping the ones already there.
+# 3. Add CONFIGURE_TOTP to the required actions first, keeping the ones already there,
+#    so that the user is never left with the password alone.
 ACTIONS=$(curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID" | jq -c '.requiredActions + ["CONFIGURE_TOTP"] | unique')
 echo "PUT requiredActions $ACTIONS: HTTP $(curl -s -o /dev/null -w '%{http_code}' -X PUT "${AUTH[@]}" -H 'Content-Type: application/json' \
   -d "{\"requiredActions\": $ACTIONS}" "$KC_URL/admin/realms/$REALM/users/$USER_ID")"
+
+
+# 4. The user's OTP credentials.
+echo "credentials before:"; curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -c '[.[] | {type, userLabel}]'
+OTP_IDS=$(curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -r '.[] | select(.type == "otp") | .id')
+
+# 5. Delete each OTP credential.
+for ID in $OTP_IDS; do
+  echo "DELETE credential: HTTP $(curl -s -o /dev/null -w '%{http_code}' -X DELETE "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials/$ID")"
+done
 
 # 6. Check.
 echo "credentials after:"; curl -s "${AUTH[@]}" "$KC_URL/admin/realms/$REALM/users/$USER_ID/credentials" | jq -c '[.[] | {type, userLabel}]'

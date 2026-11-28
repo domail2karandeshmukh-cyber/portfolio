@@ -18,11 +18,15 @@ import ConfirmIdentity from '../_partials/_confirm-identity.mdx';
 
 Find what the user sees in the table, then go to its section.
 
+<div className="tbl tbl--head">
+
 | The user sees | Section |
 |---|---|
 | *Invalid authenticator code.* after typing a code | [Keycloak refuses the code](#code-refused) |
 | No code to type: the phone is lost | [The user lost the phone](#phone-lost) |
 | No request for a code at all | [Keycloak doesn't ask for a code](#no-code-asked) |
+
+</div>
 
 ## Keycloak refuses the code {#code-refused}
 

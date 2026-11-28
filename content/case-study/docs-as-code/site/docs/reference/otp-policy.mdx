@@ -24,6 +24,8 @@ In the admin console, it's under **Authentication** > **Policies** > **OTP Polic
 
 The defaults are those of a new realm in Keycloak 26.8.2.
 
+<div className="tbl tbl--spec">
+
 | Setting | Default | What it decides |
 |---|---|---|
 | **OTP type** | Time based | A time-based code changes every period. A counter-based code changes each time the user asks the app for one. |
@@ -34,9 +36,13 @@ The defaults are those of a new realm in Keycloak 26.8.2.
 | **Supported applications** | FreeOTP, Google Authenticator, Microsoft Authenticator | The apps that **Mobile Authenticator Setup** lists for users to install. |
 | **Reusable token** | Off | Whether a code that has signed someone in works again before it expires. |
 
+</div>
+
 ## Admin REST API fields {#rest-fields}
 
 Each setting is a field of the realm representation, at `GET /admin/realms/{realm}`.
+
+<div className="tbl tbl--striped">
 
 | Field | Default |
 |---|---|
@@ -47,6 +53,8 @@ Each setting is a field of the realm representation, at `GET /admin/realms/{real
 | `otpPolicyPeriod` | `30` |
 | `otpPolicyCodeReusable` | `false` |
 | `otpPolicyInitialCounter` | `0`, used only by counter-based codes |
+
+</div>
 
 ## Before you change a setting {#before-change}
 

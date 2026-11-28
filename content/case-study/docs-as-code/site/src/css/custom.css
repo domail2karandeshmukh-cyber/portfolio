@@ -40,3 +40,73 @@ html[lang="en-x-pseudo"] .main-wrapper::before { content: "Pseudo-locale test bu
 .w-table { overflow-x: auto; margin-bottom: var(--ifm-spacing-vertical); }
 .w-table:focus-visible { outline: 2px solid var(--ifm-color-primary); outline-offset: 2px; }
 .w-table > table { display: table; margin-bottom: 0; }
+
+/* ---------- The reading system, 28 November 2026 ----------
+   One scale, used everywhere below: 4, 8, 12, 16, 24, 32 px. Body 17px / 1.6 in a 44rem column, about 70 characters. */
+:root {
+  --doc-ink: #0b0b0c; --doc-ink-2: #4a4a48; --doc-line: #dcdad3; --doc-paper: #f6f5f1;
+  --doc-blue: #1d4ed8; --doc-blue-bg: #eef3ff; --doc-green: #146c43; --doc-green-bg: #ecf6f0;
+  --doc-amber: #8a5a00; --doc-amber-line: #d99a00; --doc-amber-bg: #fff7e0; --doc-red: #b42318; --doc-red-bg: #fdf0ee;
+  --doc-gray: #4a4a48; --doc-gray-bg: #f3f2ee;
+  --ifm-font-size-base: 106.25%; --ifm-line-height-base: 1.6;
+  --ifm-h1-font-size: 2.1rem; --ifm-h2-font-size: 1.45rem; --ifm-h3-font-size: 1.15rem;
+  --ifm-heading-margin-bottom: .6rem; --ifm-paragraph-margin-bottom: 1rem; --ifm-list-item-margin: .4rem;
+}
+.markdown { max-width: 44rem; }
+.markdown > h2 { margin-top: 2.5rem; padding-top: .25rem; }
+.markdown > h3 { margin-top: 1.75rem; }
+.markdown ol > li { padding-left: .25rem; }
+.markdown ol > li + li { margin-top: 1.25rem; }
+.markdown ol > li > p:first-child { margin-bottom: .5rem; }
+.markdown li::marker { font-weight: 650; }
+.markdown kbd { font-family: inherit; font-size: .85em; padding: .1em .4em; border: 1px solid var(--doc-line); border-bottom-width: 2px; border-radius: 4px; background: #fff; }
+
+/* Callouts: a coloured rule, a tint, an icon and a plain label. */
+.callout.theme-admonition { border: 0; border-left: 4px solid var(--c); background: var(--bg); color: var(--doc-ink); border-radius: 6px; padding: 12px 16px 12px 16px; margin: 20px 0; box-shadow: none; }
+.callout [class*="admonitionHeading"] { color: var(--c); font: 650 .9rem/1.3 var(--ifm-font-family-base); text-transform: none; letter-spacing: 0; margin-bottom: 4px; display: flex; gap: 8px; align-items: center; }
+.callout [class*="admonitionIcon"] svg { fill: none; stroke: var(--c); width: 18px; height: 18px; }
+.callout [class*="admonitionContent"] > :last-child { margin-bottom: 0; }
+.callout--note { --c: var(--doc-gray); --bg: var(--doc-gray-bg); }
+.callout--info, .callout--tip { --c: var(--doc-blue); --bg: var(--doc-blue-bg); }
+.callout--important { --c: var(--doc-red); --bg: #fff; } .callout--important.theme-admonition { box-shadow: inset 0 0 0 1px #f0c9c4; }
+.callout--caution, .callout--warning { --c: var(--doc-amber); --bg: var(--doc-amber-bg); } .callout--caution.theme-admonition, .callout--warning.theme-admonition { border-left-color: var(--doc-amber-line); }
+.callout--danger { --c: var(--doc-red); --bg: var(--doc-red-bg); }
+.callout--verified { --c: var(--doc-green); --bg: var(--doc-green-bg); }
+ol .callout.theme-admonition { margin: 12px 0 4px; }
+
+/* Tables. Standard: rules only. Variants in a wrapper: tbl--head (ink header), tbl--spec (parameter and value),
+   tbl--striped (long references). Numbers align right with .num on a cell. */
+.markdown table { border-collapse: collapse; width: 100%; font-size: .94rem; line-height: 1.5; border: 0; }
+.markdown table thead tr { border-bottom: 2px solid var(--doc-ink); background: none; }
+.markdown table th { text-align: left; font-weight: 650; background: none; border: 0; padding: 8px 12px; vertical-align: bottom; }
+.markdown table td { border: 0; border-bottom: 1px solid var(--doc-line); padding: 10px 12px; vertical-align: top; }
+.markdown table tr { background: none; border: 0; }
+.markdown table tbody tr:nth-child(2n) { background: none; }
+.markdown table code { white-space: nowrap; }
+.tbl--head table thead tr { background: var(--doc-ink); border-bottom: 0; } .tbl--head table th { color: #fff; padding-top: 10px; }
+.tbl--spec table td:first-child { font-weight: 600; width: 34%; }
+.tbl--spec table tbody tr { border-left: 3px solid transparent; }
+.tbl--striped table tbody tr:nth-child(2n) { background: var(--doc-paper); }
+.tbl--striped table td { border-bottom: 0; }
+.markdown td.num, .markdown th.num { text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) { .markdown table { font-size: .875rem; } .markdown table th, .markdown table td { padding: 8px 10px; } }
+
+/* Figures: a hairline frame, the caption under it in the reading voice. */
+.markdown figure img { border: 1px solid var(--doc-line); border-radius: 6px; }
+
+/* Code: a language label on every block, readable on a phone. */
+.theme-code-block { position: relative; margin: 12px 0 20px; }
+.theme-code-block.language-bash:not(:has([class*="codeBlockTitle"]))::before,
+.theme-code-block.language-json:not(:has([class*="codeBlockTitle"]))::before,
+.theme-code-block.language-graphql:not(:has([class*="codeBlockTitle"]))::before { display: block; padding: 4px 12px; font: 600 .75rem/1.6 var(--ifm-font-family-base); color: var(--doc-ink-2); background: #eceae4; border-radius: 6px 6px 0 0; }
+.theme-code-block.language-bash:not(:has([class*="codeBlockTitle"]))::before { content: "Bash"; }
+.theme-code-block.language-json:not(:has([class*="codeBlockTitle"]))::before { content: "JSON"; }
+.theme-code-block.language-graphql:not(:has([class*="codeBlockTitle"]))::before { content: "GraphQL"; }
+@media print { .theme-code-block::before { display: none !important; } .callout.theme-admonition { break-inside: avoid; } .markdown figure { break-inside: avoid; } .w-table { overflow: visible; } }
+/* Heading scale, set on the elements: Infima's variables are defined after this file. */
+.markdown h1, .markdown header h1 { font-size: 2.1rem; line-height: 1.2; letter-spacing: -.015em; margin-bottom: 1rem; }
+.markdown h2 { font-size: 1.45rem; line-height: 1.3; }
+.markdown h3 { font-size: 1.15rem; line-height: 1.35; }
+.markdown table thead th { background: none; }
+.tbl--head table thead th { background: var(--doc-ink); }
+@media (max-width: 600px) { .markdown h1, .markdown header h1 { font-size: 1.75rem; } .markdown h2 { font-size: 1.3rem; } }
