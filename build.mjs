@@ -45,9 +45,10 @@ const FONTS = [
 for (const [from, to] of FONTS) await fs.copyFile(`node_modules/${from}`, `${OUT}/fonts/${to}`);
 await fs.copyFile("src/fonts/devanagari-name.woff2", `${OUT}/fonts/devanagari-name.woff2`);
 await fs.copyFile("src/fonts/newsreader.woff2", `${OUT}/fonts/newsreader.woff2`);
-// IBM Plex (SIL Open Font License, src/fonts/LICENSE-ibm-plex.txt): the type of the site since the redesign of
-// 28 November 2026. The Latin files of @fontsource/ibm-plex-*, kept in src/fonts so the build needs no package for them.
-for (const f of (await fs.readdir("src/fonts")).filter((f) => f.startsWith("plex-"))) await fs.copyFile(`src/fonts/${f}`, `${OUT}/fonts/${f}`);
+// Instrument Serif and Instrument Sans, with Geist Mono for code (all SIL Open Font License, src/fonts/LICENSE-*.txt):
+// the type of the site since 28 November 2026. The Latin files of @fontsource, kept in src/fonts so the build needs no
+// package for them.
+for (const f of (await fs.readdir("src/fonts")).filter((f) => /^(inst-|geist-)/.test(f))) await fs.copyFile(`src/fonts/${f}`, `${OUT}/fonts/${f}`);
 
 // Project screenshots: crop to 16:10 and write two WebP sizes
 for (const [id, im] of Object.entries(C.images)) {
